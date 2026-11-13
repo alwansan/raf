@@ -267,7 +267,7 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
             lanes = constant_buffer_lanes(buffer)
             buffer["original_named_lanes"] = lanes
             cb_counts["named_lanes"] += sum(lane is not None for lane in lanes)
-        verify_named_constant_buffers(bound_stage, stage, buffers)
+        cb_counts["reflected_offsets"] += verify_named_constant_buffers(bound_stage, stage, buffers)
         cb_counts["mapped"] += len(buffers)
         cb_counts["variant"] += sum(buffer["binding_from_variant"] for buffer in buffers)
         cb_counts["shared_layout"] += sum(buffer["shared_layout_present"] for buffer in buffers)
@@ -292,6 +292,7 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
         "distinct_original_parameter_blobs": len(decoded),
         "resource_rebound_stages_verified_spirv_identical_excluding_debug": len(records),
         "named_constant_buffer_candidate_stages_vulkan11_valid": len(records),
+        "named_constant_buffer_reflected_offsets_verified": cb_counts["reflected_offsets"],
         "translated_constant_buffer_declarations_mapped": cb_counts["mapped"],
         "constant_buffer_bindings_from_variant": cb_counts["variant"],
         "constant_buffer_layouts_with_shared_members_table": cb_counts["shared_layout"],

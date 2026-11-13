@@ -1,7 +1,9 @@
 """Generate named HLSL CB candidates from the authenticated source layout."""
+import json
 import re
+import subprocess
 
-from scripts.gt_original_921_cb_layout import BLOCK
+from scripts.gt_original_921_cb_layout import BLOCK, VERTEX_INFO
 from scripts.w1_rebind_depth_resources import IDENT
 from scripts.w1_recover_graphics_programs import command
 
@@ -22,6 +24,13 @@ def declaration(member):
 
 
 def rebind_constant_buffers(source, buffers):
+    used = {int(binding) for binding in re.findall(r"register\([bstu](\d+)\)", source)}
+    helper_binding = max(used, default=-1) + 1
+    source = VERTEX_INFO.sub(
+        lambda match: match[0].replace("SPIRV_Cross_VertexInfo",
+                                       f"SPIRV_Cross_VertexInfo : register(b{helper_binding})", 1),
+        source,
+    )
     by_slot = {buffer["source_slot"]: buffer for buffer in buffers}
     for block in reversed(list(BLOCK.finditer(source))):
         binding, slot, count = map(int, block.groups())
@@ -108,3 +117,50 @@ def verify_named_constant_buffers(private, stage, buffers):
         raise ValueError("named_constant_buffer_candidate_compile_failed")
     if not command(["spirv-val", "--target-env", "vulkan1.1", str(binary)]):
         raise ValueError("named_constant_buffer_candidate_spirv_invalid")
+
+
+    reflected = subprocess.run(["spirv-cross", str(binary), "--reflect"],
+                               capture_output=True, timeout=30, check=False)
+    if reflected.returncode:
+        raise ValueError("named_constant_buffer_reflection_failed")
+    return verify_offsets(json.loads(reflected.stdout), buffers)
+
+
+def verify_offsets(reflection, buffers):
+    resources = reflection.get("ubos", [])
+    slots = {(row["set"], row["binding"]): row for row in resources}
+    if len(slots) != len(resources):
+        raise ValueError("named_constant_buffer_descriptor_collision")
+    types = reflection.get("types", {})
+
+    def verify_members(original, reflected):
+        members = {member["name"]: member for member in reflected}
+        total = 0
+        for item in original:
+            member = members.get(item["name"])
+            if member is None or member["offset"] != item["index"]:
+                raise ValueError("named_constant_buffer_offset_mismatch")
+            if item["array_size"] and member.get("array") != [item["array_size"]]:
+                raise ValueError("named_constant_buffer_array_count_mismatch")
+            if item.get("matrix") and member.get("matrix_stride") != 16:
+                raise ValueError("named_constant_buffer_matrix_stride_mismatch")
+            if "members" in item:
+                if member.get("array_stride") != item["size"]:
+                    raise ValueError("named_constant_buffer_struct_stride_mismatch")
+                total += verify_members(item["members"], types[member["type"]]["members"])
+            elif item["array_size"] and member.get("array_stride") != (64 if item["matrix"] else 16):
+                raise ValueError("named_constant_buffer_array_stride_mismatch")
+            total += 1
+        return total
+
+    total = 0
+    for buffer in buffers:
+        resource = slots.get((0, buffer["translated_binding"]))
+        expected = buffer["name"]
+        if expected == "$Globals":
+            expected = f'raft921_cb{buffer["source_slot"]}_Globals'
+        if resource is None or resource["name"] != expected:
+            raise ValueError("named_constant_buffer_binding_mismatch")
+        total += verify_members(buffer["members"] + buffer["structs"],
+                                types[resource["type"]]["members"])
+    return total

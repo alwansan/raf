@@ -76,6 +76,7 @@
     "constant_buffer_named_struct_occurrences": 54,
     "distinct_original_parameter_blobs": 46,
     "named_constant_buffer_candidate_stages_vulkan11_valid": 74,
+    "named_constant_buffer_reflected_offsets_verified": 2029,
     "named_original_numeric_members_in_distinct_parameter_blobs": 711,
     "named_original_resource_entries_in_distinct_parameter_blobs": 341,
     "original_variant_stages_with_cb_bindings": 57,
