@@ -141,6 +141,32 @@ internal static class Program
         return "unclassified";
     }
 
+    private static bool ImmediateCtorOwnShaderFieldStore(
+        IList<Instruction> il, int storeAt, MethodDefinition ctor)
+    {
+        if(ctor.IsStatic || ctor.Parameters.Count!=3 || storeAt<2 ||
+           il[storeAt].OpCode.Code!=Code.Stfld ||
+           il[storeAt].Operand is not FieldReference fr ||
+           fr.FieldType.FullName!=ShaderType)
+            return false;
+        int value=storeAt-1;
+        for(int n=0;value>=0 && il[value].OpCode.Code==Code.Nop && n<4;n++)
+            value--;
+        if(value<1)return false;
+        var last=il[value];
+        // Instance ctor uses ldarg.3 for the third formal parameter.
+        bool lastArg=last.OpCode.Code==Code.Ldarg_3 ||
+            (last.OpCode.Code is Code.Ldarg or Code.Ldarg_S &&
+             last.Operand is ParameterDefinition p && p.Index==2 &&
+             p.ParameterType.FullName==ShaderType);
+        int receiver=value-1;
+        for(int n=0;receiver>=0 && il[receiver].OpCode.Code==Code.Nop && n<4;n++)
+            receiver--;
+        if(!lastArg || receiver<0 || il[receiver].OpCode.Code!=Code.Ldarg_0)
+            return false;
+        return fr.DeclaringType.FullName==ctor.DeclaringType.FullName;
+    }
+
     private static FieldDefinition? ResolvedShaderField(Instruction x, ModuleDefinition module)
     {
         if(x.OpCode.Code is not (Code.Stfld or Code.Stsfld or Code.Ldfld or Code.Ldsfld))
@@ -262,6 +288,12 @@ internal static class Program
         int localCfgCtorHasExactShader=0,localCfgCtorGameOwned=0;
         int localCfgCtorUnityEngineOther=0,localCfgCtorOther=0;
         int localCfgCtorParameterCount=0;
+        int localCfgOwnCtorResolvedWithBody=0,localCfgOwnCtorBodyInstructions=0;
+        int localCfgOwnCtorShaderFieldStoreCandidates=0;
+        int localCfgOwnCtorDirectLastShaderArgFieldStores=0;
+        int localCfgOwnCtorNewUnityMaterialShader=0;
+        int localCfgOwnCtorUnityMaterialShaderSetterCalls=0;
+        int localCfgOwnCtorGraphicsCalls=0,localCfgOwnCtorRenderTextureCalls=0;
         if(source.Local is not null)
         {
             var il=source.Method.Body.Instructions;
@@ -362,6 +394,51 @@ internal static class Program
                         if(constructor.Parameters.Count>0 &&
                            constructor.Parameters[^1].ParameterType.FullName==ShaderType)
                             localCfgCtorLastExactShader++;
+                        // Follow the *original* same-module constructor, never
+                        // infer its implementation from a Unity API guess.
+                        if(constructor.DeclaringType.Scope is ModuleDefinition)
+                        {
+                            MethodDefinition? originalCtor;
+                            try {originalCtor=constructor.Resolve();}
+                            catch(AssemblyResolutionException) {originalCtor=null;}
+                            catch(ResolutionException) {originalCtor=null;}
+                            if(originalCtor is not null &&
+                               originalCtor.Module==source.Method.Module &&
+                               originalCtor.HasBody)
+                            {
+                                localCfgOwnCtorResolvedWithBody++;
+                                var ctorIl=originalCtor.Body.Instructions;
+                                localCfgOwnCtorBodyInstructions+=ctorIl.Count;
+                                for(int j=0;j<ctorIl.Count;j++)
+                                {
+                                    var ci=ctorIl[j];
+                                    if(ci.OpCode.Code==Code.Stfld &&
+                                       ci.Operand is FieldReference fr &&
+                                       fr.FieldType.FullName==ShaderType)
+                                    {
+                                        localCfgOwnCtorShaderFieldStoreCandidates++;
+                                        if(ImmediateCtorOwnShaderFieldStore(
+                                            ctorIl,j,originalCtor))
+                                            localCfgOwnCtorDirectLastShaderArgFieldStores++;
+                                    }
+                                    if(MaterialShaderCtor(ci))
+                                        localCfgOwnCtorNewUnityMaterialShader++;
+                                    if(ci.OpCode.Code is Code.Call or Code.Callvirt &&
+                                       ci.Operand is MethodReference call)
+                                    {
+                                        if(call.DeclaringType.FullName=="UnityEngine.Material" &&
+                                           call.Name=="set_shader" &&
+                                           call.Parameters.Count==1 &&
+                                           call.Parameters[0].ParameterType.FullName==ShaderType)
+                                            localCfgOwnCtorUnityMaterialShaderSetterCalls++;
+                                        if(call.DeclaringType.FullName=="UnityEngine.Graphics")
+                                            localCfgOwnCtorGraphicsCalls++;
+                                        if(call.DeclaringType.FullName=="UnityEngine.RenderTexture")
+                                            localCfgOwnCtorRenderTextureCalls++;
+                                    }
+                                }
+                            }
+                        }
                     }
                     if(shape=="duplicate_stack_reference")localCfgDuplicate++;
                     if(shape=="comparison_consumer")localCfgComparison++;
@@ -461,6 +538,14 @@ internal static class Program
             source_local_cfg_next_ctor_parameter_count_sum=localCfgCtorParameterCount,
             source_local_cfg_next_ctor_has_exact_UnityEngine_Shader_parameter=localCfgCtorHasExactShader,
             source_local_cfg_next_ctor_last_parameter_exact_Shader=localCfgCtorLastExactShader,
+            source_local_cfg_next_own_ctor_resolved_body=localCfgOwnCtorResolvedWithBody,
+            source_local_cfg_next_own_ctor_body_instructions=localCfgOwnCtorBodyInstructions,
+            source_local_cfg_next_own_ctor_shader_field_stores=localCfgOwnCtorShaderFieldStoreCandidates,
+            source_local_cfg_next_own_ctor_direct_last_shader_arg_field_stores=localCfgOwnCtorDirectLastShaderArgFieldStores,
+            source_local_cfg_next_own_ctor_Unity_Material_Shader_newobj=localCfgOwnCtorNewUnityMaterialShader,
+            source_local_cfg_next_own_ctor_Unity_Material_set_shader_calls=localCfgOwnCtorUnityMaterialShaderSetterCalls,
+            source_local_cfg_next_own_ctor_Unity_Graphics_calls=localCfgOwnCtorGraphicsCalls,
+            source_local_cfg_next_own_ctor_Unity_RenderTexture_calls=localCfgOwnCtorRenderTextureCalls,
             source_local_cfg_actual_next_duplicate_stack_reference=localCfgDuplicate,
             source_local_cfg_actual_next_comparison_consumer=localCfgComparison,
             source_local_cfg_actual_next_runtime_reference_type_check=localCfgRuntimeTypeCheck,
