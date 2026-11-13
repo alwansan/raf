@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md",
-  "next_action": "Chat30: full native CI43346405263 from immutable 4b74f6bd is exporting 40 Unity scenes, not yet at GT Spectrum real GUID installation or Unity compilation. Check CI result first, fix real failure without inventing GUID; new source-only CSharp hard gate RequireOriginalSpectrumSevenPasses and Build() hook validated CI43347458130 (not included in in-progress 4b74 run); include on next native build. Foam2Pass/kernel6/770 Dummy/Adreno pixels pending.",
+  "latest_session": "clients/GT/sessions/20261113-GT-original-spectrum-foam-native-build-chat-31.md",
+  "next_action": "GT Chat31: REAL native first run43346405263 on 4b74f6bd has SUCCESS original ZIP2 Spectrum 7Pass private shader reconstruction and GUID-preserving same-run AssetRipper exported Shader installation, safe artifact14002987883. As of latest check it is at actual Material→Shader audit; Unity Editor Android compile, APK and device not yet proven. Next full build43349181838 c3c717315 is PENDING and includes additional original Foam Global 2Pass source+GUID install and strict Unity ShaderUtil two-shader gates. CI43348620794 synthetic source/guid install contract SUCCESS, CI43349010740 CSharp probe SUCCESS. Track first run real results and ensure second build eventually passes; do not invent source GUID or assert water pixels. Remaining kernel6, 770 Dummy, LOW_MEMORY.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -962,5 +962,33 @@
     "next_native_editor_gate_in_running_43346405263": false,
     "next_native_editor_gate_proven_with_actual_Unity2021": false,
     "new_full_native_run_reconstruct_stage_at_recent_check": "in_progress_exporting_40_unity_scenes"
+  },
+  "proofs_20261113_chat31": {
+    "latest_session": "clients/GT/sessions/20261113-GT-original-spectrum-foam-native-build-chat-31.md",
+    "first_full_native_run_id": 43346405263,
+    "first_source_sha": "4b74f6bdec8781e64d6aae182797d06b83109c35",
+    "first_native_source_authenticated_Spectrum_7pass_installer_step_success": true,
+    "first_original_AssetRipper_exported_Shader_GUID_retained_by_strict_step": true,
+    "first_spectrum_safe_artifact_id": 14002987883,
+    "first_spectrum_safe_artifact_name": "gt-native-spectrum-sevenpass-original-guid-safe-4b74f6bdec8781e64d6aae182797d06b83109c35",
+    "first_Unity_real_Android_shader_compile_verified": false,
+    "first_full_native_xapk_produced": false,
+    "second_full_native_run_id": 43349181838,
+    "second_source_sha": "c3c71731525465cb2f6297f6bcbdb37c60ae4058",
+    "second_native_status_at_latest_check": "pending_native_mutex",
+    "second_native_original_Spectrum_passes_staged": 7,
+    "second_native_original_Foam_Global_passes_staged": 2,
+    "second_original_exported_Spectrum_and_Foam_GUID_required_unmodified": true,
+    "second_native_strict_Unity_ShaderUtil_7pass_2pass_guards": true,
+    "second_source_free_installer_GIT_LFS_used": false,
+    "source_free_native_foam_spectrum_installer_CI_success": 43348620794,
+    "source_free_two_shader_CSharp_probe_CI_success": 43349010740,
+    "actual_original_Foam_Unity_game_pass_proven": false,
+    "original_Spectrum_Adreno_pixels_proven": false,
+    "original_Foam_Adreno_pixels_proven": false,
+    "original_kernel6_identity_proven": false,
+    "owner_latest_CL_source_sha": "3c26bb5d0f4de2cbffd42197dae9ae1372721659",
+    "latest_owner_total_invalid_water_passes": 28592,
+    "latest_owner_android_low_memory_exit": true
   }
 }
