@@ -79,6 +79,7 @@ namespace RaftAndroid.Editor
             // Production-only: never package a dummy/malformed original
             // Spectrum even if Unity BuildPlayer or AssetRipper succeeded.
             GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses();
+            GTOriginalWaterPassImportProbe.RequireOriginalFoamTwoPasses();
             FmodAndroidValidation.RequireOriginalBanks();
             // Owner prioritizes complete original data over package size. Use the
             // platform's normal Android imports, with NO forced resize/recompression.
