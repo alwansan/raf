@@ -3,6 +3,7 @@ import argparse
 from collections import Counter
 import json
 import math
+import struct
 from pathlib import Path
 
 from scripts.gt_mesh_restoration_priority import CATEGORIES
@@ -10,6 +11,32 @@ from scripts.gt_original_mesh_texture_graph import resolve
 from scripts.gt_original_material_link_graph import pointer
 from scripts.gt_serialized_graphics_counts import verify
 from scripts.gt_stage_serialized_owners import read_expected
+
+
+def streamed_frame_counts(words, curve_count):
+    """Validate Unity StreamedClip frame boundaries and curve indices."""
+    offset = 0
+    frames = keys = sentinels = 0
+    previous = -math.inf
+    while offset < len(words):
+        if len(words) - offset < 2:
+            raise ValueError("truncated_original_animation_stream_header")
+        time = struct.unpack("<f", struct.pack("<I", words[offset] & 0xffffffff))[0]
+        count = words[offset + 1]
+        end = offset + 2 + 5 * count
+        if count < 0 or end > len(words) or math.isnan(time) or time < previous:
+            raise ValueError("invalid_original_animation_stream_frame")
+        if not math.isfinite(time):
+            if not ((time < 0 and offset == 0) or (time > 0 and end == len(words))):
+                raise ValueError("invalid_original_animation_stream_sentinel")
+            sentinels += 1
+        if any(not 0 <= words[index] < curve_count for index in range(offset + 2, end, 5)):
+            raise ValueError("original_animation_stream_curve_out_of_range")
+        frames += 1
+        keys += count
+        previous, offset = time, end
+    return {"streamed_frames": frames, "streamed_curve_keys": keys,
+            "streamed_sentinel_frames": sentinels}
 
 
 def audit(root, manifest):
@@ -198,7 +225,9 @@ def audit(root, manifest):
             constant = data["m_ConstantClip"]["data"]
             if not all(math.isfinite(v) for v in constant):
                 raise ValueError("invalid_original_animation_constant_samples")
-            streamed = data["m_StreamedClip"]["data"]
+            stream = data["m_StreamedClip"]
+            streamed = stream["data"]
+            clip_payloads.update(streamed_frame_counts(streamed, stream["curveCount"]))
             clip_payloads.update({
                 "clips_with_valid_timing": 1,
                 "looping_clips": int(bool(muscle["m_LoopTime"])),

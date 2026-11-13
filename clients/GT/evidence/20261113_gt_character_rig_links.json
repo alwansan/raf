@@ -24,6 +24,9 @@
     "looping_clips": 22,
     "maximum_duration_seconds": 6.6666669845581055,
     "minimum_duration_seconds": 0.03333333507180214,
+    "streamed_curve_keys": 30727,
+    "streamed_frames": 972,
+    "streamed_sentinel_frames": 31,
     "streamed_words": 155579
   },
   "unique_controllers_checked_including_bases": 7,
