@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## GT Chat-29 — دليل 7 Graphics.Blit أصلي وإخفاق الهاتف بسبب الرسوميات والذاكرة
+
+[CI43343971412 SUCCESS](https://github.com/alwansan/raf/actions/runs/43343971412) أثبت في DLL أصلية SHA **7 تمريرات فعلية للـMaterial نفسه عبر typed IL كمعامل في `UnityEngine.Graphics.Blit`**، بعد مسار Shader.Find→new Material(Shader)→حقل original Material→24 قراءة في 8 دوال. فحص CIL محافظ وينهي المسار عند branch أو unsupported ويحتوي حالات إيجابية وسلبية؛ [CI43344199792 SUCCESS](https://github.com/alwansan/raf/actions/runs/43344199792) ثبّت العدد لمنع Regression. **هذا ليس نجاح Pixel GPU**. أحدث [CL@3c26bb5](https://github.com/alwansan/CL/commit/3c26bb5d0f4de2cbffd42197dae9ae1372721659) فيه 3 صور لموارد اللعبة البيضاء، 28,592 water invalid passes، 4,576 kernel6، 2,895 cursor، 4 OBB GUID، مع خروج Android PID18885 بوسم **LOW_MEMORY**؛ لا برهان أن الماء وحده سبب نقص الذاكرة. بوابة الهاتف [CI43343638117 SUCCESS](https://github.com/alwansan/raf/actions/runs/43343638117) أعادت إنتاج الإخفاق. الخطوة المقبلة إدراج ShaderLab أصلي 7Pass/Keyword في Unity transient بعد التحقق من اسم المصدر والـmeta، ثم Foam/Compute وXAPK وهاتف Adreno. [Chat29](sessions/20261113-GT-spectrum-material-blit-and-phone-low-memory-chat-29.md).
+
+---
+
 ## GT Chat-28 — إثبات التخزين و24 مرجع قراءة فعلي لـMaterial Spectrum
 
 أغلق GT جزءاً جديداً من سلسلة المصدر الحقيقي: original Shader.Find→own 3arg ctor→new Material(original Shader)→`dup`→property setter→**stfld original `UnityEngine.Material`**. [43339062121](https://github.com/alwansan/raf/actions/runs/43339062121)، [43339407339](https://github.com/alwansan/raf/actions/runs/43339407339)، [43339688082](https://github.com/alwansan/raf/actions/runs/43339688082) جميعها SUCCESS. الـMaterial field له **24 `ldfld` source-authentic** في 8 methods، 7 منها تتضمن Graphics، و2 تتضمن RenderTexture، بلا دليل بعد على وصول المرجع إلى وسيط دالة الرسم المعينة. لم يتغير الماء على الهاتف، ولا أُصلح index6 أو 770 Dummy، ولا نُشر الإصدار القديم بسبب 403. [Chat28](sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md).
