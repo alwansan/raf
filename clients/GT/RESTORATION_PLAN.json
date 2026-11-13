@@ -629,6 +629,26 @@
       "newer_binary_after_water_fix_verified": false,
       "exact_Shader_Material_Runtime_or_GPU_proof": false,
       "evidence": "clients/GT/evidence/20261113_cl_night_device_graphics_and_build_receipt.json"
+    },
+    {
+      "session": "20261113-040212-998",
+      "owner_CL_commit": "3c26bb5d0f4de2cbffd42197dae9ae1372721659",
+      "source_summary": "raft log/lf/LogRaft-20261113-040212-998/session-summary.json",
+      "visual_screenshots": 3,
+      "gate": "KNOWN_DEVICE_LOG_GATE_REJECTED",
+      "original_UltimateWater_pass_failures": 28592,
+      "spectrum_failures": 11512,
+      "foam_global_failures": 17080,
+      "invalid_compute_kernel_index6": 4576,
+      "cursor_RGBA32": 2895,
+      "OBB_GUID_failures": 4,
+      "system_matched_pid": 18885,
+      "android_system_exit_reason_code": 3,
+      "android_system_exit_reason_label": "LOW_MEMORY",
+      "unity_water_shader_oom_cause_proven": false,
+      "newer_binary_after_water_fix_verified": false,
+      "exact_original_device_GPU_shader_bindings_proven": false,
+      "evidence": "clients/GT/evidence/20261113_cl_0402_phone_and_material_blit_receipt.json"
     }
   ],
   "new_full_native_delivery_blocker": "GitHub Release POST HTTP403 with contents:write requested; signed APK+OBB checkpoint and full delivery Artifacts exist, release absent",
@@ -658,7 +678,7 @@
       43339407339,
       43339688082
     ],
-    "latest_session": "clients/GT/sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md",
+    "latest_session": "clients/GT/sessions/20261113-GT-spectrum-material-blit-and-phone-low-memory-chat-29.md",
     "own_constructor_material_newobj_duplicated": true,
     "own_constructor_Material_property_set_then_own_Material_field": true,
     "material_own_field_definition_source_verified": true,
@@ -668,6 +688,16 @@
     "material_field_reader_methods_contain_RenderTexture_calls": 2,
     "material_field_reader_methods_contain_Renderer_calls": 0,
     "Material_field_value_is_accepted_Graphics_argument_proven": false,
-    "original_Material_field_reader_CI": 43339688082
+    "original_Material_field_reader_CI": 43339688082,
+    "authentic_source_Material_to_Graphics_Blit_typed_argument_count": 7,
+    "source_Argument_compiled_IL_straight_line_only": true,
+    "original_dynamic_Material_field_reads": 24,
+    "original_dynamic_Material_field_reader_methods": 8,
+    "actual_Unity_Graphics_Blit_executed_on_phone": false,
+    "original_shader_program_Blit_pass_sampler_RT_matched": false,
+    "tracer_source_path": "android-port/Experiments/GT/SpectrumShaderFindResultFlow/OriginalMaterialCallFlow.cs",
+    "tracer_integration_path": "android-port/Experiments/GT/SpectrumShaderFindResultFlow/Program.cs",
+    "real_source_7_blit_CI": 43343971412,
+    "strict_source_7_blit_CI": 43344199792
   }
 }
