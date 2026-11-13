@@ -1,0 +1,74 @@
+name: Raft original indexed FFT private Unity import
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-gt-indexed-fft-unity.yml'
+      - 'scripts/gt_stage_indexed_fft_candidate.py'
+      - 'scripts/t1_stage_original_fft_compute_candidates.py'
+      - 'scripts/probe_original_fft_resource_bindings.py'
+      - 'android-port/Experiments/GT/Editor/GTIndexedFftValidation.cs'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-gt-indexed-fft-unity-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  indexed-fft:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: UNITY_LICENSE
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          sparse-checkout: |
+            scripts
+            android-port/Experiments/GT/Editor
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-fft
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/
+      - name: Recover original programs and stage one private indexed ComputeShader
+        shell: bash
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m scripts.stage_zip2_fft_owner --zip2-checkout zip2-fft \
+            --destination "$RUNNER_TEMP/fft/Raft_Data/sharedassets0.assets"
+          python3 -m scripts.gt_stage_indexed_fft_candidate --original-data "$RUNNER_TEMP/fft/Raft_Data" \
+            --project "$GITHUB_WORKSPACE/gt-indexed-fft"
+          mkdir "$GITHUB_WORKSPACE/gt-indexed-fft/Assets/Editor"
+          cp android-port/Experiments/GT/Editor/GTIndexedFftValidation.cs "$GITHUB_WORKSPACE/gt-indexed-fft/Assets/Editor/"
+      - name: Validate 20 indexed registrations and Android Vulkan bundle
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-indexed-fft
+          targetPlatform: Android
+          buildMethod: RaftAndroid.Editor.GTIndexedFftValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Delete temporary original assets and private compute source
+        if: always()
+        shell: bash
+        run: rm -rf -- "$GITHUB_WORKSPACE/gt-indexed-fft" "$GITHUB_WORKSPACE/zip2-fft" "$RUNNER_TEMP/fft"
