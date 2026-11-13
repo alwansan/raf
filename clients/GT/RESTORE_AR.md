@@ -1,5 +1,11 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT Chat-33 ملحق — Keyword/Property source topology
+
+[CI43358489426 SUCCESS](https://github.com/alwansan/raf/actions/runs/43358489426): كل **74 سجل Stage-Variant** للشيدر الأعلى فُحصت من ZIP2، 27 اسم Keyword و27 Flag و14 فهرساً مستعملاً أصلياً جميعها في جدول الأسماء، و35 Property أصلية، player bucket واحد؛ 58/58 HLSL/SPIR-V استمرت ناجحة. الجداول الأصلية محفوظة حصراً في runner temp أثناء CI وحُذفت؛ لم نثبت معنى global/local pragma أو Sampler/CB0/ShaderLab أو GUID إنتاجي. [Chat33](sessions/20261113-GT-original-921-complete-source-variant-stage-chat-33.md). لا XAPK.
+
+---
+
 ## GT Chat-33 — استعادة كل Variants للشيدر الأصلي الأعلى (مصدر فقط، بلا XAPK)
 
 [CI43357332292 SUCCESS](https://github.com/alwansan/raf/actions/runs/43357332292): من ZIP2 SHA الحقيقي، استخرجنا وترجمنا **58/58 برنامج DXBC أصلي مختلف** للشيدر الذي يشغل 921 خانة Renderer ضمن 6 مشاهد. **4 Passes أصلية، 33 زوج VS/FS متطابقاً، 8 Vertex Variants غير مقترنة** محفوظة بملف خاص، و58/58 نجحت HLSL وVulkan1.1 roundtrip؛ تم حذف كل الملفات الأصلية المؤقتة بعد الاختبار، ونُشر تقرير أعداد فقط. الأداة `scripts/gt_original_921_all_variants.py` واختباراتها ومسار CI الجديد داخل الفرع. **لم** ينشأ ShaderLab إنتاجي أصلي شامل بعد، ولم تتبدل Material/.meta/GUID، **770 مستند Material Dummy** لا تزال الحالة المرجعية، و165 Shader لم تُستعد بالكامل. التالي: استعادة Keywords/CB0/Samplers/render states وتجميع 4-Pass ShaderLab بكل 33 pair، ثم إدماجه في GUID الأصلي وفحص Dummy؛ بعده بقية الشيدرات/الماء/FFT/المؤثرات. **ممنوع XAPK الآن** حتى G0–G6. [جلسة Chat33](sessions/20261113-GT-original-921-complete-source-variant-stage-chat-33.md).
