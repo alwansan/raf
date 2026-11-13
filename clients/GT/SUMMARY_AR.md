@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## GT Chat-33 — تعافٍ مثبت لكل 58 برنامج شيدر أصلي عالي الأثر
+
+نجح [CI43357332292](https://github.com/alwansan/raf/actions/runs/43357332292) بإثبات **58/58** مرحلة DXBC أصلية تُترجم إلى HLSL وتُعاد إلى SPIR-V Vulkan1.1، مسترجعاً جميع **33/33 زوج VS/FS** و**8 Vertex Variants أصلية غير مقترنة** لشيدر بأربعة Passes مربوط بـ**921 خانة Renderer** من العينة الأصلية. استُخدمت 6 مشاهد و4 حاويات SHA ZIP2 بلا LFS؛ كل ملفات الشيدر الأصلية بقيت خاصة وحُذفت بعد التشغيل. GitHub Artifact الآمن `14006268247` يحتوي أعداداً لا شيفرات. هذه **استعادة برامج مصدرية قابلة لإعادة الإنتاج**، لا استبدال ShaderLab أو ربط GUID أو ألوان الهاتف؛ 770 Material Dummy وP04/P05/G0–G6 لم تُغلق. الخطوة التالية: بناء ShaderLab الكامل وترميم Sampler/CB0/Keywords ثم دمجه مع GUID الأصلي، بعد ذلك إعادة جرد Material Dummy. [Chat33](sessions/20261113-GT-original-921-complete-source-variant-stage-chat-33.md). **لا XAPK الآن**.
+
+---
+
 ## GT Chat-32 — أُنجز أول جرد ترميم حقيقي عالي الأثر وأُجّلت XAPK
 
 بعد توجيه المالك بأن الاستعادة الكاملة تسبق XAPK، اجتاز [CI43354787983 SUCCESS](https://github.com/alwansan/raf/actions/runs/43354787983) جرداً أصلياً لـ6 مشاهد: 21 Shader48 مثبتة بربط source/export، **17 منها Dummy وترتبط بـ1373 من 1633 خانة Renderer**، وأكبر شيدر ناقص يرتبط بـ**921 خانة**. رتبت GT أولوياتها [921، 121، 108، 70، 34، ...] في قائمة خاصة مؤقتة مع Source Shader→Export GUID، ولم تنشر GUIDs أو تستبدل برامج وهمية. [CI43353780918 SUCCESS](https://github.com/alwansan/raf/actions/runs/43353780918) اختبر ترتيب المصدر، [CI43354701952 SUCCESS](https://github.com/alwansan/raf/actions/runs/43354701952) راجع بصمات أدوات التصدير. **الخطوة التالية استعادة Source Shader الأعلى أصلياً (4 Pass، 33 pairs، 8 vertex غير مقترنة) ثم بقية الشيدرات والخامات**، لا طلب XAPK. [Chat32](sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md).
