@@ -25,6 +25,7 @@ namespace RaftW1
             public bool shaderImported;
             public bool androidVulkanOnly;
             public bool privateShaderBundleBuilt;
+            public bool productionDepthImportGatePassed;
             public bool shaderLabUnityValidated;
             public bool numericOrVisualEquivalence;
             public bool gameOrApkBuilt;
@@ -71,10 +72,14 @@ namespace RaftW1
                 var messages = ShaderUtil.GetShaderMessages(shader);
                 result.shaderMessages = messages.Length;
                 result.shaderErrors = messages.Count(m => m.severity.ToString() == "Error");
+                RaftAndroid.Editor.GTOriginalWaterPassImportProbe.RequireOriginalDepthTopology();
+                result.productionDepthImportGatePassed = true;
                 // Keep compiler contents private: report only count and commitment.
                 result.messageDigest = Hash(Encoding.UTF8.GetBytes(string.Join("\n", messages.Select(m => m.message))));
                 result.shaderLabUnityValidated = result.shaderImported && result.androidVulkanOnly &&
-                    result.privateShaderBundleBuilt && result.privateBundleBytes > 0 && result.shaderErrors == 0 && !ShaderUtil.ShaderHasError(shader);
+                    result.privateShaderBundleBuilt && result.privateBundleBytes > 0 &&
+                    result.productionDepthImportGatePassed && result.shaderErrors == 0 &&
+                    !ShaderUtil.ShaderHasError(shader);
                 exitCode = result.shaderLabUnityValidated ? 0 : 1;
             }
             catch (Exception exception)

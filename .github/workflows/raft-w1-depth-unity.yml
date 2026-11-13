@@ -7,6 +7,7 @@ on:
       - 'scripts/w1_build_depth_wrapper.py'
       - '.github/workflows/raft-w1-depth-unity.yml'
       - 'android-port/Experiments/W1/Editor/DepthShaderValidation.cs'
+      - 'android-port/Editor/GTOriginalWaterPassImportProbe.cs'
       - 'scripts/w1_depth_shaderlab.py'
       - 'tests/test_w1_depth_shaderlab.py'
   workflow_dispatch:
@@ -26,6 +27,7 @@ jobs:
           lfs: false
           sparse-checkout: |
             android-port/Experiments/W1
+            android-port/Editor
             scripts
             tests
       - name: Credential readiness without exposing values
@@ -83,8 +85,10 @@ jobs:
           dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
       - name: Decode original parameters and reconstruct private ShaderLab wrapper
         run: timeout 600s python3 -m scripts.w1_build_depth_wrapper --source "$RUNNER_TEMP/w1-depth-original/Raft_Data" --out "$RUNNER_TEMP/w1-depth-wrapper-summary.json" --private-project "$GITHUB_WORKSPACE/w1-depth-project"
-      - name: Install only W1 editor probe
-        run: cp android-port/Experiments/W1/Editor/DepthShaderValidation.cs w1-depth-project/Assets/Editor/
+      - name: Stage the W1 validation and production water import check
+        run: |
+          cp android-port/Experiments/W1/Editor/DepthShaderValidation.cs \
+             android-port/Editor/GTOriginalWaterPassImportProbe.cs w1-depth-project/Assets/Editor/
       - name: Compile one private shader bundle in pinned Unity; never build a Player
         uses: game-ci/unity-builder@v4
         env:

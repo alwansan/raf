@@ -8,7 +8,7 @@ import tempfile
 
 from scripts.verify_targeted_lfs_compute_sources import verify_sources
 from scripts.w1_recover_graphics_programs import OWNERS, decoded_platforms, records, translate, command
-from scripts.w1_recover_depth_passes import TARGET, OBJECT_SHA256, linked_program, stage_variants, variant_key, digest
+from scripts.w1_recover_depth_passes import TARGET, SOURCE_IDENTITY, OBJECT_SHA256, linked_program, stage_variants, variant_key, digest
 from scripts.w1_rebind_depth_resources import rebind, signature_inputs
 from scripts.run_original_dxbc_translation_probe import version_tokens
 from scripts.w1_depth_shaderlab import decode_empty_parameters, stage_body, wrapper, property_name
@@ -17,8 +17,9 @@ from scripts.w1_depth_shaderlab import decode_empty_parameters, stage_body, wrap
 def build(root, out, private_project=None, private_shader=None):
     verify_sources(root, expected=OWNERS)
     import UnityPy
-    env = UnityPy.load(str(root / 'sharedassets0.assets'))
-    original = env.file.objects[2407]
+    owner, path_id = SOURCE_IDENTITY
+    env = UnityPy.load(str(root / owner))
+    original = env.file.objects[path_id]
     if original.type.name != 'Shader' or hashlib.sha256(original.get_raw_data()).hexdigest() != OBJECT_SHA256:
         raise ValueError('Original Depth Copy input identity changed')
     tree = original.read_typetree()

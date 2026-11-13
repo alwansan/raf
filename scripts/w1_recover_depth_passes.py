@@ -22,6 +22,7 @@ from scripts.w1_rebind_depth_resources import rebind, signature_inputs
 from scripts.w1_recover_graphics_programs import command
 
 TARGET = 'UltimateWater/Depth/Depth Copy'
+SOURCE_IDENTITY = ('sharedassets0.assets', 2407)
 OBJECT_SHA256 = 'cf978dad4f4c67e57fb58448cee7a8c033c30d1491ef54b0a6ad887317fba75a'
 
 
@@ -117,7 +118,7 @@ def recover(root, out):
         raise ValueError('Original D3D11 graphics table is ambiguous')
     entries = tables[0][1]
     parsed = tree['m_ParsedForm']
-    if owner != 'sharedassets0.assets' or path_id != 2407 or object_sha != OBJECT_SHA256:
+    if (owner, path_id) != SOURCE_IDENTITY or object_sha != OBJECT_SHA256:
         raise ValueError('Previously authenticated original Depth Copy object identity changed')
     passes, stages = [], []
     with tempfile.TemporaryDirectory(prefix='w1-private-depth-passes-') as folder:

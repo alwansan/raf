@@ -14,6 +14,7 @@ namespace UnityEngine
         public int passCount;
         public bool isSupported;
         public bool syntheticCompileError;
+        public int[] serializedPassCounts;
     }
     public static class Application
     {
@@ -31,11 +32,26 @@ namespace UnityEngine
 
 namespace UnityEditor
 {
+    public sealed class ShaderData
+    {
+        public sealed class Subshader
+        {
+            public int PassCount { get; set; }
+        }
+        private readonly int[] passes;
+        public ShaderData(int[] passes) { this.passes = passes; }
+        public int SerializedSubshaderCount => passes.Length;
+        public Subshader GetSerializedSubshader(int index) => new Subshader { PassCount = passes[index] };
+    }
     public static class ShaderUtil
     {
         public static bool ShaderHasError(UnityEngine.Shader shader)
         {
             return shader.syntheticCompileError;
+        }
+        public static ShaderData GetShaderData(UnityEngine.Shader shader)
+        {
+            return new ShaderData(shader.serializedPassCounts);
         }
     }
     public static class AssetDatabase
@@ -79,6 +95,19 @@ public static class Program
             line => line.StartsWith(
                 "GT_WATER_IMPORTED_PASS_DIAGNOSTIC family=" + family + " ",
                 StringComparison.Ordinal));
+    }
+
+    private static void RequireDepthBlocked(string message)
+    {
+        try
+        {
+            RaftAndroid.Editor.GTOriginalWaterPassImportProbe.RequireOriginalDepthTopology();
+        }
+        catch (InvalidOperationException)
+        {
+            return;
+        }
+        throw new InvalidOperationException(message);
     }
 
     public static void Main()
@@ -192,6 +221,24 @@ public static class Program
             catch (InvalidOperationException) { foamBlocked=true; }
             Require(foamBlocked, "native accepted original Foam dummy ShaderLab");
             File.WriteAllText(foam, "Shader \"synthetic\" { SubShader { Pass {} Pass {} } }");
+
+            RequireDepthBlocked("missing original Depth Copy was accepted");
+            var depthShader = new UnityEngine.Shader
+            {
+                name = "UltimateWater/Depth/Depth Copy",
+                passCount = 3,
+                serializedPassCounts = new[] { 6, 3 },
+            };
+            UnityEditor.AssetDatabase.Register("synthetic-depth", "Assets/Water/Depth.shader", depthShader);
+            RaftAndroid.Editor.GTOriginalWaterPassImportProbe.RequireOriginalDepthTopology();
+            depthShader.serializedPassCounts = new[] { 3, 6 };
+            RequireDepthBlocked("reordered original Depth Copy SubShaders were accepted");
+            depthShader.serializedPassCounts = new[] { 6, 3 };
+            depthShader.syntheticCompileError = true;
+            RequireDepthBlocked("original Depth Copy compiler errors were accepted");
+            depthShader.syntheticCompileError = false;
+            UnityEditor.AssetDatabase.Register("synthetic-depth-duplicate", "Assets/Water/OtherDepth.shader", depthShader);
+            RequireDepthBlocked("duplicate original Depth Copy was accepted");
 
             // A malicious/redirected asset path must never be read as a
             // local project .shader, even if it resolves to a real outer file.

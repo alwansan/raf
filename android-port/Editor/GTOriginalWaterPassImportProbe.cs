@@ -177,6 +177,41 @@ namespace RaftAndroid.Editor
                     "GT_Native_Foam_original_two_pass_import_or_compile_not_verified");
         }
 
+        public static void RequireOriginalDepthTopology()
+        {
+            const string originalName = "UltimateWater/Depth/Depth Copy";
+            string[] shaderIds = AssetDatabase.FindAssets("t:Shader", new[] { "Assets" });
+            Shader original = null;
+            foreach (string id in shaderIds)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(id);
+                if (string.IsNullOrEmpty(path) ||
+                    !path.StartsWith("Assets/", StringComparison.Ordinal) ||
+                    !path.EndsWith(".shader", StringComparison.OrdinalIgnoreCase))
+                    continue;
+                Shader shader = AssetDatabase.LoadAssetAtPath<Shader>(path);
+                if (shader == null || !string.Equals(shader.name, originalName, StringComparison.Ordinal))
+                    continue;
+                if (original != null)
+                    throw new InvalidOperationException("GT_Native_Depth_Copy_duplicate_import");
+                original = shader;
+            }
+            if (original == null)
+                throw new InvalidOperationException("GT_Native_Depth_Copy_missing_import");
+
+            // Inspect both authored alternatives. Shader.passCount reflects the
+            // editor's active SubShader and says nothing about Android selection.
+            ShaderData data = ShaderUtil.GetShaderData(original);
+            if (data == null || data.SerializedSubshaderCount != 2 ||
+                data.GetSerializedSubshader(0).PassCount != 6 ||
+                data.GetSerializedSubshader(1).PassCount != 3 ||
+                ShaderUtil.ShaderHasError(original))
+                throw new InvalidOperationException("GT_Native_Depth_Copy_original_topology_or_compile_not_verified");
+
+            Debug.Log("GT_NATIVE_DEPTH_COPY_UNITY_IMPORT_GATE serializedSubshaderPasses=6,3 " +
+                      "accepted=true AndroidSubshaderSelectionVerified=false");
+        }
+
         public static void Report()
         {
             // Search only local exported project shader assets. No names, GUIDs,

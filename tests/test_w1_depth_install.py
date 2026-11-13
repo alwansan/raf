@@ -1,4 +1,5 @@
 import hashlib
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -25,17 +26,31 @@ class InstallTests(unittest.TestCase):
         self.content = self.original + b'\n// synthetic reconstruction fixture\n'
         self.source.write_bytes(self.content)
         self.backup = self.root / 'backup'
+        self.trace = self.root / 'private-trace.json'
+        self.lineage = {
+            'schema_version': 1,
+            'export_instance': 'a' * 32,
+            'objects': [{
+                'class_id': 48,
+                'source': {'owner': subject.SOURCE_IDENTITY[0], 'path_id': subject.SOURCE_IDENTITY[1]},
+                'exportable': True,
+                'export': {'file_id': 4800000, 'guid': '1234567890abcdef1234567890abcdef', 'type': 3},
+            }],
+        }
+        self.trace.write_text(json.dumps(self.lineage))
         self.pin = patch.object(subject, 'WRAPPER_SHA256', hashlib.sha256(self.content).hexdigest())
         self.pin.start()
         self.addCleanup(self.pin.stop)
 
     def run_install(self):
-        return subject.install(self.project, self.source, self.backup)
+        return subject.install(self.project, self.source, self.backup, self.trace)
 
     def test_preserves_guid_and_other_assets(self):
         other = self.assets / 'unrelated.mat'
         other.write_bytes(b'unchanged')
-        self.assertEqual(self.run_install()['installed_targets'], 1)
+        report = self.run_install()
+        self.assertEqual(report['installed_targets'], 1)
+        self.assertTrue(report['source_shader_guid_matches_same_instance_trace'])
         self.assertEqual(self.target.read_bytes(), self.content)
         self.assertEqual(self.meta.read_bytes(), self.metadata)
         self.assertEqual(other.read_bytes(), b'unchanged')
@@ -60,6 +75,25 @@ class InstallTests(unittest.TestCase):
         self.meta.unlink()
         with self.assertRaises(OSError): self.run_install()
         self.assertEqual(self.target.read_bytes(), self.original)
+
+    def test_trace_mismatch_rejected_before_mutation(self):
+        self.lineage['objects'][0]['export']['guid'] = 'b' * 32
+        self.trace.write_text(json.dumps(self.lineage))
+        with self.assertRaisesRegex(ValueError, 'does not match the traced source GUID'):
+            self.run_install()
+        self.assertEqual(self.target.read_bytes(), self.original)
+        self.assertFalse(self.backup.exists())
+
+    def test_another_shader_cannot_share_the_traced_guid(self):
+        original = self.lineage['objects'][0]
+        self.lineage['objects'].append({
+            **original, 'source': {**original['source'], 'path_id': subject.SOURCE_IDENTITY[1] + 1},
+        })
+        self.trace.write_text(json.dumps(self.lineage))
+        with self.assertRaisesRegex(ValueError, 'Ambiguous original Depth Copy export GUID'):
+            self.run_install()
+        self.assertEqual(self.target.read_bytes(), self.original)
+        self.assertFalse(self.backup.exists())
 
     def test_backup_inside_project_rejected(self):
         self.backup = self.project / 'backup'

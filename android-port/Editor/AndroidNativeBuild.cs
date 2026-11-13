@@ -80,6 +80,7 @@ namespace RaftAndroid.Editor
             // Spectrum even if Unity BuildPlayer or AssetRipper succeeded.
             GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses();
             GTOriginalWaterPassImportProbe.RequireOriginalFoamTwoPasses();
+            GTOriginalWaterPassImportProbe.RequireOriginalDepthTopology();
             FmodAndroidValidation.RequireOriginalBanks();
             // Owner prioritizes complete original data over package size. Use the
             // platform's normal Android imports, with NO forced resize/recompression.
