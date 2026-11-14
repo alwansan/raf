@@ -8,6 +8,8 @@ on:
       - scripts/gt_verify_original_mesh_export.py
       - tests/test_gt_verify_original_mesh_export.py
       - scripts/b44_verify_material_colors.py
+      - scripts/gt_verify_native_array_mips.py
+      - scripts/gt_write_unity_array_import_contract.py
       - scripts/gt_stage_indexed_fft_candidate.py
   workflow_dispatch:
 

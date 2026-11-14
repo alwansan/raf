@@ -264,7 +264,10 @@ def compose(private, engine_keywords=False):
             names = sorted({name for key in engine_keys for name in key})
             clauses = [{"enabled": key, "program": number}
                        for number, key in enumerate(engine_keys)]
-            pragmas = ["#pragma multi_compile __ " + name for name in names]
+            pragmas = ["#pragma multi_compile __ " + name
+                       for name in names if name != "INSTANCING_ON"]
+            if "INSTANCING_ON" in names:
+                pragmas.append("#pragma multi_compile_instancing")
             # Import needs a valid default even when the original pass
             # contains no empty-keyword permutation (e.g. ShadowCaster).
             code = routed_stage(clauses, names, programs).replace(

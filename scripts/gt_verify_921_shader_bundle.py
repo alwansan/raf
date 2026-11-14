@@ -75,9 +75,10 @@ def verify_routes(parsed, entries=None, engine_routes=None):
             if expected_keys is not None:
                 missing_count = len(expected_keys - routes)
                 if missing_count:
+                    missing_instanced = sum("INSTANCING_ON" in key for key in expected_keys - routes)
                     raise ValueError(
                         f"original_921_engine_routes_missing stage={stage} pass={index} "
-                        f"missing={missing_count} entries={len(rows)}"
+                        f"missing={missing_count} missingInstanced={missing_instanced} entries={len(rows)}"
                     )
                 counts.append(len(expected_keys))
                 continue
