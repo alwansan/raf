@@ -2,11 +2,42 @@
 import argparse
 import json
 from pathlib import Path
+import struct
 
 from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES
 from scripts.restore_builtin_shaders import exported_shader_identity
 from scripts.w1_recover_depth_passes import stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
+
+
+def spirv_execution_models(data):
+    if len(data) < 20 or len(data) % 4 or data[:4] != b"\x03\x02\x23\x07":
+        raise ValueError("original_921_invalid_spirv_module")
+    words = struct.unpack(f"<{len(data) // 4}I", data)
+    models = set()
+    index = 5
+    while index < len(words):
+        count, opcode = divmod(words[index], 1 << 16)
+        if not count or index + count > len(words):
+            raise ValueError("original_921_invalid_spirv_instruction")
+        if opcode == 15:
+            if count < 4:
+                raise ValueError("original_921_invalid_spirv_entrypoint")
+            models.add(words[index + 1])
+        index += count
+    return models
+
+
+def vulkan_blob_header_counts(entries, rows):
+    indices = {row.get("m_BlobIndex") for _, _, row in rows}
+    if any(type(index) is not int or not 0 <= index < len(entries) for index in indices):
+        raise ValueError("original_921_invalid_vulkan_blob_index")
+    counts = {}
+    for index in indices:
+        _, bytecode = entries[index]
+        count = bytecode.count(b"LOMS") + bytecode.count(b"\x03\x02\x23\x07")
+        counts[count] = counts.get(count, 0) + 1
+    return dict(sorted(counts.items()))
 
 
 def inspect(bundle, source, receipt, engine_route_manifest=None):
@@ -52,6 +83,13 @@ def verify_routes(parsed, entries=None, engine_routes=None):
             expected_keys = engine_routes[index] if engine_routes is not None else None
             engine_names = set().union(*expected_keys) if expected_keys is not None else set()
             rows = stage_variants(shader_pass[stage])
+            if entries is not None and stage == "progFragment" and not rows:
+                vertices = stage_variants(shader_pass["progVertex"])
+                counts_by_blob = vulkan_blob_header_counts(entries, vertices)
+                raise ValueError(
+                    f"original_921_fragment_table_empty pass={index} "
+                    f"vertexRows={len(vertices)} moduleHeadersByBlob={counts_by_blob}"
+                )
             routes = set()
             for _, _, row in rows:
                 if entries is not None:
