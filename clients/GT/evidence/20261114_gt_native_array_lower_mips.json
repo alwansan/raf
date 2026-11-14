@@ -1,0 +1,12 @@
+{
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_owner": "sharedassets1.assets",
+  "owner_and_stream_sha256_verified": true,
+  "exported_native_class187_arrays_matched_by_same_instance_trace": 4,
+  "original_array_layers": 28,
+  "mip_levels_per_layer": 11,
+  "complete_mip_payload_bytes_exact": 39147584,
+  "exported_dimensions_mip_count_and_graphics_format_exact": true,
+  "isolated_unity_android_import_verified": false,
+  "production_exporter_changed": false
+}
