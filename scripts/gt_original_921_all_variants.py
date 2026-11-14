@@ -21,12 +21,18 @@ STATUS="GT_ORIGINAL_921_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
 VEGETATION_STATUS="GT_ORIGINAL_VEGETATION_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
 DIRTPILE_STATUS="GT_ORIGINAL_DIRTPILE_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
 GRASSPLOT_STATUS="GT_ORIGINAL_GRASSPLOT_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
+SKIN_STATUS="GT_ORIGINAL_SKIN_AMPLIFY_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
 SOURCE_PROFILES = {
     "blockpaint": (921, 35, STATUS, " BlockPaint"),
     "vegetation": (121, 16, VEGETATION_STATUS, "Vegetation"),
     "dirtpile": (70, 6, DIRTPILE_STATUS, "DirtPile"),
     "grassplot": (16, 8, GRASSPLOT_STATUS, "GrassPlot"),
+    "skin": (30, 13, SKIN_STATUS, "Skin_Amplify"),
 }
+
+
+DEFAULT_TOPOLOGY = (PASS_COUNT, PAIRED_COUNT, ORPHAN_VERTEX_COUNT, DISTINCT_DXBC_COUNT)
+SKIN_TOPOLOGY = (3, 23, 8, 43)
 
 
 def select_scene_shader(source_use, report, shader, *, get_tree=None):
@@ -73,7 +79,7 @@ def authenticated_shader_reader(original: Path):
 
     return get_tree
 
-def enumerate_all(parsed,table,*,variants,permutation,linker):
+def enumerate_all(parsed,table,*,variants,permutation,linker,topology=DEFAULT_TOPOLOGY):
     """Never pair unrelated player buckets, tiers or keyword permutations."""
     if type(parsed) is not dict or type(parsed.get("m_SubShaders")) is not list or not parsed["m_SubShaders"]:
         raise ValueError("missing_original_shader_pass_graph")
@@ -136,9 +142,8 @@ def enumerate_all(parsed,table,*,variants,permutation,linker):
                 "unmatched_vertex":len(rows[1].keys()-matched),
                 "unmatched_fragment":len(rows[0].keys()-matched),
             })
-    if (n_passes!=PASS_COUNT or len(pairs)!=PAIRED_COUNT or
-        sum(o["stage"]==1 for o in orphans)!=ORPHAN_VERTEX_COUNT or
-        any(o["stage"]==0 for o in orphans) or len(distinct)!=DISTINCT_DXBC_COUNT):
+    if ((n_passes,len(pairs),len(orphans),len(distinct)) != topology
+            or any(o["stage"]==0 for o in orphans)):
         raise ValueError("authenticated_original_921_variant_population_drift")
     return pairs,orphans,passes,distinct
 
@@ -152,8 +157,8 @@ def _private_destination(path:Path,source:Path,other:Path):
     return path
 
 def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator,source_parsed=None,shader="blockpaint"):
-    if (len(pairs)!=PAIRED_COUNT or len(orphans)!=ORPHAN_VERTEX_COUNT or
-        len(passes)!=PASS_COUNT or len(distinct)!=DISTINCT_DXBC_COUNT):
+    topology = SKIN_TOPOLOGY if shader == "skin" else DEFAULT_TOPOLOGY
+    if (len(passes),len(pairs),len(orphans),len(distinct)) != topology:
         raise ValueError("non_original_921_stage_inventory")
     if type(source_parsed) is not dict or type(source_parsed.get('m_SubShaders')) is not list:
         raise ValueError('original_full_Shader_ParsedForm_missing')
@@ -408,20 +413,25 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None,shad
     if len(tables)!=1:
         raise ValueError("ambiguous_original_921_D3D11_program_table")
     baseline=top.summarize(tree.get("m_ParsedForm"),tables[0])
-    if (baseline["original_source_Shader48_pass_count"]!=PASS_COUNT or
-        baseline["matched_vertex_fragment_permutation_pairs"]!=PAIRED_COUNT or
-        baseline["unmatched_vertex_permutations"]!=ORPHAN_VERTEX_COUNT or
-        baseline["unmatched_fragment_permutations"]!=0 or
-        baseline["distinct_original_linked_D3D11_programs"]!=DISTINCT_DXBC_COUNT):
+    topology = SKIN_TOPOLOGY if shader == "skin" else DEFAULT_TOPOLOGY
+    original_topology = (
+        baseline["original_source_Shader48_pass_count"],
+        baseline["matched_vertex_fragment_permutation_pairs"],
+        baseline["unmatched_vertex_permutations"],
+        baseline["distinct_original_linked_D3D11_programs"],
+    )
+    if original_topology != topology or baseline["unmatched_fragment_permutations"] != 0:
         raise ValueError("original_921_authenticated_shader_variant_baseline_drift")
     pairs,orphans,passes,unique=enumerate_all(
         tree["m_ParsedForm"],tables[0],variants=stage_variants,
-        permutation=variant_key,linker=linked_program)
+        permutation=variant_key,linker=linked_program,topology=topology)
     private=_private_destination(private,original,out)
     out=_private_destination(out,original,private)
     safe=stage_private(pairs,orphans,passes,unique,private,translator=translator,source_parsed=tree['m_ParsedForm'],shader=shader)
     from scripts.gt_original_921_keyword_routes import compile_routed_stages, keyword_routes, shaderlab_layout
     route_packet, route_summary = keyword_routes(tree["m_ParsedForm"], pairs, orphans, passes)
+    if shader == "skin" and route_summary["source_exact_keyword_routes_by_pass"] != [8, 13, 2]:
+        raise ValueError("original_skin_pass_route_count_drift")
     # Resolve the tuple of stage and bytecode digest to the packet's program directories.
     program_dirs = {ident: f"program-{index:03d}" for index, ident in enumerate(unique)}
     for row in route_packet:

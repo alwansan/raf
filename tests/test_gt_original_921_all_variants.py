@@ -43,10 +43,11 @@ class Original921VariantTests(unittest.TestCase):
         from scripts.t3_original_renderer_shader_impact import STATUS
 
         source = {("sharedassets0.assets", 42): 121, ("sharedassets0.assets", 43): 921,
-                  ("sharedassets0.assets", 44): 70}
+                  ("sharedassets0.assets", 44): 70, ("sharedassets0.assets", 45): 30}
         receipt = {"status": STATUS, "six_original_scenes_sha_verified": True}
         self.assertEqual(select_scene_shader(source, receipt, "vegetation"), ("sharedassets0.assets", 42))
         self.assertEqual(select_scene_shader(source, receipt, "dirtpile"), ("sharedassets0.assets", 44))
+        self.assertEqual(select_scene_shader(source, receipt, "skin"), ("sharedassets0.assets", 45))
         with self.assertRaisesRegex(ValueError, "unverified"):
             select_scene_shader(source, {}, "dirtpile")
         with self.assertRaisesRegex(ValueError, "ambiguous"):
