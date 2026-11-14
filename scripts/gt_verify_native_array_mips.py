@@ -18,7 +18,20 @@ SAMPLER_FIELDS = ("m_FilterMode", "m_Aniso", "m_MipBias", "m_WrapU", "m_WrapV", 
 
 def array_key(tree):
     settings = tree["m_TextureSettings"]
-    return tuple(tree[field] for field in FIELDS) + tuple(settings[field] for field in SAMPLER_FIELDS)
+    return tuple(tree[field] for field in FIELDS), tuple(settings[field] for field in SAMPLER_FIELDS)
+
+
+def verify_packaged_arrays(original, packaged):
+    def payloads(arrays):
+        result = Counter()
+        for ((shape, _sampler), length, digest), count in arrays.items():
+            result[shape, length, digest] += count
+        return result
+
+    if payloads(packaged) != payloads(original):
+        raise ValueError("android_bundle_original_array_payload_mismatch")
+    if packaged != original:
+        raise ValueError("android_bundle_original_array_sampler_mismatch")
 
 
 def packaged_arrays(bundle):
@@ -154,8 +167,8 @@ def inspect(source, manifest, trace_file, assets, owners, bundle=None,
                 referenced.add(guid)
     if referenced != target_guids:
         raise ValueError("native_array_missing_exported_material_reference")
-    if bundle is not None and packaged_arrays(bundle) != original_payloads:
-        raise ValueError("android_bundle_original_array_payload_mismatch")
+    if bundle is not None:
+        verify_packaged_arrays(original_payloads, packaged_arrays(bundle))
     return {"android_bundle_original_mip_payloads_verified": bundle is not None,
             "android_bundle_original_sampler_settings_verified": bundle is not None,
             "arrays": arrays, "layers": layers, "exact_mip_payload_bytes": total_bytes,
