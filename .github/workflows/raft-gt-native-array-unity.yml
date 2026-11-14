@@ -34,6 +34,10 @@ jobs:
             /RAFT_FILE_MANIFEST.tsv
             /Raft/Raft_Data/sharedassets1.assets
             /Raft/Raft_Data/sharedassets1.assets.resS/*
+            /Raft/Raft_Data/sharedassets35.assets
+            /Raft/Raft_Data/sharedassets35.assets.resS/*
+            /Raft/Raft_Data/sharedassets29.assets
+            /Raft/Raft_Data/sharedassets29.assets.resS/*
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
@@ -57,7 +61,8 @@ jobs:
           from scripts.w1_stage_zip2_owners import stage
           root = Path('zip2-array')
           pins = manifest(root)
-          paths = ['Raft_Data/sharedassets1.assets', 'Raft_Data/sharedassets1.assets.resS']
+          paths = [f'Raft_Data/sharedassets{owner}.assets{suffix}'
+                   for owner in (1, 29, 35) for suffix in ('', '.resS')]
           stage(root, Path(os.environ['RUNNER_TEMP']) / 'array-input',
                 {name: pins[name][1:] for name in paths})
           PY
@@ -72,7 +77,7 @@ jobs:
           python3 -m scripts.gt_verify_native_array_mips \
             --source "$RUNNER_TEMP/array-input/Raft_Data" \
             --manifest zip2-array/RAFT_FILE_MANIFEST.tsv --trace-file "$RAFT_PRIVATE_EXPORT_LINEAGE" \
-            --assets "$assets" --owner sharedassets1.assets
+            --assets "$assets" --owner sharedassets1.assets --owner sharedassets29.assets --owner sharedassets35.assets
           mkdir -p gt-array-unity/{Assets/Editor,Packages,ProjectSettings}
           cp -r "$assets/Texture2DArray" gt-array-unity/Assets/
           cp android-port/Experiments/GT/Editor/GTNativeArrayMipValidation.cs gt-array-unity/Assets/Editor/
@@ -100,7 +105,7 @@ jobs:
             --manifest zip2-array/RAFT_FILE_MANIFEST.tsv \
             --trace-file "$RUNNER_TEMP/array-lineage.json" \
             --assets "$RUNNER_TEMP/array-export/ExportedProject/Assets" \
-            --owner sharedassets1.assets --bundle gt-array-unity/GTNativeArrayBundle/native-arrays
+            --owner sharedassets1.assets --owner sharedassets29.assets --owner sharedassets35.assets --bundle gt-array-unity/GTNativeArrayBundle/native-arrays
       - name: Erase private generated assets and bundle
         if: always()
         run: |

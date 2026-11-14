@@ -44,7 +44,7 @@ namespace RaftGT
                 }
                 paths[i] = path;
             }
-            var expectedDepths = new[] { 6, 8 };
+            var expectedDepths = new[] { 5, 6, 6, 8 };
             if (!linearDepths.OrderBy(depth => depth).SequenceEqual(expectedDepths)
                 || !srgbDepths.OrderBy(depth => depth).SequenceEqual(expectedDepths))
                 throw new InvalidOperationException("Native array sample population changed");
@@ -54,7 +54,7 @@ namespace RaftGT
             if (!BuildPipeline.BuildAssetBundles(output, new[] { build },
                     BuildAssetBundleOptions.StrictMode, BuildTarget.Android))
                 throw new InvalidOperationException("Native array bundle construction failed");
-            Debug.Log("GT_NATIVE_ARRAY_UNITY arrays=4 layers=28 levels=11");
+            Debug.Log("GT_NATIVE_ARRAY_UNITY arrays=8 layers=50 levels=11");
         }
     }
 }
