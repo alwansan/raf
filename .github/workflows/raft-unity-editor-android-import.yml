@@ -374,7 +374,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --native-texture-arrays
+          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --native-texture-arrays --compute-lineage
           # Publish the CLI and its matching transitive assemblies together;
           # replacing one DLL cannot instrument an AOT or bundled executable.
           dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/ar" > "$RUNNER_TEMP/public-tool-build.log" 2>&1 || { tail -60 "$RUNNER_TEMP/public-tool-build.log"; exit 1; }
@@ -389,6 +389,7 @@ jobs:
           # GT needs exact ClassID187 source→export pointers from this SAME
           # run. Private JSON stays on the runner, never in Actions artifacts.
           RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: '1'
+          RAFT_PRIVATE_EXPORT_COMPUTE_LINEAGE: '1'
         shell: bash
         run: |
           set -euo pipefail
@@ -657,6 +658,18 @@ jobs:
             ${{ runner.temp }}/b45/install.json
           if-no-files-found: ignore
           retention-days: 7
+      - name: Restore original water FFT kernels and migrate their Unity references
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/gt-native-fft-backup"
+          python3 -m scripts.gt_stage_indexed_fft_candidate \
+            --original-data "$RUNNER_TEMP/w1-original/Raft_Data" \
+            --project "$RUNNER_TEMP/gt-native-fft-stage" \
+            --install-project "$RUNNER_TEMP/project/ExportedProject" \
+            --private-export-trace "$RUNNER_TEMP/private-export-lineage.json" \
+            --backup "$RUNNER_TEMP/gt-native-fft-backup"
+          rm -rf -- "$RUNNER_TEMP/gt-native-fft-stage" "$RUNNER_TEMP/gt-native-fft-backup"
       - name: GT recover original SHA-backed 7Pass Spectrum with two keyword variants and replace only its unique original exported GUID
         shell: bash
         env:
