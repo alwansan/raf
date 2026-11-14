@@ -13,6 +13,7 @@ from scripts.w1_depth_shaderlab import stage_body
 
 PASS_MODES = ("ForwardBase", "ForwardAdd", "Deferred", "ShadowCaster")
 EXPECTED_ROUTES = (8, 13, 8, 4)
+SHARED_UNIFORMS = ("BlockPaint", "UnityDrawCallInfo", "UnityPerDraw", "UnityPerCamera")
 VULKAN_LOCATION = re.compile(
     r"(?m)^( +)\[\[vk::location\(([0-9]+)\)\]\] ([^\n]+ : TEXCOORD([0-9]+);)$"
 )
@@ -37,7 +38,7 @@ def unity_resource_bindings(source, stage):
     # Unity's graphics compiler has separate, smaller HLSL sampler slots.
     # Bind textures and samplers by their recovered Unity property names.
     source = re.sub(r" : register\([ts][0-9]+\)(?=;)", "", source)
-    for name in ("BlockPaint", "UnityDrawCallInfo"):
+    for name in SHARED_UNIFORMS:
         pattern = re.compile(r"cbuffer " + name + r" : register\(b[0-9]+\) \{[^{}]*\};")
         block = pattern.search(source)
         if block is None:
@@ -57,9 +58,8 @@ def unity_resource_bindings(source, stage):
 
 def paired_uniform_layouts(stage_records):
     stages = [record["source_constant_buffer_layouts"] for record in stage_records]
-    common = ("BlockPaint", "UnityDrawCallInfo")
     canonical = {}
-    for name in common:
+    for name in SHARED_UNIFORMS:
         members = {}
         layouts = [buffer for stage in stages for buffer in stage if buffer["name"] == name]
         if len(layouts) != 2:
