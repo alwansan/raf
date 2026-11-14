@@ -13,6 +13,12 @@ from scripts.verify_export_lineage import identity, pointer
 from scripts.verify_exported_material_texture_links import material_docs, read, texenv
 
 FIELDS = ("m_Width", "m_Height", "m_Depth", "m_MipCount", "m_Format")
+SAMPLER_FIELDS = ("m_FilterMode", "m_Aniso", "m_MipBias", "m_WrapU", "m_WrapV", "m_WrapW")
+
+
+def array_key(tree):
+    settings = tree["m_TextureSettings"]
+    return tuple(tree[field] for field in FIELDS) + tuple(settings[field] for field in SAMPLER_FIELDS)
 
 
 def packaged_arrays(bundle):
@@ -31,7 +37,7 @@ def packaged_arrays(bundle):
                 raise ValueError("ambiguous_packaged_texture_array_payload")
             payload = get_resource_data(stream["path"], obj.assets_file,
                                         stream["offset"], stream["size"])
-        key = tuple(tree[field] for field in FIELDS)
+        key = array_key(tree)
         result[key, len(payload), sha256(payload).digest()] += 1
     return result
 
@@ -127,7 +133,7 @@ def inspect(source, manifest, trace_file, assets, owners, bundle=None,
                     "graphics_format": tree["m_Format"],
                     "has_original_source_pixels": bool(data["size"]),
                 })
-            key = tuple(tree[field] for field in FIELDS)
+            key = array_key(tree)
             original_payloads[key, len(original), sha256(original).digest()] += 1
             arrays += 1
             layers += tree["m_Depth"]
@@ -151,6 +157,7 @@ def inspect(source, manifest, trace_file, assets, owners, bundle=None,
     if bundle is not None and packaged_arrays(bundle) != original_payloads:
         raise ValueError("android_bundle_original_array_payload_mismatch")
     return {"android_bundle_original_mip_payloads_verified": bundle is not None,
+            "android_bundle_original_sampler_settings_verified": bundle is not None,
             "arrays": arrays, "layers": layers, "exact_mip_payload_bytes": total_bytes,
             "material_references": references, "arrays_referenced_by_materials": len(referenced)}
 
