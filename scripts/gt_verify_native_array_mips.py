@@ -125,7 +125,7 @@ def inspect(source, manifest, trace_file, assets, owners, bundle=None,
                     "depth": tree["m_Depth"],
                     "mipmap_count": tree["m_MipCount"],
                     "graphics_format": tree["m_Format"],
-                    "has_original_source_pixels": bool(original),
+                    "has_original_source_pixels": bool(data["size"]),
                 })
             key = tuple(tree[field] for field in FIELDS)
             original_payloads[key, len(original), sha256(original).digest()] += 1
