@@ -39,7 +39,7 @@ IO_KEYS = ("identical","original_slots","roundtrip_slots","removed_locations",
 IO_BOOLEAN = frozenset(("identical","type_multiset_equal","location_only_remap_candidate"))
 
 
-def exact_four_stage_links(parsed:dict, table:list, *, linker=linked_program):
+def exact_four_stage_links(parsed:dict, table:list, *, linker=linked_program, table_records=SHADER_TABLE_RECORDS):
     """Return paired DXBC and the exact serialized bucket and ordinal of each stage."""
     if (type(parsed) is not dict or
         type(parsed.get("m_SubShaders")) is not list or
@@ -51,7 +51,7 @@ def exact_four_stage_links(parsed:dict, table:list, *, linker=linked_program):
     p=parsed["m_SubShaders"][0]["m_Passes"][0]
     if type(p) is not dict or type(p.get("m_Type")) is not int or p["m_Type"]!=0:
         raise ValueError("non_normal_original_particle108_pass")
-    if (type(table) is not list or len(table)!=SHADER_TABLE_RECORDS or
+    if (type(table) is not list or len(table)!=table_records or
         any(type(e) is not tuple or len(e)!=2 or type(e[0]) is not int
             or type(e[1]) is not bytes or not e[1] for e in table)):
         raise ValueError("untrusted_original_particle108_program_table")
@@ -89,9 +89,9 @@ def exact_four_stage_links(parsed:dict, table:list, *, linker=linked_program):
     return pairs
 
 
-def exact_four_pairs(parsed:dict, table:list, *, linker=linked_program):
+def exact_four_pairs(parsed:dict, table:list, *, linker=linked_program, table_records=SHADER_TABLE_RECORDS):
     """Return ONLY private paired original DXBC buffers; no guessed keywords."""
-    return [(vs[0],fs[0]) for vs,fs in exact_four_stage_links(parsed,table,linker=linker)]
+    return [(vs[0],fs[0]) for vs,fs in exact_four_stage_links(parsed,table,linker=linker,table_records=table_records)]
 
 
 def _validate_reflection(data:dict):
