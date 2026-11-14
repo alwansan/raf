@@ -66,6 +66,25 @@ class MaterialColorsTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'shape'):
             normalize_colors([{'bad': 10}])
 
+    def test_nonfinite_channels_compare_by_category_and_infinity_sign(self):
+        trace, source, actual = fixture()
+        values = color(float("nan"), float("inf"), float("-inf"), 1.0)
+        source[("original.assets", 12)] = normalize_colors(
+            [("_Tint", values)], allow_nonfinite=True)
+        pointer = (2100000, "a" * 32)
+        actual[pointer] = normalize_colors(
+            {"_Tint": values}, exported=True, allow_nonfinite=True)
+        result = compare(trace, source, actual)
+        self.assertEqual(result["nonfinite_channels_compared"], 3)
+        self.assertEqual(result["nonfinite_channel_drift"], 0)
+        self.assertTrue(result["original_material_color_values_preserved"])
+
+        actual[pointer]["_Tint"] = (0.0, float("-inf"), float("-inf"), 0.5)
+        result = compare(trace, source, actual)
+        self.assertEqual(result["nonfinite_channel_drift"], 2)
+        self.assertEqual(result["changed_color_values"], 1)
+        self.assertFalse(result["original_material_color_values_preserved"])
+
     def test_source_and_export_dict_shapes(self):
         expected = {'_Tint': (.12, .5, 1., 1.)}
         self.assertEqual(normalize_colors([{'m_First': '_Tint', 'm_Second': color()}]), expected)
