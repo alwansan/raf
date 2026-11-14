@@ -12,5 +12,8 @@
   "isolated_unity_android_import_run": 43547724750,
   "isolated_unity_android_import_preserved_class187_local_file_ids": true,
   "isolated_unity_android_asset_bundle_built": true,
-  "packaged_mip_payload_bytes_verified": false
+  "packaged_mip_payload_bytes_verified": true,
+  "packaged_mip_payload_verification_run": 43595326642,
+  "packaged_mip_payload_bytes_exact": 39147584,
+  "packaged_original_linear_and_srgb_bc3_formats_verified": true
 }
