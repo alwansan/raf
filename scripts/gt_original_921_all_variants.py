@@ -20,24 +20,58 @@ DISTINCT_DXBC_COUNT=58
 STATUS="GT_ORIGINAL_921_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
 VEGETATION_STATUS="GT_ORIGINAL_VEGETATION_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
 DIRTPILE_STATUS="GT_ORIGINAL_DIRTPILE_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
+GRASSPLOT_STATUS="GT_ORIGINAL_GRASSPLOT_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
 SOURCE_PROFILES = {
     "blockpaint": (921, 35, STATUS, " BlockPaint"),
     "vegetation": (121, 16, VEGETATION_STATUS, "Vegetation"),
     "dirtpile": (70, 6, DIRTPILE_STATUS, "DirtPile"),
+    "grassplot": (16, 8, GRASSPLOT_STATUS, "GrassPlot"),
 }
 
 
-def select_scene_shader(source_use, report, shader):
+def select_scene_shader(source_use, report, shader, *, get_tree=None):
     from scripts.t3_original_renderer_shader_impact import STATUS as SOURCE_STATUS
 
     if (report.get("status") != SOURCE_STATUS
             or report.get("six_original_scenes_sha_verified") is not True):
         raise ValueError("original_source_graph_unverified")
-    slots, _, _, _ = SOURCE_PROFILES[shader]
+    slots, _, _, shader_name = SOURCE_PROFILES[shader]
     matches = [key for key, count in source_use.items() if count == slots]
-    if len(matches) != 1 or matches[0][0] != "sharedassets0.assets":
+    if not matches or any(owner != "sharedassets0.assets" for owner, _ in matches):
+        raise ValueError("original_source_identity_ambiguous")
+    if get_tree is not None:
+        matches = [key for key in matches
+                   if get_tree(key)["m_ParsedForm"]["m_Name"] == shader_name]
+    if len(matches) != 1:
         raise ValueError("original_source_identity_ambiguous")
     return matches[0]
+
+
+def authenticated_shader_reader(original: Path):
+    """Return a private, cached reader for Shader48 trees in pinned ZIP2 owners."""
+    import UnityPy
+    from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+    from scripts.w1_stage_zip2_owners import fingerprint
+
+    owner_files = {}
+    trees = {}
+
+    def get_tree(key):
+        owner, path_id = key
+        if key in trees:
+            return trees[key]
+        if owner not in owner_files:
+            source = original / "Raft_Data" / owner
+            if source.is_symlink() or fingerprint(source) != SHADER_OWNERS[owner]:
+                raise ValueError("original_921_Shader_owner_SHA_mismatch")
+            owner_files[owner] = UnityPy.load(str(source)).file
+        obj = owner_files[owner].objects.get(path_id)
+        if obj is None or obj.type.name != "Shader":
+            raise ValueError("original_921_Shader48_object_identity_mismatch")
+        trees[key] = obj.read_typetree()
+        return trees[key]
+
+    return get_tree
 
 def enumerate_all(parsed,table,*,variants,permutation,linker):
     """Never pair unrelated player buckets, tiers or keyword permutations."""
@@ -355,31 +389,21 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
 def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None,shader="blockpaint"):
     from scripts import t3_original_renderer_shader_impact as scenes
     from scripts import t3_original_top_shader_dxbc_feasibility as top
-    from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
-    from scripts.w1_stage_zip2_owners import fingerprint
     from scripts.w1_recover_graphics_programs import decoded_platforms,records,translate
     from scripts.w1_recover_depth_passes import linked_program,stage_variants,variant_key
-    _, property_count, _, shader_name = SOURCE_PROFILES[shader]
+    _, property_count, _, _ = SOURCE_PROFILES[shader]
     if translator is None:translator=translate
     for binary in ("vkd3d-compiler","spirv-val","spirv-opt","spirv-cross","glslangValidator"):
         if not shutil.which(binary):
             raise ValueError("missing_required_original_DXBC_translation_tool")
     use={}
     report=scenes.load_original(original,manifest,private_slot_counts=use)
+    get_tree = authenticated_shader_reader(original)
     if shader == "blockpaint":
-        owner,path_id = top.selected_high_use(use,report)
+        source_key = top.selected_high_use(use,report)
     else:
-        owner,path_id = select_scene_shader(use,report,shader)
-    source=original/"Raft_Data"/owner
-    if source.is_symlink() or fingerprint(source)!=SHADER_OWNERS[owner]:
-        raise ValueError("original_921_Shader_owner_SHA_mismatch")
-    import UnityPy
-    candidates=[o for o in UnityPy.load(str(source)).file.objects.values() if o.path_id==path_id]
-    if len(candidates)!=1 or candidates[0].type.name!="Shader":
-        raise ValueError("original_921_Shader48_object_identity_mismatch")
-    tree=candidates[0].read_typetree()
-    if shader != "blockpaint" and tree["m_ParsedForm"]["m_Name"] != shader_name:
-        raise ValueError("original_serialized_shader_name_mismatch")
+        source_key = select_scene_shader(use,report,shader,get_tree=get_tree)
+    tree = get_tree(source_key)
     tables=[records(parts) for platform,parts in decoded_platforms(tree) if platform==4]
     if len(tables)!=1:
         raise ValueError("ambiguous_original_921_D3D11_program_table")

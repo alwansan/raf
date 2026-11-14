@@ -52,7 +52,9 @@ def install(project, trace, source_key, candidate, receipt, backup):
 
 
 def main():
-    from scripts.gt_original_921_all_variants import SOURCE_PROFILES, select_scene_shader
+    from scripts.gt_original_921_all_variants import (
+        SOURCE_PROFILES, authenticated_shader_reader, select_scene_shader,
+    )
     from scripts.t3_original_renderer_shader_impact import load_original
     from scripts.t3_original_top_shader_dxbc_feasibility import selected_high_use
 
@@ -67,8 +69,11 @@ def main():
         raise ValueError("private_model_shader_inputs_inside_export")
     slots = {}
     source = load_original(args.original, args.manifest, private_slot_counts=slots)
-    source_key = (selected_high_use(slots, source) if args.shader == "blockpaint"
-                  else select_scene_shader(slots, source, args.shader))
+    if args.shader == "blockpaint":
+        source_key = selected_high_use(slots, source)
+    else:
+        source_key = select_scene_shader(
+            slots, source, args.shader, get_tree=authenticated_shader_reader(args.original))
     result = install(project, json.loads(read_bounded(args.trace, 40_000_000)), source_key,
                      read_bounded(args.candidate, MAX_SHADER),
                      json.loads(read_bounded(args.receipt, 65536)), args.backup)

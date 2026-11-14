@@ -52,6 +52,23 @@ class Original921VariantTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "ambiguous"):
             select_scene_shader(source | {("sharedassets1.assets", 31): 70}, receipt, "dirtpile")
 
+    def test_grassplot_resolves_equal_slots_by_exact_authored_name(self):
+        from scripts.t3_original_renderer_shader_impact import STATUS
+
+        grass = ("sharedassets0.assets", 42)
+        particles = ("sharedassets0.assets", 43)
+        source = {grass: 16, particles: 16}
+        receipt = {"status": STATUS, "six_original_scenes_sha_verified": True}
+        names = {grass: "GrassPlot", particles: "ParticleShader_Additive"}
+
+        def tree(key):
+            return {"m_ParsedForm": {"m_Name": names[key]}}
+
+        self.assertEqual(select_scene_shader(source, receipt, "grassplot", get_tree=tree), grass)
+        names[particles] = "GrassPlot"
+        with self.assertRaisesRegex(ValueError, "ambiguous"):
+            select_scene_shader(source, receipt, "grassplot", get_tree=tree)
+
     def test_shadow_fragment_without_an_input_interface_is_preserved(self):
         from scripts.gt_original_921_semantics import pin_varying_locations
 
