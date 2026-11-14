@@ -6,6 +6,7 @@ on:
     paths:
       - .github/workflows/raft-gt-native-array-unity.yml
       - scripts/gt_verify_native_array_mips.py
+      - scripts/patch_export_lineage.py
       - android-port/Experiments/GT/Editor/GTNativeArrayMipValidation.cs
 permissions:
   contents: read

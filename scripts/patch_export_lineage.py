@@ -87,21 +87,28 @@ def patch(root, helper, *, mesh_lineage=False, native_texture_arrays=False):
     source = raw.decode('utf-8')
     if source.count(ANCHOR) != 1:
         raise ValueError('Exporter container hook is ambiguous')
+    overrides = directory / 'ProjectExporter.Overrides.cs'
     if native_texture_arrays:
+        override_raw = overrides.read_bytes()
+        override_source = override_raw.decode('utf-8')
         registration = 'OverrideExporter<ITexture2DArray>(textureArrayExporter);'
-        if source.count(registration) != 1:
+        if override_source.count(registration) != 1:
             raise ValueError('Pinned Texture2DArray registration is ambiguous')
-        source = source.replace(registration,
-                                'OverrideExporter<ITexture2DArray>(streamedAssetExporter);')
+        override_source = override_source.replace(
+            registration, 'OverrideExporter<ITexture2DArray>(streamedAssetExporter);')
     destination = directory / 'RaftExportLineage.cs'
     if destination.exists():
         raise FileExistsError('Trace source already exists')
     helper_raw = helper.read_bytes()
     destination.write_bytes(add_mesh_lineage(helper_raw) if mesh_lineage else helper_raw)
     try:
+        if native_texture_arrays:
+            overrides.write_bytes(override_source.encode('utf-8'))
         yaml_target.write_bytes(yaml_fixed)
         target.write_bytes(source.replace(ANCHOR, ANCHOR + '\n\t\tRaftExportLineage.Capture(container, collections);').encode('utf-8'))
     except BaseException:
+        if native_texture_arrays:
+            overrides.write_bytes(override_raw)
         yaml_target.write_bytes(yaml_raw)
         target.write_bytes(raw)
         destination.unlink()
