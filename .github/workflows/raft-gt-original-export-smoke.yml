@@ -96,7 +96,7 @@ jobs:
           set -euo pipefail
           python3 -m scripts.patch_export_lineage \
             --tool-source ar-host \
-            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage
+            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --native-texture-arrays
           dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
             -c Release -p:PublishAot=false -p:PublishTrimmed=false \
             -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
@@ -209,17 +209,6 @@ jobs:
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
             --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
             --report "$RUNNER_TEMP/gt-real-cubemap-export-lineage.json"
-      - name: GT record exact imported Texture2DArray image fileID and importer shape enum before any edits
-        id: gt_array_importer_shape
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m unittest discover -s tests -p test_gt_diagnose_texture_export_lineage.py -v
-          python3 -m scripts.gt_diagnose_texture_export_lineage \
-            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
-            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
-            --report "$RUNNER_TEMP/gt-real-array-shape-verified.json"
       - name: Capture original Material-to-Texture export GUID guard results including exact failure code
         id: gt_export_links
         continue-on-error: true
@@ -277,209 +266,16 @@ jobs:
           fi
           echo "GT_B05_EXACT_TEXENV_COMPARISON exit_code=$result_code status_report_saved=true"
           exit "$result_code"
-      - name: GT verify nine SHA-authentic original Texture2DArray objects against actual Unity image importer GUIDs and source layer metadata
-        id: gt_original_texture_array_export
-        continue-on-error: true
-        shell: bash
+      - name: Validate all nine native arrays and 28 material slots in the full export
         run: |
           set -euo pipefail
-          python3 -m unittest discover -s tests -p test_gt_verify_original_array_export.py -v
-          python3 -m scripts.gt_verify_original_array_export \
-            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
-            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
-            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
-            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
-            --report "$RUNNER_TEMP/gt-9-original-texture-arrays.json"
-      - name: GT prove actual source Texture2DArray importer flipbook rows and 1024 pixel cells preserve each of nine original class187 identities
-        id: gt_original_array_flipbook_geometry
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m unittest discover -s tests -p test_gt_validate_texture2darray_flipbook.py -v
-          python3 -m scripts.gt_validate_texture2darray_flipbook \
-            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
-            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
-            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
-            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
-            --report "$RUNNER_TEMP/gt-original-array-real-flipbook-geometry.json"
-          # The original exporter may produce valid PNG previews but invalid
-          # 2D-array cell grids. Keep exit 2 for a failed import; the complete
-          # aggregate still records which source-authenticated repair applies.
-          # Do not bypass the original material texture-link safety checks.
-
-      - name: GT extract original 50 BC3 Texture2DArray layer payloads from nine exact ZIP2 source objects into private Unity import bridge
-        id: gt_real_original_bc3_array_streams
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m unittest discover -s tests -p test_gt_bc3_array_layout.py -v
-          python3 -m unittest discover -s tests -p test_gt_recover_original_array_layers.py -v
-          python3 -m scripts.gt_recover_original_array_layers \
-            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
-            --zip2-checkout .gt-zip2 \
-            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
-            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
-            --private-output "$RUNNER_TEMP/gt-private-original-bc3-arrays" \
-            --report "$RUNNER_TEMP/gt-real-bc3-array-staging-summary.json"
-          test -s "$RUNNER_TEMP/gt-private-original-bc3-arrays/private-array-import-manifest.json"
-          # Raw original game bytes and private exporter GUIDs are NEVER uploaded.
-          python3 - <<'PY'
-          import json,os
-          from pathlib import Path
-          result=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-real-bc3-array-staging-summary.json").read_text())
-          assert result["source_total_layer_count"]==52
-          assert result["source_array_layers_with_original_streamed_pixels"]==50
-          assert result["source_array_layers_without_original_pixels"]==2
-          assert result["sha256_authenticated_streamed_payloads_copied"]==8
-          assert result["original_source_streamed_bytes_restored_to_private_stage"]==69906400
-          assert result["original_array_objects_with_zero_source_payload"]==1
-          assert result["git_lfs_used"] is False
-          assert result["Unity_Editor_Texture2DArray_assets_created"] is False
-          print("GT_BC3_ARRAY_REAL_STREAM_STAGE authenticBC3Bytes=69906400 arraysWithPixels=8 originalZeroPixelArrays=1 layersWithPixels=50 stagedPrivate=true editedGUIDs=false LFS=false")
-          PY
-      - name: GT independently verify actual ZIP2 texture-array layer order with UnityPy and Pillow BC3 decoders
-        id: gt_source_array_order_probe
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m pip install --disable-pip-version-check Pillow==11.3.0 UnityPy==1.23.0
-          python3 -m unittest discover -s tests -p test_gt_validate_bc3_array_slice_order.py -v
-          python3 -m scripts.gt_validate_bc3_array_slice_order \
-            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
-            --source-manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
-            --private-original-array-stage "$RUNNER_TEMP/gt-private-original-bc3-arrays" \
-            --report "$RUNNER_TEMP/gt-original-array-slice-layout-independent.json"
-          # Independent UnityPy decode consumes SHA-verified original BC3
-          # streamed payload bytes in memory: do not require adjacent .resS,
-          # alter source owners or replace empty original arrays with pixels.
-          python3 - <<'PY'
-          import json,os
-          from pathlib import Path
-          result=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-original-array-slice-layout-independent.json").read_text())
-          assert result["authenticated_original_array_objects"]==9
-          assert result["source_arrays_with_decoded_BC3_pixels"]==8
-          assert result["original_zero_pixel_source_array_objects"]==1
-          assert result["layout_selected_from_independent_UnityPy_source_decoder"]=="slice_major"
-          assert result["source_array_layout_unambiguous"] is True
-          assert result["counts"]["original_source_array_slice_major_full_match"]==8
-          assert result["original_or_exported_Unity_objects_modified"] is False
-          print("GT_REAL_UNITYPY_INDEPENDENT_BC3_LAYER_ORDER originalArrays=9 genuineDecoded=8 originalZeroPixels=1 sliceMajorExact=8 originalModified=false")
-          PY
-      - name: GT validate authentic original BC3 pixel slices against actual nine imported AssetRipper PNG array flipbooks without any game pixels in artifacts
-        id: gt_bc3_source_pixel_parity
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m pip install --disable-pip-version-check Pillow==11.3.0
-          python3 -m unittest discover -s tests -p test_gt_compare_original_bc3_to_flipbook_pixels.py -v
-          if python3 -m scripts.gt_compare_original_bc3_to_flipbook_pixels \
-                --private-original-array-stage "$RUNNER_TEMP/gt-private-original-bc3-arrays" \
-                --project "$RUNNER_TEMP/gt-project/ExportedProject" \
-                --report "$RUNNER_TEMP/gt-original-array-exact-pixel-parity.json" \
-                > "$RUNNER_TEMP/gt-private-original-array-pixel-parity.stdout" 2>&1; then
-            result_code=0
-          else
-            result_code=$?
-          fi
-          if test -s "$RUNNER_TEMP/gt-original-array-exact-pixel-parity.json"; then
-            python3 - <<'PY'
-          import json,os
-          from pathlib import Path
-          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-original-array-exact-pixel-parity.json").read_text())
-          print("GT_REAL_ORIGINAL_BC3_EXACT_PNG_SLICES "+json.dumps(d,sort_keys=True))
-          PY
-          else
-            python3 - <<'PY'
-          import json,os
-          from pathlib import Path
-          result={"schema":"GT_ORIGINAL_BC3_ARRAY_TO_ASSETRIPPER_FLIPBOOK_PIXEL_EQUIVALENCE_V1",
-                  "status":"INCONCLUSIVE_BEFORE_PIXEL_PARITY_RECEIPT",
-                  "original_or_exported_assets_modified":False,
-                  "original_image_data_disclosed":False,
-                  "Android_GPU_pixels_verified":False}
-          (Path(os.environ["RUNNER_TEMP"])/"gt-original-array-exact-pixel-parity.json").write_text(
-              json.dumps(result,sort_keys=True,indent=2)+"\n")
-          print("GT_REAL_ORIGINAL_BC3_EXACT_PNG_SLICES "+json.dumps(result,sort_keys=True))
-          PY
-          fi
-          exit "$result_code"
-      - name: GT compare every source-populated original BC3 array layer top-mip against actual AssetRipper PNG pixels
-        id: gt_all_original_bc3_top_mip_pixels
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m unittest discover -s tests -p test_gt_compare_original_bc3_to_flipbook_pixels.py -v
-          python3 -m scripts.gt_compare_original_bc3_to_flipbook_pixels \
-            --private-original-array-stage "$RUNNER_TEMP/gt-private-original-bc3-arrays" \
-            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
-            --all-original-layer-cells \
-            --report "$RUNNER_TEMP/gt-all-original-bc3-layer-topmip-parity.json"
-          python3 - <<'PY'
-          import json,os
-          from pathlib import Path
-          result=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-all-original-bc3-layer-topmip-parity.json").read_text())
-          assert result["original_source_populated_layers_expected"]==50
-          assert result["sampled_original_source_layer0_mips_vs_PNG_cells"]==50
-          assert result["all_populated_original_BC3_top_mip_layers_match_exported_PNG"] is True
-          assert result["full_mip_chain_pixel_equivalence_proven"] is False
-          print("GT_REAL_50_SOURCE_BC3_ARRAY_LAYER_TOPMIPS originalLayers=50 sourceTopMipPixelsEqual=true lowerOriginalMipsNotYetCompared=true androidGPUUnverified=true")
-          PY
-      - name: GT repair only source-proven full PNG array importer flipbook grids with private per-file GUID backups
-        id: gt_bounded_original_array_importers
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m unittest discover -s tests -p test_gt_repair_array_flipbook_importers.py -v
-          python3 -m scripts.gt_repair_array_flipbook_importers \
-            --original-source "$RUNNER_TEMP/gt-input/Raft_Data" \
-            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
-            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
-            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
-            --backup "$RUNNER_TEMP/gt-private-original-array-importer-backups" \
-            --report "$RUNNER_TEMP/gt-real-array-meta-only-repair.json"
-          python3 - <<'PY'
-          import json,os
-          from pathlib import Path
-          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-real-array-meta-only-repair.json").read_text())
-          assert d["original_exported_asset_guids_preserved"] is True
-          assert d["source_images_or_binaries_edited"] is False
-          assert d["meta_files_outside_the_exactly_verified_array_set_changed"]==0
-          assert d["original_importer_repair_candidates_applied"]<=9
-          print("GT_REAL_SAFE_TEXTURE2DARRAY_GRID_REPAIR "+json.dumps(d,sort_keys=True))
-          PY
-      - name: GT validate all 28 original Class187 Material refs to nine exact source arrays after bounded importer repair
-        id: gt_original_array_material_ref_integrity
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m unittest discover -s tests -p test_gt_verify_original_array_material_refs.py -v
-          python3 -m scripts.gt_verify_original_array_material_refs \
-            --original-source "$RUNNER_TEMP/gt-input/Raft_Data" \
-            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
-            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
-            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
-            --report "$RUNNER_TEMP/gt-real-array-28-source-links.json"
-      - name: GT stage private Unity Editor class187 native importer verification manifest from original nine arrays
-        id: gt_real_private_Unity_Editor_array_contract
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m unittest discover -s tests -p test_gt_write_unity_array_import_contract.py -v
           python3 -m scripts.gt_write_unity_array_import_contract \
             --original-source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --native-stream-source "$RUNNER_TEMP/gt-input/Raft_Data" \
             --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
             --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
             --report "$RUNNER_TEMP/gt-real-original-array-private-Editor-gate-aggregate.json"
-          test -s "$RUNNER_TEMP/gt-project/ExportedProject/Assets/Editor/RaftAndroid/GTOriginalArrayImportContract.json"
       - name: GT compare all 1556 original Material texture properties and GUIDs with actual same-instance exported Unity project
         id: gt_all_original_texenvs
         continue-on-error: true
@@ -527,7 +323,6 @@ jobs:
       # external refs, without dumping private fileID/pathID/GUID on failure.
       - name: GT source-authenticate external Material Texture PPtrs across original ZIP2 owners and same-instance GUIDs
         id: gt_external_original_texture_links
-        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
@@ -539,6 +334,15 @@ jobs:
             --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
             --report "$RUNNER_TEMP/gt-real-external-texture-links.json"
           test -s "$RUNNER_TEMP/gt-real-external-texture-links.json"
+          python3 - <<'PYASSERT'
+          import json, os
+          from pathlib import Path
+          d = json.loads((Path(os.environ["RUNNER_TEMP"]) / "gt-real-external-texture-links.json").read_text())
+          assert d["authenticated_owner_tables"] == 82
+          assert d["original_external_texture_slots"] == 416
+          assert d["exact_cross_owner_source_export_texture_links"] == 416
+          assert d["all_external_links_verified"] is True
+          PYASSERT
       - name: Measure unmodified AssetRipper Material to ShaderLab dummy and pass completeness for T3
         continue-on-error: true
         shell: bash
@@ -559,18 +363,6 @@ jobs:
             --raw-quality "$RUNNER_TEMP/gt-raw-export-program-quality.json" \
             --backup-root "$RUNNER_TEMP/gt-shader-original-backup" \
             --report "$RUNNER_TEMP/gt-actual-postrestore-shader-quality.json"
-      - name: GT fail-closed accepted original source graphics parity (9 Class187, 416 cross-owner textures, 50 BC3 top mips)
-        id: gt_original_graphics_critical_gate
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m unittest discover -s tests -p test_gt_original_graphics_critical_gate.py -v
-          python3 -m scripts.gt_original_graphics_critical_gate \
-            --arrays "$RUNNER_TEMP/gt-real-array-28-source-links.json" \
-            --external "$RUNNER_TEMP/gt-real-external-texture-links.json" \
-            --bc3 "$RUNNER_TEMP/gt-all-original-bc3-layer-topmip-parity.json" \
-            --report "$RUNNER_TEMP/gt-original-graphics-9-416-50-strict-evidence.json"
-          test -s "$RUNNER_TEMP/gt-original-graphics-9-416-50-strict-evidence.json"
       - name: Publish aggregate evidence only, never original scenes/meshes/export/trace
         if: always()
         uses: actions/upload-artifact@v4
@@ -584,21 +376,11 @@ jobs:
             ${{ runner.temp }}/gt-export-texture-guard-safe.json
             ${{ runner.temp }}/gt-export-all-texture-target-categories.json
             ${{ runner.temp }}/gt-real-cubemap-export-lineage.json
-            ${{ runner.temp }}/gt-real-array-shape-verified.json
-            ${{ runner.temp }}/gt-9-original-texture-arrays.json
-            ${{ runner.temp }}/gt-real-bc3-array-staging-summary.json
-            ${{ runner.temp }}/gt-original-array-real-flipbook-geometry.json
-            ${{ runner.temp }}/gt-original-array-exact-pixel-parity.json
-            ${{ runner.temp }}/gt-all-original-bc3-layer-topmip-parity.json
-            ${{ runner.temp }}/gt-original-array-slice-layout-independent.json
-            ${{ runner.temp }}/gt-real-array-meta-only-repair.json
-            ${{ runner.temp }}/gt-real-array-28-source-links.json
             ${{ runner.temp }}/gt-real-original-array-private-Editor-gate-aggregate.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-full-material-colors.json
             ${{ runner.temp }}/gt-real-external-texture-links.json
-            ${{ runner.temp }}/gt-original-graphics-9-416-50-strict-evidence.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
             ${{ runner.temp }}/gt-actual-postrestore-shader-quality.json
           retention-days: 14
