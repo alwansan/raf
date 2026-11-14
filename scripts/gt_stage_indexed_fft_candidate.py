@@ -81,7 +81,32 @@ def install_fft(project, trace, shader, backup):
     shutil.copy2(old, saved)
     shutil.copy2(old_meta, saved_meta)
     created = []
+    changed = []
+    references = 0
+    reference = re.compile(
+        rb"(\{fileID:\s*7200000,\s*guid:\s*" + guid.encode("ascii") + rb",\s*type:\s*)2(\s*\})"
+    )
     try:
+        for path in (project / "Assets").rglob("*"):
+            if path.suffix not in (".asset", ".unity", ".prefab") or path == old or path.is_symlink():
+                continue
+            if not path.is_file():
+                continue
+            with path.open("rb") as stream:
+                if not stream.read(16).lstrip(b"\xef\xbb\xbf").startswith(b"%YAML"):
+                    continue
+                stream.seek(0)
+                original = stream.read()
+            patched, count = reference.subn(rb"\g<1>3\2", original)
+            if not count:
+                continue
+            snapshot = backup / path.relative_to(project)
+            snapshot.parent.mkdir(parents=True, exist_ok=True)
+            with snapshot.open("xb") as output:
+                output.write(original)
+            changed.append((path, snapshot))
+            path.write_bytes(patched)
+            references += count
         with destination.open("x", encoding="utf-8") as output:
             created.append(destination)
             output.write(source)
@@ -95,6 +120,8 @@ def install_fft(project, trace, shader, backup):
         old.unlink()
         old_meta.unlink()
     except BaseException:
+        for path, snapshot in changed:
+            shutil.copy2(snapshot, path)
         if not old.exists():
             shutil.copy2(saved, old)
         if not old_meta.exists():
@@ -102,7 +129,8 @@ def install_fft(project, trace, shader, backup):
         for path in created:
             path.unlink(missing_ok=True)
         raise
-    return {"original_fft_guid_preserved": True, "ordered_routes_installed": len(expected)}
+    return {"original_fft_guid_preserved": True, "ordered_routes_installed": len(expected),
+            "serialized_fft_references_converted_to_importer_type": references}
 
 
 def route(candidate, row):
