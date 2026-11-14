@@ -23,6 +23,7 @@ namespace RaftGT
             public int passCount;
             public int registeredRoutes;
             public int errors;
+            public string[] compilerErrorGroups;
             public bool androidVulkanOnly;
             public bool privateBundleCompiled;
         }
@@ -80,8 +81,16 @@ namespace RaftGT
                     BuildAssetBundleOptions.ForceRebuildAssetBundle | BuildAssetBundleOptions.StrictMode,
                     BuildTarget.Android);
                 result.checkpoint = "compiler_results";
-                result.errors = ShaderUtil.GetShaderMessages(shader)
-                    .Count(message => message.severity.ToString() == "Error");
+                var errors = ShaderUtil.GetShaderMessages(shader)
+                    .Where(message => message.severity.ToString() == "Error").ToArray();
+                result.errors = errors.Length;
+                result.compilerErrorGroups = errors
+                    .GroupBy(message => new { Category = ErrorCategory(message.message), message.line })
+                    .OrderByDescending(group => group.Count())
+                    .ThenBy(group => group.Key.line)
+                    .Take(16)
+                    .Select(group => $"{group.Key.Category} line={group.Key.line} count={group.Count()}")
+                    .ToArray();
                 var artifact = new FileInfo(Path.Combine(bundleDirectory, bundleName));
                 result.privateBundleCompiled = manifest != null && artifact.Exists && artifact.Length > 0
                     && result.errors == 0 && !ShaderUtil.ShaderHasError(shader);
@@ -95,6 +104,18 @@ namespace RaftGT
                 JsonUtility.ToJson(result, true));
             Debug.Log("GT_ORIGINAL_921_UNITY_SAFE " + JsonUtility.ToJson(result));
             EditorApplication.Exit(exitCode);
+        }
+
+        private static string ErrorCategory(string message)
+        {
+            string[] categories = {
+                "entry point", "undeclared identifier", "redefinition", "already defined",
+                "no matching", "cannot convert", "cannot map", "invalid semantic", "duplicate",
+                "unsupported", "unexpected token", "syntax error", "unrecognized",
+                "out of bounds", "overlapping", "failed to compile"
+            };
+            return categories.FirstOrDefault(category =>
+                message.IndexOf(category, StringComparison.OrdinalIgnoreCase) >= 0) ?? "other";
         }
     }
 }
