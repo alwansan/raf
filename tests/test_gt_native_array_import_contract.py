@@ -1,7 +1,7 @@
 """GT native build pipeline source-authentic Texture2DArray restore contract.
 
 Source-free static guard: real ZIP2 originals + same AssetRipper export trace
-must repair all nine original imported PNG array grids before T5's existing
+must verify all nine native array payloads before T5's existing
 B46 Material and shader gates. No XAPK launch or changes to scene/asset data.
 """
 import unittest
@@ -23,7 +23,7 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
     def test_source_authentic_array_stage_in_actual_native_lane_before_all_material_checks(self):
         body=self.workflow
         source=body.index("      - name: Export 40 scenes into a Unity Editor project with correct MonoScript metadata")
-        restore=body.index("      - name: GT restore nine original Texture2DArray importer grids before every native Material/Shader link gate")
+        restore=body.index("      - name: GT verify nine native Texture2DArray assets before every Material and Shader link gate")
         color=body.index("      - name: B04 restore original Linear color space")
         material=body.index("      - name: T5 inspect actual postrestorer Material-to-Texture references")
         final=body.index("      - name: Stage private Unity project candidate inside runner workspace")
@@ -34,32 +34,24 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
 
     def test_strict_source_verified_guids_and_all_28_materials_or_fail(self):
         body=self.workflow
-        stage=body.split("      - name: GT restore nine original Texture2DArray importer grids",1)[1].split(
-              "      - name: GT publish source-authentic array importer",1)[0]
+        stage=body.split("      - name: GT verify nine native Texture2DArray assets",1)[1].split(
+              "      - name: GT publish native array and Material",1)[0]
         self.assertNotIn("continue-on-error",stage)
-        self.assertIn("scripts.gt_repair_array_flipbook_importers",stage)
-        self.assertIn("scripts.gt_verify_original_array_material_refs",stage)
+        self.assertIn("--mesh-lineage --native-texture-arrays",body)
+        self.assertIn("scripts.gt_write_unity_array_import_contract",stage)
         self.assertIn("zip2-original/RAFT_FILE_MANIFEST.tsv",stage)
         self.assertIn("$RUNNER_TEMP/private-export-lineage.json",stage)
-        # Mesh inlining mutates the export input. Class187 provenance must come
-        # from immutable, SHA-verified ZIP2 serialized owners, never that input.
         self.assertIn('scripts.gt_stage_serialized_owners',stage)
         self.assertIn('--source zip2-original/Raft/Raft_Data',stage)
-        self.assertIn('original_owners="$RUNNER_TEMP/gt-native-pristine-serialized-owners"',stage)
-        self.assertEqual(stage.count('--original-source "$original_owners"'),3)
-        self.assertNotIn('--original-source "$RUNNER_TEMP/input/Raft_Data"',stage)
+        self.assertIn('--original-source "$original_owners"',stage)
+        self.assertIn('--native-stream-source "$RUNNER_TEMP/input/Raft_Data"',stage)
         self.assertIn('rm -rf -- "$original_owners"',stage)
-        self.assertIn("exact_original_class187_array_material_refs']==28",stage)
-        self.assertIn("distinct_source_array_guids_referenced_by_materials']==9",stage)
-        self.assertIn("original_exported_asset_guids_preserved",stage)
-        self.assertIn("meta_files_outside_the_exactly_verified_array_set_changed",stage)
-        self.assertIn("source_images_or_binaries_edited",stage)
-        self.assertNotIn("git lfs",stage.lower())
+        self.assertNotIn('gt_repair_array_flipbook_importers',stage)
 
     def test_all_416_source_external_texture_references_must_match_same_export_before_android(self):
         body=self.workflow
-        stage=body.split("      - name: GT restore nine original Texture2DArray importer grids",1)[1].split(
-              "      - name: GT publish source-authentic array importer",1)[0]
+        stage=body.split("      - name: GT verify nine native Texture2DArray assets",1)[1].split(
+              "      - name: GT publish native array and Material",1)[0]
         self.assertIn('python3 -m scripts.gt_external_original_texture_links',stage)
         self.assertIn('--source "$original_owners"',stage)
         self.assertIn('--manifest zip2-original/RAFT_FILE_MANIFEST.tsv',stage)
@@ -77,36 +69,12 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
         self.assertNotIn('sed -i',stage)
         self.assertNotIn('git lfs',stage.lower())
 
-    def test_all_50_SHA_original_BC3_layer_topmips_are_required_before_native_Unity(self):
-        body=self.workflow
-        stage=body.split("      - name: GT restore nine original Texture2DArray importer grids",1)[1].split(
-              "      - name: GT publish source-authentic array importer",1)[0]
-        self.assertIn("scripts.gt_recover_original_array_layers",stage)
-        self.assertIn('scripts.gt_compare_original_bc3_to_flipbook_pixels',stage)
-        self.assertIn('--source "$original_owners"',stage)
-        self.assertIn('--stream-source "$RUNNER_TEMP/input/Raft_Data"',stage)
-        self.assertIn("--all-original-layer-cells",stage)
-        self.assertIn("original_source_streamed_bytes_restored_to_private_stage']==69906400",stage)
-        self.assertIn("parity['original_source_populated_layers_expected']==50",stage)
-        self.assertIn("parity['sampled_original_source_layer0_mips_vs_PNG_cells']==50",stage)
-        self.assertIn("parity['all_populated_original_BC3_top_mip_layers_match_exported_PNG'] is True",stage)
-        self.assertIn("source['separate_original_stream_provider_root_authenticated'] is True",stage)
-        self.assertIn("parity['Unity_Android_GPU_pixels_verified'] is False",stage)
-        self.assertLess(stage.index('scripts.gt_compare_original_bc3_to_flipbook_pixels'),
-                        stage.index('rm -rf -- "$original_owners"'))
-        self.assertNotIn('continue-on-error',stage)
-        self.assertIn('gt-native-original-50-topmip-parity.json',body)
-
-    def test_real_native_final_same_instance_array_external_and_pixel_parity_is_fail_closed(self):
-        body=self.workflow
-        stage=body.split("      - name: GT restore nine original Texture2DArray importer grids",1)[1].split(
-              "      - name: GT publish source-authentic array importer",1)[0]
-        self.assertIn('scripts.gt_original_graphics_critical_gate',stage)
-        self.assertIn('--arrays "$RUNNER_TEMP/gt-native-original-array-material-links.json"',stage)
-        self.assertIn('--external "$RUNNER_TEMP/gt-native-original-external-texture-links.json"',stage)
-        self.assertIn('--bc3 "$RUNNER_TEMP/gt-native-original-50-topmip-parity.json"',stage)
-        self.assertIn('gt-native-original-9-28-416-50-final.json',body)
-        self.assertLess(stage.index('scripts.gt_original_graphics_critical_gate'),
+    def test_full_native_mip_and_material_gate_uses_same_export_before_cleanup(self):
+        stage=self.workflow.split("      - name: GT verify nine native Texture2DArray assets",1)[1].split(
+              "      - name: GT publish native array and Material",1)[0]
+        self.assertIn('--project "$RUNNER_TEMP/project/ExportedProject"',stage)
+        self.assertIn('gt-native-unity-array-import-contract.json',stage)
+        self.assertLess(stage.index('scripts.gt_write_unity_array_import_contract'),
                         stage.index('rm -rf -- "$original_owners"'))
         self.assertNotIn("continue-on-error",stage)
         self.assertNotIn("|| true",stage)
@@ -116,7 +84,7 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
         # Material and Shader objects. Nine ClassID187 entries are absent,
         # even though the separate GT full AssetRipper smoke succeeds.
         exporter=self.workflow.split("      - name: Export 40 scenes",1)[1].split(
-            "      - name: GT restore nine original Texture2DArray",1)[0]
+            "      - name: GT verify nine native Texture2DArray",1)[0]
         self.assertIn("RAFT_PRIVATE_EXPORT_LINEAGE:",exporter)
         self.assertIn("RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: '1'",exporter)
         self.assertNotIn("continue-on-error",exporter)
@@ -125,7 +93,8 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
         self.assertIn("OriginalTextureArrayImportGuard.Validate();",self.editor)
         self.assertIn("OriginalTextureArrayImportGuard",self.guard)
         self.assertIn("GTOriginalArrayImportContract.json",self.guard)
-        self.assertIn("TextureImporterShape.Texture2DArray",self.guard)
+        self.assertIn("AssetDatabase.TryGetGUIDAndLocalFileIdentifier",self.guard)
+        self.assertIn("importedArray.graphicsFormat",self.guard)
         self.assertIn("AssetDatabase.GUIDToAssetPath",self.guard)
         self.assertIn("AssetDatabase.LoadAssetAtPath<Texture2DArray>",self.guard)
         self.assertIn("importedArray.mipmapCount != array.mipmap_count",self.guard)

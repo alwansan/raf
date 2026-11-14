@@ -374,7 +374,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage
+          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --native-texture-arrays
           # Publish the CLI and its matching transitive assemblies together;
           # replacing one DLL cannot instrument an AOT or bundled executable.
           dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/ar" > "$RUNNER_TEMP/public-tool-build.log" 2>&1 || { tail -60 "$RUNNER_TEMP/public-tool-build.log"; exit 1; }
@@ -412,16 +412,13 @@ jobs:
           test -d "$RUNNER_TEMP/project/ExportedProject/Assets"
           test -d "$RUNNER_TEMP/project/ExportedProject/ProjectSettings"
           df -h /
-      - name: GT restore nine original Texture2DArray importer grids before every native Material/Shader link gate
+      - name: GT verify nine native Texture2DArray assets before every Material and Shader link gate
         id: gt_native_original_texture_arrays
         shell: bash
         run: |
           set -euo pipefail
-          # Same-instance original ClassID187 source→AssetRipper GUID provenance,
-          # exact 1024px source layer atlas grid and full PNG decode. No fake
-          # Texture2D fileID, imported pixels, source .meta or original GUIDs.
-          # Mesh inlining rewrites serialized owners in the export input.
-          # Authenticate ClassID187 against the pristine ZIP2 owners.
+          # Mesh inlining rewrites the export inputs. Authenticate arrays
+          # against pristine ZIP2 owners and the separately verified streams.
           original_owners="$RUNNER_TEMP/gt-native-pristine-serialized-owners"
           python3 -m scripts.gt_stage_serialized_owners \
             --source zip2-original/Raft/Raft_Data \
@@ -434,41 +431,9 @@ jobs:
             --private-export-trace "$RUNNER_TEMP/private-export-lineage.json" \
             --project "$RUNNER_TEMP/project/ExportedProject" \
             --out "$RUNNER_TEMP/gt-native-material-colors.json"
-          python3 -m scripts.gt_repair_array_flipbook_importers \
-            --original-source "$original_owners" \
-            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
-            --trace "$RUNNER_TEMP/private-export-lineage.json" \
-            --project "$RUNNER_TEMP/project/ExportedProject" \
-            --backup "$RUNNER_TEMP/gt-native-original-array-meta-backup" \
-            --report "$RUNNER_TEMP/gt-native-original-array-importer-repair.json"
-          # Reject any output except nine source-proven repaired array grids.
-          python3 -m scripts.gt_verify_original_array_material_refs \
-            --original-source "$original_owners" \
-            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
-            --trace "$RUNNER_TEMP/private-export-lineage.json" \
-            --project "$RUNNER_TEMP/project/ExportedProject" \
-            --report "$RUNNER_TEMP/gt-native-original-array-material-links.json"
-          python3 - <<'PY'
-          import json,os
-          from pathlib import Path
-          root=Path(os.environ['RUNNER_TEMP'])
-          fix=json.loads((root/'gt-native-original-array-importer-repair.json').read_text())
-          refs=json.loads((root/'gt-native-original-array-material-links.json').read_text())
-          assert fix['status']=='ALL_NINE_ARRAY_IMPORTERS_VALID', 'original_array_importers_not_source_verified'
-          assert fix['all_nine_original_array_importers_accepted'] is True
-          assert fix['original_exported_asset_guids_preserved'] is True
-          assert fix['source_images_or_binaries_edited'] is False
-          assert fix['meta_files_outside_the_exactly_verified_array_set_changed']==0
-          assert refs['full_array_material_importer_links_verified'] is True
-          assert refs['exact_original_class187_array_material_refs']==28
-          assert refs['distinct_source_array_guids_referenced_by_materials']==9
-          print('GT_NATIVE_ORIGINAL_ARRAY_IMPORT_GRIDS sourceOwners=82 arrays=9 gridVerified=9 exactMaterialRefs=28 guidPreserved=true sourcePixelsUntouched=true LFS=false editorImportNotYetVerified=true')
-          PY
-          # Private GUID/depth/mip manifest is copied into unity-candidate and
-          # consumed by AndroidNativeBuild.ValidateSdkBindings in Unity Editor.
-          # This does not run Unity yet or publish a source file/GUID.
           python3 -m scripts.gt_write_unity_array_import_contract \
             --original-source "$original_owners" \
+            --native-stream-source "$RUNNER_TEMP/input/Raft_Data" \
             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
             --trace "$RUNNER_TEMP/private-export-lineage.json" \
             --project "$RUNNER_TEMP/project/ExportedProject" \
@@ -508,67 +473,16 @@ jobs:
           assert d['source_or_exported_assets_modified'] is False
           print('GT_NATIVE_ORIGINAL_EXTERNAL_TEXTURE_PPTRS sourceOwners=82 originalExternalSlots=416 exactSourceToExport=416 mismatches=0 sourceChanged=false gpuUnverified=true')
           PY
-          # Verify every source-populated top mip (50 original BC3 slices)
-          # from two independently checked ZIP2 populations: unmodified
-          # serialized owner objects and original streamed GPU bytes. Do not
-          # publish private source arrays, image pixels or exporter GUIDs.
-          python3 -m scripts.gt_recover_original_array_layers \
-            --source "$original_owners" \
-            --stream-source "$RUNNER_TEMP/input/Raft_Data" \
-            --zip2-checkout zip2-original \
-            --trace "$RUNNER_TEMP/private-export-lineage.json" \
-            --project "$RUNNER_TEMP/project/ExportedProject" \
-            --private-output "$RUNNER_TEMP/gt-native-original-bc3-private" \
-            --report "$RUNNER_TEMP/gt-native-original-bc3-staging.json"
-          python3 -m scripts.gt_compare_original_bc3_to_flipbook_pixels \
-            --private-original-array-stage "$RUNNER_TEMP/gt-native-original-bc3-private" \
-            --project "$RUNNER_TEMP/project/ExportedProject" \
-            --all-original-layer-cells \
-            --report "$RUNNER_TEMP/gt-native-original-50-topmip-parity.json"
-          python3 - <<'PY'
-          import json,os
-          from pathlib import Path
-          root=Path(os.environ['RUNNER_TEMP'])
-          source=json.loads((root/'gt-native-original-bc3-staging.json').read_text())
-          parity=json.loads((root/'gt-native-original-50-topmip-parity.json').read_text())
-          assert source['source_total_layer_count']==52
-          assert source['source_array_layers_with_original_streamed_pixels']==50
-          assert source['source_array_layers_without_original_pixels']==2
-          assert source['original_source_streamed_bytes_restored_to_private_stage']==69906400
-          assert source['separate_original_stream_provider_root_authenticated'] is True
-          assert source['git_lfs_used'] is False
-          assert parity['original_source_populated_layers_expected']==50
-          assert parity['sampled_original_source_layer0_mips_vs_PNG_cells']==50
-          assert parity['all_populated_original_BC3_top_mip_layers_match_exported_PNG'] is True
-          assert parity['full_mip_chain_pixel_equivalence_proven'] is False
-          assert parity['Unity_Android_GPU_pixels_verified'] is False
-          print('GT_NATIVE_SOURCE_BC3_TOPMIPS originalLayers=52 sourcePixelLayers=50 exactSourceToPNG=50 originalStreamSHA=true lowerMipsNotCompared=true androidGPUNotProven=true')
-          PY
-          # A single strict final gate combines exact source identities from
-          # this SAME AssetRipper export. It does not accept reports merely
-          # because some optional/synthetic diagnostic job appears green.
-          python3 -m scripts.gt_original_graphics_critical_gate \
-            --arrays "$RUNNER_TEMP/gt-native-original-array-material-links.json" \
-            --external "$RUNNER_TEMP/gt-native-original-external-texture-links.json" \
-            --bc3 "$RUNNER_TEMP/gt-native-original-50-topmip-parity.json" \
-            --report "$RUNNER_TEMP/gt-native-original-9-28-416-50-final.json"
-          test -s "$RUNNER_TEMP/gt-native-original-9-28-416-50-final.json"
-          rm -rf -- "$RUNNER_TEMP/gt-native-original-bc3-private"
           rm -rf -- "$original_owners"
-      - name: GT publish source-authentic array importer and Material link receipts only
+      - name: GT publish native array and Material link receipts only
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: gt-native-original-array-import-${{ github.sha }}
           path: |
-            ${{ runner.temp }}/gt-native-original-array-importer-repair.json
             ${{ runner.temp }}/gt-native-mesh-export-geometry.json
             ${{ runner.temp }}/gt-native-material-colors.json
-            ${{ runner.temp }}/gt-native-original-array-material-links.json
             ${{ runner.temp }}/gt-native-original-external-texture-links.json
-            ${{ runner.temp }}/gt-native-original-bc3-staging.json
-            ${{ runner.temp }}/gt-native-original-50-topmip-parity.json
-            ${{ runner.temp }}/gt-native-original-9-28-416-50-final.json
             ${{ runner.temp }}/gt-native-unity-array-import-contract.json
           if-no-files-found: ignore
           retention-days: 7
