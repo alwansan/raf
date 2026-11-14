@@ -75,7 +75,21 @@ def repair_yaml_hex(raw):
     )
 
 
-def patch(root, helper, *, mesh_lineage=False, native_texture_arrays=False):
+def add_compute_lineage(raw):
+    source = raw.decode('utf-8')
+    anchor = '        foreach (IExportCollection collection in collections)'
+    condition = 'asset.ClassID is not (21 or 48) &&'
+    if source.count(condition) != 1:
+        raise ValueError('Exporter ComputeShader trace hook is ambiguous')
+    index = source.index(anchor)
+    source = source[:index] + '''        bool includeComputeObjects = Environment.GetEnvironmentVariable(
+            "RAFT_PRIVATE_EXPORT_COMPUTE_LINEAGE") == "1";
+''' + source[index:]
+    return source.replace(condition, condition + '''
+                    !(includeComputeObjects && asset.ClassID == 72) &&''').encode('utf-8')
+
+
+def patch(root, helper, *, mesh_lineage=False, native_texture_arrays=False, compute_lineage=False):
     directory = root / 'Source/AssetRipper.Export.UnityProjects'
     target = directory / 'ProjectExporter.cs'
     raw = target.read_bytes()
@@ -100,7 +114,11 @@ def patch(root, helper, *, mesh_lineage=False, native_texture_arrays=False):
     if destination.exists():
         raise FileExistsError('Trace source already exists')
     helper_raw = helper.read_bytes()
-    destination.write_bytes(add_mesh_lineage(helper_raw) if mesh_lineage else helper_raw)
+    if mesh_lineage:
+        helper_raw = add_mesh_lineage(helper_raw)
+    if compute_lineage:
+        helper_raw = add_compute_lineage(helper_raw)
+    destination.write_bytes(helper_raw)
     try:
         if native_texture_arrays:
             overrides.write_bytes(override_source.encode('utf-8'))
@@ -121,6 +139,7 @@ if __name__ == '__main__':
     p.add_argument('--helper', type=Path, required=True)
     p.add_argument('--mesh-lineage', action='store_true')
     p.add_argument('--native-texture-arrays', action='store_true')
+    p.add_argument('--compute-lineage', action='store_true')
     a = p.parse_args()
     patch(a.tool_source, a.helper, mesh_lineage=a.mesh_lineage,
-          native_texture_arrays=a.native_texture_arrays)
+          native_texture_arrays=a.native_texture_arrays, compute_lineage=a.compute_lineage)

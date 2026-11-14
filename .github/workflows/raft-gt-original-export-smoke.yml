@@ -96,7 +96,7 @@ jobs:
           set -euo pipefail
           python3 -m scripts.patch_export_lineage \
             --tool-source ar-host \
-            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --native-texture-arrays
+            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --native-texture-arrays --compute-lineage
           dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
             -c Release -p:PublishAot=false -p:PublishTrimmed=false \
             -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
@@ -115,6 +115,7 @@ jobs:
           RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/gt-private-export-lineage.json
           RAFT_PRIVATE_EXPORT_MESH_LINEAGE: ${{ runner.temp }}/gt-private-mesh-export-lineage.json
           RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: '1'
+          RAFT_PRIVATE_EXPORT_COMPUTE_LINEAGE: '1'
           DOTNET_PROCESSOR_COUNT: '2'
         shell: bash
         run: |
@@ -276,6 +277,28 @@ jobs:
             --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
             --report "$RUNNER_TEMP/gt-real-original-array-private-Editor-gate-aggregate.json"
+      - name: Prove the original water FFT has a same-export native compute asset
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"])
+          trace = json.loads((root / "gt-private-export-lineage.json").read_text())
+          matches = [row for row in trace["objects"] if row["class_id"] == 72 and
+                     row["source"] == {"owner": "sharedassets0.assets", "path_id": 2456}]
+          assert len(matches) == 1, "original_fft_export_trace_missing"
+          target = matches[0]["export"]
+          assert target["file_id"] == 7200000 and target["type"] == 2, "original_fft_export_type"
+          assert re.fullmatch(r"[a-f0-9]{32}", target["guid"]), "original_fft_invalid_export_guid"
+          assets = root / "gt-project/ExportedProject/Assets"
+          pattern = re.compile(r"(?m)^guid: " + target["guid"] + r"$")
+          metas = [p for p in assets.rglob("*.asset.meta") if pattern.search(p.read_text(encoding="utf-8-sig"))]
+          assert len(metas) == 1, "original_fft_export_meta_missing"
+          with metas[0].with_suffix("").open(encoding="utf-8-sig") as source:
+              assert any(line.rstrip() == "--- !u!72 &7200000" for line in source), "original_fft_export_class"
+          print("GT_FFT_SOURCE_EXPORT_IDENTITY verified=true")
+          PY
       - name: GT compare all 1556 original Material texture properties and GUIDs with actual same-instance exported Unity project
         id: gt_all_original_texenvs
         continue-on-error: true
