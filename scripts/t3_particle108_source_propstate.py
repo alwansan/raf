@@ -66,9 +66,19 @@ def serialize_properties(parsed, *, allow_hidden_and_toggle=False):
                 "PROPERTY_DESCRIPTION")
         flags = prop["m_Flags"]
         attributes = prop["m_Attributes"]
+        toggle = None
+        if type(attributes) is list and len(attributes) == 1 and isinstance(attributes[0], str):
+            attribute = attributes[0]
+            if attribute == "Toggle":
+                toggle = attribute
+            elif attribute.startswith("Toggle(") and attribute.endswith(")"):
+                keyword = attribute[len("Toggle("):-1]
+                keywords = parsed.get("m_KeywordNames", [])
+                if IDENT.fullmatch(keyword) and type(keywords) is list and keyword in keywords:
+                    toggle = attribute
         require(type(flags) is int and type(attributes) is list and
                 ((flags == 0 and not attributes) or
-                 (allow_hidden_and_toggle and flags in (0, 1) and attributes in ([], ["Toggle"]))),
+                 (allow_hidden_and_toggle and flags in (0, 1) and (not attributes or toggle is not None))),
                 "PROPERTY_FLAGS_OR_ATTRIBUTES")
         typ=prop["m_Type"]
         require(type(typ) is int and typ in (0,1,2,3,4),
@@ -110,7 +120,7 @@ def serialize_properties(parsed, *, allow_hidden_and_toggle=False):
                       number(values[2])+")) = "+number(values[0]))
                 family["ranges"]+=1
         require(not attributes or typ == 2, "PROPERTY_FLAGS_OR_ATTRIBUTES")
-        prefix = ("[HideInInspector] " if flags == 1 else "") + ("[Toggle] " if attributes else "")
+        prefix = ("[HideInInspector] " if flags == 1 else "") + (f"[{toggle}] " if toggle else "")
         lines.append(prefix + line)
     lines.append("}")
     return "\n".join(lines), {
