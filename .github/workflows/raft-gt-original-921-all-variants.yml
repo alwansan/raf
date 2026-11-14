@@ -18,6 +18,8 @@ on:
       - tests/test_gt_original_921_cb_layout.py
       - scripts/gt_original_921_all_variants.py
       - scripts/gt_original_921_keyword_routes.py
+      - scripts/t3_particle108_source_propstate.py
+      - scripts/w1_depth_shaderlab.py
       - scripts/gt_original_921_cb_layout.py
       - scripts/gt_original_921_cb_hlsl.py
       - scripts/gt_original_921_resource_rebind.py
