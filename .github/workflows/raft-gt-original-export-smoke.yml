@@ -8,6 +8,7 @@ on:
       - scripts/gt_verify_original_mesh_export.py
       - tests/test_gt_verify_original_mesh_export.py
       - scripts/b44_verify_material_colors.py
+      - scripts/t3_audit_exported_material_programs.py
       - scripts/gt_verify_native_array_mips.py
       - scripts/gt_write_unity_array_import_contract.py
       - scripts/gt_external_original_texture_links.py
@@ -277,7 +278,7 @@ jobs:
         run: |
           python3 -m scripts.t3_audit_exported_material_programs \
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
-            --out "$RUNNER_TEMP/gt-raw-export-program-quality.json"
+            --rank-dummy-targets --out "$RUNNER_TEMP/gt-raw-export-program-quality.json"
       - name: Validate all nine native arrays and 28 material slots in the full export
         run: |
           set -euo pipefail

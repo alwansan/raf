@@ -13,11 +13,13 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+from hashlib import sha256
 import json
 import re
 from pathlib import Path
 
 from scripts.b49_shaderlab_pass_contract import pass_coverage
+from scripts.restore_builtin_shaders import exported_shader_identity
 from scripts.w1_audit_export_material_shaders import HEADER, SHADER, GUID, ENGINE, pptr
 
 MAX_INVENTORY=150_000
@@ -75,6 +77,7 @@ def _shader_profiles(entries:list[Path]):
         txt=_read(path,MAX_SHADER)
         profile=pass_coverage(txt)
         result[guid]={
+            "identity": exported_shader_identity(txt),
             "dummy": "//DummyShaderTextExporter" in txt,
             "no_subprograms": "// No subprograms found" in txt,
             "unknown_exporter": "ShaderUnknownExporter" in txt,
@@ -116,7 +119,7 @@ def _material_refs(entries:list[Path]):
     return rows
 
 
-def audit(project:Path):
+def audit(project:Path, *, rank_dummy_targets=False):
     root=Path(project).absolute()
     _require_unlinked_path(root)
     assets=root/"Assets"
@@ -180,7 +183,7 @@ def audit(project:Path):
          +c["material_docs_with_null_Shader"]
          +c["material_docs_with_unknown_or_broken_Shader"]!=c["material_documents"]):
         raise AssertionError("exported_Material_reference_count_inconsistent")
-    return {
+    report = {
         "schema_version":1,
         "purpose":"native_post_restorer_actual_Material_to_ShaderLab_quality",
         "counts":{k:c[k] for k in COUNT_KEYS},
@@ -199,18 +202,28 @@ def audit(project:Path):
         "linked_dummy_Shader_program_risk_present":c["material_docs_using_dummy_Shader"]>0,
         "status":STATUS,
     }
+    if rank_dummy_targets:
+        ranked = Counter()
+        for guid, count in dummy_frequency.items():
+            identity = shader_map[guid]["identity"]
+            if identity is None:
+                raise ValueError("missing_dummy_shader_identity")
+            ranked[sha256(identity.encode("utf-8")).hexdigest()] += count
+        report["dummy_shader_material_counts_by_name_digest"] = dict(ranked.most_common())
+    return report
 
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--project",type=Path,required=True)
     p.add_argument("--out",type=Path,required=True)
+    p.add_argument("--rank-dummy-targets", action="store_true")
     a=p.parse_args(argv)
     if (a.out.exists() or a.out.is_symlink()
         or a.out.resolve().is_relative_to(a.project.resolve())):
         raise ValueError("unsafe_Shader_program_report_destination")
     try:
-        report=audit(a.project)
+        report=audit(a.project, rank_dummy_targets=a.rank_dummy_targets)
     except Exception as error:
         # Never publish third-party source/GUID/path exception message.
         report={"schema_version":1,"purpose":"native_post_restorer_actual_Material_to_ShaderLab_quality",
