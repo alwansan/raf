@@ -6,6 +6,9 @@ from pathlib import Path
 
 from scripts.b49_shaderlab_pass_contract import pass_coverage
 from scripts.gt_original_921_keyword_routes import routed_stage
+from scripts.gt_original_921_cb_layout import constant_buffer_lanes
+from scripts.gt_original_921_cb_hlsl import rebind_constant_buffers
+from scripts.gt_original_921_semantics import pin_varying_locations, restore_vertex_inputs
 from scripts.w1_depth_shaderlab import stage_body
 
 PASS_MODES = ("ForwardBase", "ForwardAdd", "Deferred", "ShadowCaster")
@@ -34,10 +37,52 @@ def unity_resource_bindings(source, stage):
     # Unity's graphics compiler has separate, smaller HLSL sampler slots.
     # Bind textures and samplers by their recovered Unity property names.
     source = re.sub(r" : register\([ts][0-9]+\)(?=;)", "", source)
+    for name in ("BlockPaint", "UnityDrawCallInfo"):
+        pattern = re.compile(r"cbuffer " + name + r" : register\(b[0-9]+\) \{[^{}]*\};")
+        block = pattern.search(source)
+        if block is None:
+            continue
+        pads = {pad: f"gt_{name}_pad{lane}" for pad, lane in
+                re.findall(r"\b(raft921_cb[0-9]+_pad([0-9]+))\b", block[0])}
+        source = source[:block.start()] + re.sub(
+            r" : register\(b[0-9]+\)", "", block[0], count=1) + source[block.end():]
+        if pads:
+            source = re.sub(r"\b(?:" + "|".join(pads) + r")\b",
+                            lambda match: pads[match[0]], source)
     # These names are generated for padding, with no original Unity binding.
     # They must not alias a different stage's unrelated padding or globals.
     return re.sub(r"\braft921_cb[0-9]+_(?:pad[0-9]+|Globals|type[0-9]+)\b",
                   lambda match: f"gt_{stage}_{match[0]}", source)
+
+
+def paired_uniform_layouts(stage_records):
+    stages = [record["source_constant_buffer_layouts"] for record in stage_records]
+    common = ("BlockPaint", "UnityDrawCallInfo")
+    canonical = {}
+    for name in common:
+        members = {}
+        layouts = [buffer for stage in stages for buffer in stage if buffer["name"] == name]
+        if len(layouts) != 2:
+            continue
+        for buffer in layouts:
+            if buffer["structs"] or buffer["variant_size_bytes"] != layouts[0]["variant_size_bytes"]:
+                raise ValueError("original_921_incompatible_shared_uniform_block")
+            for member in buffer["members"]:
+                previous = members.setdefault(member["name"], member)
+                if previous != member:
+                    raise ValueError("original_921_conflicting_shared_uniform_member")
+        canonical[name] = sorted(members.values(), key=lambda member: member["index"])
+
+    merged = []
+    for stage in stages:
+        buffers = []
+        for buffer in stage:
+            if buffer["name"] in canonical:
+                buffer = dict(buffer, members=canonical[buffer["name"]])
+                buffer["original_named_lanes"] = constant_buffer_lanes(buffer)
+            buffers.append(buffer)
+        merged.append(buffers)
+    return merged
 
 
 def compose(private):
@@ -46,14 +91,21 @@ def compose(private):
     manifest = json.loads((private / "original-private-variant-manifest.json").read_text())
     if tuple(len(row["routes"]) for row in routes) != EXPECTED_ROUTES:
         raise ValueError("original_921_unexpected_shaderlab_routes")
+    records = json.loads((private / "original-private-parameter-records.json").read_text())["stage_records"]
     stage_sources = {}
     for index, pair in enumerate(manifest["paired"]):
+        layouts = paired_uniform_layouts(records[index * 2:index * 2 + 2])
         for offset, stage in enumerate(("vs", "fs")):
             row = pair[stage]
             key = (pair["subshader"], pair["pass"], stage, row["program_ref"],
                    tuple(sorted(row["original_variant_metadata"]["m_KeywordIndices"])))
-            candidate = private / f"bound-stage-{index * 2 + offset:03d}" / "varying-bound.hlsl"
-            source = unity_varying_semantics(candidate.read_text(encoding="utf-8"))
+            directory = private / f"bound-stage-{index * 2 + offset:03d}"
+            source = rebind_constant_buffers(
+                (directory / "resource-bound.hlsl").read_text(encoding="utf-8"), layouts[offset])
+            if stage == "vs":
+                dxbc = (private / row["program_ref"] / "source.dxbc").read_bytes()
+                source, _ = restore_vertex_inputs(source, dxbc)
+            source = unity_varying_semantics(pin_varying_locations(source, 1 - offset))
             stage_sources[key] = unity_resource_bindings(source, stage)
     original_names = manifest["original_shader_ParsedForm_full_private"]["m_KeywordNames"]
     indices = {name: index for index, name in enumerate(original_names)}
