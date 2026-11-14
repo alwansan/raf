@@ -8,6 +8,7 @@ import re
 from scripts.gt_stage_serialized_owners import read_expected
 from scripts.gt_serialized_graphics_counts import verify
 from scripts.verify_export_lineage import identity, pointer
+from scripts.verify_exported_material_texture_links import material_docs, read, texenv
 
 FIELDS = ("m_Width", "m_Height", "m_Depth", "m_MipCount", "m_Format")
 
@@ -41,10 +42,11 @@ def inspect(source, manifest, trace_file, assets, owner):
                 raise ValueError("invalid_native_array_export_pointer")
             targets[path_id] = guid
 
+    target_guids = set(targets.values())
     files = {}
     for meta in assets.rglob("*.asset.meta"):
         match = re.search(r"(?m)^guid: ([0-9a-f]{32})$", meta.read_text(encoding="utf-8-sig"))
-        if match and match[1] in targets.values():
+        if match and match[1] in target_guids:
             guid = match[1]
             if guid in files:
                 raise ValueError("duplicate_native_array_export_guid")
@@ -76,7 +78,22 @@ def inspect(source, manifest, trace_file, assets, owner):
             total_bytes += data["size"]
     if not arrays or targets or files:
         raise ValueError("incomplete_native_array_export_scope")
-    return {"arrays": arrays, "layers": layers, "exact_mip_payload_bytes": total_bytes}
+    references = 0
+    referenced = set()
+    for material in assets.rglob("*.mat"):
+        docs, _ = material_docs(read(material))
+        for doc in docs:
+            for file_id, guid, kind in texenv(doc):
+                if guid not in target_guids:
+                    continue
+                if (file_id, kind) != (18700000, 2):
+                    raise ValueError("native_array_material_pointer_type_mismatch")
+                references += 1
+                referenced.add(guid)
+    if referenced != target_guids:
+        raise ValueError("native_array_missing_exported_material_reference")
+    return {"arrays": arrays, "layers": layers, "exact_mip_payload_bytes": total_bytes,
+            "material_references": references, "arrays_referenced_by_materials": len(referenced)}
 
 
 def main():
