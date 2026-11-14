@@ -10,6 +10,7 @@ on:
       - scripts/b44_verify_material_colors.py
       - scripts/gt_verify_native_array_mips.py
       - scripts/gt_write_unity_array_import_contract.py
+      - scripts/gt_external_original_texture_links.py
       - scripts/gt_stage_indexed_fft_candidate.py
   workflow_dispatch:
 
@@ -273,6 +274,7 @@ jobs:
       - name: Validate all nine native arrays and 28 material slots in the full export
         run: |
           set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_external_original_texture_links.py
           python3 -m scripts.gt_write_unity_array_import_contract \
             --original-source "$RUNNER_TEMP/gt-input/Raft_Data" \
             --native-stream-source "$RUNNER_TEMP/gt-input/Raft_Data" \

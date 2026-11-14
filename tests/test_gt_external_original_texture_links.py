@@ -3,7 +3,7 @@ from types import SimpleNamespace
 import unittest
 
 from scripts.gt_external_original_texture_links import (
-    exact_owner, compare, trace_targets,
+    exact_owner, compare, trace_targets, verify_native_array_slots,
 )
 from scripts.gt_stage_serialized_owners import InventoryError
 
@@ -35,6 +35,36 @@ class ExternalTextureBindingsTests(unittest.TestCase):
         self.assertTrue(result["all_external_links_verified"])
         self.assertNotIn(self.guid,str(result))
         self.assertNotIn("sharedassets",str(result))
+
+    def test_native_array_slots_join_local_and_external_references_with_uvs(self):
+        original_slots = self.original[self.material]
+        exported_slots = self.exported[(2100000, self.mat_guid)]
+        original_slots.clear()
+        exported_slots.clear()
+        self.types.clear()
+        self.trace["objects"].pop()
+        uv = ((1.0, 1.0), (0.0, 0.0))
+        for index in range(9):
+            external = index % 2
+            owner = self.texture[0] if external else self.material[0]
+            path_id = index + 22
+            guid = f"{index + 512:032x}"
+            self.types[owner, path_id] = 187
+            self.trace["objects"].append({
+                "class_id": 187, "source": {"owner": owner, "path_id": path_id},
+                "export": {"file_id": 18700000, "guid": guid, "type": 2},
+            })
+            for slot in range(20 if index == 0 else 1):
+                name = f"_Texture{index}_{slot}"
+                original_slots[name] = ((external, path_id), uv)
+                exported_slots[name] = ((18700000, guid, 2), uv)
+        empty_guid = f"{512:032x}"
+        self.assertEqual(verify_native_array_slots(
+            self.original, self.tables, self.types, self.trace, self.exported, empty_guid), 20)
+        exported_slots["_Texture1_0"] = (exported_slots["_Texture1_0"][0], None)
+        with self.assertRaisesRegex(InventoryError, "material_slot_mismatch"):
+            verify_native_array_slots(
+                self.original, self.tables, self.types, self.trace, self.exported, empty_guid)
 
     def test_font_material_is_not_falsely_treated_as_missing_yaml(self):
         font_source=("sharedassets0.assets",42)
