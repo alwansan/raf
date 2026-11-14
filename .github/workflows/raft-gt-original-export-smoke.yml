@@ -402,7 +402,7 @@ jobs:
               assert exported_shader_identity(text) == source_name, "model_shader_export_identity_mismatch"
               assert "DummyShaderTextExporter" in text, "model_shader_export_not_dummy"
               guid, = GUID.findall(meta.read_text(encoding="utf-8-sig"))
-              material_counts[profile] = referenced[4800000, guid.lower(), 3]
+              material_counts[profile] = referenced[4800000, guid.lower(), "3"]
               assert material_counts[profile] > 0, "model_shader_export_has_no_material_reference"
               destinations.add(target)
           assert len(destinations) == len(SOURCE_PROFILES), "model_shader_export_destination_alias"
