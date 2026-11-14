@@ -152,6 +152,22 @@ class MaterialColorsTests(unittest.TestCase):
         self.assertEqual(r['engine_material_redirects_excluded'], 1)
         self.assertEqual(r['font_importer_materials_excluded'], 1)
 
+    def test_scoped_color_join_rejects_external_material_alias(self):
+        trace, source, actual = fixture()
+        other = copy.deepcopy(trace["objects"][0])
+        other["source"]["owner"] = "engine.assets"
+        other["export"]["guid"] = "c" * 32
+        trace["objects"].append(other)
+        actual[(2100000, "c" * 32)] = {}
+        report = compare(trace, source, actual, selected_owners={"original.assets"})
+        self.assertEqual(report["outside_scope_trace_materials"], 1)
+        self.assertEqual(report["yaml_materials_compared"], 1)
+        self.assertTrue(report["original_material_color_values_preserved"])
+
+        other["export"]["guid"] = "a" * 32
+        with self.assertRaisesRegex(ValueError, "identities differ"):
+            compare(trace, source, actual, selected_owners={"original.assets"})
+
     def test_mixed_duplicate_or_missing_source_rejected(self):
         t, s, a = fixture()
         t['objects'].append(copy.deepcopy(t['objects'][0]))
