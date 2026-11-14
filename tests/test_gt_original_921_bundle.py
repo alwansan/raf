@@ -7,6 +7,30 @@ from scripts.gt_verify_921_shader_bundle import verify_routes
 
 
 class Original921BundleTests(unittest.TestCase):
+    def test_engine_routes_require_compiled_entries_and_exact_keyword_combinations(self):
+        keywords = [f"KEY_{index}" for index in range(13)]
+        passes = []
+        expected_keys = []
+        for count in EXPECTED_ROUTES:
+            rows = [{"m_KeywordIndices": [index], "m_BlobIndex": index}
+                    for index in range(count)]
+            passes.append({stage: {"m_PlayerSubPrograms": [list(rows)]}
+                           for stage in ("progVertex", "progFragment")})
+            expected_keys.append({frozenset({keywords[index]}) for index in range(count)})
+        shader = {"m_KeywordNames": keywords, "m_SubShaders": [{"m_Passes": passes}]}
+        entries = [(0, b"compiled")] * len(keywords)
+        result = verify_routes(shader, entries, expected_keys)
+        self.assertTrue(result["compiled_program_table_verified"])
+        self.assertEqual(result["fragment_routes_by_pass"], list(EXPECTED_ROUTES))
+
+        rows = passes[1]["progFragment"]["m_PlayerSubPrograms"][0]
+        rows[-1] = {"m_KeywordIndices": [11, 12], "m_BlobIndex": 12}
+        with self.assertRaisesRegex(ValueError, "engine_routes_missing.*pass=1"):
+            verify_routes(shader, entries, expected_keys)
+        rows[-1] = {"m_KeywordIndices": [12], "m_BlobIndex": 13}
+        with self.assertRaisesRegex(ValueError, "route_blob_missing.*pass=1"):
+            verify_routes(shader, entries, expected_keys)
+
     def test_missing_compiled_route_is_rejected(self):
         names, passes = [], []
         for index, expected in enumerate(EXPECTED_ROUTES):
