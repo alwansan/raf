@@ -18,6 +18,7 @@ namespace RaftGT
             var linearDepths = new System.Collections.Generic.List<int>();
             var srgbDepths = new System.Collections.Generic.List<int>();
             var paths = new string[guids.Length];
+            Debug.Log($"GT_NATIVE_ARRAY_IMPORTED_COUNT count={guids.Length}");
             for (int i = 0; i < guids.Length; i++)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guids[i]);
@@ -26,6 +27,8 @@ namespace RaftGT
                     || guid != guids[i] || id != 18700000
                     || texture.width != 1024 || texture.height != 1024 || texture.mipmapCount != 11)
                     throw new InvalidOperationException("Native array identity or mip count changed");
+                Debug.Log($"GT_NATIVE_ARRAY_IMPORTED shape={texture.width}x{texture.height} " +
+                    $"depth={texture.depth} mips={texture.mipmapCount} format={texture.graphicsFormat}");
                 switch (texture.graphicsFormat)
                 {
                     case GraphicsFormat.RGBA_DXT5_UNorm:

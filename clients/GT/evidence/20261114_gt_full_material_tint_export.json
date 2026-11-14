@@ -1,0 +1,16 @@
+{
+  "run": 43548221728,
+  "source_owner_count": 82,
+  "source_materials_verified": 1556,
+  "yaml_materials_compared": 1536,
+  "color_slots_compared": 4903,
+  "changed_color_values": 0,
+  "missing_color_slots": 0,
+  "unexpected_color_slots": 0,
+  "nonfinite_channels_compared": 16,
+  "nonfinite_channel_drift": 0,
+  "engine_material_redirects_excluded": 6,
+  "font_importer_materials_excluded": 14,
+  "outside_scope_trace_materials": 2,
+  "shader_program_or_device_fidelity_verified": false
+}
