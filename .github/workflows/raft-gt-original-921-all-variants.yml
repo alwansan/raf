@@ -166,7 +166,7 @@ jobs:
           mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
           python3 -m scripts.gt_original_921_shaderlab \
             --private "$RUNNER_TEMP/gt-921-private-recovered" \
-            --shader "$project/Assets/GTOriginal921.shader"
+            --shader "$project/Assets/GTOriginal921.shader" --verify-entrypoints
           cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
           printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
           printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"

@@ -2,6 +2,7 @@
 import argparse
 import json
 import re
+import tempfile
 from pathlib import Path
 
 from scripts.b49_shaderlab_pass_contract import pass_coverage
@@ -150,13 +151,48 @@ def compose(private):
     return shader
 
 
+def verify_entrypoints(shader, directory):
+    """Compile both real entries of every generated ShaderLab route."""
+    from scripts.w1_recover_graphics_programs import command
+    from scripts.t3_spirv_interface_name_drift import read_reflection
+
+    blocks = re.findall(r"(?ms)^HLSLPROGRAM\n(.*?)^ENDHLSL$", shader)
+    if len(blocks) != len(EXPECTED_ROUTES):
+        raise ValueError("original_921_entrypoint_pass_count_mismatch")
+    with tempfile.TemporaryDirectory(prefix="original-921-entrypoints-", dir=directory) as tmp:
+        source = Path(tmp) / "route.hlsl"
+        binary = Path(tmp) / "route.spv"
+        for index, (block, count) in enumerate(zip(blocks, EXPECTED_ROUTES)):
+            code = re.sub(r"(?m)^#pragma [^\n]*\n", "", block)
+            source.write_text(code, encoding="utf-8")
+            for variant in range(count):
+                route = [f"-DGT_ORIGINAL_921_P{index}_V{variant}=1"] if variant else []
+                for suffix, macro, entry in (
+                    ("vert", "VERTEX", "gt_vs_main"),
+                    ("frag", "FRAGMENT", "gt_fs_main"),
+                ):
+                    args = ["glslangValidator", "-V", "-D", "--target-env", "vulkan1.1",
+                            "-S", suffix, "-e", entry, f"-DSHADER_STAGE_{macro}=1"]
+                    binary.unlink(missing_ok=True)
+                    if not command([*args, *route, "-o", str(binary), str(source)]):
+                        raise ValueError("original_921_shaderlab_entrypoint_compile_failed")
+                    if not command(["spirv-val", "--target-env", "vulkan1.1", str(binary)]):
+                        raise ValueError("original_921_shaderlab_entrypoint_spirv_invalid")
+                    if [row["name"] for row in read_reflection(binary)["entryPoints"]] != [entry]:
+                        raise ValueError("original_921_shaderlab_entrypoint_missing")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--private", type=Path, required=True)
     parser.add_argument("--shader", type=Path, required=True)
+    parser.add_argument("--verify-entrypoints", action="store_true")
     args = parser.parse_args()
+    shader = compose(args.private)
+    if args.verify_entrypoints:
+        verify_entrypoints(shader, args.private)
     with args.shader.open("x", encoding="utf-8") as target:
-        target.write(compose(args.private))
+        target.write(shader)
 
 
 if __name__ == "__main__":
