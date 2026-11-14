@@ -36,12 +36,15 @@ def packaged_arrays(bundle):
     return result
 
 
-def inspect(source, manifest, trace_file, assets, owner, bundle=None):
+def inspect(source, manifest, trace_file, assets, owners, bundle=None):
     import UnityPy
 
     pins = read_expected(manifest)
-    _, size, digest = pins[owner]
-    verify(source / owner, size, digest)
+    if not owners or len(set(owners)) != len(owners):
+        raise ValueError("missing_or_duplicate_original_array_owner")
+    for owner in owners:
+        _, size, digest = pins[owner]
+        verify(source / owner, size, digest)
     with manifest.open(encoding="utf-8") as table:
         stream_pins = {}
         for row in csv.DictReader(table, delimiter="\t"):
@@ -61,11 +64,11 @@ def inspect(source, manifest, trace_file, assets, owner, bundle=None):
         if row["class_id"] != 187:
             continue
         collection, path_id = identity(row["source"])
-        if collection == owner:
+        if collection in owners:
             file_id, guid, kind = pointer(row["export"])
-            if file_id != 18700000 or kind != "2" or path_id in targets or guid in targets.values():
+            if file_id != 18700000 or kind != "2" or (collection, path_id) in targets or guid in targets.values():
                 raise ValueError("invalid_native_array_export_pointer")
-            targets[path_id] = guid
+            targets[collection, path_id] = guid
 
     target_guids = set(targets.values())
     files = {}
@@ -79,40 +82,41 @@ def inspect(source, manifest, trace_file, assets, owner, bundle=None):
 
     arrays = layers = total_bytes = 0
     original_payloads = Counter()
-    for obj in UnityPy.load(str(source / owner)).objects:
-        if obj.type.name != "Texture2DArray":
-            continue
-        yaml = files.pop(targets.pop(obj.path_id)).read_text(encoding="utf-8-sig")
-        if not re.search(r"(?m)^--- !u!187 &18700000$", yaml):
-            raise ValueError("invalid_native_array_yaml_identity")
-        tree = obj.read_typetree()
-        for field in FIELDS:
-            value = re.search(rf"(?m)^  {field}: (\d+)$", yaml)
-            if not value or int(value[1]) != tree[field]:
-                raise ValueError("native_array_metadata_mismatch")
-        data = tree["m_StreamData"]
-        payload = re.search(r"(?m)^  _typelessdata: ([0-9a-fA-F]*)$", yaml)
-        encoded = bytes.fromhex(payload[1]) if payload else b""
-        if data["size"]:
-            stream_name = Path(data["path"]).name
-            stream_size, stream_digest = stream_pins[stream_name]
-            if not 0 <= data["offset"] <= stream_size - data["size"] or data["size"] < 0:
-                raise ValueError("invalid_original_array_stream_range")
-            if stream_name not in verified_streams:
-                verify(source / stream_name, stream_size, stream_digest)
-                verified_streams.add(stream_name)
-            with (source / stream_name).open("rb") as stream:
-                stream.seek(data["offset"])
-                original = stream.read(data["size"])
-        else:
-            original = bytes(tree.get("image data") or b"")
-        if encoded != original:
-            raise ValueError("native_array_mip_payload_mismatch")
-        key = tuple(tree[field] for field in FIELDS)
-        original_payloads[key, len(original), sha256(original).digest()] += 1
-        arrays += 1
-        layers += tree["m_Depth"]
-        total_bytes += data["size"]
+    for owner in owners:
+        for obj in UnityPy.load(str(source / owner)).objects:
+            if obj.type.name != "Texture2DArray":
+                continue
+            yaml = files.pop(targets.pop((owner, obj.path_id))).read_text(encoding="utf-8-sig")
+            if not re.search(r"(?m)^--- !u!187 &18700000$", yaml):
+                raise ValueError("invalid_native_array_yaml_identity")
+            tree = obj.read_typetree()
+            for field in FIELDS:
+                value = re.search(rf"(?m)^  {field}: (\d+)$", yaml)
+                if not value or int(value[1]) != tree[field]:
+                    raise ValueError("native_array_metadata_mismatch")
+            data = tree["m_StreamData"]
+            payload = re.search(r"(?m)^  _typelessdata: ([0-9a-fA-F]*)$", yaml)
+            encoded = bytes.fromhex(payload[1]) if payload else b""
+            if data["size"]:
+                stream_name = Path(data["path"]).name
+                stream_size, stream_digest = stream_pins[stream_name]
+                if not 0 <= data["offset"] <= stream_size - data["size"] or data["size"] < 0:
+                    raise ValueError("invalid_original_array_stream_range")
+                if stream_name not in verified_streams:
+                    verify(source / stream_name, stream_size, stream_digest)
+                    verified_streams.add(stream_name)
+                with (source / stream_name).open("rb") as stream:
+                    stream.seek(data["offset"])
+                    original = stream.read(data["size"])
+            else:
+                original = bytes(tree.get("image data") or b"")
+            if encoded != original:
+                raise ValueError("native_array_mip_payload_mismatch")
+            key = tuple(tree[field] for field in FIELDS)
+            original_payloads[key, len(original), sha256(original).digest()] += 1
+            arrays += 1
+            layers += tree["m_Depth"]
+            total_bytes += data["size"]
     if not arrays or targets or files:
         raise ValueError("incomplete_native_array_export_scope")
     references = 0
@@ -140,7 +144,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("source", "manifest", "trace-file", "assets"):
         parser.add_argument("--" + name, type=Path, required=True)
-    parser.add_argument("--owner", required=True)
+    parser.add_argument("--owner", dest="owners", action="append", required=True)
     parser.add_argument("--bundle", type=Path)
     report = inspect(**vars(parser.parse_args()))
     print("GT_NATIVE_ARRAY_MIPS " + json.dumps(report, sort_keys=True))
