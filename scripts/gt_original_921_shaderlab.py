@@ -80,7 +80,8 @@ def compose(private):
             stages[stage] = routed_stage(clauses, names, programs)
         pragmas = ["#pragma multi_compile __ " + " ".join(names)]
         program = ["HLSLPROGRAM", "#pragma target 5.0",
-                   "#pragma vertex main", "#pragma fragment main", *pragmas,
+                   "#pragma vertex main", "#pragma fragment main",
+                   "#pragma use_dxc vulkan", *pragmas,
                    stage_body(stages["vs"], stages["fs"]), "ENDHLSL"]
         remainder = blocks[index + 1]
         if index + 1 < len(PASS_MODES):
