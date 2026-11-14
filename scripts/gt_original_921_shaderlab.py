@@ -106,6 +106,9 @@ def compose(private):
                 dxbc = (private / row["program_ref"] / "source.dxbc").read_bytes()
                 source, _ = restore_vertex_inputs(source, dxbc)
             source = unity_varying_semantics(pin_varying_locations(source, 1 - offset))
+            source, entries = re.subn(r"\bmain(?=\s*\()", f"gt_{stage}_main", source)
+            if entries != 1:
+                raise ValueError("original_921_translated_entrypoint_missing_or_ambiguous")
             stage_sources[key] = unity_resource_bindings(source, stage)
     original_names = manifest["original_shader_ParsedForm_full_private"]["m_KeywordNames"]
     indices = {name: index for index, name in enumerate(original_names)}
@@ -132,7 +135,7 @@ def compose(private):
             stages[stage] = routed_stage(clauses, names, programs)
         pragmas = ["#pragma multi_compile __ " + " ".join(names)]
         program = ["HLSLPROGRAM", "#pragma target 5.0",
-                   "#pragma vertex main", "#pragma fragment main",
+                   "#pragma vertex gt_vs_main", "#pragma fragment gt_fs_main",
                    "#pragma use_dxc vulkan", *pragmas,
                    stage_body(stages["vs"], stages["fs"]), "ENDHLSL"]
         remainder = blocks[index + 1]
