@@ -211,7 +211,7 @@ def engine_route_keys(row, pass_index):
     return result
 
 
-def compose(private):
+def compose(private, engine_keywords=False):
     layout = (private / "original-private-layout.txt").read_text(encoding="utf-8")
     routes = json.loads((private / "original-private-keyword-routes.json").read_text())
     manifest = json.loads((private / "original-private-variant-manifest.json").read_text())
@@ -244,7 +244,7 @@ def compose(private):
         raise ValueError("original_921_shaderlab_layout_has_wrong_pass_count")
     parts = [blocks[0].replace('"LIGHTMODE" = "FORWARDBASE"', '"LightMode" = "ForwardBase"')]
     for index, row in enumerate(routes):
-        engine_route_keys(row, index)
+        engine_keys = engine_route_keys(row, index)
         # A private per-pass keyword dimension lets Unity compile every
         # recovered program without assuming production keyword selection.
         names = [f"GT_ORIGINAL_921_P{index}_V{variant}"
@@ -260,11 +260,22 @@ def compose(private):
             programs[number] = combine_stages(*pair_sources)
             clauses.append({"enabled": [names[number - 1]] if number else [],
                             "program": number})
-        pragmas = ["#pragma multi_compile __ " + " ".join(names)]
+        if engine_keywords:
+            names = sorted({name for key in engine_keys for name in key})
+            clauses = [{"enabled": key, "program": number}
+                       for number, key in enumerate(engine_keys)]
+            pragmas = ["#pragma multi_compile __ " + name for name in names]
+            # Import needs a valid default even when the original pass
+            # contains no empty-keyword permutation (e.g. ShadowCaster).
+            code = routed_stage(clauses, names, programs).replace(
+                "#error Unmapped_original_keyword_set", programs[0], 1)
+        else:
+            pragmas = ["#pragma multi_compile __ " + " ".join(names)]
+            code = routed_stage(clauses, names, programs)
         program = ["HLSLPROGRAM", "#pragma target 5.0",
                    "#pragma vertex gt_vs_main", "#pragma fragment gt_fs_main",
                    "#pragma use_dxc vulkan", *pragmas,
-                   routed_stage(clauses, names, programs), "ENDHLSL"]
+                   code, "ENDHLSL"]
         remainder = blocks[index + 1]
         if index + 1 < len(PASS_MODES):
             mode = PASS_MODES[index + 1]
@@ -277,7 +288,7 @@ def compose(private):
     return shader
 
 
-def verify_entrypoints(shader, directory):
+def verify_entrypoints(shader, directory, routes=None):
     """Compile both real entries of every generated ShaderLab route."""
     from scripts.w1_recover_graphics_programs import command
     from scripts.t3_spirv_interface_name_drift import read_reflection
@@ -292,7 +303,10 @@ def verify_entrypoints(shader, directory):
             code = re.sub(r"(?m)^#pragma [^\n]*\n", "", block)
             source.write_text(code, encoding="utf-8")
             for variant in range(count):
-                route = [f"-DGT_ORIGINAL_921_P{index}_V{variant}=1"] if variant else []
+                if routes is not None:
+                    route = [f"-D{name}=1" for name in routes[index][variant]]
+                else:
+                    route = [f"-DGT_ORIGINAL_921_P{index}_V{variant}=1"] if variant else []
                 for suffix, macro, entry in (
                     ("vert", "VERTEX", "gt_vs_main"),
                     ("frag", "FRAGMENT", "gt_fs_main"),
@@ -313,10 +327,15 @@ def main():
     parser.add_argument("--private", type=Path, required=True)
     parser.add_argument("--shader", type=Path, required=True)
     parser.add_argument("--verify-entrypoints", action="store_true")
+    parser.add_argument("--engine-keywords", action="store_true")
     args = parser.parse_args()
-    shader = compose(args.private)
+    shader = compose(args.private, engine_keywords=args.engine_keywords)
     if args.verify_entrypoints:
-        verify_entrypoints(shader, args.private)
+        routes = None
+        if args.engine_keywords:
+            packet = json.loads((args.private / "original-private-keyword-routes.json").read_text())
+            routes = [engine_route_keys(row, index) for index, row in enumerate(packet)]
+        verify_entrypoints(shader, args.private, routes)
     with args.shader.open("x", encoding="utf-8") as target:
         target.write(shader)
 
