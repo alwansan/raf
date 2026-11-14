@@ -12,6 +12,8 @@ namespace RaftGT
     {
         public static void Validate()
         {
+            // Match the SHA-verified original PlayerSettings used by the native pipeline.
+            PlayerSettings.colorSpace = ColorSpace.Linear;
             PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android, false);
             PlayerSettings.SetGraphicsAPIs(BuildTarget.Android, new[] { GraphicsDeviceType.Vulkan });
             var guids = AssetDatabase.FindAssets("t:Texture2DArray", new[] { "Assets/Texture2DArray" });
