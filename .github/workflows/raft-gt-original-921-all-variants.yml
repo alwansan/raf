@@ -34,7 +34,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: gt-original-921-${{ inputs.shader || (contains(github.event.head_commit.message, '[Shimmer probe]') && 'shimmer' || contains(github.event.head_commit.message, '[Skin probe]') && 'skin' || contains(github.event.head_commit.message, '[GrassPlot probe]') && 'grassplot' || contains(github.event.head_commit.message, '[DirtPile probe]') && 'dirtpile' || contains(github.event.head_commit.message, '[Vegetation probe]') && 'vegetation' || (inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]')) && 'unity' || 'source') }}-${{ github.ref }}
+  group: gt-original-921-${{ inputs.shader || (contains(github.event.head_commit.message, '[SailPaint probe]') && 'sailpaint' || contains(github.event.head_commit.message, '[Hair probe]') && 'hair' || contains(github.event.head_commit.message, '[Shimmer probe]') && 'shimmer' || contains(github.event.head_commit.message, '[Skin probe]') && 'skin' || contains(github.event.head_commit.message, '[GrassPlot probe]') && 'grassplot' || contains(github.event.head_commit.message, '[DirtPile probe]') && 'dirtpile' || contains(github.event.head_commit.message, '[Vegetation probe]') && 'vegetation' || (inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]')) && 'unity' || 'source') }}-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   original-921-full-stage-recovery:
@@ -179,9 +179,11 @@ jobs:
           printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
 
       - name: Recover the selected original foliage or terrain shader
-        if: (inputs.shader && inputs.shader != 'blockpaint') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]') || contains(github.event.head_commit.message, '[GrassPlot probe]') || contains(github.event.head_commit.message, '[Skin probe]') || contains(github.event.head_commit.message, '[Shimmer probe]')
+        if: (inputs.shader && inputs.shader != 'blockpaint') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]') || contains(github.event.head_commit.message, '[GrassPlot probe]') || contains(github.event.head_commit.message, '[Skin probe]') || contains(github.event.head_commit.message, '[Shimmer probe]') || contains(github.event.head_commit.message, '[SailPaint probe]') || contains(github.event.head_commit.message, '[Hair probe]')
         env:
           SHADER_INPUT: ${{ inputs.shader }}
+          SAIL_PROBE: ${{ contains(github.event.head_commit.message, '[SailPaint probe]') }}
+          HAIR_PROBE: ${{ contains(github.event.head_commit.message, '[Hair probe]') }}
           SHIMMER_PROBE: ${{ contains(github.event.head_commit.message, '[Shimmer probe]') }}
           SKIN_PROBE: ${{ contains(github.event.head_commit.message, '[Skin probe]') }}
           GRASSPLOT_PROBE: ${{ contains(github.event.head_commit.message, '[GrassPlot probe]') }}
@@ -193,6 +195,8 @@ jobs:
           if [ "$GRASSPLOT_PROBE" = true ]; then shader=grassplot; fi
           if [ "$SKIN_PROBE" = true ]; then shader=skin; fi
           if [ "$SHIMMER_PROBE" = true ]; then shader=shimmer; fi
+          if [ "$SAIL_PROBE" = true ]; then shader=sailpaint; fi
+          if [ "$HAIR_PROBE" = true ]; then shader=hair; fi
           if [ -n "$SHADER_INPUT" ]; then shader="$SHADER_INPUT"; fi
           python3 -m scripts.gt_original_921_all_variants \
             --shader "$shader" --original "$RUNNER_TEMP/gt-921-original" \
@@ -208,7 +212,7 @@ jobs:
             --engine-route-manifest "$project/Original921EngineRoutes.json"
 
       - name: Compile all recovered routes in an isolated Unity Android Vulkan bundle
-        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]') || contains(github.event.head_commit.message, '[GrassPlot probe]') || contains(github.event.head_commit.message, '[Skin probe]') || contains(github.event.head_commit.message, '[Shimmer probe]')
+        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]') || contains(github.event.head_commit.message, '[GrassPlot probe]') || contains(github.event.head_commit.message, '[Skin probe]') || contains(github.event.head_commit.message, '[Shimmer probe]') || contains(github.event.head_commit.message, '[SailPaint probe]') || contains(github.event.head_commit.message, '[Hair probe]')
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -226,7 +230,7 @@ jobs:
           customParameters: -job-worker-count 2
 
       - name: Verify every recovered route is retained in the actual Vulkan shader bundle
-        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]') || contains(github.event.head_commit.message, '[GrassPlot probe]') || contains(github.event.head_commit.message, '[Skin probe]') || contains(github.event.head_commit.message, '[Shimmer probe]')
+        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]') || contains(github.event.head_commit.message, '[GrassPlot probe]') || contains(github.event.head_commit.message, '[Skin probe]') || contains(github.event.head_commit.message, '[Shimmer probe]') || contains(github.event.head_commit.message, '[SailPaint probe]') || contains(github.event.head_commit.message, '[Hair probe]')
         run: |
           set -euo pipefail
           project="$GITHUB_WORKSPACE/gt-original-921-unity"
