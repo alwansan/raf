@@ -1,0 +1,14 @@
+{
+  "run": 43509487111,
+  "job": 132175708267,
+  "source_owners": 82,
+  "mesh_streams": 23,
+  "source_meshes": 4708,
+  "matched_exported_mesh_geometry": 4708,
+  "unmatched_source_trace_records": 0,
+  "mismatch_fields": {},
+  "exact_bc3_top_mip_layers": 50,
+  "exact_texture_array_material_links": 28,
+  "exact_cross_owner_material_texture_links": 416,
+  "unity_renderer_binding_and_device_verified": false
+}
