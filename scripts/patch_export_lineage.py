@@ -75,7 +75,7 @@ def repair_yaml_hex(raw):
     )
 
 
-def patch(root, helper, *, mesh_lineage=False):
+def patch(root, helper, *, mesh_lineage=False, native_texture_arrays=False):
     directory = root / 'Source/AssetRipper.Export.UnityProjects'
     target = directory / 'ProjectExporter.cs'
     raw = target.read_bytes()
@@ -87,6 +87,12 @@ def patch(root, helper, *, mesh_lineage=False):
     source = raw.decode('utf-8')
     if source.count(ANCHOR) != 1:
         raise ValueError('Exporter container hook is ambiguous')
+    if native_texture_arrays:
+        registration = 'OverrideExporter<ITexture2DArray>(textureArrayExporter);'
+        if source.count(registration) != 1:
+            raise ValueError('Pinned Texture2DArray registration is ambiguous')
+        source = source.replace(registration,
+                                'OverrideExporter<ITexture2DArray>(streamedAssetExporter);')
     destination = directory / 'RaftExportLineage.cs'
     if destination.exists():
         raise FileExistsError('Trace source already exists')
@@ -107,5 +113,7 @@ if __name__ == '__main__':
     p.add_argument('--tool-source', type=Path, required=True)
     p.add_argument('--helper', type=Path, required=True)
     p.add_argument('--mesh-lineage', action='store_true')
+    p.add_argument('--native-texture-arrays', action='store_true')
     a = p.parse_args()
-    patch(a.tool_source, a.helper, mesh_lineage=a.mesh_lineage)
+    patch(a.tool_source, a.helper, mesh_lineage=a.mesh_lineage,
+          native_texture_arrays=a.native_texture_arrays)
