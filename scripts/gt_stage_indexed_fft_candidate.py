@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import shutil
 import tempfile
 
 from scripts.probe_directx_shader_bridge import inspect
@@ -56,6 +57,52 @@ def exported_fft(assets, trace):
         if not any(line.rstrip() == "--- !u!72 &7200000" for line in stream):
             raise ValueError("original_fft_export_class")
     return asset, guid
+
+
+def install_fft(project, trace, shader, backup):
+    project = project.resolve()
+    backup = backup.resolve()
+    if backup.is_relative_to(project) or not backup.is_dir():
+        raise ValueError("original_fft_backup_must_be_outside_project")
+    old, guid = exported_fft(project / "Assets", trace)
+    old_meta = old.with_suffix(".asset.meta")
+    destination = old.with_suffix(".compute")
+    destination_meta = destination.with_suffix(".compute.meta")
+    saved = backup / old.relative_to(project)
+    saved_meta = saved.with_suffix(".asset.meta")
+    paths = (destination, destination_meta, saved, saved_meta)
+    if any(path.exists() or path.is_symlink() for path in paths):
+        raise ValueError("original_fft_install_path_conflict")
+    source = shader.read_text(encoding="utf-8")
+    expected = [(entry(i), str(i)) for i in range(20)]
+    if re.findall(r"(?m)^#pragma kernel (\w+) RAFT_FFT_SLOT=(\d+)$", source) != expected:
+        raise ValueError("original_fft_install_kernel_order")
+    saved.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(old, saved)
+    shutil.copy2(old_meta, saved_meta)
+    created = []
+    try:
+        with destination.open("x", encoding="utf-8") as output:
+            created.append(destination)
+            output.write(source)
+        with destination_meta.open("x", encoding="utf-8") as output:
+            created.append(destination_meta)
+            output.write(
+                f"fileFormatVersion: 2\nguid: {guid}\nComputeShaderImporter:\n"
+                "  externalObjects: {}\n  currentAPIMask: 4\n  userData:\n"
+                "  assetBundleName:\n  assetBundleVariant:\n"
+            )
+        old.unlink()
+        old_meta.unlink()
+    except BaseException:
+        if not old.exists():
+            shutil.copy2(saved, old)
+        if not old_meta.exists():
+            shutil.copy2(saved_meta, old_meta)
+        for path in created:
+            path.unlink(missing_ok=True)
+        raise
+    return {"original_fft_guid_preserved": True, "ordered_routes_installed": len(expected)}
 
 
 def route(candidate, row):
