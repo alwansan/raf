@@ -53,6 +53,22 @@ class Original921VariantTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "ambiguous"):
             select_scene_shader(source | {("sharedassets1.assets", 31): 70}, receipt, "dirtpile")
 
+    def test_remaining_four_pass_profiles_select_exact_source_name(self):
+        from scripts.t3_original_renderer_shader_impact import STATUS
+
+        receipt = {"status": STATUS, "six_original_scenes_sha_verified": True}
+        for profile, slots, name in (
+                ("shimmer", 15, "Shimmer"), ("sailpaint", 7, "SailPaint"),
+                ("hair", 5, "Hair_Amplify")):
+            with self.subTest(profile=profile):
+                source = {("sharedassets0.assets", 42): slots}
+                exact = lambda key: {"m_ParsedForm": {"m_Name": name}}
+                wrong = lambda key: {"m_ParsedForm": {"m_Name": name.lower()}}
+                self.assertEqual(select_scene_shader(source, receipt, profile, get_tree=exact),
+                                 ("sharedassets0.assets", 42))
+                with self.assertRaisesRegex(ValueError, "ambiguous"):
+                    select_scene_shader(source, receipt, profile, get_tree=wrong)
+
     def test_grassplot_resolves_equal_slots_by_exact_authored_name(self):
         from scripts.t3_original_renderer_shader_impact import STATUS
 
