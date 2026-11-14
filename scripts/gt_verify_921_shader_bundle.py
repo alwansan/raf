@@ -1,5 +1,6 @@
 """Verify the private Unity bundle retains every requested original 921 route."""
 import argparse
+from hashlib import sha256
 import json
 from pathlib import Path
 import struct
@@ -88,11 +89,13 @@ def vulkan_execution_models(blob, decoder):
 def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None):
     import UnityPy
 
-    expected_name = exported_shader_identity(source.read_text(encoding="utf-8"))
+    shader = source.read_bytes()
+    expected_name = exported_shader_identity(shader.decode("utf-8"))
     unity = json.loads(receipt.read_text(encoding="utf-8"))
     if (unity.get("privateBundleCompiled") is not True
             or unity.get("androidVulkanOnly") is not True
-            or unity.get("registeredRoutes") != sum(EXPECTED_ROUTES)):
+            or unity.get("registeredRoutes") != sum(EXPECTED_ROUTES)
+            or unity.get("candidateSha256") != sha256(shader).hexdigest()):
         raise ValueError("original_921_unity_bundle_unverified")
     trees = [obj.read_typetree() for obj in UnityPy.load(str(bundle)).objects
              if obj.type.name == "Shader"]
@@ -110,7 +113,10 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
                          for item in packet["passes"]]
         if tuple(map(len, engine_routes)) != EXPECTED_ROUTES:
             raise ValueError("original_921_engine_route_contract_mismatch")
-    return verify_routes(tree["m_ParsedForm"], records(segments), engine_routes, smolv_decoder)
+    result = verify_routes(tree["m_ParsedForm"], records(segments), engine_routes, smolv_decoder)
+    return dict(result, candidate_sha256=unity["candidateSha256"],
+                engine_keywords_verified=engine_routes is not None,
+                vertex_and_fragment_entrypoints_verified=smolv_decoder is not None)
 
 
 def verify_routes(parsed, entries=None, engine_routes=None, smolv_decoder=None):

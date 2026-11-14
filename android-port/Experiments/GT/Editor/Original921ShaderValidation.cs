@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -29,6 +30,7 @@ namespace RaftGT
             public string[] compilerErrorGroups;
             public bool androidVulkanOnly;
             public bool privateBundleCompiled;
+            public string candidateSha256;
         }
 
         public static void Validate()
@@ -46,6 +48,10 @@ namespace RaftGT
                 result.androidVulkanOnly = PlayerSettings.GetGraphicsAPIs(BuildTarget.Android)
                     .SequenceEqual(new[] { GraphicsDeviceType.Vulkan });
                 const string shaderPath = "Assets/GTOriginal921.shader";
+                using (var sha256 = SHA256.Create())
+                using (var shaderInput = File.OpenRead(Path.Combine(Application.dataPath, "GTOriginal921.shader")))
+                    result.candidateSha256 = BitConverter.ToString(sha256.ComputeHash(shaderInput))
+                        .Replace("-", "").ToLowerInvariant();
                 const string collectionPath = "Assets/GTOriginal921.shadervariants";
                 result.checkpoint = "import";
                 AssetDatabase.ImportAsset(shaderPath,
