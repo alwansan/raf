@@ -28,7 +28,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: gt-original-921-variants-source-only
+  group: gt-original-921-${{ (inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]')) && 'unity' || 'source' }}-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   original-921-full-stage-recovery:
