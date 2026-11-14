@@ -14,6 +14,11 @@ import math
 from pathlib import Path, PurePosixPath
 import re
 
+UNITY_YAML_SPECIAL_FLOATS = {
+    "NaN": math.nan,
+    "Infinity": math.inf,
+    "-Infinity": -math.inf,
+}
 CHANNELS = frozenset(('r', 'g', 'b', 'a'))
 ENGINE = frozenset(('0000000000000000e000000000000000', '0000000000000000f000000000000000'))
 MATERIAL_HEADER = re.compile(r'^--- !u!21 &(-?\d+)(?: stripped)?\s*$', re.M)
@@ -58,7 +63,11 @@ def normalize_colors(entries, *, exported=False, allow_nonfinite=False):
             raise ValueError('Malformed or duplicated Material color slot')
         if not isinstance(rgba, dict) or set(rgba) != CHANNELS:
             raise ValueError('Malformed RGBA Material color')
-        result[key] = tuple(_number(rgba[channel], allow_nonfinite=allow_nonfinite) for channel in ('r', 'g', 'b', 'a'))
+        values = (rgba[channel] for channel in ("r", "g", "b", "a"))
+        if exported and allow_nonfinite:
+            values = (UNITY_YAML_SPECIAL_FLOATS.get(value, value) if isinstance(value, str) else value
+                      for value in values)
+        result[key] = tuple(_number(value, allow_nonfinite=allow_nonfinite) for value in values)
     return result
 
 

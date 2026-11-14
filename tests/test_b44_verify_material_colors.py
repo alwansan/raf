@@ -85,6 +85,23 @@ class MaterialColorsTests(unittest.TestCase):
         self.assertEqual(result["changed_color_values"], 1)
         self.assertFalse(result["original_material_color_values_preserved"])
 
+    def test_unity_yaml_special_float_spelling(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            assets = Path(tmp) / "Assets"
+            assets.mkdir()
+            (assets / "material.mat").write_text(
+                "%YAML 1.1\n--- !u!21 &2100000\nMaterial:\n"
+                "  m_SavedProperties:\n    m_Colors:\n"
+                "      _Tint: {r: Infinity, g: -Infinity, b: NaN, a: 1}\n")
+            (assets / "material.mat.meta").write_text("guid: " + "a" * 32 + "\n")
+            trace, source, _ = fixture()
+            source[("original.assets", 12)]["_Tint"] = (
+                float("inf"), float("-inf"), float("nan"), 1.0)
+            exported = exported_colors(Path(tmp), allow_nonfinite=True)
+            self.assertTrue(compare(trace, source, exported)["original_material_color_values_preserved"])
+            with self.assertRaisesRegex(ValueError, "Invalid color component type"):
+                exported_colors(Path(tmp))
+
     def test_source_and_export_dict_shapes(self):
         expected = {'_Tint': (.12, .5, 1., 1.)}
         self.assertEqual(normalize_colors([{'m_First': '_Tint', 'm_Second': color()}]), expected)
