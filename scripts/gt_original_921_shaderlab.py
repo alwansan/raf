@@ -14,6 +14,12 @@ from scripts.gt_original_921_semantics import pin_varying_locations, restore_ver
 
 PASS_MODES = ("ForwardBase", "ForwardAdd", "Deferred", "ShadowCaster")
 EXPECTED_ROUTES = (8, 13, 8, 4)
+# ShaderLab injects the pass macro. ForwardBase uses a directional light
+# even when Unity does not expose DIRECTIONAL as a separate variant keyword.
+ENGINE_FIXED_KEYWORDS = (
+    frozenset({"DIRECTIONAL"}), frozenset(), frozenset(),
+    frozenset({"UNITY_PASS_SHADOWCASTER"}),
+)
 VULKAN_LOCATION = re.compile(
     r"(?m)^( +)\[\[vk::location\(([0-9]+)\)\]\] ([^\n]+ : TEXCOORD([0-9]+);)$"
 )
@@ -192,6 +198,19 @@ def combine_stages(vertex, fragment):
     return "\n".join([*type_declarations, *buffer_declarations, *globals_.values(), vertex, fragment])
 
 
+def engine_route_keys(row, pass_index):
+    fixed = ENGINE_FIXED_KEYWORDS[pass_index]
+    result = []
+    for route in row["routes"]:
+        names = frozenset(route["enabled"])
+        if not fixed <= names:
+            raise ValueError("original_921_expected_engine_pass_keyword_missing")
+        result.append(tuple(sorted(names - fixed)))
+    if len(set(result)) != len(result):
+        raise ValueError("original_921_engine_keyword_route_collision")
+    return result
+
+
 def compose(private):
     layout = (private / "original-private-layout.txt").read_text(encoding="utf-8")
     routes = json.loads((private / "original-private-keyword-routes.json").read_text())
@@ -225,6 +244,7 @@ def compose(private):
         raise ValueError("original_921_shaderlab_layout_has_wrong_pass_count")
     parts = [blocks[0].replace('"LIGHTMODE" = "FORWARDBASE"', '"LightMode" = "ForwardBase"')]
     for index, row in enumerate(routes):
+        engine_route_keys(row, index)
         # A private per-pass keyword dimension lets Unity compile every
         # recovered program without assuming production keyword selection.
         names = [f"GT_ORIGINAL_921_P{index}_V{variant}"
