@@ -135,7 +135,7 @@ jobs:
                                'gt-particle20-bindings-safe.json').read_text())
           proof = json.loads(Path(
               'gt-particle20-unity/ProbeResults/gt-particle108-private-unity-safe.json').read_text())
-          assert proof['status'] == 'ORIGINAL_PRIVATE_CANDLE16_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED'
+          assert proof['status'] == 'ORIGINAL_PRIVATE_PARTICLE108_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED'
           assert proof['unityVersion'] == '2021.3.45f2'
           assert proof['candidateShaderSha256'] == source['candidate_shader_sha256']
           assert proof['sourceKeywordDimensions'] == 2
