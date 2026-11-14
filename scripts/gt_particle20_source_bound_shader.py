@@ -18,7 +18,7 @@ from scripts.w1_recover_graphics_programs import decoded_platforms, records, tra
 STATUS = "SOURCE_NAMED_PARTICLE20_FOUR_ROUTES_VULKAN_COMPILED"
 
 
-def recover(original, manifest, private):
+def original_particle20(original, manifest):
     slots = {}
     graph = load_original(original, manifest, private_particle_slot_counts=slots)
     matches = [key for key, count in slots.items() if count == 20]
@@ -29,6 +29,12 @@ def recover(original, manifest, private):
     parsed = tree["m_ParsedForm"]
     if parsed["m_Name"] != "ParticleShader":
         raise ValueError("particle20_original_name_mismatch")
+    return matches[0], tree
+
+
+def recover(original, manifest, private):
+    _, tree = original_particle20(original, manifest)
+    parsed = tree["m_ParsedForm"]
     table, = [records(parts) for platform, parts in decoded_platforms(tree) if platform == 4]
     pairs = exact_four_stage_links(parsed, table, table_records=14)
     if len({(stage, link[0]) for pair in pairs for stage, link in enumerate(pair)}) != 6:

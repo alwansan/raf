@@ -69,6 +69,17 @@ CANDLE_SOURCE_PROOF = {
 }
 CANDLE_UNITY_PROOF = dict(SMOKE_UNITY_PROOF,
     status="ORIGINAL_PRIVATE_CANDLE16_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED")
+PARTICLE20_SOURCE_PROOF = {
+    "status": "SOURCE_NAMED_PARTICLE20_FOUR_ROUTES_VULKAN_COMPILED",
+    "original_renderer_material_slots": 20,
+    "original_shader_properties": 12,
+    "original_unique_D3D11_programs": 6,
+    "original_paired_keyword_variants": 4,
+    "named_Vulkan_stages_compiled": 8,
+    "original_DXBC_samples_verified": 6,
+    "named_constant_buffers": 18,
+    "reflected_constant_buffer_offsets": 58,
+}
 MAX_SHADER = 16 * 1024 * 1024
 
 
@@ -87,16 +98,18 @@ def require_proof(report, expected):
         raise ValueError("incomplete_particle108_source_or_Unity_proof")
 
 
-def candidate_bytes(candidate, source_report, unity_report, *, smoke34=False, candle16=False):
+def candidate_bytes(candidate, source_report, unity_report, *, smoke34=False, candle16=False, particle20=False):
     data = read_bounded(candidate, MAX_SHADER)
     source = json.loads(read_bounded(source_report, 65536))
     unity = json.loads(read_bounded(unity_report, 65536))
-    if smoke34 and candle16:
+    if sum((smoke34, candle16, particle20)) > 1:
         raise ValueError("multiple_particle_shader_targets")
     if candle16:
         expected_source, expected_unity = CANDLE_SOURCE_PROOF, CANDLE_UNITY_PROOF
     elif smoke34:
         expected_source, expected_unity = SMOKE_SOURCE_PROOF, SMOKE_UNITY_PROOF
+    elif particle20:
+        expected_source, expected_unity = PARTICLE20_SOURCE_PROOF, UNITY_PROOF
     else:
         expected_source, expected_unity = SOURCE_PROOF, UNITY_PROOF
     require_proof(source, expected_source)
@@ -154,13 +167,14 @@ def traced_shader(assets, trace, source_key):
 
 
 def stage(original, manifest, project, trace_file, candidate, source_report,
-          unity_report, backup, *, apply=False, smoke34=False, candle16=False):
+          unity_report, backup, *, apply=False, smoke34=False, candle16=False, particle20=False):
     project = check_safe_ancestors(project)
     backup = check_safe_ancestors(backup)
     if any(check_safe_ancestors(path).is_relative_to(project)
            for path in (candidate, source_report, unity_report, trace_file, backup)):
         raise ValueError("private_particle108_input_or_backup_inside_export")
-    data = candidate_bytes(candidate, source_report, unity_report, smoke34=smoke34, candle16=candle16)
+    data = candidate_bytes(candidate, source_report, unity_report, smoke34=smoke34,
+                           candle16=candle16, particle20=particle20)
     trace = json.loads(read_bounded(trace_file, 40_000_000))
     if candle16:
         from scripts.gt_smoke34_source_bound_shader import original_candle_target
@@ -170,6 +184,11 @@ def stage(original, manifest, project, trace_file, candidate, source_report,
     elif smoke34:
         source_key, _ = original_private_smoke_target(original, manifest)
         profile, renderer_slots = "SMOKE34", 34
+    elif particle20:
+        from scripts.gt_particle20_source_bound_shader import original_particle20
+
+        source_key, _ = original_particle20(original, manifest)
+        profile, renderer_slots = "PARTICLE20", 20
     else:
         private = {}
         report = load_original(original, manifest, private_particle_slot_counts=private)
@@ -229,6 +248,7 @@ def main():
     profile = parser.add_mutually_exclusive_group()
     profile.add_argument("--smoke34", action="store_true")
     profile.add_argument("--candle16", action="store_true")
+    profile.add_argument("--particle20", action="store_true")
     parser.add_argument("--out", type=Path)
     args = parser.parse_args()
     output = args.out
