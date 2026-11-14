@@ -75,6 +75,12 @@ def pin_varying_locations(source, stage):
     name = "SPIRV_Cross_Output" if stage == 1 else "SPIRV_Cross_Input"
     struct = re.search(r"\bstruct\s+" + name + r"\s*\{([^{}]*)\}", source)
     if struct is None:
+        # A depth-only shadow fragment can use no input varyings at all.
+        # Allow only the generated zero-argument entry shape; the compiled
+        # SPIR-V reflection below still checks the actual interface.
+        if (stage == 0 and re.search(r"\bSPIRV_Cross_Output\s+main\s*\(\s*\)\s*\{", source)
+                and not re.search(r":\s*TEXCOORD[0-9]+\b", source)):
+            return source
         raise ValueError("original_921_missing_translated_varying_interface")
     fields = re.compile(r"(?m)^( +)((?:nointerpolation )?\w+ )([ov])([0-9]+)"
                         r"\s*:\s*TEXCOORD([0-9]+);$")

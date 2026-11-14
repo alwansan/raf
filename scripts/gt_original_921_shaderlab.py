@@ -199,7 +199,9 @@ def combine_stages(vertex, fragment):
 
 
 def engine_route_keys(row, pass_index):
-    fixed = ENGINE_FIXED_KEYWORDS[pass_index]
+    fixed = ENGINE_FIXED_KEYWORDS[pass_index] & {
+        name for route in row["routes"] for name in route["enabled"]
+    }
     result = []
     for route in row["routes"]:
         names = frozenset(route["enabled"])

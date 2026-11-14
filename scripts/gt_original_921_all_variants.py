@@ -19,19 +19,24 @@ ORPHAN_VERTEX_COUNT=8
 DISTINCT_DXBC_COUNT=58
 STATUS="GT_ORIGINAL_921_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
 VEGETATION_STATUS="GT_ORIGINAL_VEGETATION_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
-SOURCE_PROFILES = {"blockpaint": (921, 35, STATUS),
-                   "vegetation": (121, 16, VEGETATION_STATUS)}
+DIRTPILE_STATUS="GT_ORIGINAL_DIRTPILE_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
+SOURCE_PROFILES = {
+    "blockpaint": (921, 35, STATUS, " BlockPaint"),
+    "vegetation": (121, 16, VEGETATION_STATUS, "Vegetation"),
+    "dirtpile": (70, 6, DIRTPILE_STATUS, "DirtPile"),
+}
 
 
-def selected_vegetation(source_use, report):
+def select_scene_shader(source_use, report, shader):
     from scripts.t3_original_renderer_shader_impact import STATUS as SOURCE_STATUS
 
     if (report.get("status") != SOURCE_STATUS
             or report.get("six_original_scenes_sha_verified") is not True):
-        raise ValueError("vegetation_original_source_graph_unverified")
-    matches = [key for key, count in source_use.items() if count == 121]
+        raise ValueError("original_source_graph_unverified")
+    slots, _, _, _ = SOURCE_PROFILES[shader]
+    matches = [key for key, count in source_use.items() if count == slots]
     if len(matches) != 1 or matches[0][0] != "sharedassets0.assets":
-        raise ValueError("vegetation_original_source_identity_ambiguous")
+        raise ValueError("original_source_identity_ambiguous")
     return matches[0]
 
 def enumerate_all(parsed,table,*,variants,permutation,linker):
@@ -147,7 +152,7 @@ def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator,source
     }
     (private/"original-private-variant-manifest.json").write_text(
         json.dumps(packet,sort_keys=True,indent=2)+"\n",encoding="utf-8")
-    scope, _, status = SOURCE_PROFILES[shader]
+    scope, _, status, _ = SOURCE_PROFILES[shader]
     return {
         "schema_version":1,"status":status,
         "scope":f"six_SHA_original_scenes_selected_{scope}_renderer_material_slots",
@@ -354,15 +359,17 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None,shad
     from scripts.w1_stage_zip2_owners import fingerprint
     from scripts.w1_recover_graphics_programs import decoded_platforms,records,translate
     from scripts.w1_recover_depth_passes import linked_program,stage_variants,variant_key
-    _, property_count, _ = SOURCE_PROFILES[shader]
+    _, property_count, _, shader_name = SOURCE_PROFILES[shader]
     if translator is None:translator=translate
     for binary in ("vkd3d-compiler","spirv-val","spirv-opt","spirv-cross","glslangValidator"):
         if not shutil.which(binary):
             raise ValueError("missing_required_original_DXBC_translation_tool")
     use={}
     report=scenes.load_original(original,manifest,private_slot_counts=use)
-    selector = top.selected_high_use if shader == "blockpaint" else selected_vegetation
-    owner,path_id = selector(use,report)
+    if shader == "blockpaint":
+        owner,path_id = top.selected_high_use(use,report)
+    else:
+        owner,path_id = select_scene_shader(use,report,shader)
     source=original/"Raft_Data"/owner
     if source.is_symlink() or fingerprint(source)!=SHADER_OWNERS[owner]:
         raise ValueError("original_921_Shader_owner_SHA_mismatch")
@@ -371,8 +378,8 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None,shad
     if len(candidates)!=1 or candidates[0].type.name!="Shader":
         raise ValueError("original_921_Shader48_object_identity_mismatch")
     tree=candidates[0].read_typetree()
-    if shader == "vegetation" and tree["m_ParsedForm"]["m_Name"] != "Vegetation":
-        raise ValueError("vegetation_original_serialized_shader_name_mismatch")
+    if shader != "blockpaint" and tree["m_ParsedForm"]["m_Name"] != shader_name:
+        raise ValueError("original_serialized_shader_name_mismatch")
     tables=[records(parts) for platform,parts in decoded_platforms(tree) if platform==4]
     if len(tables)!=1:
         raise ValueError("ambiguous_original_921_D3D11_program_table")

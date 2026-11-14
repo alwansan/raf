@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from scripts.gt_original_921_all_variants import (
-    enumerate_all, stage_private, source_keyword_profile, selected_vegetation, _private_destination, PAIRED_COUNT,
+    enumerate_all, stage_private, source_keyword_profile, select_scene_shader, _private_destination, PAIRED_COUNT,
     ORPHAN_VERTEX_COUNT, DISTINCT_DXBC_COUNT,
 )
 
@@ -39,16 +39,27 @@ class Original921VariantTests(unittest.TestCase):
         return enumerate_all(tree if tree is not None else fixture(),[object()],
                              variants=variants,permutation=key,linker=link)
 
-    def test_vegetation_selector_requires_unique_exact_source_use(self):
+    def test_scene_shader_selector_requires_unique_exact_source_use(self):
         from scripts.t3_original_renderer_shader_impact import STATUS
 
-        source = {("sharedassets0.assets", 42): 121, ("sharedassets0.assets", 43): 921}
+        source = {("sharedassets0.assets", 42): 121, ("sharedassets0.assets", 43): 921,
+                  ("sharedassets0.assets", 44): 70}
         receipt = {"status": STATUS, "six_original_scenes_sha_verified": True}
-        self.assertEqual(selected_vegetation(source, receipt), ("sharedassets0.assets", 42))
+        self.assertEqual(select_scene_shader(source, receipt, "vegetation"), ("sharedassets0.assets", 42))
+        self.assertEqual(select_scene_shader(source, receipt, "dirtpile"), ("sharedassets0.assets", 44))
         with self.assertRaisesRegex(ValueError, "unverified"):
-            selected_vegetation(source, {})
+            select_scene_shader(source, {}, "dirtpile")
         with self.assertRaisesRegex(ValueError, "ambiguous"):
-            selected_vegetation(source | {("sharedassets1.assets", 31): 121}, receipt)
+            select_scene_shader(source | {("sharedassets1.assets", 31): 70}, receipt, "dirtpile")
+
+    def test_shadow_fragment_without_an_input_interface_is_preserved(self):
+        from scripts.gt_original_921_semantics import pin_varying_locations
+
+        fragment = "struct SPIRV_Cross_Output { float4 o0 : SV_Target0; };\n"
+        fragment += "SPIRV_Cross_Output main() { SPIRV_Cross_Output result; return result; }"
+        self.assertEqual(pin_varying_locations(fragment, 0), fragment)
+        with self.assertRaisesRegex(ValueError, "missing_translated_varying_interface"):
+            pin_varying_locations(fragment.replace("main()", "main(float v : TEXCOORD0)"), 0)
 
     def test_complete_four_pass_33_pairs_eight_unmatched_58_unique(self):
         paired,orphans,passes,unique=self.collect()
