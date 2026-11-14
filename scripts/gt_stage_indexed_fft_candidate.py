@@ -13,6 +13,7 @@ from scripts.t1_stage_original_fft_compute_candidates import (
 )
 from scripts.probe_original_fft_resource_bindings import resource_rows
 from scripts.probe_authentic_fft_dxbc_translation import OWNER, PATH_ID
+from scripts.verify_export_lineage import identity, pointer
 
 # Original managed SetTexture names, checked against the serialized ABI.
 RESOURCE_NAMES = {
@@ -29,6 +30,32 @@ DECLARATIONS = {
 
 def entry(index):
     return f'RaftFftSlot{index:02d}'
+
+
+def exported_fft(assets, trace):
+    if trace.get("schema_version") != 1 or not re.fullmatch(
+        r"[a-f0-9]{32}", trace.get("export_instance", "")
+    ):
+        raise ValueError("invalid_original_fft_export_trace")
+    matches = [row for row in trace["objects"] if row["class_id"] == 72
+               and identity(row["source"]) == (OWNER, PATH_ID)]
+    if len(matches) != 1 or not matches[0]["exportable"]:
+        raise ValueError("original_fft_export_trace_missing")
+    file_id, guid, kind = pointer(matches[0]["export"])
+    if file_id != 7200000 or kind != "2":
+        raise ValueError("original_fft_export_type")
+    pattern = re.compile(r"(?m)^guid: " + re.escape(guid) + r"$")
+    matches = [path for path in assets.rglob("*.asset.meta")
+               if pattern.search(path.read_text(encoding="utf-8-sig"))]
+    if len(matches) != 1:
+        raise ValueError("original_fft_export_meta_missing")
+    asset = matches[0].with_suffix("")
+    if asset.is_symlink() or matches[0].is_symlink():
+        raise ValueError("original_fft_export_unsafe_asset")
+    with asset.open(encoding="utf-8-sig") as stream:
+        if not any(line.rstrip() == "--- !u!72 &7200000" for line in stream):
+            raise ValueError("original_fft_export_class")
+    return asset, guid
 
 
 def route(candidate, row):
