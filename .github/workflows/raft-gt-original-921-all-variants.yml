@@ -2,6 +2,11 @@ name: GT original 921-slot shader all compiled variants (source only, NO XAPK)
 on:
   workflow_dispatch:
     inputs:
+      shader:
+        description: Recovered shader to validate
+        type: choice
+        options: [blockpaint, vegetation, dirtpile, grassplot]
+        default: blockpaint
       compile_unity:
         description: Also compile the private Android Vulkan shader bundle
         type: boolean
@@ -29,7 +34,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: gt-original-921-${{ contains(github.event.head_commit.message, '[GrassPlot probe]') && 'grassplot' || contains(github.event.head_commit.message, '[DirtPile probe]') && 'dirtpile' || contains(github.event.head_commit.message, '[Vegetation probe]') && 'vegetation' || (inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]')) && 'unity' || 'source' }}-${{ github.ref }}
+  group: gt-original-921-${{ inputs.shader || (contains(github.event.head_commit.message, '[GrassPlot probe]') && 'grassplot' || contains(github.event.head_commit.message, '[DirtPile probe]') && 'dirtpile' || contains(github.event.head_commit.message, '[Vegetation probe]') && 'vegetation' || (inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]')) && 'unity' || 'source') }}-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   original-921-full-stage-recovery:
@@ -174,8 +179,9 @@ jobs:
           printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
 
       - name: Recover the selected original foliage or terrain shader
-        if: contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]') || contains(github.event.head_commit.message, '[GrassPlot probe]')
+        if: (inputs.shader && inputs.shader != 'blockpaint') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]') || contains(github.event.head_commit.message, '[GrassPlot probe]')
         env:
+          SHADER_INPUT: ${{ inputs.shader }}
           GRASSPLOT_PROBE: ${{ contains(github.event.head_commit.message, '[GrassPlot probe]') }}
           DIRTPILE_PROBE: ${{ contains(github.event.head_commit.message, '[DirtPile probe]') }}
         run: |
@@ -183,6 +189,7 @@ jobs:
           shader=vegetation
           if [ "$DIRTPILE_PROBE" = true ]; then shader=dirtpile; fi
           if [ "$GRASSPLOT_PROBE" = true ]; then shader=grassplot; fi
+          if [ -n "$SHADER_INPUT" ]; then shader="$SHADER_INPUT"; fi
           python3 -m scripts.gt_original_921_all_variants \
             --shader "$shader" --original "$RUNNER_TEMP/gt-921-original" \
             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
