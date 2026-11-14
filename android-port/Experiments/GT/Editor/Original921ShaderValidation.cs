@@ -83,6 +83,18 @@ namespace RaftGT
                 var material = new Material(shader) { enableInstancing = true };
                 AssetDatabase.CreateAsset(material, materialPath);
                 AssetDatabase.SaveAssets();
+                result.checkpoint = "instancing_settings";
+                var graphics = Unsupported.GetSerializedAssetInterfaceSingleton("GraphicsSettings");
+                var settings = new SerializedObject(graphics);
+                var stripping = settings.FindProperty("m_InstancingStripping");
+                if (stripping == null || stripping.propertyType != SerializedPropertyType.Enum)
+                    throw new InvalidOperationException("Original921InstancingStrippingSettingMissing");
+                int keepAll = Array.IndexOf(stripping.enumNames, "KeepAll");
+                if (keepAll < 0)
+                    throw new InvalidOperationException("Original921InstancingKeepAllMissing");
+                stripping.enumValueIndex = keepAll;
+                settings.ApplyModifiedPropertiesWithoutUndo();
+                AssetDatabase.SaveAssets();
 
                 const string bundleName = "gt-original-921";
                 var bundleDirectory = Path.Combine(output, "Private");
