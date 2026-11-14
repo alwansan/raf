@@ -74,9 +74,9 @@ def keyword_routes(parsed, pairs, orphans, passes):
     }
 
 
-def shaderlab_layout(parsed, passes):
+def shaderlab_layout(parsed, passes, expected_property_count=35):
     properties, counts = serialize_properties(parsed, allow_hidden_and_toggle=True)
-    if counts["original_authored_property_count"] != 35:
+    if counts["original_authored_property_count"] != expected_property_count:
         raise ValueError("original_921_property_count_drift")
     lines = ["// Private layout fragment. Attach recovered HLSL before import.",
              "Shader " + quoted(parsed["m_Name"]) + " {", properties]
