@@ -173,6 +173,8 @@ def combine_stages(vertex, fragment):
 
         type_symbols = {}
         source = TOP_LEVEL.sub(lambda match: extract(match) if match["kind"] == "struct" else match[0], source)
+        source = re.sub(r"\.gt_(?:vs|fs)_raft921_cb[0-9]+_pad([0-9]+)\b",
+                        r".gt_struct_pad\1", source)
         for old, new in type_symbols.items():
             source = re.sub(r"\b" + old + r"\b", new, source)
         # Translated helpers, including the global stage I/O temporaries, are
