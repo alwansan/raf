@@ -60,7 +60,10 @@ namespace RaftGT
                 if (shader == null)
                     throw new InvalidOperationException("Original921ShaderMissing");
                 result.passCount = shader.passCount;
-                if (result.passCount != Counts.Length)
+                bool skin = result.passCount == 3 && shader.name == "Skin_Amplify";
+                var counts = skin ? new[] { 8, 13, 2 } : Counts;
+                var passes = skin ? new[] { PassType.ForwardBase, PassType.ForwardAdd, PassType.ShadowCaster } : Passes;
+                if (result.passCount != counts.Length)
                     throw new InvalidOperationException("Original921ShaderPassCountMismatch");
 
                 result.checkpoint = "register";
@@ -68,18 +71,18 @@ namespace RaftGT
                     "Original921EngineRoutes.json");
                 var routes = File.Exists(routePath)
                     ? JsonUtility.FromJson<RouteManifest>(File.ReadAllText(routePath)).passes : null;
-                if (routes != null && (routes.Length != Counts.Length ||
-                    routes.Where((pass, index) => pass.variants.Length != Counts[index]).Any()))
+                if (routes != null && (routes.Length != counts.Length ||
+                    routes.Where((pass, index) => pass.variants.Length != counts[index]).Any()))
                     throw new InvalidOperationException("Original921EngineRouteCountMismatch");
                 var collection = new ShaderVariantCollection();
-                for (int pass = 0; pass < Passes.Length; ++pass)
+                for (int pass = 0; pass < passes.Length; ++pass)
                 {
-                    for (int variant = 0; variant < Counts[pass]; ++variant)
+                    for (int variant = 0; variant < counts[pass]; ++variant)
                     {
                         var keywords = routes != null ? routes[pass].variants[variant].keywords :
                             variant == 0 ? Array.Empty<string>() :
                             new[] { $"GT_ORIGINAL_921_P{pass}_V{variant}" };
-                        if (!collection.Add(new ShaderVariantCollection.ShaderVariant(shader, Passes[pass], keywords)))
+                        if (!collection.Add(new ShaderVariantCollection.ShaderVariant(shader, passes[pass], keywords)))
                             throw new InvalidOperationException("Original921VariantNotRegistered");
                         ++result.registeredRoutes;
                     }

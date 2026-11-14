@@ -6,7 +6,7 @@ from pathlib import Path
 import struct
 import subprocess
 
-from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES
+from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, SKIN_ROUTES
 from scripts.restore_builtin_shaders import exported_shader_identity
 from scripts.w1_recover_depth_passes import stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
@@ -91,10 +91,11 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
 
     shader = source.read_bytes()
     expected_name = exported_shader_identity(shader.decode("utf-8"))
+    counts = SKIN_ROUTES if expected_name == "Skin_Amplify" else EXPECTED_ROUTES
     unity = json.loads(receipt.read_text(encoding="utf-8"))
     if (unity.get("privateBundleCompiled") is not True
             or unity.get("androidVulkanOnly") is not True
-            or unity.get("registeredRoutes") != sum(EXPECTED_ROUTES)
+            or unity.get("registeredRoutes") != sum(counts)
             or unity.get("candidateSha256") != sha256(shader).hexdigest()):
         raise ValueError("original_921_unity_bundle_unverified")
     trees = [obj.read_typetree() for obj in UnityPy.load(str(bundle)).objects
@@ -111,25 +112,25 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
         packet = json.loads(engine_route_manifest.read_text(encoding="utf-8"))
         engine_routes = [{frozenset(row["keywords"]) for row in item["variants"]}
                          for item in packet["passes"]]
-        if tuple(map(len, engine_routes)) != EXPECTED_ROUTES:
+        if tuple(map(len, engine_routes)) != counts:
             raise ValueError("original_921_engine_route_contract_mismatch")
-    result = verify_routes(tree["m_ParsedForm"], records(segments), engine_routes, smolv_decoder)
+    result = verify_routes(tree["m_ParsedForm"], records(segments), engine_routes, smolv_decoder, counts)
     return dict(result, candidate_sha256=unity["candidateSha256"],
                 engine_keywords_verified=engine_routes is not None,
                 vertex_and_fragment_entrypoints_verified=smolv_decoder is not None)
 
 
-def verify_routes(parsed, entries=None, engine_routes=None, smolv_decoder=None):
+def verify_routes(parsed, entries=None, engine_routes=None, smolv_decoder=None, expected_counts=EXPECTED_ROUTES):
     keywords = parsed["m_KeywordNames"]
     subshaders = parsed["m_SubShaders"]
-    if len(subshaders) != 1 or len(subshaders[0]["m_Passes"]) != len(EXPECTED_ROUTES):
+    if len(subshaders) != 1 or len(subshaders[0]["m_Passes"]) != len(expected_counts):
         raise ValueError("original_921_bundle_pass_topology_mismatch")
     verified = {}
     decoded = {}
     for stage in ("progVertex", "progFragment"):
         counts = []
         for index, (shader_pass, expected) in enumerate(
-            zip(subshaders[0]["m_Passes"], EXPECTED_ROUTES)
+            zip(subshaders[0]["m_Passes"], expected_counts)
         ):
             prefix = f"GT_ORIGINAL_921_P{index}_V"
             expected_keys = engine_routes[index] if engine_routes is not None else None
