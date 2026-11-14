@@ -23,6 +23,8 @@ namespace RaftAndroid.Editor
             public int height;
             public int depth;
             public int mipmap_count;
+            public long native_file_id;
+            public int graphics_format;
             public bool has_original_source_pixels;
         }
 
@@ -68,21 +70,30 @@ namespace RaftAndroid.Editor
                 string path = AssetDatabase.GUIDToAssetPath(array.guid);
                 if (String.IsNullOrEmpty(path))
                     throw new BuildFailedException("GT original array GUID missing after Unity import.");
-                var importer = AssetImporter.GetAtPath(path) as TextureImporter;
-                if (importer == null)
-                    throw new BuildFailedException("GT original Class187 array has no Unity TextureImporter.");
-                var settings = new TextureImporterSettings();
-                importer.ReadTextureSettings(settings);
-                if (settings.textureShape != TextureImporterShape.Texture2DArray ||
-                    settings.flipbookRows < 1 || settings.flipbookColumns < 1 ||
-                    settings.flipbookRows * settings.flipbookColumns != array.depth)
-                    throw new BuildFailedException("GT Unity importer did not preserve original array slice shape.");
-
                 var importedArray = AssetDatabase.LoadAssetAtPath<Texture2DArray>(path);
                 if (importedArray == null || importedArray.width != array.width ||
                     importedArray.height != array.height || importedArray.depth != array.depth ||
                     importedArray.mipmapCount != array.mipmap_count)
                     throw new BuildFailedException("GT Unity imported Texture2DArray class/depth/mip contract mismatch.");
+                if (array.native_file_id == 0)
+                {
+                    var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                    if (importer == null)
+                        throw new BuildFailedException("GT original flipbook has no Unity TextureImporter.");
+                    var settings = new TextureImporterSettings();
+                    importer.ReadTextureSettings(settings);
+                    if (settings.textureShape != TextureImporterShape.Texture2DArray ||
+                        settings.flipbookRows < 1 || settings.flipbookColumns < 1 ||
+                        settings.flipbookRows * settings.flipbookColumns != array.depth)
+                        throw new BuildFailedException("GT Unity importer did not preserve original array slice shape.");
+                }
+                else if (array.native_file_id != 18700000 ||
+                    !AssetDatabase.TryGetGUIDAndLocalFileIdentifier(importedArray, out string guid, out long fileId) ||
+                    guid != array.guid || fileId != array.native_file_id ||
+                    (int)importedArray.graphicsFormat != array.graphics_format)
+                {
+                    throw new BuildFailedException("GT Unity native Texture2DArray identity or graphics format mismatch.");
+                }
 
                 logicalLayers += array.depth;
                 if (array.has_original_source_pixels)

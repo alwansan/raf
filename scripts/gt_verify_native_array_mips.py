@@ -36,10 +36,13 @@ def packaged_arrays(bundle):
     return result
 
 
-def inspect(source, manifest, trace_file, assets, owners, bundle=None):
+def inspect(source, manifest, trace_file, assets, owners, bundle=None,
+            stream_source=None, editor_arrays=None):
     import UnityPy
 
     pins = read_expected(manifest)
+    if stream_source is None:
+        stream_source = source
     if not owners or len(set(owners)) != len(owners):
         raise ValueError("missing_or_duplicate_original_array_owner")
     for owner in owners:
@@ -86,7 +89,8 @@ def inspect(source, manifest, trace_file, assets, owners, bundle=None):
         for obj in UnityPy.load(str(source / owner)).objects:
             if obj.type.name != "Texture2DArray":
                 continue
-            yaml = files.pop(targets.pop((owner, obj.path_id))).read_text(encoding="utf-8-sig")
+            guid = targets.pop((owner, obj.path_id))
+            yaml = files.pop(guid).read_text(encoding="utf-8-sig")
             if not re.search(r"(?m)^--- !u!187 &18700000$", yaml):
                 raise ValueError("invalid_native_array_yaml_identity")
             tree = obj.read_typetree()
@@ -103,15 +107,26 @@ def inspect(source, manifest, trace_file, assets, owners, bundle=None):
                 if not 0 <= data["offset"] <= stream_size - data["size"] or data["size"] < 0:
                     raise ValueError("invalid_original_array_stream_range")
                 if stream_name not in verified_streams:
-                    verify(source / stream_name, stream_size, stream_digest)
+                    verify(stream_source / stream_name, stream_size, stream_digest)
                     verified_streams.add(stream_name)
-                with (source / stream_name).open("rb") as stream:
+                with (stream_source / stream_name).open("rb") as stream:
                     stream.seek(data["offset"])
                     original = stream.read(data["size"])
             else:
                 original = bytes(tree.get("image data") or b"")
             if encoded != original:
                 raise ValueError("native_array_mip_payload_mismatch")
+            if editor_arrays is not None:
+                editor_arrays.append({
+                    "guid": guid,
+                    "native_file_id": 18700000,
+                    "width": tree["m_Width"],
+                    "height": tree["m_Height"],
+                    "depth": tree["m_Depth"],
+                    "mipmap_count": tree["m_MipCount"],
+                    "graphics_format": tree["m_Format"],
+                    "has_original_source_pixels": bool(original),
+                })
             key = tuple(tree[field] for field in FIELDS)
             original_payloads[key, len(original), sha256(original).digest()] += 1
             arrays += 1
@@ -146,6 +161,7 @@ def main():
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--owner", dest="owners", action="append", required=True)
     parser.add_argument("--bundle", type=Path)
+    parser.add_argument("--stream-source", type=Path)
     report = inspect(**vars(parser.parse_args()))
     print("GT_NATIVE_ARRAY_MIPS " + json.dumps(report, sort_keys=True))
 
