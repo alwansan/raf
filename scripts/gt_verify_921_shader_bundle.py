@@ -6,6 +6,7 @@ from pathlib import Path
 from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES
 from scripts.restore_builtin_shaders import exported_shader_identity
 from scripts.w1_recover_depth_passes import stage_variants
+from scripts.w1_recover_graphics_programs import decoded_platforms, records
 
 
 def inspect(bundle, source, receipt):
@@ -22,10 +23,14 @@ def inspect(bundle, source, receipt):
     matches = [tree for tree in trees if tree["m_ParsedForm"]["m_Name"] == expected_name]
     if len(matches) != 1 or list(matches[0]["platforms"]) != [18]:
         raise ValueError("original_921_vulkan_shader_missing_or_ambiguous")
-    return verify_routes(matches[0]["m_ParsedForm"])
+    tree = matches[0]
+    [(platform, segments)] = list(decoded_platforms(tree))
+    if platform != 18:
+        raise ValueError("original_921_bundle_platform_table_mismatch")
+    return verify_routes(tree["m_ParsedForm"], records(segments))
 
 
-def verify_routes(parsed):
+def verify_routes(parsed, entries=None):
     keywords = parsed["m_KeywordNames"]
     subshaders = parsed["m_SubShaders"]
     if len(subshaders) != 1 or len(subshaders[0]["m_Passes"]) != len(EXPECTED_ROUTES):
@@ -40,6 +45,12 @@ def verify_routes(parsed):
             rows = stage_variants(shader_pass[stage])
             routes = set()
             for _, _, row in rows:
+                if entries is not None:
+                    blob_index = row.get("m_BlobIndex")
+                    if type(blob_index) is not int or not 0 <= blob_index < len(entries):
+                        raise ValueError(
+                            f"original_921_bundle_route_blob_missing stage={stage} pass={index}"
+                        )
                 indices = row["m_KeywordIndices"]
                 if any(type(key) is not int or not 0 <= key < len(keywords) for key in indices):
                     raise ValueError("original_921_bundle_keyword_index_invalid")
@@ -60,7 +71,8 @@ def verify_routes(parsed):
                 )
             counts.append(len(routes))
         verified[stage] = counts
-    return {"vulkan_platform_only": True, "vertex_routes_by_pass": verified["progVertex"],
+    return {"vulkan_platform_only": True, "compiled_program_table_verified": entries is not None,
+            "vertex_routes_by_pass": verified["progVertex"],
             "fragment_routes_by_pass": verified["progFragment"]}
 
 
