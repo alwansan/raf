@@ -1,7 +1,7 @@
 import unittest
 
 from scripts.gt_original_921_shaderlab import (
-    EXPECTED_ROUTES, unity_resource_bindings, unity_varying_semantics,
+    EXPECTED_ROUTES, paired_uniform_layouts, unity_resource_bindings, unity_varying_semantics,
 )
 from scripts.gt_verify_921_shader_bundle import verify_routes
 
@@ -37,6 +37,22 @@ class Original921UnityCompilerTests(unittest.TestCase):
         self.assertIn("cbuffer Material : register(b0) { float4 _Color; };", converted)
         self.assertIn("cbuffer gt_fs_raft921_cb0_Globals", converted)
         self.assertIn("_Diffuse.Sample(sampler_Diffuse, uv) * _Color * gt_fs_raft921_cb0_pad3;", converted)
+
+    def test_shared_material_uniforms_preserve_both_stage_offsets(self):
+        base = {"name": "BlockPaint", "variant_size_bytes": 16, "structs": []}
+        scalar = {"columns": 1, "rows": 1, "matrix": False,
+                  "type": 0, "array_size": 0}
+        vertex = dict(base, members=[dict(scalar, name="_Wave", index=0)])
+        fragment = dict(base, members=[dict(scalar, name="_ColorWeight", index=8)])
+        records = [{"source_constant_buffer_layouts": [value]}
+                   for value in (vertex, fragment)]
+        (vs,), (fs,) = paired_uniform_layouts(records)
+        self.assertEqual(vs["original_named_lanes"], fs["original_named_lanes"])
+        self.assertEqual(vs["original_named_lanes"][0]["path"], ["_Wave"])
+        self.assertEqual(fs["original_named_lanes"][2]["path"], ["_ColorWeight"])
+        fragment["members"][0].update(name="_Wave")
+        with self.assertRaisesRegex(ValueError, "conflicting_shared_uniform_member"):
+            paired_uniform_layouts(records)
 
     def test_unity_varying_keeps_original_register_and_interpolation(self):
         self.assertEqual(
