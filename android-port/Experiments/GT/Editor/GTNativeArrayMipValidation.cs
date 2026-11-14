@@ -43,7 +43,7 @@ namespace RaftGT
             if (!linearDepths.OrderBy(depth => depth).SequenceEqual(expectedDepths)
                 || !srgbDepths.OrderBy(depth => depth).SequenceEqual(expectedDepths))
                 throw new InvalidOperationException("Native array sample population changed");
-            var output = Path.GetFullPath("Temp/GTNativeArrayBundle");
+            var output = Path.Combine(Directory.GetParent(Application.dataPath).FullName, "GTNativeArrayBundle");
             Directory.CreateDirectory(output);
             var build = new AssetBundleBuild { assetBundleName = "native-arrays", assetNames = paths };
             if (!BuildPipeline.BuildAssetBundles(output, new[] { build },

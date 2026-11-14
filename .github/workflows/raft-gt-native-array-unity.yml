@@ -92,6 +92,15 @@ jobs:
           buildMethod: RaftGT.GTNativeArrayMipValidation.Validate
           versioning: None
           allowDirtyBuild: true
+      - name: Compare every packaged Android mip byte to the authenticated original
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_verify_native_array_mips \
+            --source "$RUNNER_TEMP/array-input/Raft_Data" \
+            --manifest zip2-array/RAFT_FILE_MANIFEST.tsv \
+            --trace-file "$RUNNER_TEMP/array-lineage.json" \
+            --assets "$RUNNER_TEMP/array-export/ExportedProject/Assets" \
+            --owner sharedassets1.assets --bundle gt-array-unity/GTNativeArrayBundle/native-arrays
       - name: Erase private generated assets and bundle
         if: always()
         run: |

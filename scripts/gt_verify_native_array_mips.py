@@ -1,6 +1,8 @@
 """Verify native Class187 YAML payloads against a pinned ZIP2 owner and stream."""
 import argparse
 import csv
+from collections import Counter
+from hashlib import sha256
 import json
 from pathlib import Path
 import re
@@ -13,7 +15,28 @@ from scripts.verify_exported_material_texture_links import material_docs, read, 
 FIELDS = ("m_Width", "m_Height", "m_Depth", "m_MipCount", "m_Format")
 
 
-def inspect(source, manifest, trace_file, assets, owner):
+def packaged_arrays(bundle):
+    import UnityPy
+    from UnityPy.helpers.ResourceReader import get_resource_data
+
+    result = Counter()
+    for obj in UnityPy.load(str(bundle)).objects:
+        if obj.type.name != "Texture2DArray":
+            continue
+        tree = obj.read_typetree()
+        payload = bytes(tree.get("image data") or b"")
+        stream = tree.get("m_StreamData") or {}
+        if stream.get("size"):
+            if payload:
+                raise ValueError("ambiguous_packaged_texture_array_payload")
+            payload = get_resource_data(stream["path"], obj.assets_file,
+                                        stream["offset"], stream["size"])
+        key = tuple(tree[field] for field in FIELDS)
+        result[key, len(payload), sha256(payload).digest()] += 1
+    return result
+
+
+def inspect(source, manifest, trace_file, assets, owner, bundle=None):
     import UnityPy
 
     pins = read_expected(manifest)
@@ -53,6 +76,7 @@ def inspect(source, manifest, trace_file, assets, owner):
             files[guid] = meta.with_suffix("")
 
     arrays = layers = total_bytes = 0
+    original_payloads = Counter()
     with (source / stream_name).open("rb") as stream:
         for obj in UnityPy.load(str(source / owner)).objects:
             if obj.type.name != "Texture2DArray":
@@ -71,8 +95,11 @@ def inspect(source, manifest, trace_file, assets, owner):
                 raise ValueError("invalid_original_array_stream_range")
             stream.seek(data["offset"])
             payload = re.search(r"(?m)^  _typelessdata: ([0-9a-fA-F]+)$", yaml)
-            if not payload or bytes.fromhex(payload[1]) != stream.read(data["size"]):
+            original = stream.read(data["size"])
+            if not payload or bytes.fromhex(payload[1]) != original:
                 raise ValueError("native_array_mip_payload_mismatch")
+            key = tuple(tree[field] for field in FIELDS)
+            original_payloads[key, len(original), sha256(original).digest()] += 1
             arrays += 1
             layers += tree["m_Depth"]
             total_bytes += data["size"]
@@ -92,7 +119,10 @@ def inspect(source, manifest, trace_file, assets, owner):
                 referenced.add(guid)
     if referenced != target_guids:
         raise ValueError("native_array_missing_exported_material_reference")
-    return {"arrays": arrays, "layers": layers, "exact_mip_payload_bytes": total_bytes,
+    if bundle is not None and packaged_arrays(bundle) != original_payloads:
+        raise ValueError("android_bundle_original_array_payload_mismatch")
+    return {"android_bundle_original_mip_payloads_verified": bundle is not None,
+            "arrays": arrays, "layers": layers, "exact_mip_payload_bytes": total_bytes,
             "material_references": references, "arrays_referenced_by_materials": len(referenced)}
 
 
@@ -101,6 +131,7 @@ def main():
     for name in ("source", "manifest", "trace-file", "assets"):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--owner", required=True)
+    parser.add_argument("--bundle", type=Path)
     report = inspect(**vars(parser.parse_args()))
     print("GT_NATIVE_ARRAY_MIPS " + json.dumps(report, sort_keys=True))
 
