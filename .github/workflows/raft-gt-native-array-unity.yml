@@ -1,0 +1,99 @@
+name: GT native texture-array full mip Unity import
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-native-array-unity.yml
+      - scripts/gt_verify_native_array_mips.py
+      - android-port/Experiments/GT/Editor/GTNativeArrayMipValidation.cs
+permissions:
+  contents: read
+jobs:
+  native-array-import:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          sparse-checkout: |
+            scripts
+            android-port/Experiments
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-array
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets1.assets
+            /Raft/Raft_Data/sharedassets1.assets.resS/*
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - uses: actions/checkout@v4
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          sparse-checkout: Source
+      - name: Stage authenticated native-format array sample and verify every original mip byte
+        env:
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: '1'
+        run: |
+          set -euo pipefail
+          export RAFT_PRIVATE_EXPORT_LINEAGE="$RUNNER_TEMP/array-lineage.json"
+          python3 -m pip install --user UnityPy==1.25.4
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.gt_zip2_payloads import manifest
+          from scripts.w1_stage_zip2_owners import stage
+          root = Path('zip2-array')
+          pins = manifest(root)
+          paths = ['Raft_Data/sharedassets1.assets', 'Raft_Data/sharedassets1.assets.resS']
+          stage(root, Path(os.environ['RUNNER_TEMP']) / 'array-input',
+                {name: pins[name][1:] for name in paths})
+          PY
+          python3 -m scripts.patch_export_lineage --tool-source ar-host \
+            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --native-texture-arrays
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            --self-contained false -o "$RUNNER_TEMP/array-ar" > "$RUNNER_TEMP/array-build.log" 2>&1
+          dotnet "$RUNNER_TEMP/array-ar/ExportLineage.dll" "$RUNNER_TEMP/array-input" \
+            "$RUNNER_TEMP/array-export" > "$RUNNER_TEMP/array-export.log" 2>&1
+          assets="$RUNNER_TEMP/array-export/ExportedProject/Assets"
+          python3 -m scripts.gt_verify_native_array_mips \
+            --source "$RUNNER_TEMP/array-input/Raft_Data" \
+            --manifest zip2-array/RAFT_FILE_MANIFEST.tsv --trace-file "$RAFT_PRIVATE_EXPORT_LINEAGE" \
+            --assets "$assets" --owner sharedassets1.assets
+          mkdir -p gt-array-unity/{Assets/Editor,Packages,ProjectSettings}
+          cp -r "$assets/Texture2DArray" gt-array-unity/Assets/
+          cp android-port/Experiments/GT/Editor/GTNativeArrayMipValidation.cs gt-array-unity/Assets/Editor/
+          printf '%s\n' '{"dependencies":{}}' > gt-array-unity/Packages/manifest.json
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > gt-array-unity/ProjectSettings/ProjectVersion.txt
+      - name: Import original mip-chain sample in Unity Android
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-array-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.GTNativeArrayMipValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+      - name: Erase private generated assets and bundle
+        if: always()
+        run: |
+          test "$PWD" = "$GITHUB_WORKSPACE"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-array-unity"
+          rm -rf -- "$RUNNER_TEMP/array-input" "$RUNNER_TEMP/array-export" "$RUNNER_TEMP/array-lineage.json"
