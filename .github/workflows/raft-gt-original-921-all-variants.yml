@@ -29,7 +29,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: gt-original-921-${{ (inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]')) && 'unity' || 'source' }}-${{ github.ref }}
+  group: gt-original-921-${{ contains(github.event.head_commit.message, '[GrassPlot probe]') && 'grassplot' || contains(github.event.head_commit.message, '[DirtPile probe]') && 'dirtpile' || contains(github.event.head_commit.message, '[Vegetation probe]') && 'vegetation' || (inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]')) && 'unity' || 'source' }}-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   original-921-full-stage-recovery:
@@ -174,13 +174,15 @@ jobs:
           printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
 
       - name: Recover the selected original foliage or terrain shader
-        if: contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]')
+        if: contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]') || contains(github.event.head_commit.message, '[GrassPlot probe]')
         env:
+          GRASSPLOT_PROBE: ${{ contains(github.event.head_commit.message, '[GrassPlot probe]') }}
           DIRTPILE_PROBE: ${{ contains(github.event.head_commit.message, '[DirtPile probe]') }}
         run: |
           set -euo pipefail
           shader=vegetation
           if [ "$DIRTPILE_PROBE" = true ]; then shader=dirtpile; fi
+          if [ "$GRASSPLOT_PROBE" = true ]; then shader=grassplot; fi
           python3 -m scripts.gt_original_921_all_variants \
             --shader "$shader" --original "$RUNNER_TEMP/gt-921-original" \
             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
@@ -195,7 +197,7 @@ jobs:
             --engine-route-manifest "$project/Original921EngineRoutes.json"
 
       - name: Compile all 33 recovered routes in an isolated Unity Android Vulkan bundle
-        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]')
+        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]') || contains(github.event.head_commit.message, '[GrassPlot probe]')
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -213,7 +215,7 @@ jobs:
           customParameters: -job-worker-count 2
 
       - name: Verify every recovered route is retained in the actual Vulkan shader bundle
-        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]')
+        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]') || contains(github.event.head_commit.message, '[DirtPile probe]') || contains(github.event.head_commit.message, '[GrassPlot probe]')
         run: |
           set -euo pipefail
           project="$GITHUB_WORKSPACE/gt-original-921-unity"
