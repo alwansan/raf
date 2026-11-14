@@ -69,6 +69,7 @@ namespace RaftGT
             string evidence = Path.Combine(root, "ProbeResults");
             Directory.CreateDirectory(evidence);
             bool smoke34 = File.Exists(Path.Combine(evidence, "smoke34"));
+            bool candle16 = File.Exists(Path.Combine(evidence, "candle16"));
             int exitCode = 1;
             try
             {
@@ -76,7 +77,7 @@ namespace RaftGT
                     throw new InvalidOperationException("UnpinnedUnityVersion");
                 const string shaderAsset = "Assets/GTPrivateOriginal.shader";
                 string shaderPath = Path.Combine(root, shaderAsset);
-                var keywords = KeywordNames(File.ReadAllText(shaderPath), smoke34 ? 1 : 2);
+                var keywords = KeywordNames(File.ReadAllText(shaderPath), smoke34 || candle16 ? 1 : 2);
                 using (var sha256 = SHA256.Create())
                 using (var stream = File.OpenRead(shaderPath))
                 {
@@ -157,6 +158,7 @@ namespace RaftGT
                     !ShaderUtil.ShaderHasError(shader);
                 result.status = result.unityEditorShaderImportAndCompilationProven
                     ? (smoke34 ? "ORIGINAL_PRIVATE_SMOKE34_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED"
+                               : candle16 ? "ORIGINAL_PRIVATE_CANDLE16_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED"
                                : "ORIGINAL_PRIVATE_PARTICLE108_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED")
                     : "INCONCLUSIVE";
                 if (result.unityEditorShaderImportAndCompilationProven)

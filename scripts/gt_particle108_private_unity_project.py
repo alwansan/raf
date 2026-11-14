@@ -55,7 +55,7 @@ def isolate_stage_buffer_names(raw):
         raise ValueError("unsafe_private_stage_buffer_disambiguation")
     return changed,counts
 
-def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path, *, diagnostic_stage_buffers=False, smoke34=False):
+def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path, *, diagnostic_stage_buffers=False, smoke34=False, candle16=False):
     shader,editor,project,report,routing=(p.absolute() for p in (shader,editor,project,report,routing))
     if (project.exists() or project.is_symlink() or not project.parent.is_dir()
         or any(p.is_symlink() or not p.is_file() for p in (shader,editor,routing))
@@ -73,9 +73,11 @@ def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path, *, di
               "original_keyword_flags_pragma_scope_proven":False,
               "Unity_ShaderLab_import_or_actual_variant_selection_proven":False,
               "original_Material_binding_proven":False,"Android_pixels_proven":False}
-    dimensions=1 if smoke34 else 2
+    dimensions=1 if smoke34 or candle16 else 2
     combinations=1 << dimensions
-    if smoke34:
+    if smoke34 and candle16:
+        raise ValueError("ambiguous_private_particle_shader")
+    if smoke34 or candle16:
         required={"status":"SOURCE_NAMED_SMOKE34_TWO_ROUTES_VULKAN_COMPILED",
                   "source_original_smoke_named_particle_renderer_slots":34,
                   "source_original_keyword_variants":combinations,
@@ -83,6 +85,12 @@ def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path, *, di
                   "private_original_DXBC_sample_pairs_verified":5,
                   "private_original_named_constant_buffers":9,
                   "private_original_named_constant_buffer_reflected_offsets":32}
+        if candle16:
+            required.update(status="SOURCE_NAMED_CANDLE16_TWO_ROUTES_VULKAN_COMPILED",
+                            private_original_DXBC_sample_pairs_verified=3,
+                            private_original_named_constant_buffer_reflected_offsets=20)
+            del required["source_original_smoke_named_particle_renderer_slots"]
+            required["source_original_candle_named_particle_renderer_slots"]=16
         if diagnostic_stage_buffers or proof.get("candidate_shader_sha256")!=hashlib.sha256(shader.read_bytes()).hexdigest():
             raise ValueError("untrusted_private_smoke34_shader_bytes")
     if any(type(proof.get(k)) is not type(v) or proof.get(k)!=v for k,v in required.items()):
@@ -108,9 +116,9 @@ def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path, *, di
     project.mkdir()
     try:
         (project/"Assets/Editor").mkdir(parents=True)
-        if smoke34:
+        if smoke34 or candle16:
             (project/"ProbeResults").mkdir()
-            (project/"ProbeResults/smoke34").touch()
+            (project/"ProbeResults"/("candle16" if candle16 else "smoke34")).touch()
         (project/"Packages").mkdir()
         (project/"ProjectSettings").mkdir()
         if diagnostic_stage_buffers:
@@ -127,6 +135,7 @@ def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path, *, di
         raise
     result={"schema":"GT_PRIVATE_ORIGINAL_PARTICLE108_UNITY_PROBE_V1",
             "status":("SHA_ORIGINAL_TWO_VARIANT_SMOKE34_SHADERLAB_STAGED" if smoke34 else
+                      "SHA_ORIGINAL_TWO_VARIANT_CANDLE16_SHADERLAB_STAGED" if candle16 else
                       "SHA_ORIGINAL_FOUR_VARIANT_SHADERLAB_STAGED_UNITY_NOT_YET_COMPILED"),
             "source_authenticated_original_keyword_dimensions":dimensions,
             "source_original_variant_combinations":combinations,
@@ -150,9 +159,10 @@ def main():
         p.add_argument("--"+field,type=Path,required=True)
     p.add_argument("--diagnostic-stage-buffers",action="store_true")
     p.add_argument("--smoke34",action="store_true")
+    p.add_argument("--candle16",action="store_true")
     a=p.parse_args()
     prepare(a.shader,a.editor,a.project,a.report,a.routing,
-            diagnostic_stage_buffers=a.diagnostic_stage_buffers,smoke34=a.smoke34)
+            diagnostic_stage_buffers=a.diagnostic_stage_buffers,smoke34=a.smoke34,candle16=a.candle16)
 
 if __name__=="__main__":
     main()

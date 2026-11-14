@@ -16,6 +16,7 @@ import re
 import shutil
 
 from scripts import t3_original_particle108_spirv_translation as original
+from scripts.t3_original_particle_shader_state import inspect_parsed
 from scripts import t3_particle108_source_propstate as source_state
 from scripts import t3_particle108_shaderlab_property_parity as props
 from scripts import t3_original_renderer_shader_impact as impact
@@ -57,7 +58,7 @@ def source_models(vs:bytes,fs:bytes):
     return versions[0]
 
 
-def assemble(parsed:dict,vertex:str,fragment:str,model:tuple):
+def assemble(parsed:dict,vertex:str,fragment:str,model:tuple, *, candle16=False):
     """Make one *isolated* ShaderLab candidate without claiming keyword routing."""
     if (type(parsed) is not dict or type(model) is not tuple or model not in MODELS
         or any(type(code) is not str or not 0<len(code.encode("utf-8"))<=MAX_HLSL
@@ -67,11 +68,16 @@ def assemble(parsed:dict,vertex:str,fragment:str,model:tuple):
         raise ValueError("T3_VARIANT_SOURCE_INVALID")
     # Source-state authenticates original normal Pass, selective RGB mask,
     # exact authored property schema and no dynamic state guessed.
-    _,shape=source_state.source_fragment(parsed)
+    if candle16:
+        inspect_parsed(parsed)
+    else:
+        _,shape=source_state.source_fragment(parsed)
     subs=parsed["m_SubShaders"]
     sub=subs[0]
     render_pass=sub["m_Passes"][0]
-    properties,_=source_state.serialize_properties(parsed)
+    properties,property_shape=source_state.serialize_properties(parsed,allow_hidden_and_toggle=candle16)
+    if candle16:
+        shape=property_shape
     try:
         state=render_state(render_pass["m_State"],allow_selective_color_mask=True)
         shader_name=quoted(parsed["m_Name"])

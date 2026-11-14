@@ -8,7 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import shutil
 
 from scripts.b25_foam_cb_namebridge import original_name_registry
@@ -18,6 +18,8 @@ from scripts.t3_original_smoke34_spirv_translation import exact_two_stage_links
 from scripts.t3_particle108_private_keyword_routed_shaderlab import compile_one, parts
 from scripts.t3_particle108_private_shaderlab_variants import assemble, source_models
 from scripts.t3_smoke34_sameexport_shaderlab import original_private_smoke_target
+from scripts.t3_original_renderer_shader_impact import load_original
+from scripts.t3_original_particle_emitter_semantics import local_gameobject_name
 from scripts.w1_rebind_depth_resources import IDENT
 from scripts.w1_recover_depth_passes import stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records, translate
@@ -60,14 +62,49 @@ def route_pair(shaders, keyword, switched, private):
     return candidate
 
 
-def recover(original, manifest, private):
+CANDLE_STATUS = "SOURCE_NAMED_CANDLE16_TWO_ROUTES_VULKAN_COMPILED"
+
+
+def original_candle_target(original, manifest):
+    """Resolve the second Shader48 bound by candle-named scene renderers."""
+    import UnityPy
+
+    ranks, materials = {}, {}
+    load_original(original, manifest, private_particle_slot_counts=ranks,
+                  private_particle_materials=materials)
+    target, = [key for key, rank in ranks.items() if rank == 16]
+    scene = UnityPy.load(str(original / "Raft_Data/level0")).file
+    owners = [PurePosixPath(row.path.replace("\\", "/")).name for row in scene.externals]
+    objects = {row.path_id: row for row in scene.objects.values()}
+    slots = renderers = 0
+    for row in objects.values():
+        if row.type.name != "ParticleSystemRenderer":
+            continue
+        renderer = row.read_typetree(check_read=False)
+        name = local_gameobject_name(renderer, objects)
+        if name is None or "candle" not in name.casefold():
+            continue
+        selected = 0
+        for ptr in renderer["m_Materials"]:
+            owner, path_id = ptr["m_FileID"], ptr["m_PathID"]
+            if 0 < owner <= len(owners) and (owners[owner - 1], path_id) in materials[target]:
+                selected += 1
+        slots += selected
+        renderers += selected > 0
+    if (slots, renderers) != (16, 8):
+        raise ValueError("candle16_original_renderer_link_drift")
+    return target
+
+
+def recover(original, manifest, private, *, candle16=False):
     import UnityPy
 
     private = private.absolute()
     if (private.exists() or any(p.is_symlink() for p in (private, *private.parents))
             or private.is_relative_to(original.absolute())):
         raise ValueError("unsafe_smoke34_private_output")
-    (owner, path_id), _ = original_private_smoke_target(original, manifest)
+    owner, path_id = (original_candle_target(original, manifest) if candle16 else
+                      original_private_smoke_target(original, manifest)[0])
     original_file = UnityPy.load(str(original / "Raft_Data" / owner)).file
     shader = original_file.objects[path_id].read_typetree()
     parsed = shader["m_ParsedForm"]
@@ -101,19 +138,22 @@ def recover(original, manifest, private):
                 buffers += count
                 samples += stats["original_DXBC_sample_operand_pairs_verified"]
             candidate, _ = assemble(parsed, programs[1], programs[0],
-                                    source_models(vertex[0], fragment[0]))
+                                    source_models(vertex[0], fragment[0]), candle16=candle16)
             shaders.append(candidate)
-        if (samples, buffers, offsets) != (5, 9, 32):
+        expected = (3, 9, 20) if candle16 else (5, 9, 32)
+        if (samples, buffers, offsets) != expected:
             raise ValueError("smoke34_original_named_parameter_counts_drift")
         candidate = route_pair(shaders, keyword, switched, private).encode("utf-8")
-        (private / "smoke34-original.shader").write_bytes(candidate)
+        filename = "candle16-original.shader" if candle16 else "smoke34-original.shader"
+        (private / filename).write_bytes(candidate)
     except BaseException:
         shutil.rmtree(private)
         raise
     return {
-        "status": STATUS,
+        "status": CANDLE_STATUS if candle16 else STATUS,
         "candidate_shader_sha256": hashlib.sha256(candidate).hexdigest(),
-        "source_original_smoke_named_particle_renderer_slots": 34,
+        ("source_original_candle_named_particle_renderer_slots" if candle16 else
+         "source_original_smoke_named_particle_renderer_slots"): 16 if candle16 else 34,
         "source_original_keyword_variants": 2,
         "private_named_Vulkan_stages_compiled": 4,
         "private_original_DXBC_sample_pairs_verified": samples,
@@ -129,17 +169,18 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("original", "manifest", "private", "report"):
         parser.add_argument("--" + name, type=Path, required=True)
+    parser.add_argument("--candle16", action="store_true")
     args = parser.parse_args()
     if (args.report.exists() or args.report.is_symlink()
             or args.report.absolute().is_relative_to(args.original.absolute())):
         raise ValueError("unsafe_smoke34_source_report_output")
     try:
-        result = recover(args.original, args.manifest, args.private)
+        result = recover(args.original, args.manifest, args.private, candle16=args.candle16)
     except (OSError, ValueError, TypeError, KeyError):
         result = {"status": "INCONCLUSIVE_ORIGINAL_SMOKE34_SOURCE_BOUND_SHADER"}
     args.report.write_text(json.dumps(result, sort_keys=True, indent=2) + "\n", encoding="utf-8")
     print("GT_ORIGINAL_SMOKE34_SOURCE_BOUND " + json.dumps(result, sort_keys=True))
-    return 0 if result["status"] == STATUS else 2
+    return 0 if result["status"] in (STATUS, CANDLE_STATUS) else 2
 
 
 if __name__ == "__main__":
