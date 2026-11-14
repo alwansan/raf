@@ -8,6 +8,7 @@ aggregate integer counts only; this is not a shader/pixel/device test.
 from __future__ import annotations
 
 import argparse
+from functools import partial
 import json
 import math
 from pathlib import Path, PurePosixPath
@@ -21,16 +22,16 @@ GUID = re.compile(r'^guid:[ \t]*([0-9a-fA-F]{32})[ \t]*$', re.M)
 FONT_COLLECTION = 'AssetRipper.Export.UnityProjects.Miscellaneous.FontAssetExportCollection'
 
 
-def _number(value):
+def _number(value, *, allow_nonfinite=False):
     if isinstance(value, bool) or not isinstance(value, (float, int)):
         raise ValueError('Invalid color component type')
     number = float(value)
-    if not math.isfinite(number):
+    if not allow_nonfinite and not math.isfinite(number):
         raise ValueError('Nonfinite original or exported Material color')
     return number
 
 
-def normalize_colors(entries, *, exported=False):
+def normalize_colors(entries, *, exported=False, allow_nonfinite=False):
     """Canonical per-property RGBA map from original pairs or Unity YAML maps.
 
     Rejects duplicates and unsupported shapes, never logs original names/values.
@@ -57,7 +58,7 @@ def normalize_colors(entries, *, exported=False):
             raise ValueError('Malformed or duplicated Material color slot')
         if not isinstance(rgba, dict) or set(rgba) != CHANNELS:
             raise ValueError('Malformed RGBA Material color')
-        result[key] = tuple(_number(rgba[channel]) for channel in ('r', 'g', 'b', 'a'))
+        result[key] = tuple(_number(rgba[channel], allow_nonfinite=allow_nonfinite) for channel in ('r', 'g', 'b', 'a'))
     return result
 
 
@@ -102,7 +103,7 @@ def original_colors(source_root: Path, *, selected_owners=None):
     return result
 
 
-def exported_colors(project: Path):
+def exported_colors(project: Path, *, allow_nonfinite=False):
     """Parse only complete Material YAML documents using bounded safe YAML.
 
     Both embedded .asset Materials and loose .mat are included. All symlinked
@@ -167,7 +168,8 @@ def exported_colors(project: Path):
             key = (int(match.group(1)), guids[0].lower())
             if key in found:
                 raise ValueError('Duplicate exported Material identity')
-            found[key] = normalize_colors(props['m_Colors'], exported=True)
+            found[key] = normalize_colors(props['m_Colors'], exported=True,
+                                          allow_nonfinite=allow_nonfinite)
     if not found:
         raise ValueError('No actual YAML Material documents')
     return found
@@ -230,6 +232,7 @@ def compare(trace: dict, original: dict, actual: dict) -> dict:
     compared_slots = absent_slots = unexpected_slots = changed_rgba = 0
     material_mismatches = 0
     material_nonidentity = 0
+    nonfinite_channels = nonfinite_drift = 0
     for key, before in expected.items():
         after = actual[key]
         if not isinstance(after, dict):
@@ -244,8 +247,18 @@ def compare(trace: dict, original: dict, actual: dict) -> dict:
             rgba_original, rgba_exported = before[slot], after[slot]
             if len(rgba_original) != 4 or len(rgba_exported) != 4:
                 raise ValueError('Invalid RGBA width')
-            if any(not math.isclose(a, b, rel_tol=2e-6, abs_tol=2e-5)
-                   for a, b in zip(rgba_original, rgba_exported)):
+            changed = False
+            for original_channel, exported_channel in zip(rgba_original, rgba_exported):
+                if math.isfinite(original_channel) and math.isfinite(exported_channel):
+                    changed |= not math.isclose(original_channel, exported_channel,
+                                                rel_tol=2e-6, abs_tol=2e-5)
+                else:
+                    nonfinite_channels += 1
+                    equivalent = (original_channel == exported_channel or
+                                  (math.isnan(original_channel) and math.isnan(exported_channel)))
+                    nonfinite_drift += not equivalent
+                    changed |= not equivalent
+            if changed:
                 changed_rgba += 1
                 mismatch = True
         if any(any(abs(c - 1.0) > 1e-6 for c in rgba) for rgba in before.values()):
@@ -263,6 +276,8 @@ def compare(trace: dict, original: dict, actual: dict) -> dict:
         'missing_color_slots': absent_slots,
         'unexpected_color_slots': unexpected_slots,
         'changed_color_values': changed_rgba,
+        'nonfinite_channels_compared': nonfinite_channels,
+        'nonfinite_channel_drift': nonfinite_drift,
         'mismatched_materials': material_mismatches,
         'original_material_color_values_preserved': material_mismatches == 0,
         'shader_program_or_device_fidelity_verified': False,
@@ -285,8 +300,8 @@ def main(argv=None):
     else:
         from scripts.gt_full_original_export_texenvs import original
         source = original(args.source, args.zip2_manifest, property_name='m_Colors',
-                          normalize=normalize_colors)
-    actual = exported_colors(args.project)
+                          normalize=partial(normalize_colors, allow_nonfinite=True))
+    actual = exported_colors(args.project, allow_nonfinite=args.zip2_manifest is not None)
     report = compare(json.loads(args.private_export_trace.read_text(encoding='utf-8')), source, actual)
     args.out.write_text(json.dumps(report, indent=2, sort_keys=True) + '\n', encoding='utf-8')
     print('RAFT_B44_MATERIAL_COLOR_LINEAGE ' + json.dumps(report, sort_keys=True))
