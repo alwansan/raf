@@ -428,6 +428,12 @@ jobs:
             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
             --destination "$original_owners" \
             --report "$RUNNER_TEMP/gt-native-pristine-serialized-owners.json"
+          python3 -m scripts.b44_verify_material_colors \
+            --source "$original_owners" \
+            --zip2-manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --private-export-trace "$RUNNER_TEMP/private-export-lineage.json" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --out "$RUNNER_TEMP/gt-native-material-colors.json"
           python3 -m scripts.gt_repair_array_flipbook_importers \
             --original-source "$original_owners" \
             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
@@ -557,6 +563,7 @@ jobs:
           path: |
             ${{ runner.temp }}/gt-native-original-array-importer-repair.json
             ${{ runner.temp }}/gt-native-mesh-export-geometry.json
+            ${{ runner.temp }}/gt-native-material-colors.json
             ${{ runner.temp }}/gt-native-original-array-material-links.json
             ${{ runner.temp }}/gt-native-original-external-texture-links.json
             ${{ runner.temp }}/gt-native-original-bc3-staging.json
