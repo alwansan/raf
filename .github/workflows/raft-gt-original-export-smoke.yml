@@ -271,6 +271,13 @@ jobs:
           fi
           echo "GT_B05_EXACT_TEXENV_COMPARISON exit_code=$result_code status_report_saved=true"
           exit "$result_code"
+      - name: Measure unmodified AssetRipper Material to ShaderLab dummy and pass completeness for T3
+        continue-on-error: true
+        shell: bash
+        run: |
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --out "$RUNNER_TEMP/gt-raw-export-program-quality.json"
       - name: Validate all nine native arrays and 28 material slots in the full export
         run: |
           set -euo pipefail
@@ -362,13 +369,6 @@ jobs:
           assert d["exact_cross_owner_source_export_texture_links"] == 416
           assert d["all_external_links_verified"] is True
           PYASSERT
-      - name: Measure unmodified AssetRipper Material to ShaderLab dummy and pass completeness for T3
-        continue-on-error: true
-        shell: bash
-        run: |
-          python3 -m scripts.t3_audit_exported_material_programs \
-            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
-            --out "$RUNNER_TEMP/gt-raw-export-program-quality.json"
       - name: GT run official authenticated TMP PostFX and volumetric shader recovery in isolated exported Unity project
         id: gt_vendor_shader_restoration
         continue-on-error: true
