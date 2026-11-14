@@ -182,6 +182,10 @@ jobs:
             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
             --private "$RUNNER_TEMP/gt-vegetation-private-recovered" \
             --out gt-vegetation-source-aggregate-safe.json
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$RUNNER_TEMP/gt-vegetation-private-recovered" \
+            --shader "$RUNNER_TEMP/gt-vegetation-private-recovered/Vegetation.shader" \
+            --engine-keywords --verify-entrypoints
 
       - name: Compile all 33 recovered routes in an isolated Unity Android Vulkan bundle
         if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]')
