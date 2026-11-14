@@ -124,14 +124,20 @@ def main():
         if (receipt["arrays"],receipt["layers"],receipt["exact_mip_payload_bytes"],
             receipt["material_references"],receipt["arrays_referenced_by_materials"]) != (9,52,69906400,28,9):
             raise InventoryError("source_native_array_import_contract_wrong_scope")
-        if sum(x["depth"] for x in arrays if x["has_original_source_pixels"]) != 50:
+        empty=[x for x in arrays if not x["has_original_source_pixels"]]
+        if len(empty)!=1 or empty[0]["depth"]!=2:
             raise InventoryError("source_native_array_import_contract_pixel_layers_drift")
         tables, types=load_tables(args.original_source,args.manifest)
-        verify_native_array_slots(
+        empty_slots=verify_native_array_slots(
             original_texenvs(args.original_source,args.manifest),tables,types,
-            json.loads(args.trace.read_text()),exported_texenvs(args.project))
+            json.loads(args.trace.read_text()),exported_texenvs(args.project),empty[0]["guid"])
         data={"schema":SCHEMA,"arrays":sorted(arrays,key=lambda array: array["guid"])}
     report=install_contract(args.project,data)
+    if args.native_stream_source is not None:
+        report.update(
+            exact_original_mip_payload_bytes=receipt["exact_mip_payload_bytes"],
+            source_zero_pixel_original_array_refs=empty_slots,
+        )
     args.report.parent.mkdir(parents=True,exist_ok=True)
     args.report.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n")
     print("GT_NATIVE_PRIVATE_UNITY_ARRAY_GATE "+json.dumps(report,sort_keys=True))

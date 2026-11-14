@@ -159,10 +159,11 @@ def compare(originals,external_tables,source_types,trace,exported):
     }
 
 
-def verify_native_array_slots(originals, external_tables, source_types, trace, exported):
+def verify_native_array_slots(originals, external_tables, source_types, trace, exported, empty_guid):
     materials, textures = trace_targets(trace)
     matched = set()
     expected = set()
+    empty_slots = 0
     array_pointers = {ptr for cls, ptr in textures.values() if cls == 187}
     for source, slots in originals.items():
         material_pointer = materials.get(source)
@@ -188,15 +189,18 @@ def verify_native_array_slots(originals, external_tables, source_types, trace, e
                 raise InventoryError("native_array_source_material_slot_mismatch")
             expected.add((material_key, name))
             matched.add(mapped[1])
+            if mapped[1][1] == empty_guid:
+                empty_slots += 1
     observed = {
         (material_key, name)
         for material_key, slots in exported.items()
         for name, slot in slots.items()
         if _slot(slot)[0] in array_pointers
     }
-    if expected != observed or matched != array_pointers or len(expected) != 28 or len(matched) != 9:
+    if (expected != observed or matched != array_pointers or
+        len(expected) != 28 or len(matched) != 9 or empty_slots != 20):
         raise InventoryError("native_array_source_material_slot_scope_mismatch")
-    return len(expected)
+    return empty_slots
 
 
 def load_tables(source_root,manifest,loader=None):
