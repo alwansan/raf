@@ -7,6 +7,10 @@
   "mip_levels_per_layer": 11,
   "complete_mip_payload_bytes_exact": 39147584,
   "exported_dimensions_mip_count_and_graphics_format_exact": true,
-  "isolated_unity_android_import_verified": false,
-  "production_exporter_changed": false
+  "isolated_unity_android_import_verified": true,
+  "production_exporter_changed": false,
+  "isolated_unity_android_import_run": 43547724750,
+  "isolated_unity_android_import_preserved_class187_local_file_ids": true,
+  "isolated_unity_android_asset_bundle_built": true,
+  "packaged_mip_payload_bytes_verified": false
 }
