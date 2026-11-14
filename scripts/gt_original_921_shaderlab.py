@@ -14,6 +14,7 @@ from scripts.gt_original_921_semantics import pin_varying_locations, restore_ver
 
 PASS_MODES = ("ForwardBase", "ForwardAdd", "Deferred", "ShadowCaster")
 EXPECTED_ROUTES = (8, 13, 8, 4)
+SKIN_ROUTES = (8, 13, 2)
 # ShaderLab injects the pass macro. ForwardBase uses a directional light
 # even when Unity does not expose DIRECTIONAL as a separate variant keyword.
 ENGINE_FIXED_KEYWORDS = (
@@ -200,8 +201,8 @@ def combine_stages(vertex, fragment):
     return "\n".join([*type_declarations, *buffer_declarations, *globals_.values(), vertex, fragment])
 
 
-def engine_route_keys(row, pass_index):
-    fixed = ENGINE_FIXED_KEYWORDS[pass_index] & {
+def engine_route_keys(row, pass_index, pass_modes=PASS_MODES):
+    fixed = ENGINE_FIXED_KEYWORDS[PASS_MODES.index(pass_modes[pass_index])] & {
         name for route in row["routes"] for name in route["enabled"]
     }
     result = []
@@ -215,12 +216,19 @@ def engine_route_keys(row, pass_index):
     return result
 
 
+def pass_modes_for_routes(counts):
+    if counts == EXPECTED_ROUTES:
+        return PASS_MODES
+    if counts == SKIN_ROUTES:
+        return ("ForwardBase", "ForwardAdd", "ShadowCaster")
+    raise ValueError("original_921_unexpected_shaderlab_routes")
+
+
 def compose(private, engine_keywords=False):
     layout = (private / "original-private-layout.txt").read_text(encoding="utf-8")
     routes = json.loads((private / "original-private-keyword-routes.json").read_text())
     manifest = json.loads((private / "original-private-variant-manifest.json").read_text())
-    if tuple(len(row["routes"]) for row in routes) != EXPECTED_ROUTES:
-        raise ValueError("original_921_unexpected_shaderlab_routes")
+    pass_modes = pass_modes_for_routes(tuple(len(row["routes"]) for row in routes))
     records = json.loads((private / "original-private-parameter-records.json").read_text())["stage_records"]
     stage_sources = {}
     for index, pair in enumerate(manifest["paired"]):
@@ -244,11 +252,11 @@ def compose(private, engine_keywords=False):
     indices = {name: index for index, name in enumerate(original_names)}
     anchor = "// Original stage programs attach here"
     blocks = layout.split(anchor)
-    if len(blocks) != len(PASS_MODES) + 1:
+    if len(blocks) != len(pass_modes) + 1:
         raise ValueError("original_921_shaderlab_layout_has_wrong_pass_count")
     parts = [blocks[0].replace('"LIGHTMODE" = "FORWARDBASE"', '"LightMode" = "ForwardBase"')]
     for index, row in enumerate(routes):
-        engine_keys = engine_route_keys(row, index)
+        engine_keys = engine_route_keys(row, index, pass_modes)
         # A private per-pass keyword dimension lets Unity compile every
         # recovered program without assuming production keyword selection.
         names = [f"GT_ORIGINAL_921_P{index}_V{variant}"
@@ -284,13 +292,14 @@ def compose(private, engine_keywords=False):
                    "#pragma use_dxc vulkan", *pragmas,
                    code, "ENDHLSL"]
         remainder = blocks[index + 1]
-        if index + 1 < len(PASS_MODES):
-            mode = PASS_MODES[index + 1]
+        if index + 1 < len(pass_modes):
+            mode = pass_modes[index + 1]
             remainder = remainder.replace(f'"LIGHTMODE" = "{mode.upper()}"', f'"LightMode" = "{mode}"')
         parts.extend(("\n".join(program), remainder))
     shader = "".join(parts)
     result = pass_coverage(shader)
-    if result["subshader_pass_counts"] != [4] or result["passes_with_complete_program"] != 4:
+    if (result["subshader_pass_counts"] != [len(pass_modes)]
+            or result["passes_with_complete_program"] != len(pass_modes)):
         raise ValueError("original_921_incomplete_shaderlab")
     return shader
 
@@ -301,12 +310,13 @@ def verify_entrypoints(shader, directory, routes=None):
     from scripts.t3_spirv_interface_name_drift import read_reflection
 
     blocks = re.findall(r"(?ms)^HLSLPROGRAM\n(.*?)^ENDHLSL$", shader)
-    if len(blocks) != len(EXPECTED_ROUTES):
+    counts = EXPECTED_ROUTES if routes is None else tuple(map(len, routes))
+    if len(blocks) != len(counts):
         raise ValueError("original_921_entrypoint_pass_count_mismatch")
     with tempfile.TemporaryDirectory(prefix="original-921-entrypoints-", dir=directory) as tmp:
         source = Path(tmp) / "route.hlsl"
         binary = Path(tmp) / "route.spv"
-        for index, (block, count) in enumerate(zip(blocks, EXPECTED_ROUTES)):
+        for index, (block, count) in enumerate(zip(blocks, counts)):
             code = re.sub(r"(?m)^#pragma [^\n]*\n", "", block)
             source.write_text(code, encoding="utf-8")
             for variant in range(count):
@@ -341,7 +351,8 @@ def main():
     routes = None
     if args.engine_keywords:
         packet = json.loads((args.private / "original-private-keyword-routes.json").read_text())
-        routes = [engine_route_keys(row, index) for index, row in enumerate(packet)]
+        pass_modes = pass_modes_for_routes(tuple(len(row["routes"]) for row in packet))
+        routes = [engine_route_keys(row, index, pass_modes) for index, row in enumerate(packet)]
     if args.verify_entrypoints:
         verify_entrypoints(shader, args.private, routes)
     if args.engine_route_manifest:
