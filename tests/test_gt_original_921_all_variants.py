@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from scripts.gt_original_921_all_variants import (
-    enumerate_all, stage_private, source_keyword_profile, _private_destination, PAIRED_COUNT,
+    enumerate_all, stage_private, source_keyword_profile, selected_vegetation, _private_destination, PAIRED_COUNT,
     ORPHAN_VERTEX_COUNT, DISTINCT_DXBC_COUNT,
 )
 
@@ -38,6 +38,17 @@ class Original921VariantTests(unittest.TestCase):
     def collect(self,tree=None):
         return enumerate_all(tree if tree is not None else fixture(),[object()],
                              variants=variants,permutation=key,linker=link)
+
+    def test_vegetation_selector_requires_unique_exact_source_use(self):
+        from scripts.t3_original_renderer_shader_impact import STATUS
+
+        source = {("sharedassets0.assets", 42): 121, ("sharedassets0.assets", 43): 921}
+        receipt = {"status": STATUS, "six_original_scenes_sha_verified": True}
+        self.assertEqual(selected_vegetation(source, receipt), ("sharedassets0.assets", 42))
+        with self.assertRaisesRegex(ValueError, "unverified"):
+            selected_vegetation(source, {})
+        with self.assertRaisesRegex(ValueError, "ambiguous"):
+            selected_vegetation(source | {("sharedassets1.assets", 31): 121}, receipt)
 
     def test_complete_four_pass_33_pairs_eight_unmatched_58_unique(self):
         paired,orphans,passes,unique=self.collect()

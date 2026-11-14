@@ -18,6 +18,21 @@ PAIRED_COUNT=33
 ORPHAN_VERTEX_COUNT=8
 DISTINCT_DXBC_COUNT=58
 STATUS="GT_ORIGINAL_921_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
+VEGETATION_STATUS="GT_ORIGINAL_VEGETATION_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
+SOURCE_PROFILES = {"blockpaint": (921, 35, STATUS),
+                   "vegetation": (121, 16, VEGETATION_STATUS)}
+
+
+def selected_vegetation(source_use, report):
+    from scripts.t3_original_renderer_shader_impact import STATUS as SOURCE_STATUS
+
+    if (report.get("status") != SOURCE_STATUS
+            or report.get("six_original_scenes_sha_verified") is not True):
+        raise ValueError("vegetation_original_source_graph_unverified")
+    matches = [key for key, count in source_use.items() if count == 121]
+    if len(matches) != 1 or matches[0][0] != "sharedassets0.assets":
+        raise ValueError("vegetation_original_source_identity_ambiguous")
+    return matches[0]
 
 def enumerate_all(parsed,table,*,variants,permutation,linker):
     """Never pair unrelated player buckets, tiers or keyword permutations."""
@@ -97,7 +112,7 @@ def _private_destination(path:Path,source:Path,other:Path):
         raise ValueError("unsafe_private_original_shader_stage_destination")
     return path
 
-def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator,source_parsed=None):
+def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator,source_parsed=None,shader="blockpaint"):
     if (len(pairs)!=PAIRED_COUNT or len(orphans)!=ORPHAN_VERTEX_COUNT or
         len(passes)!=PASS_COUNT or len(distinct)!=DISTINCT_DXBC_COUNT):
         raise ValueError("non_original_921_stage_inventory")
@@ -132,9 +147,10 @@ def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator,source
     }
     (private/"original-private-variant-manifest.json").write_text(
         json.dumps(packet,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+    scope, _, status = SOURCE_PROFILES[shader]
     return {
-        "schema_version":1,"status":STATUS,
-        "scope":"six_SHA_original_scenes_selected_921_renderer_material_slots",
+        "schema_version":1,"status":status,
+        "scope":f"six_SHA_original_scenes_selected_{scope}_renderer_material_slots",
         "original_passes":len(passes),
         "exact_original_source_VS_FS_permutation_pairs":len(pairs),
         "unmatched_original_vertex_variants_retained":len(orphans),
@@ -145,7 +161,7 @@ def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator,source
         "private_HLSL_recovered_stages":counts["hlsl_recovered"],
         "private_HLSL_roundtrip_vulkan11_valid_stages":counts["roundtrip_vulkan11_valid"],
         "all_distinct_original_D3D11_programs_translated":counts["roundtrip_vulkan11_valid"]==len(distinct),
-        "all_original_921_shader_variant_population_extracted_to_private_stage":True,
+        f"all_original_{scope}_shader_variant_population_extracted_to_private_stage":True,
         "source_original_Shader_ParsedForm_pass_states_keyword_property_tables_preserved_privately":True,
         "original_keyword_name_count":len(source_parsed.get('m_KeywordNames',[])) if type(source_parsed.get('m_KeywordNames')) is list else None,
         "original_property_count":len(source_parsed.get('m_PropInfo',{}).get('m_Props',[])) if type(source_parsed.get('m_PropInfo')) is dict and type(source_parsed.get('m_PropInfo',{}).get('m_Props')) is list else None,
@@ -331,20 +347,22 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
     }
 
 
-def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None):
+def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None,shader="blockpaint"):
     from scripts import t3_original_renderer_shader_impact as scenes
     from scripts import t3_original_top_shader_dxbc_feasibility as top
     from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
     from scripts.w1_stage_zip2_owners import fingerprint
     from scripts.w1_recover_graphics_programs import decoded_platforms,records,translate
     from scripts.w1_recover_depth_passes import linked_program,stage_variants,variant_key
+    _, property_count, _ = SOURCE_PROFILES[shader]
     if translator is None:translator=translate
     for binary in ("vkd3d-compiler","spirv-val","spirv-opt","spirv-cross","glslangValidator"):
         if not shutil.which(binary):
             raise ValueError("missing_required_original_DXBC_translation_tool")
     use={}
     report=scenes.load_original(original,manifest,private_slot_counts=use)
-    owner,path_id=top.selected_high_use(use,report)
+    selector = top.selected_high_use if shader == "blockpaint" else selected_vegetation
+    owner,path_id = selector(use,report)
     source=original/"Raft_Data"/owner
     if source.is_symlink() or fingerprint(source)!=SHADER_OWNERS[owner]:
         raise ValueError("original_921_Shader_owner_SHA_mismatch")
@@ -353,6 +371,8 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None):
     if len(candidates)!=1 or candidates[0].type.name!="Shader":
         raise ValueError("original_921_Shader48_object_identity_mismatch")
     tree=candidates[0].read_typetree()
+    if shader == "vegetation" and tree["m_ParsedForm"]["m_Name"] != "Vegetation":
+        raise ValueError("vegetation_original_serialized_shader_name_mismatch")
     tables=[records(parts) for platform,parts in decoded_platforms(tree) if platform==4]
     if len(tables)!=1:
         raise ValueError("ambiguous_original_921_D3D11_program_table")
@@ -368,7 +388,7 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None):
         permutation=variant_key,linker=linked_program)
     private=_private_destination(private,original,out)
     out=_private_destination(out,original,private)
-    safe=stage_private(pairs,orphans,passes,unique,private,translator=translator,source_parsed=tree['m_ParsedForm'])
+    safe=stage_private(pairs,orphans,passes,unique,private,translator=translator,source_parsed=tree['m_ParsedForm'],shader=shader)
     from scripts.gt_original_921_keyword_routes import compile_routed_stages, keyword_routes, shaderlab_layout
     route_packet, route_summary = keyword_routes(tree["m_ParsedForm"], pairs, orphans, passes)
     # Resolve the tuple of stage and bytecode digest to the packet's program directories.
@@ -379,7 +399,7 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None):
                 route[stage] = program_dirs[route[stage]]
     (private / "original-private-keyword-routes.json").write_text(
         json.dumps(route_packet, indent=2) + "\n", encoding="utf-8")
-    layout, safe["source_shaderlab_layout"] = shaderlab_layout(tree["m_ParsedForm"], passes)
+    layout, safe["source_shaderlab_layout"] = shaderlab_layout(tree["m_ParsedForm"], passes, expected_property_count=property_count)
     (private / "original-private-layout.txt").write_text(layout, encoding="utf-8")
     route_summary["validated_exact_routed_stage_compilations"] = compile_routed_stages(route_packet, private)
     safe["source_keyword_route_coverage"] = route_summary
@@ -395,9 +415,10 @@ def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__.splitlines()[0])
     for name in ("original","manifest","private","out"):
         p.add_argument("--"+name,type=Path,required=True)
+    p.add_argument("--shader", choices=SOURCE_PROFILES, default="blockpaint")
     a=p.parse_args(argv)
     try:
-        safe=run(a.original,a.manifest,a.private,a.out)
+        safe=run(a.original,a.manifest,a.private,a.out,shader=a.shader)
     except Exception as error:
         print("GT_ORIGINAL_921_ALL_VARIANTS_BLOCKED "+json.dumps({
             "status":"INCONCLUSIVE","exception_type":type(error).__name__,

@@ -173,6 +173,16 @@ jobs:
           printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
           printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
 
+      - name: Recover original Vegetation programs from the same authenticated source owners
+        if: contains(github.event.head_commit.message, '[Vegetation probe]')
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_original_921_all_variants \
+            --shader vegetation --original "$RUNNER_TEMP/gt-921-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --private "$RUNNER_TEMP/gt-vegetation-private-recovered" \
+            --out gt-vegetation-source-aggregate-safe.json
+
       - name: Compile all 33 recovered routes in an isolated Unity Android Vulkan bundle
         if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]')
         uses: game-ci/unity-builder@v4
@@ -226,6 +236,7 @@ jobs:
         run: |
           rm -rf -- "$RUNNER_TEMP/gt-921-original" \
                    "$RUNNER_TEMP/gt-921-private-recovered" \
+                   "$RUNNER_TEMP/gt-vegetation-private-recovered" \
                    zip2-original
           sudo rm -rf -- "$GITHUB_WORKSPACE/gt-original-921-unity"
 
@@ -234,6 +245,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gt-original-921-safe-source-aggregate
-          path: gt-921-source-aggregate-safe.json
+          path: |
+            gt-921-source-aggregate-safe.json
+            gt-vegetation-source-aggregate-safe.json
           if-no-files-found: ignore
           retention-days: 7
