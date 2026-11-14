@@ -50,7 +50,14 @@ def verify_routes(parsed):
                 routes.update(active or {""})
             required = {""} | {prefix + str(variant) for variant in range(1, expected)}
             if routes != required:
-                raise ValueError("original_921_bundle_route_population_mismatch")
+                missing = [variant for variant in range(expected)
+                           if (prefix + str(variant) if variant else "") not in routes]
+                gpu_types = sorted({row.get("m_GpuProgramType", -1) for _, _, row in rows})
+                raise ValueError(
+                    "original_921_bundle_route_population_mismatch "
+                    f"stage={stage} pass={index} missingRoutes={missing} "
+                    f"entries={len(rows)} shaderKeywords={len(keywords)} gpuTypes={gpu_types}"
+                )
             counts.append(len(routes))
         verified[stage] = counts
     return {"vulkan_platform_only": True, "vertex_routes_by_pass": verified["progVertex"],
