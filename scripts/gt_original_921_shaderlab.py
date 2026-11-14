@@ -99,6 +99,23 @@ MEMBER = re.compile(
     r"(?m)^(?P<type>(?:column_major |row_major )?[A-Za-z_]\w*) "
     r"(?P<var>[A-Za-z_]\w*)(?P<array>\[[0-9]+\])? : packoffset\([^)]*\);$"
 )
+PACKOFFSET = re.compile(r"packoffset\(c([0-9]+)(?:\.([xyzw]))?\)")
+
+
+def ordered_buffer(definition):
+    lines = definition.splitlines()
+    members = []
+    for line in lines[1:-1]:
+        if not line.strip():
+            continue
+        offset = PACKOFFSET.search(line)
+        if offset is None:
+            return definition
+        lane = int(offset[1]) * 4 + "xyzw".index(offset[2] or "x")
+        members.append((lane, line))
+    if len({lane for lane, _ in members}) != len(members):
+        raise ValueError("original_921_duplicate_uniform_offset")
+    return "\n".join([lines[0], *(line for _, line in sorted(members)), lines[-1]])
 
 
 def combine_stages(vertex, fragment):
@@ -131,10 +148,7 @@ def combine_stages(vertex, fragment):
                     if kind != "cbuffer" or old[0] != new[0]:
                         raise ValueError("original_921_shared_HLSL_declaration_drift")
                     declarations={line.strip() for line in old[1:-1]+new[1:-1]}
-                    def offset(line):
-                        match = re.search(r"packoffset\(c([0-9]+)(?:\.([xyzw]))?\)", line)
-                        return int(match[1]) * 4 + ("xyzw".index(match[2]) if match[2] else 0)
-                    common[name]="\n".join([old[0],*sorted(declarations,key=offset),old[-1]])
+                    common[name]=ordered_buffer("\n".join([old[0],*declarations,old[-1]]))
                 return ""
             if kind == "cbuffer":
                 for member in MEMBER.finditer(match["body"]):
@@ -170,8 +184,11 @@ def combine_stages(vertex, fragment):
     vertex = stage_body(vertex, "vs")
     fragment = stage_body(fragment, "fs")
     type_declarations = [f"struct {name} {{{body}}};" for body, name in types.items()]
-    buffer_declarations = [MEMBER.sub(lambda m: "" if m["var"] in globals_ else m[0], value)
-                           for value in common.values()]
+    buffer_declarations = [
+        ordered_buffer(MEMBER.sub(lambda m: "" if m["var"] in globals_ else m[0], value))
+        if value.startswith("cbuffer ") else value
+        for value in common.values()
+    ]
     return "\n".join([*type_declarations, *buffer_declarations, *globals_.values(), vertex, fragment])
 
 

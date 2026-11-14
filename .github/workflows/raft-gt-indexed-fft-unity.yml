@@ -50,9 +50,19 @@ jobs:
             --destination "$RUNNER_TEMP/fft/Raft_Data/sharedassets0.assets"
           python3 -m scripts.gt_stage_indexed_fft_candidate --original-data "$RUNNER_TEMP/fft/Raft_Data" \
             --project "$GITHUB_WORKSPACE/gt-indexed-fft"
+          cat > "$GITHUB_WORKSPACE/gt-indexed-fft/Assets/DX11 FFT.compute.meta" <<'META'
+          fileFormatVersion: 2
+          guid: 9f14a6e4dd044e5282dca378746aa831
+          ComputeShaderImporter:
+            externalObjects: {}
+            currentAPIMask: 4
+            userData:
+            assetBundleName:
+            assetBundleVariant:
+          META
           mkdir "$GITHUB_WORKSPACE/gt-indexed-fft/Assets/Editor"
           cp android-port/Experiments/GT/Editor/GTIndexedFftValidation.cs "$GITHUB_WORKSPACE/gt-indexed-fft/Assets/Editor/"
-      - name: Validate 20 indexed registrations and Android Vulkan bundle
+      - name: Validate FFT identity, serialized references, and 20 indexed Android registrations
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
