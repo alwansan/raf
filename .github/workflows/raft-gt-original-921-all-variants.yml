@@ -166,7 +166,8 @@ jobs:
           mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
           python3 -m scripts.gt_original_921_shaderlab \
             --private "$RUNNER_TEMP/gt-921-private-recovered" \
-            --shader "$project/Assets/GTOriginal921.shader" --verify-entrypoints
+            --shader "$project/Assets/GTOriginal921.shader" --verify-entrypoints \
+            --engine-keywords --engine-route-manifest "$project/Original921EngineRoutes.json"
           cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
           printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
           printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
@@ -198,6 +199,7 @@ jobs:
             --bundle "$project/ProbeResults/Private/gt-original-921" \
             --source "$project/Assets/GTOriginal921.shader" \
             --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
             --out "$project/ProbeResults/gt-original-921-bundle-safe.json"
 
       - name: Retain aggregate Unity compiler result

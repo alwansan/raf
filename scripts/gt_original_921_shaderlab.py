@@ -328,14 +328,21 @@ def main():
     parser.add_argument("--shader", type=Path, required=True)
     parser.add_argument("--verify-entrypoints", action="store_true")
     parser.add_argument("--engine-keywords", action="store_true")
+    parser.add_argument("--engine-route-manifest", type=Path)
     args = parser.parse_args()
     shader = compose(args.private, engine_keywords=args.engine_keywords)
+    routes = None
+    if args.engine_keywords:
+        packet = json.loads((args.private / "original-private-keyword-routes.json").read_text())
+        routes = [engine_route_keys(row, index) for index, row in enumerate(packet)]
     if args.verify_entrypoints:
-        routes = None
-        if args.engine_keywords:
-            packet = json.loads((args.private / "original-private-keyword-routes.json").read_text())
-            routes = [engine_route_keys(row, index) for index, row in enumerate(packet)]
         verify_entrypoints(shader, args.private, routes)
+    if args.engine_route_manifest:
+        if routes is None:
+            parser.error("--engine-route-manifest requires --engine-keywords")
+        with args.engine_route_manifest.open("x", encoding="utf-8") as output:
+            json.dump({"passes": [{"variants": [{"keywords": list(key)} for key in keys]}
+                                  for keys in routes]}, output)
     with args.shader.open("x", encoding="utf-8") as target:
         target.write(shader)
 

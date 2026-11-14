@@ -9,7 +9,7 @@ from scripts.w1_recover_depth_passes import stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
 
 
-def inspect(bundle, source, receipt):
+def inspect(bundle, source, receipt, engine_route_manifest=None):
     import UnityPy
 
     expected_name = exported_shader_identity(source.read_text(encoding="utf-8"))
@@ -27,10 +27,17 @@ def inspect(bundle, source, receipt):
     [(platform, segments)] = list(decoded_platforms(tree))
     if platform != 18:
         raise ValueError("original_921_bundle_platform_table_mismatch")
-    return verify_routes(tree["m_ParsedForm"], records(segments))
+    engine_routes = None
+    if engine_route_manifest is not None:
+        packet = json.loads(engine_route_manifest.read_text(encoding="utf-8"))
+        engine_routes = [{frozenset(row["keywords"]) for row in item["variants"]}
+                         for item in packet["passes"]]
+        if tuple(map(len, engine_routes)) != EXPECTED_ROUTES:
+            raise ValueError("original_921_engine_route_contract_mismatch")
+    return verify_routes(tree["m_ParsedForm"], records(segments), engine_routes)
 
 
-def verify_routes(parsed, entries=None):
+def verify_routes(parsed, entries=None, engine_routes=None):
     keywords = parsed["m_KeywordNames"]
     subshaders = parsed["m_SubShaders"]
     if len(subshaders) != 1 or len(subshaders[0]["m_Passes"]) != len(EXPECTED_ROUTES):
@@ -42,6 +49,8 @@ def verify_routes(parsed, entries=None):
             zip(subshaders[0]["m_Passes"], EXPECTED_ROUTES)
         ):
             prefix = f"GT_ORIGINAL_921_P{index}_V"
+            expected_keys = engine_routes[index] if engine_routes is not None else None
+            engine_names = set().union(*expected_keys) if expected_keys is not None else set()
             rows = stage_variants(shader_pass[stage])
             routes = set()
             for _, _, row in rows:
@@ -55,11 +64,23 @@ def verify_routes(parsed, entries=None):
                 if any(type(key) is not int or not 0 <= key < len(keywords) for key in indices):
                     raise ValueError("original_921_bundle_keyword_index_invalid")
                 names = {keywords[key] for key in indices}
+                if expected_keys is not None:
+                    routes.add(frozenset(names & engine_names))
+                    continue
                 active = {name for name in names if name.startswith(prefix)}
                 if len(active) > 1:
                     raise ValueError("original_921_bundle_route_conflict")
                 routes.update(active or {""})
             required = {""} | {prefix + str(variant) for variant in range(1, expected)}
+            if expected_keys is not None:
+                missing_count = len(expected_keys - routes)
+                if missing_count:
+                    raise ValueError(
+                        f"original_921_engine_routes_missing stage={stage} pass={index} "
+                        f"missing={missing_count} entries={len(rows)}"
+                    )
+                counts.append(len(expected_keys))
+                continue
             if routes != required:
                 missing = [variant for variant in range(expected)
                            if (prefix + str(variant) if variant else "") not in routes]
@@ -80,8 +101,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for option in ("bundle", "source", "receipt", "out"):
         parser.add_argument("--" + option, required=True, type=Path)
+    parser.add_argument("--engine-route-manifest", type=Path)
     args = parser.parse_args()
-    result = inspect(args.bundle, args.source, args.receipt)
+    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest)
     args.out.write_text(json.dumps(result, sort_keys=True) + "\n", encoding="utf-8")
     print("GT_ORIGINAL_921_BUNDLE_ROUTES " + json.dumps(result, sort_keys=True))
 
