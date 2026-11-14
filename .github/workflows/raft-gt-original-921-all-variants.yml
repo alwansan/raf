@@ -29,7 +29,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: gt-original-921-${{ (inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]')) && 'unity' || 'source' }}-${{ github.ref }}
+  group: gt-original-921-${{ (inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]')) && 'unity' || 'source' }}-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   original-921-full-stage-recovery:
@@ -182,13 +182,16 @@ jobs:
             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
             --private "$RUNNER_TEMP/gt-vegetation-private-recovered" \
             --out gt-vegetation-source-aggregate-safe.json
+          project="$GITHUB_WORKSPACE/gt-original-921-unity"
+          rm "$project/Assets/GTOriginal921.shader" "$project/Original921EngineRoutes.json"
           python3 -m scripts.gt_original_921_shaderlab \
             --private "$RUNNER_TEMP/gt-vegetation-private-recovered" \
-            --shader "$RUNNER_TEMP/gt-vegetation-private-recovered/Vegetation.shader" \
-            --engine-keywords --verify-entrypoints
+            --shader "$project/Assets/GTOriginal921.shader" \
+            --engine-keywords --verify-entrypoints \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
 
       - name: Compile all 33 recovered routes in an isolated Unity Android Vulkan bundle
-        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]')
+        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]')
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -206,7 +209,7 @@ jobs:
           customParameters: -job-worker-count 2
 
       - name: Verify every recovered route is retained in the actual Vulkan shader bundle
-        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]')
+        if: inputs.compile_unity || contains(github.event.head_commit.message, '[921 Unity probe]') || contains(github.event.head_commit.message, '[Vegetation probe]')
         run: |
           set -euo pipefail
           project="$GITHUB_WORKSPACE/gt-original-921-unity"
