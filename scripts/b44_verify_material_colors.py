@@ -202,7 +202,7 @@ def _export_pointer(value):
     return value['file_id'], value['guid'].lower()
 
 
-def compare(trace: dict, original: dict, actual: dict) -> dict:
+def compare(trace: dict, original: dict, actual: dict, *, selected_owners=None) -> dict:
     """Count exact mismatches, including absent/extra slots (without values)."""
     if trace.get('schema_version') != 1 or not isinstance(trace.get('export_instance'), str) or not re.fullmatch(r'[0-9a-f]{32}', trace['export_instance']):
         raise ValueError('Missing authenticated same-instance export trace')
@@ -212,10 +212,18 @@ def compare(trace: dict, original: dict, actual: dict) -> dict:
     expected = {}
     skipped_engine = 0
     skipped_font = 0
+    outside_pointers = set()
+    outside_materials = 0
     for row in trace['objects']:
         if row.get('class_id') != 21:
             continue
         src = _source_id(row['source'])
+        if selected_owners is not None and src[0] not in selected_owners:
+            outside_materials += 1
+            ref = row['export']
+            if ref['file_id'] and ref['type'] in (2, 3):
+                outside_pointers.add(_export_pointer(ref))
+            continue
         if src not in original or src in covered_sources:
             raise ValueError('Unverified/duplicate source Material identity')
         covered_sources.add(src)
@@ -235,7 +243,9 @@ def compare(trace: dict, original: dict, actual: dict) -> dict:
         expected[pointer] = original[src]
     if covered_sources != set(original):
         raise ValueError('Original source Material missing in same-instance export trace')
-    if not expected or set(expected) != set(actual):
+    if (not expected or not set(expected).issubset(actual)
+            or (selected_owners is None and set(expected) != set(actual))
+            or set(expected) & outside_pointers):
         raise ValueError('Actual exported Material identities differ from the trace')
 
     compared_slots = absent_slots = unexpected_slots = changed_rgba = 0
@@ -277,6 +287,7 @@ def compare(trace: dict, original: dict, actual: dict) -> dict:
     report = {
         'schema_version': 1,
         'source_materials_verified': len(original),
+        'outside_scope_trace_materials': outside_materials,
         'yaml_materials_compared': len(expected),
         'engine_material_redirects_excluded': skipped_engine,
         'font_importer_materials_excluded': skipped_font,
@@ -304,14 +315,17 @@ def main(argv=None):
     args = ap.parse_args(argv)
     if args.out.resolve().is_relative_to(args.project.resolve()):
         raise ValueError('Report destination is inside original project')
+    selected_owners = None
     if args.zip2_manifest is None:
         source = original_colors(args.source)
     else:
-        from scripts.gt_full_original_export_texenvs import original
+        from scripts.gt_full_original_export_texenvs import OWNERS, original
+        selected_owners = set(OWNERS)
         source = original(args.source, args.zip2_manifest, property_name='m_Colors',
                           normalize=partial(normalize_colors, allow_nonfinite=True))
     actual = exported_colors(args.project, allow_nonfinite=args.zip2_manifest is not None)
-    report = compare(json.loads(args.private_export_trace.read_text(encoding='utf-8')), source, actual)
+    report = compare(json.loads(args.private_export_trace.read_text(encoding='utf-8')), source, actual,
+                     selected_owners=selected_owners)
     args.out.write_text(json.dumps(report, indent=2, sort_keys=True) + '\n', encoding='utf-8')
     print('RAFT_B44_MATERIAL_COLOR_LINEAGE ' + json.dumps(report, sort_keys=True))
     if not report['original_material_color_values_preserved']:
