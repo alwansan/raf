@@ -374,10 +374,13 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import json, os
+          from collections import Counter
           from pathlib import Path
           from scripts.gt_install_original_particle108 import traced_shader
           from scripts.gt_original_921_all_variants import SOURCE_PROFILES, authenticated_shader_reader, select_scene_shader
           from scripts.restore_builtin_shaders import exported_shader_identity
+          from scripts.t3_audit_exported_material_programs import _material_refs
+          from scripts.w1_audit_export_material_shaders import GUID
           from scripts.t3_original_renderer_shader_impact import load_original
           from scripts.t3_original_top_shader_dxbc_feasibility import selected_high_use
           root = Path(os.environ["RUNNER_TEMP"])
@@ -388,17 +391,22 @@ jobs:
           assets = root / "gt-project/ExportedProject/Assets"
           reader = authenticated_shader_reader(original)
           destinations = set()
+          referenced = Counter(_material_refs(sorted(assets.rglob("*"))))
+          material_counts = {}
           for profile in SOURCE_PROFILES:
               key = (selected_high_use(slots, report) if profile == "blockpaint"
                      else select_scene_shader(slots, report, profile, get_tree=reader))
-              target, _ = traced_shader(assets, trace, key)
+              target, meta = traced_shader(assets, trace, key)
               text = target.read_text(encoding="utf-8-sig")
               source_name = reader(key)["m_ParsedForm"]["m_Name"]
               assert exported_shader_identity(text) == source_name, "model_shader_export_identity_mismatch"
               assert "DummyShaderTextExporter" in text, "model_shader_export_not_dummy"
+              guid, = GUID.findall(meta.read_text(encoding="utf-8-sig"))
+              material_counts[profile] = referenced[4800000, guid.lower(), 3]
+              assert material_counts[profile] > 0, "model_shader_export_has_no_material_reference"
               destinations.add(target)
           assert len(destinations) == len(SOURCE_PROFILES), "model_shader_export_destination_alias"
-          print(f"GT_MODEL_SHADER_EXPORT_DESTINATIONS verified={len(destinations)}")
+          print("GT_MODEL_SHADER_EXPORT_DESTINATIONS " + json.dumps(material_counts, sort_keys=True))
           PY
       - name: GT run official authenticated TMP PostFX and volumetric shader recovery in isolated exported Unity project
         id: gt_vendor_shader_restoration
