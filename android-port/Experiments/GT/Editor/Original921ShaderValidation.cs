@@ -85,11 +85,11 @@ namespace RaftGT
                     .Where(message => message.severity.ToString() == "Error").ToArray();
                 result.errors = errors.Length;
                 result.compilerErrorGroups = errors
-                    .GroupBy(message => new { Category = ErrorCategory(message.message), message.line })
+                    .GroupBy(message => ErrorCategory(message.message))
                     .OrderByDescending(group => group.Count())
-                    .ThenBy(group => group.Key.line)
+                    .ThenBy(group => group.Min(message => message.line))
                     .Take(16)
-                    .Select(group => $"{group.Key.Category} line={group.Key.line} count={group.Count()}")
+                    .Select(group => $"{group.Key} firstLine={group.Min(message => message.line)} count={group.Count()}")
                     .ToArray();
                 var artifact = new FileInfo(Path.Combine(bundleDirectory, bundleName));
                 result.privateBundleCompiled = manifest != null && artifact.Exists && artifact.Length > 0
@@ -112,10 +112,15 @@ namespace RaftGT
                 "entry point", "undeclared identifier", "redefinition", "already defined",
                 "no matching", "cannot convert", "cannot map", "invalid semantic", "duplicate",
                 "unsupported", "unexpected token", "syntax error", "unrecognized",
-                "out of bounds", "overlapping", "failed to compile"
+                "out of bounds", "overlapping", "failed to compile",
+                "packoffset", "constant buffer", "cbuffer", "overlap", "not supported",
+                "not allowed", "invalid", "expected", "missing", "unimplemented", "conflict"
             };
-            return categories.FirstOrDefault(category =>
-                message.IndexOf(category, StringComparison.OrdinalIgnoreCase) >= 0) ?? "other";
+            // Unity includes private identifiers in many messages. Report only
+            // diagnostic phrases from this source-controlled vocabulary.
+            var matches = categories.Where(category =>
+                message.IndexOf(category, StringComparison.OrdinalIgnoreCase) >= 0).ToArray();
+            return matches.Length == 0 ? "other" : String.Join(", ", matches);
         }
     }
 }
