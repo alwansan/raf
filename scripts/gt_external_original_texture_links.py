@@ -159,6 +159,46 @@ def compare(originals,external_tables,source_types,trace,exported):
     }
 
 
+def verify_native_array_slots(originals, external_tables, source_types, trace, exported):
+    materials, textures = trace_targets(trace)
+    matched = set()
+    expected = set()
+    array_pointers = {ptr for cls, ptr in textures.values() if cls == 187}
+    for source, slots in originals.items():
+        material_pointer = materials.get(source)
+        if material_pointer is None:
+            continue
+        material_key = material_pointer[:2]
+        for name, slot in slots.items():
+            (file_id, path_id), original_uv = _slot(slot)
+            if file_id == 0:
+                owner = source[0]
+            elif 0 < file_id <= len(external_tables[source[0]]):
+                owner = exact_owner(external_tables[source[0]][file_id - 1])
+            else:
+                continue
+            target = owner, path_id
+            if source_types.get(target) != 187:
+                continue
+            mapped = textures.get(target)
+            if mapped is None or mapped[0] != 187 or mapped[1][0] != 18700000 or mapped[1][2] != 2:
+                raise InventoryError("native_array_source_trace_pointer_mismatch")
+            actual_slot = exported.get(material_key, {}).get(name)
+            if actual_slot is None or _slot(actual_slot) != (mapped[1], original_uv):
+                raise InventoryError("native_array_source_material_slot_mismatch")
+            expected.add((material_key, name))
+            matched.add(mapped[1])
+    observed = {
+        (material_key, name)
+        for material_key, slots in exported.items()
+        for name, slot in slots.items()
+        if _slot(slot)[0] in array_pointers
+    }
+    if expected != observed or matched != array_pointers or len(expected) != 28 or len(matched) != 9:
+        raise InventoryError("native_array_source_material_slot_scope_mismatch")
+    return len(expected)
+
+
 def load_tables(source_root,manifest,loader=None):
     if source_root.is_symlink() or not source_root.is_dir():
         raise InventoryError("invalid_original_owner_table_root")

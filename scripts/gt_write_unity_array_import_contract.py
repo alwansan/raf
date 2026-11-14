@@ -20,6 +20,9 @@ from scripts.gt_verify_original_array_material_refs import check
 from scripts.gt_repair_array_flipbook_importers import exact_targets
 from scripts.gt_validate_texture2darray_flipbook import index_exported_array_meta
 from scripts.gt_verify_native_array_mips import inspect
+from scripts.gt_external_original_texture_links import load_tables, verify_native_array_slots
+from scripts.gt_full_original_export_texenvs import original as original_texenvs
+from scripts.b05_verify_material_texenv_bindings import exported_texenvs
 
 
 SCHEMA="GT_ORIGINAL_UNITY_TEXTURE2DARRAY_IMPORT_CONTRACT_V1"
@@ -89,9 +92,7 @@ def install_contract(project:Path,data:dict)->dict:
         "original_logical_layers":sum(x["depth"] for x in data["arrays"]),
         "original_layers_with_streamed_source_pixels":sum(
             x["depth"] for x in data["arrays"] if x["has_original_source_pixels"]),
-        "original_class187_material_refs_source_proven":(
-            0 if native_count else 28),
-        "native_exported_material_refs_verified":28 if native_count else 0,
+        "original_class187_material_refs_source_proven":28,
         "original_source_array_guids_printed_or_uploaded":False,
         "original_exported_PNG_and_meta_modified":False,
         "native_array_assets":native_count,
@@ -125,6 +126,10 @@ def main():
             raise InventoryError("source_native_array_import_contract_wrong_scope")
         if sum(x["depth"] for x in arrays if x["has_original_source_pixels"]) != 50:
             raise InventoryError("source_native_array_import_contract_pixel_layers_drift")
+        tables, types=load_tables(args.original_source,args.manifest)
+        verify_native_array_slots(
+            original_texenvs(args.original_source,args.manifest),tables,types,
+            json.loads(args.trace.read_text()),exported_texenvs(args.project))
         data={"schema":SCHEMA,"arrays":sorted(arrays,key=lambda array: array["guid"])}
     report=install_contract(args.project,data)
     args.report.parent.mkdir(parents=True,exist_ok=True)
