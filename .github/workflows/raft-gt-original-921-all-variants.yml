@@ -19,6 +19,7 @@ on:
       - scripts/gt_original_921_semantics.py
       - scripts/gt_original_921_shaderlab.py
       - scripts/gt_verify_921_shader_bundle.py
+      - scripts/gt_decode_smolv.cpp
       - tests/test_gt_original_921_bundle.py
       - android-port/Experiments/GT/Editor/Original921ShaderValidation.cs
       - scripts/t3_original_921_dxbc_semantic_join.py
@@ -195,11 +196,18 @@ jobs:
         run: |
           set -euo pipefail
           project="$GITHUB_WORKSPACE/gt-original-921-unity"
+          smolv="$RUNNER_TEMP/gt-smolv"
+          mkdir "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
           python3 -m scripts.gt_verify_921_shader_bundle \
             --bundle "$project/ProbeResults/Private/gt-original-921" \
             --source "$project/Assets/GTOriginal921.shader" \
             --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
             --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$smolv/decode" \
             --out "$project/ProbeResults/gt-original-921-bundle-safe.json"
 
       - name: Retain aggregate Unity compiler result

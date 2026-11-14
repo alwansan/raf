@@ -3,6 +3,7 @@ import argparse
 import json
 from pathlib import Path
 import struct
+import subprocess
 
 from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES
 from scripts.restore_builtin_shaders import exported_shader_identity
@@ -40,7 +41,51 @@ def vulkan_blob_header_counts(entries, rows):
     return dict(sorted(counts.items()))
 
 
-def inspect(bundle, source, receipt, engine_route_manifest=None):
+def unity_vulkan_modules(blob):
+    """Read the serialized Unity 2021 subprogram and its Vulkan snippet table."""
+    if len(blob) < 32 or struct.unpack_from("<I", blob)[0] < 202012090:
+        raise ValueError("original_921_unknown_vulkan_program_header")
+    offset = 28
+    keywords = struct.unpack_from("<I", blob, 24)[0]
+    if keywords > 256:
+        raise ValueError("original_921_oversized_vulkan_keyword_table")
+    for _ in range(keywords):
+        if offset + 4 > len(blob):
+            raise ValueError("original_921_truncated_vulkan_keyword")
+        size = struct.unpack_from("<I", blob, offset)[0]
+        offset += 4 + (size + 3) // 4 * 4
+    if offset + 4 > len(blob):
+        raise ValueError("original_921_truncated_vulkan_program")
+    size = struct.unpack_from("<I", blob, offset)[0]
+    program = blob[offset + 4:offset + 4 + size]
+    if len(program) != size:
+        raise ValueError("original_921_truncated_vulkan_program")
+    boundary = len(program)
+    for entry_offset in range(4, 52, 8):
+        if entry_offset + 8 > boundary:
+            break
+        start, length = struct.unpack_from("<II", program, entry_offset)
+        if not length:
+            continue
+        if start < entry_offset + 8 or start + length > len(program):
+            raise ValueError("original_921_vulkan_module_range")
+        boundary = min(boundary, start)
+        yield program[start:start + length]
+
+
+def vulkan_execution_models(blob, decoder):
+    models = set()
+    for module in unity_vulkan_modules(blob):
+        if module[:4] == b"LOMS":
+            result = subprocess.run([decoder], input=module, capture_output=True, timeout=15)
+            if result.returncode:
+                raise ValueError("original_921_smolv_decode_failed")
+            module = result.stdout
+        models.update(spirv_execution_models(module))
+    return models
+
+
+def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None):
     import UnityPy
 
     expected_name = exported_shader_identity(source.read_text(encoding="utf-8"))
@@ -65,15 +110,16 @@ def inspect(bundle, source, receipt, engine_route_manifest=None):
                          for item in packet["passes"]]
         if tuple(map(len, engine_routes)) != EXPECTED_ROUTES:
             raise ValueError("original_921_engine_route_contract_mismatch")
-    return verify_routes(tree["m_ParsedForm"], records(segments), engine_routes)
+    return verify_routes(tree["m_ParsedForm"], records(segments), engine_routes, smolv_decoder)
 
 
-def verify_routes(parsed, entries=None, engine_routes=None):
+def verify_routes(parsed, entries=None, engine_routes=None, smolv_decoder=None):
     keywords = parsed["m_KeywordNames"]
     subshaders = parsed["m_SubShaders"]
     if len(subshaders) != 1 or len(subshaders[0]["m_Passes"]) != len(EXPECTED_ROUTES):
         raise ValueError("original_921_bundle_pass_topology_mismatch")
     verified = {}
+    decoded = {}
     for stage in ("progVertex", "progFragment"):
         counts = []
         for index, (shader_pass, expected) in enumerate(
@@ -84,12 +130,12 @@ def verify_routes(parsed, entries=None, engine_routes=None):
             engine_names = set().union(*expected_keys) if expected_keys is not None else set()
             rows = stage_variants(shader_pass[stage])
             if entries is not None and stage == "progFragment" and not rows:
-                vertices = stage_variants(shader_pass["progVertex"])
-                counts_by_blob = vulkan_blob_header_counts(entries, vertices)
-                raise ValueError(
-                    f"original_921_fragment_table_empty pass={index} "
-                    f"vertexRows={len(vertices)} moduleHeadersByBlob={counts_by_blob}"
-                )
+                rows = stage_variants(shader_pass["progVertex"])
+                if smolv_decoder is None:
+                    raise ValueError(
+                        f"original_921_fragment_table_empty pass={index} "
+                        f"vertexRows={len(rows)} moduleHeadersByBlob={vulkan_blob_header_counts(entries, rows)}"
+                    )
             routes = set()
             for _, _, row in rows:
                 if entries is not None:
@@ -98,6 +144,11 @@ def verify_routes(parsed, entries=None, engine_routes=None):
                         raise ValueError(
                             f"original_921_bundle_route_blob_missing stage={stage} pass={index}"
                         )
+                    if smolv_decoder is not None:
+                        if blob_index not in decoded:
+                            decoded[blob_index] = vulkan_execution_models(entries[blob_index][1], smolv_decoder)
+                        if (0 if stage == "progVertex" else 4) not in decoded[blob_index]:
+                            continue
                 indices = row["m_KeywordIndices"]
                 if any(type(key) is not int or not 0 <= key < len(keywords) for key in indices):
                     raise ValueError("original_921_bundle_keyword_index_invalid")
@@ -141,8 +192,9 @@ def main():
     for option in ("bundle", "source", "receipt", "out"):
         parser.add_argument("--" + option, required=True, type=Path)
     parser.add_argument("--engine-route-manifest", type=Path)
+    parser.add_argument("--smolv-decoder", type=Path)
     args = parser.parse_args()
-    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest)
+    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest, args.smolv_decoder)
     args.out.write_text(json.dumps(result, sort_keys=True) + "\n", encoding="utf-8")
     print("GT_ORIGINAL_921_BUNDLE_ROUTES " + json.dumps(result, sort_keys=True))
 
