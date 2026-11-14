@@ -34,7 +34,7 @@ class Original921UnityCompilerTests(unittest.TestCase):
         self.assertIn("Texture2D<float4> _Diffuse;", converted)
         self.assertIn("SamplerState sampler_Diffuse;", converted)
         self.assertNotIn("register(s16)", converted)
-        self.assertIn("cbuffer Material : register(b0) { float4 _Color; };", converted)
+        self.assertIn("cbuffer Material { float4 _Color; };", converted)
         self.assertIn("cbuffer gt_fs_raft921_cb0_Globals", converted)
         self.assertIn("_Diffuse.Sample(sampler_Diffuse, uv) * _Color * gt_fs_raft921_cb0_pad3;", converted)
 

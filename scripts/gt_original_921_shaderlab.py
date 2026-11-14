@@ -10,11 +10,10 @@ from scripts.gt_original_921_keyword_routes import routed_stage
 from scripts.gt_original_921_cb_layout import constant_buffer_lanes
 from scripts.gt_original_921_cb_hlsl import rebind_constant_buffers
 from scripts.gt_original_921_semantics import pin_varying_locations, restore_vertex_inputs
-from scripts.w1_depth_shaderlab import stage_body
+
 
 PASS_MODES = ("ForwardBase", "ForwardAdd", "Deferred", "ShadowCaster")
 EXPECTED_ROUTES = (8, 13, 8, 4)
-SHARED_UNIFORMS = ("BlockPaint", "UnityDrawCallInfo", "UnityPerDraw", "UnityPerCamera")
 VULKAN_LOCATION = re.compile(
     r"(?m)^( +)\[\[vk::location\(([0-9]+)\)\]\] ([^\n]+ : TEXCOORD([0-9]+);)$"
 )
@@ -39,7 +38,7 @@ def unity_resource_bindings(source, stage):
     # Unity's graphics compiler has separate, smaller HLSL sampler slots.
     # Bind textures and samplers by their recovered Unity property names.
     source = re.sub(r" : register\([ts][0-9]+\)(?=;)", "", source)
-    for name in SHARED_UNIFORMS:
+    for name in re.findall(r"(?m)^cbuffer ((?!gt_|raft921_cb)[A-Za-z_]\w*) ", source):
         pattern = re.compile(r"cbuffer " + name + r" : register\(b[0-9]+\) \{[^{}]*\};")
         block = pattern.search(source)
         if block is None:
@@ -60,13 +59,14 @@ def unity_resource_bindings(source, stage):
 def paired_uniform_layouts(stage_records):
     stages = [record["source_constant_buffer_layouts"] for record in stage_records]
     canonical = {}
-    for name in SHARED_UNIFORMS:
+    matched = {buffer["name"] for buffer in stages[0]} & {buffer["name"] for buffer in stages[1]}
+    for name in sorted(matched - {"$Globals"}):
         members = {}
         layouts = [buffer for stage in stages for buffer in stage if buffer["name"] == name]
         if len(layouts) != 2:
             continue
         for buffer in layouts:
-            if buffer["structs"] or buffer["variant_size_bytes"] != layouts[0]["variant_size_bytes"]:
+            if buffer["structs"] != layouts[0]["structs"] or buffer["variant_size_bytes"] != layouts[0]["variant_size_bytes"]:
                 raise ValueError("original_921_incompatible_shared_uniform_block")
             for member in buffer["members"]:
                 previous = members.setdefault(member["name"], member)
@@ -84,6 +84,95 @@ def paired_uniform_layouts(stage_records):
             buffers.append(buffer)
         merged.append(buffers)
     return merged
+
+
+TOP_LEVEL = re.compile(
+    r"(?m)^(?P<kind>cbuffer|struct) (?P<name>[A-Za-z_]\w*)[^\n{]*\{(?P<body>[^{}]*)\};"
+    r"|^(?P<decl>(?:Texture\w*(?:<[^;>]+>)?|Sampler\w*) (?P<resource>[A-Za-z_]\w*)[^;\n]*;)"
+)
+HELPER = re.compile(
+    r"\b(?:SPIRV_Cross_(?:Input|Output)|spirv_cross_main|raft921_cb[0-9]+_read|"
+    r"SPIRV_Cross_(?:VertexInfo|BaseVertex|BaseInstance)|in_[A-Za-z_0-9]+|out_[A-Za-z_0-9]+)\b"
+)
+GLOBAL = re.compile(r"(?m)^(?:static(?: const)? )[^{};\n]+;")
+MEMBER = re.compile(
+    r"(?m)^(?P<type>(?:column_major |row_major )?[A-Za-z_]\w*) "
+    r"(?P<var>[A-Za-z_]\w*)(?P<array>\[[0-9]+\])? : packoffset\([^)]*\);$"
+)
+
+
+def combine_stages(vertex, fragment):
+    """Keep both entries visible to Unity's DXC and share exact uniform declarations."""
+    common = {}
+    members = {}
+    types = {}
+    globals_ = {}
+
+    def stage_body(source, stage):
+        source = HELPER.sub(lambda match: f"gt_{stage}_{match[0]}", source)
+
+        def extract(match):
+            kind = match["kind"]
+            if kind == "struct":
+                if "raft921_cb" not in match["name"]:
+                    return match[0]
+                normalized = re.sub(r"gt_(?:vs|fs)_raft921_cb[0-9]+_pad([0-9]+)",
+                                    r"gt_struct_pad\1", match["body"])
+                key = normalized
+                target = types.setdefault(key, f"gt_original_struct{len(types)}")
+                type_symbols[match["name"]] = target
+                return ""
+            name = match["name"] or match["resource"]
+            definition = re.sub(r" ?:\s*register\(b[0-9]+\)", "", match[0], count=1)
+            if name in common:
+                if common[name] != definition:
+                    old=common[name].splitlines()
+                    new=definition.splitlines()
+                    if kind != "cbuffer" or old[0] != new[0]:
+                        raise ValueError("original_921_shared_HLSL_declaration_drift")
+                    declarations={line.strip() for line in old[1:-1]+new[1:-1]}
+                    def offset(line):
+                        match = re.search(r"packoffset\(c([0-9]+)(?:\.([xyzw]))?\)", line)
+                        return int(match[1]) * 4 + ("xyzw".index(match[2]) if match[2] else 0)
+                    common[name]="\n".join([old[0],*sorted(declarations,key=offset),old[-1]])
+                return ""
+            if kind == "cbuffer":
+                for member in MEMBER.finditer(match["body"]):
+                    var = member["var"]
+                    previous = members.setdefault(var, name)
+                    if previous == name:
+                        continue
+                    if not previous.endswith("_Globals") or not name.endswith("_Globals"):
+                        raise ValueError("original_921_uniform_in_multiple_buffers")
+                    other = next(m for m in MEMBER.finditer(common[previous]) if m["var"] == var)
+                    if (other["type"], other["array"]) != (member["type"], member["array"]):
+                        raise ValueError("original_921_uniform_incompatible_type")
+                    globals_[var] = f'{member["type"]} {var}{member["array"] or ""};'
+            common[name] = definition
+            return ""
+
+        type_symbols = {}
+        source = TOP_LEVEL.sub(lambda match: extract(match) if match["kind"] == "struct" else match[0], source)
+        for old, new in type_symbols.items():
+            source = re.sub(r"\b" + old + r"\b", new, source)
+        # Translated helpers, including the global stage I/O temporaries, are
+        # private to their stage. Recovered engine/material names remain global.
+        prefixes = {}
+        for decl in GLOBAL.finditer(source):
+            match = re.search(r"\b([A-Za-z_]\w*)(?:\[[^]]+\])?\s*(?:=.*)?;$", decl[0])
+            if match and not match[1].startswith(f"gt_{stage}_"):
+                prefixes[match[1]] = f"gt_{stage}_{match[1]}"
+        if prefixes:
+            names = re.compile(r"\b(?:" + "|".join(prefixes) + r")\b")
+            source = names.sub(lambda match: prefixes[match[0]], source)
+        return TOP_LEVEL.sub(extract, source)
+
+    vertex = stage_body(vertex, "vs")
+    fragment = stage_body(fragment, "fs")
+    type_declarations = [f"struct {name} {{{body}}};" for body, name in types.items()]
+    buffer_declarations = [MEMBER.sub(lambda m: "" if m["var"] in globals_ else m[0], value)
+                           for value in common.values()]
+    return "\n".join([*type_declarations, *buffer_declarations, *globals_.values(), vertex, fragment])
 
 
 def compose(private):
@@ -119,26 +208,26 @@ def compose(private):
         raise ValueError("original_921_shaderlab_layout_has_wrong_pass_count")
     parts = [blocks[0].replace('"LIGHTMODE" = "FORWARDBASE"', '"LightMode" = "ForwardBase"')]
     for index, row in enumerate(routes):
-        stages = {}
         # A private per-pass keyword dimension lets Unity compile every
         # recovered program without assuming production keyword selection.
         names = [f"GT_ORIGINAL_921_P{index}_V{variant}"
                  for variant in range(1, len(row["routes"]))]
-        for stage in ("vs", "fs"):
-            programs = {}
-            clauses = []
-            for number, route in enumerate(row["routes"]):
-                order = tuple(sorted(indices[name] for name in route["enabled"]))
-                key = (row["subshader"], row["pass"], stage, route[stage], order)
-                programs[number] = stage_sources[key]
-                clauses.append({"enabled": [names[number - 1]] if number else [],
-                                "program": number})
-            stages[stage] = routed_stage(clauses, names, programs)
+        programs = {}
+        clauses = []
+        for number, route in enumerate(row["routes"]):
+            order = tuple(sorted(indices[name] for name in route["enabled"]))
+            pair_sources = [
+                stage_sources[row["subshader"], row["pass"], stage, route[stage], order]
+                for stage in ("vs", "fs")
+            ]
+            programs[number] = combine_stages(*pair_sources)
+            clauses.append({"enabled": [names[number - 1]] if number else [],
+                            "program": number})
         pragmas = ["#pragma multi_compile __ " + " ".join(names)]
         program = ["HLSLPROGRAM", "#pragma target 5.0",
                    "#pragma vertex gt_vs_main", "#pragma fragment gt_fs_main",
                    "#pragma use_dxc vulkan", *pragmas,
-                   stage_body(stages["vs"], stages["fs"]), "ENDHLSL"]
+                   routed_stage(clauses, names, programs), "ENDHLSL"]
         remainder = blocks[index + 1]
         if index + 1 < len(PASS_MODES):
             mode = PASS_MODES[index + 1]
