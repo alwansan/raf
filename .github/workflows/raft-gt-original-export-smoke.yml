@@ -8,6 +8,7 @@ on:
       - scripts/gt_verify_original_mesh_export.py
       - tests/test_gt_verify_original_mesh_export.py
       - scripts/b44_verify_material_colors.py
+      - scripts/gt_stage_indexed_fft_candidate.py
   workflow_dispatch:
 
 permissions:
@@ -277,19 +278,19 @@ jobs:
             --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
             --report "$RUNNER_TEMP/gt-real-original-array-private-Editor-gate-aggregate.json"
-      - name: Prove the original water FFT has a same-export native compute asset
+      - name: Restore the authenticated original water FFT in the full reconstruction
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import json, os
-          from pathlib import Path
-          from scripts.gt_stage_indexed_fft_candidate import exported_fft
-
-          root = Path(os.environ["RUNNER_TEMP"])
-          trace = json.loads((root / "gt-private-export-lineage.json").read_text())
-          exported_fft(root / "gt-project/ExportedProject/Assets", trace)
-          print("GT_FFT_SOURCE_EXPORT_IDENTITY verified=true")
-          PY
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          mkdir "$RUNNER_TEMP/gt-fft-backup"
+          python3 -m scripts.gt_stage_indexed_fft_candidate \
+            --original-data "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --project "$RUNNER_TEMP/gt-fft-stage" \
+            --install-project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --private-export-trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --backup "$RUNNER_TEMP/gt-fft-backup"
+          rm -rf -- "$RUNNER_TEMP/gt-fft-stage" "$RUNNER_TEMP/gt-fft-backup"
       - name: GT compare all 1556 original Material texture properties and GUIDs with actual same-instance exported Unity project
         id: gt_all_original_texenvs
         continue-on-error: true

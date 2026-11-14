@@ -181,5 +181,16 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--original-data', type=Path, required=True)
     parser.add_argument('--project', type=Path, required=True)
+    parser.add_argument('--install-project', type=Path)
+    parser.add_argument('--private-export-trace', type=Path)
+    parser.add_argument('--backup', type=Path)
     args = parser.parse_args()
-    print('GT_INDEXED_FFT_CANDIDATE ' + json.dumps(stage(args.original_data, args.project), sort_keys=True))
+    install_args = (args.install_project, args.private_export_trace, args.backup)
+    if any(install_args) and not all(install_args):
+        parser.error("FFT installation requires an export project, its trace, and an external backup")
+    report = stage(args.original_data, args.project)
+    if args.install_project:
+        trace = json.loads(args.private_export_trace.read_text(encoding="utf-8"))
+        report.update(install_fft(args.install_project, trace,
+                                  args.project / "Assets/DX11 FFT.compute", args.backup))
+    print('GT_INDEXED_FFT_CANDIDATE ' + json.dumps(report, sort_keys=True))
