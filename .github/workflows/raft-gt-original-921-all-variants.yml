@@ -225,7 +225,7 @@ jobs:
             --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
             --engine-route-manifest "$project/Original921EngineRoutes.json" \
             --smolv-decoder "$smolv/decode" \
-            --out "$project/ProbeResults/gt-original-921-bundle-safe.json"
+            --out "$RUNNER_TEMP/gt-original-921-bundle-safe.json"
 
       - name: Retain aggregate Unity compiler result
         if: always()
@@ -234,7 +234,7 @@ jobs:
           name: gt-original-921-unity-safe
           path: |
             gt-original-921-unity/ProbeResults/gt-original-921-unity-safe.json
-            gt-original-921-unity/ProbeResults/gt-original-921-bundle-safe.json
+            ${{ runner.temp }}/gt-original-921-bundle-safe.json
           if-no-files-found: ignore
           retention-days: 7
 
