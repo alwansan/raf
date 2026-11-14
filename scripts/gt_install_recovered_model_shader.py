@@ -61,11 +61,15 @@ def main():
         parser.add_argument("--" + key, type=Path, required=True)
     parser.add_argument("--shader", choices=SOURCE_PROFILES, required=True)
     args = parser.parse_args()
+    project = check_safe_ancestors(args.project)
+    if any(check_safe_ancestors(path).is_relative_to(project)
+           for path in (args.original, args.manifest, args.trace, args.candidate, args.receipt)):
+        raise ValueError("private_model_shader_inputs_inside_export")
     slots = {}
     source = load_original(args.original, args.manifest, private_slot_counts=slots)
     source_key = (selected_high_use(slots, source) if args.shader == "blockpaint"
                   else select_scene_shader(slots, source, args.shader))
-    result = install(args.project, json.loads(read_bounded(args.trace, 40_000_000)), source_key,
+    result = install(project, json.loads(read_bounded(args.trace, 40_000_000)), source_key,
                      read_bounded(args.candidate, MAX_SHADER),
                      json.loads(read_bounded(args.receipt, 65536)), args.backup)
     print("GT_RESTORED_MODEL_SHADER " + json.dumps(result, sort_keys=True))
