@@ -40,16 +40,18 @@ def inspect(source, manifest, trace_file, assets, owner, bundle=None):
     import UnityPy
 
     pins = read_expected(manifest)
-    stream_name = owner + ".resS"
     _, size, digest = pins[owner]
     verify(source / owner, size, digest)
     with manifest.open(encoding="utf-8") as table:
-        matches = [row for row in csv.DictReader(table, delimiter="\t")
-                   if row["relative_path_under_Raft"] == "Raft_Data/" + stream_name]
-    if len(matches) != 1:
-        raise ValueError("missing_or_duplicate_array_stream_pin")
-    stream_size = int(matches[0]["bytes"])
-    verify(source / stream_name, stream_size, matches[0]["sha256"])
+        stream_pins = {}
+        for row in csv.DictReader(table, delimiter="\t"):
+            relative = row["relative_path_under_Raft"]
+            if relative.startswith("Raft_Data/") and relative.endswith(".resS"):
+                name = relative.removeprefix("Raft_Data/")
+                if Path(name).name != name or name in stream_pins:
+                    raise ValueError("invalid_or_duplicate_array_stream_pin")
+                stream_pins[name] = (int(row["bytes"]), row["sha256"])
+    verified_streams = set()
 
     trace = json.loads(trace_file.read_text(encoding="utf-8"))
     if trace["schema_version"] != 1 or not re.fullmatch(r"[0-9a-f]{32}", trace["export_instance"]):
@@ -77,32 +79,40 @@ def inspect(source, manifest, trace_file, assets, owner, bundle=None):
 
     arrays = layers = total_bytes = 0
     original_payloads = Counter()
-    with (source / stream_name).open("rb") as stream:
-        for obj in UnityPy.load(str(source / owner)).objects:
-            if obj.type.name != "Texture2DArray":
-                continue
-            yaml = files.pop(targets.pop(obj.path_id)).read_text(encoding="utf-8-sig")
-            if not re.search(r"(?m)^--- !u!187 &18700000$", yaml):
-                raise ValueError("invalid_native_array_yaml_identity")
-            tree = obj.read_typetree()
-            for field in FIELDS:
-                value = re.search(rf"(?m)^  {field}: (\d+)$", yaml)
-                if not value or int(value[1]) != tree[field]:
-                    raise ValueError("native_array_metadata_mismatch")
-            data = tree["m_StreamData"]
-            if (Path(data["path"]).name != stream_name or data["size"] <= 0 or
-                    not 0 <= data["offset"] <= stream_size - data["size"]):
+    for obj in UnityPy.load(str(source / owner)).objects:
+        if obj.type.name != "Texture2DArray":
+            continue
+        yaml = files.pop(targets.pop(obj.path_id)).read_text(encoding="utf-8-sig")
+        if not re.search(r"(?m)^--- !u!187 &18700000$", yaml):
+            raise ValueError("invalid_native_array_yaml_identity")
+        tree = obj.read_typetree()
+        for field in FIELDS:
+            value = re.search(rf"(?m)^  {field}: (\d+)$", yaml)
+            if not value or int(value[1]) != tree[field]:
+                raise ValueError("native_array_metadata_mismatch")
+        data = tree["m_StreamData"]
+        payload = re.search(r"(?m)^  _typelessdata: ([0-9a-fA-F]*)$", yaml)
+        encoded = bytes.fromhex(payload[1]) if payload else b""
+        if data["size"]:
+            stream_name = Path(data["path"]).name
+            stream_size, stream_digest = stream_pins[stream_name]
+            if not 0 <= data["offset"] <= stream_size - data["size"] or data["size"] < 0:
                 raise ValueError("invalid_original_array_stream_range")
-            stream.seek(data["offset"])
-            payload = re.search(r"(?m)^  _typelessdata: ([0-9a-fA-F]+)$", yaml)
-            original = stream.read(data["size"])
-            if not payload or bytes.fromhex(payload[1]) != original:
-                raise ValueError("native_array_mip_payload_mismatch")
-            key = tuple(tree[field] for field in FIELDS)
-            original_payloads[key, len(original), sha256(original).digest()] += 1
-            arrays += 1
-            layers += tree["m_Depth"]
-            total_bytes += data["size"]
+            if stream_name not in verified_streams:
+                verify(source / stream_name, stream_size, stream_digest)
+                verified_streams.add(stream_name)
+            with (source / stream_name).open("rb") as stream:
+                stream.seek(data["offset"])
+                original = stream.read(data["size"])
+        else:
+            original = bytes(tree.get("image data") or b"")
+        if encoded != original:
+            raise ValueError("native_array_mip_payload_mismatch")
+        key = tuple(tree[field] for field in FIELDS)
+        original_payloads[key, len(original), sha256(original).digest()] += 1
+        arrays += 1
+        layers += tree["m_Depth"]
+        total_bytes += data["size"]
     if not arrays or targets or files:
         raise ValueError("incomplete_native_array_export_scope")
     references = 0
