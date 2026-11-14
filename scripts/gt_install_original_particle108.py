@@ -58,6 +58,17 @@ SMOKE_SOURCE_PROOF = {
 SMOKE_UNITY_PROOF = dict(UNITY_PROOF,
     status="ORIGINAL_PRIVATE_SMOKE34_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED",
     sourceKeywordDimensions=1, sourceKeywordCombinations=2, registeredKeywordVariants=2)
+CANDLE_SOURCE_PROOF = {
+    "status": "SOURCE_NAMED_CANDLE16_TWO_ROUTES_VULKAN_COMPILED",
+    "source_original_candle_named_particle_renderer_slots": 16,
+    "source_original_keyword_variants": 2,
+    "private_named_Vulkan_stages_compiled": 4,
+    "private_original_DXBC_sample_pairs_verified": 3,
+    "private_original_named_constant_buffers": 9,
+    "private_original_named_constant_buffer_reflected_offsets": 20,
+}
+CANDLE_UNITY_PROOF = dict(SMOKE_UNITY_PROOF,
+    status="ORIGINAL_PRIVATE_CANDLE16_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED")
 MAX_SHADER = 16 * 1024 * 1024
 
 
@@ -76,13 +87,21 @@ def require_proof(report, expected):
         raise ValueError("incomplete_particle108_source_or_Unity_proof")
 
 
-def candidate_bytes(candidate, source_report, unity_report, *, smoke34=False):
+def candidate_bytes(candidate, source_report, unity_report, *, smoke34=False, candle16=False):
     data = read_bounded(candidate, MAX_SHADER)
     source = json.loads(read_bounded(source_report, 65536))
     unity = json.loads(read_bounded(unity_report, 65536))
-    require_proof(source, SMOKE_SOURCE_PROOF if smoke34 else SOURCE_PROOF)
-    require_proof(unity, SMOKE_UNITY_PROOF if smoke34 else UNITY_PROOF)
-    dimensions = 1 if smoke34 else 2
+    if smoke34 and candle16:
+        raise ValueError("multiple_particle_shader_targets")
+    if candle16:
+        expected_source, expected_unity = CANDLE_SOURCE_PROOF, CANDLE_UNITY_PROOF
+    elif smoke34:
+        expected_source, expected_unity = SMOKE_SOURCE_PROOF, SMOKE_UNITY_PROOF
+    else:
+        expected_source, expected_unity = SOURCE_PROOF, UNITY_PROOF
+    require_proof(source, expected_source)
+    require_proof(unity, expected_unity)
+    dimensions = 1 if smoke34 or candle16 else 2
     digest = hashlib.sha256(data).hexdigest()
     if source.get("candidate_shader_sha256") != digest or unity.get("candidateShaderSha256") != digest:
         raise ValueError("particle108_candidate_proof_digest_mismatch")
@@ -135,22 +154,29 @@ def traced_shader(assets, trace, source_key):
 
 
 def stage(original, manifest, project, trace_file, candidate, source_report,
-          unity_report, backup, *, apply=False, smoke34=False):
+          unity_report, backup, *, apply=False, smoke34=False, candle16=False):
     project = check_safe_ancestors(project)
     backup = check_safe_ancestors(backup)
     if any(check_safe_ancestors(path).is_relative_to(project)
            for path in (candidate, source_report, unity_report, trace_file, backup)):
         raise ValueError("private_particle108_input_or_backup_inside_export")
-    data = candidate_bytes(candidate, source_report, unity_report, smoke34=smoke34)
+    data = candidate_bytes(candidate, source_report, unity_report, smoke34=smoke34, candle16=candle16)
     trace = json.loads(read_bounded(trace_file, 40_000_000))
-    if smoke34:
+    if candle16:
+        from scripts.gt_smoke34_source_bound_shader import original_candle_target
+
+        source_key = original_candle_target(original, manifest)
+        profile, renderer_slots = "CANDLE16", 16
+    elif smoke34:
         source_key, _ = original_private_smoke_target(original, manifest)
+        profile, renderer_slots = "SMOKE34", 34
     else:
         private = {}
         report = load_original(original, manifest, private_particle_slot_counts=private)
         source_key = select(private, report)
+        profile, renderer_slots = "PARTICLE108", 108
     target, meta = traced_shader(project / "Assets", trace, source_key)
-    status_prefix = "ORIGINAL_SMOKE34" if smoke34 else "ORIGINAL_PARTICLE108"
+    status_prefix = "ORIGINAL_" + profile
     previous = read_bounded(target, MAX_SHADER)
     metadata = read_bounded(meta, 65536)
     old_shader = previous.decode("utf-8-sig")
@@ -185,7 +211,7 @@ def stage(original, manifest, project, trace_file, candidate, source_report,
             status = status_prefix + "_SOURCE_BOUND_SHADER_INSTALLED"
     return {
         "status": status,
-        "source_original_particle_renderer_material_slots": 34 if smoke34 else 108,
+        "source_original_particle_renderer_material_slots": renderer_slots,
         "source_to_export_unique_Shader48_GUID_verified": True,
         "exported_shader_meta_preserved": True,
         "isolated_Unity_Android_Vulkan_candidate_digest_verified": True,
@@ -200,7 +226,9 @@ def main():
                  "source-report", "unity-report", "backup"):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--apply", action="store_true")
-    parser.add_argument("--smoke34", action="store_true")
+    profile = parser.add_mutually_exclusive_group()
+    profile.add_argument("--smoke34", action="store_true")
+    profile.add_argument("--candle16", action="store_true")
     parser.add_argument("--out", type=Path)
     args = parser.parse_args()
     output = args.out

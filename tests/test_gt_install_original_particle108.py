@@ -100,3 +100,26 @@ class Particle108InstallerTests(unittest.TestCase):
             self.assertEqual(result["status"], "ORIGINAL_SMOKE34_SOURCE_BOUND_SHADER_INSTALLED")
             self.assertEqual(result["source_original_particle_renderer_material_slots"], 34)
             self.assertEqual(self.meta.read_bytes(), self.metadata)
+
+
+    def test_candle16_rejects_smoke_receipt_and_installs_on_original_guid(self):
+        args = (Path("Original"), Path("Manifest"), self.assets.parent, self.trace_file,
+                self.candidate, self.source, self.unity, self.backup)
+        self.candidate.write_text(self.candidate.read_text().replace(
+            "#pragma multi_compile __ KEY_B\n", ""))
+        digest = hashlib.sha256(self.candidate.read_bytes()).hexdigest()
+        self.source.write_text(json.dumps(dict(install.CANDLE_SOURCE_PROOF,
+                                               candidate_shader_sha256=digest)))
+        unity = dict(install.SMOKE_UNITY_PROOF,
+                     candidateShaderSha256=digest, privateBundleBytes=128)
+        self.unity.write_text(json.dumps(unity))
+        with self.assertRaisesRegex(ValueError, "incomplete_particle108_source_or_Unity_proof"):
+            install.stage(*args, candle16=True, apply=True)
+        self.unity.write_text(json.dumps(dict(unity, **install.CANDLE_UNITY_PROOF)))
+        with patch("scripts.gt_smoke34_source_bound_shader.original_candle_target",
+                   return_value=self.source_key) as select_candle:
+            result = install.stage(*args, candle16=True, apply=True)
+        select_candle.assert_called_once_with(*args[:2])
+        self.assertEqual(result["status"], "ORIGINAL_CANDLE16_SOURCE_BOUND_SHADER_INSTALLED")
+        self.assertEqual(result["source_original_particle_renderer_material_slots"], 16)
+        self.assertEqual(self.meta.read_bytes(), self.metadata)
