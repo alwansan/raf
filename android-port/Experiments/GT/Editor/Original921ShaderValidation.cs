@@ -79,13 +79,16 @@ namespace RaftGT
                     }
                 }
                 AssetDatabase.CreateAsset(collection, collectionPath);
+                const string materialPath = "Assets/GTOriginal921Instanced.mat";
+                var material = new Material(shader) { enableInstancing = true };
+                AssetDatabase.CreateAsset(material, materialPath);
                 AssetDatabase.SaveAssets();
 
                 const string bundleName = "gt-original-921";
                 var bundleDirectory = Path.Combine(output, "Private");
                 Directory.CreateDirectory(bundleDirectory);
                 var bundle = new AssetBundleBuild {
-                    assetBundleName = bundleName, assetNames = new[] { shaderPath, collectionPath }
+                    assetBundleName = bundleName, assetNames = new[] { shaderPath, collectionPath, materialPath }
                 };
                 result.checkpoint = "compile";
                 var manifest = BuildPipeline.BuildAssetBundles(bundleDirectory, new[] { bundle },
