@@ -6,7 +6,7 @@ from pathlib import Path
 
 from scripts.b45_install_original_blur import _atomic_replace_bytes, check_safe_ancestors
 from scripts.gt_install_original_particle108 import MAX_SHADER, read_bounded, traced_shader
-from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES
+from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, SKIN_ROUTES
 from scripts.restore_builtin_shaders import exported_shader_identity
 
 
@@ -16,14 +16,18 @@ def install(project, trace, source_key, candidate, receipt, backup):
     if backup.is_relative_to(project) or backup.exists():
         raise ValueError("invalid_model_shader_backup")
     digest = sha256(candidate).hexdigest()
+    identity = exported_shader_identity(candidate.decode("utf-8"))
+    if identity is None:
+        raise ValueError("model_shader_identity_missing")
+    counts = SKIN_ROUTES if identity == "Skin_Amplify" else EXPECTED_ROUTES
     required = {
         "candidate_sha256": digest,
         "compiled_program_table_verified": True,
         "engine_keywords_verified": True,
         "vertex_and_fragment_entrypoints_verified": True,
         "vulkan_platform_only": True,
-        "vertex_routes_by_pass": list(EXPECTED_ROUTES),
-        "fragment_routes_by_pass": list(EXPECTED_ROUTES),
+        "vertex_routes_by_pass": list(counts),
+        "fragment_routes_by_pass": list(counts),
     }
     if any(receipt.get(key) != value for key, value in required.items()):
         raise ValueError("model_shader_bundle_evidence_missing")
@@ -31,7 +35,7 @@ def install(project, trace, source_key, candidate, receipt, backup):
     previous = read_bounded(target, MAX_SHADER)
     metadata = read_bounded(meta, 65536)
     old_text = previous.decode("utf-8-sig")
-    if exported_shader_identity(old_text) != exported_shader_identity(candidate.decode("utf-8")):
+    if exported_shader_identity(old_text) != identity:
         raise ValueError("model_shader_identity_mismatch")
     if previous != candidate:
         if "DummyShaderTextExporter" not in old_text:
@@ -48,7 +52,7 @@ def install(project, trace, source_key, candidate, receipt, backup):
         except (OSError, ValueError):
             _atomic_replace_bytes(target, previous, ".gt-model-shader-rollback-")
             raise
-    return {"original_export_guid_preserved": True, "vulkan_routes_installed": sum(EXPECTED_ROUTES)}
+    return {"original_export_guid_preserved": True, "vulkan_routes_installed": sum(counts)}
 
 
 def main():
