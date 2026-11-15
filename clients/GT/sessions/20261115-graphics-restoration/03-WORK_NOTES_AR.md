@@ -71,3 +71,10 @@
 - شغّلت 43768958865 لتحديث الـ82 source Shader48 census مع 246 remaining Dummy بعد تثبيت 13. هذا workflow يستدعي post13 artifact من 43764506277 ويستعمل expected_dummy_materials=246 وexpected_dummy_shaders=47.
 - علة Particle108: 43767741576 أثبت 9 من 10 exporter Material TexEnv references type3 fileID2800000 وخامة عاشرة local type0. إن كانت بعض صور النار خارجية وصورة مخصصة embedded، يجب تتبعها إلى serialized Unity YAML/Asset importer المحلي، لا نسخ GUID اعتباطياً. فحص 43767766873 نسخة متأخرة ونتيجته لم تثبت.
 - احفظ original shader source HLSL/SPIR-V وzip2 owner bytes داخل Actions temp فقط ولا تنشرها؛ اطبع safe counts وsafe reason codes. لا APK/OBB/XAPK.
+
+
+### الخطوات البرمجية الدقيقة – 16 نوفمبر 2026
+1. الحالة post13 المؤكدة: 540/786 custom non-Dummy و246 Dummy على 47 Shader من [43764506277](https://github.com/alwansan/raf/actions/runs/43764506277). لا تستخدم 333 أو 770 إلا كأرقام تاريخية.
+2. NEXT30: المصدر 55 برنامج D3D11 نجح Vulkan، 31 keyword routes / 4 Pass، اختبار Unity المعزول [43768744473](https://github.com/alwansan/raf/actions/runs/43768744473) SUCCESS، وفحص Vulkan bundle stage paths [43769218778](https://github.com/alwansan/raf/actions/runs/43769218778) SUCCESS. مثبت المصدر scripts/gt_install_next30_original_shader48.py وفحوصه [43769866165](https://github.com/alwansan/raf/actions/runs/43769866165) SUCCESS. يجب تنفيذ التثبيت الصارم مع source owner/PathID→export trace والتحقق من quality report والحفاظ على GUID وMaterial YAML وmeta، ثم إصدار audit جديد. لا تدع أن next30 ثبت قبل ذلك.
+3. FIRE Alpha: [43767766873](https://github.com/alwansan/raf/actions/runs/43767766873) FAILED بسبب local texture PPtr type0 في واحد من 10 TexEnv؛ عالج الارتباط وفق مصدر الأصلي ولا تستبدل GUID، ولا تعلن Fire Alpha سليمة.
+4. في نهاية **كل دفعة وجلسة** حدّث clients/GT/RESTORE_AR.md أولاً، ثم 01-PLAN_AR.md و02-STATUS_AND_TESTS_AR.md و03-WORK_NOTES_AR.md وملفات الأدلة؛ أبقِ Water/FFT/Kernel6/Graphics/Models وG0-G6 مفتوحة وXAPK متوقفاً لحين اكتمال الاستعادة.
