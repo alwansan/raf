@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "agent": "GT",
+  "scope": "Particle108 original 108-use source Texture2D alpha diagnostic: synthetic guard only",
+  "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_original_Material21_target_count": 5,
+  "source_original_Texture2D28_target_count": 3,
+  "source_original_TexEnv_pointer_count": 10,
+  "diagnostic": "scripts/gt_particle108_export_alpha_diagnostic.py",
+  "synthetic_tests": "tests/test_gt_particle108_export_alpha_diagnostic.py",
+  "ci_run_id": 43762000860,
+  "ci_run_url": "https://github.com/alwansan/raf/actions/runs/43762000860",
+  "ci_conclusion": "success",
+  "source_export_pointer_join_on_real_export_executed": false,
+  "real_png_alpha_scanned": false,
+  "source_original_pixels_compared": false,
+  "Unity_Vulkan_runtime_material_alpha_verified": false,
+  "adreno_phone_black_square_resolved": false,
+  "published_original_asset_bytes": false,
+  "xapk_created": false,
+  "follow_up": "Run diagnostic against same full Unity export after material/Texture2D GUID joins; check source RGB-to-alpha shader state and importer flags separately; do not claim pixel transparency until device screenshots and logs match."
+}
