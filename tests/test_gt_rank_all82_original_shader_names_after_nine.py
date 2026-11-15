@@ -41,6 +41,16 @@ class OriginalAll82NamePriorityTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"invalid_actual_exported_shader_name_digest"):
             rank_name_hashes(originals,malformed)
 
+    def test_post13_exact_246_dummy_materials_accepts_only_246(self):
+        originals={("resources.assets",1):"a"*64,
+                   ("sharedassets0.assets",2):"b"*64}
+        result=rank_name_hashes(originals,{"a"*64:30,"b"*64:216},
+                                expected_dummy_materials=246)
+        self.assertEqual(result["exporter_actual_dummy_Material_documents"],246)
+        self.assertEqual(result["dummy_material_links_uniquely_resolved_to_original_Shader48"],246)
+        with self.assertRaisesRegex(ValueError,"invalid_original_82_shader_to_dummy_material_scope"):
+            rank_name_hashes(originals,{"a"*64:333},expected_dummy_materials=246)
+
     def test_full_scope_unique_and_no_guess(self):
         originals={("resources.assets",1):"b"*64}
         result=rank_name_hashes(originals,{"b"*64:333})
