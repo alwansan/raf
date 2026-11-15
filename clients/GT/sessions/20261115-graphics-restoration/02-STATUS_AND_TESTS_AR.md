@@ -70,3 +70,10 @@
 - [43766959343](https://github.com/alwansan/raf/actions/runs/43766959343) يفحص برامج D3D11 الأصلية للأسماء الـ12 الأعلى أثراً ويصدر أعداد SubShader/Pass/VS-FS variant pairs فقط، دون ملفات مصدر أو XAPK؛ لم تثبت نتيجته النهائية حتى الآن.
 - [43766815679](https://github.com/alwansan/raf/actions/runs/43766815679) يعيد اختبار Alpha مع فصل خطوة تحليل Material YAML عن خطوة مطابقة TexEnv ومع أسباب فشل آمنة. إخفاقات Alpha السابقة لا تعني إصلاح النار.
 - [تقرير التغطية](../../evidence/20261116_gt_all82_original_shader48_remaining_materials.json).
+
+### تأكيد التسعة زائد الأربعة من المصدر — 16 تشرين الثاني
+
+- [43764506277](https://github.com/alwansan/raf/actions/runs/43764506277) **SUCCESS**: شيدرات BlockPaint/DirtPile/Vegetation/GrassPlot/Skin_Amplify/Shimmer/SailPaint/Hair_Amplify/BillboardFade وParticle108/Particle20/Smoke34/Candle16 جميعها جمعت وفُحصت في Unity Android Vulkan وتثبتت على الـShader GUID الأصلي في نفس المصدر. من 786 مادة Custom، **540 non-Dummy (68.7%)** و**246 Dummy** موزعة على **47 هدفاً مستخدماً**. بنيت 0 حزمة لعبة، ولم تتغير 29213 ملف Material/Meta. [دليل أصلي](../../evidence/20261116_gt_thirteen_original_shader_same_export_acceptance.json).
+- [43768013634](https://github.com/alwansan/raf/actions/runs/43768013634) **SUCCESS**: next30 أصل Shader48، 55 Vulkan1.1/HLSL verified، 4-Pass ShaderLab original property bindings، 62 entrypoints verified. [دليل المصدر](../../evidence/20261116_gt_next30_original_shader48_all55_vulkan_stage_proof.json).
+- [43768744473](https://github.com/alwansan/raf/actions/runs/43768744473): Unity isolated real Android Vulkan ShaderBundle testing للـnext30، والنتيجة عند كتابة هذه الملاحظات مفتوحة. [43768958865](https://github.com/alwansan/raf/actions/runs/43768958865) يربط جرد مصادر Shader48 من الـ82 مالكاً مع **246** مادة بعد 13، وليس 333 بعد تسعة.
+- [43767741576](https://github.com/alwansan/raf/actions/runs/43767741576) فشل باختبار Alpha real مع دليل محلي جديد: 9 exported external PPtr من عشرة type3/fileID 2800000، وواحد type0 internal nonzero. هذا مسار ربط، لا دليل Alpha pixels مفقودة. فحص متابعة [43767766873](https://github.com/alwansan/raf/actions/runs/43767766873). لا نعلن إصلاح fire/water المرئي.
