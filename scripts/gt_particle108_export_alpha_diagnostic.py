@@ -92,6 +92,69 @@ def source_texture_export_map(trace, originals, *, metrics=None):
     return result
 
 
+def source_material_to_exported_texture_guids(trace, source_materials, originals, exported):
+    """Derive 3 texture GUIDs from 10 exact original/exported Material TexEnvs.
+
+    This join uses source-authenticated Material21 PPtrs, the same-instance
+    exporter Material21 source GUID trace, the true exported Material YAML,
+    and the unchanged original texture property labels and UVs. Does not
+    substitute a guessed texture name, GUID or encoded image.
+    """
+    if (type(trace) is not dict or type(source_materials) is not dict
+            or len(source_materials) != 5 or len(originals) != EXPECTED_TARGETS
+            or type(exported) is not dict):
+        raise ValueError("untrusted_source_export_particle_Material_mapping")
+    mapped = {}
+    for row in trace.get("objects", []):
+        if not isinstance(row, dict) or row.get("class_id") != 21:
+            continue
+        key = identity(row["source"])
+        if key not in source_materials:
+            continue
+        if key in mapped:
+            raise ValueError("duplicate_particle_source_Material_trace")
+        file_id, guid, kind = pointer(row["export"])
+        if file_id <= 0 or kind not in ("2", "3"):
+            raise ValueError("invalid_traced_particle_Material21_export")
+        mapped[key] = (file_id, guid)
+    if set(mapped) != set(source_materials) or len(set(mapped.values())) != 5:
+        raise ValueError("missing_original_particle_Material_same_export_trace")
+    result = {}
+    exact_slots = 0
+    for source_key, ptr in mapped.items():
+        if ptr not in exported:
+            raise ValueError("missing_same_export_particle_Material_YAML")
+        before, after = source_materials[source_key], exported[ptr]
+        if set(before) != set(after):
+            raise ValueError("changed_same_export_particle_Material_TexEnv_schema")
+        for name in before:
+            original_pointer, original_uv = before[name]
+            exported_pointer, exported_uv = after[name]
+            if (type(original_pointer) is not tuple or len(original_pointer) != 2
+                    or original_pointer[0] != 0 or original_pointer[1] <= 0):
+                raise ValueError("unverified_source_particle_texture_PPtr")
+            texture_key = source_key[0], original_pointer[1]
+            if texture_key not in originals:
+                raise ValueError("particle_Material_source_Texture2D_not_in_3_authentic_targets")
+            file_id, guid, kind = exported_pointer
+            if file_id <= 0 or kind not in (2, 3) or len(guid) != 32:
+                raise ValueError("broken_same_export_particle_texture_Material_ref")
+            if original_uv is None or exported_uv is None or len(original_uv) != len(exported_uv):
+                raise ValueError("missing_same_export_particle_texture_UV")
+            import math
+            if any(not math.isclose(a,b,abs_tol=1e-6,rel_tol=1e-6)
+                   for a,b in zip(original_uv, exported_uv)):
+                raise ValueError("changed_same_export_particle_texture_UV")
+            if texture_key in result and result[texture_key] != guid:
+                raise ValueError("one_original_particle_Texture2D_maps_to_two_export_GUIDs")
+            result[texture_key] = guid
+            exact_slots += 1
+    if (set(result) != set(originals) or len(set(result.values())) != EXPECTED_TARGETS
+            or exact_slots != 10):
+        raise ValueError("incomplete_original_particle_Material_TexEnv_10_to_3_join")
+    return result
+
+
 def image_meta_index(assets, wanted):
     """Use exactly the previously traced GUIDs; never infer assets by names."""
     if not assets.is_dir() or assets.is_symlink():
@@ -160,8 +223,10 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
         raise ValueError("unsafe_original_or_exported_particle_data")
     mark("original_material_shader_Texture2D_PPtrs")
     original_targets = {}
+    original_material_texenvs = {}
     materials = material_source.run(
-        original, manifest, private_local_texture_targets=original_targets)
+        original, manifest, private_local_texture_targets=original_targets,
+        private_material_texenvs=original_material_texenvs)
     mark("original_Texture2D28_manifest_and_stream")
     source = texture_source.run(original, manifest)
     if (materials["status"] != material_source.STATUS
@@ -174,7 +239,21 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
     mark("read_private_export_trace")
     trace = json.loads(trace_path.read_text(encoding="utf-8"))
     mark("join_same_export_Texture2D28_GUID")
-    mapping = source_texture_export_map(trace, original_targets, metrics=trace_metrics)
+    try:
+        direct_mapping = source_texture_export_map(
+            trace, original_targets, metrics=trace_metrics)
+    except ValueError as direct_error:
+        if str(direct_error) not in (
+                "invalid_same_export_Texture2D_pointer",
+                "original_particle_Texture2D_Guid_not_unique"):
+            raise
+        direct_mapping = None
+    mark("join_original_Material_TexEnv_to_exported_Texture2D_GUID")
+    from scripts.b05_verify_material_texenv_bindings import exported_texenvs
+    mapping = source_material_to_exported_texture_guids(
+        trace, original_material_texenvs, original_targets, exported_texenvs(project))
+    if direct_mapping is not None and direct_mapping != mapping:
+        raise ValueError("original_texture_trace_and_Material_YAML_GUID_mismatch")
     mark("locate_exported_TextureImporter_image")
     exported = image_meta_index(project / "Assets", set(mapping.values()))
     mark("decode_exported_image_alpha")
@@ -187,6 +266,9 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
         "source_particle_material_to_texture_references": 10,
         "source_original_texture2d_objects": EXPECTED_TARGETS,
         "same_export_source_texture_guids_joined": len(mapping),
+        "same_export_original_Material_TexEnv_PPtr_slots_exact": 10,
+        "original_texture_direct_export_trace_guid_usable": direct_mapping is not None,
+        "original_material_same_export_GUID_and_UV_linkage_verified": True,
         "actual_exported_alpha_image_counts": dict(sorted(counts.items())),
         "exported_importer_metadata_numeric_counts": importers,
         "original_source_texture_pixels_compared": False,
@@ -215,6 +297,7 @@ def main():
         "original_Texture2D28_manifest_and_stream",
         "read_private_export_trace",
         "join_same_export_Texture2D28_GUID",
+        "join_original_Material_TexEnv_to_exported_Texture2D_GUID",
         "locate_exported_TextureImporter_image",
         "decode_exported_image_alpha",
         "completed",
