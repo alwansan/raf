@@ -16,6 +16,7 @@ PASS_MODES = ("ForwardBase", "ForwardAdd", "Deferred", "ShadowCaster")
 EXPECTED_ROUTES = (8, 13, 8, 4)
 SKIN_ROUTES = (8, 13, 2)
 BILLBOARD_ROUTES = (4, 5)
+NEXT_30_MATERIAL_ROUTES = (8, 13, 8, 2)
 
 
 def expected_routes_for_shader(name):
@@ -229,6 +230,8 @@ def pass_modes_for_routes(counts):
         return ("ForwardBase", "ForwardAdd", "ShadowCaster")
     if counts == BILLBOARD_ROUTES:
         return ("ForwardBase", "ForwardAdd")
+    if counts == NEXT_30_MATERIAL_ROUTES:
+        return PASS_MODES
     raise ValueError("original_921_unexpected_shaderlab_routes")
 
 
