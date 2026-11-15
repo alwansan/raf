@@ -90,6 +90,49 @@ class OriginalParticle108ExportAlphaTests(unittest.TestCase):
                 image_meta_index(assets, {"a" * 32, "b" * 32, "c" * 32})
 
 
+    def test_local_type0_Texture2D_is_proven_original_but_not_fabricated_image_guid(self):
+        originals={("sharedassets0.assets",i):1 for i in (1,2,3)}
+        original_materials={}
+        exported={}
+        trace={"schema_version":1,"export_instance":"f"*32,"objects":[]}
+        # Nine external refs to two originals; one source-exact local type0
+        # pointer to the third original. Never publish private game IDs.
+        slots=[1,2,1,2,1,2,1,2,1,3]
+        for material_no in range(5):
+            key=("sharedassets0.assets",100+material_no)
+            guid=f"{100+material_no:032x}"
+            trace["objects"].append({
+                "class_id":21,
+                "source":{"owner":"Raft_Data/sharedassets0.assets","path_id":100+material_no},
+                "export":{"file_id":2100000,"guid":guid,"type":2},
+            })
+            props={}
+            dst={}
+            for j in range(2):
+                target=slots[2*material_no+j]
+                label=f"_Texture{j}"
+                uv=(1.0,1.0,0.0,0.0)
+                props[label]=((0,target),uv)
+                dst[label]=(((123,"0"*32,0) if target==3
+                            else (2800000,f"{target:032x}",3)),uv)
+            original_materials[key]=props
+            exported[(2100000,guid)]=dst
+        metrics={}
+        result=source_material_to_exported_texture_guids(
+            trace,original_materials,originals,exported,metrics=metrics)
+        self.assertEqual(len(result),2)
+        self.assertEqual(metrics["source_Type0_local_original_Texture2D_targets"],1)
+        self.assertEqual(metrics["source_Type0_local_texture_pointer_slots"],1)
+        self.assertEqual(metrics["source_to_export_texture_UV_pairs_verified"],10)
+        self.assertEqual(metrics["exported_Texture2D_PPtr_type_0"],1)
+        self.assertEqual(metrics["exported_Texture2D_PPtr_type_3"],9)
+        self.assertEqual(metrics["source_Texture2D_to_export_GUIDs_unique"],2)
+        # A nonzero local GUID is suspicious and must not be silently joined.
+        last=exported[(2100000,f"{104:032x}")]
+        last["_Texture1"]=((123,"a"*32,0),(1.0,1.0,0.0,0.0))
+        with self.assertRaisesRegex(ValueError,"untrusted_original_local_Texture2D_nonzero_GUID"):
+            source_material_to_exported_texture_guids(trace,original_materials,originals,exported)
+
     def test_same_export_material_texenv_fallback_uses_exact_original_texture_guids(self):
         original_source = {("sharedassets0.assets", i): 1 for i in (1, 2, 3)}
         original_materials = {}
