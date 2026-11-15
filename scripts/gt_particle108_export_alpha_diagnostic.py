@@ -47,26 +47,46 @@ def alpha_profile(image):
     }
 
 
-def source_texture_export_map(trace, originals):
-    """One source Texture2D28 => one loose exported pointer; no name matching."""
+def source_texture_export_map(trace, originals, *, metrics=None):
+    """One original Texture2D28 => one exported pointer; only numeric telemetry."""
     if (type(trace) is not dict or trace.get("schema_version") != 1
             or not re.fullmatch("[a-fA-F0-9]{32}", str(trace.get("export_instance", "")))
             or not isinstance(trace.get("objects"), list)
             or len(originals) != EXPECTED_TARGETS):
         raise ValueError("untrusted_particle_source_export_linkage")
+    if metrics is not None:
+        if type(metrics) is not dict or metrics:
+            raise ValueError("invalid_export_trace_numeric_diagnostic")
+        metrics.update({
+            "original_selected_Texture2D28":EXPECTED_TARGETS,
+            "all_export_trace_Texture2D28_rows":0,
+            "rows_matching_original_selected_Texture2D28":0,
+            "duplicate_original_selected_texture_rows":0,
+            "matched_original_selected_unique_targets":0,
+            "distinct_exported_GUIDs_for_matched_original":0,
+        })
     result = {}
     for row in trace["objects"]:
         if not isinstance(row, dict) or row.get("class_id") != 28:
             continue
+        if metrics is not None:
+            metrics["all_export_trace_Texture2D28_rows"] += 1
         key = identity(row["source"])
         if key not in originals:
             continue
+        if metrics is not None:
+            metrics["rows_matching_original_selected_Texture2D28"] += 1
         if key in result:
+            if metrics is not None:
+                metrics["duplicate_original_selected_texture_rows"] += 1
             raise ValueError("duplicated_original_particle_Texture2D_export")
         fid, guid, kind = pointer(row["export"])
         if fid <= 0 or kind not in ("2", "3"):
             raise ValueError("invalid_same_export_Texture2D_pointer")
         result[key] = guid
+        if metrics is not None:
+            metrics["matched_original_selected_unique_targets"] = len(result)
+            metrics["distinct_exported_GUIDs_for_matched_original"] = len(set(result.values()))
     if set(result) != set(originals) or len(set(result.values())) != EXPECTED_TARGETS:
         raise ValueError("original_particle_Texture2D_Guid_not_unique")
     return result
@@ -125,7 +145,7 @@ def analyze_exported_images(index):
     return total, {key: dict(sorted(value.items())) for key, value in importer_values.items()}
 
 
-def audit(original, manifest, project, trace_path, *, checkpoint=None):
+def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_metrics=None):
     def mark(step):
         if checkpoint is not None:
             checkpoint(step)
@@ -154,7 +174,7 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None):
     mark("read_private_export_trace")
     trace = json.loads(trace_path.read_text(encoding="utf-8"))
     mark("join_same_export_Texture2D28_GUID")
-    mapping = source_texture_export_map(trace, original_targets)
+    mapping = source_texture_export_map(trace, original_targets, metrics=trace_metrics)
     mark("locate_exported_TextureImporter_image")
     exported = image_meta_index(project / "Assets", set(mapping.values()))
     mark("decode_exported_image_alpha")
@@ -188,6 +208,7 @@ def main():
             a.out.resolve().is_relative_to(a.original.resolve())):
         raise ValueError("unsafe_particle_alpha_report_destination")
     progress = {"stage": "input_paths_and_layout"}
+    numeric_trace_metrics = {}
     stages = {
         "input_paths_and_layout",
         "original_material_shader_Texture2D_PPtrs",
@@ -203,13 +224,17 @@ def main():
             raise ValueError("invalid_private_diagnostic_stage")
         progress["stage"] = stage
     try:
-        report = audit(a.original, a.manifest, a.project, a.trace, checkpoint=mark)
+        report = audit(a.original, a.manifest, a.project, a.trace, checkpoint=mark,
+                       trace_metrics=numeric_trace_metrics)
     except Exception as error:
         report = {
             "schema_version": 1,
             "status": "INCONCLUSIVE",
             "error_type": type(error).__name__,
+            "failure_code": (str(error) if str(error) in ["untrusted_particle_source_export_linkage","duplicated_original_particle_Texture2D_export","invalid_same_export_Texture2D_pointer","original_particle_Texture2D_Guid_not_unique"]
+                             else "UNCLASSIFIED_SAFE_ERROR"),
             "failure_stage": progress["stage"],
+            "trace_source_export_match_counts": numeric_trace_metrics,
             "android_device_fire_pixels_verified": False,
             "private_ids_guids_paths_or_pixels_published": False,
         }
