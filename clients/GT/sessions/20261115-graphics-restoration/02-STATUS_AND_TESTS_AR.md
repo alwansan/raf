@@ -63,3 +63,10 @@
 - انطلق [43764506277](https://github.com/alwansan/raf/actions/runs/43764506277) بعد إضافة شيدرات Particle108 وParticle20 وSmoke34 وCandle16 إلى اختبار التصدير الكامل بعد التسعة، مع Unity Vulkan وإعادة جرد المواد وفحص بقاء 29213 ملف Material/meta ثابتاً. لا APK/OBB/XAPK. النتيجة النهائية مفتوحة.
 - فحص Alpha الأول [43762318768](https://github.com/alwansan/raf/actions/runs/43762318768) فشل. الفحص الثاني [43763158214](https://github.com/alwansan/raf/actions/runs/43763158214) حصره في مرحلة join_same_export_Texture2D28_GUID. أضيف فحص عددي آمن لتمييز غياب المصدر/التكرار/نوع مؤشر GUID وأطلق [43764070678](https://github.com/alwansan/raf/actions/runs/43764070678).
 - [دليل المصدر](../../evidence/20261116_gt_333_remaining_original_scene_shader_correlations.json) و[تقرير التسعة الناجح](../../evidence/20261116_gt_nine_original_shader_same_export_acceptance.json).
+
+### إثبات شمول جميع مصادر Shader48 — 16 تشرين الثاني
+
+- [43766412259](https://github.com/alwansan/raf/actions/runs/43766412259) نجح: في الـ82 أصل ZIP2 المدقق SHA توجد 165 كائن Shader48 في 14 مالكاً و163 اسماً. من 333 مادة Dummy بعد التسعة: **330** تحمل أسماء أصلية فريدة (48 هدفاً)، و**3** تحمل اسماً مكرراً لدى 3 كائنات Shader48، و**0** أسماء خارج الأصل. هذا دليل وجود مصدر لكل اسم وليس استعادة GPU أو GUID النهائي.
+- [43766959343](https://github.com/alwansan/raf/actions/runs/43766959343) يفحص برامج D3D11 الأصلية للأسماء الـ12 الأعلى أثراً ويصدر أعداد SubShader/Pass/VS-FS variant pairs فقط، دون ملفات مصدر أو XAPK؛ لم تثبت نتيجته النهائية حتى الآن.
+- [43766815679](https://github.com/alwansan/raf/actions/runs/43766815679) يعيد اختبار Alpha مع فصل خطوة تحليل Material YAML عن خطوة مطابقة TexEnv ومع أسباب فشل آمنة. إخفاقات Alpha السابقة لا تعني إصلاح النار.
+- [تقرير التغطية](../../evidence/20261116_gt_all82_original_shader48_remaining_materials.json).
