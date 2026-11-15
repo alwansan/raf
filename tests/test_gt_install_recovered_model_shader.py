@@ -60,10 +60,10 @@ class RecoveredModelShaderInstallationTests(unittest.TestCase):
             shader=assets/"Custom.shader"
             meta=assets/"Custom.shader.meta"
             guid="f"*32
-            original=b'Shader "Next30_Source" {} // DummyShaderTextExporter\\n'
-            candidate=b'Shader "Next30_Source" { SubShader { Pass {} Pass {} Pass {} Pass {} } }\\n'
+            original=b'Shader "Next30_Source" {} // DummyShaderTextExporter\n'
+            candidate=b'Shader "Next30_Source" { SubShader { Pass {} Pass {} Pass {} Pass {} } }\n'
             shader.write_bytes(original)
-            metadata=("fileFormatVersion: 2\\nguid: "+guid+"\\n").encode()
+            metadata=("fileFormatVersion: 2\nguid: "+guid+"\n").encode()
             meta.write_bytes(metadata)
             trace={"schema_version":1,"export_instance":"b"*32,"objects":[{
                 "class_id":48,
