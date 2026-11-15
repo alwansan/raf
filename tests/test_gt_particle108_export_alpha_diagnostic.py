@@ -9,6 +9,7 @@ from scripts.gt_particle108_export_alpha_diagnostic import (
     alpha_profile, analyze_exported_images, image_meta_index,
     source_texture_export_map,
     source_material_to_exported_texture_guids,
+    verify_external_texture_guid_subset,
 )
 
 
@@ -89,6 +90,22 @@ class OriginalParticle108ExportAlphaTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "importer_missing"):
                 image_meta_index(assets, {"a" * 32, "b" * 32, "c" * 32})
 
+
+    def test_same_export_direct_3_texture_trace_checks_only_proven_external_PPtrs(self):
+        # A material-local type0 pointer must not be given a fabricated
+        # external importer GUID merely because all three source textures
+        # appear independently in the same-export trace.
+        a=("sharedassets0.assets",1)
+        b=("sharedassets0.assets",2)
+        local=("sharedassets0.assets",3)
+        direct={a:"a"*32,b:"b"*32,local:"c"*32}
+        materials={a:"a"*32,b:"b"*32}
+        verify_external_texture_guid_subset(direct,materials)
+        verify_external_texture_guid_subset(None,materials)
+        with self.assertRaisesRegex(ValueError,"original_texture_trace_and_Material_YAML_GUID_mismatch"):
+            verify_external_texture_guid_subset(direct,dict(materials,bad="d"*32))
+        with self.assertRaisesRegex(ValueError,"original_texture_trace_and_Material_YAML_GUID_mismatch"):
+            verify_external_texture_guid_subset(direct,{a:"e"*32,b:"b"*32})
 
     def test_local_type0_Texture2D_is_proven_original_but_not_fabricated_image_guid(self):
         originals={("sharedassets0.assets",i):1 for i in (1,2,3)}
