@@ -5,6 +5,8 @@ on:
     paths:
       - scripts/gt_rank_all82_original_shader_names_after_nine.py
       - scripts/gt_probe_remaining_original_shader_dxbc_topology.py
+      - scripts/gt_translate_next_remaining_30_shader48.py
+      - tests/test_gt_translate_next_remaining_30_shader48.py
       - tests/test_gt_probe_remaining_original_shader_dxbc_topology.py
       - tests/test_gt_rank_all82_original_shader_names_after_nine.py
       - .github/workflows/raft-gt-all82-original-shader-name-priority.yml
@@ -21,7 +23,7 @@ concurrency:
 jobs:
   original-all82-name-source-priority:
     runs-on: ubuntu-24.04
-    timeout-minutes: 50
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -36,6 +38,7 @@ jobs:
           python3 -m py_compile scripts/gt_rank_all82_original_shader_names_after_nine.py
           python3 -m unittest discover -s tests -p test_gt_rank_all82_original_shader_names_after_nine.py -v
           python3 -m unittest discover -s tests -p test_gt_probe_remaining_original_shader_dxbc_topology.py -v
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_30_shader48.py -v
       - name: Read SHA-original source-free numeric material usage from validated nine-shader run
         uses: actions/download-artifact@v4
         with:
@@ -166,6 +169,18 @@ jobs:
             --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
             --quality "$RUNNER_TEMP/gt-nine-original-quality/gt-nine-shader-postrestore-quality.json" \
             --out "$RUNNER_TEMP/gt-top12-original-d3d11-shader-topology-safe.json"
+      - name: Recover exact original 30-Material Shader48 55 D3D11 stages and route to Vulkan11 privately (NO XAPK)
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          timeout 2400s python3 -m scripts.gt_translate_next_remaining_30_shader48 \
+            --original "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-nine-original-quality/gt-nine-shader-postrestore-quality.json" \
+            --private "$RUNNER_TEMP/gt-private-recovered-30-material-original-shader" \
+            --out "$RUNNER_TEMP/gt-original-30-material-shader-D3D11-private-stage-safe.json"
       - name: Upload anonymous ranking counts only
         if: always()
         uses: actions/upload-artifact@v4
@@ -174,9 +189,11 @@ jobs:
           path: |
             ${{ runner.temp }}/gt-all82-original-333-material-priority-safe.json
             ${{ runner.temp }}/gt-top12-original-d3d11-shader-topology-safe.json
+            ${{ runner.temp }}/gt-original-30-material-shader-D3D11-private-stage-safe.json
           retention-days: 14
           if-no-files-found: ignore
       - name: Delete runner-private original ZIP2 shader owners and source names
         if: always()
         run: |
           rm -rf -- "$RUNNER_TEMP/gt-original-82-shader-owners" .gt-zip2
+          rm -rf -- "$RUNNER_TEMP/gt-private-recovered-30-material-original-shader"
