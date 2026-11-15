@@ -1188,6 +1188,351 @@ jobs:
             ${{ runner.temp }}/gt-nine-shader-postrestore-summary-safe.json
           retention-days: 14
           if-no-files-found: ignore
+      # All nine verified original model Shader48 programs are already installed.
+      # Continue with four original particle programs from the SAME SHA-authentic
+      # ZIP2 full export without rebuilding a game Player or packaging APK/OBB.
+      - name: Prove same original full ZIP2 source used for particle and model shader installs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C .gt-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/sharedassets0.assets"
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/resources.assets"
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/level0"
+          test -s "$RUNNER_TEMP/gt-nine-shader-postrestore-quality.json"
+      - name: Recover original Particle108 ShaderLab from ZIP2 for the native export
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_gt_install_original_particle108.py' -v
+          work="$RUNNER_TEMP/gt-thirteen-particle108"
+          mkdir -m 700 "$work"
+          timeout 720s python3 -m scripts.t3_particle108_private_shaderlab_variants \
+            --source "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private-dir "$work/raw" --out "$work/variants-safe.json"
+          timeout 300s python3 -m scripts.gt_particle108_unity_bindings \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private-source "$work/raw" --private-dest "$work/bound" \
+            --report "$work/bindings-safe.json"
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$work/bound/keyword-routed-private.shader" \
+            --routing "$work/bound/routing-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-thirteen-particle108-unity" \
+            --report "$work/staging-safe.json"
+      - name: Compile only original Particle108 ShaderLab in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-thirteen-particle108-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Install compiled Particle108 into its original native exported Shader48 GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-particle108"
+          timeout 240s python3 -m scripts.gt_install_original_particle108 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace-file "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$work/bound/keyword-routed-private.shader" \
+            --source-report "$work/bindings-safe.json" \
+            --unity-report "$GITHUB_WORKSPACE/gt-thirteen-particle108-unity/ProbeResults/gt-particle108-private-unity-safe.json" \
+            --backup "$RUNNER_TEMP/gt-thirteen-particle108-original-export" --apply \
+            --out "$RUNNER_TEMP/gt-thirteen-particle108-install-safe.json"
+      - name: Retain only the aggregate original Particle108 native install receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-thirteen-particle108-original-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-thirteen-particle108-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Particle108 source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-thirteen-particle108"
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-thirteen-particle108-unity"
+      - name: Recover original Particle20 ShaderLab from ZIP2 for the native export
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_gt_install_original_particle108.py' -v
+          work="$RUNNER_TEMP/gt-thirteen-particle20"
+          mkdir -m 700 "$work"
+          timeout 420s python3 -m scripts.gt_particle20_source_bound_shader \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/bound" --report "$work/bindings-safe.json"
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$work/bound/keyword-routed-private.shader" \
+            --routing "$work/bound/routing-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-thirteen-particle20-unity" \
+            --report "$work/staging-safe.json"
+      - name: Compile only original Particle20 ShaderLab in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-thirteen-particle20-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Install compiled Particle20 into its original native exported Shader48 GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-particle20"
+          timeout 240s python3 -m scripts.gt_install_original_particle108 --particle20 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace-file "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$work/bound/keyword-routed-private.shader" \
+            --source-report "$work/bindings-safe.json" \
+            --unity-report "$GITHUB_WORKSPACE/gt-thirteen-particle20-unity/ProbeResults/gt-particle108-private-unity-safe.json" \
+            --backup "$RUNNER_TEMP/gt-thirteen-particle20-original-export" --apply \
+            --out "$RUNNER_TEMP/gt-thirteen-particle20-install-safe.json"
+      - name: Retain only the aggregate original Particle20 native install receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-thirteen-particle20-original-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-thirteen-particle20-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Particle20 source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-thirteen-particle20"
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-thirteen-particle20-unity"
+      - name: Recover original Smoke34 ShaderLab from ZIP2 for the native export
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-smoke34"
+          mkdir -m 700 "$work"
+          timeout 420s python3 -m scripts.gt_smoke34_source_bound_shader \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/bound" --report "$work/bindings-safe.json"
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$work/bound/smoke34-original.shader" \
+            --routing "$work/bindings-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-thirteen-smoke34-unity" \
+            --report "$work/staging-safe.json" --smoke34
+      - name: Compile only original Smoke34 ShaderLab in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-thirteen-smoke34-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Install compiled Smoke34 into its original native exported Shader48 GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-smoke34"
+          timeout 240s python3 -m scripts.gt_install_original_particle108 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace-file "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$work/bound/smoke34-original.shader" \
+            --source-report "$work/bindings-safe.json" \
+            --unity-report "$GITHUB_WORKSPACE/gt-thirteen-smoke34-unity/ProbeResults/gt-particle108-private-unity-safe.json" \
+            --backup "$RUNNER_TEMP/gt-thirteen-smoke34-original-export" --apply --smoke34 \
+            --out "$RUNNER_TEMP/gt-thirteen-smoke34-install-safe.json"
+      - name: Retain only the aggregate original Smoke34 native install receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-thirteen-smoke34-original-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-thirteen-smoke34-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Smoke34 source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-thirteen-smoke34"
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-thirteen-smoke34-unity"
+      - name: Recover original Candle16 ShaderLab from ZIP2 for the native export
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-candle16"
+          mkdir -m 700 "$work"
+          timeout 420s python3 -m scripts.gt_smoke34_source_bound_shader \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/bound" --report "$work/bindings-safe.json" --candle16
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$work/bound/candle16-original.shader" \
+            --routing "$work/bindings-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-thirteen-candle16-unity" \
+            --report "$work/staging-safe.json" --candle16
+      - name: Compile only original Candle16 ShaderLab in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-thirteen-candle16-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Install compiled Candle16 into its original native exported Shader48 GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-candle16"
+          timeout 240s python3 -m scripts.gt_install_original_particle108 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace-file "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$work/bound/candle16-original.shader" \
+            --source-report "$work/bindings-safe.json" \
+            --unity-report "$GITHUB_WORKSPACE/gt-thirteen-candle16-unity/ProbeResults/gt-particle108-private-unity-safe.json" \
+            --backup "$RUNNER_TEMP/gt-thirteen-candle16-original-export" --apply --candle16 \
+            --out "$RUNNER_TEMP/gt-thirteen-candle16-install-safe.json"
+      - name: Retain only the aggregate original Candle16 native install receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-thirteen-candle16-original-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-thirteen-candle16-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Candle16 source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-thirteen-candle16"
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-thirteen-candle16-unity"
+      - name: Recount actual Material-to-Shader programs after nine model and four particle GUID installs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --rank-dummy-targets \
+            --out "$RUNNER_TEMP/gt-thirteen-shader-postrestore-quality.json"
+          python3 - <<'PY_GT_THIRTEEN'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          assets=root/"gt-project/ExportedProject/Assets"
+          before=json.loads((root/"gt-full-smoke-private-unchanged-material-meta.json").read_text())
+          accepted_nine=json.loads((root/"gt-nine-shader-postrestore-summary-safe.json").read_text())
+          a=json.loads((root/"gt-thirteen-shader-postrestore-quality.json").read_text())
+          protected={}
+          for path in assets.rglob("*"):
+              if path.is_file() and not path.is_symlink() and path.suffix.lower() in {".meta",".mat",".asset",".prefab",".unity"}:
+                  h=hashlib.sha256()
+                  with path.open("rb") as reader:
+                      for block in iter(lambda:reader.read(1048576),b""):
+                          h.update(block)
+                  protected[str(path.relative_to(assets))]=h.hexdigest()
+          assert protected==before,"original_Material_or_Meta_changed_during_13_shader_integration"
+          assert accepted_nine["status"]=="GT_NINE_ORIGINAL_SHADERS_SAME_FULL_EXPORT_ACCEPTED_NO_APK"
+          assert a["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          c=a["counts"]
+          assert c["material_documents"]==1536
+          assert c["material_docs_using_Unity_builtin_Shader"]==750
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          assert c["material_docs_using_dummy_Shader"]<333
+          assert c["material_docs_using_non_dummy_Shader"]>453
+          assert c["material_docs_using_dummy_Shader"]+c["material_docs_using_non_dummy_Shader"]==786
+          summary={
+              "schema_version":1,
+              "status":"GT_THIRTEEN_ORIGINAL_SHADER_SAME_EXPORT_GUID_VERIFIED_NO_APK",
+              "source_zip2_sha":"15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+              "full_export_material_documents":c["material_documents"],
+              "custom_shader_material_documents":c["material_docs_using_local_custom_Shader"],
+              "unity_builtin_shader_material_documents":c["material_docs_using_Unity_builtin_Shader"],
+              "after_nine_shader_dummy_material_documents":accepted_nine["all_nine_shaders_installed_dummy_materials"],
+              "after_thirteen_shader_dummy_material_documents":c["material_docs_using_dummy_Shader"],
+              "after_thirteen_shader_non_dummy_material_documents":c["material_docs_using_non_dummy_Shader"],
+              "remaining_dummy_shader_guid_targets_referenced":c["distinct_dummy_Shader_targets_referenced"],
+              "protected_unchanged_Material_YAML_and_meta_files":len(protected),
+              "all_original_Material_and_meta_sha256_unchanged":True,
+              "source_authentic_model_shader_targets_installed":9,
+              "source_authentic_particle_shader_targets_installed":4,
+              "APK_OBB_XAPK_created":False,
+              "Unity_Android_Adreno_game_pixels_verified":False
+          }
+          (root/"gt-thirteen-shader-postrestore-summary-safe.json").write_text(json.dumps(summary,sort_keys=True,indent=2)+"\n")
+          print("GT_13_ORIGINAL_SHADER_REAL_POSTRESTORE "+json.dumps(summary,sort_keys=True))
+          PY_GT_THIRTEEN
+      - name: Retain numeric only thirteen-source-program Unity same-export material audit (NO GAME PACKAGE)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-thirteen-source-shader-full-export-audit-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-thirteen-shader-postrestore-summary-safe.json
+            ${{ runner.temp }}/gt-thirteen-shader-postrestore-quality.json
+            ${{ runner.temp }}/gt-thirteen-particle108-install-safe.json
+            ${{ runner.temp }}/gt-thirteen-particle20-install-safe.json
+            ${{ runner.temp }}/gt-thirteen-smoke34-install-safe.json
+            ${{ runner.temp }}/gt-thirteen-candle16-install-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
       - name: Publish aggregate evidence only, never original scenes/meshes/export/trace
         if: always()
         uses: actions/upload-artifact@v4
