@@ -4,6 +4,8 @@ on:
     branches: [feature/android-native-port]
     paths:
       - scripts/gt_rank_all82_original_shader_names_after_nine.py
+      - scripts/gt_probe_remaining_original_shader_dxbc_topology.py
+      - tests/test_gt_probe_remaining_original_shader_dxbc_topology.py
       - tests/test_gt_rank_all82_original_shader_names_after_nine.py
       - .github/workflows/raft-gt-all82-original-shader-name-priority.yml
   workflow_dispatch:
@@ -33,6 +35,7 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/gt_rank_all82_original_shader_names_after_nine.py
           python3 -m unittest discover -s tests -p test_gt_rank_all82_original_shader_names_after_nine.py -v
+          python3 -m unittest discover -s tests -p test_gt_probe_remaining_original_shader_dxbc_topology.py -v
       - name: Read SHA-original source-free numeric material usage from validated nine-shader run
         uses: actions/download-artifact@v4
         with:
@@ -155,12 +158,22 @@ jobs:
             --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
             --quality "$RUNNER_TEMP/gt-nine-original-quality/gt-nine-shader-postrestore-quality.json" \
             --out "$RUNNER_TEMP/gt-all82-original-333-material-priority-safe.json"
+      - name: Inspect real original D3D11 pass and permutation feasibility for 12 top unresolved material shader targets
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_probe_remaining_original_shader_dxbc_topology \
+            --original "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-nine-original-quality/gt-nine-shader-postrestore-quality.json" \
+            --out "$RUNNER_TEMP/gt-top12-original-d3d11-shader-topology-safe.json"
       - name: Upload anonymous ranking counts only
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: gt-all82-original-333-shader-priority-safe-${{ github.run_id }}
-          path: ${{ runner.temp }}/gt-all82-original-333-material-priority-safe.json
+          path: |
+            ${{ runner.temp }}/gt-all82-original-333-material-priority-safe.json
+            ${{ runner.temp }}/gt-top12-original-d3d11-shader-topology-safe.json
           retention-days: 14
           if-no-files-found: ignore
       - name: Delete runner-private original ZIP2 shader owners and source names
