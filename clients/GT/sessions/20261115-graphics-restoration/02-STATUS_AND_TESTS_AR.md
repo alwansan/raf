@@ -96,3 +96,16 @@
 - [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669) SUCCESS: شيدر 23 Material أصلي، 58/58 D3D11→Vulkan/HLSL، 33 VS/FS + 8 orphan VS، 66 routed stage compilations، 74 parameter records، 1192 CB offsets و552 Texture/Sampler mappings و236 varyings، 17 property بينها 3 Range وDefault واحد خارج bounds حفظ كما هو. فحص Source فقط، لا GUID.
 - [43774787696](https://github.com/alwansan/raf/actions/runs/43774787696) بدأ private Unity Android Vulkan bundle للتحقق من 4 Pass و33 VS/FS routes بالـSMOL-V. لم تقبل نتيجته حتى الآن. بعد PASS يتوجب تثبيت original Shader48 عبر نفس source→export GUID في التصدير الأصلي وفحص مواد Dummy.
 - [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176) next30 في full export لا يزال بلا نتيجة نهائية. آخر أرقام يقينية: **540/786 non-Dummy، 246 Dummy، 47 Shader targets**؛ لا XAPK. ملف المصدر الرئيسي الحي: clients/GT/RESTORE_AR.md؛ حدّثه في كل دفعة.
+
+## تحديث التحقق الحي — 16 نوفمبر 2026 / GT
+
+| مستوى الإثبات | الدليل | الخلاصة |
+| --- | --- | --- |
+| SOURCE | [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669) | NEXT23: 58/58 original D3D11→Vulkan roundtrip، 4 Pass، 33 VS/FS [8,13,8,4]، 8 orphan VS |
+| ISOLATED UNITY | [43774787696](https://github.com/alwansan/raf/actions/runs/43774787696) | SUCCESS Unity 2021.3.45f2 Android Vulkan bundle، 33 VS و33 FS متحقق منها؛ ليس تثبيت GUID |
+| SAME-EXPORT GUID | [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176) | NEXT30 SUCCESS أصل source SHA→GUID و31 Vulkan route: 570/786 non-Dummy، 216 Dummy، 46 targets، 0 broken، 29213 YAML/meta unchanged |
+| DEVICE VISUAL | لا قياس جديد | لا إثبات إزالة بياض المواد أو مربع النار أو استعادة Water/GPU بالكامل |
+
+- artifact NEXT30: `gt-fourteen-next30-source-shader-full-export-audit-43773151176`، ID `14186801044`، digest zip `sha256:41f5ba7bbcd1accca6e04b60902749cffdecaf5ce9c1febe607d1abef173b8cd`. Commit التشغيل `988490597b63f6c404536b4b311c03d0f6d3f8dc`؛ 570/786 = **72.5% من Custom Material documents** فقط.
+- فشل سابق [43773953670](https://github.com/alwansan/raf/actions/runs/43773953670) أُصلح باختبار المصدر [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669). فشل FireAlpha الواقعي 43773481136 و43773517218 لم يُحل بنجاح الاختبار الصناعي 43773517246.
+- **المتبقي** 216 مادة Dummy و46 Shader reference targets؛ NEXT23 يحتاج same-export install وأرقام post15 من فحص حي، لا من طرح 23. ماء Spectrum/Foam/Depth/FFT وKernel6 والظلال/الشفافية وAndroid device parity غير مقبولة بعد. لا لعبة XAPK.
