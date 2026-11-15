@@ -1,0 +1,32 @@
+name: GT Particle108 export-alpha diagnostic contract (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_particle108_export_alpha_diagnostic.py
+      - tests/test_gt_particle108_export_alpha_diagnostic.py
+      - .github/workflows/raft-gt-particle-alpha-static-gate.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-particle-alpha-diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify source-GUID mapping, true PNG alpha histogram and no asset mutation
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0
+          python3 -m py_compile scripts/gt_particle108_export_alpha_diagnostic.py
+          python3 -m unittest discover -s tests -p test_gt_particle108_export_alpha_diagnostic.py -v
+          echo 'GT_PARTICLE108_EXPORT_ALPHA_STATIC_CONFIRMED=true gameAPK=false sourceImagesPublished=false'
