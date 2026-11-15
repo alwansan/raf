@@ -44,3 +44,6 @@
 - [43769218778](https://github.com/alwansan/raf/actions/runs/43769218778) SUCCESS: شيدر next30 أصلي 55/55 برنامج D3D11 مترجم إلى Vulkan1.1، 4 Passes، 31 مسار VS/FS [8,13,8,2] داخل Unity Android Bundle الحقيقي. [43769866165](https://github.com/alwansan/raf/actions/runs/43769866165) SUCCESS لاختبارات المثبّت؛ التثبيت الفعلي بالـGUID الأصلي ما زال مطلوباً.
 - التالي: تنفيذ same-export next30 GUID-proven installer وجرد مواد Dummy من جديد، مع مواصلة إصلاح Fire Alpha type0 TexEnv وFFT/Water/Compute والمجسمات والألوان. لا XAPK حتى كل الموارد مستعادة.
 - **التزام مستمر:** تحديث RESTORE_AR.md في كل جلسة وبعد كل دفعة موثقة، إلى جانب 01/02/03 وتقرير الأدلة؛ افحص دائماً HEAD الحالي ولا تدّع عمل خلفية تلقائي.
+
+### CI جديد بعد تحديث RESTORE_AR — 16 نوفمبر 2026
+- بدأ [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176) في full ZIP2 same-export بعد التسعة وأربعة Particle لإعادة بناء وترجمة وتثبيت next30 Shader48 مع الحفاظ على GUID الأصلي والتحقق من 31 VS/FS Vulkan routes. يراجع 29213 Material/meta/YAML محمي، ويعيد حساب المواد الحقيقية. **العدد المستهدف فقط**: 570 non-Dummy / 216 Dummy / 46 shader references؛ **آخر قيمة مثبتة لا تزال** 540 non-Dummy / 246 Dummy / 47 shader references، إلى أن تنتهي CI بنجاح. لا APK/XAPK. يجب فحص نتائج run وتحديث clients/GT/RESTORE_AR.md و01/02/03 مجدداً فور ظهور دليل جديد.
