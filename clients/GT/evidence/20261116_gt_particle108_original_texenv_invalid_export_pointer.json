@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "agent": "GT",
+  "status": "ORIGINAL_PARTICLE108_SAME_EXPORT_TEXENV_POINTER_INVALID_ROOT_CLASSIFIED",
+  "source_run_id": 43766815679,
+  "source_run_url": "https://github.com/alwansan/raf/actions/runs/43766815679",
+  "source_report_artifact": "gt-particle108-real-export-alpha-43766815679",
+  "run_conclusion": "failure",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_sha_original_Texture2D28_objects": 3,
+  "source_sha_original_Material21_objects": 5,
+  "source_original_texenv_texture_reference_slots": 10,
+  "all_Texture2D28_export_trace_rows": 2928,
+  "selected_source_Texture2D28_trace_rows": 1,
+  "direct_export_pointer_failure_code": "invalid_same_export_Texture2D_pointer",
+  "material_fallback_failure_stage": "join_original_Material_TexEnv_to_exported_Texture2D_GUID",
+  "material_fallback_failure_code": "broken_same_export_particle_texture_Material_ref",
+  "actual_exported_Material21_texture_pointer_fileID_classification": "pending numeric diagnostic",
+  "numeric_PPtr_diagnostic_runs": [
+    43767741576,
+    43767766873
+  ],
+  "same_instance_export_completed": true,
+  "original_source_or_material_guid_mutated": false,
+  "original_alpha_pixels_decoded_or_verified": false,
+  "source_original_Texture2D_png_export_verified": false,
+  "android_game_fire_alpha_correct": false,
+  "APK_OBB_XAPK_created": false,
+  "next": "Count null/nonstandard original Material21 exported Texture2D PPtrs by fileID/type from full real exporter, trace exact 3 Texture2D assets and their export collection type without leaking names/GUID, then repair real texture binary export and preserve original material/Shader GUIDs. Never substitute random PNG or overwrite Materials before proven source identity."
+}
