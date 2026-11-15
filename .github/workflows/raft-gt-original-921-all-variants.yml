@@ -28,6 +28,7 @@ on:
       - scripts/gt_verify_921_shader_bundle.py
       - scripts/gt_decode_smolv.cpp
       - tests/test_gt_original_921_bundle.py
+      - tests/test_gt_install_recovered_model_shader.py
       - android-port/Experiments/GT/Editor/Original921ShaderValidation.cs
       - scripts/t3_original_921_dxbc_semantic_join.py
       - tests/test_gt_original_921_all_variants.py
@@ -58,6 +59,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_gt_original_921_all_variants.py' -v
           python3 -m unittest discover -s tests -p 'test_gt_original_921_cb_layout.py' -v
           python3 -m unittest discover -s tests -p 'test_gt_original_921_bundle.py' -v
+          python3 -m unittest discover -s tests -p 'test_gt_install_recovered_model_shader.py' -v
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
