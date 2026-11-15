@@ -127,11 +127,21 @@ class OriginalParticle108ExportAlphaTests(unittest.TestCase):
         self.assertEqual(metrics["exported_Texture2D_PPtr_type_0"],1)
         self.assertEqual(metrics["exported_Texture2D_PPtr_type_3"],9)
         self.assertEqual(metrics["source_Texture2D_to_export_GUIDs_unique"],2)
-        # A nonzero local GUID is suspicious and must not be silently joined.
+        # A type0 GUID hint, including nonzero, is never accepted as an
+        # external image GUID; it remains an unresolved original PPtr.
         last=exported[(2100000,f"{104:032x}")]
         last["_Texture1"]=((123,"a"*32,0),(1.0,1.0,0.0,0.0))
-        with self.assertRaisesRegex(ValueError,"untrusted_original_local_Texture2D_nonzero_GUID"):
-            source_material_to_exported_texture_guids(trace,original_materials,originals,exported)
+        flagged={}
+        mapped=source_material_to_exported_texture_guids(
+            trace,original_materials,originals,exported,metrics=flagged)
+        self.assertEqual(len(mapped),2)
+        self.assertEqual(flagged["source_Type0_PPtr_nonzero_GUID_hints_not_used_as_export_image"],1)
+        self.assertNotIn("a"*32,set(mapped.values()))
+        # Even for type0, malformed GUID text or empty fileID is rejected.
+        last["_Texture1"]=((123,"bad",0),(1.0,1.0,0.0,0.0))
+        with self.assertRaisesRegex(ValueError,"broken_same_export_particle_texture_Material_ref"):
+            source_material_to_exported_texture_guids(
+                trace,original_materials,originals,exported)
 
     def test_same_export_material_texenv_fallback_uses_exact_original_texture_guids(self):
         original_source = {("sharedassets0.assets", i): 1 for i in (1, 2, 3)}
