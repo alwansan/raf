@@ -151,8 +151,10 @@ def run(original,manifest,quality,private):
         for route in row["routes"]:
             for stage in ("vs","fs"):
                 route[stage]=folders[route[stage]]
+    checkpoint="compile_source_exact_keyword_routes"
     try:
         report["private_original_exact_keyword_routed_programs_compiled"] = compile_routed_stages(packet,private)
+        checkpoint="restore_authentic_source_property_contract"
         source_properties=parsed.get("m_PropInfo",{}).get("m_Props",[])
         if not isinstance(source_properties,list):
             raise ValueError("invalid_original_23_material_Shader_properties")
@@ -185,12 +187,14 @@ def run(original,manifest,quality,private):
         (private/"original-private-keyword-routes.json").write_text(
             json.dumps(packet,sort_keys=True,indent=2)+"\n",encoding="utf-8")
         (private/"original-private-layout.txt").write_text(layout,encoding="utf-8")
+        checkpoint="bind_source_constant_buffer_resource_and_vertex_semantics"
         named=stage_parameter_records(paired,orphans,passes,tables[0],private,folders)
         report["source_variant_named_CB_sampler_stage_bindings_verified"]=True
         report["original_stage_parameter_records_checked"]=named["original_variant_stages_with_parameter_records"]
         report["original_vertex_fragment_varying_records_matched"]=named["original_vertex_fragment_varying_records_matched"]
         report["original_named_constant_buffer_offsets_verified"]=named["named_constant_buffer_reflected_offsets_verified"]
         report["original_texture_sampler_bindings_rebound"]=named["translated_texture_declarations_mapped_to_source_name"]+named["translated_sampler_declarations_mapped_to_source_texture"]
+        checkpoint="compose_four_pass_recovered_original_shaderlab"
         shader=compose(private,engine_keywords=False)
         (private/"original-23-material-Shader48-private.shader").write_text(
             shader,encoding="utf-8")
@@ -199,6 +203,7 @@ def run(original,manifest,quality,private):
              for index in range(route_count)]
             for pass_index,route_count in enumerate(routing["source_exact_keyword_routes_by_pass"])
         ]
+        checkpoint="verify_66_compiled_shaderlab_vertex_fragment_entrypoints"
         verify_entrypoints(shader,private,routes=route_sets)
         report["private_original_23_material_ShaderLab_4pass_composed"]=True
         report["private_original_23_material_ShaderLab_66_vertex_fragment_entrypoints_validated"]=True
@@ -206,6 +211,12 @@ def run(original,manifest,quality,private):
     except Exception as exc:
         report["source_keyword_router_or_ShaderLab_layout_status"]="INCONCLUSIVE"
         report["source_keyword_router_or_ShaderLab_layout_error_type"]=type(exc).__name__
+        report["source_keyword_router_or_ShaderLab_layout_safe_checkpoint"]=checkpoint
+        from scripts.t3_particle108_source_propstate import PrivateContractError
+        if isinstance(exc,PrivateContractError):
+            # This is an allowlisted generic reason, never the private source
+            # shader name, value, keyword, ID or binary.
+            report["source_original_property_contract_safe_failure_category"]=exc.category
         report["original_ShaderLab_android_Unity_or_device_render_proven"]=False
     return report
 
