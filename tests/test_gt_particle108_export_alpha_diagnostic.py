@@ -62,9 +62,9 @@ class OriginalParticle108ExportAlphaTests(unittest.TestCase):
                 image.save(texture)
                 meta = texture.with_suffix(".png.meta")
                 meta.write_text(
-                    f"fileFormatVersion: 2\\nguid: {guid}\\nTextureImporter:\\n"
-                    "  alphaSource: 1\\n  alphaIsTransparency: 1\\n"
-                    "  sRGBTexture: 1\\n  mipmapEnabled: 1\\n",
+                    f"fileFormatVersion: 2\nguid: {guid}\nTextureImporter:\n"
+                    "  alphaSource: 1\n  alphaIsTransparency: 1\n"
+                    "  sRGBTexture: 1\n  mipmapEnabled: 1\n",
                     encoding="utf-8")
             original_bytes = {
                 path.name: path.read_bytes() for path in assets.rglob("*") if path.is_file()}
