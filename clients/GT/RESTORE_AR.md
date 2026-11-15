@@ -34,6 +34,13 @@ After every meaningful batch: update THIS clients/GT/RESTORE_AR.md at top, the 0
 - عند المتابعة: افحص 43773151176 **أولاً**. في حال FAILED افحص failing job step وsafe report، وأصلح المصدر أو فحص GUID بأدلة، ثم أعد CI non-XAPK. لا تتجاوز أي فحص عن طريق تزييف material counts. في حال SUCCESS حدّث العداد المثبت في هذا الملف وكل 01/02/03 وسجّل SHA + artifact، ثم تابع الـ216 الباقية/النار/الماء.
 - سجل مصدر العمل الجديد: مسار workflow `.github/workflows/raft-gt-original-export-smoke.yml`، مثبت `scripts/gt_install_next30_original_shader48.py`، فحص `scripts.gt_verify_921_shader_bundle --next30`، وبصمة ZIP2 المثبتة `15964ea8f246b6e076ce26b60931ee2e1a9a2385`.
 
+## تتبع Fire Alpha الحقيقي — 16 نوفمبر 2026
+
+- بعد فشل ربط 10 TexEnv القديمة، صارت أداة `scripts/gt_particle108_export_alpha_diagnostic.py` تميّز **المراجع الخارجية type3** عن **مرجع أصلي محلي type0** من المصدر ذي الثلاثة Texture2D دون اختراع GUID. إن تأكدت صورتان خارجيتان بـTextureImporter/Pixels، ستعطي حالة **PARTIAL** مع تصنيف Alpha لهما صراحةً وتبقى الصورة المحلية الثالثة غير مثبتة، لا تدّع سلامة النار كاملة.
+- فحص الكود السابق [43773481137](https://github.com/alwansan/raf/actions/runs/43773481137) **SUCCESS**؛ الفحص الواقعي الجديد [43773481136](https://github.com/alwansan/raf/actions/runs/43773481136) جارٍ على أول تعديل؛ وفحص حالات type0 الاصطناعية الجديد [43773517246](https://github.com/alwansan/raf/actions/runs/43773517246) مع تجربة تصدير المصدر الأحدث [43773517218](https://github.com/alwansan/raf/actions/runs/43773517218) أُطلقا ولم تثبت نتيجتهما بعد. **لا تحسب partial كاستعادة، ولا تصف فقدان الصورة المحلية بلا إثبات.**
+- عند استكمال CI: افحص safe artifact `gt-particle108-real-export-alpha-<run>.zip`، خاصة `source_SHA_original_Texture2D28_local_type0_pointer_targets` و`actual_exported_alpha_image_counts`. إن كانت الصور الخارجية غير موجودة فلا تتجاوز الخطأ؛ أصلح مصدر تصديرها من نفس AssetRipper وليس تغيير YAML/Meta.
+- حدّث رسالة RESTORE_AR مع نتائج هذه التشغيلات عندما تتثبت، إضافة إلى 01/02/03، مع بقاء XAPK ممنوعاً.
+
 ## الحالة الهندسية المُعتمدة الآن
 
 - **المجسمات والخامات والألوان:** أُثبتت مصادر ZIP2 ذات 82 مالكاً وأصول Mesh وTextures ومواقع المشاهد وألوانها. يوجد فحص لعدد 4,708 Mesh وملفات Streamed أصلية، لكن **لا تفسّر ذلك على أنه قبول بصري كامل على Adreno**. يجب إكمال جميع الروابط والمواد المفقودة.
