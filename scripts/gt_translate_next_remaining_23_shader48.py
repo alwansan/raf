@@ -1,8 +1,8 @@
 """Recover source-authentic next unresolved 23-Material Shader48 D3D11 stages.
 
 Select exactly one remaining shader from 82 SHA-pinned original ZIP2 owners
-using the post-nine exact 23-Material name digest and source Shader48 identity.
-Validate original 4 Pass / 33 VS-FS keyword routes / 8 VS orphans / 55 distinct
+using the post-thirteen exact 23-Material name digest and source Shader48 identity.
+Validate original 4 Pass / 33 VS-FS keyword routes / 8 VS orphans / 58 distinct
 DXBC programs. Translate original DXBC privately to SPIR-V and recovered HLSL,
 then validate Vulkan 1.1 stage roundtrips. No source code, names, hashes,
 identifiers, or compiled shader bytes enter public reports. Does NOT yet
@@ -26,7 +26,7 @@ from scripts.t3_original_top_shader_dxbc_feasibility import summarize
 from scripts.w1_recover_depth_passes import linked_program, stage_variants, variant_key
 from scripts.w1_recover_graphics_programs import decoded_platforms, records, translate
 
-STATUS="GT_SHA_ORIGINAL_REMAINING_30_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
+STATUS="GT_SHA_ORIGINAL_REMAINING_23_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
 EXPECTED_TOPOLOGY=(4,33,8,58)
 
 
@@ -108,7 +108,7 @@ def run(original,manifest,quality,private):
               census["distinct_original_linked_D3D11_programs"])
     if (baseline!=EXPECTED_TOPOLOGY
             or census["unmatched_fragment_permutations"]!=0):
-        raise ValueError("authenticated_original_30_Material_shader_D3D11_pass_topology_drift")
+        raise ValueError("authenticated_original_23_Material_shader_D3D11_pass_topology_drift")
     paired,orphans,passes,distinct=enumerate_all(
         parsed,tables[0],variants=stage_variants,permutation=variant_key,
         linker=linked_program,topology=EXPECTED_TOPOLOGY)
