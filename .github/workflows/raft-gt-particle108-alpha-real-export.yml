@@ -4,6 +4,8 @@ on:
     branches: [feature/android-native-port]
     paths:
       - .github/workflows/raft-gt-particle108-alpha-real-export.yml
+      - scripts/gt_particle108_export_alpha_diagnostic.py
+      - tests/test_gt_particle108_export_alpha_diagnostic.py
   workflow_dispatch:
 
 permissions:
