@@ -49,6 +49,13 @@ jobs:
           run-id: 43759856414
           name: gt-nine-shader-full-export-audit-43759856414
           path: ${{ runner.temp }}/gt-nine-original-quality
+      - name: Read exact post13 246-Dummy Material same-export audit from validated ZIP2 Unity run
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43764506277
+          name: gt-thirteen-source-shader-full-export-audit-43764506277
+          path: ${{ runner.temp }}/gt-thirteen-original-quality
       - name: Require runner capacity for 82 original serialized objects only
         run: |
           set -euo pipefail
@@ -164,6 +171,16 @@ jobs:
             --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
             --quality "$RUNNER_TEMP/gt-nine-original-quality/gt-nine-shader-postrestore-quality.json" \
             --out "$RUNNER_TEMP/gt-all82-original-333-material-priority-safe.json"
+      - name: Re-evaluate exact original 82-owner Shader48 source names against post13 246 remaining real Dummy Materials
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_rank_all82_original_shader_names_after_nine \
+            --original "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-thirteen-original-quality/gt-thirteen-shader-postrestore-quality.json" \
+            --expected-dummy-materials 246 --expected-dummy-shaders 47 \
+            --out "$RUNNER_TEMP/gt-all82-original-246-material-priority-safe.json"
       - name: Inspect real original D3D11 pass and permutation feasibility for 12 top unresolved material shader targets
         run: |
           set -euo pipefail
@@ -260,6 +277,7 @@ jobs:
           name: gt-all82-original-333-shader-priority-safe-${{ github.run_id }}
           path: |
             ${{ runner.temp }}/gt-all82-original-333-material-priority-safe.json
+            ${{ runner.temp }}/gt-all82-original-246-material-priority-safe.json
             ${{ runner.temp }}/gt-top12-original-d3d11-shader-topology-safe.json
             ${{ runner.temp }}/gt-original-30-material-shader-D3D11-private-stage-safe.json
           retention-days: 14
