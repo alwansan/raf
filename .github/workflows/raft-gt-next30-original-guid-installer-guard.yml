@@ -1,0 +1,33 @@
+name: GT original next30 Shader48 same-export GUID installer negative gates (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_install_next30_original_shader48.py
+      - scripts/gt_install_recovered_model_shader.py
+      - tests/test_gt_install_next30_original_shader48.py
+      - .github/workflows/raft-gt-next30-original-guid-installer-guard.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-next30-source-guid-guard:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify original source Shader48 identity and 31-route Vulkan receipt before any GUID edit
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_install_next30_original_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_install_next30_original_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_install_recovered_model_shader.py -v
+          echo 'GT_NEXT30_ORIGINAL_SAME_EXPORT_GUID_SOURCE_ONLY_GUARD_PASS noAPK=true originalAssetsNotDownloaded=true'
