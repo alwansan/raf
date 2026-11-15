@@ -112,6 +112,8 @@
 
 ## دفعة برمجة لم تُعتمد بصرياً — 16 نوفمبر 2026
 
+- بدء [43777739448](https://github.com/alwansan/raf/actions/runs/43777739448) للـunit static fail-closed next23 بعد إضافة workflow `raft-gt-next23-installer-static-gate.yml`، لا تحويله إلى ادعاء same-export.\n\n
+
 - أُضيف [مثبت NEXT23](https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/gt_install_next23_original_shader48.py): حارس 216/46 post14، 165 source Shader48 SHA، تمييز shader الـ23 الصحيح بالتوبولوجيا (شيدر آخر 23 مادة مختلف 1156 variants)، receipt Unity [8,13,8,4] VS/FS، ومطابقة source owner/PathID لنفس exporter ShaderGUID مع حفظ .meta. آخر Unity isolated ناجح 43774787696؛ اختبار التثبيت الحقيقي 43777283111 لم ينتهِ.
 - أضيف جرد post15 بعد التثبيت، يرفض كل خروج عن المتوقع 1536 total/750 Builtin/786 Custom و193 Dummy/593 non-Dummy/45 targets و0 broken أو تغير أي ملف من 29213. **كلها assert أهداف وليست نتيجة مثبتة حتى SUCCESS**.
 - كود [فاحص النار](https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/gt_particle108_export_alpha_diagnostic.py) صار يتحقق direct Texture2D trace مقابل external material GUID **subset** فقط مع إبقاء local PPtr type0 خارج الصور المصدرة؛ إضافة [اختبارات](https://github.com/alwansan/raf/blob/feature/android-native-port/tests/test_gt_particle108_export_alpha_diagnostic.py). [43777415580](https://github.com/alwansan/raf/actions/runs/43777415580) SUCCESS للاختبار الاصطناعي؛ [43777415610](https://github.com/alwansan/raf/actions/runs/43777415610) real pending؛ Alpha pixel على الهاتف غير مثبت.
