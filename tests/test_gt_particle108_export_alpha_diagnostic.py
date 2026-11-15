@@ -8,6 +8,7 @@ from PIL import Image
 from scripts.gt_particle108_export_alpha_diagnostic import (
     alpha_profile, analyze_exported_images, image_meta_index,
     source_texture_export_map,
+    source_material_to_exported_texture_guids,
 )
 
 
@@ -87,6 +88,50 @@ class OriginalParticle108ExportAlphaTests(unittest.TestCase):
             assets.mkdir()
             with self.assertRaisesRegex(ValueError, "importer_missing"):
                 image_meta_index(assets, {"a" * 32, "b" * 32, "c" * 32})
+
+
+    def test_same_export_material_texenv_fallback_uses_exact_original_texture_guids(self):
+        original_source = {("sharedassets0.assets", i): 1 for i in (1, 2, 3)}
+        original_materials = {}
+        exported = {}
+        trace = {"schema_version": 1, "export_instance": "f" * 32, "objects": []}
+        texture_ids = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1]
+        for i in range(5):
+            source_key = ("sharedassets0.assets", 100+i)
+            exported_guid = f"{100+i:032x}"
+            original_properties = {}
+            exported_properties = {}
+            trace["objects"].append({
+                "class_id":21,
+                "source":{"owner":"Raft_Data/sharedassets0.assets","path_id":100+i},
+                "export":{"file_id":2100000,"guid":exported_guid,"type":2},
+            })
+            for j in range(2):
+                prop = f"_Texture{j}"
+                original_tex_id=texture_ids[2*i+j]
+                uv=(1.0,1.0,0.0,0.0)
+                original_properties[prop]=((0,original_tex_id),uv)
+                exported_properties[prop]=(
+                    (2800000,f"{original_tex_id:032x}",3),uv)
+            original_materials[source_key]=original_properties
+            exported[(2100000,exported_guid)]=exported_properties
+        mapping=source_material_to_exported_texture_guids(
+            trace, original_materials, original_source, exported)
+        self.assertEqual(len(mapping),3)
+        self.assertEqual(mapping[("sharedassets0.assets",1)],f"{1:032x}")
+        self.assertEqual(set(mapping.values()),{f"{i:032x}" for i in (1,2,3)})
+        modified={k:dict(v) for k,v in exported.items()}
+        first=next(iter(modified.values()))
+        first["_Texture0"]=((2800000,"a"*32,3),(1.0,1.0,0.0,0.0))
+        with self.assertRaisesRegex(ValueError,"maps_to_two_export_GUIDs"):
+            source_material_to_exported_texture_guids(
+                trace,original_materials,original_source,modified)
+        modified={k:dict(v) for k,v in exported.items()}
+        first=next(iter(modified.values()))
+        first["_Texture0"]=((2800000,f"{1:032x}",3),(0.5,1.0,0.0,0.0))
+        with self.assertRaisesRegex(ValueError,"changed_same_export_particle_texture_UV"):
+            source_material_to_exported_texture_guids(
+                trace,original_materials,original_source,modified)
 
 
 if __name__ == "__main__":
