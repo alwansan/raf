@@ -63,3 +63,11 @@
 - [43766959343](https://github.com/alwansan/raf/actions/runs/43766959343) بدأ فحص توبولوجيا 12 شيدر Dummy من D3D11 الأصلية. البرنامج: scripts/gt_probe_remaining_original_shader_dxbc_topology.py. ينشر أعداد Pass/Variant فقط، من دون DXBC أو أسماء أو GUID.
 - فحص Alpha [43766815679](https://github.com/alwansan/raf/actions/runs/43766815679) يميز فشل قراءة Material YAML عن فشل join original Material TexEnv إلى exported Texture2D، ويصدر رمز فشل ثابت وآمن. الفحوص السابقة حددت المصدر وليس فقدان البكسلات.
 - خذ نتيجة [43764506277](https://github.com/alwansan/raf/actions/runs/43764506277) بعد 13 شيدراً، عدل عدد Dummy الفعلي، ثم استعد شيدرات المصدر التالية بأثر المواد الأعلى. لا XAPK قبل استكمال جميع الموارد.
+
+### إجراءات وخطوات الاستئناف — بعد قبول 13 Shader48
+
+- تأكد نهائياً 43764506277 SUCCESS من ملف gt-thirteen-shader-postrestore-summary-safe.json: 540/786 Custom real ShaderLab (68.7%)، 246 Dummy و47 referenced Shader GUID، 0 broken، unchanged files 29213. استعمل 246 في كل تقارير الأولوية الجديدة، وأبقِ 333 مرجعاً لمرحلة تسعة شيدرات فقط.
+- استخرج اختبار 43768013634 SUCCESS من private original shader script: شيدر 30 مادة له 4 Pass [8,13,8,2] و55 genuine D3D11 stages valid Vulkan11/HLSL؛ stage_parameter_records 70، CB reflected offsets 1007، textures/samplers 364، varying 232، composed ShaderLab 62 entrypoints glslang verified. التالي Unity 2021 Android Vulkan private bundle في 43768744473، ملف Editor: android-port/Experiments/GT/Editor/Next30ShaderValidation.cs. فلا تعتبر استعادة الهدف موثقة على GUID قبل Unity bundle وfull export.
+- شغّلت 43768958865 لتحديث الـ82 source Shader48 census مع 246 remaining Dummy بعد تثبيت 13. هذا workflow يستدعي post13 artifact من 43764506277 ويستعمل expected_dummy_materials=246 وexpected_dummy_shaders=47.
+- علة Particle108: 43767741576 أثبت 9 من 10 exporter Material TexEnv references type3 fileID2800000 وخامة عاشرة local type0. إن كانت بعض صور النار خارجية وصورة مخصصة embedded، يجب تتبعها إلى serialized Unity YAML/Asset importer المحلي، لا نسخ GUID اعتباطياً. فحص 43767766873 نسخة متأخرة ونتيجته لم تثبت.
+- احفظ original shader source HLSL/SPIR-V وzip2 owner bytes داخل Actions temp فقط ولا تنشرها؛ اطبع safe counts وsafe reason codes. لا APK/OBB/XAPK.
