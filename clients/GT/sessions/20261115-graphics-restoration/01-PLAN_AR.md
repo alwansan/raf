@@ -65,6 +65,8 @@
 
 ## دفعة تنفيذ NEXT23 وFireAlpha — 16 نوفمبر 2026
 
+- فحص مبكر مستقل جديد للمثبت `raft-gt-next23-installer-static-gate.yml`: [43777739448](https://github.com/alwansan/raf/actions/runs/43777739448)، وليس اختبار Full-Export أو Vulkan نفسه.\n\n
+
 - كود الاستعادة: `scripts/gt_install_next23_original_shader48.py`، اختبار `tests/test_gt_install_next23_original_shader48.py`، وربط `raft-gt-original-export-smoke.yml` على commit [5d44b41](https://github.com/alwansan/raf/commit/5d44b41fb3f94556122ca073f74061e0cf9e687b) ثم اختبار مبكر في [ae503180](https://github.com/alwansan/raf/commit/ae503180c3238fcb359dd89e684be8353abc2b02). [43777150940](https://github.com/alwansan/raf/actions/runs/43777150940) قيد التنفيذ من snapshot أولي؛ [43777283111](https://github.com/alwansan/raf/actions/runs/43777283111) أحدث snapshot بحماية الاختبار وكان pending عند التوثيق. لا تقبل post15 إلا بجرد صادر **حقيقي** وMaterial/meta SHA.
 - الناتج المستهدف في **CI فقط**: 593 non-Dummy و193 Dummy و45 targets؛ الأعداد المثبتة حالياً: **570 non-Dummy و216 Dummy و46 targets**، تغطية 72.5% من مواد Custom فقط. حارس strict 29,213 ملفات unchanged، صفر broken؛ لا XAPK.
 - كود FireAlpha يميز direct trace لكل Texture2D وبين 2 external material GUID وlocal type0 مجهول؛ لا اختلاق GUID للمحلي. Static [43777398225](https://github.com/alwansan/raf/actions/runs/43777398225) SUCCESS، real [43777398215](https://github.com/alwansan/raf/actions/runs/43777398215) قيد التنفيذ و[43777415610](https://github.com/alwansan/raf/actions/runs/43777415610) pending. المطلوب نتيجة real ثم التحقق من Alpha وImporter وأصل الـtype0.
