@@ -62,9 +62,9 @@ class RecoveredModelShaderInstallationTests(unittest.TestCase):
             shader = assets / "Billboard.shader"
             meta = assets / "Billboard.shader.meta"
             guid = "c" * 32
-            original = b'Shader "BillboardFade" {} // DummyShaderTextExporter\\n'
-            candidate = b'Shader "BillboardFade" { SubShader { Pass {} Pass {} } }\\n'
-            original_meta = f"fileFormatVersion: 2\\nguid: {guid}\\n".encode()
+            original = b'Shader "BillboardFade" {} // DummyShaderTextExporter\n'
+            candidate = b'Shader "BillboardFade" { SubShader { Pass {} Pass {} } }\n'
+            original_meta = f"fileFormatVersion: 2\nguid: {guid}\n".encode()
             shader.write_bytes(original)
             meta.write_bytes(original_meta)
             trace = {"schema_version": 1, "export_instance": "d" * 32, "objects": [{
