@@ -74,6 +74,33 @@ def choose_original_23_by_topology(original,manifest,source_hashes,usage):
     return verified[0]
 
 
+def original_range_contract_safe_census(parsed):
+    """Publish counts only, never original range names, limits or default values."""
+    props=parsed.get("m_PropInfo",{}).get("m_Props",[])
+    if type(props) is not list or len(props)>128:
+        raise ValueError("unverified_original_Shader48_range_property_population")
+    out={
+        "source_original_ShaderLab_Range_property_count":0,
+        "source_original_Range_nonzero_unused_fourth_lane_count":0,
+        "source_original_Range_inverted_lower_upper_count":0,
+        "source_original_Range_default_outside_lower_upper_count":0,
+    }
+    for prop in props:
+        if type(prop) is not dict or prop.get("m_Type")!=3:
+            continue
+        values=[prop.get("m_DefValue[%d]"%i) for i in range(4)]
+        import math
+        if any(type(v) not in (int,float) or not math.isfinite(v) for v in values):
+            raise ValueError("unverifiable_original_Shader48_range_property_numbers")
+        default,lower,upper,tail=values
+        out["source_original_ShaderLab_Range_property_count"]+=1
+        out["source_original_Range_nonzero_unused_fourth_lane_count"]+=bool(tail!=0)
+        out["source_original_Range_inverted_lower_upper_count"]+=bool(lower>upper)
+        out["source_original_Range_default_outside_lower_upper_count"]+=bool(
+            default<min(lower,upper) or default>max(lower,upper))
+    return out
+
+
 def run(original,manifest,quality,private):
     import UnityPy
     for binary in ("vkd3d-compiler","spirv-val","spirv-cross","glslangValidator"):
@@ -217,6 +244,8 @@ def run(original,manifest,quality,private):
             # This is an allowlisted generic reason, never the private source
             # shader name, value, keyword, ID or binary.
             report["source_original_property_contract_safe_failure_category"]=exc.category
+            if exc.category=="PROPERTY_RANGE":
+                report["source_original_Shader48_range_contract_numeric_census"]=original_range_contract_safe_census(parsed)
         report["original_ShaderLab_android_Unity_or_device_render_proven"]=False
     return report
 
