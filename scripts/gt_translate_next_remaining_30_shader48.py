@@ -17,8 +17,9 @@ from pathlib import Path
 import shutil
 
 from scripts.gt_rank_all82_original_shader_names_after_nine import gather
-from scripts.gt_original_921_all_variants import enumerate_all
+from scripts.gt_original_921_all_variants import enumerate_all, stage_parameter_records
 from scripts.gt_original_921_keyword_routes import keyword_routes, compile_routed_stages, shaderlab_layout
+from scripts.gt_original_921_shaderlab import compose, verify_entrypoints
 from scripts.gt_stage_serialized_owners import read_expected
 from scripts.gt_serialized_graphics_counts import verify
 from scripts.t3_original_top_shader_dxbc_feasibility import summarize
@@ -125,6 +126,48 @@ def run(original,manifest,quality,private):
         report["source_original_ShaderLab_4pass_property_layout_validated"]=True
         report["source_original_keyword_permutation_route_counts_per_pass"]=routing["source_exact_keyword_routes_by_pass"]
         report["source_original_property_count"]=len(source_properties)
+        # Preserve all source/Shader48 metadata and GPU program identity
+        # privately. Only source-free counters leave CI.
+        def stage_row(row):
+            return {k:(folders[v] if k=="program_ref" else v) for k,v in row.items()}
+        manifest={
+            "schema":1,
+            "original_passes":passes,
+            "original_shader_ParsedForm_full_private":parsed,
+            "paired":[
+                {"subshader":pair["subshader"],"pass":pair["pass"],
+                 "vs":stage_row(pair["vs"]),"fs":stage_row(pair["fs"])}
+                for pair in paired
+            ],
+            "unpaired":[
+                {"subshader":orphan["subshader"],"pass":orphan["pass"],
+                 "stage":orphan["stage"],"variant":stage_row(orphan["variant"])}
+                for orphan in orphans
+            ],
+        }
+        (private/"original-private-variant-manifest.json").write_text(
+            json.dumps(manifest,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+        (private/"original-private-keyword-routes.json").write_text(
+            json.dumps(packet,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+        (private/"original-private-layout.txt").write_text(layout,encoding="utf-8")
+        named=stage_parameter_records(paired,orphans,passes,tables[0],private,folders)
+        report["source_variant_named_CB_sampler_stage_bindings_verified"]=True
+        report["original_stage_parameter_records_checked"]=named["original_variant_stages_with_parameter_records"]
+        report["original_vertex_fragment_varying_records_matched"]=named["original_vertex_fragment_varying_records_matched"]
+        report["original_named_constant_buffer_offsets_verified"]=named["named_constant_buffer_reflected_offsets_verified"]
+        report["original_texture_sampler_bindings_rebound"]=named["translated_texture_declarations_mapped_to_source_name"]+named["translated_sampler_declarations_mapped_to_source_texture"]
+        shader=compose(private,engine_keywords=False)
+        (private/"original-30-material-Shader48-private.shader").write_text(
+            shader,encoding="utf-8")
+        route_sets=[
+            [[] if index==0 else [f"GT_ORIGINAL_921_P{pass_index}_V{index}"]
+             for index in range(route_count)]
+            for pass_index,route_count in enumerate(routing["source_exact_keyword_routes_by_pass"])
+        ]
+        verify_entrypoints(shader,private,routes=route_sets)
+        report["private_original_30_material_ShaderLab_4pass_composed"]=True
+        report["private_original_30_material_ShaderLab_62_vertex_fragment_entrypoints_validated"]=True
+        report["original_ShaderLab_android_Unity_or_device_render_proven"]=False
     except Exception as exc:
         report["source_keyword_router_or_ShaderLab_layout_status"]="INCONCLUSIVE"
         report["source_keyword_router_or_ShaderLab_layout_error_type"]=type(exc).__name__
