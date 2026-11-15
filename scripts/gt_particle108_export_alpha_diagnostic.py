@@ -217,6 +217,23 @@ def source_material_to_exported_texture_guids(trace, source_materials, originals
     return result
 
 
+def verify_external_texture_guid_subset(direct_mapping, material_mapping):
+    """The same source local type0 PPtr is not an external TextureImporter GUID.
+
+    Trace may independently identify three source Texture2D exports, while
+    the Material's exact ten TexEnv slots expose only two external GUIDs
+    and one local type0 pointer. Compare only truly external source keys;
+    never pretend the local pointer is an exported image or replace its GUID.
+    """
+    if direct_mapping is None:
+        return
+    if (type(direct_mapping) is not dict or type(material_mapping) is not dict
+            or not set(material_mapping).issubset(direct_mapping)
+            or any(direct_mapping[key] != guid
+                   for key, guid in material_mapping.items())):
+        raise ValueError("original_texture_trace_and_Material_YAML_GUID_mismatch")
+
+
 def image_meta_index(assets, wanted):
     """Use exactly the previously traced GUIDs; never infer assets by names."""
     if not assets.is_dir() or assets.is_symlink():
@@ -318,8 +335,7 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
     mapping = source_material_to_exported_texture_guids(
         trace, original_material_texenvs, original_targets, exported_materials,
         metrics=material_metrics)
-    if direct_mapping is not None and direct_mapping != mapping:
-        raise ValueError("original_texture_trace_and_Material_YAML_GUID_mismatch")
+    verify_external_texture_guid_subset(direct_mapping, mapping)
     mark("locate_exported_TextureImporter_image")
     if len(mapping) not in (2, EXPECTED_TARGETS):
         raise ValueError("incomplete_original_particle_two_external_texture_alpha_scope")
