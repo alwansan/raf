@@ -1,19 +1,52 @@
-# نقطة الاستعادة الحالية — Raft Android
+# GT — رسالة الاستعادة الأساسية الحية | 16 تشرين الثاني 2026
 
-انسخ النص داخل المربع إلى الجلسة الجديدة. [فهرس التسليم](sessions/20261115-graphics-restoration/).
+> **اقرأ هذا القسم أولاً**؛ نصوص الأسفل سجل تاريخي وقد تحتوي أرقاماً قديمة مثل 770 أو 333 Dummy. هذه الأرقام ليست آخر حالة مثبتة. التحديثات الجديدة تُكتب في مقدمة هذا الملف **عند كل دفعة/فحص/إصلاح وقبل إنهاء كل جلسة**، مع تحديث ملفات خطة GT الثلاثة وملخص المالك ذي الصلة. لا تدّع أن أي تحديث يحدث تلقائياً عندما تتوقف الجلسة؛ يتطلب جلسة عمل أو مهمة مجدولة منفذة.
+
+## رسالة جاهزة للاستعادة في جلسة جديدة — النسخة الحالية
 
 ```text
-أكمل استعادة رسوم Raft Android من GitHub alwansan/raf على فرع feature/android-native-port. راجع الفرع الحي قبل العمل. اقرأ:
+اسمك GT؛ تابع الاستعادة الهندسية الشاملة لرسوم Raft Android، دون تغيير الهوية أو الفرع.
+المستودع https://github.com/alwansan/raf؛ فرع الكتابة الوحيد feature/android-native-port. ابدأ بقراءة الفرع الحي، ثم:
+https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/RESTORE_AR.md
+https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md
 https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/sessions/20261115-graphics-restoration/01-PLAN_AR.md
 https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/sessions/20261115-graphics-restoration/02-STATUS_AND_TESTS_AR.md
 https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/sessions/20261115-graphics-restoration/03-WORK_NOTES_AR.md
 
-الأولوية للمجسمات البيضاء، الخامات والألوان، شفافية النار والماء. الأنيميشن مؤجل. أصل بيانات اللعبة ZIP2 مثبت عند 15964ea8f246b6e076ce26b60931ee2e1a9a2385. اللوقات والصور في https://github.com/alwansan/CL. دمج كل دفعة صالحة مع الحفاظ على نفس GUID وروابط المواد، واشتغل بالتوازي إذا الملفات مستقلة.
+SOURCE: zip2 pinned at 15964ea8f246b6e076ce26b60931ee2e1a9a2385, SHA-verified originals; do not use Git LFS. Phone logs/screenshots in alwansan/CL. Preserve original Shader GUID and all .meta, Material YAML, scenes/prefabs, meshes and save compatibility. Do not write any branch except feature/android-native-port.
 
-آخر نقطة: تطابق هندسة المجسمات والألوان ومصفوفات التكستشر مثبت في التصدير، وفحص Unity Vulkan تحقق من دفعة شيدرات المجسمات والمؤثرات. الآن تابع فحص BillboardFade بتمريريه ForwardBase/ForwardAdd ومساراته [4,5]، ثم ثبّته في مسار الإنتاج بعد القبول. جرد 43651736236 أحصى 786 مادة على شيدرات مؤقتة قبل تركيب الاستعادات. أعِد جرد المواد بعد تثبيتها وأكمل الشيدرات المتبقية حسب أثرها. التحقق البصري في اللعبة بعده مفتوح.
+LATEST VERIFIED: GitHub Actions 43764506277 SUCCESS, same full AssetRipper export installed nine original model + Particle108/Particle20/Smoke34/Candle16 shaders at their authentic Unity Shader GUID: 540 of 786 custom material documents have real non-Dummy shader and 246 remaining Dummy in 47 referenced custom Shader targets (68.7% CUSTOM MATERIAL COVERAGE ONLY; not whole-game completion), 1536 materials total, 750 built-in, 0 broken, 29213 original Material/meta/YAML documents byte-for-byte unchanged. Earlier 333 Dummy is post-NINE historical state; 770/786 historical pre-restoration state.
 
-لا تبدأ XAPK قبل اكتمال الاستعادة. عند إطلاق الاختبار الطويل سلّم رقم التشغيل للمالك حتى ينتظر ويخبرك بالنتيجة، ثم طابق اللوق والصور وعالج الفروقات.
+ALL82 CENSUS: 43768958865 SUCCESS, after 13 shaders 246 remaining Dummy materials; 243 material links match an original unique Shader48 source NAME and three link to a shared name among three original Shader48 objects, none outside 82 SHA-authenticated original owners; 165 Shader48 source objects in 14 owners. Name match is NOT GUID match nor visual/Android GPU proof.
+
+NEXT30 SHADER: 43768013634 SUCCESS proved 55 original D3D11 programs translated/roundtripped Vulkan1.1 HLSL, 4 passes [8,13,8,2], 31 VS/FS keyword routes, 8 unpaired VS variants, 16 original properties, 70 parameter records and 62 independently compiled entries. 43768744473 SUCCESS isolated Unity 2021.3.45f2 Android Vulkan bundle registered 31 routes and 0 shader errors. 43769218778 SUCCESS independently decoded/verified exactly [8,13,8,2] Vertex and Fragment routes in actual Unity Vulkan serialized shader bundle. 43769866165 SUCCESS ran source-only strict install safety tests. NEXT: run exact same-export installation on original GUID with source owner+PathID to exported trace verified and original post13 246/47 quality proof; follow by recount of actual Dummy materials. Do NOT call next30 installed until real same-export workflow proves it. Runtime keyword-selection parity and phone Adreno pixels not verified.
+
+FIRE ALPHA: 43767741576 and 43767766873 FAIL in REAL Particle108 original Texture2D→Material TexEnv export binding. Five original Materials and ten texture slots: nine valid exported external PPtrs (type3/fileID2800000), one local PPtr type0. Classify its true same-export local GUID/fileID meaning; do not silently substitute images or GUID, do not claim black-square/fire alpha fixed; photos and CL phone visuals still open. Water Spectrum/Foam/Depth/FFT and kernel6 identity and compute/parity remain priority.
+
+PRIORITY: restore ALL original models, textures, colors, materials, shaders, variants, shadows, water FFT/compute, fire, PostFX/TMP and preserved GUID references FIRST; animation deferred by owner; XAPK tests ONLY after full restoration/merge G0-G6. Non-XAPK original-source and isolated Unity Shader validation allowed. Maintain an exact verified resource/material count and differentiate SOURCE / ISOLATED UNITY / SAME EXPORT GUID / DEVICE VISUAL PROOF.
+After every meaningful batch: update THIS clients/GT/RESTORE_AR.md at top, the 01/02/03 files, evidence and safe CI run IDs (including failures, remaining tasks and next concrete action) so a new session never resumes stale state.
 ```
+
+## الحالة الهندسية المُعتمدة الآن
+
+- **المجسمات والخامات والألوان:** أُثبتت مصادر ZIP2 ذات 82 مالكاً وأصول Mesh وTextures ومواقع المشاهد وألوانها. يوجد فحص لعدد 4,708 Mesh وملفات Streamed أصلية، لكن **لا تفسّر ذلك على أنه قبول بصري كامل على Adreno**. يجب إكمال جميع الروابط والمواد المفقودة.
+- **شيدرات المواد المخصصة:** [43764506277](https://github.com/alwansan/raf/actions/runs/43764506277) SUCCESS؛ **540/786 = 68.7%** من مستندات المواد المخصصة أصبح لها شيدر غير Dummy في التصدير الأصلي نفسه؛ **246/786** تنتظر الاستعادة، عبر **47** مرجع Shader ما زال Dummy. لا نحسب 68.7% كنسبة استعادة اللعبة الكاملة، ولا كعدد الكائنات Shader48 الأصلية المنتهية من أصل 165.
+- **المصدر الأصلي للشيدرات الباقية:** [43768958865](https://github.com/alwansan/raf/actions/runs/43768958865) SUCCESS؛ 82 أصلاً SHA، 165 Shader48 في 14 حاوية و163 اسماً؛ **243** مادة Dummy اسمها يطابق مصدر Shader48 فريداً، **3** مواد اسمها غير فريد وله ثلاث هويات أصلية، **0** أسماء غير موجودة. [الدليل](evidence/20261116_gt_all82_post13_original_shader48_246_material_census.json).
+- **التالي/30 مادة:** [43768013634](https://github.com/alwansan/raf/actions/runs/43768013634) ترجم 55/55 برنامج D3D11 الأصلي؛ [43768744473](https://github.com/alwansan/raf/actions/runs/43768744473) استورد ShaderLab بأربع Passes ومسارات 31 وصفر أخطاء في Unity Android Vulkan؛ [43769218778](https://github.com/alwansan/raf/actions/runs/43769218778) **SUCCESS** يثبت [8,13,8,2] زوج Vertex/Fragment داخل ShaderBundle فعلاً؛ [43769866165](https://github.com/alwansan/raf/actions/runs/43769866165) SUCCESS فحص الأمان السلبي للمثبّت قبل التنفيذ. **ليس مثبتاً في GUID التصدير الحقيقي بعد.** ملفات التنفيذ: `scripts/gt_translate_next_remaining_30_shader48.py`، `scripts/gt_install_next30_original_shader48.py`، `scripts/gt_install_recovered_model_shader.py`، `android-port/Experiments/GT/Editor/Next30ShaderValidation.cs`. التالي CI same-export verify + GUID-preserving installation، ثم عدّ 246 مجدداً؛ لا تقل 216 إلا بعد إثبات جرد جديد.
+- **أثر 13 شيدراً:** تسعة شيدرات النماذج/النبات/الظلال + أربعة شيدرات الجسيمات Particle108 وParticle20 وSmoke34 وCandle16 تحققت داخل التصدير الأصلي نفسه. [دليل مثبت](evidence/20261116_gt_thirteen_original_shader_same_export_acceptance.json). لم تُثبت شفافية النار الفعلية رغم تركيب Shader48.
+- **مشكلة النار/الشفافية:** [43767766873](https://github.com/alwansan/raf/actions/runs/43767766873) FAILED؛ 9/10 TexEnv pointers صالحة كروابط خارجية وصورة واحدة مؤشرة محلياً type0؛ يجب فصل المصدر المحلي الحقيقي عن شرط validator الذي لا يقبل سوى type2/3، وإثبات alpha pixels/importer/Material links قبل أي إصلاح بصري أو دمج.
+- **الماء/الدخان/المؤثرات:** تتبع Spectrum7Pass وFoam/Depth Copy وFFT وCompute kernel6 والأخطاء القديمة في CL لا يزال ضمن الأعمال المتبقية؛ نجاح compile معزول ليس دليل إظهار مياه أو نار حقيقية على Adreno. PostFX/TMP والأصول المفقودة تحتاج جرداً ونهج اختبار موثق.
+- **معايير القبول:** الحفاظ على `.meta` وMaterial YAML وGUID، عدم صنع مصدر خاص وهمي، عدم رفع DXBC/HLSL/ملفات ZIP2 السرية إلى Artifacts، الفصل بين source-authentication وUnity compiler وGUID install وdevice parity، و**عدم بدء XAPK قبل اكتمال استعادة كل الموارد**.
+
+## سياسة تحديث رسالة الاستعادة (إلزامية في كل جلسة GT)
+
+1. ابدأ بفتح هذا الملف من **HEAD الحي** لا من ذاكرة الدردشة وحدها، وتحقق من أحدث CI الناجح/الفاشل وملفات evidence.
+2. بعد أي milestone أو إصلاح أو تشغيل طويل، اكتب **تاريخ/رقم CI، PASS أو FAIL، الحسابات الفعلية، ما لم يثبت، المشاكل المفتوحة، والخطوة البرمجية التالية** في أعلى هذا الملف، مع تحديث `01-PLAN_AR.md` و`02-STATUS_AND_TESTS_AR.md` و`03-WORK_NOTES_AR.md` حسب التغير. أعد قراءة blob SHA قبل تعديل الملف ولا تكتب إلا الفرع المسموح.
+3. لا تحذف السجل التاريخي أدناه؛ قدّم قسماً حديثاً مميزاً واحتفظ بقيم/روابط التشغيل القديم بوصفها تاريخاً غير حالي. لا تصف أي تجربة هاتفية بأنها ناجحة دون صورة/لوق فعلي.
+4. عند تشغيل CI طويل سجّل رقم التشغيل للمالك فوراً، وأكمل فحصه داخل الجلسة إن أمكن. عند بدء جلسة جديدة افحصه ولا تعتمد على وعد مراقبة خلفية غير منفّذ.
+5. XAPK ممنوع الآن بقرار المالك؛ ترتيب العمل **الاستعادة الكاملة، الدمج، البوابات G0–G6، ثم اختبار التوافق**.
+
+---
 
 ## سجل الاستعادة السابق
 
