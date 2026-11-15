@@ -27,3 +27,12 @@
 - فحص [43766959343](https://github.com/alwansan/raf/actions/runs/43766959343) يقيس SubShader/Pass/D3D11 keyword variants للأهداف الـ12 الأعلى كثافة؛ استخدم نتائج التوبولوجيا لبداية دفعات استعادة برامجها الأصلية، لا Dummy شكلياً، مع الحفاظ على source owner + GUID.
 - فحص Alpha [43766815679](https://github.com/alwansan/raf/actions/runs/43766815679) يميّز مشكلة parsing لمادة Unity من خطأ الربط بمصدر Texture2D؛ لا تدّع إصلاح النار قبل مسار صور ألفا والاختبار المرئي.
 - الأولوية لاستعادة كل الموارد والشيدرات والمجسمات والخامات والماء والنار، وتأجيل XAPK والأنيميشن حسب تعليمات المالك.
+
+### الحالة المحدثة — نجاح 13 أصل Shader48 والتخطيط للمتبقي
+
+- التشغيل 43764506277 انتهى SUCCESS في نفس AssetRipper ZIP2 export: 9 model shaders + 4 original particle shaders. CUSTOM Material من أصل 786: 540 ببرنامج غير Dummy (68.7%)، والباقي 246 Dummy مرتبطة بـ47 شيدر مستخدم. 750 built-in، 1536 Material بالمجموع، 0 Shader broken. 29213 ملف Material/meta/YAML محمي مطابق للبايتات. انظر clients/GT/evidence/20261116_gt_thirteen_original_shader_same_export_acceptance.json.
+- التشغيل 43768013634 انتهى SUCCESS وأثبت استعادة 55/55 برنامج D3D11 لشيدر يربط 30 مادة أصلية وتحويلها إلى Vulkan1.1/HLSL، و31 keyword pairs/62 stage compilations، ثم 70 parameter records و1007 CB offsets و364 texture/sampler mappings و232 varying records و4-pass ShaderLab/62 entrypoints. لا يثبت Unity import بعد.
+- بدأ اختبار Unity Android Vulkan للشيدر ذي 30 مادة بالـ31 routes والـ4 Passes، التشغيل 43768744473. لا XAPK. الإخراج المطلوب safe receipt يثبت original candidate SHA/passCount/routes/errors ثم verify Vulkan bundle.
+- أطلقت إعادة ترتيب الـ82 مالكاً وفق العدد الفعلي بعد 13 شيدراً: 246 Dummy/47 GUID، التشغيل 43768958865. لا تعتمد الـ333 الماضية بعد اكتمال 13، فهي مرجع لحالة التسعة فقط.
+- تقرير Alpha الحقيقي 43767741576 أظهر خمسة Material21 أصلية و10 TexEnv: 9 exported external Texture2D refs صحيحة (type3 fileID 2800000) ومؤشر واحد type0 محلي/fileID آخر. لا تستبدل GUID ولا تعتبر الصور الأصلية تالفة. شغّل تقرير تصنيف لاحق 43767766873 قبل تقرير مرئي.
+- أولوية المالك: استعادة جميع الموارد والشيدرات أولاً، شيدرات الماء والنار والظلال والخامات والمجسمات؛ لا XAPK ولا ترحيل الأنيميشن الآن.
