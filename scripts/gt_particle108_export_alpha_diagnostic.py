@@ -124,6 +124,7 @@ def source_material_to_exported_texture_guids(trace, source_materials, originals
             "source_Texture2D_to_export_GUIDs_unique":0,
             "source_Type0_local_texture_pointer_slots":0,
             "source_Type0_local_original_Texture2D_targets":0,
+            "source_Type0_PPtr_nonzero_GUID_hints_not_used_as_export_image":0,
         })
     mapped = {}
     for row in trace.get("objects", []):
@@ -176,8 +177,11 @@ def source_material_to_exported_texture_guids(trace, source_materials, originals
             # external GUID or count this as an exported PNG image.
             if file_id <= 0 or len(guid) != 32 or kind not in (0, 2, 3):
                 raise ValueError("broken_same_export_particle_texture_Material_ref")
-            if kind == 0 and guid.lower() != "0" * 32:
-                raise ValueError("untrusted_original_local_Texture2D_nonzero_GUID")
+            if kind == 0 and metrics is not None and guid.lower() != "0" * 32:
+                # Type0 with nonzero GUID is a nonstandard same-export PPtr,
+                # NOT proof of a standalone TextureImporter or image file.
+                # Keep its source-authenticated owner/PathID and UV only.
+                metrics["source_Type0_PPtr_nonzero_GUID_hints_not_used_as_export_image"] += 1
             if original_uv is None or exported_uv is None or len(original_uv) != len(exported_uv):
                 raise ValueError("missing_same_export_particle_texture_UV")
             import math
