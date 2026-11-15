@@ -60,6 +60,13 @@ After every meaningful batch: update THIS clients/GT/RESTORE_AR.md at top, the 0
 - [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176) لاستعادة next30 الكاملة، وفحوص Particle108 Alpha [43773481136](https://github.com/alwansan/raf/actions/runs/43773481136) و[43773517218](https://github.com/alwansan/raf/actions/runs/43773517218) مفتوحة عند كتابة هذه الملاحظة. لا تفترض نجاحاً حتى انتهاء CI.
 - أبقِ آخر رقم مثبت **540/786 Custom material non-Dummy؛ 246 Dummy على 47 Shader** حتى يقبل تقرير post14. لا XAPK.
 
+## دفعة إصلاح المصدر الأصلي — Range للشيدر 23 وTexture2D لشفافية النار | 16 نوفمبر
+
+- [43774312812](https://github.com/alwansan/raf/actions/runs/43774312812) FAILED ولكن أثبت بدقة أن شيدر 23 مادة لديه **3 Range Properties**، منها **واحدة فقط ذات قيمة Default خارج حدود المنزلق**؛ لا حدود Range معكوسة ولا lane4 غير صفرية. برامج **58/58 DXBC و66/66 stage route** نجحت؛ فشل Property serializer فقط. أضفنا **خياراً مقيّداً لهذا Shader48 SHA-authenticated** كي يُعيد إصدار نفس حدود Range وقيمة Default الأصلية دون clamp أو تغيير، وبقيت الحراسة الافتراضية لجميع الشيدرات القديمة صارمة. [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669) يجرب إصلاح المصدر؛ النتيجة لم تثبت بعد. ملفات التنفيذ: scripts/t3_particle108_source_propstate.py، scripts/gt_original_921_keyword_routes.py، scripts/gt_translate_next_remaining_23_shader48.py.
+- [43773481136](https://github.com/alwansan/raf/actions/runs/43773481136) FAILED بسبب أن مرجع Texture2D غير القياسي type0 (واحد من عشرة TexEnv أصلية) **يحمل GUID غير صفري**. هذه إشارة من المصدر الفعلي، **ليست إثباتاً لصورة PNG مستقلة**. تغيّرت الأداة كي تحتفظ بهذا المصدر/UV مؤقتاً وتعتبره unresolved، وتحلل فقط صور TextureImporter الخارجية المؤكدة (2 من أصل 3). [43774613471](https://github.com/alwansan/raf/actions/runs/43774613471) **SUCCESS** لاختبارات هذا الفصل، والفحص الواقعي الأحدث [43774613441](https://github.com/alwansan/raf/actions/runs/43774613441) لم يثبت بعد. لا تعتبر Fire Alpha أو pixels على Adreno مستعادة.
+- [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176) لا يزال مسار next30 داخل **full same-export** وغير منتهٍ عند كتابة الملاحظة. **العدد المثبت لا يزال 540/786 custom non-Dummy مقابل 246 Dummy (47 targets)**. لا XAPK حتى استعادة كل الموارد واختبارات G0–G6.
+- عند العودة افحص جميع أرقام CI أعلاه، وأصلح سبب الفشل الحقيقي لا تختصره؛ **ثم حدّث هذه الرسالة و01/02/03** وأرفق دليل العدد الجديد بعد قبول المصدر.
+
 ## الحالة الهندسية المُعتمدة الآن
 
 - **المجسمات والخامات والألوان:** أُثبتت مصادر ZIP2 ذات 82 مالكاً وأصول Mesh وTextures ومواقع المشاهد وألوانها. يوجد فحص لعدد 4,708 Mesh وملفات Streamed أصلية، لكن **لا تفسّر ذلك على أنه قبول بصري كامل على Adreno**. يجب إكمال جميع الروابط والمواد المفقودة.
