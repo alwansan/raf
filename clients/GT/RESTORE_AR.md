@@ -74,6 +74,12 @@ After every meaningful batch: update THIS clients/GT/RESTORE_AR.md at top, the 0
 - سجل سبب الفشل السابق في [43774150865](https://github.com/alwansan/raf/actions/runs/43774150865) و[43774312812](https://github.com/alwansan/raf/actions/runs/43774312812) وأصلحنا المصدر الحقيقي دون قص/تغيير القيم. بعد نجاح [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669)، لا تنسب هذه الفحوص السابقة كفشل قائم.
 - أصل ZIP2 وجميع برامج Shader48 الخاصة تبقى فقط ضمن GitHub runner؛ Artifact عام يحتوي counts دون أسماء/PathIDs/Shader bytes، ولا APK/OBB/XAPK.
 
+## بدء تجميع next23 في Unity Android Vulkan — 16 نوفمبر
+
+- شُغّل [43774787696](https://github.com/alwansan/raf/actions/runs/43774787696) على commit `0f07bc40b18175d1d7a3755bc2fc03216b58bc3b` بعد قبول مصدر الشيدر الأصلي [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669). يقرأ 82 owner SHA من ZIP2، يستعيد private ShaderLab الأصلي بأربع Passes و33 مسار VS/FS و58 DXBC programs، ثم ينفّذ `RaftGT.Next23ShaderValidation.Validate` في Unity 2021.3.45f2 Android Vulkan shader-only Bundle وSMOL-V decode للتحقق من الاحتفاظ بكل المسارات. **لم يثبت نجاح Unity ولا original same-export GUID بعد**.
+- الدليل الآمن المتوقع إذا نجح فحص Unity: `gt-next23-private-unity-vulkan-safe-43774787696` يحوي compiler receipt وVS/FS route counts فقط، دون ملفات original Shader48. فشل CI يستلزم فحص error types ومقارنة المصدر دون تحوير GUID أو Material YAML. أبقِ آخر **246 Dummy** كما هو حتى قبول post14 أو دمج الشيدر في التصدير.
+- **لا XAPK**. حدّث هذه الرسالة فور انتهاء أي فحص وملفات 01/02/03 المرافقة.
+
 ## الحالة الهندسية المُعتمدة الآن
 
 - **المجسمات والخامات والألوان:** أُثبتت مصادر ZIP2 ذات 82 مالكاً وأصول Mesh وTextures ومواقع المشاهد وألوانها. يوجد فحص لعدد 4,708 Mesh وملفات Streamed أصلية، لكن **لا تفسّر ذلك على أنه قبول بصري كامل على Adreno**. يجب إكمال جميع الروابط والمواد المفقودة.
