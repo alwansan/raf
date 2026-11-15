@@ -1,0 +1,166 @@
+name: GT original Particle108 linked texture alpha from real ZIP2 export (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-particle108-alpha-real-export.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-particle108-real-alpha-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  original-particle-alpha-real-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            config
+            android-port/Experiments/ExportLineage
+            android-port/Experiments/GT/Editor
+            Raft/Raft_Data/Managed
+            tests
+      - name: Check disk for full 7.53GB Raft source and actual AssetRipper export
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 47185920
+      - name: Immutable full Raft graphics ZIP2 checkout, never Git LFS
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/**
+      - name: Stage exact original managed providers for full AssetRipper import
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check dnfile==0.18.0
+          python3 -m scripts.stage_export_managed_providers \
+            --source "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
+            --destination "$RUNNER_TEMP/gt-input/Raft_Data/Managed"
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/Managed/Assembly-CSharp.dll"
+          test ! -e "$RUNNER_TEMP/gt-input/Raft_Data/Managed/PlayFab_o.dll"
+      - name: Restore complete 134 SHA-authentic original graphics and scenes to real exporter input
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_zip2_export_resources \
+            --zip2-checkout .gt-zip2 \
+            --input-root "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --profile full \
+            --byte-budget 10000000000 \
+            --report "$RUNNER_TEMP/gt-export-original-restore.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-export-original-restore.json"
+          result=json.loads(p.read_text())
+          assert result["original_resources_verified"]==134
+          assert result["original_bytes_materialized_or_reused"]==7532909297
+          assert result["git_lfs_used"] is False
+          assert result["original_payload_sha256_and_size_verified"]
+          print("GT_REAL_EXPORT_INPUT_READY originalFiles=134 originalBytes=7532909297 managed=true LFS=false")
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - uses: actions/checkout@v4
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          sparse-checkout: Source
+      - name: Instrument and publish exact native-pipeline AssetRipper for same-instance lineage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.patch_export_lineage \
+            --tool-source ar-host \
+            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --native-texture-arrays --compute-lineage
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/gt-ar" \
+            > "$RUNNER_TEMP/gt-public-tool-build.log" 2>&1 || {
+              tail -30 "$RUNNER_TEMP/gt-public-tool-build.log"
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/gt-ar/ExportLineage.dll" --probe-tool \
+            > "$RUNNER_TEMP/gt-tool-smoke.log" 2>&1 || {
+              tail -30 "$RUNNER_TEMP/gt-tool-smoke.log"
+              exit 1
+            }
+      - name: Run genuine exporter on fully restored Raft scene/texture/mesh streams
+        env:
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/gt-private-export-lineage.json
+          RAFT_PRIVATE_EXPORT_MESH_LINEAGE: ${{ runner.temp }}/gt-private-mesh-export-lineage.json
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: '1'
+          RAFT_PRIVATE_EXPORT_COMPUTE_LINEAGE: '1'
+          DOTNET_PROCESSOR_COUNT: '2'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1200s dotnet "$RUNNER_TEMP/gt-ar/ExportLineage.dll" \
+            "$RUNNER_TEMP/gt-input" "$RUNNER_TEMP/gt-project" --full-install \
+            > "$RUNNER_TEMP/gt-export-log.private.txt" 2>&1 || {
+              python3 - <<'PY'
+          import json,os,re
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-export-log.private.txt"
+          s=p.read_text(errors="replace")
+          d={"export_completed":False,
+             "has_missing_assembly":"Could not load file or assembly" in s,
+             "loading_started":"Processing loaded assets" in s,
+             "export_started":"Starting export" in s,
+             "managed_assembly_initialization_failure":"Could not initialize assembly manager" in s,
+             "known_exception_types":len(set(re.findall(r'(?:System|AssetRipper)\.[a-zA-Z.]+Exception',s))),
+             "log_bytes":len(s.encode())}
+          (Path(os.environ["RUNNER_TEMP"])/"gt-export-failure-safe.json").write_text(json.dumps(d,sort_keys=True,indent=2)+"\n")
+          print("GT_EXPORTER_FAILED_AGGREGATE "+json.dumps(d,sort_keys=True))
+          PY
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/gt-private-export-lineage.json"
+          test -d "$RUNNER_TEMP/gt-project/ExportedProject/Assets"
+          test -d "$RUNNER_TEMP/gt-project/ExportedProject/ProjectSettings"
+          python3 -m scripts.verify_assetripper_script_import \
+            --log "$RUNNER_TEMP/gt-export-log.private.txt"
+      - name: Check source-selected three Particle108 Texture2D exported alpha images and importer settings
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0 UnityPy==1.23.0
+          python3 -m unittest discover -s tests -p test_gt_particle108_export_alpha_diagnostic.py -v
+          python3 -m scripts.gt_particle108_export_alpha_diagnostic \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --out "$RUNNER_TEMP/gt-particle108-real-export-alpha-safe.json"
+      - name: Upload only aggregate alpha/channel/importer evidence, never images or private source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-particle108-real-export-alpha-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-particle108-real-export-alpha-safe.json
+            ${{ runner.temp }}/gt-export-failure-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
