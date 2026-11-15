@@ -125,7 +125,10 @@ def analyze_exported_images(index):
     return total, {key: dict(sorted(value.items())) for key, value in importer_values.items()}
 
 
-def audit(original, manifest, project, trace_path):
+def audit(original, manifest, project, trace_path, *, checkpoint=None):
+    def mark(step):
+        if checkpoint is not None:
+            checkpoint(step)
     original = original.absolute()
     project = project.absolute()
     trace_path = trace_path.absolute()
@@ -135,9 +138,11 @@ def audit(original, manifest, project, trace_path):
             or trace_path.is_relative_to(project)
             or any(path.is_symlink() for path in (original, project, trace_path))):
         raise ValueError("unsafe_original_or_exported_particle_data")
+    mark("original_material_shader_Texture2D_PPtrs")
     original_targets = {}
     materials = material_source.run(
         original, manifest, private_local_texture_targets=original_targets)
+    mark("original_Texture2D28_manifest_and_stream")
     source = texture_source.run(original, manifest)
     if (materials["status"] != material_source.STATUS
             or source["status"] != texture_source.STATUS
@@ -146,10 +151,15 @@ def audit(original, manifest, project, trace_path):
         raise ValueError("unverified_particle_original_Texture2D_scope")
     if trace_path.stat().st_size > 40 * 1024 * 1024:
         raise ValueError("oversize_private_export_trace")
+    mark("read_private_export_trace")
     trace = json.loads(trace_path.read_text(encoding="utf-8"))
+    mark("join_same_export_Texture2D28_GUID")
     mapping = source_texture_export_map(trace, original_targets)
+    mark("locate_exported_TextureImporter_image")
     exported = image_meta_index(project / "Assets", set(mapping.values()))
+    mark("decode_exported_image_alpha")
     counts, importers = analyze_exported_images(exported)
+    mark("completed")
     return {
         "schema_version": 1,
         "status": STATUS,
@@ -177,13 +187,29 @@ def main():
             a.out.resolve().is_relative_to(a.project.resolve()) or
             a.out.resolve().is_relative_to(a.original.resolve())):
         raise ValueError("unsafe_particle_alpha_report_destination")
+    progress = {"stage": "input_paths_and_layout"}
+    stages = {
+        "input_paths_and_layout",
+        "original_material_shader_Texture2D_PPtrs",
+        "original_Texture2D28_manifest_and_stream",
+        "read_private_export_trace",
+        "join_same_export_Texture2D28_GUID",
+        "locate_exported_TextureImporter_image",
+        "decode_exported_image_alpha",
+        "completed",
+    }
+    def mark(stage):
+        if stage not in stages:
+            raise ValueError("invalid_private_diagnostic_stage")
+        progress["stage"] = stage
     try:
-        report = audit(a.original, a.manifest, a.project, a.trace)
+        report = audit(a.original, a.manifest, a.project, a.trace, checkpoint=mark)
     except Exception as error:
         report = {
             "schema_version": 1,
             "status": "INCONCLUSIVE",
             "error_type": type(error).__name__,
+            "failure_stage": progress["stage"],
             "android_device_fire_pixels_verified": False,
             "private_ids_guids_paths_or_pixels_published": False,
         }
