@@ -18,6 +18,7 @@ from pathlib import Path
 from scripts import t3_audit_exported_material_programs as quality
 from scripts.gt_stage_serialized_owners import OWNERS, read_expected
 from scripts.gt_serialized_graphics_counts import verify
+from scripts.t3_original_renderer_shader_impact import load_original, STATUS as SCENE_STATUS
 from scripts.verify_export_lineage import identity, pointer
 
 STATUS="GT_EXACT_ORIGINAL_SHADER48_SAME_EXPORT_DUMMY_MATERIAL_PRIORITY_VERIFIED"
@@ -164,11 +165,18 @@ def run(original,manifest,project,trace_path):
     wanted,source_by_guid=select_dummy_export_sources(
         json.loads(trace_path.read_text("utf-8")),profiles,refs)
     names,owner_count=original_names_for_wanted(original,manifest,source_by_guid)
+    scene_slots={}
+    scene_proof=load_original(original,manifest,private_slot_counts=scene_slots)
+    if (scene_proof.get("status")!=SCENE_STATUS or
+            scene_proof.get("six_original_scenes_sha_verified") is not True):
+        raise ValueError("original_six_scene_priority_source_not_verified")
     dummy=sum(count for (fid,guid,kind),count in refs.items()
               if fid==4800000 and kind=="3" and guid in wanted)
     private,report=compare_exact_sources(profiles,refs,source_by_guid,names,
-                                         expected_material_documents=dummy)
+                                         expected_material_documents=dummy,
+                                         original_scene_weights=scene_slots)
     report["original_sha_authenticated_Shader_owner_count"]=owner_count
+    report["six_original_scenes_1633_Shader48_material_slots_SHA_verified"]=True
     report["distinct_dummy_Shader_GUIDs_referenced"]=len(wanted)
     report["linked_dummy_Shader_targets_with_exported_trace"]=len(source_by_guid)
     report["full_original_export_material_documents"]=sum(refs.values())
