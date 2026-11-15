@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "agent": "GT",
+  "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "failed_real_alpha_run": 43764070678,
+  "failed_real_alpha_url": "https://github.com/alwansan/raf/actions/runs/43764070678",
+  "failed_real_alpha_conclusion": "failure",
+  "failed_step": "Check source-selected three Particle108 Texture2D exported alpha images and importer settings",
+  "failure_stage": "join_same_export_Texture2D28_GUID",
+  "failure_code": "invalid_same_export_Texture2D_pointer",
+  "source_original_Texture2D_targets": 3,
+  "all_export_trace_Texture2D28_rows": 2928,
+  "matching_original_source_Texture2D28_trace_rows": 1,
+  "valid_direct_texture_source_to_export_guid_mappings_before_failure": 0,
+  "duplicate_selected_original_texture_trace_rows": 0,
+  "source_original_particle_materials": 5,
+  "source_original_material_texenv_slots": 10,
+  "next_strict_proof": "Join five original Material21 source identifiers through same exporter trace to exported Material21 YAML; map each source TexEnv property/UV to actual exported texture PPtr, enforce three consistent source Texture2D GUIDs; no arbitrary resource substitution.",
+  "fallback_code_commit": "212a32ab48d19517b9cd93769d3d84dd004fb3e4",
+  "fallback_synthetic_tests_commit": "f7c9124c94f305a20d86ff785c1243e9a4865d59",
+  "fallback_real_runs": [
+    43764899336,
+    43764952245
+  ],
+  "fallback_synthetic_test_run": 43764952233,
+  "fallback_synthetic_test_conclusion": "success",
+  "original_and_exported_assets_modified": false,
+  "original_material_or_texture_guids_modified": false,
+  "source_original_alpha_pixels_compared": false,
+  "Android_device_fire_transparency_verified": false,
+  "APK_OBB_XAPK_created": false,
+  "status": "SOURCE_DIRECT_TEXTURE_PPTR_INVALID_STRICT_MATERIAL_YAML_FALLBACK_TESTING"
+}
