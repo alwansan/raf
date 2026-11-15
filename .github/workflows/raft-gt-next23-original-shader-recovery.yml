@@ -1,0 +1,192 @@
+name: GT recover next authentic 23-material Shader48 58 original D3D11 stages (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_translate_next_remaining_23_shader48.py
+      - tests/test_gt_translate_next_remaining_23_shader48.py
+      - .github/workflows/raft-gt-next23-original-shader-recovery.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: gt-next23-original-shader48-source-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  authenticated-original-23-material-shader48:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Test SHA-authentic shader target ranking against two different 23-material originals
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_translate_next_remaining_23_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_23_shader48.py -v
+      - name: Import real post13 246 dummy material quality without any original game resources
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43764506277
+          name: gt-thirteen-source-shader-full-export-audit-43764506277
+          path: ${{ runner.temp }}/gt-thirteen-original-quality
+      - name: Check storage for all original Shader48 objects, no git LFS
+        run: |
+          set -euo pipefail
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 5242880
+      - name: Read immutable ZIP2 serialized owner files only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/level6
+            Raft/Raft_Data/level7
+            Raft/Raft_Data/level8
+            Raft/Raft_Data/level9
+            Raft/Raft_Data/level10
+            Raft/Raft_Data/level11
+            Raft/Raft_Data/level12
+            Raft/Raft_Data/level13
+            Raft/Raft_Data/level14
+            Raft/Raft_Data/level15
+            Raft/Raft_Data/level16
+            Raft/Raft_Data/level17
+            Raft/Raft_Data/level18
+            Raft/Raft_Data/level19
+            Raft/Raft_Data/level20
+            Raft/Raft_Data/level21
+            Raft/Raft_Data/level22
+            Raft/Raft_Data/level23
+            Raft/Raft_Data/level24
+            Raft/Raft_Data/level25
+            Raft/Raft_Data/level26
+            Raft/Raft_Data/level27
+            Raft/Raft_Data/level28
+            Raft/Raft_Data/level29
+            Raft/Raft_Data/level30
+            Raft/Raft_Data/level31
+            Raft/Raft_Data/level32
+            Raft/Raft_Data/level33
+            Raft/Raft_Data/level34
+            Raft/Raft_Data/level35
+            Raft/Raft_Data/level36
+            Raft/Raft_Data/level37
+            Raft/Raft_Data/level38
+            Raft/Raft_Data/level39
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets2.assets
+            Raft/Raft_Data/sharedassets3.assets
+            Raft/Raft_Data/sharedassets4.assets
+            Raft/Raft_Data/sharedassets5.assets
+            Raft/Raft_Data/sharedassets6.assets
+            Raft/Raft_Data/sharedassets7.assets
+            Raft/Raft_Data/sharedassets8.assets
+            Raft/Raft_Data/sharedassets9.assets
+            Raft/Raft_Data/sharedassets10.assets
+            Raft/Raft_Data/sharedassets11.assets
+            Raft/Raft_Data/sharedassets12.assets
+            Raft/Raft_Data/sharedassets13.assets
+            Raft/Raft_Data/sharedassets14.assets
+            Raft/Raft_Data/sharedassets15.assets
+            Raft/Raft_Data/sharedassets16.assets
+            Raft/Raft_Data/sharedassets17.assets
+            Raft/Raft_Data/sharedassets18.assets
+            Raft/Raft_Data/sharedassets19.assets
+            Raft/Raft_Data/sharedassets20.assets
+            Raft/Raft_Data/sharedassets21.assets
+            Raft/Raft_Data/sharedassets22.assets
+            Raft/Raft_Data/sharedassets23.assets
+            Raft/Raft_Data/sharedassets24.assets
+            Raft/Raft_Data/sharedassets25.assets
+            Raft/Raft_Data/sharedassets26.assets
+            Raft/Raft_Data/sharedassets27.assets
+            Raft/Raft_Data/sharedassets28.assets
+            Raft/Raft_Data/sharedassets29.assets
+            Raft/Raft_Data/sharedassets30.assets
+            Raft/Raft_Data/sharedassets31.assets
+            Raft/Raft_Data/sharedassets32.assets
+            Raft/Raft_Data/sharedassets33.assets
+            Raft/Raft_Data/sharedassets34.assets
+            Raft/Raft_Data/sharedassets35.assets
+            Raft/Raft_Data/sharedassets36.assets
+            Raft/Raft_Data/sharedassets37.assets
+            Raft/Raft_Data/sharedassets38.assets
+            Raft/Raft_Data/sharedassets39.assets
+
+      - name: Materialize exact SHA-authenticated 82 Unity serialized owners (no LFS or raw upload)
+        run: |
+          set -euo pipefail
+          test "$(git -C .gt-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m scripts.gt_stage_serialized_owners \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --source .gt-zip2/Raft/Raft_Data \
+            --destination "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --report "$RUNNER_TEMP/gt-original-82-source-proof-private.json" > "$RUNNER_TEMP/gt-original-82-source-private.log"
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+
+      - name: Recover exact original 23-material 4-pass 33-VSFS source and Vulkan1.1 program topology privately
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          timeout 2700s python3 -m scripts.gt_translate_next_remaining_23_shader48 \
+            --original "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-thirteen-original-quality/gt-thirteen-shader-postrestore-quality.json" \
+            --private "$RUNNER_TEMP/gt-next23-private-D3D11-HLSL" \
+            --out "$RUNNER_TEMP/gt-next23-original-d3d11-58-safe.json"
+          python3 - <<'PY_GT_NEXT23'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          r=json.loads((root/"gt-next23-original-d3d11-58-safe.json").read_text())
+          assert r["status"]=="GT_SHA_ORIGINAL_REMAINING_23_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
+          assert r["postthirteen_dummy_materials_linked_to_this_original_shader"]==23
+          assert r["original_exact_vertex_fragment_keyword_permutation_pairs"]==33
+          assert r["original_orphan_vertex_stage_variants"]==8
+          assert r["original_program_stages_roundtrip_Vulkan11_valid"]==58
+          assert r["private_original_exact_keyword_routed_programs_compiled"]==66
+          assert r["source_original_keyword_permutation_route_counts_per_pass"]==[8,13,8,4]
+          assert r["private_original_23_material_ShaderLab_4pass_composed"] is True
+          assert r["private_original_23_material_ShaderLab_66_vertex_fragment_entrypoints_validated"] is True
+          print("GT_NEXT23_ORIGINAL_58_D3D11_PROGRAMS_AND_33_VSFS_SOURCE_ROUTES_VALID noGamePackage=true")
+          PY_GT_NEXT23
+      - name: Upload safe source-only numeric original 23-material shader report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-next23-original-D3D11-58-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/gt-next23-original-d3d11-58-safe.json
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Delete original ZIP2 owner files and all temporary private shader DXBC/HLSL/ShaderLab
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-original-82-shader-owners" \
+                   "$RUNNER_TEMP/gt-next23-private-D3D11-HLSL" .gt-zip2
