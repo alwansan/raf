@@ -10,6 +10,7 @@ on:
       - tests/test_gt_probe_remaining_original_shader_dxbc_topology.py
       - tests/test_gt_rank_all82_original_shader_names_after_nine.py
       - .github/workflows/raft-gt-all82-original-shader-name-priority.yml
+      - android-port/Experiments/GT/Editor/Next30ShaderValidation.cs
   workflow_dispatch:
 
 permissions:
@@ -23,7 +24,8 @@ concurrency:
 jobs:
   original-all82-name-source-priority:
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 130
+    environment: UNITY_LICENSE
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -32,6 +34,7 @@ jobs:
           sparse-checkout: |
             scripts
             tests
+            android-port/Experiments/GT/Editor
       - name: Test strict no-private-names rank for source Shader48 and post-nine dummy materials
         run: |
           set -euo pipefail
@@ -181,6 +184,75 @@ jobs:
             --quality "$RUNNER_TEMP/gt-nine-original-quality/gt-nine-shader-postrestore-quality.json" \
             --private "$RUNNER_TEMP/gt-private-recovered-30-material-original-shader" \
             --out "$RUNNER_TEMP/gt-original-30-material-shader-D3D11-private-stage-safe.json"
+      - name: Prepare next original 30-Material Shader48 private Unity Android Vulkan project (no game player)
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next30-original-unity"
+          private="$RUNNER_TEMP/gt-private-recovered-30-material-original-shader"
+          python3 - <<'PY_GT_NEXT30'
+          import os,json
+          from pathlib import Path
+          r=Path(os.environ["RUNNER_TEMP"])
+          source=json.loads((r/"gt-original-30-material-shader-D3D11-private-stage-safe.json").read_text())
+          assert source["status"]=="GT_SHA_ORIGINAL_REMAINING_30_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
+          assert source["original_program_stages_roundtrip_Vulkan11_valid"]==55
+          assert source["private_original_30_material_ShaderLab_62_vertex_fragment_entrypoints_validated"] is True
+          assert source["source_original_keyword_permutation_route_counts_per_pass"]==[8,13,8,2]
+          assert source["APK_OBB_XAPK_created"] is False
+          print("GT_NEXT30_ORIGINAL_SHADER48_PRIVATE_ANDROID_BUNDLE_INPUT_VERIFIED=true")
+          PY_GT_NEXT30
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          test -s "$private/original-30-material-Shader48-private.shader"
+          cp "$private/original-30-material-Shader48-private.shader" "$project/Assets/GTNext30.shader"
+          cp android-port/Experiments/GT/Editor/Next30ShaderValidation.cs "$project/Assets/Editor/Next30ShaderValidation.cs"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile the recovered private 30-Material Shader48 in isolated Unity Android Vulkan (NO APK)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-next30-original-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Next30ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Require exact original 31 Unity Android Vulkan keyword routes and 4 passes (no player)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY_GT_UNITY_NEXT30'
+          import json,hashlib
+          from pathlib import Path
+          project=Path("gt-next30-original-unity")
+          shader=project/"Assets/GTNext30.shader"
+          report=json.loads((project/"ProbeResults/gt-next30-unity-safe.json").read_text())
+          assert report["unityVersion"]=="2021.3.45f2"
+          assert report["passCount"]==4
+          assert report["registeredRoutes"]==31
+          assert report["errors"]==0
+          assert report["androidVulkanOnly"] is True
+          assert report["privateBundleCompiled"] is True
+          assert report["candidateSha256"]==hashlib.sha256(shader.read_bytes()).hexdigest()
+          assert (project/"ProbeResults/Private/gt-next30").is_file()
+          print("GT_NEXT30_4_PASS_31_ROUTE_UNITY_ANDROID_VULKAN_ISOLATED_SHADER_BUNDLE_VALID noAPK=true noOriginalShaderSourcePublished=true")
+          PY_GT_UNITY_NEXT30
+      - name: Retain only next30 numeric Unity compiler proof, never source ShaderLab or shader bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-next30-original-unity-vulkan-safe-${{ github.run_id }}
+          path: |
+            gt-next30-original-unity/ProbeResults/gt-next30-unity-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
       - name: Upload anonymous ranking counts only
         if: always()
         uses: actions/upload-artifact@v4
@@ -197,3 +269,4 @@ jobs:
         run: |
           rm -rf -- "$RUNNER_TEMP/gt-original-82-shader-owners" .gt-zip2
           rm -rf -- "$RUNNER_TEMP/gt-private-recovered-30-material-original-shader"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-next30-original-unity"
