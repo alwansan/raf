@@ -261,6 +261,36 @@ jobs:
           assert (project/"ProbeResults/Private/gt-next30").is_file()
           print("GT_NEXT30_4_PASS_31_ROUTE_UNITY_ANDROID_VULKAN_ISOLATED_SHADER_BUNDLE_VALID noAPK=true noOriginalShaderSourcePublished=true")
           PY_GT_UNITY_NEXT30
+      - name: Verify original 30-Material Shader48 Vulkan bundle serializes 31 VS/FS routes, not merely Unity compiler success
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next30-original-unity"
+          smolv="$RUNNER_TEMP/gt-next30-smolv"
+          mkdir -p "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-next30" \
+            --source "$project/Assets/GTNext30.shader" \
+            --receipt "$project/ProbeResults/gt-next30-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" --next30 \
+            --out "$RUNNER_TEMP/gt-next30-original-vulkan-bundle-safe.json"
+          python3 - <<'PY_GT_NEXT30_BUNDLE'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          r=json.loads((root/"gt-next30-original-vulkan-bundle-safe.json").read_text())
+          assert r["vulkan_platform_only"] is True
+          assert r["compiled_program_table_verified"] is True
+          assert r["vertex_routes_by_pass"]==[8,13,8,2]
+          assert r["fragment_routes_by_pass"]==[8,13,8,2]
+          assert r["vertex_and_fragment_entrypoints_verified"] is True
+          assert r["candidate_sha256"]
+          print("GT_NEXT30_SOURCE_4PASS_UNITY_ANDROID_VULKAN_31_VSFS_BUNDLE_ROUTES_VERIFIED noAPK=true")
+          PY_GT_NEXT30_BUNDLE
       - name: Retain only next30 numeric Unity compiler proof, never source ShaderLab or shader bundle
         if: always()
         uses: actions/upload-artifact@v4
@@ -268,6 +298,7 @@ jobs:
           name: gt-next30-original-unity-vulkan-safe-${{ github.run_id }}
           path: |
             gt-next30-original-unity/ProbeResults/gt-next30-unity-safe.json
+            ${{ runner.temp }}/gt-next30-original-vulkan-bundle-safe.json
           retention-days: 14
           if-no-files-found: ignore
       - name: Upload anonymous ranking counts only
