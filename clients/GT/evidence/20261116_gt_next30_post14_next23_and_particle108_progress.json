@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "agent": "GT",
+  "date_baghdad": "2026-11-16",
+  "repository": "alwansan/raf",
+  "write_branch": "feature/android-native-port",
+  "zip2_pinned_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_only_and_same_export_separation": {
+    "post14_next30": {
+      "run_id": 43773151176,
+      "conclusion": "success",
+      "head_sha": "988490597b63f6c404536b4b311c03d0f6d3f8dc",
+      "artifact_id": 14186801044,
+      "artifact_digest": "sha256:41f5ba7bbcd1accca6e04b60902749cffdecaf5ce9c1febe607d1abef173b8cd",
+      "source_d3d11_programs": 55,
+      "vulkan_vs_fs_routes_by_pass": [
+        8,
+        13,
+        8,
+        2
+      ],
+      "real_same_export_source_owner_pathid_to_original_guid_verified": true,
+      "materials_total": 1536,
+      "unity_builtin_materials": 750,
+      "custom_materials": 786,
+      "non_dummy_custom_materials": 570,
+      "dummy_custom_materials": 216,
+      "distinct_dummy_shader_targets": 46,
+      "broken_material_shader_references": 0,
+      "original_meta_yaml_material_files_sha_unchanged": 29213,
+      "coverage_percent_of_custom_materials_only": 72.5
+    },
+    "next23_not_yet_same_export_installed": {
+      "source_success": 43774524669,
+      "source_original_d3d11_stages": 58,
+      "source_vulkan_roundtrip_stages": 58,
+      "isolated_unity_success": 43774787696,
+      "original_expected_vs_fs_routes_by_pass": [
+        8,
+        13,
+        8,
+        4
+      ],
+      "same_export_installer_path": "scripts/gt_install_next23_original_shader48.py",
+      "full_export_workflow": ".github/workflows/raft-gt-original-export-smoke.yml",
+      "full_export_initial_run": 43777150940,
+      "full_export_fixed_fixture_run": 43777283111,
+      "post15_dummy_target_expected_but_NOT_VERIFIED": 193,
+      "post15_non_dummy_expected_but_NOT_VERIFIED": 593,
+      "post15_distinct_dummy_target_expected_but_NOT_VERIFIED": 45,
+      "source_owner_to_actual_export_guid_unverified_in_this_batch": true
+    }
+  },
+  "fire_alpha": {
+    "original_materials": 5,
+    "texture_slots": 10,
+    "external_kind3_fileid2800000": 9,
+    "local_kind0": 1,
+    "real_previous_failures": [
+      43773481136,
+      43773517218
+    ],
+    "static_gate_success": 43777398225,
+    "external_guid_subset_fix_commit": "8563cf65f4876856e3d8ca078b479e087c8c9e73",
+    "real_source_changed_run": 43777398215,
+    "tests_changed_run": 43777415610,
+    "expected_possible_result": "PARTIAL 2 external images; local unresolved",
+    "actual_exported_alpha_NOT_VERIFIED": true,
+    "source_texture_local_GUID_must_not_be_invented": true
+  },
+  "water_fft_foam_depth_kernel6_unresolved": true,
+  "animation_deferred": true,
+  "gates_G0_to_G6_all_closed": false,
+  "android_adreno_pixels_verified": false,
+  "xapk_created_in_this_batch": false
+}
