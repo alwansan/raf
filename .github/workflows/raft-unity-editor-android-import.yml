@@ -1671,6 +1671,99 @@ jobs:
         run: |
           rm -rf -- "$RUNNER_TEMP/gt-native-hair"
           sudo rm -rf -- "$GITHUB_WORKSPACE/gt-native-hair-unity"
+      - name: Recover and stage original BillboardFade programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-native-billboard"
+          project="$GITHUB_WORKSPACE/gt-native-billboard-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader billboard --original "$RUNNER_TEMP/w1-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original BillboardFade in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-native-billboard-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all BillboardFade routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-native-billboard"
+          project="$GITHUB_WORKSPACE/gt-native-billboard-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          # Refuse any partial or silently substituted shader reconstruction.
+          # The complete source topology and actual Unity Vulkan routes must
+          # match before replacing the original exported ShaderLab text.
+          python3 - <<'PY_GT_NATIVE_BILLBOARD_GATE'
+          import json,os
+          from pathlib import Path
+          work=Path(os.environ['RUNNER_TEMP'])/'gt-native-billboard'
+          source=json.loads((work/'source-safe.json').read_text())
+          bundle=json.loads((work/'bundle-safe.json').read_text())
+          assert source['original_passes']==2
+          assert source['exact_original_source_VS_FS_permutation_pairs']==9
+          assert source['original_unique_D3D11_stage_programs']==19
+          assert source['source_keyword_route_coverage']['source_exact_keyword_routes_by_pass']==[4,5]
+          assert bundle['compiled_program_table_verified'] is True
+          assert bundle['vertex_routes_by_pass']==[4,5]
+          assert bundle['fragment_routes_by_pass']==[4,5]
+          assert bundle['engine_keywords_verified'] is True
+          assert bundle['vulkan_platform_only'] is True
+          print('GT_NATIVE_BILLBOARD_PREFLIGHT originalPasses=2 pairedRoutes=4,5 sourcePrograms=19 UnityVulkanVerified=true')
+          PY_GT_NATIVE_BILLBOARD_GATE
+          python3 -m scripts.gt_install_recovered_model_shader --shader billboard \
+            --original "$RUNNER_TEMP/w1-original" --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/project/ExportedProject" --trace "$RUNNER_TEMP/private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate BillboardFade compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-native-billboard-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-native-billboard/source-safe.json
+            ${{ runner.temp }}/gt-native-billboard/bundle-safe.json
+            gt-native-billboard-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private BillboardFade source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-native-billboard"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-native-billboard-unity"
       - name: Inventory actual exported Material Shader references without modifying assets
         id: w1_material_inventory
         # A diagnostic failure stays visible in the JSON. Existing strict builtin
@@ -1690,7 +1783,7 @@ jobs:
           set -euo pipefail
           python3 -m scripts.t3_audit_exported_material_programs \
             --project "$RUNNER_TEMP/project/ExportedProject" \
-            --out "$RUNNER_TEMP/t3-native-material-shader-quality.json"
+            --rank-dummy-targets --out "$RUNNER_TEMP/t3-native-material-shader-quality.json"
       - name: T5 inspect actual postrestorer Material-to-Texture references (non-mutating)
         id: t5_material_texture_links
         # Fail visibly when the exported links are broken, but do not prevent
