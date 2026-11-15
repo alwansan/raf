@@ -1533,6 +1533,189 @@ jobs:
             ${{ runner.temp }}/gt-thirteen-candle16-install-safe.json
           retention-days: 14
           if-no-files-found: ignore
+      # Original Shader48 next30 is sourced exclusively from SHA-pinned ZIP2.
+      # All candidate programs remain runner-private. Do NOT build any game package.
+      - name: Authenticate still-unrestored 30-material Shader48 between postnine and actual postthirteen exports
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_install_next30_original_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_install_recovered_model_shader.py -v
+          python3 - <<'PY_GT_NEXT30_SOURCE'
+          import json,os
+          from pathlib import Path
+          temp=Path(os.environ["RUNNER_TEMP"])
+          nine=json.loads((temp/"gt-nine-shader-postrestore-quality.json").read_text())
+          thirteen=json.loads((temp/"gt-thirteen-shader-postrestore-quality.json").read_text())
+          nc=nine["counts"];tc=thirteen["counts"]
+          assert nc["material_docs_using_dummy_Shader"]==333
+          assert tc["material_docs_using_dummy_Shader"]==246
+          assert tc["distinct_dummy_Shader_targets_referenced"]==47
+          rank_n=[k for k,n in nine["dummy_shader_material_counts_by_name_digest"].items() if n==30]
+          rank_t=[k for k,n in thirteen["dummy_shader_material_counts_by_name_digest"].items() if n==30]
+          assert len(rank_n)==len(rank_t)==1 and rank_n==rank_t
+          assert (temp/"gt-input/Raft_Data").is_dir()
+          print("GT_NEXT30_POST9_TO_POST13_SOURCE_MATCH remainingMaterials=30 all82_SHA_pinned=true")
+          PY_GT_NEXT30_SOURCE
+      - name: Recover the 55 SHA-original D3D11 stages and assemble private next30 four-pass ShaderLab
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-next30-source-private"
+          timeout 2400s python3 -m scripts.gt_translate_next_remaining_30_shader48 \
+            --original "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-nine-shader-postrestore-quality.json" \
+            --private "$work" --out "$RUNNER_TEMP/gt-next30-source-translation-safe.json"
+          python3 - <<'PY_GT_NEXT30_SOURCE_REPORT'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-next30-source-translation-safe.json").read_text())
+          assert r["status"]=="GT_SHA_ORIGINAL_REMAINING_30_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
+          assert r["original_program_stages_roundtrip_Vulkan11_valid"]==55
+          assert r["private_original_30_material_ShaderLab_4pass_composed"] is True
+          assert r["private_original_30_material_ShaderLab_62_vertex_fragment_entrypoints_validated"] is True
+          assert r["source_original_keyword_permutation_route_counts_per_pass"]==[8,13,8,2]
+          print("GT_NEXT30_AUTHENTIC_PRIVATE_SHADERLAB_SOURCE_READY stagePrograms=55 passRoutes=31 noAPK=true")
+          PY_GT_NEXT30_SOURCE_REPORT
+          project="$GITHUB_WORKSPACE/gt-next30-full-export-unity"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          cp "$work/original-30-material-Shader48-private.shader" "$project/Assets/GTNext30.shader"
+          cp android-port/Experiments/GT/Editor/Next30ShaderValidation.cs "$project/Assets/Editor/Next30ShaderValidation.cs"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile exact original next30 Shader48 in isolated Unity 2021 Android Vulkan (NO APK)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-next30-full-export-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Next30ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify exact source next30 Vulkan 31-route VS/FS original bundle and candidate SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next30-full-export-unity"
+          smolv="$RUNNER_TEMP/gt-next30-full-export-smolv"
+          mkdir -p "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-next30" \
+            --source "$project/Assets/GTNext30.shader" \
+            --receipt "$project/ProbeResults/gt-next30-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" --next30 \
+            --out "$RUNNER_TEMP/gt-next30-full-export-bundle-safe.json"
+          python3 - <<'PY_GT_NEXT30_31ROUTE'
+          import json,hashlib,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          src=Path("gt-next30-full-export-unity/Assets/GTNext30.shader")
+          r=json.loads((root/"gt-next30-full-export-bundle-safe.json").read_text())
+          assert r["vulkan_platform_only"] is True
+          assert r["compiled_program_table_verified"] is True
+          assert r["vertex_and_fragment_entrypoints_verified"] is True
+          assert r["vertex_routes_by_pass"]==r["fragment_routes_by_pass"]==[8,13,8,2]
+          assert r["candidate_sha256"]==hashlib.sha256(src.read_bytes()).hexdigest()
+          print("GT_NEXT30_VERIFIED_SOURCE_UNITY_ANDROID_VULKAN_SHADER_BUNDLE 31VSFS=true noAPK=true")
+          PY_GT_NEXT30_31ROUTE
+      - name: Install 30-material original Shader48 into actual same full ZIP2 export GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_install_next30_original_shader48 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-thirteen-shader-postrestore-quality.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$GITHUB_WORKSPACE/gt-next30-full-export-unity/Assets/GTNext30.shader" \
+            --receipt "$RUNNER_TEMP/gt-next30-full-export-bundle-safe.json" \
+            --backup "$RUNNER_TEMP/gt-next30-original-export-backup" \
+            --out "$RUNNER_TEMP/gt-next30-original-install-safe.json"
+      - name: Recount original full export custom materials after next30 GUID install and verify untouched YAML/meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --rank-dummy-targets \
+            --out "$RUNNER_TEMP/gt-fourteen-shader-postrestore-quality.json"
+          python3 - <<'PY_GT_FOURTEEN'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          before=json.loads((root/"gt-full-smoke-private-unchanged-material-meta.json").read_text())
+          post13=json.loads((root/"gt-thirteen-shader-postrestore-quality.json").read_text())
+          post14=json.loads((root/"gt-fourteen-shader-postrestore-quality.json").read_text())
+          assert post13["status"]==post14["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          c=post14["counts"]
+          assert c["material_documents"]==1536
+          assert c["material_docs_using_Unity_builtin_Shader"]==750
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          assert c["material_docs_using_dummy_Shader"]==216
+          assert c["material_docs_using_non_dummy_Shader"]==570
+          assert c["distinct_dummy_Shader_targets_referenced"]==46
+          source_sha={}
+          for p in (root/"gt-project/ExportedProject/Assets").rglob("*"):
+              if p.is_file() and not p.is_symlink() and p.suffix.lower() in {".meta",".mat",".asset",".prefab",".unity"}:
+                  h=hashlib.sha256()
+                  with p.open("rb") as f:
+                      for chunk in iter(lambda:f.read(1048576),b""):
+                          h.update(chunk)
+                  source_sha[str(p.relative_to(root/"gt-project/ExportedProject/Assets"))]=h.hexdigest()
+          assert source_sha==before,"next30_unexpected_original_Material_or_meta_mutation"
+          out={
+              "schema_version":1,
+              "status":"GT_FOURTEEN_NEXT30_SOURCE_SHADER48_SAME_EXPORT_GUID_ACCEPTED_NO_APK",
+              "post13_dummy_material_documents":246,
+              "post14_dummy_material_documents":216,
+              "post14_non_dummy_custom_material_documents":570,
+              "remaining_dummy_Shader_GUID_targets_referenced":46,
+              "protected_unchanged_original_Material_YAML_and_meta_files":len(source_sha),
+              "all_original_Material_meta_and_YAML_sha256_unchanged":True,
+              "original_Shader48_source_identity_and_UnityVulkan_bundle_verified":True,
+              "original_shader_GUID_preserved":True,
+              "APK_OBB_XAPK_created":False,
+              "device_pixel_or_original_keyword_runtime_parity_verified":False
+          }
+          (root/"gt-fourteen-shader-postrestore-summary-safe.json").write_text(
+              json.dumps(out,sort_keys=True,indent=2)+"\n")
+          print("GT_FOURTEEN_ORIGINAL_SHADER48_SAME_EXPORT_POSTINSTALL "+json.dumps(out,sort_keys=True))
+          PY_GT_FOURTEEN
+      - name: Upload only verified next30 Shader48 original GUID and post14 material count numeric proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-fourteen-next30-source-shader-full-export-audit-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-next30-source-translation-safe.json
+            gt-next30-full-export-unity/ProbeResults/gt-next30-unity-safe.json
+            ${{ runner.temp }}/gt-next30-full-export-bundle-safe.json
+            ${{ runner.temp }}/gt-next30-original-install-safe.json
+            ${{ runner.temp }}/gt-fourteen-shader-postrestore-summary-safe.json
+            ${{ runner.temp }}/gt-fourteen-shader-postrestore-quality.json
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Delete private next30 recovered D3D11/HLSL and Unity shader sources and bundles
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-next30-source-private" "$RUNNER_TEMP/gt-next30-original-export-backup"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-next30-full-export-unity"
       - name: Publish aggregate evidence only, never original scenes/meshes/export/trace
         if: always()
         uses: actions/upload-artifact@v4
