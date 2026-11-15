@@ -41,6 +41,12 @@ After every meaningful batch: update THIS clients/GT/RESTORE_AR.md at top, the 0
 - عند استكمال CI: افحص safe artifact `gt-particle108-real-export-alpha-<run>.zip`، خاصة `source_SHA_original_Texture2D28_local_type0_pointer_targets` و`actual_exported_alpha_image_counts`. إن كانت الصور الخارجية غير موجودة فلا تتجاوز الخطأ؛ أصلح مصدر تصديرها من نفس AssetRipper وليس تغيير YAML/Meta.
 - حدّث رسالة RESTORE_AR مع نتائج هذه التشغيلات عندما تتثبت، إضافة إلى 01/02/03، مع بقاء XAPK ممنوعاً.
 
+## الاستعادة التالية بالتوازي — 23 مادة Dummy، 16 نوفمبر 2026
+
+- بدأ [43773953670](https://github.com/alwansan/raf/actions/runs/43773953670) في commit `5e24abc7fae99177e09a284b485b9d68c8317200`: يجرد مصدر 82 owner من ZIP2 SHA، ويفصل **الشيدرين ذوي 23 مادة** بحسب توبولوجيا D3D11 الأصلية لا بالاسم وحده. يستهدف واحداً فقط فيه **4 Pass و33 VS/FS routes و8 VS orphans و58 برنامج DXBC أصلي**، بينما الشيدر الآخر ذي 1,156 route لم يُستعد بهذه الخطوة. يفك البرامج إلى Vulkan1.1/HLSL ويعيد اختبارها مع تجهيز ShaderLab ومسارات المصدر داخل بيئة خاصة، ثم يحذف ملفات البرنامج؛ **هذا فحص source-only ولا يثبت Unity AssetBundle/GUID/Adreno**.
+- مصدر الاستعادة: `scripts/gt_translate_next_remaining_23_shader48.py`؛ بوابة الفحص `tests/test_gt_translate_next_remaining_23_shader48.py`؛ CI `.github/workflows/raft-gt-next23-original-shader-recovery.yml`. لا ترفع source-name/PathID/bytecode/HLSL، واحتفظ بـ246 Material Dummy كعدد مثبت إلى حين نجاح دمج next30 في [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176).
+- عند جلسة الاستكمال: افحص [43773953670](https://github.com/alwansan/raf/actions/runs/43773953670) وArtifact الخاص به، أصلح أي فشل حقيقي، ثم إن ثبتت الـ58 stages فعلياً انتقل لاختبار Unity Android Vulkan 33 route في bundle خاص، وبعد ذلك original same-export GUID. لا XAPK.
+
 ## الحالة الهندسية المُعتمدة الآن
 
 - **المجسمات والخامات والألوان:** أُثبتت مصادر ZIP2 ذات 82 مالكاً وأصول Mesh وTextures ومواقع المشاهد وألوانها. يوجد فحص لعدد 4,708 Mesh وملفات Streamed أصلية، لكن **لا تفسّر ذلك على أنه قبول بصري كامل على Adreno**. يجب إكمال جميع الروابط والمواد المفقودة.
