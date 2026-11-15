@@ -89,3 +89,11 @@
 - [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669) SUCCESS: شيدر 23 Material أصلي، 58/58 D3D11→Vulkan/HLSL، 33 VS/FS + 8 orphan VS، 66 routed stage compilations، 74 parameter records، 1192 CB offsets و552 Texture/Sampler mappings و236 varyings، 17 property بينها 3 Range وDefault واحد خارج bounds حفظ كما هو. فحص Source فقط، لا GUID.
 - [43774787696](https://github.com/alwansan/raf/actions/runs/43774787696) بدأ private Unity Android Vulkan bundle للتحقق من 4 Pass و33 VS/FS routes بالـSMOL-V. لم تقبل نتيجته حتى الآن. بعد PASS يتوجب تثبيت original Shader48 عبر نفس source→export GUID في التصدير الأصلي وفحص مواد Dummy.
 - [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176) next30 في full export لا يزال بلا نتيجة نهائية. آخر أرقام يقينية: **540/786 non-Dummy، 246 Dummy، 47 Shader targets**؛ لا XAPK. ملف المصدر الرئيسي الحي: clients/GT/RESTORE_AR.md؛ حدّثه في كل دفعة.
+
+## سجل GT — 16 نوفمبر 2026 / نتيجة CI وتكملة هندسية
+
+- قرأت `feature/android-native-port` الحي وملفات المالك. HEAD قبل تعديل التوثيق `aeeaf87a86a4931c97642075759bebb614923d00`. مصدر `zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385` فقط، بلا LFS.
+- قرأت job `132993334224` للتشغيل [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176)؛ PASS في `gt_install_next30_original_shader48` على exporter الحقيقي؛ receipt `GT_EXACT_ORIGINAL_NEXT30_SAME_EXPORT_SHADER48_GUID_INSTALLED_NO_APK`، ثم audit `GT_FOURTEEN_NEXT30_SOURCE_SHADER48_SAME_EXPORT_GUID_ACCEPTED_NO_APK`. 570 non-Dummy، 216 Dummy، 46 targets، 29,213 YAML/meta ملفات لم تتغير، 0 broken، 0 package.
+- NEXT23: [43774787696](https://github.com/alwansan/raf/actions/runs/43774787696) جميع خطوات Unity Vulkan منفصلة ناجحة (33 VS/FS)، المصدر [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669) 58/58 نجاح. يجب ربط original shader identity بالتصدير الفعلي بعد next30؛ لا اعتباره مثبتاً.
+- FireAlpha: 43773481136 و43773517218 FAILED، الاصطناعي 43773517246 SUCCESS؛ 9 external / 1 local PPtr لا يزال يحتاج إثبات exported Texture semantics، وبكسل النار غير موثق. Kernel6/Water وعناصر G0–G6 ما زالت أعمالاً مفتوحة.
+- تحديث RESTORE_AR.md أولاً، ومنه يجب أن تستأنف أي جلسة لاحقة بالعداد 216 الحقيقي. تمييز: SOURCE ≠ ISOLATED UNITY ≠ SAME-EXPORT GUID ≠ DEVICE pixels.
