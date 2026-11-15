@@ -67,6 +67,13 @@ After every meaningful batch: update THIS clients/GT/RESTORE_AR.md at top, the 0
 - [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176) لا يزال مسار next30 داخل **full same-export** وغير منتهٍ عند كتابة الملاحظة. **العدد المثبت لا يزال 540/786 custom non-Dummy مقابل 246 Dummy (47 targets)**. لا XAPK حتى استعادة كل الموارد واختبارات G0–G6.
 - عند العودة افحص جميع أرقام CI أعلاه، وأصلح سبب الفشل الحقيقي لا تختصره؛ **ثم حدّث هذه الرسالة و01/02/03** وأرفق دليل العدد الجديد بعد قبول المصدر.
 
+## تحقق نهائي جديد — شيدر 23 مادة من المصدر الأصلي | 16 نوفمبر
+
+- [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669) **SUCCESS في source-only**: الشيدر الأصلي المرتبط بـ23 Material Dummy تميّز عن شيدر آخر بنفس عدد المواد و1156 Variant بالتحقق من SHA الأصلية والـD3D11 graph. نجحت **58/58** من برامج D3D11 إلى SPIR-V/HLSL Vulkan1.1، و**33 زوج VS/FS و8 unmatched VS**، و**66/66 routed stage compilations**، مع **74 parameter records و1192 CB offsets و552 texture/sampler mappings و236 varying records**. احتفظ ShaderLab بأربع Passes ومسارات [8,13,8,4] و17 Property أصلية، منها 3 Range وإحداها default خارج inspector slider وقد أُصدرت كما كانت في المصدر. **66 ShaderLab entrypoints** نجحت بالـglslang.
+- *لا يزال Unity Android shader-bundle وsame-export GUID الخاص بالشيدر ذي 23 مادة غير مثبتين*. المرحلة التالية: isolated Unity 2021.3.45f2 Vulkan compilation + real serialized SPIR-V VS/FS route verification، ثم same-export GUID install من المصدر، ثم جرد Custom Material. لا تُضف 23 مادة إلى نسبة الإنجاز قبل قبول كل هذه المراحل.
+- سجل سبب الفشل السابق في [43774150865](https://github.com/alwansan/raf/actions/runs/43774150865) و[43774312812](https://github.com/alwansan/raf/actions/runs/43774312812) وأصلحنا المصدر الحقيقي دون قص/تغيير القيم. بعد نجاح [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669)، لا تنسب هذه الفحوص السابقة كفشل قائم.
+- أصل ZIP2 وجميع برامج Shader48 الخاصة تبقى فقط ضمن GitHub runner؛ Artifact عام يحتوي counts دون أسماء/PathIDs/Shader bytes، ولا APK/OBB/XAPK.
+
 ## الحالة الهندسية المُعتمدة الآن
 
 - **المجسمات والخامات والألوان:** أُثبتت مصادر ZIP2 ذات 82 مالكاً وأصول Mesh وTextures ومواقع المشاهد وألوانها. يوجد فحص لعدد 4,708 Mesh وملفات Streamed أصلية، لكن **لا تفسّر ذلك على أنه قبول بصري كامل على Adreno**. يجب إكمال جميع الروابط والمواد المفقودة.
