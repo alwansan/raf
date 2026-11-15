@@ -30,7 +30,7 @@ def install(project, trace, source_key, candidate, receipt, backup, *, counts_ov
     required = {
         "candidate_sha256": digest,
         "compiled_program_table_verified": True,
-        "engine_keywords_verified": True,
+        "engine_keywords_verified": counts_override is None,
         "vertex_and_fragment_entrypoints_verified": True,
         "vulkan_platform_only": True,
         "vertex_routes_by_pass": list(counts),
