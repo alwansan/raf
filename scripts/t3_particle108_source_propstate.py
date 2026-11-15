@@ -43,7 +43,7 @@ def require(test, category):
     if not test:
         raise PrivateContractError(category)
 
-def serialize_properties(parsed, *, allow_hidden_and_toggle=False):
+def serialize_properties(parsed, *, allow_hidden_and_toggle=False, allow_out_of_range_defaults=False):
     """Return only private text + public-safe type counts; never log source values."""
     info = parsed.get("m_PropInfo") if type(parsed) is dict else None
     require(type(info) is dict and type(info.get("m_Props")) is list,
@@ -114,7 +114,13 @@ def serialize_properties(parsed, *, allow_hidden_and_toggle=False):
                 line=label+"Float) = "+number(values[0])
                 family["floats"]+=1
             else:
-                require(values[3]==0 and values[1]<=values[0]<=values[2],
+                # Authentic Unity Shader48 may serialize a default outside its
+                # inspector slider bounds. Re-emit the original default and
+                # original range exactly, never clamp, reorder or reinterpret.
+                # Only specific SHA-proven source recovery opts in; all older
+                # Particle/Water gates retain the strict default contract.
+                require(values[3]==0 and values[1]<=values[2] and
+                        (values[1]<=values[0]<=values[2] or allow_out_of_range_defaults),
                         "PROPERTY_RANGE")
                 line=(label+"Range("+number(values[1])+","+
                       number(values[2])+")) = "+number(values[0]))
