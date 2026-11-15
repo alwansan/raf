@@ -25,11 +25,12 @@ EXPECTED_DUMMY_MATERIALS = 333
 EXPECTED_ORIGINAL_OWNERS = 82
 
 
-def rank_name_hashes(original_hashes, dummy_materials):
+def rank_name_hashes(original_hashes, dummy_materials, *, expected_dummy_materials=EXPECTED_DUMMY_MATERIALS):
     """Only hash and numeric weights; preserve ambiguity, never pick arbitrary PPtr."""
     if (type(original_hashes) is not dict or type(dummy_materials) is not dict
             or not original_hashes or not dummy_materials
-            or sum(dummy_materials.values()) != EXPECTED_DUMMY_MATERIALS):
+            or type(expected_dummy_materials) is not int or expected_dummy_materials<1
+            or sum(dummy_materials.values()) != expected_dummy_materials):
         raise ValueError("invalid_original_82_shader_to_dummy_material_scope")
     by_digest=defaultdict(list)
     for original_id, name_digest in original_hashes.items():
@@ -52,14 +53,14 @@ def rank_name_hashes(original_hashes, dummy_materials):
             ambiguous.append((count,len(found)))
         else:
             missing.append(count)
-    if sum(matched)+sum(x[0] for x in ambiguous)+sum(missing)!=EXPECTED_DUMMY_MATERIALS:
+    if sum(matched)+sum(x[0] for x in ambiguous)+sum(missing)!=expected_dummy_materials:
         raise ValueError("dummy_material_frequency_accounting_drift")
     return {
         "schema_version":1,
         "status":STATUS,
         "source_original_Shader48_objects_Sha_verified":len(original_hashes),
         "source_original_unique_Shader48_names":len(by_digest),
-        "exporter_actual_dummy_Material_documents":EXPECTED_DUMMY_MATERIALS,
+        "exporter_actual_dummy_Material_documents":expected_dummy_materials,
         "dummy_shader_names_uniquely_resolved_to_original_Shader48":len(matched),
         "dummy_material_links_uniquely_resolved_to_original_Shader48":sum(matched),
         "uniquely_named_source_Shader48_dummy_Material_priority_descending":sorted(matched,reverse=True),
@@ -118,6 +119,8 @@ def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
     for key in ("original","manifest","quality","out"):
         parser.add_argument("--"+key,type=Path,required=True)
+    parser.add_argument("--expected-dummy-materials",type=int,default=EXPECTED_DUMMY_MATERIALS)
+    parser.add_argument("--expected-dummy-shaders",type=int,default=51)
     a=parser.parse_args(argv)
     if (a.out.is_symlink() or a.out.exists() or
             a.out.resolve().is_relative_to(a.original.resolve()) or
@@ -128,13 +131,15 @@ def main(argv=None):
         quality=json.loads(a.quality.read_text(encoding="utf-8"))
         if (quality.get("status")!="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
                 or quality.get("counts",{}).get("material_documents")!=1536
-                or quality.get("counts",{}).get("material_docs_using_dummy_Shader")!=EXPECTED_DUMMY_MATERIALS
-                or quality.get("counts",{}).get("distinct_dummy_Shader_targets_referenced")!=51):
+                or quality.get("counts",{}).get("material_docs_using_dummy_Shader")!=a.expected_dummy_materials
+                or quality.get("counts",{}).get("distinct_dummy_Shader_targets_referenced")!=a.expected_dummy_shaders):
             raise ValueError("untrusted_original_nine_shader_postrestore_333_dummy_report")
-        report=rank_name_hashes(source,quality["dummy_shader_material_counts_by_name_digest"])
+        report=rank_name_hashes(source,quality["dummy_shader_material_counts_by_name_digest"],
+                                expected_dummy_materials=a.expected_dummy_materials)
         report["source_zip2_original_serialized_owners_SHA_verified"]=EXPECTED_ORIGINAL_OWNERS
         report["original_owners_with_Shader48"]=owners
-        report["postnine_full_export_run_id"]=43759856414
+        report["actual_same_export_custom_dummy_Shader_targets"]=a.expected_dummy_shaders
+        report["full_export_quality_source_run_id"]=43759856414 if a.expected_dummy_materials==333 else 43764506277
         report["source_original_zip2_commit"]="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
     except Exception as exc:
         report={"schema_version":1,"status":"INCONCLUSIVE",
