@@ -56,3 +56,10 @@
 - **سلامة الروابط:** SHA تحقق أن **29213** ملف Material/.meta/YAML ظل ببايتاته نفسها أثناء تثبيت التسعة، و0 مراجع Shader مكسورة أو مجهولة.
 - **ترتيب المتبقي:** أعلى Material links إلى Dummy shader حسب بصمة اسم مجهولة: 48، 30، 26، 23، 23، 18، 17، 15 ثم 11 وغيرها؛ نحتاج private source-to-export join قبل استعادة الشيدرات التالية، ولا نعتبر عدد المواد عدد مجسمات بيضاء.
 - **الدليل:** [قبول الدمج التساعي](../../evidence/20261116_gt_nine_original_shader_same_export_acceptance.json). تكافؤ Adreno الفعلي، النار والماء مفتوح. تشغيل فحص Alpha الحقيقي الأول [43762318768](https://github.com/alwansan/raf/actions/runs/43762318768) فشل من دون تصنيف المرحلة، وأضيف failure_stage وشُغّل [43763158214](https://github.com/alwansan/raf/actions/runs/43763158214) لإصلاح السبب.
+
+### متابعة بعد استعادة الشيدرات التسعة — 16 تشرين الثاني
+
+- نجح [43763883804](https://github.com/alwansan/raf/actions/runs/43763883804): مطابقة بصمة اسم Shader أصلي لـ8 مصادر Shader48 فريدة من ستة مشاهد مع 101 مستند Material Dummy من أصل 333. أوزان Material links هي 48/26/11/7/4/2/2/1، وأوزان Renderer Slots المقابلة 20/16/108/1/1/34/1/1. بقيت 232 مادة خارج نطاق المطابقة. **هذه مطابقة اسم وليس إثبات source-to-export GUID.**
+- انطلق [43764506277](https://github.com/alwansan/raf/actions/runs/43764506277) بعد إضافة شيدرات Particle108 وParticle20 وSmoke34 وCandle16 إلى اختبار التصدير الكامل بعد التسعة، مع Unity Vulkan وإعادة جرد المواد وفحص بقاء 29213 ملف Material/meta ثابتاً. لا APK/OBB/XAPK. النتيجة النهائية مفتوحة.
+- فحص Alpha الأول [43762318768](https://github.com/alwansan/raf/actions/runs/43762318768) فشل. الفحص الثاني [43763158214](https://github.com/alwansan/raf/actions/runs/43763158214) حصره في مرحلة join_same_export_Texture2D28_GUID. أضيف فحص عددي آمن لتمييز غياب المصدر/التكرار/نوع مؤشر GUID وأطلق [43764070678](https://github.com/alwansan/raf/actions/runs/43764070678).
+- [دليل المصدر](../../evidence/20261116_gt_333_remaining_original_scene_shader_correlations.json) و[تقرير التسعة الناجح](../../evidence/20261116_gt_nine_original_shader_same_export_acceptance.json).
