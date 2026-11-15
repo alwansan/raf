@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "shader": "BillboardFade",
+  "proof_scope": "ISOLATED_UNITY_2021_3_45f2_ANDROID_VULKAN_SHADER_BUNDLE",
+  "source_report": "clients/GT/evidence/20261115_gt_billboard_source.json",
+  "source_programs": 19,
+  "original_passes": 2,
+  "source_routes_by_pass": [
+    4,
+    5
+  ],
+  "original_vs_fs_pairs": 9,
+  "unity_run_id": 43723487222,
+  "unity_run_url": "https://github.com/alwansan/raf/actions/runs/43723487222",
+  "unity_candidate_sha256": "74094b12475c554e88ef0424101f133902ce3db6cdb92854c35c2837fa984ce1",
+  "unity_compiler_errors": 0,
+  "unity_registered_routes": 9,
+  "compiled_program_table_verified": true,
+  "engine_keywords_verified": true,
+  "vertex_and_fragment_entrypoints_verified": true,
+  "vertex_routes_by_pass": [
+    4,
+    5
+  ],
+  "fragment_routes_by_pass": [
+    4,
+    5
+  ],
+  "vulkan_platform_only": true,
+  "integration_commit": "d2d00b9810de1724248f95601d8f91a86e757654",
+  "integration_target": "feature/android-native-port/.github/workflows/raft-unity-editor-android-import.yml",
+  "production_reconstruction_run_after_change_verified": false,
+  "unity_editor_full_original_project_import_verified": false,
+  "postrestorer_material_dummy_count_measured": false,
+  "adreno_device_pixels_verified": false,
+  "gles_supported_or_verified": false,
+  "pending_no_xapk_ci_run_id": 43759121385,
+  "notes": "This is an isolated Unity shader-bundle proof, not a native Unity project installation receipt. Production installation uses original same-export Shader48 GUID with .meta preserved and a [4,5] bundle receipt gate; XAPK is not triggered."
+}
