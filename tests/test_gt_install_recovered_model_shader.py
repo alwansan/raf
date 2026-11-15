@@ -51,6 +51,48 @@ class RecoveredModelShaderInstallationTests(unittest.TestCase):
             self.assertEqual((backup / "original.shader").read_bytes(), original)
             self.assertEqual((backup / "original.shader.meta").read_bytes(), metadata)
 
+    def test_next30_requires_exact_original_four_pass_31_route_bundle_receipt(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            project=root/"project"
+            assets=project/"Assets"
+            assets.mkdir(parents=True)
+            shader=assets/"Custom.shader"
+            meta=assets/"Custom.shader.meta"
+            guid="f"*32
+            original=b'Shader "Next30_Source" {} // DummyShaderTextExporter\\n'
+            candidate=b'Shader "Next30_Source" { SubShader { Pass {} Pass {} Pass {} Pass {} } }\\n'
+            shader.write_bytes(original)
+            metadata=("fileFormatVersion: 2\\nguid: "+guid+"\\n").encode()
+            meta.write_bytes(metadata)
+            trace={"schema_version":1,"export_instance":"b"*32,"objects":[{
+                "class_id":48,
+                "source":{"owner":"sharedassets0.assets","path_id":550},
+                "export":{"file_id":4800000,"guid":guid,"type":3},
+            }]}
+            receipt={
+                "candidate_sha256":sha256(candidate).hexdigest(),
+                "compiled_program_table_verified":True,
+                "engine_keywords_verified":True,
+                "vertex_and_fragment_entrypoints_verified":True,
+                "vulkan_platform_only":True,
+                "vertex_routes_by_pass":[8,13,8,2],
+                "fragment_routes_by_pass":[8,13,8,3],
+            }
+            args=(project,trace,("sharedassets0.assets",550),candidate,receipt,root/"backup")
+            with self.assertRaisesRegex(ValueError,"model_shader_bundle_evidence_missing"):
+                install(*args,counts_override=[8,13,8,2])
+            self.assertEqual(shader.read_bytes(),original)
+            self.assertEqual(meta.read_bytes(),metadata)
+            self.assertFalse((root/"backup").exists())
+            with self.assertRaisesRegex(ValueError,"untrusted_original_model_shader_route_override"):
+                install(*args,counts_override=[8,13,8,4])
+            receipt["fragment_routes_by_pass"]=[8,13,8,2]
+            result=install(*args,counts_override=[8,13,8,2])
+            self.assertEqual(result["vulkan_routes_installed"],31)
+            self.assertEqual(shader.read_bytes(),candidate)
+            self.assertEqual(meta.read_bytes(),metadata)
+
     def test_billboard_requires_both_vulkan_forward_passes_before_guid_preserving_install(self):
         from scripts.gt_original_921_shaderlab import BILLBOARD_ROUTES
         self.assertEqual(list(BILLBOARD_ROUTES), [4, 5])
