@@ -55,3 +55,10 @@
 - [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669) SUCCESS: شيدر 23 Material أصلي، 58/58 D3D11→Vulkan/HLSL، 33 VS/FS + 8 orphan VS، 66 routed stage compilations، 74 parameter records، 1192 CB offsets و552 Texture/Sampler mappings و236 varyings، 17 property بينها 3 Range وDefault واحد خارج bounds حفظ كما هو. فحص Source فقط، لا GUID.
 - [43774787696](https://github.com/alwansan/raf/actions/runs/43774787696) بدأ private Unity Android Vulkan bundle للتحقق من 4 Pass و33 VS/FS routes بالـSMOL-V. لم تقبل نتيجته حتى الآن. بعد PASS يتوجب تثبيت original Shader48 عبر نفس source→export GUID في التصدير الأصلي وفحص مواد Dummy.
 - [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176) next30 في full export لا يزال بلا نتيجة نهائية. آخر أرقام يقينية: **540/786 non-Dummy، 246 Dummy، 47 Shader targets**؛ لا XAPK. ملف المصدر الرئيسي الحي: clients/GT/RESTORE_AR.md؛ حدّثه في كل دفعة.
+
+## تحديث مثبت — 16 نوفمبر 2026 / GT بعد NEXT30
+
+- مرحلة `P04/P05`: [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176) **SUCCESS** نفس التصدير، NEXT30 مثبت بـGUID الحقيقي، 31-route Unity Vulkan؛ الجرد بعد 14: **570/786 non-Dummy custom، 216 Dummy / 46 Shader targets**. سلامة 29213 ملف YAML/meta مؤكدة، 0 broken؛ Artifact ID 14186801044. لا تقيس 72.5% كنسبة كل الرسوم.
+- المهمة التالية `NEXT23`: [43774524669](https://github.com/alwansan/raf/actions/runs/43774524669) يثبت 58 مرحلة مصدر، [43774787696](https://github.com/alwansan/raf/actions/runs/43774787696) **SUCCESS** Unity Vulkan 33 route [8,13,8,4] في مشروع معزول. المطلوب: مثبت مصدر SHA + owner/PathID→export trace + جرد post14 216/46 + جرد post15 فعلي وحماية 29213 ملف؛ لا تُسجل 193 افتراضياً.
+- `P08` FireAlpha: [43773481136](https://github.com/alwansan/raf/actions/runs/43773481136) و[43773517218](https://github.com/alwansan/raf/actions/runs/43773517218) فشل اختبار real؛ [43773517246](https://github.com/alwansan/raf/actions/runs/43773517246) اختبار صناعي ناجح فقط؛ local PPtr type0 ما زال مفتوحاً.
+- `G0-G6` **غير مغلقة**: أكمل الجرد/النار/الماء FFT وKernel6 وTexture GUID/Mips/PostFX/TMP وباقي 216 مادة Dummy، ولا XAPK حتى إغلاق موارد الاستعادة.
