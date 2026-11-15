@@ -25,7 +25,8 @@ concurrency:
 jobs:
   real-original-export:
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
+    timeout-minutes: 180
+    environment: UNITY_LICENSE
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,6 +36,7 @@ jobs:
             scripts
             config
             android-port/Experiments/ExportLineage
+            android-port/Experiments/GT/Editor
             Raft/Raft_Data/Managed
             tests
       - name: Check disk for full 7.53GB Raft source and actual AssetRipper export
@@ -422,6 +424,770 @@ jobs:
             --raw-quality "$RUNNER_TEMP/gt-raw-export-program-quality.json" \
             --backup-root "$RUNNER_TEMP/gt-shader-original-backup" \
             --report "$RUNNER_TEMP/gt-actual-postrestore-shader-quality.json"
+      # GT FULL POSTRESTORER ORIGINAL NINE SHADERS NO XAPK: reused the
+      # validated native SHA-pinned shader steps against this SAME full export.
+      - name: Prepare nine independent original shader compilers and immutable material baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_install_recovered_model_shader.py -v
+          python3 -m pip install --disable-pip-version-check UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          python3 - <<'PY_GT_BEFORE'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          vendor=json.loads((root/"gt-actual-postrestore-shader-quality.json").read_text())
+          assert vendor["status"]=="POST_RESTORE_SOURCE_QUALITY_COMPARED"
+          assets=root/"gt-project/ExportedProject/Assets"
+          suffixes={".meta",".mat",".asset",".prefab",".unity"}
+          rows={}
+          for f in assets.rglob("*"):
+              if f.is_file() and not f.is_symlink() and f.suffix.lower() in suffixes:
+                  h=hashlib.sha256()
+                  with f.open("rb") as source:
+                      for data in iter(lambda: source.read(1024*1024), b""):
+                          h.update(data)
+                  rows[str(f.relative_to(assets))]=h.hexdigest()
+          assert len(rows)>1000
+          (root/"gt-full-smoke-private-unchanged-material-meta.json").write_text(json.dumps(rows,sort_keys=True))
+          print("GT_NINE_SHADER_SAME_EXPORT_IMMUTABLE_BASELINE",len(rows))
+          PY_GT_BEFORE
+      - name: Recover and stage original BlockPaint programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-blockpaint"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-blockpaint-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader blockpaint --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original BlockPaint in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-blockpaint-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all BlockPaint routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-blockpaint"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-blockpaint-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader blockpaint \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate BlockPaint compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-blockpaint-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-blockpaint/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-blockpaint/bundle-safe.json
+            gt-full-smoke-blockpaint-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private BlockPaint source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-blockpaint"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-blockpaint-unity"
+      - name: Recover and stage original DirtPile programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-dirtpile"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-dirtpile-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader dirtpile --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original DirtPile in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-dirtpile-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all DirtPile routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-dirtpile"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-dirtpile-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader dirtpile \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate DirtPile compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-dirtpile-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-dirtpile/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-dirtpile/bundle-safe.json
+            gt-full-smoke-dirtpile-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private DirtPile source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-dirtpile"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-dirtpile-unity"
+      - name: Recover and stage original Vegetation programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-vegetation"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-vegetation-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader vegetation --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original Vegetation in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-vegetation-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all Vegetation routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-vegetation"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-vegetation-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader vegetation \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate Vegetation compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-vegetation-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-vegetation/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-vegetation/bundle-safe.json
+            gt-full-smoke-vegetation-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Vegetation source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-vegetation"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-vegetation-unity"
+      - name: Recover and stage original GrassPlot programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-grassplot"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-grassplot-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader grassplot --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original GrassPlot in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-grassplot-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all GrassPlot routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-grassplot"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-grassplot-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader grassplot \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate GrassPlot compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-grassplot-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-grassplot/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-grassplot/bundle-safe.json
+            gt-full-smoke-grassplot-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private GrassPlot source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-grassplot"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-grassplot-unity"
+      - name: Recover and stage original Skin_Amplify programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-skin"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-skin-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader skin --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original Skin_Amplify in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-skin-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all Skin_Amplify routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-skin"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-skin-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader skin \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate Skin_Amplify compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-skin-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-skin/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-skin/bundle-safe.json
+            gt-full-smoke-skin-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Skin_Amplify source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-skin"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-skin-unity"
+      - name: Recover and stage original Shimmer programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-shimmer"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-shimmer-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader shimmer --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original Shimmer in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-shimmer-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all Shimmer routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-shimmer"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-shimmer-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader shimmer \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate Shimmer compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-shimmer-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-shimmer/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-shimmer/bundle-safe.json
+            gt-full-smoke-shimmer-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Shimmer source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-shimmer"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-shimmer-unity"
+      - name: Recover and stage original SailPaint programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-sailpaint"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-sailpaint-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader sailpaint --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original SailPaint in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-sailpaint-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all SailPaint routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-sailpaint"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-sailpaint-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader sailpaint \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate SailPaint compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-sailpaint-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-sailpaint/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-sailpaint/bundle-safe.json
+            gt-full-smoke-sailpaint-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private SailPaint source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-sailpaint"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-sailpaint-unity"
+      - name: Recover and stage original Hair_Amplify programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-hair"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-hair-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader hair --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original Hair_Amplify in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-hair-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all Hair_Amplify routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-hair"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-hair-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader hair \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate Hair_Amplify compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-hair-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-hair/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-hair/bundle-safe.json
+            gt-full-smoke-hair-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Hair_Amplify source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-hair"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-hair-unity"
+      - name: Recover and stage original BillboardFade programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-billboard"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-billboard-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader billboard --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original BillboardFade in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-billboard-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all BillboardFade routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-billboard"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-billboard-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          # Refuse any partial or silently substituted shader reconstruction.
+          # The complete source topology and actual Unity Vulkan routes must
+          # match before replacing the original exported ShaderLab text.
+          python3 - <<'PY_GT_NATIVE_BILLBOARD_GATE'
+          import json,os
+          from pathlib import Path
+          work=Path(os.environ['RUNNER_TEMP'])/'gt-full-smoke-billboard'
+          source=json.loads((work/'source-safe.json').read_text())
+          bundle=json.loads((work/'bundle-safe.json').read_text())
+          assert source['original_passes']==2
+          assert source['exact_original_source_VS_FS_permutation_pairs']==9
+          assert source['original_unique_D3D11_stage_programs']==19
+          assert source['source_keyword_route_coverage']['source_exact_keyword_routes_by_pass']==[4,5]
+          assert bundle['compiled_program_table_verified'] is True
+          assert bundle['vertex_routes_by_pass']==[4,5]
+          assert bundle['fragment_routes_by_pass']==[4,5]
+          assert bundle['engine_keywords_verified'] is True
+          assert bundle['vulkan_platform_only'] is True
+          print('GT_NATIVE_BILLBOARD_PREFLIGHT originalPasses=2 pairedRoutes=4,5 sourcePrograms=19 UnityVulkanVerified=true')
+          PY_GT_NATIVE_BILLBOARD_GATE
+          python3 -m scripts.gt_install_recovered_model_shader --shader billboard \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate BillboardFade compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-billboard-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-billboard/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-billboard/bundle-safe.json
+            gt-full-smoke-billboard-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private BillboardFade source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-billboard"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-billboard-unity"
+      - name: Rank actually unresolved Material shaders after nine original GUID installs (NO APK)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --rank-dummy-targets \
+            --out "$RUNNER_TEMP/gt-nine-shader-postrestore-quality.json"
+          python3 - <<'PY_GT_AFTER'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          a=root/"gt-project/ExportedProject/Assets"
+          previous=json.loads((root/"gt-full-smoke-private-unchanged-material-meta.json").read_text())
+          suffixes={".meta",".mat",".asset",".prefab",".unity"}
+          actual={}
+          for f in a.rglob("*"):
+              if f.is_file() and not f.is_symlink() and f.suffix.lower() in suffixes:
+                  h=hashlib.sha256()
+                  with f.open("rb") as source:
+                      for data in iter(lambda: source.read(1024*1024), b""):
+                          h.update(data)
+                  actual[str(f.relative_to(a))]=h.hexdigest()
+          assert actual==previous,"Original_Material_or_Meta_modified"
+          raw=json.loads((root/"gt-raw-export-program-quality.json").read_text())
+          vendor=json.loads((root/"gt-actual-postrestore-shader-quality.json").read_text())
+          after=json.loads((root/"gt-nine-shader-postrestore-quality.json").read_text())
+          c=after["counts"]
+          assert after["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          assert c["material_documents"]==raw["counts"]["material_documents"]==1536
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          old=vendor["postrestore_material_quality"]["postrestore_custom_dummy_material_documents"]
+          assert c["material_docs_using_dummy_Shader"] < old
+          report={"schema_version":1,"status":"GT_NINE_ORIGINAL_SHADERS_SAME_FULL_EXPORT_ACCEPTED_NO_APK",
+            "raw_export_dummy_materials":raw["counts"]["material_docs_using_dummy_Shader"],
+            "vendor_only_dummy_materials":old,
+            "all_nine_shaders_installed_dummy_materials":c["material_docs_using_dummy_Shader"],
+            "all_nine_shaders_installed_non_dummy_materials":c["material_docs_using_non_dummy_Shader"],
+            "postrestoration_remaining_dummy_by_name_digest":after.get("dummy_shader_material_counts_by_name_digest",{}),
+            "protected_material_and_meta_files":len(actual),
+            "all_original_material_meta_bytes_unchanged":True,
+            "original_source_zip2_sha":"15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+            "APK_OBB_XAPK_created":False,"device_pixel_render_verified":False}
+          (root/"gt-nine-shader-postrestore-summary-safe.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print("GT_NINE_SAME_EXPORT_POSTRESTORE_MATERIAL_COUNTS "+json.dumps({
+            k:v for k,v in report.items() if k!="postrestoration_remaining_dummy_by_name_digest"
+          },sort_keys=True))
+          PY_GT_AFTER
+      - name: Publish all-nine postrestorer Material coverage without original Shader source or game files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-nine-shader-full-export-audit-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-nine-shader-postrestore-quality.json
+            ${{ runner.temp }}/gt-nine-shader-postrestore-summary-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
       - name: Publish aggregate evidence only, never original scenes/meshes/export/trace
         if: always()
         uses: actions/upload-artifact@v4
