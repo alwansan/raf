@@ -10,7 +10,7 @@ from scripts.gt_original_921_shaderlab import expected_routes_for_shader
 from scripts.restore_builtin_shaders import exported_shader_identity
 
 
-def install(project, trace, source_key, candidate, receipt, backup):
+def install(project, trace, source_key, candidate, receipt, backup, *, counts_override=None):
     project = check_safe_ancestors(project)
     backup = check_safe_ancestors(backup)
     if backup.is_relative_to(project) or backup.exists():
@@ -19,7 +19,14 @@ def install(project, trace, source_key, candidate, receipt, backup):
     identity = exported_shader_identity(candidate.decode("utf-8"))
     if identity is None:
         raise ValueError("model_shader_identity_missing")
-    counts = expected_routes_for_shader(identity)
+    if counts_override is None:
+        counts = expected_routes_for_shader(identity)
+    elif tuple(counts_override) == (8, 13, 8, 2):
+        # This profile MUST be selected by an independent SHA-original
+        # Shader48 source-to-export GUID proof, never by guessed shader name.
+        counts = tuple(counts_override)
+    else:
+        raise ValueError("untrusted_original_model_shader_route_override")
     required = {
         "candidate_sha256": digest,
         "compiled_program_table_verified": True,
