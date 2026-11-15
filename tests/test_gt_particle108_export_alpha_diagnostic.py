@@ -115,8 +115,16 @@ class OriginalParticle108ExportAlphaTests(unittest.TestCase):
                     (2800000,f"{original_tex_id:032x}",3),uv)
             original_materials[source_key]=original_properties
             exported[(2100000,exported_guid)]=exported_properties
+        counters={}
         mapping=source_material_to_exported_texture_guids(
-            trace, original_materials, original_source, exported)
+            trace, original_materials, original_source, exported, metrics=counters)
+        self.assertEqual(counters["source_original_Material21"],5)
+        self.assertEqual(counters["selected_source_materials_with_export_trace"],5)
+        self.assertEqual(counters["source_original_TexEnv_slots_compared"],10)
+        self.assertEqual(counters["exported_Texture2D_PPtr_fileID_nonzero"],10)
+        self.assertEqual(counters["exported_Texture2D_PPtr_type_3"],10)
+        self.assertEqual(counters["source_to_export_texture_UV_pairs_verified"],10)
+        self.assertEqual(counters["source_Texture2D_to_export_GUIDs_unique"],3)
         self.assertEqual(len(mapping),3)
         self.assertEqual(mapping[("sharedassets0.assets",1)],f"{1:032x}")
         self.assertEqual(set(mapping.values()),{f"{i:032x}" for i in (1,2,3)})
@@ -132,6 +140,16 @@ class OriginalParticle108ExportAlphaTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"changed_same_export_particle_texture_UV"):
             source_material_to_exported_texture_guids(
                 trace,original_materials,original_source,modified)
+        modified={k:dict(v) for k,v in exported.items()}
+        first=next(iter(modified.values()))
+        first["_Texture0"]=((0,"0"*32,0),(1.0,1.0,0.0,0.0))
+        failed_counts={}
+        with self.assertRaisesRegex(ValueError,"broken_same_export_particle_texture_Material_ref"):
+            source_material_to_exported_texture_guids(
+                trace,original_materials,original_source,modified,metrics=failed_counts)
+        self.assertEqual(failed_counts["exported_Texture2D_PPtr_fileID_null"],1)
+        self.assertEqual(failed_counts["exported_Texture2D_PPtr_type_0"],1)
+        self.assertEqual(failed_counts["source_original_TexEnv_slots_compared"],1)
 
 
 if __name__ == "__main__":
