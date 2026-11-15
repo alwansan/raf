@@ -37,8 +37,11 @@ class OriginalNext23SameExportTests(unittest.TestCase):
             qfile = root / "post14.json"
             q = self.quality(qfile)
             original_key = ("sharedassets5.assets", 123)
+            source_names = {("sharedassets5.assets", i): format(i, "064x")
+                            for i in range(1, 166)}
+            source_names[original_key] = "f" * 64
             with (patch("scripts.gt_install_next23_original_shader48.gather",
-                        return_value=({("sharedassets5.assets", 123): "f" * 64}, 14)),
+                        return_value=(source_names, 14)),
                   patch("scripts.gt_install_next23_original_shader48.choose_original_23_by_topology",
                         return_value=original_key) as checker):
                 self.assertEqual(source_identity(root, root / "manifest", qfile), original_key)
