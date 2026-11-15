@@ -185,7 +185,18 @@ def run(original,manifest,quality,private):
         source_properties=parsed.get("m_PropInfo",{}).get("m_Props",[])
         if not isinstance(source_properties,list):
             raise ValueError("invalid_original_23_material_Shader_properties")
-        layout,details=shaderlab_layout(parsed,passes,expected_property_count=len(source_properties))
+        ranges=original_range_contract_safe_census(parsed)
+        if (ranges["source_original_ShaderLab_Range_property_count"]!=3
+                or ranges["source_original_Range_nonzero_unused_fourth_lane_count"]!=0
+                or ranges["source_original_Range_inverted_lower_upper_count"]!=0
+                or ranges["source_original_Range_default_outside_lower_upper_count"]!=1):
+            raise ValueError("SHA_authentic_next23_Range_contract_drift")
+        # The original one out-of-slider Range default is valid historical
+        # source data. Preserve the exact serialized slider limits and default.
+        layout,details=shaderlab_layout(parsed,passes,
+            expected_property_count=len(source_properties),
+            allow_out_of_range_defaults=True)
+        report["original_3_Range_properties_and_1_outside_default_reemitted_unclamped"]=True
         (private/"original-private-shaderlab-layout.txt").write_text(layout,encoding="utf-8")
         report["source_original_ShaderLab_4pass_property_layout_validated"]=True
         report["source_original_keyword_permutation_route_counts_per_pass"]=routing["source_exact_keyword_routes_by_pass"]
