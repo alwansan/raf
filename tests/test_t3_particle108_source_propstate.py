@@ -82,6 +82,29 @@ class OriginalPrivateParticleProps(unittest.TestCase):
         p=original();p["m_PropInfo"]["m_Props"][2]["m_DefValue[0]"]=float("nan")
         with self.assertRaises(PrivateContractError) as e:source_fragment(p)
         self.assertEqual(e.exception.category,"PROPERTY_DEFAULT_NUMERIC")
+    def test_authentic_original_range_default_outside_bounds_opt_in_never_clamps(self):
+        p=original()
+        record=p["m_PropInfo"]["m_Props"][2]
+        record["m_DefValue[0]"]=2.0
+        with self.assertRaises(PrivateContractError) as context:
+            serialize_properties(p,allow_hidden_and_toggle=True)
+        self.assertEqual(context.exception.category,"PROPERTY_RANGE")
+        before=copy.deepcopy(p)
+        text,counts=serialize_properties(
+            p,allow_hidden_and_toggle=True,allow_out_of_range_defaults=True)
+        self.assertEqual(p,before)
+        self.assertEqual(counts["original_authored_range_property_count"],1)
+        self.assertIn("Range(0,1)",text)
+        self.assertIn(" = 2",text)
+        self.assertIn("_PRIVATE_RANGE",text)
+        record["m_DefValue[3]"]=1.0
+        with self.assertRaises(PrivateContractError):
+            serialize_properties(p,allow_out_of_range_defaults=True)
+        record["m_DefValue[3]"]=0.0
+        record["m_DefValue[1]"]=3.0
+        with self.assertRaises(PrivateContractError):
+            serialize_properties(p,allow_out_of_range_defaults=True)
+
     def test_unknown_property_type_rejected(self):
         p=original();p["m_PropInfo"]["m_Props"][2]["m_Type"]=5
         with self.assertRaises(PrivateContractError) as e:source_fragment(p)
