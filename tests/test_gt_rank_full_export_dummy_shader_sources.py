@@ -64,7 +64,7 @@ class FullOriginalShaderSourceGuidsTests(unittest.TestCase):
         trace["objects"].append(trace["objects"][0])
         with self.assertRaisesRegex(ValueError,"duplicate_original_Shader48"):
             select_dummy_export_sources(trace,profiles,refs)
-        trace.pop("objects")
+        trace["objects"].pop()
         _,mapping=select_dummy_export_sources(trace,profiles,refs)
         with self.assertRaisesRegex(ValueError,"wrong_same_export_remaining_Dummy_Material_population"):
             compare_exact_sources(profiles,refs,mapping,names,expected_material_documents=16)
