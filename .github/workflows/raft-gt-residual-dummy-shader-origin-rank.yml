@@ -1,0 +1,120 @@
+name: GT rank remaining 333 custom Dummy materials against original Shader48 (NO XAPK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-residual-dummy-shader-origin-rank.yml
+      - scripts/gt_rank_remaining_original_shader_by_export_materials.py
+      - tests/test_gt_rank_remaining_original_shader_by_export_materials.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: gt-rank-remaining-source-Shader48-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-authenticated-residual-priority:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Test fail-closed source versus remaining real Material ranking without source assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_rank_remaining_original_shader_by_export_materials.py
+          python3 -m unittest discover -s tests -p test_gt_rank_remaining_original_shader_by_export_materials.py -v
+      - name: Retrieve numerical-only same-export 333-Dummy Material audit from approved original Unity run
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43759856414
+          name: gt-nine-shader-full-export-audit-43759856414
+          path: ${{ runner.temp }}/gt-nine-original-quality
+      - name: Pin and authenticate the exact original ZIP2 scenes and shader owners without LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Stage original 4 SHA-verified Shader48 owners and 6 original scenes for private recovery planning
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          python3 - <<'PY_GT_STAGE'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN, verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path("zip2-source")
+          target=Path(os.environ["RUNNER_TEMP"])/"gt-residual-original"
+          pins={"Raft_Data/"+name:SHADER_OWNERS[name] for name in SHADER_OWNERS_SELECTED}
+          checked=stage(source,target,pins)
+          assert len(checked["owners"])==4
+          assert checked["verified_bytes"]==269007288 and not checked["lfs_used"]
+          for scene,pin in PIN.items():
+              path=source/"Raft/Raft_Data"/scene
+              verify_source(path,pin)
+              output=target/"Raft_Data"/scene
+              if output.exists() or output.is_symlink():
+                  raise ValueError("original_scenes_destination_unsafe")
+              with path.open("rb") as reader, output.open("xb") as writer:
+                  for part in iter(lambda:reader.read(1048576),b""):
+                      writer.write(part)
+              verify_source(output,pin)
+          print("GT_RESIDUAL_ORIGINAL_SCENES=6 originalShaderOwners=4 originalBytes=269007288 noLFS=true")
+          PY_GT_STAGE
+      - name: Privately match residual 333 material Dummy targets to authentic original scene shader names
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_rank_remaining_original_shader_by_export_materials \
+            --original "$RUNNER_TEMP/gt-residual-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-nine-original-quality/gt-nine-shader-postrestore-quality.json" \
+            --out "$RUNNER_TEMP/gt-residual-original-scene-priority-safe.json"
+      - name: Retain anonymous source-scene renderer impact and exported material priority only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-residual-original-scene-priority-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/gt-residual-original-scene-priority-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Remove all private original scenes, Shader48 owners and hashed name lists
+        if: always()
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-residual-original" zip2-source
