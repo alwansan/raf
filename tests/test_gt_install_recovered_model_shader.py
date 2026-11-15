@@ -73,7 +73,7 @@ class RecoveredModelShaderInstallationTests(unittest.TestCase):
             receipt={
                 "candidate_sha256":sha256(candidate).hexdigest(),
                 "compiled_program_table_verified":True,
-                "engine_keywords_verified":True,
+                "engine_keywords_verified":False,
                 "vertex_and_fragment_entrypoints_verified":True,
                 "vulkan_platform_only":True,
                 "vertex_routes_by_pass":[8,13,8,2],
