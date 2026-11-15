@@ -53,6 +53,13 @@ After every meaningful batch: update THIS clients/GT/RESTORE_AR.md at top, the 0
 - أُضيف تقسيم مراحل الفشل إلى أسباب آمنة فقط (مثل PROPERTY_FLAGS_OR_ATTRIBUTES/PROPERTY_TYPE_UNSUPPORTED) دون نشر أسماء أو بيانات المصدر. بدأ [43774150865](https://github.com/alwansan/raf/actions/runs/43774150865) لتحديد شرط المصدر الذي يحتاج ترجمة صحيحة لا تجاوز الحارس. لم يثبت النجاح عند كتابة هذه الملاحظة. بعد استرجاع checkpoint/category من Artifact، أصلح serializer بما يحافظ على Property flags/defaults الأصلية، ثم تحقق Unity وGUID.
 - قواعد الأرقام لم تتغير: آخر قيمة مثبتة ما تزال **540/786 custom non-Dummy، و246 Dummy** قبل نجاح next30 [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176). لا XAPK ولا تعديل ملف مصدر/Meta.
 
+## Root cause جديدة لـnext23 — 16 نوفمبر
+
+- [43774150865](https://github.com/alwansan/raf/actions/runs/43774150865) FAILED بعد إثبات **58/58 D3D11 translated/roundtrip SPIR-V، و33 original VS/FS pairs و66 HLSL route compilations**. فشل مرحلة ShaderLab Property serializer هو **PrivateContractError: PROPERTY_RANGE** عند `restore_authentic_source_property_contract`، وليس DXBC/Shader routing. لم تتأثر نسخ ZIP2 أو مواد اللعبة ولم تُبنَ أي حزمة Android.
+- أضفنا فحصاً numeric-only لحالات Range: حدود معكوسة، Default خارج [min,max]، أو القيمة الرابعة غير الصفرية، دون نشر أسماء Shader أو حدود Property أو قيمها. بدأ [43774312812](https://github.com/alwansan/raf/actions/runs/43774312812)؛ اقرأ تقريره المحدد ثم أصلح Property serialization باحترام قيم المصدر وقيود Unity، بدلاً من تجاوز البوابة أو استبدال shader Dummy. لا تعتبر next23 مُثبتاً في Unity أو GUID.
+- [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176) لاستعادة next30 الكاملة، وفحوص Particle108 Alpha [43773481136](https://github.com/alwansan/raf/actions/runs/43773481136) و[43773517218](https://github.com/alwansan/raf/actions/runs/43773517218) مفتوحة عند كتابة هذه الملاحظة. لا تفترض نجاحاً حتى انتهاء CI.
+- أبقِ آخر رقم مثبت **540/786 Custom material non-Dummy؛ 246 Dummy على 47 Shader** حتى يقبل تقرير post14. لا XAPK.
+
 ## الحالة الهندسية المُعتمدة الآن
 
 - **المجسمات والخامات والألوان:** أُثبتت مصادر ZIP2 ذات 82 مالكاً وأصول Mesh وTextures ومواقع المشاهد وألوانها. يوجد فحص لعدد 4,708 Mesh وملفات Streamed أصلية، لكن **لا تفسّر ذلك على أنه قبول بصري كامل على Adreno**. يجب إكمال جميع الروابط والمواد المفقودة.
