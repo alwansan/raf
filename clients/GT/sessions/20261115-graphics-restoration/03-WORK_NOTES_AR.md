@@ -42,3 +42,11 @@
 - تشغيل الـ9 شيدرات [43759856414](https://github.com/alwansan/raf/actions/runs/43759856414) ما زال مطلوباً لإخراج `gt-nine-shader-postrestore-summary-safe.json` والجرد الحقيقي بعد التثبيت. لا تستخدم بيانات 786/770 القديمة للاستنتاج. أبقِ XAPK متوقفاً.
 
 - أُطلق فحص مستقل للـ3 Texture2D الحقيقية (Particle108) مع مصدر ZIP2 وAssetRipper من [43762318768](https://github.com/alwansan/raf/actions/runs/43762318768). فحص الاختبار الصناعي السابق `43762000860` ناجح، أما هذا التشغيل الحقيقي ففي تقدم. Artifact عند النجاح باسم `gt-particle108-real-export-alpha-43762318768` وفيه **أعداد alpha/importer فقط**؛ إذا فشل راجع step `Check source-selected three Particle108 Texture2D exported alpha images and importer settings`. لا تنسب سبب مربع النار الأسود إلى textures إلا إذا تحقق اختلاف Alpha بين المصدر والتصدير، وبعدها ينبغي التحقق من blending والشيدر وقت التشغيل.
+
+### دفعة إضافية: قياس 13 شيدر أصلي بدون حزمة لعبة
+
+- التقرير التساعي [43759856414](https://github.com/alwansan/raf/actions/runs/43759856414) أثبت 453 مادة Custom مستعادة و333 Dummy متبقية، موزعة على 51 شيدر GUID مستخدم. ملفات Material وMeta محمية وعددها 29213 لم تتغير.
+- فحص ترتيب المصدر [43763883804](https://github.com/alwansan/raf/actions/runs/43763883804) طابق 8 أسماء Shader48 حقيقية مع 101 مادة Dummy من 333؛ بقيت 232 خارج مطابقة الأسماء بمصادر الستة مشاهد. لا تخلط الاسم مع دليل GUID.
+- توسع workflow التصدير الكامل بإعادة استخدام خطوات استعادة وتثبيت Particle108 وParticle20 وSmoke34 وCandle16 الأصليين على نفس export instance، بعد الشيدرات التسعة. فحص انتهاء الدفعة يثبت SHA لملفات المواد والـmeta، ويقيس Material Dummy بعد 13 شيدراً. التشغيل [43764506277](https://github.com/alwansan/raf/actions/runs/43764506277)، Artifact المنتظر gt-thirteen-source-shader-full-export-audit-43764506277. لا XAPK.
+- الفحص الثاني لخامات النار [43763158214](https://github.com/alwansan/raf/actions/runs/43763158214) عزل ValueError إلى join_same_export_Texture2D28_GUID. كود الثالث [43764070678](https://github.com/alwansan/raf/actions/runs/43764070678) يميز الأسباب الآمنة مع عدادات trace أصلية من دون أسماء أو GUID.
+- عند نجاح 13، أعد ترتيب Dummy الأصلي غير المستعاد من التقرير، وراجع اختلاف الصور والألوان وشفافية النار والماء، مع الأولوية لإثبات المصدر والحفاظ على روابط المواد. لا XAPK قبل اكتمال جميع موارد الاستعادة.
