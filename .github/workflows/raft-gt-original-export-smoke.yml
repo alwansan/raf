@@ -13,6 +13,8 @@ on:
       - scripts/gt_write_unity_array_import_contract.py
       - scripts/gt_external_original_texture_links.py
       - scripts/gt_stage_indexed_fft_candidate.py
+      - scripts/gt_install_next23_original_shader48.py
+      - tests/test_gt_install_next23_original_shader48.py
   workflow_dispatch:
 
 permissions:
@@ -39,6 +41,12 @@ jobs:
             android-port/Experiments/GT/Editor
             Raft/Raft_Data/Managed
             tests
+      - name: Fail fast on authentic next23 source-free installer contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_install_next23_original_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_install_next23_original_shader48.py -v
       - name: Check disk for full 7.53GB Raft source and actual AssetRipper export
         run: |
           df -h /
