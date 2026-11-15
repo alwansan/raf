@@ -92,7 +92,7 @@ def source_texture_export_map(trace, originals, *, metrics=None):
     return result
 
 
-def source_material_to_exported_texture_guids(trace, source_materials, originals, exported):
+def source_material_to_exported_texture_guids(trace, source_materials, originals, exported, *, metrics=None):
     """Derive 3 texture GUIDs from 10 exact original/exported Material TexEnvs.
 
     This join uses source-authenticated Material21 PPtrs, the same-instance
@@ -104,6 +104,24 @@ def source_material_to_exported_texture_guids(trace, source_materials, originals
             or len(source_materials) != 5 or len(originals) != EXPECTED_TARGETS
             or type(exported) is not dict):
         raise ValueError("untrusted_source_export_particle_Material_mapping")
+    if metrics is not None:
+        if type(metrics) is not dict or metrics:
+            raise ValueError("unsafe_nonempty_texture_pointer_diagnostic")
+        metrics.update({
+            "source_original_Material21":len(source_materials),
+            "selected_source_materials_with_export_trace":0,
+            "source_original_TexEnv_slots_compared":0,
+            "exported_Texture2D_PPtr_fileID_null":0,
+            "exported_Texture2D_PPtr_fileID_nonzero":0,
+            "exported_Texture2D_PPtr_type_0":0,
+            "exported_Texture2D_PPtr_type_2":0,
+            "exported_Texture2D_PPtr_type_3":0,
+            "exported_Texture2D_PPtr_other_type":0,
+            "exported_Texture2D_PPtr_fileID_2800000":0,
+            "exported_Texture2D_PPtr_fileID_not_2800000":0,
+            "source_to_export_texture_UV_pairs_verified":0,
+            "source_Texture2D_to_export_GUIDs_unique":0,
+        })
     mapped = {}
     for row in trace.get("objects", []):
         if not isinstance(row, dict) or row.get("class_id") != 21:
@@ -117,6 +135,8 @@ def source_material_to_exported_texture_guids(trace, source_materials, originals
         if file_id <= 0 or kind not in ("2", "3"):
             raise ValueError("invalid_traced_particle_Material21_export")
         mapped[key] = (file_id, guid)
+        if metrics is not None:
+            metrics["selected_source_materials_with_export_trace"] = len(mapped)
     if set(mapped) != set(source_materials) or len(set(mapped.values())) != 5:
         raise ValueError("missing_original_particle_Material_same_export_trace")
     result = {}
@@ -130,6 +150,8 @@ def source_material_to_exported_texture_guids(trace, source_materials, originals
         for name in before:
             original_pointer, original_uv = before[name]
             exported_pointer, exported_uv = after[name]
+            if metrics is not None:
+                metrics["source_original_TexEnv_slots_compared"] += 1
             if (type(original_pointer) is not tuple or len(original_pointer) != 2
                     or original_pointer[0] != 0 or original_pointer[1] <= 0):
                 raise ValueError("unverified_source_particle_texture_PPtr")
@@ -137,6 +159,13 @@ def source_material_to_exported_texture_guids(trace, source_materials, originals
             if texture_key not in originals:
                 raise ValueError("particle_Material_source_Texture2D_not_in_3_authentic_targets")
             file_id, guid, kind = exported_pointer
+            if metrics is not None:
+                metrics["exported_Texture2D_PPtr_fileID_null" if file_id == 0 else "exported_Texture2D_PPtr_fileID_nonzero"] += 1
+                if kind in (0,2,3):
+                    metrics["exported_Texture2D_PPtr_type_" + str(kind)] += 1
+                else:
+                    metrics["exported_Texture2D_PPtr_other_type"] += 1
+                metrics["exported_Texture2D_PPtr_fileID_2800000" if file_id == 2800000 else "exported_Texture2D_PPtr_fileID_not_2800000"] += 1
             if file_id <= 0 or kind not in (2, 3) or len(guid) != 32:
                 raise ValueError("broken_same_export_particle_texture_Material_ref")
             if original_uv is None or exported_uv is None or len(original_uv) != len(exported_uv):
@@ -145,9 +174,13 @@ def source_material_to_exported_texture_guids(trace, source_materials, originals
             if any(not math.isclose(a,b,abs_tol=1e-6,rel_tol=1e-6)
                    for a,b in zip(original_uv, exported_uv)):
                 raise ValueError("changed_same_export_particle_texture_UV")
+            if metrics is not None:
+                metrics["source_to_export_texture_UV_pairs_verified"] += 1
             if texture_key in result and result[texture_key] != guid:
                 raise ValueError("one_original_particle_Texture2D_maps_to_two_export_GUIDs")
             result[texture_key] = guid
+            if metrics is not None:
+                metrics["source_Texture2D_to_export_GUIDs_unique"] = len(set(result.values()))
             exact_slots += 1
     if (set(result) != set(originals) or len(set(result.values())) != EXPECTED_TARGETS
             or exact_slots != 10):
@@ -208,7 +241,7 @@ def analyze_exported_images(index):
     return total, {key: dict(sorted(value.items())) for key, value in importer_values.items()}
 
 
-def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_metrics=None):
+def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_metrics=None, material_metrics=None):
     def mark(step):
         if checkpoint is not None:
             checkpoint(step)
@@ -253,7 +286,8 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
     exported_materials = exported_texenvs(project)
     mark("join_original_Material_TexEnv_to_exported_Texture2D_GUID")
     mapping = source_material_to_exported_texture_guids(
-        trace, original_material_texenvs, original_targets, exported_materials)
+        trace, original_material_texenvs, original_targets, exported_materials,
+        metrics=material_metrics)
     if direct_mapping is not None and direct_mapping != mapping:
         raise ValueError("original_texture_trace_and_Material_YAML_GUID_mismatch")
     mark("locate_exported_TextureImporter_image")
@@ -293,6 +327,7 @@ def main():
         raise ValueError("unsafe_particle_alpha_report_destination")
     progress = {"stage": "input_paths_and_layout"}
     numeric_trace_metrics = {}
+    numeric_material_metrics = {}
     stages = {
         "input_paths_and_layout",
         "original_material_shader_Texture2D_PPtrs",
@@ -311,7 +346,7 @@ def main():
         progress["stage"] = stage
     try:
         report = audit(a.original, a.manifest, a.project, a.trace, checkpoint=mark,
-                       trace_metrics=numeric_trace_metrics)
+                       trace_metrics=numeric_trace_metrics, material_metrics=numeric_material_metrics)
     except Exception as error:
         report = {
             "schema_version": 1,
@@ -321,6 +356,7 @@ def main():
                              else "UNCLASSIFIED_SAFE_ERROR"),
             "failure_stage": progress["stage"],
             "trace_source_export_match_counts": numeric_trace_metrics,
+            "source_Material21_to_export_Texture2D_pointer_counts": numeric_material_metrics,
             "android_device_fire_pixels_verified": False,
             "private_ids_guids_paths_or_pixels_published": False,
         }
