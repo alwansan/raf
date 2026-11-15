@@ -248,10 +248,12 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
                 "original_particle_Texture2D_Guid_not_unique"):
             raise
         direct_mapping = None
-    mark("join_original_Material_TexEnv_to_exported_Texture2D_GUID")
+    mark("parse_exported_Material_TexEnv_YAML")
     from scripts.b05_verify_material_texenv_bindings import exported_texenvs
+    exported_materials = exported_texenvs(project)
+    mark("join_original_Material_TexEnv_to_exported_Texture2D_GUID")
     mapping = source_material_to_exported_texture_guids(
-        trace, original_material_texenvs, original_targets, exported_texenvs(project))
+        trace, original_material_texenvs, original_targets, exported_materials)
     if direct_mapping is not None and direct_mapping != mapping:
         raise ValueError("original_texture_trace_and_Material_YAML_GUID_mismatch")
     mark("locate_exported_TextureImporter_image")
@@ -297,6 +299,7 @@ def main():
         "original_Texture2D28_manifest_and_stream",
         "read_private_export_trace",
         "join_same_export_Texture2D28_GUID",
+        "parse_exported_Material_TexEnv_YAML",
         "join_original_Material_TexEnv_to_exported_Texture2D_GUID",
         "locate_exported_TextureImporter_image",
         "decode_exported_image_alpha",
@@ -314,7 +317,7 @@ def main():
             "schema_version": 1,
             "status": "INCONCLUSIVE",
             "error_type": type(error).__name__,
-            "failure_code": (str(error) if str(error) in ["untrusted_particle_source_export_linkage","duplicated_original_particle_Texture2D_export","invalid_same_export_Texture2D_pointer","original_particle_Texture2D_Guid_not_unique"]
+            "failure_code": (str(error) if str(error) in ["untrusted_particle_source_export_linkage","duplicated_original_particle_Texture2D_export","invalid_same_export_Texture2D_pointer","original_particle_Texture2D_Guid_not_unique","untrusted_source_export_particle_Material_mapping","duplicate_particle_source_Material_trace","invalid_traced_particle_Material21_export","missing_original_particle_Material_same_export_trace","missing_same_export_particle_Material_YAML","changed_same_export_particle_Material_TexEnv_schema","unverified_source_particle_texture_PPtr","particle_Material_source_Texture2D_not_in_3_authentic_targets","broken_same_export_particle_texture_Material_ref","missing_same_export_particle_texture_UV","changed_same_export_particle_texture_UV","one_original_particle_Texture2D_maps_to_two_export_GUIDs","incomplete_original_particle_Material_TexEnv_10_to_3_join","original_texture_trace_and_Material_YAML_GUID_mismatch","Missing/redirected Unity Assets root","Linked export path is unsafe","Missing or linked Material metadata","Invalid exported Material GUID","Malformed private Material YAML","Duplicate exported Material YAML mapping key","Material texture data absent in export","Duplicated exported Material pointer","No exported Material texture documents"]
                              else "UNCLASSIFIED_SAFE_ERROR"),
             "failure_stage": progress["stage"],
             "trace_source_export_match_counts": numeric_trace_metrics,
