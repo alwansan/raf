@@ -47,6 +47,12 @@ After every meaningful batch: update THIS clients/GT/RESTORE_AR.md at top, the 0
 - مصدر الاستعادة: `scripts/gt_translate_next_remaining_23_shader48.py`؛ بوابة الفحص `tests/test_gt_translate_next_remaining_23_shader48.py`؛ CI `.github/workflows/raft-gt-next23-original-shader-recovery.yml`. لا ترفع source-name/PathID/bytecode/HLSL، واحتفظ بـ246 Material Dummy كعدد مثبت إلى حين نجاح دمج next30 في [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176).
 - عند جلسة الاستكمال: افحص [43773953670](https://github.com/alwansan/raf/actions/runs/43773953670) وArtifact الخاص به، أصلح أي فشل حقيقي، ثم إن ثبتت الـ58 stages فعلياً انتقل لاختبار Unity Android Vulkan 33 route في bundle خاص، وبعد ذلك original same-export GUID. لا XAPK.
 
+## نتيجة الاستعادة التالية 23 مادة — تحديث مهم 16 نوفمبر
+
+- [43773953670](https://github.com/alwansan/raf/actions/runs/43773953670) **FAILED في بوابة بناء ShaderLab** رغم تحقق **58/58 DXBC→Vulkan1.1/HLSL** و**33 زوج VS/FS و8 orphan VS**، وتجميع **66/66 مسار HLSL مستقل**. نوع سبب الفشل `PrivateContractError` داخل مرحلة original ShaderLab Property/Pass serialization. **لا تحتسب هذا الشيدر مستعاداً في Unity ولا في تصدير اللعبة**.
+- أُضيف تقسيم مراحل الفشل إلى أسباب آمنة فقط (مثل PROPERTY_FLAGS_OR_ATTRIBUTES/PROPERTY_TYPE_UNSUPPORTED) دون نشر أسماء أو بيانات المصدر. بدأ [43774150865](https://github.com/alwansan/raf/actions/runs/43774150865) لتحديد شرط المصدر الذي يحتاج ترجمة صحيحة لا تجاوز الحارس. لم يثبت النجاح عند كتابة هذه الملاحظة. بعد استرجاع checkpoint/category من Artifact، أصلح serializer بما يحافظ على Property flags/defaults الأصلية، ثم تحقق Unity وGUID.
+- قواعد الأرقام لم تتغير: آخر قيمة مثبتة ما تزال **540/786 custom non-Dummy، و246 Dummy** قبل نجاح next30 [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176). لا XAPK ولا تعديل ملف مصدر/Meta.
+
 ## الحالة الهندسية المُعتمدة الآن
 
 - **المجسمات والخامات والألوان:** أُثبتت مصادر ZIP2 ذات 82 مالكاً وأصول Mesh وTextures ومواقع المشاهد وألوانها. يوجد فحص لعدد 4,708 Mesh وملفات Streamed أصلية، لكن **لا تفسّر ذلك على أنه قبول بصري كامل على Adreno**. يجب إكمال جميع الروابط والمواد المفقودة.
