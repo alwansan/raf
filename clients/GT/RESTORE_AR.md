@@ -1,3 +1,22 @@
+# نقطة الاستعادة الحالية — Raft Android
+
+انسخ النص داخل المربع إلى الجلسة الجديدة. [فهرس التسليم](sessions/20261115-graphics-restoration/).
+
+```text
+أكمل استعادة رسوم Raft Android من GitHub alwansan/raf على فرع feature/android-native-port. راجع الفرع الحي قبل العمل. اقرأ:
+https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/sessions/20261115-graphics-restoration/01-PLAN_AR.md
+https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/sessions/20261115-graphics-restoration/02-STATUS_AND_TESTS_AR.md
+https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/sessions/20261115-graphics-restoration/03-WORK_NOTES_AR.md
+
+الأولوية للمجسمات البيضاء، الخامات والألوان، شفافية النار والماء. الأنيميشن مؤجل. أصل بيانات اللعبة ZIP2 مثبت عند 15964ea8f246b6e076ce26b60931ee2e1a9a2385. اللوقات والصور في https://github.com/alwansan/CL. دمج كل دفعة صالحة مع الحفاظ على نفس GUID وروابط المواد، واشتغل بالتوازي إذا الملفات مستقلة.
+
+آخر نقطة: تطابق هندسة المجسمات والألوان ومصفوفات التكستشر مثبت في التصدير، وفحص Unity Vulkan تحقق من دفعة شيدرات المجسمات والمؤثرات. الآن تابع فحص BillboardFade بتمريريه ForwardBase/ForwardAdd ومساراته [4,5]، ثم ثبّته في مسار الإنتاج بعد القبول. جرد 43651736236 أحصى 786 مادة على شيدرات مؤقتة قبل تركيب الاستعادات. أعِد جرد المواد بعد تثبيتها وأكمل الشيدرات المتبقية حسب أثرها. التحقق البصري في اللعبة بعده مفتوح.
+
+لا تبدأ XAPK قبل اكتمال الاستعادة. عند إطلاق الاختبار الطويل سلّم رقم التشغيل للمالك حتى ينتظر ويخبرك بالنتيجة، ثم طابق اللوق والصور وعالج الفروقات.
+```
+
+## سجل الاستعادة السابق
+
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
 ## دفعات دمج البصريات في Android

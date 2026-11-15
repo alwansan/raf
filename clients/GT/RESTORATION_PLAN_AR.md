@@ -1,5 +1,9 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## تنفيذ الخطة الحالي
+
+ابدأ من [تسليم استعادة الرسوم](sessions/20261115-graphics-restoration/) و[نقطة الاستعادة](RESTORE_AR.md). أحدث [حالة وفحوص](sessions/20261115-graphics-restoration/02-STATUS_AND_TESTS_AR.md) و[خطة استكمال](sessions/20261115-graphics-restoration/01-PLAN_AR.md) تحدد ما نُشر وما بقي، وتقدّم على الحالة التاريخية أدناه.
+
 ## ملحق Chat-33 — بيانات Keywords/Properties المصدرية مكتملة الجرد لا الربط
 
 [CI43358489426 SUCCESS](https://github.com/alwansan/raf/actions/runs/43358489426): 74 original VS/FS variant records، 27 Keyword names/flags، 14 فهرس Keyword مستخدم ومتحقق ضمن نطاق الأسماء، 35 Shader Properties، player bucket واحد، مع بقاء ترجمة 58/58 صحيحة. أصل بيانات ParsedForm والـPass States محفوظ مؤقتاً فقط وملف المشروع لم يتغير. **ما زال P05 مفتوحاً** حتى يثبت Original ShaderLab الكامل وربط التهيئة/الـCB0/الـSampler والـGUID. **P04 770 Dummy ما زال مفتوحاً**، ثم الموارد الباقية إلى G0–G6 قبل XAPK.

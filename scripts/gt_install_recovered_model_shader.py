@@ -6,7 +6,7 @@ from pathlib import Path
 
 from scripts.b45_install_original_blur import _atomic_replace_bytes, check_safe_ancestors
 from scripts.gt_install_original_particle108 import MAX_SHADER, read_bounded, traced_shader
-from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, SKIN_ROUTES
+from scripts.gt_original_921_shaderlab import expected_routes_for_shader
 from scripts.restore_builtin_shaders import exported_shader_identity
 
 
@@ -19,7 +19,7 @@ def install(project, trace, source_key, candidate, receipt, backup):
     identity = exported_shader_identity(candidate.decode("utf-8"))
     if identity is None:
         raise ValueError("model_shader_identity_missing")
-    counts = SKIN_ROUTES if identity == "Skin_Amplify" else EXPECTED_ROUTES
+    counts = expected_routes_for_shader(identity)
     required = {
         "candidate_sha256": digest,
         "compiled_program_table_verified": True,

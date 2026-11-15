@@ -15,6 +15,12 @@ from scripts.gt_original_921_semantics import pin_varying_locations, restore_ver
 PASS_MODES = ("ForwardBase", "ForwardAdd", "Deferred", "ShadowCaster")
 EXPECTED_ROUTES = (8, 13, 8, 4)
 SKIN_ROUTES = (8, 13, 2)
+BILLBOARD_ROUTES = (4, 5)
+
+
+def expected_routes_for_shader(name):
+    return {"Skin_Amplify": SKIN_ROUTES, "BillboardFade": BILLBOARD_ROUTES}.get(name, EXPECTED_ROUTES)
+
 # ShaderLab injects the pass macro. ForwardBase uses a directional light
 # even when Unity does not expose DIRECTIONAL as a separate variant keyword.
 ENGINE_FIXED_KEYWORDS = (
@@ -221,6 +227,8 @@ def pass_modes_for_routes(counts):
         return PASS_MODES
     if counts == SKIN_ROUTES:
         return ("ForwardBase", "ForwardAdd", "ShadowCaster")
+    if counts == BILLBOARD_ROUTES:
+        return ("ForwardBase", "ForwardAdd")
     raise ValueError("original_921_unexpected_shaderlab_routes")
 
 

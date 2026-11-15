@@ -1,5 +1,9 @@
 # ملخص تقدم GT للمالك
 
+## تقدم 15 تشرين الثاني 2026
+
+ابدأ من [تسليم استعادة الرسوم](sessions/20261115-graphics-restoration/) و[نقطة الاستعادة](RESTORE_AR.md). أحدث [حالة وفحوص](sessions/20261115-graphics-restoration/02-STATUS_AND_TESTS_AR.md) و[خطة استكمال](sessions/20261115-graphics-restoration/01-PLAN_AR.md) تحدد ما نُشر وما بقي، وتقدّم على الحالة التاريخية أدناه.
+
 ## ملحق GT Chat-33 — تغطية الأسماء والخصائص الأصلية
 
 نجح [CI43358489426](https://github.com/alwansan/raf/actions/runs/43358489426): **27 اسم Keyword و27 Flag و14 فهرس مستخدم من الأصل (كلها ضمن الجدول) و35 خاصية Shader و74 سجل Variant**، مع استمرار ترجمة البرامج الأصلية **58/58** بنجاح. هذا فحص أصيل من ZIP2 دون تعديل موارد Android أو .meta؛ لم تتحول 770 Material Dummy إلى موارد سليمة بعد. خطوة GT اللاحقة: بناء original 4-Pass ShaderLab وربط Keywords/Samplers/CB0 بنفس GUID قبل مرحلة التوافق.

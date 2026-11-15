@@ -1,5 +1,9 @@
 # GT — استعادة رسوميات Raft Android
 
+## التسليم الحالي
+
+ابدأ من [تسليم استعادة الرسوم](sessions/20261115-graphics-restoration/) و[نقطة الاستعادة](RESTORE_AR.md). أحدث [حالة وفحوص](sessions/20261115-graphics-restoration/02-STATUS_AND_TESTS_AR.md) و[خطة استكمال](sessions/20261115-graphics-restoration/01-PLAN_AR.md) تحدد ما نُشر وما بقي، وتقدّم على الحالة التاريخية أدناه.
+
 | الملف | وظيفته |
 |---|---|
 | [الخطة الحيّة](RESTORATION_PLAN_AR.md) · [البيانات JSON](RESTORATION_PLAN.json) | ما استُعيد فعلاً حسب مستوى الدليل، وما تبقى، وأولويات وموانع القبول على Android |

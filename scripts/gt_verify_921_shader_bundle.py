@@ -6,7 +6,7 @@ from pathlib import Path
 import struct
 import subprocess
 
-from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, SKIN_ROUTES
+from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, expected_routes_for_shader
 from scripts.restore_builtin_shaders import exported_shader_identity
 from scripts.w1_recover_depth_passes import stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
@@ -91,7 +91,7 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
 
     shader = source.read_bytes()
     expected_name = exported_shader_identity(shader.decode("utf-8"))
-    counts = SKIN_ROUTES if expected_name == "Skin_Amplify" else EXPECTED_ROUTES
+    counts = expected_routes_for_shader(expected_name)
     unity = json.loads(receipt.read_text(encoding="utf-8"))
     if (unity.get("privateBundleCompiled") is not True
             or unity.get("androidVulkanOnly") is not True

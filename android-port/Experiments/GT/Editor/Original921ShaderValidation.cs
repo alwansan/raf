@@ -60,9 +60,18 @@ namespace RaftGT
                 if (shader == null)
                     throw new InvalidOperationException("Original921ShaderMissing");
                 result.passCount = shader.passCount;
-                bool skin = result.passCount == 3 && shader.name == "Skin_Amplify";
-                var counts = skin ? new[] { 8, 13, 2 } : Counts;
-                var passes = skin ? new[] { PassType.ForwardBase, PassType.ForwardAdd, PassType.ShadowCaster } : Passes;
+                var counts = Counts;
+                var passes = Passes;
+                if (shader.name == "Skin_Amplify")
+                {
+                    counts = new[] { 8, 13, 2 };
+                    passes = new[] { PassType.ForwardBase, PassType.ForwardAdd, PassType.ShadowCaster };
+                }
+                else if (shader.name == "BillboardFade")
+                {
+                    counts = new[] { 4, 5 };
+                    passes = new[] { PassType.ForwardBase, PassType.ForwardAdd };
+                }
                 if (result.passCount != counts.Length)
                     throw new InvalidOperationException("Original921ShaderPassCountMismatch");
 

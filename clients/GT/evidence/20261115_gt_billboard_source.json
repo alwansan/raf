@@ -1,0 +1,91 @@
+{
+  "Unity_Editor_Android_or_device_pixels_verified": false,
+  "all_distinct_original_D3D11_programs_translated": true,
+  "all_original_6_shader_variant_population_extracted_to_private_stage": true,
+  "exact_original_source_VS_FS_permutation_pairs": 9,
+  "original_authored_ShaderLab_or_Sampler_CB0_render_parity_verified": false,
+  "original_game_assets_or_meta_modified": false,
+  "original_keyword_name_count": 20,
+  "original_passes": 2,
+  "original_project_Shader_GUID_replaced": false,
+  "original_property_count": 6,
+  "original_source_IDs_GUIDs_shader_names_or_program_bytes_published": false,
+  "original_unique_D3D11_stage_programs": 19,
+  "private_HLSL_recovered_stages": 19,
+  "private_HLSL_roundtrip_vulkan11_valid_stages": 19,
+  "private_stage_translation_attempts": 19,
+  "private_vulkan11_valid_stages": 19,
+  "schema_version": 1,
+  "scope": "six_SHA_original_scenes_selected_6_renderer_material_slots",
+  "source_keyword_route_coverage": {
+    "source_exact_keyword_routes_by_pass": [
+      4,
+      5
+    ],
+    "source_keyword_universe_size_by_pass": [
+      4,
+      5
+    ],
+    "source_unmatched_vertex_keyword_sets_by_pass": [
+      2,
+      0
+    ],
+    "source_used_flag_byte_population_across_passes": {
+      "0": 9
+    },
+    "validated_exact_routed_stage_compilations": 18
+  },
+  "source_original_Shader_ParsedForm_pass_states_keyword_property_tables_preserved_privately": true,
+  "source_original_keyword_coverage": {
+    "all_source_variant_metadata_stages_censused": 20,
+    "original_distinct_hardware_tiers_in_variants": 0,
+    "original_distinct_player_buckets_in_variants": 1,
+    "original_global_keyword_indices_used": 0,
+    "original_global_local_pragma_flags_and_compilation_selection_proven": false,
+    "original_keyword_flags": 20,
+    "original_keyword_indices_within_name_table": true,
+    "original_keyword_names": 20,
+    "original_legacy_keyword_indices_used": 8,
+    "original_local_keyword_indices_used": 0,
+    "original_property_definitions": 6,
+    "original_sampler_register_CB0_bindings_proven": false,
+    "source_original_unique_used_keyword_indices": 8
+  },
+  "source_shaderlab_layout": {
+    "original_authored_color_property_count": 1,
+    "original_authored_float_property_count": 1,
+    "original_authored_property_count": 6,
+    "original_authored_range_property_count": 2,
+    "original_authored_texture_property_count": 2,
+    "original_authored_vector_property_count": 0,
+    "original_property_hide_in_inspector_count": 2,
+    "original_property_toggle_count": 0,
+    "original_render_states_serialized": 2
+  },
+  "source_variant_parameter_records": {
+    "constant_buffer_bindings_from_variant": 22,
+    "constant_buffer_layouts_with_shared_members_table": 73,
+    "constant_buffer_named_32bit_lanes": 1951,
+    "constant_buffer_named_member_occurrences": 242,
+    "constant_buffer_named_struct_occurrences": 6,
+    "distinct_original_parameter_blobs": 15,
+    "named_constant_buffer_candidate_stages_vulkan11_valid": 20,
+    "named_constant_buffer_reflected_offsets_verified": 275,
+    "named_original_numeric_members_in_distinct_parameter_blobs": 80,
+    "named_original_resource_entries_in_distinct_parameter_blobs": 39,
+    "original_variant_stages_with_cb_bindings": 7,
+    "original_variant_stages_with_parameter_records": 20,
+    "original_variant_stages_with_textures": 5,
+    "original_vertex_fragment_varying_records_matched": 48,
+    "original_vertex_input_semantics_restored": 33,
+    "resource_rebound_stages_verified_spirv_identical_excluding_debug": 20,
+    "translated_constant_buffer_declarations_mapped": 94,
+    "translated_sampler_declarations_mapped_to_source_texture": 37,
+    "translated_texture_declarations_mapped_to_source_name": 41,
+    "vertex_variants_with_verified_mesh_inputs": 11,
+    "vulkan_vertex_fragment_locations_matched": 39
+  },
+  "status": "GT_ORIGINAL_BILLBOARD_FADE_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY",
+  "unmatched_original_fragment_variants": 0,
+  "unmatched_original_vertex_variants_retained": 2
+}

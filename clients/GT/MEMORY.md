@@ -1,5 +1,9 @@
 # ذاكرة GT — الحالة الحية
 
+## نقطة الاستئناف الحالية
+
+ابدأ من [تسليم استعادة الرسوم](sessions/20261115-graphics-restoration/) و[نقطة الاستعادة](RESTORE_AR.md). أحدث [حالة وفحوص](sessions/20261115-graphics-restoration/02-STATUS_AND_TESTS_AR.md) و[خطة استكمال](sessions/20261115-graphics-restoration/01-PLAN_AR.md) تحدد ما نُشر وما بقي، وتقدّم على الحالة التاريخية أدناه.
+
 ## دفعات دمج البصريات في Android
 
 استعادة مدخلات المجسمات ومواقع Vulkan لشيدر 921، وتجهيز ShaderLab للفحص المعزول. دمجنا إصلاح معرّفات عظام المجسمات، ومثبّتي Particle108 وDepth Copy مع حفظ GUID. تحقق Unity المعزول للجسيمات وDepth نجح. [جلسة الأدلة والخطوات الباقية](sessions/20261113-GT-visual-restoration-native-batches.md). لا XAPK.

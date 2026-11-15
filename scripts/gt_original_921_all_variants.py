@@ -25,6 +25,7 @@ SKIN_STATUS="GT_ORIGINAL_SKIN_AMPLIFY_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECO
 SHIMMER_STATUS="GT_ORIGINAL_SHIMMER_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
 SAILPAINT_STATUS="GT_ORIGINAL_SAILPAINT_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
 HAIR_STATUS="GT_ORIGINAL_HAIR_AMPLIFY_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
+BILLBOARD_STATUS="GT_ORIGINAL_BILLBOARD_FADE_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY"
 SOURCE_PROFILES = {
     "blockpaint": (921, 35, STATUS, " BlockPaint"),
     "vegetation": (121, 16, VEGETATION_STATUS, "Vegetation"),
@@ -34,11 +35,13 @@ SOURCE_PROFILES = {
     "shimmer": (15, 13, SHIMMER_STATUS, "Shimmer"),
     "sailpaint": (7, 20, SAILPAINT_STATUS, "SailPaint"),
     "hair": (5, 7, HAIR_STATUS, "Hair_Amplify"),
+    "billboard": (6, 6, BILLBOARD_STATUS, "BillboardFade"),
 }
 
 
 DEFAULT_TOPOLOGY = (PASS_COUNT, PAIRED_COUNT, ORPHAN_VERTEX_COUNT, DISTINCT_DXBC_COUNT)
-SKIN_TOPOLOGY = (3, 23, 8, 43)
+SHADER_TOPOLOGIES = {"skin": (3, 23, 8, 43), "billboard": (2, 9, 2, 19)}
+SHADER_ROUTE_COUNTS = {"skin": [8, 13, 2], "billboard": [4, 5]}
 
 
 def select_scene_shader(source_use, report, shader, *, get_tree=None):
@@ -163,7 +166,7 @@ def _private_destination(path:Path,source:Path,other:Path):
     return path
 
 def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator,source_parsed=None,shader="blockpaint"):
-    topology = SKIN_TOPOLOGY if shader == "skin" else DEFAULT_TOPOLOGY
+    topology = SHADER_TOPOLOGIES.get(shader, DEFAULT_TOPOLOGY)
     if (len(passes),len(pairs),len(orphans),len(distinct)) != topology:
         raise ValueError("non_original_921_stage_inventory")
     if type(source_parsed) is not dict or type(source_parsed.get('m_SubShaders')) is not list:
@@ -419,7 +422,7 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None,shad
     if len(tables)!=1:
         raise ValueError("ambiguous_original_921_D3D11_program_table")
     baseline=top.summarize(tree.get("m_ParsedForm"),tables[0])
-    topology = SKIN_TOPOLOGY if shader == "skin" else DEFAULT_TOPOLOGY
+    topology = SHADER_TOPOLOGIES.get(shader, DEFAULT_TOPOLOGY)
     original_topology = (
         baseline["original_source_Shader48_pass_count"],
         baseline["matched_vertex_fragment_permutation_pairs"],
@@ -436,8 +439,9 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None,shad
     safe=stage_private(pairs,orphans,passes,unique,private,translator=translator,source_parsed=tree['m_ParsedForm'],shader=shader)
     from scripts.gt_original_921_keyword_routes import compile_routed_stages, keyword_routes, shaderlab_layout
     route_packet, route_summary = keyword_routes(tree["m_ParsedForm"], pairs, orphans, passes)
-    if shader == "skin" and route_summary["source_exact_keyword_routes_by_pass"] != [8, 13, 2]:
-        raise ValueError("original_skin_pass_route_count_drift")
+    if (shader in SHADER_ROUTE_COUNTS and
+            route_summary["source_exact_keyword_routes_by_pass"] != SHADER_ROUTE_COUNTS[shader]):
+        raise ValueError("original_profile_pass_route_count_drift")
     # Resolve the tuple of stage and bytecode digest to the packet's program directories.
     program_dirs = {ident: f"program-{index:03d}" for index, ident in enumerate(unique)}
     for row in route_packet:
