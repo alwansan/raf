@@ -4,6 +4,10 @@ on:
     branches: [feature/android-native-port]
     paths:
       - scripts/gt_translate_next_remaining_23_shader48.py
+      - scripts/t3_particle108_source_propstate.py
+      - scripts/gt_original_921_keyword_routes.py
+      - android-port/Experiments/GT/Editor/Next23ShaderValidation.cs
+      - tests/test_t3_particle108_source_propstate.py
       - tests/test_gt_translate_next_remaining_23_shader48.py
       - .github/workflows/raft-gt-next23-original-shader-recovery.yml
   workflow_dispatch:
@@ -19,7 +23,8 @@ concurrency:
 jobs:
   authenticated-original-23-material-shader48:
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
+    timeout-minutes: 125
+    environment: UNITY_LICENSE
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -28,12 +33,14 @@ jobs:
           sparse-checkout: |
             scripts
             tests
+            android-port/Experiments/GT/Editor
       - name: Test SHA-authentic shader target ranking against two different 23-material originals
         shell: bash
         run: |
           set -euo pipefail
           python3 -m py_compile scripts/gt_translate_next_remaining_23_shader48.py
           python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_23_shader48.py -v
+          python3 -m unittest discover -s tests -p test_t3_particle108_source_propstate.py -v
       - name: Import real post13 246 dummy material quality without any original game resources
         uses: actions/download-artifact@v4
         with:
@@ -177,6 +184,80 @@ jobs:
           assert r["private_original_23_material_ShaderLab_66_vertex_fragment_entrypoints_validated"] is True
           print("GT_NEXT23_ORIGINAL_58_D3D11_PROGRAMS_AND_33_VSFS_SOURCE_ROUTES_VALID noGamePackage=true")
           PY_GT_NEXT23
+      - name: Stage authenticated original next23 Shader48 four-pass private Unity Vulkan project
+        shell: bash
+        run: |
+          set -euo pipefail
+          private="$RUNNER_TEMP/gt-next23-private-D3D11-HLSL"
+          project="$GITHUB_WORKSPACE/gt-next23-original-unity"
+          test -s "$private/original-23-material-Shader48-private.shader"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          cp "$private/original-23-material-Shader48-private.shader" "$project/Assets/GTNext23.shader"
+          cp android-port/Experiments/GT/Editor/Next23ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile all 33 original next23 Vulkan routes in isolated Unity 2021.3.45f2 Android shader bundle (no APK)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-next23-original-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Next23ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify actual Unity Android Vulkan next23 shader bundle serializes all 33 VS and FS programs
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next23-original-unity"
+          smolv="$RUNNER_TEMP/gt-next23-smolv"
+          mkdir -p "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-next23" \
+            --source "$project/Assets/GTNext23.shader" \
+            --receipt "$project/ProbeResults/gt-next23-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" \
+            --out "$RUNNER_TEMP/gt-next23-original-vulkan-bundle-safe.json"
+          python3 - <<'PY_NEXT23_UNITY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          shader=Path("gt-next23-original-unity/Assets/GTNext23.shader")
+          unity=json.loads(Path("gt-next23-original-unity/ProbeResults/gt-next23-unity-safe.json").read_text())
+          bundle=json.loads((root/"gt-next23-original-vulkan-bundle-safe.json").read_text())
+          assert unity["passCount"]==4 and unity["registeredRoutes"]==33
+          assert unity["unityVersion"]=="2021.3.45f2"
+          assert unity["errors"]==0 and unity["privateBundleCompiled"] is True
+          assert unity["androidVulkanOnly"] is True
+          assert bundle["vulkan_platform_only"] is True
+          assert bundle["compiled_program_table_verified"] is True
+          assert bundle["vertex_and_fragment_entrypoints_verified"] is True
+          assert bundle["vertex_routes_by_pass"]==[8,13,8,4]
+          assert bundle["fragment_routes_by_pass"]==[8,13,8,4]
+          assert bundle["candidate_sha256"]==hashlib.sha256(shader.read_bytes()).hexdigest()
+          print("GT_NEXT23_ORIGINAL_UNITY_VULKAN_33_VSFS_ROUTES_AND_4_PASSES_VERIFIED_noAPK=true")
+          PY_NEXT23_UNITY
+      - name: Upload only next23 anonymous Unity Vulkan compiler and serialized VS/FS proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-next23-private-unity-vulkan-safe-${{ github.run_id }}
+          path: |
+            gt-next23-original-unity/ProbeResults/gt-next23-unity-safe.json
+            ${{ runner.temp }}/gt-next23-original-vulkan-bundle-safe.json
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Upload safe source-only numeric original 23-material shader report
         if: always()
         uses: actions/upload-artifact@v4
@@ -190,3 +271,4 @@ jobs:
         run: |
           rm -rf -- "$RUNNER_TEMP/gt-original-82-shader-owners" \
                    "$RUNNER_TEMP/gt-next23-private-D3D11-HLSL" .gt-zip2
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-next23-original-unity"
