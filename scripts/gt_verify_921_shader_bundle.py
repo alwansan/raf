@@ -6,7 +6,7 @@ from pathlib import Path
 import struct
 import subprocess
 
-from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, expected_routes_for_shader
+from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, NEXT_30_MATERIAL_ROUTES, expected_routes_for_shader
 from scripts.restore_builtin_shaders import exported_shader_identity
 from scripts.w1_recover_depth_passes import stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
@@ -86,12 +86,12 @@ def vulkan_execution_models(blob, decoder):
     return models
 
 
-def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None):
+def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None, *, next30=False):
     import UnityPy
 
     shader = source.read_bytes()
     expected_name = exported_shader_identity(shader.decode("utf-8"))
-    counts = expected_routes_for_shader(expected_name)
+    counts = NEXT_30_MATERIAL_ROUTES if next30 else expected_routes_for_shader(expected_name)
     unity = json.loads(receipt.read_text(encoding="utf-8"))
     if (unity.get("privateBundleCompiled") is not True
             or unity.get("androidVulkanOnly") is not True
@@ -200,8 +200,9 @@ def main():
         parser.add_argument("--" + option, required=True, type=Path)
     parser.add_argument("--engine-route-manifest", type=Path)
     parser.add_argument("--smolv-decoder", type=Path)
+    parser.add_argument("--next30", action="store_true", help="Require verified original 30-material [8,13,8,2] routes")
     args = parser.parse_args()
-    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest, args.smolv_decoder)
+    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest, args.smolv_decoder, next30=args.next30)
     args.out.write_text(json.dumps(result, sort_keys=True) + "\n", encoding="utf-8")
     print("GT_ORIGINAL_921_BUNDLE_ROUTES " + json.dumps(result, sort_keys=True))
 
