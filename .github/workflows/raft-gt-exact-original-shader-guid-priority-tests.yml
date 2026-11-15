@@ -1,0 +1,32 @@
+name: GT exact original Shader48 GUID-to-Material priority source contract (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_rank_full_export_dummy_shader_sources.py
+      - tests/test_gt_rank_full_export_dummy_shader_sources.py
+      - .github/workflows/raft-gt-exact-original-shader-guid-priority-tests.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  strict-original-source-guid-audit-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify exact original Shader48 export GUID linkage and private-only ranking
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_rank_full_export_dummy_shader_sources.py
+          python3 -m unittest discover -s tests -p test_gt_rank_full_export_dummy_shader_sources.py -v
+          echo 'GT_EXACT_ORIGINAL_SHADER_GUID_PRIORITY_STATIC_OK noGameAPK=true noOriginalShaderSourceUploaded=true'
