@@ -48,3 +48,11 @@
 - [دليل مرحلة الفحص](../../evidence/20261116_gt_particle108_alpha_static_test.json). اختبار الهاتف محجوب حتى اكتمال استعادة بقية الرسوم حسب قرار المالك، والأنيميشن مؤجل.
 
 - **تشخيص فعلي مستقل لشفافية Particle108:** أُطلق تشغيل [43762318768](https://github.com/alwansan/raf/actions/runs/43762318768) على مسار `.github/workflows/raft-gt-particle108-alpha-real-export.yml` (SHA `6a8162423f086782e803ae70af58b842ebe51528`). يستخدم ZIP2 الكامل وAssetRipper ونفس-instance Texture GUID Trace لفحص 3 Texture2D. النتيجة لم تكن متوفرة عند التوثيق؛ لا تخلط نجاح اختبار Pillow الصناعي مع إثبات Alpha حقيقي أو Pixel Vulkan على الهاتف.
+
+## نتيجة نهائية مثبتة للتشغيل 43759856414 — 16 تشرين الثاني
+
+- **التشغيل:** [43759856414](https://github.com/alwansan/raf/actions/runs/43759856414) انتهى **SUCCESS**. شيدرات BlockPaint/DirtPile/Vegetation/GrassPlot/Skin_Amplify/Shimmer/SailPaint/Hair_Amplify/BillboardFade اجتازت استعادة المصدر، Unity Android Vulkan، والتحقق والتثبيت على GUID نفس التصدير. **لا APK/XAPK**.
+- **جرد المواد الحقيقي:** 1536 مستند Material، منها 750 Builtin و786 Custom. Custom المستعاد = **453**، والمتبقي Dummy = **333**، يشير إلى **51 شيدر Dummy متميز مرتبط بمواد فعلياً**. خام التصدير 786 Dummy، وبعد Vendor فقط 770، وبعد التسعة الأصلية 333. تغطية 453/786 = **57.6% من مواد Custom**، لا من رسوم اللعبة كلها.
+- **سلامة الروابط:** SHA تحقق أن **29213** ملف Material/.meta/YAML ظل ببايتاته نفسها أثناء تثبيت التسعة، و0 مراجع Shader مكسورة أو مجهولة.
+- **ترتيب المتبقي:** أعلى Material links إلى Dummy shader حسب بصمة اسم مجهولة: 48، 30، 26، 23، 23، 18، 17، 15 ثم 11 وغيرها؛ نحتاج private source-to-export join قبل استعادة الشيدرات التالية، ولا نعتبر عدد المواد عدد مجسمات بيضاء.
+- **الدليل:** [قبول الدمج التساعي](../../evidence/20261116_gt_nine_original_shader_same_export_acceptance.json). تكافؤ Adreno الفعلي، النار والماء مفتوح. تشغيل فحص Alpha الحقيقي الأول [43762318768](https://github.com/alwansan/raf/actions/runs/43762318768) فشل من دون تصنيف المرحلة، وأضيف failure_stage وشُغّل [43763158214](https://github.com/alwansan/raf/actions/runs/43763158214) لإصلاح السبب.
