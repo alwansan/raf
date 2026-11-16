@@ -35,7 +35,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_REAL_POST17_NEXT17_ORIGINAL_GUID_628_OF_786_CUSTOM_NON_DUMMY_158_DUMMY_43_TARGETS_NEXT15_NEXT11_CI_ACTIVE",
+  "status": "GT_628_OF_786_CUSTOM_NON_DUMMY_158_DUMMY_43_SHADER_TARGETS_ACTUAL__FOUR_ORIGINAL_GUID_CI_CHAINS_ACTIVE",
   "latest_921_source_receipt": "clients/GT/evidence/20261113_original_921_routes_layout_parameters.json",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
-  "next_action": "Inspect runs 43918007004 (NEXT15) and 43918847740 (NEXT11), diagnose failing step with actual safe logs, correct only original SHA source/export GUID issue; accept 643/143/42 and 654/132/41 only after complete real full same-export post18/post19 audits; continue source-first remaining Shader48/water/fire/G0-G6",
+  "next_action": "Check exact corrected run jobs/logs/artifacts in order: 43920541904, 43920553298, 43922026302, 43922253136. Recheck actual postinstall material/meta SHA before promoting any count. Do not mistake source-only or isolated Unity for same-export GUID or Adreno pixels.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1719,5 +1719,77 @@
     }
   },
   "gt_restoration_priority": "Restore original resources/meshes/textures/materials/shaders/foam/depth/FFT/kernel6/fire/PostFX with source/GUID proof before general first XAPK; animation deferred; no inferred device pixels",
-  "last_updated_baghdad": "2026-11-16"
+  "last_updated_baghdad": "2026-11-16",
+  "latest_gt_original_shader48_live_20261116": {
+    "evidence": "clients/GT/evidence/20261116_gt_next10pair_original_guid_pipeline_progress.json",
+    "last_accepted_same_export": {
+      "run": 43787809110,
+      "conclusion": "success",
+      "original_custom_material_non_dummy": 628,
+      "custom_material_total": 786,
+      "dummy_custom_materials": 158,
+      "dummy_shader_guid_targets": 43,
+      "coverage_pct_of_custom_material_documents_only": 79.9,
+      "original_protected_material_yaml_meta_files_sha_unchanged": 29213,
+      "broken_shader_references": 0,
+      "android_device_pixels_verified": false,
+      "xapk_created": false
+    },
+    "full_export_chains_corrected": [
+      {
+        "shader": "NEXT15",
+        "run": 43920541904,
+        "commit": "f1625a720cf949c6c9e5d725ccc828e7ce62d96b",
+        "expected_only_after_success": {
+          "non_dummy": 643,
+          "dummy": 143,
+          "targets": 42
+        }
+      },
+      {
+        "shader": "NEXT11",
+        "run": 43920553298,
+        "commit": "8f567becb5ee378f54dbaf58455390d59989f04a",
+        "expected_only_after_success": {
+          "non_dummy": 654,
+          "dummy": 132,
+          "targets": 41
+        }
+      },
+      {
+        "shader": "NEXT10p33",
+        "run": 43922026302,
+        "commit": "a3f20f02a8e99e6773410eb71694f43d6cdf72c4",
+        "expected_only_after_success": {
+          "non_dummy": 664,
+          "dummy": 122,
+          "targets": 40
+        }
+      },
+      {
+        "shader": "NEXT10p31",
+        "run": 43922253136,
+        "commit": "b0face36c11d7e716b613b388df45c98173a141f",
+        "expected_only_after_success": {
+          "non_dummy": 674,
+          "dummy": 112,
+          "targets": 39
+        }
+      }
+    ],
+    "authenticated_full_export_stage_guard_run": 43922343892,
+    "authenticated_next10pair_source_installer_static_run": 43921213570,
+    "next_session_first": "Check exact corrected run jobs/logs/artifacts in order: 43920541904, 43920553298, 43922026302, 43922253136. Recheck actual postinstall material/meta SHA before promoting any count. Do not mistake source-only or isolated Unity for same-export GUID or Adreno pixels.",
+    "pending_resource_gates": [
+      "G0–G6",
+      "Remaining 43 source Shader GUID targets at last real audit",
+      "water Spectrum Foam Depth FFT kernel6",
+      "Fire exported alpha and device pixel parity",
+      "geometry/color/shadow/PostFX cross-component parity"
+    ],
+    "source_zip2_pinned_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "git_lfs_used": false,
+    "animation_deferred": true,
+    "xapk_test_deferred_until_all_original_resources_restored": true
+  }
 }
