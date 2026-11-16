@@ -1,5 +1,22 @@
 # التقدم وما بقي والفحوص
 
+## فحوص الأربع دفعات الأصلية المحمية — 16 نوفمبر 2026
+
+| مرحلة | تشغيل آخر نسخة صحيحة | النتيجة |
+| --- | --- | --- |
+| Actual post17 same export | [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110) | **SUCCESS: 628/786 non-Dummy، 158 Dummy/43، 29,213 SHA ثابتة** |
+| NEXT15 بعد post17 | [43920541904](https://github.com/alwansan/raf/actions/runs/43920541904) | **PENDING**؛ المتوقع فقط post18 643/143/42 |
+| NEXT11 بعد post18 | [43920553298](https://github.com/alwansan/raf/actions/runs/43920553298) | **PENDING**؛ المتوقع فقط post19 654/132/41 |
+| NEXT10p33 بعد post19 | [43922026302](https://github.com/alwansan/raf/actions/runs/43922026302) | **PENDING**؛ المتوقع فقط post20 664/122/40 |
+| NEXT10p31 بعد post20 | [43922253136](https://github.com/alwansan/raf/actions/runs/43922253136) | **IN PROGRESS**؛ المتوقع فقط post21 674/112/39 |
+| Fail-closed source dispatch & prior audit check | [43922343892](https://github.com/alwansan/raf/actions/runs/43922343892) | **SUCCESS، اختبار static** وليس same-export استعادة |
+| 10p33/10p31 source+installer static | [43921213570](https://github.com/alwansan/raf/actions/runs/43921213570) | **SUCCESS، اختبار static** |
+
+- جميع النسخ المصححة تستخدم مصدر ZIP2 SHA الأصلي مع فحص D3D11/Unity Vulkan/owner+PathID→original GUID و29,213 Material/YAML/meta SHA. لا تخلطها بإثبات الجهاز أو Pixel.
+- NEXT10p31 يفرق بين 2 مصادر من أصل post14 و1 Shader GUID متبقٍ فقط بعد NEXT10p33، ويستخدم --next30 بوصفه verifier لـ31 route، لا على أنه شيدر المصدر NEXT30.
+- لا XAPK من GT، وG0–G6/Water/Fire/FFT/kernel6 ما زالت مفتوحة. Evidence `clients/GT/evidence/20261116_gt_next10pair_original_guid_pipeline_progress.json`.
+
+
 - **Additional running CI:** [43918847740](https://github.com/alwansan/raf/actions/runs/43918847740) NEXT11 full export, must prove post18 first, then authenticated same-export NEXT11. Target post19 **654/786 non-Dummy, 132 Dummy/41 targets is not established**. Newest accepted remains 628/786, 158/43.
 
 ## Verified full SAME-EXPORT status — 16 Nov 2026
