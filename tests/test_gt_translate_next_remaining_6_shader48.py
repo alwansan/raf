@@ -8,6 +8,7 @@ from scripts.gt_translate_next_remaining_6_shader48 import (
     STATUS, EXPECTED_TOPOLOGY, select_exact_6_material_name,
     validate_authentic_source_ranges, safe_original_six_property_flag_attribute_census,
     source_only_static_parameter_binding_failure_category,
+    original_six_validator_private_failure_safe_topics,
 )
 
 
@@ -62,6 +63,26 @@ class SixMaterialAuthenticOriginalShader48(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"property_attribute_string"):
             safe_original_six_property_flag_attribute_census(
                 {"m_PropInfo":{"m_Props":props}})
+
+    def test_vulkan_block_overlap_classification_is_numeric_only(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        with TemporaryDirectory() as td:
+            root=Path(td)
+            stage=root/"bound-stage-000"
+            stage.mkdir()
+            original=("Structure member 1 at offset 12 overlaps previous "
+                      "member ending at offset 15; privateName SECRET_CB_NAME")
+            (stage/"original-validator-raw-private.log").write_text(original)
+            actual=original_six_validator_private_failure_safe_topics(root)
+            self.assertEqual(actual["private_validator_diagnostic_files"],1)
+            self.assertEqual(actual["safe_problem_topic_counts"]["specific_member_overlap"],1)
+            import json
+            exposed=json.dumps(actual)
+            self.assertNotIn("SECRET_CB_NAME",exposed)
+            self.assertNotIn("privateName",exposed)
+            self.assertFalse(actual[
+                "original_shader_identifiers_hlsl_spirv_or_raw_validator_text_published"])
 
     def test_original_binding_errors_are_static_safe_or_suppressed(self):
         self.assertEqual(
