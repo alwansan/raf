@@ -1,5 +1,13 @@
 # خطة استكمال استعادة رسوم Raft Android
 
+## خطة متابعة دفعة 7-material الأصلية — GT — 16 نوفمبر
+
+1. افتح نتائج SAME-EXPORT بالترتيب: NEXT15 43920541904 ثم NEXT11 43920553298 ثم NEXT10p33 43922026302 ثم NEXT10p31 43922253136 ثم NEXT7p11 43925468867 وNEXT7p33 43925787952. *التشغيلات التي تستخدم SHA قديم قبل الإصلاح لا تُقبل.*
+2. NEXT7p11 source 22 original D3D11/11 VSFS [4,5,2]/3 Pass/Range4؛ يطلب post21 فعلي 674/112/39 واثنين 7-material، وبعد تثبيت GUID أصلي يطلب post22 681/105/38. NEXT7p33 source 58 D3D11/33 VSFS [8,13,8,4]/4 Pass/Range0؛ يطلب post22 فعلي وواحد 7-material فقط ثم post23 688/98/37. كل عدادات post22/23 **gates conditional** حتى SUCCESS و29,213 protected SHA.
+3. [43925234660](https://github.com/alwansan/raf/actions/runs/43925234660) static source/installer و[43925851391](https://github.com/alwansan/raf/actions/runs/43925851391) static final-stage wiring ناجحان. الدليل `clients/GT/evidence/20261116_gt_next7pair_original_guid_pipeline_progress.json`. ثم بقي 37 Shader GUID فقط إذا ثبت نجاح الدفعات الست؛ لا تعده واقعاً الآن.
+4. بعد تصحيح ما يفشل، استعد الباقي من shader targets والموارد الأصلية Water/FFT/kernel6/Foam/Depth/Fire/PostFX/G0–G6 والمجسمات. الأنيميشن مؤجل، XAPK GT مؤجل حتى الاستعادة الشاملة.
+
+
 ## خطة GT — إعادة التشغيل الصحيح لـNEXT15/NEXT11 ثم 10p33/10p31 (16 نوفمبر)
 
 - **المرجع المثبت الوحيد حالياً** SAME EXPORT post17 [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110): **628/786 Custom Material non-Dummy و158 Dummy/43 GUID**؛ 29,213 protected original SHA unchanged، 0 broken.
