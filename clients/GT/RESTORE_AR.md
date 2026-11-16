@@ -1,5 +1,7 @@
 # GT — رسالة الاستعادة الأساسية الحية | 16 تشرين الثاني 2026
 
+- **NEXT11 parallel full original same-export chain added:** workflow .github/workflows/raft-gt-next11-original-full-export.yml commit e8ca45d0c4bb3a0cb78e3c465edab46d0d6cf277, run [43918847740](https://github.com/alwansan/raf/actions/runs/43918847740) IN PROGRESS at newest check. It replays NEXT15 and independently requires **actual post18 143 Dummy/42** before installing NEXT11, then candidate 58 original D3D11, 33 VSFS, Unity Vulkan and strict post19 SHA audit. **654 non-Dummy/132 Dummy/41 targets are projection ONLY**, not accepted. Historical accepted baseline is still 628/158/43.
+
 ## GT — REAL post17 source-authentic Shader GUID progress, 16 Nov 2026
 
 - **Latest accepted full same-export run [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110): SUCCESS.** Actual Custom Material non-Dummy **628/786 (79.90% of Custom Material documents only)**, **158 Dummy /43 remaining original Shader GUID targets**, 750 built-in + 786 Custom = 1536 total, 0 broken shader references, **29,213 original Material/meta/YAML SHA unchanged**. Artifact gt-seventeen-next17-source-shader-full-export-audit-43787809110 ID 14192158339. This is genuine source owner/PathID → same-export original GUID installation, **not Adreno device pixels or full graphics parity**.
