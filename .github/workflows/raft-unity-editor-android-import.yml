@@ -116,9 +116,11 @@ jobs:
     environment: UNITY_LICENSE
     if: ${{ needs.unity-license-preflight.outputs.ready == 'true' && ((github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]'))) }}
     runs-on: ubuntu-24.04
-    # Restored Mono fields now require a substantially larger first-import budget.
-    # Previous 65-minute job expired during active asset import, before Build().
-    timeout-minutes: 240
+    # Full original shader variants were still compiling at exactly 240 minutes
+    # in run 43845968578 (Unity actively progressed; kernel OOM kills=0).
+    # GitHub-hosted jobs allow a maximum of 360 minutes. Preserve all original
+    # shaders/variant gates and reserve remaining time for signed APK/OBB/XAPK.
+    timeout-minutes: 360
     steps:
       - name: Disk safety gate before dependencies / LFS download
         shell: bash
@@ -2121,7 +2123,7 @@ jobs:
           sudo swapon /mnt/raft-unity.swap
           free -m
           df -h / /mnt
-          python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/unity-memory.jsonl" --interval 10 --samples 1440 > /dev/null 2>&1 &
+          python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/unity-memory.jsonl" --interval 15 --samples 1440 > /dev/null 2>&1 &
           echo "$!" > "$RUNNER_TEMP/unity-memory.pid"
       - name: Unity Editor 2021.3.45f2 Android import and compile
         id: unity_build
