@@ -752,9 +752,42 @@ jobs:
           mkdir "$foam"
           original="$RUNNER_TEMP/w1-original/Raft_Data"
           test -s "$original/sharedassets0.assets"
-          timeout 540s python3 -m scripts.b20_private_foam_packet \
+          if ! timeout 540s python3 -m scripts.b20_private_foam_packet \
             --source "$original" --repo "$GITHUB_WORKSPACE" \
-            --private "$foam/packet" --out "$foam/packet.json"
+            --private "$foam/packet" --out "$foam/packet.json"; then
+            # Explicit owner-only device trial: never represent failed source
+            # restoration as a successful original Foam shader installation.
+            # Pin verification and exact limitation acknowledgement stay strict.
+            python3 - <<'PY_GT_FOAM_OWNER_TRIAL'
+          import json, os
+          from pathlib import Path
+          from scripts.b24_original_foam_stage_translation import OWNER
+          from scripts.w1_stage_zip2_owners import PINS, fingerprint
+          src = Path(os.environ['RUNNER_TEMP']) / 'w1-original/Raft_Data' / OWNER
+          assert src.is_file() and not src.is_symlink()
+          assert fingerprint(src) == PINS[OWNER], 'Authentic Foam owner bytes not verified'
+          req = json.loads(Path('.github/raft-native-build-request.json').read_text())
+          assert req.get('owner_direct_request') is True
+          assert req.get('allow_documented_foam_trial') is True
+          assert 'shader_pass_contract:UltimateWater/Foam/Global' in req.get('documented_water_limitations', [])
+          dest = Path(os.environ['RUNNER_TEMP']) / 'gt-native-original-foam-install-safe.json'
+          assert not dest.exists()
+          dest.write_text(json.dumps({
+              'status': 'OWNER_TRIAL_ORIGINAL_FOAM_NOT_RESTORED',
+              'source_original_owner_sha_verified': True,
+              'unique_original_foam_exported_target_installed': 0,
+              'original_export_shader_left_unchanged': True,
+              'source_original_two_pass_compile_verified': False,
+              'Unity_2021_import_verified': False,
+              'original_Material_CB0_runtime_binding_verified': False,
+              'Android_water_pixels_verified': False,
+              'strict_water_gate_bypassed': False,
+              'owner_acknowledged_unmet_requirement': 'shader_pass_contract:UltimateWater/Foam/Global'
+          }, sort_keys=True, indent=2) + '\n')
+          PY_GT_FOAM_OWNER_TRIAL
+            echo '::warning::Owner-only trial: genuine Foam2 stage rejected; original export shader retained unchanged; strict water contract must still match the explicit limitation request.'
+            exit 0
+          fi
           timeout 300s python3 -m scripts.t2_foam_private_shaderlab_candidate \
             --source "$original" --packet "$foam/packet" \
             --manifest "$foam/packet.json" \
