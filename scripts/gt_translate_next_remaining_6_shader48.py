@@ -381,7 +381,9 @@ def run(original,manifest,quality,private):
             json.dumps(packet,sort_keys=True,indent=2)+"\n",encoding="utf-8")
         (private/"original-private-layout.txt").write_text(layout,encoding="utf-8")
         checkpoint="bind_source_constant_buffer_resource_and_vertex_semantics"
-        named=stage_parameter_records(paired,orphans,passes,tables[0],private,folders)
+        named=stage_parameter_records(
+            paired,orphans,passes,tables[0],private,folders,
+            original_hlsl_offsets=True)
         report["source_variant_named_CB_sampler_stage_bindings_verified"]=True
         report["original_stage_parameter_records_checked"]=named["original_variant_stages_with_parameter_records"]
         report["original_vertex_fragment_varying_records_matched"]=named["original_vertex_fragment_varying_records_matched"]
