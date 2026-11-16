@@ -937,5 +937,35 @@
       "Restore water Spectrum/Foam/Depth/FFT compute and kernel6 exact identity; resolve G0-G6 before any XAPK"
     ],
     "xapk_before_all_resource_gates": false
+  },
+  "next_gt_original_shaders_source_batched_20261116": {
+    "same_export_current": 43773151176,
+    "custom_non_dummy": 570,
+    "custom_dummy": 216,
+    "original_guid_targets_remaining": 46,
+    "next23_full_export_run": 43777283111,
+    "next18_unity_pass_run": 43780219002,
+    "next18_original_guid_install_waits_for_real_post15": true,
+    "next17_original_source_pass_run": 43781304391,
+    "next17_unity_check_run": 43782074242,
+    "parallel_source_runs": [
+      {
+        "material_documents": 15,
+        "run_id": 43782323454,
+        "source_proof_completed": false
+      },
+      {
+        "material_documents": 11,
+        "run_id": 43782328731,
+        "source_proof_completed": false
+      }
+    ],
+    "next_actions": [
+      "Read each source-only CI, prove exact original programs, properties and variant routes",
+      "Require isolated Unity Vulkan and same-export source owner/PathID Shader GUID for each target",
+      "Rerun protected real original Material+meta SHA and Dummy counts after installs",
+      "Prioritize Water Spectrum/Foam/Depth/FFT/kernel6 exact compute and Fire original image/source/export parity",
+      "Do not build XAPK before G0-G6 restored"
+    ]
   }
 }
