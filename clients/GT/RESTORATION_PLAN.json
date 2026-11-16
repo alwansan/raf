@@ -901,5 +901,41 @@
     "source_all_original_4pass_33variant_highest_shader_fully_restored": false,
     "original_shader_restoration_complete": false,
     "compatibility_XAPK_approved": false
+  },
+  "gt_live_post14_priority_20261116": {
+    "post14_real_material_baseline": {
+      "run_id": 43773151176,
+      "non_dummy_custom_material_documents": 570,
+      "remaining_dummy_custom_material_documents": 216,
+      "remaining_original_shader_guid_targets": 46,
+      "original_meta_material_yaml_sha_unchanged": 29213,
+      "custom_material_coverage_percent_only": 72.5
+    },
+    "active_batch": {
+      "next23_full_export_runs": [
+        43777150940,
+        43777283111
+      ],
+      "same_export_next23_installed_proven": false,
+      "real_post15_material_counter_not_proven": true
+    },
+    "parallel_source_recovery": {
+      "verified_post14_artifact_id": 14186801044,
+      "top16_original_D3D11_probe_run": 43779089456,
+      "source_programs_and_names_published": false
+    },
+    "fire_alpha": {
+      "real_export_run": 43777398215,
+      "status": "TWO_EXTERNAL_IMAGES_ALPHA_DECODED_ONE_LOCAL_TYPE0_PENDING",
+      "new_original_local_type0_alpha_run": 43778717548,
+      "phone_visual_proof": false
+    },
+    "must_continue": [
+      "Accept/fix NEXT23 same-export original Shader GUID and audit true post15 material counts",
+      "Classify original local type0 Material→Texture28 same-export pointer and original pixel alpha without GUID invention",
+      "Prioritize next 16 remaining original Shader48 based on full source topology, not name alone",
+      "Restore water Spectrum/Foam/Depth/FFT compute and kernel6 exact identity; resolve G0-G6 before any XAPK"
+    ],
+    "xapk_before_all_resource_gates": false
   }
 }
