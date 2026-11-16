@@ -1,0 +1,2513 @@
+name: GT full ZIP2 NEXT15 authentic Shader48 GUID after NEXT17 original export (NO APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-next15-original-full-export.yml
+      - scripts/gt_translate_next_remaining_15_shader48.py
+      - scripts/gt_install_next15_original_shader48.py
+      - tests/test_gt_translate_next_remaining_15_shader48.py
+      - tests/test_gt_install_next15_original_shader48.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-next15-full-original-guid-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  real-original-next15-after-next17-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    environment: UNITY_LICENSE
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            config
+            android-port/Experiments/ExportLineage
+            android-port/Experiments/GT/Editor
+            Raft/Raft_Data/Managed
+            tests
+      - name: Fail fast on authentic next23 source-free installer contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_install_next23_original_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_install_next23_original_shader48.py -v
+      - name: Check disk for full 7.53GB Raft source and actual AssetRipper export
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 47185920
+      - name: Immutable full Raft graphics ZIP2 checkout, never Git LFS
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/**
+      - name: Stage exact original managed providers for full AssetRipper import
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check dnfile==0.18.0
+          python3 -m scripts.stage_export_managed_providers \
+            --source "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
+            --destination "$RUNNER_TEMP/gt-input/Raft_Data/Managed"
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/Managed/Assembly-CSharp.dll"
+          test ! -e "$RUNNER_TEMP/gt-input/Raft_Data/Managed/PlayFab_o.dll"
+      - name: Restore complete 134 SHA-authentic original graphics and scenes to real exporter input
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_zip2_export_resources \
+            --zip2-checkout .gt-zip2 \
+            --input-root "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --profile full \
+            --byte-budget 10000000000 \
+            --report "$RUNNER_TEMP/gt-export-original-restore.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-export-original-restore.json"
+          result=json.loads(p.read_text())
+          assert result["original_resources_verified"]==134
+          assert result["original_bytes_materialized_or_reused"]==7532909297
+          assert result["git_lfs_used"] is False
+          assert result["original_payload_sha256_and_size_verified"]
+          print("GT_REAL_EXPORT_INPUT_READY originalFiles=134 originalBytes=7532909297 managed=true LFS=false")
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - uses: actions/checkout@v4
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          sparse-checkout: Source
+      - name: Instrument and publish exact native-pipeline AssetRipper for same-instance lineage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.patch_export_lineage \
+            --tool-source ar-host \
+            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --native-texture-arrays --compute-lineage
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/gt-ar" \
+            > "$RUNNER_TEMP/gt-public-tool-build.log" 2>&1 || {
+              tail -30 "$RUNNER_TEMP/gt-public-tool-build.log"
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/gt-ar/ExportLineage.dll" --probe-tool \
+            > "$RUNNER_TEMP/gt-tool-smoke.log" 2>&1 || {
+              tail -30 "$RUNNER_TEMP/gt-tool-smoke.log"
+              exit 1
+            }
+      - name: Run genuine exporter on fully restored Raft scene/texture/mesh streams
+        env:
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/gt-private-export-lineage.json
+          RAFT_PRIVATE_EXPORT_MESH_LINEAGE: ${{ runner.temp }}/gt-private-mesh-export-lineage.json
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: '1'
+          RAFT_PRIVATE_EXPORT_COMPUTE_LINEAGE: '1'
+          DOTNET_PROCESSOR_COUNT: '2'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1200s dotnet "$RUNNER_TEMP/gt-ar/ExportLineage.dll" \
+            "$RUNNER_TEMP/gt-input" "$RUNNER_TEMP/gt-project" --full-install \
+            > "$RUNNER_TEMP/gt-export-log.private.txt" 2>&1 || {
+              python3 - <<'PY'
+          import json,os,re
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-export-log.private.txt"
+          s=p.read_text(errors="replace")
+          d={"export_completed":False,
+             "has_missing_assembly":"Could not load file or assembly" in s,
+             "loading_started":"Processing loaded assets" in s,
+             "export_started":"Starting export" in s,
+             "managed_assembly_initialization_failure":"Could not initialize assembly manager" in s,
+             "known_exception_types":len(set(re.findall(r'(?:System|AssetRipper)\.[a-zA-Z.]+Exception',s))),
+             "log_bytes":len(s.encode())}
+          (Path(os.environ["RUNNER_TEMP"])/"gt-export-failure-safe.json").write_text(json.dumps(d,sort_keys=True,indent=2)+"\n")
+          print("GT_EXPORTER_FAILED_AGGREGATE "+json.dumps(d,sort_keys=True))
+          PY
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/gt-private-export-lineage.json"
+          test -d "$RUNNER_TEMP/gt-project/ExportedProject/Assets"
+          test -d "$RUNNER_TEMP/gt-project/ExportedProject/ProjectSettings"
+          python3 -m scripts.verify_assetripper_script_import \
+            --log "$RUNNER_TEMP/gt-export-log.private.txt"
+      - name: Compare authenticated original Mesh geometry to the same export
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check UnityPy==1.25.4 PyYAML==6.0.2
+          python3 -m unittest discover -s tests -p test_gt_verify_original_mesh_export.py -v
+          python3 -m scripts.gt_verify_original_mesh_export \
+            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --zip2-checkout .gt-zip2 \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --mesh-trace "$RUNNER_TEMP/gt-private-mesh-export-lineage.json" \
+            --export-trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --report "$RUNNER_TEMP/gt-real-mesh-export-geometry.json"
+      - name: Compare original Material tint RGBA across all 82 owners
+        if: success() || failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b44_verify_material_colors.py -v
+          python3 -m scripts.b44_verify_material_colors \
+            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --zip2-manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private-export-trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --out "$RUNNER_TEMP/gt-full-material-colors.json"
+      - name: Measure real exported Unity files and source link integrity without game identifiers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import collections,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"gt-project/ExportedProject/Assets"
+          c=collections.Counter(p.suffix.lower() for p in root.rglob('*') if p.is_file())
+          d={"schema":"GT_FULL_ORIGINAL_ASSERIPPER_EXPORT_REAL_V1",
+             "exporter_completed":True,
+             "scene_yaml_files":c[".unity"],"material_yaml_files":c[".mat"],
+             "texture_image_files":sum(c[x] for x in (".png",".tga",".dds",".jpg",".jpeg",".exr",".hdr")),
+             "mesh_asset_files":c[".asset"],"unity_meta_files":c[".meta"],
+             "managed_originals_present":True,
+             "no_git_lfs":True,"android_gpu_render_verified":False}
+          (Path(os.environ["RUNNER_TEMP"])/"gt-real-export-aggregate.json").write_text(json.dumps(d,indent=2,sort_keys=True)+"\n")
+          print("GT_REAL_FULL_ORIGINAL_EXPORT "+json.dumps(d,sort_keys=True))
+          PY
+      - name: GT classify all actual exporter texture GUID targets without exposing original identities
+        id: gt_export_texture_target_classes
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_diagnose_export_texture_targets.py -v
+          python3 -m scripts.gt_diagnose_export_texture_targets \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --out "$RUNNER_TEMP/gt-export-all-texture-target-categories.json"
+      - name: GT correlate nonstandard imported image fileIDs with exact original Cubemap class and TextureImporter shape
+        id: gt_original_cubemap_export_lineage
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_diagnose_texture_export_lineage.py -v
+          python3 -m scripts.gt_diagnose_texture_export_lineage \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --report "$RUNNER_TEMP/gt-real-cubemap-export-lineage.json"
+      - name: Capture original Material-to-Texture export GUID guard results including exact failure code
+        id: gt_export_links
+        continue-on-error: true
+        shell: bash
+        run: |
+          if python3 -m scripts.verify_exported_material_texture_links \
+              --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+              > "$RUNNER_TEMP/gt-export-texture-guard.private.txt"; then
+            result_code=0
+          else
+            result_code=$?
+          fi
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          s=(Path(os.environ["RUNNER_TEMP"])/"gt-export-texture-guard.private.txt").read_text()
+          # B46 emits only an aggregate status and safe error code, never game values.
+          lines=[x for x in s.splitlines() if x.startswith("RAFT_B46_TEXTURE_LINKS ")]
+          if len(lines)!=1:
+              raise SystemExit("Missing aggregate Material-to-Texture guard result")
+          result=json.loads(lines[0].split(" ",1)[1])
+          (Path(os.environ["RUNNER_TEMP"])/"gt-export-texture-guard-safe.json").write_text(
+              json.dumps(result,sort_keys=True,indent=2)+"\n")
+          print("GT_EXPORTED_MATERIAL_TEXTURE_LINKS "+json.dumps(result,sort_keys=True))
+          PY
+          exit "$result_code"
+      - name: GT inspect exact original-to-export Material texture GUID/UV lineage in one authenticated visible provider
+        id: gt_exact_material_texenv
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.2
+          python3 -m unittest discover -s tests -p test_b05_verify_material_texenv_bindings.py -v
+          if python3 -m scripts.b05_verify_material_texenv_bindings \
+               --original "$RUNNER_TEMP/gt-input" \
+               --owner sharedassets6.assets \
+               --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+               --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+               --out "$RUNNER_TEMP/gt-b05-actual-original-to-export-texenv.json" \
+               > "$RUNNER_TEMP/gt-b05-private.stdout.txt" 2>&1; then
+            result_code=0
+          else
+            result_code=$?
+          fi
+          if test ! -s "$RUNNER_TEMP/gt-b05-actual-original-to-export-texenv.json"; then
+            python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-b05-actual-original-to-export-texenv.json"
+          p.write_text(json.dumps({"source_export_guid_lineage_verified":False,
+             "status":"INCONCLUSIVE_BEFORE_AGGREGATE_REPORT",
+             "original_data_modified":False,"device_render_verified":False},sort_keys=True,indent=2)+"\n")
+          PY
+          fi
+          echo "GT_B05_EXACT_TEXENV_COMPARISON exit_code=$result_code status_report_saved=true"
+          exit "$result_code"
+      - name: Measure unmodified AssetRipper Material to ShaderLab dummy and pass completeness for T3
+        continue-on-error: true
+        shell: bash
+        run: |
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --rank-dummy-targets --out "$RUNNER_TEMP/gt-raw-export-program-quality.json"
+      - name: Validate all nine native arrays and 28 material slots in the full export
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_external_original_texture_links.py
+          python3 -m scripts.gt_write_unity_array_import_contract \
+            --original-source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --native-stream-source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --report "$RUNNER_TEMP/gt-real-original-array-private-Editor-gate-aggregate.json"
+      - name: Restore the authenticated original water FFT in the full reconstruction
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          mkdir "$RUNNER_TEMP/gt-fft-backup"
+          python3 -m scripts.gt_stage_indexed_fft_candidate \
+            --original-data "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --project "$RUNNER_TEMP/gt-fft-stage" \
+            --install-project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --private-export-trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --backup "$RUNNER_TEMP/gt-fft-backup"
+          rm -rf -- "$RUNNER_TEMP/gt-fft-stage" "$RUNNER_TEMP/gt-fft-backup"
+      - name: GT compare all 1556 original Material texture properties and GUIDs with actual same-instance exported Unity project
+        id: gt_all_original_texenvs
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_full_original_export_texenvs.py -v
+          if python3 -m scripts.gt_full_original_export_texenvs \
+               --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+               --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+               --export-project "$RUNNER_TEMP/gt-project/ExportedProject" \
+               --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+               --report "$RUNNER_TEMP/gt-full-real-82-owner-texenv.json" \
+               > "$RUNNER_TEMP/gt-full-texenv-private.stdout.txt" 2>&1; then
+            result_code=0
+          else
+            result_code=$?
+          fi
+          if test ! -s "$RUNNER_TEMP/gt-full-real-82-owner-texenv.json"; then
+            python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-full-real-82-owner-texenv.json"
+          p.write_text(json.dumps({"source_export_guid_lineage_verified":False,
+             "status":"INCONCLUSIVE_BEFORE_AGGREGATE_REPORT",
+             "source_original_materials_modified":False,"device_render_verified":False},
+             sort_keys=True,indent=2)+"\n")
+          PY
+          fi
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-full-real-82-owner-texenv.json").read_text())
+          print("GT_REAL_ALL_82_TEXENV_FIDELITY "+json.dumps({
+             k:d.get(k) for k in ("status","original_material_objects",
+               "materials_compared","source_texture_slots","slots_compared",
+               "exact_internal_targets_compared","wrong_internal_targets",
+               "unresolved_internal_targets","external_targets_not_proven",
+               "null_to_bound","bound_to_null","uv_transform_value_mismatches",
+               "source_slots_faithful_with_resolved_scope")},sort_keys=True))
+          PY
+          exit "$result_code"
+      # Serialized fonts are authenticated but do not export as ordinary
+      # loose Material YAML. Safe aggregate receipts reveal true remaining
+      # external refs, without dumping private fileID/pathID/GUID on failure.
+      - name: GT source-authenticate external Material Texture PPtrs across original ZIP2 owners and same-instance GUIDs
+        id: gt_external_original_texture_links
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_external_original_texture_links.py -v
+          python3 -m scripts.gt_external_original_texture_links \
+            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --report "$RUNNER_TEMP/gt-real-external-texture-links.json"
+          test -s "$RUNNER_TEMP/gt-real-external-texture-links.json"
+          python3 - <<'PYASSERT'
+          import json, os
+          from pathlib import Path
+          d = json.loads((Path(os.environ["RUNNER_TEMP"]) / "gt-real-external-texture-links.json").read_text())
+          assert d["authenticated_owner_tables"] == 82
+          assert d["original_external_texture_slots"] == 416
+          assert d["exact_cross_owner_source_export_texture_links"] == 416
+          assert d["all_external_links_verified"] is True
+          PYASSERT
+      - name: Verify all recovered model shaders have unique destinations in the full export
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os
+          from collections import Counter
+          from pathlib import Path
+          from scripts.gt_install_original_particle108 import traced_shader
+          from scripts.gt_original_921_all_variants import SOURCE_PROFILES, authenticated_shader_reader, select_scene_shader
+          from scripts.restore_builtin_shaders import exported_shader_identity
+          from scripts.t3_audit_exported_material_programs import _material_refs
+          from scripts.w1_audit_export_material_shaders import GUID
+          from scripts.t3_original_renderer_shader_impact import load_original
+          from scripts.t3_original_top_shader_dxbc_feasibility import selected_high_use
+          root = Path(os.environ["RUNNER_TEMP"])
+          original = root / "gt-input"
+          slots = {}
+          report = load_original(original, Path(".gt-zip2/RAFT_FILE_MANIFEST.tsv"), private_slot_counts=slots)
+          trace = json.loads((root / "gt-private-export-lineage.json").read_text())
+          assets = root / "gt-project/ExportedProject/Assets"
+          reader = authenticated_shader_reader(original)
+          destinations = set()
+          referenced = Counter(_material_refs(sorted(assets.rglob("*"))))
+          material_counts = {}
+          for profile in SOURCE_PROFILES:
+              key = (selected_high_use(slots, report) if profile == "blockpaint"
+                     else select_scene_shader(slots, report, profile, get_tree=reader))
+              target, meta = traced_shader(assets, trace, key)
+              text = target.read_text(encoding="utf-8-sig")
+              source_name = reader(key)["m_ParsedForm"]["m_Name"]
+              assert exported_shader_identity(text) == source_name, "model_shader_export_identity_mismatch"
+              assert "DummyShaderTextExporter" in text, "model_shader_export_not_dummy"
+              guid, = GUID.findall(meta.read_text(encoding="utf-8-sig"))
+              material_counts[profile] = referenced[4800000, guid.lower(), "3"]
+              assert material_counts[profile] > 0, "model_shader_export_has_no_material_reference"
+              destinations.add(target)
+          assert len(destinations) == len(SOURCE_PROFILES), "model_shader_export_destination_alias"
+          print("GT_MODEL_SHADER_EXPORT_DESTINATIONS " + json.dumps(material_counts, sort_keys=True))
+          PY
+      - name: GT run official authenticated TMP PostFX and volumetric shader recovery in isolated exported Unity project
+        id: gt_vendor_shader_restoration
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_compare_shader_restore_quality.py -v
+          python3 -m unittest discover -s tests -p test_gt_test_vendor_shader_restoration.py -v
+          python3 -m scripts.gt_test_vendor_shader_restoration \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --raw-quality "$RUNNER_TEMP/gt-raw-export-program-quality.json" \
+            --backup-root "$RUNNER_TEMP/gt-shader-original-backup" \
+            --report "$RUNNER_TEMP/gt-actual-postrestore-shader-quality.json"
+      # GT FULL POSTRESTORER ORIGINAL NINE SHADERS NO XAPK: reused the
+      # validated native SHA-pinned shader steps against this SAME full export.
+      - name: Prepare nine independent original shader compilers and immutable material baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_install_recovered_model_shader.py -v
+          python3 -m pip install --disable-pip-version-check UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          python3 - <<'PY_GT_BEFORE'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          vendor=json.loads((root/"gt-actual-postrestore-shader-quality.json").read_text())
+          assert vendor["status"]=="POST_RESTORE_SOURCE_QUALITY_COMPARED"
+          assets=root/"gt-project/ExportedProject/Assets"
+          suffixes={".meta",".mat",".asset",".prefab",".unity"}
+          rows={}
+          for f in assets.rglob("*"):
+              if f.is_file() and not f.is_symlink() and f.suffix.lower() in suffixes:
+                  h=hashlib.sha256()
+                  with f.open("rb") as source:
+                      for data in iter(lambda: source.read(1024*1024), b""):
+                          h.update(data)
+                  rows[str(f.relative_to(assets))]=h.hexdigest()
+          assert len(rows)>1000
+          (root/"gt-full-smoke-private-unchanged-material-meta.json").write_text(json.dumps(rows,sort_keys=True))
+          print("GT_NINE_SHADER_SAME_EXPORT_IMMUTABLE_BASELINE",len(rows))
+          PY_GT_BEFORE
+      - name: Recover and stage original BlockPaint programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-blockpaint"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-blockpaint-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader blockpaint --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original BlockPaint in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-blockpaint-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all BlockPaint routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-blockpaint"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-blockpaint-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader blockpaint \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate BlockPaint compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-blockpaint-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-blockpaint/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-blockpaint/bundle-safe.json
+            gt-full-smoke-blockpaint-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private BlockPaint source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-blockpaint"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-blockpaint-unity"
+      - name: Recover and stage original DirtPile programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-dirtpile"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-dirtpile-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader dirtpile --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original DirtPile in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-dirtpile-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all DirtPile routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-dirtpile"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-dirtpile-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader dirtpile \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate DirtPile compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-dirtpile-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-dirtpile/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-dirtpile/bundle-safe.json
+            gt-full-smoke-dirtpile-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private DirtPile source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-dirtpile"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-dirtpile-unity"
+      - name: Recover and stage original Vegetation programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-vegetation"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-vegetation-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader vegetation --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original Vegetation in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-vegetation-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all Vegetation routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-vegetation"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-vegetation-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader vegetation \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate Vegetation compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-vegetation-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-vegetation/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-vegetation/bundle-safe.json
+            gt-full-smoke-vegetation-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Vegetation source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-vegetation"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-vegetation-unity"
+      - name: Recover and stage original GrassPlot programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-grassplot"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-grassplot-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader grassplot --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original GrassPlot in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-grassplot-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all GrassPlot routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-grassplot"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-grassplot-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader grassplot \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate GrassPlot compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-grassplot-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-grassplot/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-grassplot/bundle-safe.json
+            gt-full-smoke-grassplot-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private GrassPlot source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-grassplot"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-grassplot-unity"
+      - name: Recover and stage original Skin_Amplify programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-skin"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-skin-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader skin --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original Skin_Amplify in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-skin-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all Skin_Amplify routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-skin"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-skin-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader skin \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate Skin_Amplify compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-skin-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-skin/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-skin/bundle-safe.json
+            gt-full-smoke-skin-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Skin_Amplify source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-skin"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-skin-unity"
+      - name: Recover and stage original Shimmer programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-shimmer"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-shimmer-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader shimmer --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original Shimmer in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-shimmer-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all Shimmer routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-shimmer"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-shimmer-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader shimmer \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate Shimmer compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-shimmer-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-shimmer/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-shimmer/bundle-safe.json
+            gt-full-smoke-shimmer-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Shimmer source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-shimmer"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-shimmer-unity"
+      - name: Recover and stage original SailPaint programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-sailpaint"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-sailpaint-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader sailpaint --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original SailPaint in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-sailpaint-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all SailPaint routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-sailpaint"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-sailpaint-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader sailpaint \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate SailPaint compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-sailpaint-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-sailpaint/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-sailpaint/bundle-safe.json
+            gt-full-smoke-sailpaint-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private SailPaint source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-sailpaint"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-sailpaint-unity"
+      - name: Recover and stage original Hair_Amplify programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-hair"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-hair-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader hair --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original Hair_Amplify in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-hair-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all Hair_Amplify routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-hair"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-hair-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          python3 -m scripts.gt_install_recovered_model_shader --shader hair \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate Hair_Amplify compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-hair-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-hair/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-hair/bundle-safe.json
+            gt-full-smoke-hair-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Hair_Amplify source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-hair"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-hair-unity"
+      - name: Recover and stage original BillboardFade programs for Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-billboard"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-billboard-unity"
+          mkdir -m 700 "$work"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --shader billboard --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/recovered" --out "$work/source-safe.json"
+          python3 -m scripts.gt_original_921_shaderlab \
+            --private "$work/recovered" --shader "$project/Assets/GTOriginal921.shader" \
+            --verify-entrypoints --engine-keywords \
+            --engine-route-manifest "$project/Original921EngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Original921ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile original BillboardFade in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-full-smoke-billboard-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Original921ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify all BillboardFade routes and restore its original project Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-full-smoke-billboard"
+          project="$GITHUB_WORKSPACE/gt-full-smoke-billboard-unity"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$work/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$work/smolv.h"
+          c++ -std=c++11 -O2 -I"$work" scripts/gt_decode_smolv.cpp "$work/smolv.cpp" -o "$work/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-original-921" \
+            --source "$project/Assets/GTOriginal921.shader" \
+            --receipt "$project/ProbeResults/gt-original-921-unity-safe.json" \
+            --engine-route-manifest "$project/Original921EngineRoutes.json" \
+            --smolv-decoder "$work/decode" --out "$work/bundle-safe.json"
+          # Refuse any partial or silently substituted shader reconstruction.
+          # The complete source topology and actual Unity Vulkan routes must
+          # match before replacing the original exported ShaderLab text.
+          python3 - <<'PY_GT_NATIVE_BILLBOARD_GATE'
+          import json,os
+          from pathlib import Path
+          work=Path(os.environ['RUNNER_TEMP'])/'gt-full-smoke-billboard'
+          source=json.loads((work/'source-safe.json').read_text())
+          bundle=json.loads((work/'bundle-safe.json').read_text())
+          assert source['original_passes']==2
+          assert source['exact_original_source_VS_FS_permutation_pairs']==9
+          assert source['original_unique_D3D11_stage_programs']==19
+          assert source['source_keyword_route_coverage']['source_exact_keyword_routes_by_pass']==[4,5]
+          assert bundle['compiled_program_table_verified'] is True
+          assert bundle['vertex_routes_by_pass']==[4,5]
+          assert bundle['fragment_routes_by_pass']==[4,5]
+          assert bundle['engine_keywords_verified'] is True
+          assert bundle['vulkan_platform_only'] is True
+          print('GT_NATIVE_BILLBOARD_PREFLIGHT originalPasses=2 pairedRoutes=4,5 sourcePrograms=19 UnityVulkanVerified=true')
+          PY_GT_NATIVE_BILLBOARD_GATE
+          python3 -m scripts.gt_install_recovered_model_shader --shader billboard \
+            --original "$RUNNER_TEMP/gt-input" --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$project/Assets/GTOriginal921.shader" --receipt "$work/bundle-safe.json" \
+            --backup "$work/original-export"
+      - name: Keep aggregate BillboardFade compilation and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-full-smoke-billboard-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-full-smoke-billboard/source-safe.json
+            ${{ runner.temp }}/gt-full-smoke-billboard/bundle-safe.json
+            gt-full-smoke-billboard-unity/ProbeResults/gt-original-921-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private BillboardFade source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-full-smoke-billboard"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-full-smoke-billboard-unity"
+      - name: Rank actually unresolved Material shaders after nine original GUID installs (NO APK)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --rank-dummy-targets \
+            --out "$RUNNER_TEMP/gt-nine-shader-postrestore-quality.json"
+          python3 - <<'PY_GT_AFTER'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          a=root/"gt-project/ExportedProject/Assets"
+          previous=json.loads((root/"gt-full-smoke-private-unchanged-material-meta.json").read_text())
+          suffixes={".meta",".mat",".asset",".prefab",".unity"}
+          actual={}
+          for f in a.rglob("*"):
+              if f.is_file() and not f.is_symlink() and f.suffix.lower() in suffixes:
+                  h=hashlib.sha256()
+                  with f.open("rb") as source:
+                      for data in iter(lambda: source.read(1024*1024), b""):
+                          h.update(data)
+                  actual[str(f.relative_to(a))]=h.hexdigest()
+          assert actual==previous,"Original_Material_or_Meta_modified"
+          raw=json.loads((root/"gt-raw-export-program-quality.json").read_text())
+          vendor=json.loads((root/"gt-actual-postrestore-shader-quality.json").read_text())
+          after=json.loads((root/"gt-nine-shader-postrestore-quality.json").read_text())
+          c=after["counts"]
+          assert after["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          assert c["material_documents"]==raw["counts"]["material_documents"]==1536
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          old=vendor["postrestore_material_quality"]["postrestore_custom_dummy_material_documents"]
+          assert c["material_docs_using_dummy_Shader"] < old
+          report={"schema_version":1,"status":"GT_NINE_ORIGINAL_SHADERS_SAME_FULL_EXPORT_ACCEPTED_NO_APK",
+            "raw_export_dummy_materials":raw["counts"]["material_docs_using_dummy_Shader"],
+            "vendor_only_dummy_materials":old,
+            "all_nine_shaders_installed_dummy_materials":c["material_docs_using_dummy_Shader"],
+            "all_nine_shaders_installed_non_dummy_materials":c["material_docs_using_non_dummy_Shader"],
+            "postrestoration_remaining_dummy_by_name_digest":after.get("dummy_shader_material_counts_by_name_digest",{}),
+            "protected_material_and_meta_files":len(actual),
+            "all_original_material_meta_bytes_unchanged":True,
+            "original_source_zip2_sha":"15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+            "APK_OBB_XAPK_created":False,"device_pixel_render_verified":False}
+          (root/"gt-nine-shader-postrestore-summary-safe.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print("GT_NINE_SAME_EXPORT_POSTRESTORE_MATERIAL_COUNTS "+json.dumps({
+            k:v for k,v in report.items() if k!="postrestoration_remaining_dummy_by_name_digest"
+          },sort_keys=True))
+          PY_GT_AFTER
+      - name: Publish all-nine postrestorer Material coverage without original Shader source or game files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-nine-shader-full-export-audit-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-nine-shader-postrestore-quality.json
+            ${{ runner.temp }}/gt-nine-shader-postrestore-summary-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
+      # All nine verified original model Shader48 programs are already installed.
+      # Continue with four original particle programs from the SAME SHA-authentic
+      # ZIP2 full export without rebuilding a game Player or packaging APK/OBB.
+      - name: Prove same original full ZIP2 source used for particle and model shader installs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C .gt-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/sharedassets0.assets"
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/resources.assets"
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/level0"
+          test -s "$RUNNER_TEMP/gt-nine-shader-postrestore-quality.json"
+      - name: Recover original Particle108 ShaderLab from ZIP2 for the native export
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_gt_install_original_particle108.py' -v
+          work="$RUNNER_TEMP/gt-thirteen-particle108"
+          mkdir -m 700 "$work"
+          timeout 720s python3 -m scripts.t3_particle108_private_shaderlab_variants \
+            --source "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private-dir "$work/raw" --out "$work/variants-safe.json"
+          timeout 300s python3 -m scripts.gt_particle108_unity_bindings \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private-source "$work/raw" --private-dest "$work/bound" \
+            --report "$work/bindings-safe.json"
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$work/bound/keyword-routed-private.shader" \
+            --routing "$work/bound/routing-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-thirteen-particle108-unity" \
+            --report "$work/staging-safe.json"
+      - name: Compile only original Particle108 ShaderLab in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-thirteen-particle108-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Install compiled Particle108 into its original native exported Shader48 GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-particle108"
+          timeout 240s python3 -m scripts.gt_install_original_particle108 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace-file "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$work/bound/keyword-routed-private.shader" \
+            --source-report "$work/bindings-safe.json" \
+            --unity-report "$GITHUB_WORKSPACE/gt-thirteen-particle108-unity/ProbeResults/gt-particle108-private-unity-safe.json" \
+            --backup "$RUNNER_TEMP/gt-thirteen-particle108-original-export" --apply \
+            --out "$RUNNER_TEMP/gt-thirteen-particle108-install-safe.json"
+      - name: Retain only the aggregate original Particle108 native install receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-thirteen-particle108-original-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-thirteen-particle108-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Particle108 source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-thirteen-particle108"
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-thirteen-particle108-unity"
+      - name: Recover original Particle20 ShaderLab from ZIP2 for the native export
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_gt_install_original_particle108.py' -v
+          work="$RUNNER_TEMP/gt-thirteen-particle20"
+          mkdir -m 700 "$work"
+          timeout 420s python3 -m scripts.gt_particle20_source_bound_shader \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/bound" --report "$work/bindings-safe.json"
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$work/bound/keyword-routed-private.shader" \
+            --routing "$work/bound/routing-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-thirteen-particle20-unity" \
+            --report "$work/staging-safe.json"
+      - name: Compile only original Particle20 ShaderLab in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-thirteen-particle20-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Install compiled Particle20 into its original native exported Shader48 GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-particle20"
+          timeout 240s python3 -m scripts.gt_install_original_particle108 --particle20 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace-file "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$work/bound/keyword-routed-private.shader" \
+            --source-report "$work/bindings-safe.json" \
+            --unity-report "$GITHUB_WORKSPACE/gt-thirteen-particle20-unity/ProbeResults/gt-particle108-private-unity-safe.json" \
+            --backup "$RUNNER_TEMP/gt-thirteen-particle20-original-export" --apply \
+            --out "$RUNNER_TEMP/gt-thirteen-particle20-install-safe.json"
+      - name: Retain only the aggregate original Particle20 native install receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-thirteen-particle20-original-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-thirteen-particle20-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Particle20 source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-thirteen-particle20"
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-thirteen-particle20-unity"
+      - name: Recover original Smoke34 ShaderLab from ZIP2 for the native export
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-smoke34"
+          mkdir -m 700 "$work"
+          timeout 420s python3 -m scripts.gt_smoke34_source_bound_shader \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/bound" --report "$work/bindings-safe.json"
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$work/bound/smoke34-original.shader" \
+            --routing "$work/bindings-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-thirteen-smoke34-unity" \
+            --report "$work/staging-safe.json" --smoke34
+      - name: Compile only original Smoke34 ShaderLab in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-thirteen-smoke34-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Install compiled Smoke34 into its original native exported Shader48 GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-smoke34"
+          timeout 240s python3 -m scripts.gt_install_original_particle108 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace-file "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$work/bound/smoke34-original.shader" \
+            --source-report "$work/bindings-safe.json" \
+            --unity-report "$GITHUB_WORKSPACE/gt-thirteen-smoke34-unity/ProbeResults/gt-particle108-private-unity-safe.json" \
+            --backup "$RUNNER_TEMP/gt-thirteen-smoke34-original-export" --apply --smoke34 \
+            --out "$RUNNER_TEMP/gt-thirteen-smoke34-install-safe.json"
+      - name: Retain only the aggregate original Smoke34 native install receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-thirteen-smoke34-original-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-thirteen-smoke34-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Smoke34 source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-thirteen-smoke34"
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-thirteen-smoke34-unity"
+      - name: Recover original Candle16 ShaderLab from ZIP2 for the native export
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-candle16"
+          mkdir -m 700 "$work"
+          timeout 420s python3 -m scripts.gt_smoke34_source_bound_shader \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/bound" --report "$work/bindings-safe.json" --candle16
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$work/bound/candle16-original.shader" \
+            --routing "$work/bindings-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-thirteen-candle16-unity" \
+            --report "$work/staging-safe.json" --candle16
+      - name: Compile only original Candle16 ShaderLab in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-thirteen-candle16-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Install compiled Candle16 into its original native exported Shader48 GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-thirteen-candle16"
+          timeout 240s python3 -m scripts.gt_install_original_particle108 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace-file "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$work/bound/candle16-original.shader" \
+            --source-report "$work/bindings-safe.json" \
+            --unity-report "$GITHUB_WORKSPACE/gt-thirteen-candle16-unity/ProbeResults/gt-particle108-private-unity-safe.json" \
+            --backup "$RUNNER_TEMP/gt-thirteen-candle16-original-export" --apply --candle16 \
+            --out "$RUNNER_TEMP/gt-thirteen-candle16-install-safe.json"
+      - name: Retain only the aggregate original Candle16 native install receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-thirteen-candle16-original-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-thirteen-candle16-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Candle16 source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-thirteen-candle16"
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-thirteen-candle16-unity"
+      - name: Recount actual Material-to-Shader programs after nine model and four particle GUID installs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --rank-dummy-targets \
+            --out "$RUNNER_TEMP/gt-thirteen-shader-postrestore-quality.json"
+          python3 - <<'PY_GT_THIRTEEN'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          assets=root/"gt-project/ExportedProject/Assets"
+          before=json.loads((root/"gt-full-smoke-private-unchanged-material-meta.json").read_text())
+          accepted_nine=json.loads((root/"gt-nine-shader-postrestore-summary-safe.json").read_text())
+          a=json.loads((root/"gt-thirteen-shader-postrestore-quality.json").read_text())
+          protected={}
+          for path in assets.rglob("*"):
+              if path.is_file() and not path.is_symlink() and path.suffix.lower() in {".meta",".mat",".asset",".prefab",".unity"}:
+                  h=hashlib.sha256()
+                  with path.open("rb") as reader:
+                      for block in iter(lambda:reader.read(1048576),b""):
+                          h.update(block)
+                  protected[str(path.relative_to(assets))]=h.hexdigest()
+          assert protected==before,"original_Material_or_Meta_changed_during_13_shader_integration"
+          assert accepted_nine["status"]=="GT_NINE_ORIGINAL_SHADERS_SAME_FULL_EXPORT_ACCEPTED_NO_APK"
+          assert a["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          c=a["counts"]
+          assert c["material_documents"]==1536
+          assert c["material_docs_using_Unity_builtin_Shader"]==750
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          assert c["material_docs_using_dummy_Shader"]<333
+          assert c["material_docs_using_non_dummy_Shader"]>453
+          assert c["material_docs_using_dummy_Shader"]+c["material_docs_using_non_dummy_Shader"]==786
+          summary={
+              "schema_version":1,
+              "status":"GT_THIRTEEN_ORIGINAL_SHADER_SAME_EXPORT_GUID_VERIFIED_NO_APK",
+              "source_zip2_sha":"15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+              "full_export_material_documents":c["material_documents"],
+              "custom_shader_material_documents":c["material_docs_using_local_custom_Shader"],
+              "unity_builtin_shader_material_documents":c["material_docs_using_Unity_builtin_Shader"],
+              "after_nine_shader_dummy_material_documents":accepted_nine["all_nine_shaders_installed_dummy_materials"],
+              "after_thirteen_shader_dummy_material_documents":c["material_docs_using_dummy_Shader"],
+              "after_thirteen_shader_non_dummy_material_documents":c["material_docs_using_non_dummy_Shader"],
+              "remaining_dummy_shader_guid_targets_referenced":c["distinct_dummy_Shader_targets_referenced"],
+              "protected_unchanged_Material_YAML_and_meta_files":len(protected),
+              "all_original_Material_and_meta_sha256_unchanged":True,
+              "source_authentic_model_shader_targets_installed":9,
+              "source_authentic_particle_shader_targets_installed":4,
+              "APK_OBB_XAPK_created":False,
+              "Unity_Android_Adreno_game_pixels_verified":False
+          }
+          (root/"gt-thirteen-shader-postrestore-summary-safe.json").write_text(json.dumps(summary,sort_keys=True,indent=2)+"\n")
+          print("GT_13_ORIGINAL_SHADER_REAL_POSTRESTORE "+json.dumps(summary,sort_keys=True))
+          PY_GT_THIRTEEN
+      - name: Retain numeric only thirteen-source-program Unity same-export material audit (NO GAME PACKAGE)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-thirteen-source-shader-full-export-audit-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-thirteen-shader-postrestore-summary-safe.json
+            ${{ runner.temp }}/gt-thirteen-shader-postrestore-quality.json
+            ${{ runner.temp }}/gt-thirteen-particle108-install-safe.json
+            ${{ runner.temp }}/gt-thirteen-particle20-install-safe.json
+            ${{ runner.temp }}/gt-thirteen-smoke34-install-safe.json
+            ${{ runner.temp }}/gt-thirteen-candle16-install-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
+      # Original Shader48 next30 is sourced exclusively from SHA-pinned ZIP2.
+      # All candidate programs remain runner-private. Do NOT build any game package.
+      - name: Authenticate still-unrestored 30-material Shader48 between postnine and actual postthirteen exports
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_install_next30_original_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_install_recovered_model_shader.py -v
+          python3 - <<'PY_GT_NEXT30_SOURCE'
+          import json,os
+          from pathlib import Path
+          temp=Path(os.environ["RUNNER_TEMP"])
+          nine=json.loads((temp/"gt-nine-shader-postrestore-quality.json").read_text())
+          thirteen=json.loads((temp/"gt-thirteen-shader-postrestore-quality.json").read_text())
+          nc=nine["counts"];tc=thirteen["counts"]
+          assert nc["material_docs_using_dummy_Shader"]==333
+          assert tc["material_docs_using_dummy_Shader"]==246
+          assert tc["distinct_dummy_Shader_targets_referenced"]==47
+          rank_n=[k for k,n in nine["dummy_shader_material_counts_by_name_digest"].items() if n==30]
+          rank_t=[k for k,n in thirteen["dummy_shader_material_counts_by_name_digest"].items() if n==30]
+          assert len(rank_n)==len(rank_t)==1 and rank_n==rank_t
+          assert (temp/"gt-input/Raft_Data").is_dir()
+          print("GT_NEXT30_POST9_TO_POST13_SOURCE_MATCH remainingMaterials=30 all82_SHA_pinned=true")
+          PY_GT_NEXT30_SOURCE
+      - name: Recover the 55 SHA-original D3D11 stages and assemble private next30 four-pass ShaderLab
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-next30-source-private"
+          timeout 2400s python3 -m scripts.gt_translate_next_remaining_30_shader48 \
+            --original "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-nine-shader-postrestore-quality.json" \
+            --private "$work" --out "$RUNNER_TEMP/gt-next30-source-translation-safe.json"
+          python3 - <<'PY_GT_NEXT30_SOURCE_REPORT'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-next30-source-translation-safe.json").read_text())
+          assert r["status"]=="GT_SHA_ORIGINAL_REMAINING_30_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
+          assert r["original_program_stages_roundtrip_Vulkan11_valid"]==55
+          assert r["private_original_30_material_ShaderLab_4pass_composed"] is True
+          assert r["private_original_30_material_ShaderLab_62_vertex_fragment_entrypoints_validated"] is True
+          assert r["source_original_keyword_permutation_route_counts_per_pass"]==[8,13,8,2]
+          print("GT_NEXT30_AUTHENTIC_PRIVATE_SHADERLAB_SOURCE_READY stagePrograms=55 passRoutes=31 noAPK=true")
+          PY_GT_NEXT30_SOURCE_REPORT
+          project="$GITHUB_WORKSPACE/gt-next30-full-export-unity"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          cp "$work/original-30-material-Shader48-private.shader" "$project/Assets/GTNext30.shader"
+          cp android-port/Experiments/GT/Editor/Next30ShaderValidation.cs "$project/Assets/Editor/Next30ShaderValidation.cs"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile exact original next30 Shader48 in isolated Unity 2021 Android Vulkan (NO APK)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-next30-full-export-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Next30ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify exact source next30 Vulkan 31-route VS/FS original bundle and candidate SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next30-full-export-unity"
+          smolv="$RUNNER_TEMP/gt-next30-full-export-smolv"
+          mkdir -p "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-next30" \
+            --source "$project/Assets/GTNext30.shader" \
+            --receipt "$project/ProbeResults/gt-next30-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" --next30 \
+            --out "$RUNNER_TEMP/gt-next30-full-export-bundle-safe.json"
+          python3 - <<'PY_GT_NEXT30_31ROUTE'
+          import json,hashlib,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          src=Path("gt-next30-full-export-unity/Assets/GTNext30.shader")
+          r=json.loads((root/"gt-next30-full-export-bundle-safe.json").read_text())
+          assert r["vulkan_platform_only"] is True
+          assert r["compiled_program_table_verified"] is True
+          assert r["vertex_and_fragment_entrypoints_verified"] is True
+          assert r["vertex_routes_by_pass"]==r["fragment_routes_by_pass"]==[8,13,8,2]
+          assert r["candidate_sha256"]==hashlib.sha256(src.read_bytes()).hexdigest()
+          print("GT_NEXT30_VERIFIED_SOURCE_UNITY_ANDROID_VULKAN_SHADER_BUNDLE 31VSFS=true noAPK=true")
+          PY_GT_NEXT30_31ROUTE
+      - name: Install 30-material original Shader48 into actual same full ZIP2 export GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_install_next30_original_shader48 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-thirteen-shader-postrestore-quality.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$GITHUB_WORKSPACE/gt-next30-full-export-unity/Assets/GTNext30.shader" \
+            --receipt "$RUNNER_TEMP/gt-next30-full-export-bundle-safe.json" \
+            --backup "$RUNNER_TEMP/gt-next30-original-export-backup" \
+            --out "$RUNNER_TEMP/gt-next30-original-install-safe.json"
+      - name: Recount original full export custom materials after next30 GUID install and verify untouched YAML/meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --rank-dummy-targets \
+            --out "$RUNNER_TEMP/gt-fourteen-shader-postrestore-quality.json"
+          python3 - <<'PY_GT_FOURTEEN'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          before=json.loads((root/"gt-full-smoke-private-unchanged-material-meta.json").read_text())
+          post13=json.loads((root/"gt-thirteen-shader-postrestore-quality.json").read_text())
+          post14=json.loads((root/"gt-fourteen-shader-postrestore-quality.json").read_text())
+          assert post13["status"]==post14["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          c=post14["counts"]
+          assert c["material_documents"]==1536
+          assert c["material_docs_using_Unity_builtin_Shader"]==750
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          assert c["material_docs_using_dummy_Shader"]==216
+          assert c["material_docs_using_non_dummy_Shader"]==570
+          assert c["distinct_dummy_Shader_targets_referenced"]==46
+          source_sha={}
+          for p in (root/"gt-project/ExportedProject/Assets").rglob("*"):
+              if p.is_file() and not p.is_symlink() and p.suffix.lower() in {".meta",".mat",".asset",".prefab",".unity"}:
+                  h=hashlib.sha256()
+                  with p.open("rb") as f:
+                      for chunk in iter(lambda:f.read(1048576),b""):
+                          h.update(chunk)
+                  source_sha[str(p.relative_to(root/"gt-project/ExportedProject/Assets"))]=h.hexdigest()
+          assert source_sha==before,"next30_unexpected_original_Material_or_meta_mutation"
+          out={
+              "schema_version":1,
+              "status":"GT_FOURTEEN_NEXT30_SOURCE_SHADER48_SAME_EXPORT_GUID_ACCEPTED_NO_APK",
+              "post13_dummy_material_documents":246,
+              "post14_dummy_material_documents":216,
+              "post14_non_dummy_custom_material_documents":570,
+              "remaining_dummy_Shader_GUID_targets_referenced":46,
+              "protected_unchanged_original_Material_YAML_and_meta_files":len(source_sha),
+              "all_original_Material_meta_and_YAML_sha256_unchanged":True,
+              "original_Shader48_source_identity_and_UnityVulkan_bundle_verified":True,
+              "original_shader_GUID_preserved":True,
+              "APK_OBB_XAPK_created":False,
+              "device_pixel_or_original_keyword_runtime_parity_verified":False
+          }
+          (root/"gt-fourteen-shader-postrestore-summary-safe.json").write_text(
+              json.dumps(out,sort_keys=True,indent=2)+"\n")
+          print("GT_FOURTEEN_ORIGINAL_SHADER48_SAME_EXPORT_POSTINSTALL "+json.dumps(out,sort_keys=True))
+          PY_GT_FOURTEEN
+      - name: Upload only verified next30 Shader48 original GUID and post14 material count numeric proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-fourteen-next30-source-shader-full-export-audit-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-next30-source-translation-safe.json
+            gt-next30-full-export-unity/ProbeResults/gt-next30-unity-safe.json
+            ${{ runner.temp }}/gt-next30-full-export-bundle-safe.json
+            ${{ runner.temp }}/gt-next30-original-install-safe.json
+            ${{ runner.temp }}/gt-fourteen-shader-postrestore-summary-safe.json
+            ${{ runner.temp }}/gt-fourteen-shader-postrestore-quality.json
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Delete private next30 recovered D3D11/HLSL and Unity shader sources and bundles
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-next30-source-private" "$RUNNER_TEMP/gt-next30-original-export-backup"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-next30-full-export-unity"
+      # NEXT23: independent source topology requires 4 Pass, 33 routes and 58 D3D11.
+      # Its 23-material name has a second distinct original candidate; never pick by name alone.
+      - name: Validate post14 216 Dummy shader baseline and fail-closed original next23 GUID installer
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_install_next23_original_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_23_shader48.py -v
+          python3 - <<'PY_GT_NEXT23_POST14'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          q=json.loads((root/"gt-fourteen-shader-postrestore-quality.json").read_text())
+          c=q["counts"]
+          assert q["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          assert c["material_documents"]==1536 and c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_using_dummy_Shader"]==216
+          assert c["material_docs_using_non_dummy_Shader"]==570
+          assert c["distinct_dummy_Shader_targets_referenced"]==46
+          assert sum(n==23 for n in q["dummy_shader_material_counts_by_name_digest"].values())==2
+          print("GT_NEXT23_POST14_REAL_BASELINE_VERIFIED 216 Dummy 46 Targets two 23-name sources")
+          PY_GT_NEXT23_POST14
+      - name: Recover 58 original next23 D3D11 program stages and stage SHA-authentic private ShaderLab
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-next23-full-export-private"
+          timeout 2700s python3 -m scripts.gt_translate_next_remaining_23_shader48 \
+            --original "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-thirteen-shader-postrestore-quality.json" \
+            --private "$work" --out "$RUNNER_TEMP/gt-next23-full-export-source-safe.json"
+          python3 - <<'PY_GT_NEXT23_SOURCE'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-next23-full-export-source-safe.json").read_text())
+          assert r["status"]=="GT_SHA_ORIGINAL_REMAINING_23_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
+          assert r["original_program_stages_roundtrip_Vulkan11_valid"]==58
+          assert r["original_exact_vertex_fragment_keyword_permutation_pairs"]==33
+          assert r["original_orphan_vertex_stage_variants"]==8
+          assert r["source_original_keyword_permutation_route_counts_per_pass"]==[8,13,8,4]
+          assert r["private_original_23_material_ShaderLab_4pass_composed"] is True
+          assert r["private_original_23_material_ShaderLab_66_vertex_fragment_entrypoints_validated"] is True
+          print("GT_NEXT23_ORIGINAL_AUTHENTIC_SOURCE_58_STAGES_33_ROUTES noAPK=true")
+          PY_GT_NEXT23_SOURCE
+          project="$GITHUB_WORKSPACE/gt-next23-full-export-unity"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          cp "$work/original-23-material-Shader48-private.shader" "$project/Assets/GTNext23.shader"
+          cp android-port/Experiments/GT/Editor/Next23ShaderValidation.cs "$project/Assets/Editor/Next23ShaderValidation.cs"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile next23 exact 33 original routes in Unity 2021 Android Vulkan private bundle only
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-next23-full-export-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Next23ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify actual serialized next23 Unity Android Vulkan 33 VS FS routes and original candidate SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next23-full-export-unity"
+          smolv="$RUNNER_TEMP/gt-next23-full-export-smolv"
+          mkdir -p "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-next23" \
+            --source "$project/Assets/GTNext23.shader" \
+            --receipt "$project/ProbeResults/gt-next23-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" \
+            --out "$RUNNER_TEMP/gt-next23-full-export-bundle-safe.json"
+          python3 - <<'PY_GT_NEXT23_BUNDLE'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          shader=Path("gt-next23-full-export-unity/Assets/GTNext23.shader")
+          unity=json.loads(Path("gt-next23-full-export-unity/ProbeResults/gt-next23-unity-safe.json").read_text())
+          bundle=json.loads((root/"gt-next23-full-export-bundle-safe.json").read_text())
+          assert unity["passCount"]==4 and unity["registeredRoutes"]==33
+          assert unity["errors"]==0 and unity["privateBundleCompiled"] is True
+          assert unity["androidVulkanOnly"] is True and unity["unityVersion"]=="2021.3.45f2"
+          assert bundle["vulkan_platform_only"] is True
+          assert bundle["compiled_program_table_verified"] is True
+          assert bundle["vertex_and_fragment_entrypoints_verified"] is True
+          assert bundle["vertex_routes_by_pass"]==bundle["fragment_routes_by_pass"]==[8,13,8,4]
+          assert bundle["candidate_sha256"]==hashlib.sha256(shader.read_bytes()).hexdigest()
+          print("GT_NEXT23_SERIALIZED_ANDROID_VULKAN_BUNDLE_VERIFIED 33 VSFS noAPK=true")
+          PY_GT_NEXT23_BUNDLE
+      - name: Install original next23 Shader48 at its exact same-export GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_install_next23_original_shader48 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-fourteen-shader-postrestore-quality.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$GITHUB_WORKSPACE/gt-next23-full-export-unity/Assets/GTNext23.shader" \
+            --receipt "$RUNNER_TEMP/gt-next23-full-export-bundle-safe.json" \
+            --backup "$RUNNER_TEMP/gt-next23-original-export-backup" \
+            --out "$RUNNER_TEMP/gt-next23-original-install-safe.json"
+      - name: Audit actual post15 original Material Dummy count and preserve all 29213 YAML meta files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --rank-dummy-targets \
+            --out "$RUNNER_TEMP/gt-fifteen-shader-postrestore-quality.json"
+          python3 - <<'PY_GT_FIFTEEN'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          before=json.loads((root/"gt-full-smoke-private-unchanged-material-meta.json").read_text())
+          prior=json.loads((root/"gt-fourteen-shader-postrestore-quality.json").read_text())
+          current=json.loads((root/"gt-fifteen-shader-postrestore-quality.json").read_text())
+          assert prior["counts"]["material_docs_using_dummy_Shader"]==216
+          assert current["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          c=current["counts"]
+          assert c["material_documents"]==1536
+          assert c["material_docs_using_Unity_builtin_Shader"]==750
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          assert c["material_docs_using_dummy_Shader"]==193
+          assert c["material_docs_using_non_dummy_Shader"]==593
+          assert c["distinct_dummy_Shader_targets_referenced"]==45
+          source_sha={}
+          for p in (root/"gt-project/ExportedProject/Assets").rglob("*"):
+              if p.is_file() and not p.is_symlink() and p.suffix.lower() in {".meta",".mat",".asset",".prefab",".unity"}:
+                  h=hashlib.sha256()
+                  with p.open("rb") as f:
+                      for chunk in iter(lambda:f.read(1048576),b""):
+                          h.update(chunk)
+                  source_sha[str(p.relative_to(root/"gt-project/ExportedProject/Assets"))]=h.hexdigest()
+          assert source_sha==before,"next23_unexpected_original_Material_or_meta_mutation"
+          safe={
+              "schema_version":1,
+              "status":"GT_FIFTEEN_NEXT23_SOURCE_SHADER48_SAME_EXPORT_GUID_ACCEPTED_NO_APK",
+              "post14_dummy_material_documents":216,
+              "post15_dummy_material_documents":c["material_docs_using_dummy_Shader"],
+              "post15_non_dummy_custom_material_documents":c["material_docs_using_non_dummy_Shader"],
+              "remaining_dummy_Shader_GUID_targets_referenced":c["distinct_dummy_Shader_targets_referenced"],
+              "protected_unchanged_original_Material_YAML_and_meta_files":len(source_sha),
+              "all_original_Material_meta_and_YAML_sha256_unchanged":True,
+              "source_authentic_original_Shader48_same_export_GUID_verified":True,
+              "Android_Adreno_pixels_or_keyword_runtime_parity_verified":False,
+              "APK_OBB_XAPK_created":False,
+          }
+          (root/"gt-fifteen-shader-postrestore-summary-safe.json").write_text(json.dumps(safe,sort_keys=True,indent=2)+"\n")
+          print("GT_FIFTEEN_ORIGINAL_SHADER48_SAME_EXPORT_POSTINSTALL "+json.dumps(safe,sort_keys=True))
+          PY_GT_FIFTEEN
+      - name: Upload only safe next23 source Unity same-export GUID material-count evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-fifteen-next23-source-shader-full-export-audit-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-next23-full-export-source-safe.json
+            gt-next23-full-export-unity/ProbeResults/gt-next23-unity-safe.json
+            ${{ runner.temp }}/gt-next23-full-export-bundle-safe.json
+            ${{ runner.temp }}/gt-next23-original-install-safe.json
+            ${{ runner.temp }}/gt-fifteen-shader-postrestore-summary-safe.json
+            ${{ runner.temp }}/gt-fifteen-shader-postrestore-quality.json
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Purge private next23 original programs and Unity shader source bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-next23-full-export-private" "$RUNNER_TEMP/gt-next23-original-export-backup"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-next23-full-export-unity"
+      - name: Verify real post15 193 Dummy source audit and NEXT18 source-free original GUID installer contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_install_next18_original_shader48.py scripts/gt_translate_next_remaining_18_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_install_next18_original_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_18_shader48.py -v
+          python3 - <<'PY_GT_REAL_POST15'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          prior=json.loads((root/"gt-fifteen-shader-postrestore-quality.json").read_text())
+          c=prior["counts"]
+          assert prior["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          assert c["material_documents"]==1536
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_using_dummy_Shader"]==193
+          assert c["material_docs_using_non_dummy_Shader"]==593
+          assert c["distinct_dummy_Shader_targets_referenced"]==45
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          assert sum(prior["dummy_shader_material_counts_by_name_digest"].values())==193
+          assert list(prior["dummy_shader_material_counts_by_name_digest"].values()).count(18)==1
+          print("GT_NEXT18_ACTUAL_POST15_FULL_EXPORT_193_DUMMY_45_GUID_ACCEPTED true noAPK=true")
+          PY_GT_REAL_POST15
+      - name: Restore authentic NEXT18 original 58 D3D11 stages and 33 VSFS 4-pass ShaderLab privately
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-next18-full-export-private"
+          # The ORIGINAL translator authenticates source identity against exact post14 216/46.
+          # Installer below independently requires the same-export post15 193/45 audit.
+          timeout 2700s python3 -m scripts.gt_translate_next_remaining_18_shader48 \
+            --original "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-fourteen-shader-postrestore-quality.json" \
+            --private "$work" --out "$RUNNER_TEMP/gt-next18-full-export-source-safe.json"
+          python3 - <<'PY_GT_NEXT18_SOURCE'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-next18-full-export-source-safe.json").read_text())
+          assert r["status"]=="GT_SHA_ORIGINAL_REMAINING_18_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
+          assert r["postfourteen_dummy_materials_linked_to_this_original_shader"]==18
+          assert r["original_source_82_owners_authenticated"]==82
+          assert r["original_program_stages_roundtrip_Vulkan11_valid"]==58
+          assert r["original_exact_vertex_fragment_keyword_permutation_pairs"]==33
+          assert r["source_original_keyword_permutation_route_counts_per_pass"]==[8,13,8,4]
+          assert r["private_original_18_material_ShaderLab_4pass_composed"] is True
+          assert r["private_original_18_material_ShaderLab_66_vertex_fragment_entrypoints_validated"] is True
+          assert r["source_original_Range_property_count"]==7
+          print("GT_NEXT18_58_SHA_ORIGINAL_D3D11_SOURCE_STAGE_AND_4PASS_ACCEPTED noAPK=true")
+          PY_GT_NEXT18_SOURCE
+          project="$GITHUB_WORKSPACE/gt-next18-full-export-unity"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          cp "$work/original-18-material-Shader48-private.shader" "$project/Assets/GTNext18.shader"
+          cp android-port/Experiments/GT/Editor/Next18ShaderValidation.cs "$project/Assets/Editor/Next18ShaderValidation.cs"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile genuine NEXT18 original 33 VSFS 4-pass Shader48 in isolated Unity 2021 Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-next18-full-export-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Next18ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify serialized Unity Vulkan NEXT18 all 33 VSFS and exact original candidate SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next18-full-export-unity"
+          smolv="$RUNNER_TEMP/gt-next18-full-export-smolv"
+          mkdir -p "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-next18" \
+            --source "$project/Assets/GTNext18.shader" \
+            --receipt "$project/ProbeResults/gt-next18-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" \
+            --out "$RUNNER_TEMP/gt-next18-full-export-bundle-safe.json"
+          python3 - <<'PY_GT_NEXT18_BUNDLE'
+          import json,os,hashlib
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          path=Path("gt-next18-full-export-unity/Assets/GTNext18.shader")
+          unity=json.loads(Path("gt-next18-full-export-unity/ProbeResults/gt-next18-unity-safe.json").read_text())
+          r=json.loads((root/"gt-next18-full-export-bundle-safe.json").read_text())
+          assert unity["unityVersion"]=="2021.3.45f2"
+          assert unity["passCount"]==4 and unity["registeredRoutes"]==33
+          assert unity["errors"]==0 and unity["androidVulkanOnly"] is True
+          assert unity["privateBundleCompiled"] is True
+          assert r["vulkan_platform_only"] is True and r["compiled_program_table_verified"] is True
+          assert r["vertex_and_fragment_entrypoints_verified"] is True
+          assert r["vertex_routes_by_pass"]==r["fragment_routes_by_pass"]==[8,13,8,4]
+          assert r["candidate_sha256"]==hashlib.sha256(path.read_bytes()).hexdigest()
+          print("GT_NEXT18_SAME_EXPORT_GUARD_UNITY_VULKAN_33_ROUTE_SOURCE_SHA_VERIFIED noAPK=true")
+          PY_GT_NEXT18_BUNDLE
+      - name: Install NEXT18 original Shader48 only on its genuine AssetRipper same-export Shader GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_install_next18_original_shader48 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-fifteen-shader-postrestore-quality.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$GITHUB_WORKSPACE/gt-next18-full-export-unity/Assets/GTNext18.shader" \
+            --receipt "$RUNNER_TEMP/gt-next18-full-export-bundle-safe.json" \
+            --backup "$RUNNER_TEMP/gt-next18-original-export-backup" \
+            --out "$RUNNER_TEMP/gt-next18-original-install-safe.json"
+      - name: Audit real NEXT18 post16 175 Dummy and 611 authentic non-Dummy Custom Materials with 29213 SHA protection
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --rank-dummy-targets \
+            --out "$RUNNER_TEMP/gt-sixteen-shader-postrestore-quality.json"
+          python3 - <<'PY_GT_SIXTEEN'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          prior=json.loads((root/"gt-fifteen-shader-postrestore-quality.json").read_text())
+          current=json.loads((root/"gt-sixteen-shader-postrestore-quality.json").read_text())
+          before=json.loads((root/"gt-full-smoke-private-unchanged-material-meta.json").read_text())
+          c=current["counts"]
+          assert prior["counts"]["material_docs_using_dummy_Shader"]==193
+          assert current["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          assert c["material_documents"]==1536
+          assert c["material_docs_using_Unity_builtin_Shader"]==750
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          assert c["material_docs_using_dummy_Shader"]==175
+          assert c["material_docs_using_non_dummy_Shader"]==611
+          assert c["distinct_dummy_Shader_targets_referenced"]==44
+          source_sha={}
+          for p in (root/"gt-project/ExportedProject/Assets").rglob("*"):
+              if p.is_file() and not p.is_symlink() and p.suffix.lower() in {".meta",".mat",".asset",".prefab",".unity"}:
+                  h=hashlib.sha256()
+                  with p.open("rb") as f:
+                      for chunk in iter(lambda:f.read(1048576),b""):
+                          h.update(chunk)
+                  source_sha[str(p.relative_to(root/"gt-project/ExportedProject/Assets"))]=h.hexdigest()
+          assert source_sha==before,"next18_unexpected_original_material_or_meta_sha_drift"
+          report={
+              "schema_version":1,
+              "status":"GT_SIXTEEN_NEXT18_SOURCE_SHADER48_SAME_EXPORT_GUID_ACCEPTED_NO_APK",
+              "post15_dummy_custom_material_documents":193,
+              "post16_dummy_custom_material_documents":c["material_docs_using_dummy_Shader"],
+              "post16_non_dummy_custom_material_documents":c["material_docs_using_non_dummy_Shader"],
+              "remaining_dummy_Shader_GUID_targets_referenced":c["distinct_dummy_Shader_targets_referenced"],
+              "protected_unchanged_original_Material_YAML_and_meta_files":len(source_sha),
+              "all_original_Material_meta_and_YAML_sha256_unchanged":True,
+              "source_authentic_original_Shader48_same_export_GUID_verified":True,
+              "APK_OBB_XAPK_created":False,
+              "Android_Adreno_pixels_or_runtime_keyword_parity_verified":False,
+          }
+          (root/"gt-sixteen-shader-postrestore-summary-safe.json").write_text(json.dumps(report,sort_keys=True,indent=2)+"\n")
+          print("GT_SIXTEEN_ORIGINAL_SHADER48_SAME_EXPORT_POSTINSTALL "+json.dumps(report,sort_keys=True))
+          PY_GT_SIXTEEN
+      - name: Upload safe NEXT18 same-export source Unity GUID and post16 material audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-sixteen-next18-source-shader-full-export-audit-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-next18-full-export-source-safe.json
+            gt-next18-full-export-unity/ProbeResults/gt-next18-unity-safe.json
+            ${{ runner.temp }}/gt-next18-full-export-bundle-safe.json
+            ${{ runner.temp }}/gt-next18-original-install-safe.json
+            ${{ runner.temp }}/gt-sixteen-shader-postrestore-summary-safe.json
+            ${{ runner.temp }}/gt-sixteen-shader-postrestore-quality.json
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Purge private NEXT18 HLSL, source shader and any Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-next18-full-export-private" "$RUNNER_TEMP/gt-next18-original-export-backup"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-next18-full-export-unity"
+
+      - name: Check genuine post16 original-guid material coverage and NEXT17 source-free safety
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_translate_next_remaining_17_shader48.py scripts/gt_install_next17_original_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_17_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_install_next17_original_shader48.py -v
+          python3 - <<'PY_GT_REAL_NEXT17_PRIOR'
+          import json,os
+          from pathlib import Path
+          r=Path(os.environ["RUNNER_TEMP"])
+          q=json.loads((r/"gt-sixteen-shader-postrestore-quality.json").read_text())
+          c=q["counts"]
+          assert q["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          assert c["material_documents"]==1536
+          assert c["material_docs_using_Unity_builtin_Shader"]==750
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_using_non_dummy_Shader"]==611
+          assert c["material_docs_using_dummy_Shader"]==175
+          assert c["distinct_dummy_Shader_targets_referenced"]==44
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          weights=q["dummy_shader_material_counts_by_name_digest"]
+          assert sum(weights.values())==175
+          assert list(weights.values()).count(17)==1
+          print("GT_NEXT17_REAL_PRIOR_POST16_611_NON_DUMMY_175_DUMMY_44_TARGETS_SOURCE_ACCEPTED noAPK=true")
+          PY_GT_REAL_NEXT17_PRIOR
+      - name: Recover NEXT17 43 original D3D11 programs from ZIP2 with exact post14 216-source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-next17-full-export-private"
+          # Source selector contract is independently tied to post14 216/46.
+          # Same-export installer contract below is tied to post16 175/44.
+          timeout 2700s python3 -m scripts.gt_translate_next_remaining_17_shader48 \
+            --original "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-fourteen-shader-postrestore-quality.json" \
+            --private "$work" --out "$RUNNER_TEMP/gt-next17-full-export-source-safe.json"
+          python3 - <<'PY_GT_NEXT17_SOURCE'
+          import json,os
+          from pathlib import Path
+          r=Path(os.environ["RUNNER_TEMP"])
+          q=json.loads((r/"gt-next17-full-export-source-safe.json").read_text())
+          assert q["status"]=="GT_SHA_ORIGINAL_REMAINING_17_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
+          assert q["original_source_82_owners_authenticated"]==82
+          assert q["original_source_Shader48_object_unique_and_82_owner_SHA_verified"] is True
+          assert q["original_program_stages_roundtrip_Vulkan11_valid"]==43
+          assert q["original_exact_vertex_fragment_keyword_permutation_pairs"]==23
+          assert q["original_orphan_vertex_stage_variants"]==8
+          assert q["source_original_keyword_permutation_route_counts_per_pass"]==[8,13,2]
+          assert q["private_original_17_material_ShaderLab_3pass_composed"] is True
+          assert q["private_original_17_material_ShaderLab_46_vertex_fragment_entrypoints_validated"] is True
+          assert q["source_original_Range_property_count"]==6
+          print("GT_NEXT17_GENUINE_43_D3D11_23_VSFS_SOURCE_3PASS_VERIFIED noAPK=true")
+          PY_GT_NEXT17_SOURCE
+          project="$GITHUB_WORKSPACE/gt-next17-full-export-unity"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          cp "$work/original-17-material-Shader48-private.shader" "$project/Assets/GTNext17.shader"
+          cp android-port/Experiments/GT/Editor/Next17ShaderValidation.cs "$project/Assets/Editor/Next17ShaderValidation.cs"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile NEXT17 exact 23 original VSFS and 3-pass ShaderLab in isolated Unity 2021 Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-next17-full-export-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Next17ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify NEXT17 Vulkan serialized 23 VSFS routes and original candidate SHA before GUID install
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next17-full-export-unity"
+          smolv="$RUNNER_TEMP/gt-next17-full-export-smolv"
+          mkdir -p "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-next17" \
+            --source "$project/Assets/GTNext17.shader" \
+            --receipt "$project/ProbeResults/gt-next17-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" --next17 \
+            --out "$RUNNER_TEMP/gt-next17-full-export-bundle-safe.json"
+          python3 - <<'PY_GT_NEXT17_BUNDLE'
+          import json,os,hashlib
+          from pathlib import Path
+          r=Path(os.environ["RUNNER_TEMP"])
+          candidate=Path("gt-next17-full-export-unity/Assets/GTNext17.shader")
+          unity=json.loads(Path("gt-next17-full-export-unity/ProbeResults/gt-next17-unity-safe.json").read_text())
+          bundle=json.loads((r/"gt-next17-full-export-bundle-safe.json").read_text())
+          assert unity["unityVersion"]=="2021.3.45f2"
+          assert unity["passCount"]==3 and unity["registeredRoutes"]==23
+          assert unity["errors"]==0 and unity["privateBundleCompiled"] is True
+          assert unity["androidVulkanOnly"] is True
+          assert bundle["vulkan_platform_only"] is True
+          assert bundle["compiled_program_table_verified"] is True
+          assert bundle["vertex_and_fragment_entrypoints_verified"] is True
+          assert bundle["vertex_routes_by_pass"]==bundle["fragment_routes_by_pass"]==[8,13,2]
+          assert bundle["candidate_sha256"]==hashlib.sha256(candidate.read_bytes()).hexdigest()
+          print("GT_NEXT17_UNITY_VULKAN_23_VSFS_3PASS_SERIALIZED_VERIFIED noAPK=true")
+          PY_GT_NEXT17_BUNDLE
+      - name: Install NEXT17 original Shader48 on same-export original GUID using actual post16 audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_install_next17_original_shader48 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-sixteen-shader-postrestore-quality.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$GITHUB_WORKSPACE/gt-next17-full-export-unity/Assets/GTNext17.shader" \
+            --receipt "$RUNNER_TEMP/gt-next17-full-export-bundle-safe.json" \
+            --backup "$RUNNER_TEMP/gt-next17-original-export-backup" \
+            --out "$RUNNER_TEMP/gt-next17-original-install-safe.json"
+      - name: Audit real post17 original custom material programs and all unchanged 29213 Material YAML meta SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --rank-dummy-targets \
+            --out "$RUNNER_TEMP/gt-seventeen-shader-postrestore-quality.json"
+          python3 - <<'PY_GT_REAL_SEVENTEEN'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          prior=json.loads((root/"gt-sixteen-shader-postrestore-quality.json").read_text())
+          q=json.loads((root/"gt-seventeen-shader-postrestore-quality.json").read_text())
+          before=json.loads((root/"gt-full-smoke-private-unchanged-material-meta.json").read_text())
+          c=q["counts"]
+          assert prior["counts"]["material_docs_using_non_dummy_Shader"]==611
+          assert prior["counts"]["material_docs_using_dummy_Shader"]==175
+          assert q["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          assert c["material_documents"]==1536
+          assert c["material_docs_using_Unity_builtin_Shader"]==750
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          assert c["material_docs_using_dummy_Shader"]==158
+          assert c["material_docs_using_non_dummy_Shader"]==628
+          assert c["distinct_dummy_Shader_targets_referenced"]==43
+          sha={}
+          root_assets=root/"gt-project/ExportedProject/Assets"
+          for p in root_assets.rglob("*"):
+              if p.is_file() and not p.is_symlink() and p.suffix.lower() in {".meta",".mat",".asset",".prefab",".unity"}:
+                  h=hashlib.sha256()
+                  with p.open("rb") as f:
+                      for chunk in iter(lambda:f.read(1048576),b""):
+                          h.update(chunk)
+                  sha[str(p.relative_to(root_assets))]=h.hexdigest()
+          assert sha==before,"next17_original_Material_meta_YAML_sha_drift"
+          summary={
+              "schema_version":1,
+              "status":"GT_SEVENTEEN_NEXT17_ORIGINAL_SHADER48_SAME_EXPORT_GUID_ACCEPTED_NO_APK",
+              "post16_dummy_custom_material_documents":175,
+              "post17_non_dummy_custom_material_documents":628,
+              "post17_dummy_custom_material_documents":158,
+              "post17_original_dummy_Shader_GUID_targets_remaining":43,
+              "protected_unchanged_original_Material_YAML_and_meta_files":len(sha),
+              "all_original_Material_meta_and_YAML_sha256_unchanged":True,
+              "source_authentic_original_Shader48_same_export_GUID_verified":True,
+              "APK_OBB_XAPK_created":False,
+              "Adreno_pixels_or_runtime_keyword_parity_verified":False,
+          }
+          (root/"gt-seventeen-shader-postrestore-summary-safe.json").write_text(json.dumps(summary,sort_keys=True,indent=2)+"\n")
+          print("GT_SEVENTEEN_ORIGINAL_SHADER48_SAME_EXPORT_POSTINSTALL "+json.dumps(summary,sort_keys=True))
+          PY_GT_REAL_SEVENTEEN
+      - name: Retain safe NEXT17 source Unity Vulkan GUID and post17 real Material counts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-seventeen-next17-source-shader-full-export-audit-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-next17-full-export-source-safe.json
+            gt-next17-full-export-unity/ProbeResults/gt-next17-unity-safe.json
+            ${{ runner.temp }}/gt-next17-full-export-bundle-safe.json
+            ${{ runner.temp }}/gt-next17-original-install-safe.json
+            ${{ runner.temp }}/gt-seventeen-shader-postrestore-summary-safe.json
+            ${{ runner.temp }}/gt-seventeen-shader-postrestore-quality.json
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Purge NEXT17 private source programs, original ShaderLab and temporary Unity bundle
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-next17-full-export-private" "$RUNNER_TEMP/gt-next17-original-export-backup"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-next17-full-export-unity"
+
+      - name: Check genuine post17 original-guid material coverage and NEXT15 source-free safety
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_translate_next_remaining_17_shader48.py scripts/gt_install_next15_original_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_17_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_install_next15_original_shader48.py -v
+          python3 - <<'PY_GT_REAL_NEXT15_PRIOR'
+          import json,os
+          from pathlib import Path
+          r=Path(os.environ["RUNNER_TEMP"])
+          q=json.loads((r/"gt-seventeen-shader-postrestore-quality.json").read_text())
+          c=q["counts"]
+          assert q["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          assert c["material_documents"]==1536
+          assert c["material_docs_using_Unity_builtin_Shader"]==750
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_using_non_dummy_Shader"]==628
+          assert c["material_docs_using_dummy_Shader"]==158
+          assert c["distinct_dummy_Shader_targets_referenced"]==43
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          weights=q["dummy_shader_material_counts_by_name_digest"]
+          assert sum(weights.values())==158
+          assert list(weights.values()).count(15)==1
+          print("GT_NEXT15_REAL_PRIOR_POST16_611_NON_DUMMY_175_DUMMY_44_TARGETS_SOURCE_ACCEPTED noAPK=true")
+          PY_GT_REAL_NEXT15_PRIOR
+      - name: Recover NEXT15 58 original D3D11 programs from ZIP2 with exact post14 216-source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-next15-full-export-private"
+          # Source selector contract is independently tied to post14 216/46.
+          # Same-export installer contract below is tied to post17 158/58.
+          timeout 2700s python3 -m scripts.gt_translate_next_remaining_17_shader48 \
+            --original "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-fourteen-shader-postrestore-quality.json" \
+            --private "$work" --out "$RUNNER_TEMP/gt-next15-full-export-source-safe.json"
+          python3 - <<'PY_GT_NEXT15_SOURCE'
+          import json,os
+          from pathlib import Path
+          r=Path(os.environ["RUNNER_TEMP"])
+          q=json.loads((r/"gt-next15-full-export-source-safe.json").read_text())
+          assert q["status"]=="GT_SHA_ORIGINAL_REMAINING_15_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
+          assert q["original_source_82_owners_authenticated"]==82
+          assert q["original_source_Shader48_object_unique_and_82_owner_SHA_verified"] is True
+          assert q["original_program_stages_roundtrip_Vulkan11_valid"]==58
+          assert q["original_exact_vertex_fragment_keyword_permutation_pairs"]==33
+          assert q["original_orphan_vertex_stage_variants"]==8
+          assert q["source_original_keyword_permutation_route_counts_per_pass"]==[8,13,8,4]
+          assert q["private_original_15_material_ShaderLab_4pass_composed"] is True
+          assert q["private_original_15_material_ShaderLab_66_vertex_fragment_entrypoints_validated"] is True
+          assert q["source_original_Range_property_count"]==12
+          print("GT_NEXT15_GENUINE_43_D3D11_23_VSFS_SOURCE_3PASS_VERIFIED noAPK=true")
+          PY_GT_NEXT15_SOURCE
+          project="$GITHUB_WORKSPACE/gt-next15-full-export-unity"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          cp "$work/original-15-material-Shader48-private.shader" "$project/Assets/GTNext15.shader"
+          cp android-port/Experiments/GT/Editor/Next15ShaderValidation.cs "$project/Assets/Editor/Next15ShaderValidation.cs"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile NEXT15 exact 33 original VSFS and 4-pass ShaderLab in isolated Unity 2021 Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-next15-full-export-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Next15ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify NEXT15 Vulkan serialized 33 VSFS routes and original candidate SHA before GUID install
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next15-full-export-unity"
+          smolv="$RUNNER_TEMP/gt-next15-full-export-smolv"
+          mkdir -p "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-next15" \
+            --source "$project/Assets/GTNext15.shader" \
+            --receipt "$project/ProbeResults/gt-next15-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" \
+            --out "$RUNNER_TEMP/gt-next15-full-export-bundle-safe.json"
+          python3 - <<'PY_GT_NEXT15_BUNDLE'
+          import json,os,hashlib
+          from pathlib import Path
+          r=Path(os.environ["RUNNER_TEMP"])
+          candidate=Path("gt-next15-full-export-unity/Assets/GTNext15.shader")
+          unity=json.loads(Path("gt-next15-full-export-unity/ProbeResults/gt-next15-unity-safe.json").read_text())
+          bundle=json.loads((r/"gt-next15-full-export-bundle-safe.json").read_text())
+          assert unity["unityVersion"]=="2021.3.45f2"
+          assert unity["passCount"]==4 and unity["registeredRoutes"]==33
+          assert unity["errors"]==0 and unity["privateBundleCompiled"] is True
+          assert unity["androidVulkanOnly"] is True
+          assert bundle["vulkan_platform_only"] is True
+          assert bundle["compiled_program_table_verified"] is True
+          assert bundle["vertex_and_fragment_entrypoints_verified"] is True
+          assert bundle["vertex_routes_by_pass"]==bundle["fragment_routes_by_pass"]==[8,13,8,4]
+          assert bundle["candidate_sha256"]==hashlib.sha256(candidate.read_bytes()).hexdigest()
+          print("GT_NEXT15_UNITY_VULKAN_23_VSFS_4PASS_SERIALIZED_VERIFIED noAPK=true")
+          PY_GT_NEXT15_BUNDLE
+      - name: Install NEXT15 original Shader48 on same-export original GUID using actual post17 audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_install_next15_original_shader48 \
+            --original "$RUNNER_TEMP/gt-input" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-seventeen-shader-postrestore-quality.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --candidate "$GITHUB_WORKSPACE/gt-next15-full-export-unity/Assets/GTNext15.shader" \
+            --receipt "$RUNNER_TEMP/gt-next15-full-export-bundle-safe.json" \
+            --backup "$RUNNER_TEMP/gt-next15-original-export-backup" \
+            --out "$RUNNER_TEMP/gt-next15-original-install-safe.json"
+      - name: Audit real post18 original custom material programs and all unchanged 29213 Material YAML meta SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" --rank-dummy-targets \
+            --out "$RUNNER_TEMP/gt-eighteen-shader-postrestore-quality.json"
+          python3 - <<'PY_GT_REAL_EIGHTEEN'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          prior=json.loads((root/"gt-seventeen-shader-postrestore-quality.json").read_text())
+          q=json.loads((root/"gt-eighteen-shader-postrestore-quality.json").read_text())
+          before=json.loads((root/"gt-full-smoke-private-unchanged-material-meta.json").read_text())
+          c=q["counts"]
+          assert prior["counts"]["material_docs_using_non_dummy_Shader"]==628
+          assert prior["counts"]["material_docs_using_dummy_Shader"]==158
+          assert q["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          assert c["material_documents"]==1536
+          assert c["material_docs_using_Unity_builtin_Shader"]==750
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          assert c["material_docs_using_dummy_Shader"]==143
+          assert c["material_docs_using_non_dummy_Shader"]==643
+          assert c["distinct_dummy_Shader_targets_referenced"]==42
+          sha={}
+          root_assets=root/"gt-project/ExportedProject/Assets"
+          for p in root_assets.rglob("*"):
+              if p.is_file() and not p.is_symlink() and p.suffix.lower() in {".meta",".mat",".asset",".prefab",".unity"}:
+                  h=hashlib.sha256()
+                  with p.open("rb") as f:
+                      for chunk in iter(lambda:f.read(1048576),b""):
+                          h.update(chunk)
+                  sha[str(p.relative_to(root_assets))]=h.hexdigest()
+          assert sha==before,"next15_original_Material_meta_YAML_sha_drift"
+          summary={
+              "schema_version":1,
+              "status":"GT_EIGHTEEN_NEXT15_ORIGINAL_SHADER48_SAME_EXPORT_GUID_ACCEPTED_NO_APK",
+              "post17_dummy_custom_material_documents":158,
+              "post18_non_dummy_custom_material_documents":643,
+              "post18_dummy_custom_material_documents":143,
+              "post18_original_dummy_Shader_GUID_targets_remaining":42,
+              "protected_unchanged_original_Material_YAML_and_meta_files":len(sha),
+              "all_original_Material_meta_and_YAML_sha256_unchanged":True,
+              "source_authentic_original_Shader48_same_export_GUID_verified":True,
+              "APK_OBB_XAPK_created":False,
+              "Adreno_pixels_or_runtime_keyword_parity_verified":False,
+          }
+          (root/"gt-eighteen-shader-postrestore-summary-safe.json").write_text(json.dumps(summary,sort_keys=True,indent=2)+"\n")
+          print("GT_EIGHTEEN_ORIGINAL_SHADER48_SAME_EXPORT_POSTINSTALL "+json.dumps(summary,sort_keys=True))
+          PY_GT_REAL_EIGHTEEN
+      - name: Retain safe NEXT15 source Unity Vulkan GUID and post18 real Material counts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-eighteen-next15-source-shader-full-export-audit-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-next15-full-export-source-safe.json
+            gt-next15-full-export-unity/ProbeResults/gt-next15-unity-safe.json
+            ${{ runner.temp }}/gt-next15-full-export-bundle-safe.json
+            ${{ runner.temp }}/gt-next15-original-install-safe.json
+            ${{ runner.temp }}/gt-eighteen-shader-postrestore-summary-safe.json
+            ${{ runner.temp }}/gt-eighteen-shader-postrestore-quality.json
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Purge NEXT15 private source programs, original ShaderLab and temporary Unity bundle
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-next15-full-export-private" "$RUNNER_TEMP/gt-next15-original-export-backup"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-next15-full-export-unity"
+
+      - name: Publish aggregate evidence only, never original scenes/meshes/export/trace
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-real-original-export-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-export-original-restore.json
+            ${{ runner.temp }}/gt-real-export-aggregate.json
+            ${{ runner.temp }}/gt-real-mesh-export-geometry.json
+            ${{ runner.temp }}/gt-export-failure-safe.json
+            ${{ runner.temp }}/gt-export-texture-guard-safe.json
+            ${{ runner.temp }}/gt-export-all-texture-target-categories.json
+            ${{ runner.temp }}/gt-real-cubemap-export-lineage.json
+            ${{ runner.temp }}/gt-real-original-array-private-Editor-gate-aggregate.json
+            ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
+            ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
+            ${{ runner.temp }}/gt-full-material-colors.json
+            ${{ runner.temp }}/gt-real-external-texture-links.json
+            ${{ runner.temp }}/gt-raw-export-program-quality.json
+            ${{ runner.temp }}/gt-actual-postrestore-shader-quality.json
+          retention-days: 14
+          if-no-files-found: ignore
