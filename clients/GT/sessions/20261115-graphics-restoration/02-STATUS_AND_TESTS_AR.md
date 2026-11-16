@@ -1,5 +1,19 @@
 # التقدم وما بقي والفحوص
 
+## Verified full SAME-EXPORT status — 16 Nov 2026
+
+| Stage | Actual accepted audit | Source |
+| --- | --- | --- |
+| NEXT23 post15 | 593/786 non-Dummy; 193 Dummy/45 original Shader GUIDs | 43777283111 |
+| NEXT18 post16 | 611/786 non-Dummy; 175 Dummy/44 original Shader GUIDs | [43787527334](https://github.com/alwansan/raf/actions/runs/43787527334) SUCCESS |
+| **NEXT17 post17** | **628/786 non-Dummy (79.90% Custom Material only); 158 Dummy/43 original Shader GUIDs** | **[43787809110](https://github.com/alwansan/raf/actions/runs/43787809110) SUCCESS** |
+
+- Actual post17 1536 total Materials, 750 built-in, 786 Custom, 0 broken; **29,213 original Material/YAML/meta SHA unchanged**. Unity Vulkan source/original same-export GUID verified. No runtime Adreno pixels, general game graphics parity or GT XAPK.
+- Next15 full export [43918007004](https://github.com/alwansan/raf/actions/runs/43918007004) in progress. **Expected only** if all gates pass: 643/786 non-Dummy, 143 Dummy/42 original shader targets; do not count until actual post18 audited artifact.
+- Prior obsolete NEXT18 [43786161961](https://github.com/alwansan/raf/actions/runs/43786161961) failed incorrect post15 quality source input; corrected run successful. Safety guard after three receipt report fixes: [43917400073](https://github.com/alwansan/raf/actions/runs/43917400073) success.
+- Remaining resource gates: water Spectrum/Foam/Depth/FFT/kernel6, Fire exported alpha/runtime pixel identity, remaining custom Shader48, G0–G6, device pixels. Evidence clients/GT/evidence/20261116_gt_post17_real_guid_next15_full_export_progress.json.
+
+
 لقطة 15 تشرين الثاني 2026. المراحل أدناه تعرّف بالضبط نطاق كل نتيجة.
 
 ## نتائج مؤكدة
