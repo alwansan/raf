@@ -35,7 +35,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_ACTUAL_POST17_628_786_CUSTOM_NON_DUMMY_158_DUMMY_43_GUID__SIX_SAME_EXPORT_SHADER48_RESTORATION_CHAINS_ACTIVE",
+  "status": "GT_ACTUAL_VERIFIED_NEXT17_SUCCESS_43917381834_628_OF_786_CUSTOM_NON_DUMMY_158_DUMMY_43_TARGETS_SIX_SOURCE_SHADER_CI_ACTIVE",
   "latest_921_source_receipt": "clients/GT/evidence/20261113_original_921_routes_layout_parameters.json",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
-  "next_action": "Check latest corrected NEXT15=43920541904, NEXT11=43920553298, NEXT10p33=43922026302, NEXT10p31=43922253136, NEXT7p11=43925468867 and NEXT7p33=43925787952, accept only full same-export original GUID postinstall SHA 29213 success; inspect first failed step and repair only feature/android-native-port.",
+  "next_action": "Check corrected source-original full export runs NEXT15 43920541904, NEXT11 43920553298, NEXT10p33 43926288406 (43922026302 cancelled superseded), NEXT10p31 43922253136, NEXT7p11 running 43925468867/newer pending 43926307167, NEXT7p33 running 43925787952/newer pending 43926312944. Inspect exact first failing step and full same-export original GUID postinstall artifact before any material count promotion. Keep only feature/android-native-port writable.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1723,13 +1723,17 @@
   "latest_gt_original_shader48_live_20261116": {
     "evidence": "clients/GT/evidence/20261116_gt_next10pair_original_guid_pipeline_progress.json",
     "last_accepted_same_export": {
-      "run": 43787809110,
-      "non_dummy": 628,
+      "run": 43917381834,
+      "conclusion": "success",
+      "original_non_dummy_custom_material_documents": 628,
       "custom_total": 786,
-      "dummy": 158,
-      "original_shader_guid_targets": 43,
-      "protected_material_yaml_meta_original_sha_files": 29213,
-      "broken_shader_references": 0
+      "dummy_custom_material_documents": 158,
+      "original_dummy_shader_guid_targets": 43,
+      "protected_original_material_yaml_meta_sha_unchanged": 29213,
+      "broken_shader_references": 0,
+      "latest_same_export_artifact_id": 14256010749,
+      "latest_same_export_artifact": "gt-seventeen-next17-source-shader-full-export-audit-43917381834",
+      "actual_device_pixel_parity_proven": false
     },
     "full_export_chains_corrected": [
       {
@@ -1808,12 +1812,13 @@
       },
       {
         "stage": "NEXT10p33",
-        "corrected_run": 43922026302,
+        "corrected_run": 43926288406,
         "expected_post": {
           "non_dummy": 664,
           "dummy": 122,
           "targets": 40
-        }
+        },
+        "superseded_cancelled_run": 43922026302
       },
       {
         "stage": "NEXT10p31",
@@ -1837,7 +1842,8 @@
           "non_dummy": 681,
           "dummy": 105,
           "targets": 38
-        }
+        },
+        "newer_pending_run": 43926307167
       },
       {
         "stage": "NEXT7p33",
@@ -1853,7 +1859,8 @@
           "non_dummy": 688,
           "dummy": 98,
           "targets": 37
-        }
+        },
+        "newer_pending_run": 43926312944
       }
     ],
     "source_installer_static_seven_material_run": {
@@ -1869,6 +1876,18 @@
     "evidence_7pair": "clients/GT/evidence/20261116_gt_next7pair_original_guid_pipeline_progress.json",
     "expected_post23_counts_are_accepted": false,
     "xapk_before_complete_resource_restoration": false,
-    "last_device_pixel_parity_proven": false
+    "last_device_pixel_parity_proven": false,
+    "latest_run_failures_verified": [
+      {
+        "run": 43918007004,
+        "conclusion": "failure",
+        "step": "Recover NEXT15 58 original D3D11 programs",
+        "cause": "inherited NEXT17 source translation stage",
+        "fix_commit": "f1625a720cf949c6c9e5d725ccc828e7ce62d96b",
+        "corrected_run": 43920541904
+      }
+    ],
+    "device_render_verified": false,
+    "last_post18_post23_genuine_success": false
   }
 }
