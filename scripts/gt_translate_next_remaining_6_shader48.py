@@ -254,6 +254,19 @@ def original_six_validator_private_failure_safe_topics(private):
             if re.search(expression,raw):
                 counts["specific_"+category]+=1
                 matched=True
+        # Expose only a small overlap-length bucket, NEVER SPIR-V member IDs,
+        # raw register indices, shader symbols, source names or exact offsets.
+        for overlap in re.finditer(
+                r"member\s+\d+\s+at offset\s+(\d+)\s+overlaps\s+"
+                r"previous member ending at offset\s+(\d+)",raw):
+            start,end=int(overlap[1]),int(overlap[2])
+            if start<0 or end<start or end-start>65536:
+                raise ValueError("untrusted_original_six_spirv_overlap_diagnostic")
+            size=end-start+1
+            bucket=("1-4" if size<=4 else "5-8" if size<=8
+                    else "9-16" if size<=16 else "17-64" if size<=64
+                    else "65+")
+            counts["overlap_bytes_bucket_"+bucket]+=1
         if not matched:
             counts["unclassified_spirv_validator_error"]+=1
         for vuid in re.findall(r"vuid-[a-z0-9-]{1,96}",raw):
