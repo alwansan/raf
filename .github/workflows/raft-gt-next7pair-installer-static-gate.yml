@@ -1,0 +1,51 @@
+name: GT original seven-material Shader48 source and exact GUID installer safety (NO APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-next7pair-installer-static-gate.yml
+      - scripts/gt_install_next7p11_original_shader48.py
+      - scripts/gt_install_next7p33_original_shader48.py
+      - scripts/gt_translate_next_remaining_7p11_shader48.py
+      - scripts/gt_translate_next_remaining_7p33_shader48.py
+      - tests/test_gt_install_next7p11_original_shader48.py
+      - tests/test_gt_install_next7p33_original_shader48.py
+      - tests/test_gt_translate_next_remaining_7p11_shader48.py
+      - tests/test_gt_translate_next_remaining_7p33_shader48.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-original-next7pair-source-static-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  real-original-source-safe-static-check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Reject duplicate original 7-material source identity, non-original Shader48, altered SHA, wrong GUID and Vulkan routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_install_next7p11_original_shader48.py scripts/gt_install_next7p33_original_shader48.py scripts/gt_translate_next_remaining_7p11_shader48.py scripts/gt_translate_next_remaining_7p33_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_install_next7p11_original_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_install_next7p33_original_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_7p11_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_7p33_shader48.py -v
+          python3 - <<'PY_GT_SEVEN'
+          from scripts.gt_install_next7p11_original_shader48 import ROUTES as a
+          from scripts.gt_install_next7p33_original_shader48 import ROUTES as b
+          assert a==(4,5,2) and b==(8,13,8,4)
+          print("GT_NEXT7PAIR_SOURCE_AND_INSTALLER_STATIC_OK noAPK=true actual_same_export_proof=false")
+          PY_GT_SEVEN
