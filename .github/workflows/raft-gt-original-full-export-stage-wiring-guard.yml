@@ -89,4 +89,54 @@ jobs:
               assert all_text.count("  workflow_dispatch:")==1
               assert "cancel-in-progress: false" in all_text
               print("GT_AUTHENTIC_FULL_EXPORT_STAGE_WIRING_OK "+shader+" prior="+before+"/"+prior_targets+" post="+after+"/"+after_targets)
+          # The LAST stage alone can be correct while its preceding NEXT15
+          # source translator is wrong. This checks every earlier SOURCE stage
+          # in all six independent full-export workflows, not just the suffix.
+          import re
+          lineage = (
+              ("15", 58, 33, 12),
+              ("11", 58, 33, 0),
+              ("10p33", 58, 33, 6),
+              ("10p31", 55, 31, 0),
+              ("7p11", 22, 11, 4),
+              ("7p33", 58, 33, 0),
+          )
+          for terminal_index, (terminal, _, _, _) in enumerate(lineage):
+              path=Path(".github/workflows/raft-gt-next"+terminal+"-original-full-export.yml")
+              workflow=path.read_text(encoding="utf-8")
+              for stage_index in range(terminal_index+1):
+                  name, original_d3d11, routes, source_ranges = lineage[stage_index]
+                  post_stage=17+stage_index
+                  start_anchor=("      - name: Check genuine post"+str(post_stage)
+                      +" original-guid material coverage and NEXT"+name.upper()
+                      +" source-free safety")
+                  if stage_index == terminal_index:
+                      end_anchor="      - name: Publish aggregate evidence only"
+                  else:
+                      next_name=lineage[stage_index+1][0]
+                      end_anchor=("      - name: Check genuine post"+str(post_stage+1)
+                          +" original-guid material coverage and NEXT"+next_name.upper()
+                          +" source-free safety")
+                  assert workflow.count(start_anchor)==1, terminal+" missing stage "+name
+                  first=workflow.index(start_anchor)
+                  last=workflow.find(end_anchor,first)
+                  assert last>first, terminal+" stage boundary "+name
+                  section=workflow[first:last]
+                  required=(
+                      "      - name: Recover NEXT"+name.upper()+" "+str(original_d3d11)+" original D3D11 programs",
+                      "python3 -m scripts.gt_translate_next_remaining_"+name+"_shader48",
+                      "test_gt_translate_next_remaining_"+name+"_shader48.py",
+                      "GT_SHA_ORIGINAL_REMAINING_"+name.upper()+"_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED",
+                      'q["original_program_stages_roundtrip_Vulkan11_valid"]=='+str(original_d3d11),
+                      'q["source_original_Range_property_count"]=='+str(source_ranges),
+                      'unity["registeredRoutes"]=='+str(routes),
+                      'gt-fourteen-shader-postrestore-quality.json',
+                  )
+                  for token in required:
+                      assert token in section, terminal+" inherited stage "+name+" missing: "+token
+                  dispatches=re.findall(r'python3 -m (scripts\\.gt_translate_next_remaining_[a-z0-9]+_shader48)',section)
+                  assert dispatches==["scripts.gt_translate_next_remaining_"+name+"_shader48"],(
+                      terminal+" inherited wrong SOURCE translator in "+name+": "+repr(dispatches))
+                  print("GT_ORIGINAL_FULL_EXPORT_STAGE_LINEAGE_OK terminal="+terminal
+                      +" source="+name+" original_d3d11="+str(original_d3d11))
           PY_GT_WIRING
