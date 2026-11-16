@@ -1,0 +1,44 @@
+name: GT two original 10-Material Shader48 GUID installer safety (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_install_next10p33_original_shader48.py
+      - scripts/gt_install_next10p31_original_shader48.py
+      - tests/test_gt_install_next10p33_original_shader48.py
+      - tests/test_gt_install_next10p31_original_shader48.py
+      - .github/workflows/raft-gt-next10pair-installer-static-gate.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-next10pair-static-installers-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  original-two-ten-material-shader48-safety:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Reject mixing 10-Material shader topology, forged prior audit, wrong VSFS digest and GUID drift
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_install_next10p33_original_shader48.py scripts/gt_install_next10p31_original_shader48.py
+          python3 -m unittest discover -s tests -p 'test_gt_install_next10p33_original_shader48.py' -v
+          python3 -m unittest discover -s tests -p 'test_gt_install_next10p31_original_shader48.py' -v
+          python3 - <<'PY'
+          from scripts.gt_install_next10p33_original_shader48 import ROUTES as a
+          from scripts.gt_install_next10p31_original_shader48 import ROUTES as b
+          assert a==(8,13,8,4) and b==(8,13,8,2)
+          print("GT_NEXT10PAIR_ORIGINAL_GUID_INSTALLERS_STATIC_PASS real_export_install=false APK_OBB_XAPK_created=false")
+          PY
