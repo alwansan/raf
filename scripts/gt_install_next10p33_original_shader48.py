@@ -46,8 +46,8 @@ def source_identity(original: Path, manifest: Path, quality: Path):
     names, owner_count = gather(original_data, manifest)
     if owner_count != 14 or len(names) != 165:
         raise ValueError("original_82_source_Shader48_population_drift")
-    # Only one source Shader48 name digest serves 10 materials in post19, and
-    # its unique source owner and 4/33/8/58 topology must still be proven.
+    # Exactly two original Shader48 name digests serve ten materials each
+    # in real post19, so select the one 4/33/8/58 topology owner; never guess GUID.
     return choose_original_10p33_by_topology(
         original_data, manifest, names,
         q["dummy_shader_material_counts_by_name_digest"])
