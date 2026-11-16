@@ -209,7 +209,15 @@ def combine_stages(vertex, fragment):
 
 
 def engine_route_keys(row, pass_index, pass_modes=PASS_MODES):
-    fixed = ENGINE_FIXED_KEYWORDS[PASS_MODES.index(pass_modes[pass_index])] & {
+    # The original one-Pass source can have an explicit Always tag or no
+    # LightMode. Neither has synthetic engine-fixed keywords.
+    mode = pass_modes[pass_index]
+    fixed_bank = (ENGINE_FIXED_KEYWORDS[PASS_MODES.index(mode)]
+                  if mode in PASS_MODES else frozenset()
+                  if mode in ("Always", "Untagged") else None)
+    if fixed_bank is None:
+        raise ValueError("original_921_unproved_source_pass_mode")
+    fixed = fixed_bank & {
         name for route in row["routes"] for name in route["enabled"]
     }
     result = []
@@ -236,6 +244,48 @@ def pass_modes_for_routes(counts):
 
 
 NEXT_SEVEN_7P11_ORIGINAL_ROUTES = (4, 5, 2)
+# Original post14 six-Material Shader48 source topology is one Pass and two
+# VS/FS keyword pairs. Never infer the Pass LightMode from its route count.
+NEXT_SIX_ORIGINAL_ROUTES = (2,)
+
+
+def verified_source_next_six_pass_modes(manifest):
+    """Derive a one-Pass LightMode ONLY from the SHA-original serialized tags.
+
+    An absent original LightMode is preserved as untagged (Unity default),
+    and an explicit original Always pass is not reclassified as ForwardBase.
+    The single original owner/pass and tag lane are fail-closed verified.
+    """
+    rows = manifest.get("original_passes")
+    if (type(rows) is not list or len(rows) != 1
+            or type(rows[0]) is not dict
+            or rows[0].get("subshader") != 0
+            or rows[0].get("pass") != 0):
+        raise ValueError("source_6_ambiguous_original_single_Pass_ownership")
+    state = rows[0].get("original_state")
+    if type(state) is not dict:
+        raise ValueError("source_6_missing_original_render_state")
+    tags = state.get("m_Tags")
+    entries = tags.get("tags") if type(tags) is dict else None
+    if type(entries) is not list:
+        raise ValueError("source_6_missing_original_serialized_Pass_tags")
+    modes = []
+    valid = {mode.upper(): mode for mode in PASS_MODES}
+    valid["ALWAYS"] = "Always"
+    for entry in entries:
+        if type(entry) not in (list, tuple) or len(entry) != 2:
+            raise ValueError("source_6_malformed_original_Pass_tags")
+        key, value = entry
+        if not isinstance(key, str) or not isinstance(value, str):
+            raise ValueError("source_6_invalid_original_Pass_tag_values")
+        if key.upper() == "LIGHTMODE":
+            modes.append(valid.get(value.upper()))
+    if not modes:
+        return ("Untagged",)
+    if len(modes) != 1 or modes[0] is None:
+        raise ValueError("source_6_unknown_or_ambiguous_original_LightMode")
+    return (modes[0],)
+
 
 
 def verified_source_next_seven_pass_modes(manifest):
@@ -283,7 +333,9 @@ def compose(private, engine_keywords=False):
     routes = json.loads((private / "original-private-keyword-routes.json").read_text())
     manifest = json.loads((private / "original-private-variant-manifest.json").read_text())
     counts = tuple(len(row["routes"]) for row in routes)
-    pass_modes = (verified_source_next_seven_pass_modes(manifest)
+    pass_modes = (verified_source_next_six_pass_modes(manifest)
+                  if counts == NEXT_SIX_ORIGINAL_ROUTES else
+                  verified_source_next_seven_pass_modes(manifest)
                   if counts == NEXT_SEVEN_7P11_ORIGINAL_ROUTES
                   else pass_modes_for_routes(counts))
     records = json.loads((private / "original-private-parameter-records.json").read_text())["stage_records"]
