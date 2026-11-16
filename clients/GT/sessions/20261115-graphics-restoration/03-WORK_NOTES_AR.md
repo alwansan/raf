@@ -1,5 +1,14 @@
 # تفاصيل العمل للجلسة الجديدة
 
+## New GT session work notes — 16 Nov 2026
+
+- Checked live feature/android-native-port. Genuine full ZIP2 source SHA pinned at 15964ea8f246b6e076ce26b60931ee2e1a9a2385. [43786161961](https://github.com/alwansan/raf/actions/runs/43786161961) FAILED because NEXT18 source translator saw post15 193/45 quality in place of original post14 216/46. Corrected [43787527334](https://github.com/alwansan/raf/actions/runs/43787527334) SUCCESS post16 611/175/44; then [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110) SUCCESS post17 628/158/43. No APK; same-export original GUID, 29,213 Material/YAML/meta SHA protected, 0 broken.
+- Corrected evidence report fields (quality checks already fail-closed): scripts/gt_install_next17_original_shader48.py post16=175 commit 44083b60, gt_install_next15_original_shader48.py post17=158 commit 1668151a, gt_install_next11_original_shader48.py post18 expected=143 commit a8f8de32. Static safety [43917400073](https://github.com/alwansan/raf/actions/runs/43917400073) SUCCESS.
+- Built next real .github/workflows/raft-gt-next15-original-full-export.yml at 260001221c7135bfe7d4be31cda96a816797b17c. Real [43918007004](https://github.com/alwansan/raf/actions/runs/43918007004) IN PROGRESS. Replays NEXT23/18/17, then requires original NEXT15 source 58 programs and 33 routes [8,13,8,4], Unity serialized Vulkan verified, source-owner/PathID same-export GUID, exact unchanged SHA. Post18 643/143/42 is *expected gate only*.
+- On resume inspect 43918007004 jobs/steps/logs and safe gt-eighteen-shader-postrestore-summary-safe.json; promote only after complete audited SUCCESS. Investigate failures without replacing source/Meta or changing quality expectations. Continue NEXT11 and 10/7 sources; G0–G6/water/fire remain open, animation deferred, no game XAPK by GT.
+- Evidence: clients/GT/evidence/20261116_gt_post17_real_guid_next15_full_export_progress.json.
+
+
 ## أماكن الملفات
 
 - المشروع هو المستودع `alwansan/raf` وفرع العمل `feature/android-native-port`.
