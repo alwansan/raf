@@ -201,5 +201,31 @@
       "newer_pending": 43926312944,
       "same_export_post23_accepted": false
     }
+  },
+  "latest_accepted_real_original_same_export_post18": {
+    "run": 43920541904,
+    "conclusion": "success",
+    "custom_total": 786,
+    "non_dummy": 643,
+    "dummy": 143,
+    "remaining_original_shader_guid_targets": 42,
+    "protected_original_material_yaml_meta_sha_unchanged": 29213,
+    "broken_shader_references": 0,
+    "artifact_id": 14260325739,
+    "artifact": "gt-eighteen-next15-source-shader-full-export-audit-43920541904",
+    "source_authentic_original_shader48_same_export_guid_verified": true,
+    "adreno_phone_pixels_verified": false
+  },
+  "latest_gt_source_next6_validator_report": {
+    "run": 43933591980,
+    "mode": "source_only",
+    "status": "failure",
+    "exact_stage": "bind_source_constant_buffer_resource_and_vertex_semantics",
+    "original_stages_d3d11_vulkan11_valid": 3,
+    "shaderlab_property_layout_source_verified": true,
+    "original_CB_derived_spirv_invalid": "specific_member_overlap",
+    "raw_source_names_bytes_produced_publicly": false,
+    "shaderlab_complete": false,
+    "hlsl_offsets_did_not_resolve_overlap": true
   }
 }
