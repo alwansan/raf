@@ -6,7 +6,7 @@
   "write_branch": "feature/android-native-port",
   "original_source": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "last_accepted_same_export": {
-    "run": 43787809110,
+    "run": 43917381834,
     "status": "success",
     "post_stage": "17",
     "custom_material_documents": 786,
@@ -20,7 +20,11 @@
     "broken_shader_references": 0,
     "original_source_owner_pathid_to_export_guid_verified": true,
     "actual_adreno_device_pixel_parity_verified": false,
-    "actual_whole_game_graphics_complete": false
+    "actual_whole_game_graphics_complete": false,
+    "run_id": 43917381834,
+    "source_workflow": "GT full ZIP2 NEXT17 authentic Shader48 GUID after NEXT18 original export (NO APK)",
+    "artifact": "gt-seventeen-next17-source-shader-full-export-audit-43917381834",
+    "artifact_id": 14256010749
   },
   "successor_pipelines": [
     {
@@ -73,7 +77,7 @@
     },
     {
       "name": "NEXT10p33",
-      "corrected_run": 43922026302,
+      "corrected_run": 43926288406,
       "obsolete_run": 43921790022,
       "corrected_commit": "a3f20f02a8e99e6773410eb71694f43d6cdf72c4",
       "prior_actual_required": {
@@ -95,7 +99,8 @@
         4
       ],
       "original_Range_properties": 6,
-      "result_accepted": false
+      "result_accepted": false,
+      "superseded_pending": 43922026302
     },
     {
       "name": "NEXT10p31",
@@ -167,5 +172,48 @@
     "full-game visuals",
     "animation deferred"
   ],
-  "summary": "Four NEXT15/NEXT11/NEXT10p33/NEXT10p31 full-original-GUID workflow chains are running or queued; last accepted actual census remains 628 non-Dummy /158 Dummy/43 targets until complete real same-export audits."
+  "summary": "Four NEXT15/NEXT11/NEXT10p33/NEXT10p31 full-original-GUID workflow chains are running or queued; last accepted actual census remains 628 non-Dummy /158 Dummy/43 targets until complete real same-export audits.",
+  "latest_run_observations_verified": {
+    "historic_next15_incorrect_translator": {
+      "run": 43918007004,
+      "conclusion": "failure",
+      "failure_step": "Recover NEXT15 58 original D3D11 programs",
+      "cause": "Inherited NEXT17 translator used, source mismatch 43-vs-58; later corrected in commit f1625a72"
+    },
+    "latest_next15": {
+      "run": 43920541904,
+      "status": "in_progress",
+      "same_export_post18_accepted": false
+    },
+    "latest_next11": {
+      "run": 43920553298,
+      "status": "in_progress",
+      "same_export_post19_accepted": false
+    },
+    "superseded_next10p33_pending": {
+      "run": 43922026302,
+      "conclusion": "cancelled",
+      "note": "Newer push queued another pending workflow in same concurrency group"
+    },
+    "latest_next10p33": {
+      "run": 43926288406,
+      "status": "pending",
+      "same_export_post20_accepted": false
+    },
+    "latest_next10p31": {
+      "run": 43922253136,
+      "status": "in_progress",
+      "same_export_post21_accepted": false
+    },
+    "latest_next7p11": {
+      "running_original": 43925468867,
+      "newer_pending": 43926307167,
+      "same_export_post22_accepted": false
+    },
+    "latest_next7p33": {
+      "running_original": 43925787952,
+      "newer_pending": 43926312944,
+      "same_export_post23_accepted": false
+    }
+  }
 }
