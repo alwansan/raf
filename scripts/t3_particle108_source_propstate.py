@@ -43,7 +43,9 @@ def require(test, category):
     if not test:
         raise PrivateContractError(category)
 
-def serialize_properties(parsed, *, allow_hidden_and_toggle=False, allow_out_of_range_defaults=False):
+def serialize_properties(parsed, *, allow_hidden_and_toggle=False,
+                         allow_out_of_range_defaults=False,
+                         allow_original_per_renderer_and_drawer=False):
     """Return only private text + public-safe type counts; never log source values."""
     info = parsed.get("m_PropInfo") if type(parsed) is dict else None
     require(type(info) is dict and type(info.get("m_Props")) is list,
@@ -76,9 +78,26 @@ def serialize_properties(parsed, *, allow_hidden_and_toggle=False, allow_out_of_
                 keywords = parsed.get("m_KeywordNames", [])
                 if IDENT.fullmatch(keyword) and type(keywords) is list and keyword in keywords:
                     toggle = attribute
+        # Unity's original SerializedProperty flags use bit 1 for
+        # PerRendererData (UnityCsReference ShaderPropertyFlags). A SHA-pinned
+        # source may have an additional genuine MaterialPropertyDrawer. Its
+        # exact original identifier is re-emitted privately, never guessed.
+        # Keep this opt-in off for all earlier Particle/Water contracts.
+        exact_source_drawer = None
+        if (allow_original_per_renderer_and_drawer and type(attributes) is list
+                and len(attributes)==1 and type(attributes[0]) is str):
+            source_drawer=attributes[0]
+            if re.fullmatch(r"[_A-Za-z][_A-Za-z0-9]{0,127}(?:\\([-+_A-Za-z0-9., ]{0,128}\\))?",source_drawer):
+                exact_source_drawer=source_drawer
+        source_flag_contract = (
+            allow_original_per_renderer_and_drawer and
+            type(flags) is int and flags in (0,1,2) and
+            type(attributes) is list and
+            (not attributes or toggle is not None or exact_source_drawer is not None))
         require(type(flags) is int and type(attributes) is list and
                 ((flags == 0 and not attributes) or
-                 (allow_hidden_and_toggle and flags in (0, 1) and (not attributes or toggle is not None))),
+                 (allow_hidden_and_toggle and flags in (0, 1) and (not attributes or toggle is not None))
+                 or source_flag_contract),
                 "PROPERTY_FLAGS_OR_ATTRIBUTES")
         typ=prop["m_Type"]
         require(type(typ) is int and typ in (0,1,2,3,4),
@@ -125,9 +144,22 @@ def serialize_properties(parsed, *, allow_hidden_and_toggle=False, allow_out_of_
                 line=(label+"Range("+number(values[1])+","+
                       number(values[2])+")) = "+number(values[0]))
                 family["ranges"]+=1
-        require(not attributes or typ == 2, "PROPERTY_FLAGS_OR_ATTRIBUTES")
-        prefix = ("[HideInInspector] " if flags == 1 else "") + (f"[{toggle}] " if toggle else "")
-        lines.append(prefix + line)
+        require(not attributes or typ == 2 or
+                (allow_original_per_renderer_and_drawer and exact_source_drawer is not None),
+                "PROPERTY_FLAGS_OR_ATTRIBUTES")
+        if allow_original_per_renderer_and_drawer:
+            # Preserve source-owned PerRendererData bit 1<<1; bitmask 2 is
+            # not HideInInspector. Other unproven bit combinations still fail.
+            prefixes=("[HideInInspector] " if flags == 1 else "") + (
+                "[PerRendererData] " if flags == 2 else "")
+            if exact_source_drawer is not None:
+                prefixes+=f"[{exact_source_drawer}] "
+            elif toggle:
+                prefixes+=f"[{toggle}] "
+        else:
+            prefixes = ("[HideInInspector] " if flags == 1 else "") + (
+                f"[{toggle}] " if toggle else "")
+        lines.append(prefixes + line)
     lines.append("}")
     return "\n".join(lines), {
         "original_authored_property_count":len(props),
