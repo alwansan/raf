@@ -1,5 +1,14 @@
 # GT — رسالة الاستعادة الأساسية الحية | 16 تشرين الثاني 2026
 
+## GT — تحقق أحدث نتائج SAME EXPORT وتصحيح ازدحام CI (16 نوفمبر 2026)
+
+- **نجاح أصل جديد مثبت:** [43917381834](https://github.com/alwansan/raf/actions/runs/43917381834) completed SUCCESS، artifact `gt-seventeen-next17-source-shader-full-export-audit-43917381834` (14256010749)، safe report: **628/786 Custom Material غير Dummy، 158 Dummy/43 Shader GUID**؛ 0 broken و**29,213 Material/YAML/meta SHA أصلية بلا تغيير**. ما زال هذا **آخر جرد فعلي مثبت**؛ 79.90% نسبة مستندات Custom Materials فقط، وليس استعادة رسوم اللعبة كلها.
+- **الفشل المشخَّص فعلياً:** NEXT15 القديم [43918007004](https://github.com/alwansan/raf/actions/runs/43918007004) FAILED في خطوة Recovery NEXT15 بسبب استدعاء مترجم NEXT17 (43 stage) بدل NEXT15 (58 stage)، وليس بسبب أرقام مواد تم إثباتها. إصلاح source command كان في `f1625a72`، والتشغيل المصحح [43920541904](https://github.com/alwansan/raf/actions/runs/43920541904) IN PROGRESS وقت آخر فحص.
+- **الحالة الفعلية الأحدث للتشغيلات المتصلة:** NEXT11 المصحح [43920553298](https://github.com/alwansan/raf/actions/runs/43920553298) IN PROGRESS. NEXT10p33 المصحح السابق 43922026302 أُلغي في صف الانتظار بعد وجود نسخة أحدث لنفس مجموعة concurrency؛ **[43926288406](https://github.com/alwansan/raf/actions/runs/43926288406) PENDING هو آخر تشغيل**، مع استمرار 43921790022 القديم (بـSHA قبل إصلاح prior audit). NEXT10p31 [43922253136](https://github.com/alwansan/raf/actions/runs/43922253136) IN PROGRESS. NEXT7p11 [43925468867](https://github.com/alwansan/raf/actions/runs/43925468867) IN PROGRESS مع نسخة أحدث queued 43926307167، وNEXT7p33 [43925787952](https://github.com/alwansan/raf/actions/runs/43925787952) IN PROGRESS مع أحدث queued 43926312944.
+- حافظ على أرقام NEXT15 643/143/42 وNEXT11 654/132/41 وNEXT10p33 664/122/40 وNEXT10p31 674/112/39 وNEXT7p11 681/105/38 وNEXT7p33 688/98/37 **كشروط مستقبلية، لا نجاح فعلي**؛ لا تقبل stage بدون SAME-INSTANCE original GUID، Unity Vulkan serialized والـ29,213 SHA.
+- **مصادر أدلة الجلسة:** [NEXT10PAIR](evidence/20261116_gt_next10pair_original_guid_pipeline_progress.json)، [NEXT7PAIR](evidence/20261116_gt_next7pair_original_guid_pipeline_progress.json). لا GT XAPK قبل إكمال الموارد بما فيها Water Spectrum/Foam/Depth/FFT/kernel6 وFire Alpha وG0–G6 وAdreno pixels.
+
+
 ## GT — استكمال أصل Shader48 7p11 و7p33 وفق ZIP2 — 16 نوفمبر 2026
 
 - **ما تم إنتاجه في الفرع فعلياً:** `scripts/gt_install_next7p11_original_shader48.py` و`scripts/gt_install_next7p33_original_shader48.py` مع اختبارات المصدر/الـGUID، وعملية استخراج أصلية متصلة بـ AssetRipper SAME EXPORT. NEXT7p11 3 Pass/11 VSFS [4,5,2]/22 D3D11 (Source Range4)، وNEXT7p33 4 Pass/33 VSFS [8,13,8,4]/58 D3D11 (Source Range0). يحافظ كل مثبت على الأصل SHA وowner/PathID وGUID وMaterial/meta/YAML بلا تعديل.
