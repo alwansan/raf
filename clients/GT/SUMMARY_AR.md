@@ -1,5 +1,14 @@
 # ملخص تقدم GT للمالك
 
+## GT — أحدث أرقام أصلية مثبتة ومهام التصدير الجارية (16 نوفمبر 2026)
+
+- **آخر تدقيق SAME-EXPORT مكتمل بنجاح:** [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110). من **786 مستند Custom Material** صار **628 non-Dummy = 79.90% من مستندات Custom Material فقط**؛ **158 Dummy** مرتبطة بـ**43 Shader GUID أصلي**. المجموع 1536 Material، منها 750 built-in؛ **0 broken shader references**، و**29,213 Material/meta/YAML SHA باقية كما هي**. Shader source owner/PathID→same-export GUID وUnity Vulkan إثباتان، لكن لا تكافؤ Pixel فعلي على Adreno ولا نسبة اكتمال كل رسوم اللعبة.
+- **NEXT18** [43787527334](https://github.com/alwansan/raf/actions/runs/43787527334) SUCCESS same-export: 611 non-Dummy، 175 Dummy/44. تشغيل NEXT18 القديم 43786161961 فشل قبل المصدر بسبب تمرير جودة post15 إلى مترجم يتطلب post14.
+- **الآن توجد سلسلتان قيد التنفيذ/الانتظار:** [NEXT15 43918007004](https://github.com/alwansan/raf/actions/runs/43918007004) IN PROGRESS (بوابة مستقبلية فقط 643/143/42)، و[NEXT11 43918847740](https://github.com/alwansan/raf/actions/runs/43918847740) QUEUED عند الفحص (بوابة مستقبلية فقط 654/132/41). لن تُعتمد الأرقام الجديدة حتى تنتهي سلسلة SHA→Unity→original GUID→postinstall audit بنجاح فعلي.
+- تم إصلاح حقول تقارير الإيصال الخاصة بـNEXT17/15/11 في commits 44083b60 و1668151a وa8f8de32، واختبارات السلامة [43917400073](https://github.com/alwansan/raf/actions/runs/43917400073) SUCCESS. ملف الأدلة الآمن: [تقدم post17 وNEXT15/11](evidence/20261116_gt_post17_real_guid_next15_full_export_progress.json).
+- **العمل المتبقي:** 158 Dummy/43 targets حسب آخر قبول، الشيدرات الأخرى، Spectrum/Foam/Depth/FFT/kernel6، fire/exported-alpha، G0–G6، وproof الجهاز. لا تطلب GT XAPK تجريبياً شاملاً قبل اكتمال الموارد حسب قرار المالك؛ الأنيميشن مؤجل.
+
+
 ## تقدم 15 تشرين الثاني 2026
 
 ابدأ من [تسليم استعادة الرسوم](sessions/20261115-graphics-restoration/) و[نقطة الاستعادة](RESTORE_AR.md). أحدث [حالة وفحوص](sessions/20261115-graphics-restoration/02-STATUS_AND_TESTS_AR.md) و[خطة استكمال](sessions/20261115-graphics-restoration/01-PLAN_AR.md) تحدد ما نُشر وما بقي، وتقدّم على الحالة التاريخية أدناه.
