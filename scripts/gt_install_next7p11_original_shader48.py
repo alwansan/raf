@@ -2,7 +2,7 @@
 
 Requires original 82 SHA-authenticated ZIP2 owners, exact 3-Pass/11-pair/
 2-orphan/22-program original topology, post-NEXT10p31 112/39 actual material
-audit, serialized Unity Android Vulkan 33 VS/FS routes and the exact
+audit, serialized Unity Android Vulkan 11 VS/FS routes and the exact
 source-owner/PathID to same-instance AssetRipper exported Shader GUID trace.
 Only the exported Dummy .shader bytes may change; never its .meta or material
 YAML. No runtime keyword parity or Android pixel claims.
