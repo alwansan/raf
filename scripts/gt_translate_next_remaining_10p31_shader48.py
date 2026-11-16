@@ -30,9 +30,15 @@ STATUS="GT_SHA_ORIGINAL_REMAINING_10P31_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_T
 EXPECTED_TOPOLOGY=(4,31,8,55)
 
 
-def select_exact_10p31_material_name(source_hashes, material_name_counts):
+def select_exact_10p31_material_name(source_hashes, material_name_counts, *, expected_name_count=2):
+    # The SHA-authenticated original post14 source census has TWO distinct
+    # 10-Material candidates; after real NEXT10p33 GUID installation, post20
+    # contains ONE remaining 10-Material candidate. Never infer a GUID from
+    # the material name: the unique original Shader48 topology is still checked.
+    if type(expected_name_count) is not int or expected_name_count not in (1,2):
+        raise ValueError("invalid_original_10p31_expected_source_name_population")
     matches=[digest for digest,amount in material_name_counts.items() if amount==10]
-    if len(matches)!=2:
+    if len(matches)!=expected_name_count:
         raise ValueError("missing_or_ambiguous_10p31_material_original_shader_name_digest")
     candidates=[]
     for digest in matches:
@@ -43,9 +49,10 @@ def select_exact_10p31_material_name(source_hashes, material_name_counts):
     return candidates
 
 
-def choose_original_10p31_by_topology(original,manifest,source_hashes,usage):
+def choose_original_10p31_by_topology(original,manifest,source_hashes,usage, *, expected_name_count=2):
     import UnityPy
-    candidates=select_exact_10p31_material_name(source_hashes,usage)
+    candidates=select_exact_10p31_material_name(
+        source_hashes, usage, expected_name_count=expected_name_count)
     verified=[]
     pins=read_expected(manifest)
     for owner,pid in candidates:
