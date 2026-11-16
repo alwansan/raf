@@ -77,6 +77,7 @@ class SixMaterialAuthenticOriginalShader48(unittest.TestCase):
             actual=original_six_validator_private_failure_safe_topics(root)
             self.assertEqual(actual["private_validator_diagnostic_files"],1)
             self.assertEqual(actual["safe_problem_topic_counts"]["specific_member_overlap"],1)
+            self.assertEqual(actual["safe_problem_topic_counts"]["overlap_bytes_bucket_1-4"],1)
             import json
             exposed=json.dumps(actual)
             self.assertNotIn("SECRET_CB_NAME",exposed)
