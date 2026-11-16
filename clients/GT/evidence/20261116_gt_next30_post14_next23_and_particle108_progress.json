@@ -401,8 +401,29 @@
     "artifact_id": 14188699030,
     "artifact_zip_sha256": "5fef654d8fc29829de9efe976f6a73d7cc3ece6f621cfb5d464db82daebb7624",
     "isolated_unity_run": 43782657334,
-    "isolated_unity_final_accepted": false,
-    "same_export_original_GUID_installed": false
+    "isolated_unity_final_accepted": true,
+    "same_export_original_GUID_installed": false,
+    "isolated_unity_job": 133023141566,
+    "isolated_unity_artifact_id": 14189580629,
+    "isolated_unity_artifact_sha256": "sha256:7acc1741e4e4acd9e1c88491789136fd85f9b8c26bf61e2e822e62604b29cd57",
+    "isolated_unity_candidate_sha256": "27064d720e10037a2697426081d6030d234018f42bb53a0e643d5a22435cd7b8",
+    "unity_version": "2021.3.45f2",
+    "unity_android_vulkan_only": true,
+    "unity_compiler_errors": 0,
+    "unity_shaderlab_passes": 4,
+    "unity_registered_routes": 33,
+    "serialized_original_vulkan_vertex_routes_by_pass": [
+      8,
+      13,
+      8,
+      4
+    ],
+    "serialized_original_vulkan_fragment_routes_by_pass": [
+      8,
+      13,
+      8,
+      4
+    ]
   },
   "next11_original_source": {
     "run": 43782328731,
@@ -427,7 +448,105 @@
     "artifact_id": 14187964353,
     "artifact_zip_sha256": "9c891cecdac3d325fe0ed3e8d25f41ba95dba1a4c7a3d0889d2fd8631ceeb3d9",
     "isolated_unity_run": 43782661831,
-    "isolated_unity_final_accepted": false,
-    "same_export_original_GUID_installed": false
+    "isolated_unity_final_accepted": true,
+    "same_export_original_GUID_installed": false,
+    "isolated_unity_job": 133023155858,
+    "isolated_unity_artifact_id": 14189086879,
+    "isolated_unity_artifact_sha256": "sha256:3ff0c535bc8a36a731e4aa11e1f528db3009013ef1a828c0ef0ef8f4a4c5c1c3",
+    "isolated_unity_candidate_sha256": "5732a11c9f3125709396ba3b6324940411adacddcc7ba1a0953d7183b797ee0b",
+    "unity_version": "2021.3.45f2",
+    "unity_android_vulkan_only": true,
+    "unity_compiler_errors": 0,
+    "unity_shaderlab_passes": 4,
+    "unity_registered_routes": 33,
+    "serialized_original_vulkan_vertex_routes_by_pass": [
+      8,
+      13,
+      8,
+      4
+    ],
+    "serialized_original_vulkan_fragment_routes_by_pass": [
+      8,
+      13,
+      8,
+      4
+    ]
+  },
+  "next_original_shader_guid_installers_staged_20261116": {
+    "source_and_isolated_unity_verified_groups": [
+      {
+        "n": 18,
+        "source_run": 43779759999,
+        "unity_run": 43780219002
+      },
+      {
+        "n": 17,
+        "source_run": 43781304391,
+        "unity_run": 43782074242
+      },
+      {
+        "n": 15,
+        "source_run": 43782323454,
+        "unity_run": 43782657334
+      },
+      {
+        "n": 11,
+        "source_run": 43782328731,
+        "unity_run": 43782661831
+      }
+    ],
+    "custom_material_documents_for_future_same_export_installation_only": 61,
+    "installer_static_run": 43784558673,
+    "installer_static_job": 133029176081,
+    "installer_static_conclusion": "success",
+    "installer_paths": [
+      "scripts/gt_install_next18_original_shader48.py",
+      "scripts/gt_install_next17_original_shader48.py",
+      "scripts/gt_install_next15_original_shader48.py",
+      "scripts/gt_install_next11_original_shader48.py"
+    ],
+    "potential_required_prior_material_baselines_NOT_CONFIRMED": [
+      {
+        "phase": "post15",
+        "before_next18": {
+          "non_dummy_custom": 593,
+          "dummy_custom": 193,
+          "remaining_dummy_shader_targets": 45
+        }
+      },
+      {
+        "phase": "post16",
+        "before_next17": {
+          "non_dummy_custom": 611,
+          "dummy_custom": 175,
+          "remaining_dummy_shader_targets": 44
+        }
+      },
+      {
+        "phase": "post17",
+        "before_next15": {
+          "non_dummy_custom": 628,
+          "dummy_custom": 158,
+          "remaining_dummy_shader_targets": 43
+        }
+      },
+      {
+        "phase": "post18",
+        "before_next11": {
+          "non_dummy_custom": 643,
+          "dummy_custom": 143,
+          "remaining_dummy_shader_targets": 42
+        }
+      }
+    ],
+    "live_actual_same_export_baseline": {
+      "run": 43773151176,
+      "non_dummy_custom": 570,
+      "dummy_custom": 216,
+      "remaining_dummy_shader_targets": 46
+    },
+    "staged_installers_executed_on_real_export": false,
+    "no_xapk": true,
+    "full_game_device_shader_pixels_accepted": false
   }
 }
