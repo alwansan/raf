@@ -17,6 +17,11 @@ from scripts.w1_stage_zip2_owners import fingerprint, PINS
 # Texture classes. They are verified by separate Texture/GUID guards, never
 # materialized as Shader48 or Material21 inputs to this ownership checker.
 EXTRA_TEXTURE_TRACE_CLASSES=frozenset((28,84,89,117,187))
+# --compute-lineage in the pinned exporter adds ClassID72 (ComputeShader) to
+# the SAME private source/export trace. This is independently audited by the
+# source-authenticated compute/kernel gates; never count it as Material21 or
+# Shader48, or silently accept arbitrary new trace classes.
+EXTRA_COMPUTE_TRACE_CLASSES=frozenset((72,))
 
 
 def identity(row):
@@ -65,23 +70,27 @@ def check(trace, original_edges, original_shaders, actual, fonts=None, source_fo
     redirects = 0
     implicit_fonts = 0
     supplemental_texture_rows = 0
+    supplemental_compute_rows = 0
     actual_materials = {document_key(key): value for key, value in actual.items()}
     for row in trace['objects']:
         if not isinstance(row,dict):
             raise ValueError('Invalid trace row')
-        if row.get('class_id') in EXTRA_TEXTURE_TRACE_CLASSES:
-            # Do not turn a genuine Texture2D/Array/Cubemap source row into
-            # an unexpected Material or Shader. Check trace structure and
-            # provenance, but let dedicated GT texture guards certify the
-            # Texture subobjects and exact Material->Texture pointers.
+        if row.get('class_id') in EXTRA_TEXTURE_TRACE_CLASSES | EXTRA_COMPUTE_TRACE_CLASSES:
+            # Texture and compute objects are present only in explicitly opted-in
+            # same-instance traces; neither is a Material21 or Shader48 edge.
+            # Validate structure/provenance here; dedicated source/kernel and
+            # Texture/GUID gates remain responsible for program/link fidelity.
             if (not {'class_id','source','export'} <= set(row)
                 or set(row) - {'class_id','source','export',
                                'collection_type','exportable'}
                 or ('exportable' in row and type(row['exportable']) is not bool)):
-                raise ValueError('Invalid supplemental texture trace shape')
+                raise ValueError('Invalid supplemental resource trace shape')
             identity(row['source'])
             pointer(row['export'])
-            supplemental_texture_rows += 1
+            if row['class_id'] in EXTRA_COMPUTE_TRACE_CLASSES:
+                supplemental_compute_rows += 1
+            else:
+                supplemental_texture_rows += 1
             continue
         key = identity(row['source'])
         if key in seen:
@@ -139,6 +148,7 @@ def check(trace, original_edges, original_shaders, actual, fonts=None, source_fo
             'actual_material_documents_verified': len(actual),
             'predefined_material_redirects_observed': redirects,
             'supplemental_texture_rows_structurally_checked_only': supplemental_texture_rows,
+            'supplemental_compute_rows_structurally_checked_only': supplemental_compute_rows,
             'original_font_importer_materials_verified': implicit_fonts,
             'font_importer_runtime_shader_assignment_verified': False,
             'original_exported_material_shader_assignments_verified': True,
