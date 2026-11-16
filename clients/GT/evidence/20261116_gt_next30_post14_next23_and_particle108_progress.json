@@ -548,5 +548,57 @@
     "staged_installers_executed_on_real_export": false,
     "no_xapk": true,
     "full_game_device_shader_pixels_accepted": false
+  },
+  "next10_two_distinct_source_identites_20261116": {
+    "uniqueness": "two separate 10-Material source Shader48 names, owner/PathID and D3D11 topology SHA-proven, NEVER interchangeable",
+    "original_post14_actual_dummy_materials": 216,
+    "next10p33": {
+      "source_run": 43785114809,
+      "source_success": true,
+      "source_artifact_id": 14190375232,
+      "source_artifact_zip_sha256": "d7a73122834df6e929dfea253fc4828398c8e5d5d21ba3b2cb11b8f41f40be8d",
+      "original_shader48_passes": 4,
+      "original_unique_D3D11_programs_validated": 58,
+      "VSFS_routes_by_pass": [
+        8,
+        13,
+        8,
+        4
+      ],
+      "private_routed_stages_validated": 66,
+      "original_ShaderLab_properties": 15,
+      "original_range_properties": 6,
+      "source_CB_offsets": 907,
+      "source_texture_sampler_bindings": 538,
+      "source_varyings": 211,
+      "unity_run": 43785362318,
+      "unity_final_accepted": false,
+      "original_export_GUID_installed": false
+    },
+    "next10p31": {
+      "source_run": 43785119657,
+      "source_success": true,
+      "source_artifact_id": 14189248777,
+      "source_artifact_zip_sha256": "c40e59f8b30b116e87566607670ef9b49181b89378f02c76d6603845404ca708",
+      "original_shader48_passes": 4,
+      "original_unique_D3D11_programs_validated": 55,
+      "VSFS_routes_by_pass": [
+        8,
+        13,
+        8,
+        2
+      ],
+      "private_routed_stages_validated": 62,
+      "original_ShaderLab_properties": 9,
+      "original_range_properties": 0,
+      "source_CB_offsets": 899,
+      "source_texture_sampler_bindings": 306,
+      "source_varyings": 201,
+      "unity_run": 43785367029,
+      "unity_final_accepted": false,
+      "original_export_GUID_installed": false
+    },
+    "emitted_source_shader_program_bytes_or_GUIDs": false,
+    "device_gpu_pixel_parity_verified": false
   }
 }
