@@ -35,7 +35,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_REAL_SAME_EXPORT_POST17_628_786_CUSTOM_NON_DUMMY__SIX_FULL_WORKFLOWS_21_ANCESTOR_LINEAGE_GUARD_SUCCESS__NEXT6_SOURCE_CB_VULKAN_LAYOUT_OPEN",
+  "status": "GT_REAL_POST18_NEXT15_ORIGINAL_GUID_643_OF_786_NON_DUMMY_143_DUMMY_42_TARGETS__SIX_WORKFLOW_CHAIN_ONGOING",
   "latest_921_source_receipt": "clients/GT/evidence/20261113_original_921_routes_layout_parameters.json",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
-  "next_action": "Check NEXT6 source diagnostic run 43933639542 (or latest 43933591980) for specific Vulkan original uniform block-offset overlap/alignment classification; fix actual CB layout in SHA-owner original source without disabling spirv-val Vulkan1.1/reflect or allowing unproven scalar block feature; keep source names private. In parallel track 6 full original GUID workflows NEXT15 43920541904, NEXT11 43929654581, NEXT10p33 43929666693, NEXT10p31 43929675711, NEXT7p11 43929686417, NEXT7p33 43929698985; accept counts only on actual same-export successful postinstall safe SHA audit.",
+  "next_action": "NEXT15 real 43920541904 succeeded 643/786,143 Dummy/42 GUID and 29213 SHA. Check corrected NEXT11 43929654581 and later 10p33 43929666693, 10p31 43929675711, 7p11 43929686417, 7p33 43929698985. Source NEXT6 Vulkan CB member overlap still open; inspect latest safe original source diagnostic. Never count projected post19 onward without full same-export GUID postinstall audit.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1723,17 +1723,18 @@
   "latest_gt_original_shader48_live_20261116": {
     "evidence": "clients/GT/evidence/20261116_gt_next10pair_original_guid_pipeline_progress.json",
     "last_accepted_same_export": {
-      "run": 43917381834,
+      "run": 43920541904,
       "conclusion": "success",
-      "original_non_dummy_custom_material_documents": 628,
       "custom_total": 786,
-      "dummy_custom_material_documents": 158,
-      "original_dummy_shader_guid_targets": 43,
+      "non_dummy": 643,
+      "dummy": 143,
+      "remaining_original_shader_guid_targets": 42,
       "protected_original_material_yaml_meta_sha_unchanged": 29213,
       "broken_shader_references": 0,
-      "latest_same_export_artifact_id": 14256010749,
-      "latest_same_export_artifact": "gt-seventeen-next17-source-shader-full-export-audit-43917381834",
-      "actual_device_pixel_parity_proven": false
+      "artifact_id": 14260325739,
+      "artifact": "gt-eighteen-next15-source-shader-full-export-audit-43920541904",
+      "source_authentic_original_shader48_same_export_guid_verified": true,
+      "adreno_phone_pixels_verified": false
     },
     "full_export_chains_corrected": [
       {
@@ -1930,6 +1931,8 @@
       },
       "evidence": "clients/GT/evidence/20261116_gt_full_shader48_ancestor_gate_next6_source_progress.json",
       "no_gt_xapk": true
-    }
+    },
+    "next15_post18_accepted": true,
+    "source6_CB_overlap_unresolved": true
   }
 }
