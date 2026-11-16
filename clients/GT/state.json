@@ -35,7 +35,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_921_SOURCE_ROUTES_LAYOUT_AND_TEXTURE_SAMPLER_NAMES_VERIFIED_UNITY_BINDING_PENDING",
+  "status": "GT_REAL_POST17_NEXT17_ORIGINAL_GUID_628_OF_786_CUSTOM_NON_DUMMY_158_DUMMY_43_TARGETS_NEXT15_NEXT11_CI_ACTIVE",
   "latest_921_source_receipt": "clients/GT/evidence/20261113_original_921_routes_layout_parameters.json",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
-  "next_action": "OWNER RESTORE-EVERYTHING BEFORE FIRST XAPK; READ clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md FIRST. Real SHA-pinned original six-scene source→export 921-slot Shader48 priority scan CI43354787983 SUCCESS: 21 typed source Shader48 identities, 1633 Renderer Material slots, 17 original Dummy Shader48 targets/1373 slots, top 921 slots and exact private original owner→export GUID actionable queue. Source SHA W1/B02/B21 composition authenticated CI43354701952. NEXT implement source-authentic complete all-variant original 921-slot Shader48 ShaderLab (4 original Passes, 33 matched VS/FS variant pairs, 8 currently unpaired vertex variants, 58 distinct DX11 programs); preserve original meta/GUID and repair all 770 Dummy Material documents by distinct Shader family; then all 165 source shaders, FFT/Depth/particles/models/textures. No more XAPK until completion G0-G6. Current step ranking is NOT shader restoration. Existing runs from prior owner request are historical only.",
+  "next_action": "Inspect runs 43918007004 (NEXT15) and 43918847740 (NEXT11), diagnose failing step with actual safe logs, correct only original SHA source/export GUID issue; accept 643/143/42 and 654/132/41 only after complete real full same-export post18/post19 audits; continue source-first remaining Shader48/water/fire/G0-G6",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1718,5 +1718,6 @@
       "acceptance": "UNVERIFIED until complete safe actual post19 same-export protected-SHA audit"
     }
   },
-  "gt_restoration_priority": "Restore original resources/meshes/textures/materials/shaders/foam/depth/FFT/kernel6/fire/PostFX with source/GUID proof before general first XAPK; animation deferred; no inferred device pixels"
+  "gt_restoration_priority": "Restore original resources/meshes/textures/materials/shaders/foam/depth/FFT/kernel6/fire/PostFX with source/GUID proof before general first XAPK; animation deferred; no inferred device pixels",
+  "last_updated_baghdad": "2026-11-16"
 }
