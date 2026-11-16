@@ -1,5 +1,13 @@
 # ملخص تقدم GT للمالك
 
+## GT — دفعة ربط Shader48 ذات الأربعة فحوص الأصيلة (16 نوفمبر 2026)
+
+- **الحالة الفعلية المثبتة**: [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110) SUCCESS: **628/786 Custom Material non-Dummy (79.90% من مستندات Custom Material فقط)**، 158 Dummy/43 Shader GUID متبقياً، 0 broken، و29,213 Material/meta/YAML SHA سليمة. هذا ليس تكافؤ رسوم اللعبة على الهاتف.
+- إصلاح المصدر القديم الذي ورث NEXT17 ضمن NEXT15 وNEXT11: commits `f1625a72` و`8f567bec`. التشغيلات الحديثة المصححة: [NEXT15 43920541904](https://github.com/alwansan/raf/actions/runs/43920541904) و[NEXT11 43920553298](https://github.com/alwansan/raf/actions/runs/43920553298)، ما زالت PENDING عند آخر فحص.
+- انطلقت مرحلتا التصدير الحقيقيتان الجديدتان: [NEXT10p33 43922026302](https://github.com/alwansan/raf/actions/runs/43922026302) *PENDING* (58 D3D11/33 Vulkan routes) و[NEXT10p31 43922253136](https://github.com/alwansan/raf/actions/runs/43922253136) *IN PROGRESS* (55 D3D11/31 routes). تم حل التمييز بين مجموعتي 10 مواد في المصدر الأصلي ومجموعة واحدة بعد تثبيت الأولى. لا تقبل أرقام post20 = 664/122/40 أو post21 = 674/112/39 حتى تدقيق SAME EXPORT الحقيقي.
+- تحقق اختبارات أمان المسارات الأربعة [43922343892](https://github.com/alwansan/raf/actions/runs/43922343892) SUCCESS، وسلامة زوج المصدر/المثبت [43921213570](https://github.com/alwansan/raf/actions/runs/43921213570) SUCCESS. [إيصال الدفعة](evidence/20261116_gt_next10pair_original_guid_pipeline_progress.json). الماء والنار وFFT/kernel6 وG0–G6 وAdreno pixels لا تزال غير مغلقة، وGT لا يطلب XAPK التجريبي قبل الموارد.
+
+
 ## GT — أحدث أرقام أصلية مثبتة ومهام التصدير الجارية (16 نوفمبر 2026)
 
 - **آخر تدقيق SAME-EXPORT مكتمل بنجاح:** [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110). من **786 مستند Custom Material** صار **628 non-Dummy = 79.90% من مستندات Custom Material فقط**؛ **158 Dummy** مرتبطة بـ**43 Shader GUID أصلي**. المجموع 1536 Material، منها 750 built-in؛ **0 broken shader references**، و**29,213 Material/meta/YAML SHA باقية كما هي**. Shader source owner/PathID→same-export GUID وUnity Vulkan إثباتان، لكن لا تكافؤ Pixel فعلي على Adreno ولا نسبة اكتمال كل رسوم اللعبة.
