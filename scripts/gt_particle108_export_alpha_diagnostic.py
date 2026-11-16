@@ -93,7 +93,7 @@ def source_texture_export_map(trace, originals, *, metrics=None):
     return result
 
 
-def source_material_to_exported_texture_guids(trace, source_materials, originals, exported, *, metrics=None):
+def source_material_to_exported_texture_guids(trace, source_materials, originals, exported, *, metrics=None, private_local_pointers=None):
     """Derive 3 texture GUIDs from 10 exact original/exported Material TexEnvs.
 
     This join uses source-authenticated Material21 PPtrs, the same-instance
@@ -126,6 +126,9 @@ def source_material_to_exported_texture_guids(trace, source_materials, originals
             "source_Type0_local_original_Texture2D_targets":0,
             "source_Type0_PPtr_nonzero_GUID_hints_not_used_as_export_image":0,
         })
+    if private_local_pointers is not None and (
+            type(private_local_pointers) is not dict or private_local_pointers):
+        raise ValueError("invalid_private_original_local_pointer_outparam")
     mapped = {}
     for row in trace.get("objects", []):
         if not isinstance(row, dict) or row.get("class_id") != 21:
@@ -194,6 +197,10 @@ def source_material_to_exported_texture_guids(trace, source_materials, originals
                 if texture_key in result:
                     raise ValueError("one_original_particle_Texture2D_mixed_local_external_export")
                 local_targets.add(texture_key)
+                if private_local_pointers is not None:
+                    old=private_local_pointers.setdefault(texture_key,(file_id,guid.lower(),kind))
+                    if old!=(file_id,guid.lower(),kind):
+                        raise ValueError("one_original_local_Texture2D_has_conflicting_exported_PPtrs")
                 if metrics is not None:
                     metrics["source_Type0_local_texture_pointer_slots"] += 1
                     metrics["source_Type0_local_original_Texture2D_targets"] = len(local_targets)
@@ -232,6 +239,45 @@ def verify_external_texture_guid_subset(direct_mapping, material_mapping):
             or any(direct_mapping[key] != guid
                    for key, guid in material_mapping.items())):
         raise ValueError("original_texture_trace_and_Material_YAML_GUID_mismatch")
+
+
+def classify_original_local_texture_trace(trace, local_pointers):
+    """Check original local Material PPtr against SAME export's Texture2D28 trace.
+
+    A type0 PPtr may be an internal reference and MUST NOT be promoted to
+    an external image GUID. Even when a matching source Texture2D trace
+    object exists, this is only pointer identity, not pixel restoration.
+    Return aggregate counts only; never publish owner, PathID or GUID.
+    """
+    if (type(trace) is not dict or type(local_pointers) is not dict
+            or len(local_pointers)!=1 or not isinstance(trace.get("objects"),list)):
+        raise ValueError("invalid_local_Texture2D_export_trace_proof_scope")
+    [(target,local)]=list(local_pointers.items())
+    if (not isinstance(target,tuple) or len(target)!=2
+            or type(local)!=tuple or len(local)!=3 or local[2]!=0
+            or type(local[0]) is not int or local[0]<=0):
+        raise ValueError("unverified_original_local_Texture2D_PPtr")
+    rows=[]
+    for row in trace["objects"]:
+        if type(row) is not dict or row.get("class_id")!=28:
+            continue
+        if identity(row["source"])==target:
+            rows.append(row)
+    if len(rows)>1:
+        raise ValueError("ambiguous_source_Texture2D28_local_trace_rows")
+    if not rows:
+        return {"same_export_original_local_Texture2D28_trace_rows":0,
+                "same_export_original_local_PPtr_matches_Texture2D28_trace":False,
+                "original_local_Type0_Texture2D_export_status":"NO_DIRECT_SOURCE_TEXTURE28_TRACE",
+                "original_local_Type0_external_GUID_inferred":False}
+    fid,guid,kind=pointer(rows[0]["export"])
+    is_match=(fid,guid,int(kind))==local
+    return {"same_export_original_local_Texture2D28_trace_rows":1,
+            "same_export_original_local_PPtr_matches_Texture2D28_trace":is_match,
+            "original_local_Type0_Texture2D_export_status":(
+                "ORIGINAL_LOCAL_POINTER_EXACT_TRACE_MATCH" if is_match
+                else "SOURCE_TEXTURE_TRACE_POINTER_DIFFERS_FROM_LOCAL_MATERIAL_PPTR"),
+            "original_local_Type0_external_GUID_inferred":False}
 
 
 def image_meta_index(assets, wanted):
@@ -332,10 +378,18 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
     from scripts.b05_verify_material_texenv_bindings import exported_texenvs
     exported_materials = exported_texenvs(project)
     mark("join_original_Material_TexEnv_to_exported_Texture2D_GUID")
+    local_pointers={}
     mapping = source_material_to_exported_texture_guids(
         trace, original_material_texenvs, original_targets, exported_materials,
-        metrics=material_metrics)
+        metrics=material_metrics, private_local_pointers=local_pointers)
     verify_external_texture_guid_subset(direct_mapping, mapping)
+    mark("classify_same_export_local_Texture2D28_type0_pointer")
+    local_proof=(classify_original_local_texture_trace(trace,local_pointers)
+                 if local_pointers else {
+                     "same_export_original_local_Texture2D28_trace_rows":0,
+                     "same_export_original_local_PPtr_matches_Texture2D28_trace":False,
+                     "original_local_Type0_Texture2D_export_status":"NO_LOCAL_PPTR",
+                     "original_local_Type0_external_GUID_inferred":False})
     mark("locate_exported_TextureImporter_image")
     if len(mapping) not in (2, EXPECTED_TARGETS):
         raise ValueError("incomplete_original_particle_two_external_texture_alpha_scope")
@@ -360,6 +414,7 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
         "source_SHA_original_Texture2D28_local_type0_pointer_targets": local_count,
         "same_export_original_external_TextureImporter_images_confirmed": len(mapping),
         "source_original_all_three_Texture2D_as_exported_images_verified": local_count == 0,
+        **local_proof,
         "original_local_Type0_texture_pixel_alpha_verified": False,
         "original_texture_direct_export_trace_guid_usable": direct_mapping is not None,
         "original_material_same_export_GUID_and_UV_linkage_verified": local_count == 0,
@@ -395,6 +450,7 @@ def main():
         "join_same_export_Texture2D28_GUID",
         "parse_exported_Material_TexEnv_YAML",
         "join_original_Material_TexEnv_to_exported_Texture2D_GUID",
+        "classify_same_export_local_Texture2D28_type0_pointer",
         "locate_exported_TextureImporter_image",
         "decode_exported_image_alpha",
         "completed",
