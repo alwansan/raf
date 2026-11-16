@@ -1675,5 +1675,48 @@
     "FFT_kernel6_and_water_Foam_Depth_and_fire_visual_parity_complete": false,
     "G0_G6_all_restored": false,
     "no_GT_XAPK_created": true
-  }
+  },
+  "latest_verified_original_Shader48_same_export": {
+    "date_baghdad": "2026-11-16",
+    "full_export_run": 43787809110,
+    "full_export_conclusion": "success",
+    "original_source_pinned_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "stage": "post17 original NEXT17 Shader48 same-export GUID installed",
+    "material_documents_total": 1536,
+    "custom_material_documents": 786,
+    "custom_with_non_dummy_original_shader": 628,
+    "custom_with_dummy_shader": 158,
+    "remaining_referenced_dummy_shader_guids": 43,
+    "non_dummy_custom_material_coverage_percent": 79.9,
+    "protected_original_material_meta_yaml_sha_unmodified": 29213,
+    "unknown_or_broken_shader_references": 0,
+    "source_owner_pathid_to_original_export_guid_verified": true,
+    "unity_android_vulkan_original_routes_verified": true,
+    "phone_adreno_runtime_visual_verified": false,
+    "android_xapk_created": false,
+    "safe_artifact_id": 14192158339,
+    "evidence_file": "clients/GT/evidence/20261116_gt_post17_real_guid_next15_full_export_progress.json"
+  },
+  "next_original_shader48_full_export_queue": {
+    "next15": {
+      "workflow": ".github/workflows/raft-gt-next15-original-full-export.yml",
+      "run": 43918007004,
+      "state_last_checked": "in_progress",
+      "expected_post18_non_dummy": 643,
+      "expected_post18_dummy": 143,
+      "expected_post18_remaining_shader_guids": 42,
+      "acceptance": "UNVERIFIED until complete safe actual post18 same-export protected-SHA audit"
+    },
+    "next11": {
+      "workflow": ".github/workflows/raft-gt-next11-original-full-export.yml",
+      "run": 43918847740,
+      "state_last_checked": "queued",
+      "expected_post19_non_dummy": 654,
+      "expected_post19_dummy": 132,
+      "expected_post19_remaining_shader_guids": 41,
+      "prerequisite": "actual post18 143 Dummy/42 targets same export, then source SHA and 33 route unity compile",
+      "acceptance": "UNVERIFIED until complete safe actual post19 same-export protected-SHA audit"
+    }
+  },
+  "gt_restoration_priority": "Restore original resources/meshes/textures/materials/shaders/foam/depth/FFT/kernel6/fire/PostFX with source/GUID proof before general first XAPK; animation deferred; no inferred device pixels"
 }
