@@ -101,6 +101,15 @@ def original_range_contract_safe_census(parsed):
     return out
 
 
+def validate_authentic_source_ranges(parsed):
+    """Fail closed on malformed ORIGINAL Range lanes, never expect next23 counts."""
+    census=original_range_contract_safe_census(parsed)
+    if (census["source_original_Range_nonzero_unused_fourth_lane_count"]!=0
+            or census["source_original_Range_inverted_lower_upper_count"]!=0):
+        raise ValueError("invalid_authentic_next18_original_Range_shape")
+    return census
+
+
 def run(original,manifest,quality,private):
     import UnityPy
     for binary in ("vkd3d-compiler","spirv-val","spirv-cross","glslangValidator"):
@@ -185,18 +194,16 @@ def run(original,manifest,quality,private):
         source_properties=parsed.get("m_PropInfo",{}).get("m_Props",[])
         if not isinstance(source_properties,list):
             raise ValueError("invalid_original_18_material_Shader_properties")
-        ranges=original_range_contract_safe_census(parsed)
-        if (ranges["source_original_ShaderLab_Range_property_count"]!=3
-                or ranges["source_original_Range_nonzero_unused_fourth_lane_count"]!=0
-                or ranges["source_original_Range_inverted_lower_upper_count"]!=0
-                or ranges["source_original_Range_default_outside_lower_upper_count"]!=1):
-            raise ValueError("SHA_authentic_next18_Range_contract_drift")
-        # The original one out-of-slider Range default is valid historical
-        # source data. Preserve the exact serialized slider limits and default.
+        ranges=validate_authentic_source_ranges(parsed)
+        # The next18 source must dictate the exact original Range count.
+        # Never copy next23's 3-Range/1-outside numeric fingerprint; preserve
+        # any source-authenticated outside default without clamping or editing.
         layout,details=shaderlab_layout(parsed,passes,
             expected_property_count=len(source_properties),
-            allow_out_of_range_defaults=True)
-        report["original_3_Range_properties_and_1_outside_default_reemitted_unclamped"]=True
+            allow_out_of_range_defaults=(
+                ranges["source_original_Range_default_outside_lower_upper_count"]>0))
+        report["source_original_Range_property_count"]=ranges["source_original_ShaderLab_Range_property_count"]
+        report["source_original_Range_defaults_outside_bounds_preserved_unclamped"]=ranges["source_original_Range_default_outside_lower_upper_count"]
         (private/"original-private-shaderlab-layout.txt").write_text(layout,encoding="utf-8")
         report["source_original_ShaderLab_4pass_property_layout_validated"]=True
         report["source_original_keyword_permutation_route_counts_per_pass"]=routing["source_exact_keyword_routes_by_pass"]
