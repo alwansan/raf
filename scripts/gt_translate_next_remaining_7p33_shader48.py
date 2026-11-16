@@ -30,9 +30,15 @@ STATUS="GT_SHA_ORIGINAL_REMAINING_7P33_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TR
 EXPECTED_TOPOLOGY=(4,33,8,58)
 
 
-def select_exact_7p33_material_name(source_hashes, material_name_counts):
+def select_exact_7p33_material_name(source_hashes, material_name_counts, *, expected_name_count=2):
+    # Original post14 provenance has two 7-Material names. Once the real
+    # original-guid 7p11 install succeeds, post22 has exactly one seven-used
+    # shader left. Its 4/33/8/58 topology still must uniquely identify the
+    # pinned original Shader48 owner; never match only by name.
+    if type(expected_name_count) is not int or expected_name_count not in (1,2):
+        raise ValueError("invalid_original_7p33_expected_source_name_population")
     matches=[digest for digest,amount in material_name_counts.items() if amount==7]
-    if len(matches)!=2:
+    if len(matches)!=expected_name_count:
         raise ValueError("missing_or_ambiguous_7p33_material_original_shader_name_digest")
     candidates=[]
     for digest in matches:
@@ -43,9 +49,10 @@ def select_exact_7p33_material_name(source_hashes, material_name_counts):
     return candidates
 
 
-def choose_original_7p33_by_topology(original,manifest,source_hashes,usage):
+def choose_original_7p33_by_topology(original,manifest,source_hashes,usage, *, expected_name_count=2):
     import UnityPy
-    candidates=select_exact_7p33_material_name(source_hashes,usage)
+    candidates=select_exact_7p33_material_name(
+        source_hashes, usage, expected_name_count=expected_name_count)
     verified=[]
     pins=read_expected(manifest)
     for owner,pid in candidates:
