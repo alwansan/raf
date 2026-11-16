@@ -124,12 +124,92 @@
       "real_run": 43778269514,
       "real_status_last_checked": "pending",
       "scope": "exact source owner and PathID -> same-export Texture2D28 PPtr comparison; no external GUID substitution or image proof",
-      "actual_local_ptr_match_UNVERIFIED": true
+      "actual_local_ptr_match_UNVERIFIED": true,
+      "source_local_top_mip_alpha_helper": "original_local_type0_source_pixel_alpha",
+      "source_local_alpha_static_success": 43778717524,
+      "source_local_alpha_real_run": 43778717548,
+      "source_local_alpha_real_result_unverified": true,
+      "source_alpha_failure_policy": "INCONCLUSIVE, never replace local source pixels or infer TextureImporter GUID"
     }
   },
   "water_fft_foam_depth_kernel6_unresolved": true,
   "animation_deferred": true,
   "gates_G0_to_G6_all_closed": false,
   "android_adreno_pixels_verified": false,
-  "xapk_created_in_this_batch": false
+  "xapk_created_in_this_batch": false,
+  "post14_original_top16_shader48_topology": {
+    "run_id": 43779089456,
+    "conclusion": "success",
+    "artifact_id": 14187109374,
+    "artifact_digest": "sha256:fb3a8383cfe88df192718ada0b3506b3f8bd923eb4c0bc0737eedb95eaf4203c",
+    "source_shader48_objects": 165,
+    "source_sha_authenticated_owners": 82,
+    "owners_with_original_shader48": 14,
+    "real_post14_dummy_materials_scope": 216,
+    "ranked_remaining_material_weights": [
+      23,
+      23,
+      18,
+      17,
+      15,
+      11,
+      10,
+      10,
+      7,
+      7,
+      6,
+      5,
+      5,
+      5,
+      4,
+      4
+    ],
+    "selected_topology_by_material_weight": [
+      {
+        "material_docs": 23,
+        "original_distinct_d3d11_programs": 134,
+        "paired_keyword_vs_fs_routes": 1156,
+        "passes": 4,
+        "do_not_conflate_with_other_23_target": true
+      },
+      {
+        "material_docs": 23,
+        "original_distinct_d3d11_programs": 58,
+        "paired_keyword_vs_fs_routes": 33,
+        "passes": 4,
+        "orphan_vertex_stages": 8
+      },
+      {
+        "material_docs": 18,
+        "original_distinct_d3d11_programs": 58,
+        "paired_keyword_vs_fs_routes": 33,
+        "passes": 4,
+        "orphan_vertex_stages": 8
+      },
+      {
+        "material_docs": 17,
+        "original_distinct_d3d11_programs": 43,
+        "paired_keyword_vs_fs_routes": 23,
+        "passes": 3,
+        "orphan_vertex_stages": 8
+      }
+    ],
+    "source_d3d11_topology_only": true,
+    "translated_shader_stages_for_this_topology_run": false,
+    "original_export_guid_proven_by_this_run": false,
+    "device_visual_proven": false
+  },
+  "next18_source_restoration": {
+    "original_source_candidate_unique_18_materials": true,
+    "baseline_materials_after14": 216,
+    "source_script": "scripts/gt_translate_next_remaining_18_shader48.py",
+    "source_script_commit": "b04d1c24bec06a1ae38492f8a63e817e654ad03c",
+    "tests": "tests/test_gt_translate_next_remaining_18_shader48.py",
+    "source_ci_run": 43779460803,
+    "source_ci_status_last_checked": "queued",
+    "source_translations_verified_yet": false,
+    "isolated_unity_vulkan_verified": false,
+    "same_export_original_shader_guid_installed": false,
+    "no_game_package_requested": true
+  }
 }
