@@ -1,0 +1,33 @@
+name: GT NEXT18 original Shader48 same-export GUID installer safety (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_install_next18_original_shader48.py
+      - tests/test_gt_install_next18_original_shader48.py
+      - .github/workflows/raft-gt-next18-installer-static-gate.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  next18-original-guid-static-safety:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Reject fake source census, missing original post14, mismatched Vulkan stages and changed metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_install_next18_original_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_install_next18_original_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_install_next30_original_shader48.py -v
+          echo 'GT_NEXT18_ORIGINAL_SHADER48_INSTALLER_STATIC_GATE_ACCEPTED=true gamePackage=false'
