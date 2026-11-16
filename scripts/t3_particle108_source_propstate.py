@@ -87,7 +87,7 @@ def serialize_properties(parsed, *, allow_hidden_and_toggle=False,
         if (allow_original_per_renderer_and_drawer and type(attributes) is list
                 and len(attributes)==1 and type(attributes[0]) is str):
             source_drawer=attributes[0]
-            if re.fullmatch(r"[_A-Za-z][_A-Za-z0-9]{0,127}(?:\\([-+_A-Za-z0-9., ]{0,128}\\))?",source_drawer):
+            if re.fullmatch(r"[_A-Za-z][_A-Za-z0-9]{0,127}(?:[(][-+_A-Za-z0-9., ]{0,128}[)])?",source_drawer):
                 exact_source_drawer=source_drawer
         source_flag_contract = (
             allow_original_per_renderer_and_drawer and
