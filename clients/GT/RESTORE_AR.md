@@ -1,5 +1,15 @@
 # GT — رسالة الاستعادة الأساسية الحية | 16 تشرين الثاني 2026
 
+## GT — استكمال أصل Shader48 7p11 و7p33 وفق ZIP2 — 16 نوفمبر 2026
+
+- **ما تم إنتاجه في الفرع فعلياً:** `scripts/gt_install_next7p11_original_shader48.py` و`scripts/gt_install_next7p33_original_shader48.py` مع اختبارات المصدر/الـGUID، وعملية استخراج أصلية متصلة بـ AssetRipper SAME EXPORT. NEXT7p11 3 Pass/11 VSFS [4,5,2]/22 D3D11 (Source Range4)، وNEXT7p33 4 Pass/33 VSFS [8,13,8,4]/58 D3D11 (Source Range0). يحافظ كل مثبت على الأصل SHA وowner/PathID وGUID وMaterial/meta/YAML بلا تعديل.
+- **تشغيل FULL ZIP2 الجديد** NEXT7p11 [43925468867](https://github.com/alwansan/raf/actions/runs/43925468867) (commit `33af2670`) وNEXT7p33 [43925787952](https://github.com/alwansan/raf/actions/runs/43925787952) (commit `f6957b71`)؛ كانا IN PROGRESS عند الفحص ولم تُقبل نتيجة GUID ولا جرد مواد حتى الآن.
+- prior post21 المطلوب لـNEXT7p11 هو 674/786 Custom non-Dummy، 112 Dummy/39 GUID، مع *اثنين* من أصل الـ7 Material. Post22 المتوقع 681/786، 105 Dummy/38. NEXT7p33 يرفض البدء إلا بعد post22 الفعلي، ويطلب *واحداً* من أصل الـ7 Material ثم topology 4/33/8/58؛ Post23 المتوقع 688/786، 98 Dummy/37. **جميع هذه الأرقام مشروطة، وليست نتائج GT المعتمدة.**
+- بوابة src/installer 7-material [43925234660](https://github.com/alwansan/raf/actions/runs/43925234660) SUCCESS، وبوابة الربط/الفحوص الستة [43925851391](https://github.com/alwansan/raf/actions/runs/43925851391) SUCCESS؛ كلاهما **static** وليس نفس instance التصدير. Evidence [20261116_gt_next7pair_original_guid_pipeline_progress.json](evidence/20261116_gt_next7pair_original_guid_pipeline_progress.json).
+- **آخر قبول حقيقي لم يتغير** [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110): **628/786 Custom non-Dummy فقط (79.90% من مستندات Custom Material)، 158 Dummy/43 Shader GUID؛ 29,213 protected SHA unchanged و0 broken**. الماء Spectrum/Foam/Depth/FFT/kernel6، Fire alpha، G0–G6، PostFX وAdreno pixels غير مغلقة؛ الأنيميشن مؤجل، لا GT XAPK حتى الاستعادة المكتملة.
+- عند استعادة GT: راجع النسخ المصححة FULL NEXT15 43920541904 وNEXT11 43920553298 وNEXT10p33 43922026302 وNEXT10p31 43922253136 وNEXT7p11 43925468867 وNEXT7p33 43925787952. إذا اكتملت SUCCESS خذ الـsafe postinstall audit الحقيقي، وإلا افحص أول failed step، أصلح الفرع المسموح، ولا ترفع الأرقام بالاستنتاج.
+
+
 ## GT — أربعة مسارات أصلية محمية لإعادة تثبيت Shader48 — 16 نوفمبر 2026
 
 - **آخر قبول حقيقي SAME-EXPORT لا يزال [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110): 628/786 Custom Material غير Dummy (79.90% من مستندات المواد فقط)، 158 Dummy على 43 original Shader GUID؛ صفر مراجع مكسورة و29,213 Material/YAML/meta SHA أصلية بلا تغيير**. لا تعلن اكتمال الرسوم أو تكافؤ Adreno؛ لا XAPK جديد من GT.
