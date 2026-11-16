@@ -1,0 +1,203 @@
+name: GT source-probe next unresolved Shader48 after 14 original restores (NO APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_probe_remaining_original_shader_dxbc_topology.py
+      - tests/test_gt_probe_remaining_original_shader_dxbc_topology.py
+      - .github/workflows/raft-gt-post14-remaining-shader-topology.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: gt-post14-original-shader-topology-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  original-82-post14-topology:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Reject forged 216-material rank and original Shader48 duplicate name equivalence
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_probe_remaining_original_shader_dxbc_topology.py
+          python3 -m unittest discover -s tests -p test_gt_probe_remaining_original_shader_dxbc_topology.py -v
+      - name: Import the accepted post14 actual 216-Dummy complete export material audit
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43773151176
+          name: gt-fourteen-next30-source-shader-full-export-audit-43773151176
+          path: ${{ runner.temp }}/gt-original-post14-material-quality
+      - name: Verify original complete post14 material population before inspecting Shader48 program sources
+        run: |
+          set -euo pipefail
+          python3 - <<'PY_GT_POST14_BASELINE'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-original-post14-material-quality/gt-fourteen-shader-postrestore-quality.json"
+          q=json.loads(p.read_text())
+          c=q["counts"]
+          assert q["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          assert c["material_documents"]==1536 and c["material_docs_using_Unity_builtin_Shader"]==750
+          assert c["material_docs_using_local_custom_Shader"]==786
+          assert c["material_docs_using_dummy_Shader"]==216
+          assert c["material_docs_using_non_dummy_Shader"]==570
+          assert c["distinct_dummy_Shader_targets_referenced"]==46
+          assert c["material_docs_with_unknown_or_broken_Shader"]==0
+          assert sum(q["dummy_shader_material_counts_by_name_digest"].values())==216
+          print("GT_POST14_REAL_EXPORT_216_MATERIAL_46_GUID_BASELINE_ACCEPTED noAPK=true")
+          PY_GT_POST14_BASELINE
+      - name: Read immutable ZIP2 serialized owner files only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/level6
+            Raft/Raft_Data/level7
+            Raft/Raft_Data/level8
+            Raft/Raft_Data/level9
+            Raft/Raft_Data/level10
+            Raft/Raft_Data/level11
+            Raft/Raft_Data/level12
+            Raft/Raft_Data/level13
+            Raft/Raft_Data/level14
+            Raft/Raft_Data/level15
+            Raft/Raft_Data/level16
+            Raft/Raft_Data/level17
+            Raft/Raft_Data/level18
+            Raft/Raft_Data/level19
+            Raft/Raft_Data/level20
+            Raft/Raft_Data/level21
+            Raft/Raft_Data/level22
+            Raft/Raft_Data/level23
+            Raft/Raft_Data/level24
+            Raft/Raft_Data/level25
+            Raft/Raft_Data/level26
+            Raft/Raft_Data/level27
+            Raft/Raft_Data/level28
+            Raft/Raft_Data/level29
+            Raft/Raft_Data/level30
+            Raft/Raft_Data/level31
+            Raft/Raft_Data/level32
+            Raft/Raft_Data/level33
+            Raft/Raft_Data/level34
+            Raft/Raft_Data/level35
+            Raft/Raft_Data/level36
+            Raft/Raft_Data/level37
+            Raft/Raft_Data/level38
+            Raft/Raft_Data/level39
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets2.assets
+            Raft/Raft_Data/sharedassets3.assets
+            Raft/Raft_Data/sharedassets4.assets
+            Raft/Raft_Data/sharedassets5.assets
+            Raft/Raft_Data/sharedassets6.assets
+            Raft/Raft_Data/sharedassets7.assets
+            Raft/Raft_Data/sharedassets8.assets
+            Raft/Raft_Data/sharedassets9.assets
+            Raft/Raft_Data/sharedassets10.assets
+            Raft/Raft_Data/sharedassets11.assets
+            Raft/Raft_Data/sharedassets12.assets
+            Raft/Raft_Data/sharedassets13.assets
+            Raft/Raft_Data/sharedassets14.assets
+            Raft/Raft_Data/sharedassets15.assets
+            Raft/Raft_Data/sharedassets16.assets
+            Raft/Raft_Data/sharedassets17.assets
+            Raft/Raft_Data/sharedassets18.assets
+            Raft/Raft_Data/sharedassets19.assets
+            Raft/Raft_Data/sharedassets20.assets
+            Raft/Raft_Data/sharedassets21.assets
+            Raft/Raft_Data/sharedassets22.assets
+            Raft/Raft_Data/sharedassets23.assets
+            Raft/Raft_Data/sharedassets24.assets
+            Raft/Raft_Data/sharedassets25.assets
+            Raft/Raft_Data/sharedassets26.assets
+            Raft/Raft_Data/sharedassets27.assets
+            Raft/Raft_Data/sharedassets28.assets
+            Raft/Raft_Data/sharedassets29.assets
+            Raft/Raft_Data/sharedassets30.assets
+            Raft/Raft_Data/sharedassets31.assets
+            Raft/Raft_Data/sharedassets32.assets
+            Raft/Raft_Data/sharedassets33.assets
+            Raft/Raft_Data/sharedassets34.assets
+            Raft/Raft_Data/sharedassets35.assets
+            Raft/Raft_Data/sharedassets36.assets
+            Raft/Raft_Data/sharedassets37.assets
+            Raft/Raft_Data/sharedassets38.assets
+            Raft/Raft_Data/sharedassets39.assets
+
+      - name: Materialize exact SHA-authenticated 82 Unity serialized owners (no LFS or raw upload)
+        run: |
+          set -euo pipefail
+          test "$(git -C .gt-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m scripts.gt_stage_serialized_owners \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --source .gt-zip2/Raft/Raft_Data \
+            --destination "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --report "$RUNNER_TEMP/gt-original-82-source-proof-private.json" > "$RUNNER_TEMP/gt-original-82-source-private.log"
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+
+      - name: Probe 16 highest remaining original Shader48 D3D11 source topologies only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_probe_remaining_original_shader_dxbc_topology \
+            --original "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-original-post14-material-quality/gt-fourteen-shader-postrestore-quality.json" \
+            --expected-dummy-materials 216 --top 16 \
+            --out "$RUNNER_TEMP/gt-post14-original-shader-topology-safe.json"
+          python3 - <<'PY_GT_POST14_OUTPUT'
+          import json,os
+          from pathlib import Path
+          q=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-post14-original-shader-topology-safe.json").read_text())
+          assert q["status"]=="GT_TOP_REAL_DUMMY_MATERIAL_SHADER48_ORIGINAL_D3D11_PASS_TOPOLOGY_PROBED"
+          assert q["verified_real_export_dummy_material_scope"]==216
+          assert q["original_Shader48_distinct_source_objects"]==165
+          assert q["original_owners_with_original_Shader48"]==14
+          assert q["top_original_dummy_Material_shader_targets_requested"]==16
+          assert len(q["top_real_source_D3D11_topology_by_rank"])==16
+          assert q["source_exact_export_GUID_inferred_from_name"] is False
+          assert q["source_program_translation_or_Vulkan_compilation_performed"] is False
+          assert q["APK_OBB_XAPK_created"] is False
+          print("GT_ORIGINAL_POST14_82OWNER_SHADERS_PRIORITIZED top16=true noAPK=true")
+          PY_GT_POST14_OUTPUT
+      - name: Publish anonymous actual original 216-Dummy Shader48 D3D11 topology census only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-post14-original-216-Dummy-shader-topology-${{ github.run_id }}
+          path: ${{ runner.temp }}/gt-post14-original-shader-topology-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Delete private original ZIP2 owners and all source metadata
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-original-82-shader-owners" .gt-zip2
