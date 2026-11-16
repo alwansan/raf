@@ -115,7 +115,18 @@ def verify_named_constant_buffers(private, stage, buffers):
     if not command(["glslangValidator", "-V", "-D", "-S", suffix, "-e", "main",
                     "-o", str(binary), str(candidate)]):
         raise ValueError("named_constant_buffer_candidate_compile_failed")
-    if not command(["spirv-val", "--target-env", "vulkan1.1", str(binary)]):
+    # Keep raw Vulkan validator diagnostics PRIVATE to this temporary stage.
+    # The public source report may expose only a broad numeric/category
+    # classification, never original identifiers, CB names or SPIR-V bytes.
+    try:
+        check = subprocess.run(
+            ["spirv-val", "--target-env", "vulkan1.1", str(binary)],
+            capture_output=True, timeout=30, check=False)
+    except subprocess.TimeoutExpired:
+        raise ValueError("named_constant_buffer_candidate_spirv_invalid") from None
+    if check.returncode:
+        raw = (check.stderr + b"\\n" + check.stdout)[:65536]
+        (private / "original-validator-raw-private.log").write_bytes(raw)
         raise ValueError("named_constant_buffer_candidate_spirv_invalid")
 
 
