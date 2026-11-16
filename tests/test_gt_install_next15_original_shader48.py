@@ -25,7 +25,8 @@ class OriginalNext15SameExportTests(unittest.TestCase):
                 "material_docs_with_unknown_or_broken_Shader": 0,
             },
             "dummy_shader_material_counts_by_name_digest": {
-                "f" * 64: 15, "a" * 64: 17,
+                "f" * 64: 15, "a" * 64: 23,
+                "b" * 64: 120,
             },
         }
         path.write_text(json.dumps(q))
@@ -48,7 +49,12 @@ class OriginalNext15SameExportTests(unittest.TestCase):
                 checker.assert_called_once()
                 self.assertEqual(checker.call_args.args[0], root / "Raft_Data")
                 self.assertEqual(checker.call_args.args[3],
-                                 {"f" * 64: 15, "a" * 64: 17})
+                                 {"f" * 64: 15, "a" * 64: 23, "b" * 64: 120})
+            q["dummy_shader_material_counts_by_name_digest"]["b" * 64] += 1
+            qfile.write_text(json.dumps(q))
+            with self.assertRaisesRegex(ValueError, "invalid_real_postrestore_dummy_Material_name_digest_population"):
+                source_identity(root, root / "manifest", qfile)
+            q["dummy_shader_material_counts_by_name_digest"]["b" * 64] -= 1
             q["counts"]["material_docs_using_dummy_Shader"] = 216
             qfile.write_text(json.dumps(q))
             with self.assertRaisesRegex(ValueError, "unverified_post17"):
