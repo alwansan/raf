@@ -127,7 +127,7 @@ def main(argv=None):
         "schema_version": 1,
         "status": STATUS,
         "original_source_82_owners_SHA_verified": True,
-        "post16_actual_dummy_Material_population_verified": 193,
+        "post16_actual_dummy_Material_population_verified": 175,
         "source_original_unrestored_Material_documents_selected": 17,
         "same_export_owner_PathID_to_original_Shader_GUID_checked": True,
         "original_export_Shader48_GUID_preserved": True,
