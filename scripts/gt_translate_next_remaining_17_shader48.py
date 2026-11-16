@@ -2,7 +2,7 @@
 
 Select exactly one remaining shader from 82 SHA-pinned original ZIP2 owners
 using the post-fourteen exact 17-Material name digest and source Shader48 identity.
-Validate original 4 Pass / 33 VS-FS keyword routes / 8 VS orphans / 58 distinct
+Validate original 3 Pass / 23 VS-FS keyword routes / 8 VS orphans / 43 distinct
 DXBC programs. Translate original DXBC privately to SPIR-V and recovered HLSL,
 then validate Vulkan 1.1 stage roundtrips. No source code, names, hashes,
 identifiers, or compiled shader bytes enter public reports. Does NOT yet
@@ -163,7 +163,7 @@ def run(original,manifest,quality,private):
             counts[field]+=int(translated.get(field) is True)
     report={
         "schema_version":1,
-        "status":STATUS if counts["roundtrip_vulkan11_valid"]==58 else "PARTIAL_ORIGINAL_D3D11_STAGE_TRANSLATION",
+        "status":STATUS if counts["roundtrip_vulkan11_valid"]==43 else "PARTIAL_ORIGINAL_D3D11_STAGE_TRANSLATION",
         "postfourteen_dummy_materials_linked_to_this_original_shader":17,
         "original_source_Shader48_object_unique_and_82_owner_SHA_verified":True,
         "original_Shader48_SubShader_count":census["original_source_Shader48_SubShader_count"],
