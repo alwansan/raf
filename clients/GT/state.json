@@ -1246,5 +1246,60 @@
     "all_resource_restoration_complete": false,
     "game_xapk_requested": false,
     "animation_deferred": true
+  },
+  "latest_gt_source_batches_20261116": {
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "latest_same_export_verified_run": 43773151176,
+    "custom_material_documents": 786,
+    "non_dummy_custom_material_documents": 570,
+    "remaining_dummy_material_documents": 216,
+    "remaining_original_shader_targets": 46,
+    "original_material_meta_yaml_SHA_verified_unchanged_files": 29213,
+    "game_visual_gpu_accepted": false,
+    "shader_source18": {
+      "source_success": 43779759999,
+      "unity_android_vulkan_success": 43780219002,
+      "serialized_routes": [
+        8,
+        13,
+        8,
+        4
+      ],
+      "same_export_installed": false,
+      "synthetic_guid_installer_success": 43781139286
+    },
+    "shader_source17": {
+      "source_success": 43781304391,
+      "original_d3d11_programs": 43,
+      "serialized_routes_expected": [
+        8,
+        13,
+        2
+      ],
+      "unity_run": 43782074242,
+      "unity_accepted": false,
+      "same_export_installed": false
+    },
+    "shader_source15": {
+      "source_run": 43782323454,
+      "source_success_verified": false,
+      "expected_source_programs": 58,
+      "expected_routes": 33
+    },
+    "shader_source11": {
+      "source_run": 43782328731,
+      "source_success_verified": false,
+      "expected_source_programs": 58,
+      "expected_routes": 33
+    },
+    "shader_next23_same_export_run": 43777283111,
+    "shader_next23_same_export_accepted": false,
+    "original_fire_local_type0": {
+      "real_sha_source_alpha_and_exact_trace_success_run": 43778717548,
+      "local_exported_image_or_adreno_visual_verified": false
+    },
+    "fft_water_kernel6_and_G0_to_G6_closed": false,
+    "animation_deferred": true,
+    "xapk_created": false
   }
 }
