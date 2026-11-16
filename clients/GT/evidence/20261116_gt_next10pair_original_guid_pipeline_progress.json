@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "agent": "GT",
+  "date_baghdad": "2026-11-16",
+  "repository": "alwansan/raf",
+  "write_branch": "feature/android-native-port",
+  "original_source": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "last_accepted_same_export": {
+    "run": 43787809110,
+    "status": "success",
+    "post_stage": "17",
+    "custom_material_documents": 786,
+    "custom_non_dummy": 628,
+    "custom_dummy": 158,
+    "remaining_dummy_shader_targets": 43,
+    "custom_material_non_dummy_percent": 79.9,
+    "total_material_documents": 1536,
+    "builtin_material_documents": 750,
+    "original_material_yaml_meta_sha_unchanged": 29213,
+    "broken_shader_references": 0,
+    "original_source_owner_pathid_to_export_guid_verified": true,
+    "actual_adreno_device_pixel_parity_verified": false,
+    "actual_whole_game_graphics_complete": false
+  },
+  "successor_pipelines": [
+    {
+      "name": "NEXT15",
+      "corrected_run": 43920541904,
+      "prior_run_with_inherited_translator": 43918007004,
+      "corrected_commit": "f1625a720cf949c6c9e5d725ccc828e7ce62d96b",
+      "prior_actual_required": {
+        "non_dummy": 628,
+        "dummy": 158,
+        "targets": 43
+      },
+      "expected_future_if_audited_success": {
+        "non_dummy": 643,
+        "dummy": 143,
+        "targets": 42
+      },
+      "source_programs": 58,
+      "vsfs_by_pass": [
+        8,
+        13,
+        8,
+        4
+      ],
+      "result_accepted": false
+    },
+    {
+      "name": "NEXT11",
+      "corrected_run": 43920553298,
+      "prior_run_with_inherited_translator": 43918847740,
+      "corrected_commit": "8f567becb5ee378f54dbaf58455390d59989f04a",
+      "prior_actual_required": {
+        "non_dummy": 643,
+        "dummy": 143,
+        "targets": 42
+      },
+      "expected_future_if_audited_success": {
+        "non_dummy": 654,
+        "dummy": 132,
+        "targets": 41
+      },
+      "source_programs": 58,
+      "vsfs_by_pass": [
+        8,
+        13,
+        8,
+        4
+      ],
+      "result_accepted": false
+    },
+    {
+      "name": "NEXT10p33",
+      "corrected_run": 43922026302,
+      "obsolete_run": 43921790022,
+      "corrected_commit": "a3f20f02a8e99e6773410eb71694f43d6cdf72c4",
+      "prior_actual_required": {
+        "non_dummy": 654,
+        "dummy": 132,
+        "targets": 41,
+        "two_10_material_sources": true
+      },
+      "expected_future_if_audited_success": {
+        "non_dummy": 664,
+        "dummy": 122,
+        "targets": 40
+      },
+      "source_programs": 58,
+      "vsfs_by_pass": [
+        8,
+        13,
+        8,
+        4
+      ],
+      "original_Range_properties": 6,
+      "result_accepted": false
+    },
+    {
+      "name": "NEXT10p31",
+      "run": 43922253136,
+      "creation_commit": "b0face36c11d7e716b613b388df45c98173a141f",
+      "prior_actual_required": {
+        "non_dummy": 664,
+        "dummy": 122,
+        "targets": 40,
+        "one_remaining_10_material_source": true
+      },
+      "expected_future_if_audited_success": {
+        "non_dummy": 674,
+        "dummy": 112,
+        "targets": 39
+      },
+      "source_programs": 55,
+      "vsfs_by_pass": [
+        8,
+        13,
+        8,
+        2
+      ],
+      "original_Range_properties": 0,
+      "unity_serialized_routes_profile": "next30 only for original 31-route verification",
+      "result_accepted": false
+    }
+  ],
+  "protections": {
+    "originals_82_sha_owners": true,
+    "source_translator_requires_original_post14_216_dummy_46_targets": true,
+    "postinstall_requires_genuine_previous_same_instance_export": true,
+    "original_shader_guid_unchanged": true,
+    "material_yaml_meta_sha_guard": true,
+    "never_generate_game_xapk_from_gt_before_resource_restoration": true,
+    "do_not_count_source_or_isolated_unity_as_real_original_guid_install": true
+  },
+  "fixes_and_checks": [
+    {
+      "kind": "source-stage inheritance",
+      "next15_commit": "f1625a720cf949c6c9e5d725ccc828e7ce62d96b",
+      "next11_commit": "8f567becb5ee378f54dbaf58455390d59989f04a"
+    },
+    {
+      "kind": "post20 remaining 10p31 digest",
+      "source_commit": "e460cc56123944621da8a9065dfaa7b955835da5",
+      "installer_commit": "b872411e8f2c30d1aebebc6cabf49777a2589eda",
+      "source_test_commit": "2fa7c33b36960cb041678fe988d7ee3aac3408a4",
+      "installer_test_commit": "3203861e14633c3f5606f0f9a37f1b27b134afbb"
+    },
+    {
+      "kind": "static pair source+installer tests",
+      "run": 43921213570,
+      "status": "success",
+      "workflow_update_commit": "4f95c1c6824fc05d0fe8eaeca4607bccbe103505"
+    },
+    {
+      "kind": "source wiring stage guard including prior/current audit distinction",
+      "run": 43922343892,
+      "status": "success",
+      "commit": "db6b943b4a527adb8af1276dc31ba497f2aa82b8"
+    }
+  ],
+  "existing_open_resource_gates": [
+    "G0-G6",
+    "water Spectrum/Foam/Depth/FFT/kernel6",
+    "Fire alpha source/export device parity",
+    "remaining original Shader48 dummy targets",
+    "full-game visuals",
+    "animation deferred"
+  ],
+  "summary": "Four NEXT15/NEXT11/NEXT10p33/NEXT10p31 full-original-GUID workflow chains are running or queued; last accepted actual census remains 628 non-Dummy /158 Dummy/43 targets until complete real same-export audits."
+}
