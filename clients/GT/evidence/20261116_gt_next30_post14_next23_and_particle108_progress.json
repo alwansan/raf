@@ -54,7 +54,9 @@
         "conclusion": "success",
         "job_id": 133007783009,
         "scope": "py_compile plus source-free next23 and next30 installer tests; NOT full-export original GUID acceptance"
-      }
+      },
+      "full_export_initial_run_status": "in_progress",
+      "full_export_fixed_fixture_run_status": "pending"
     }
   },
   "fire_alpha": {
@@ -73,7 +75,57 @@
     "expected_possible_result": "PARTIAL 2 external images; local unresolved",
     "actual_exported_alpha_NOT_VERIFIED": true,
     "source_texture_local_GUID_must_not_be_invented": true,
-    "static_gate_success_latest": 43777415580
+    "static_gate_success_latest": 43777415580,
+    "real_export_alpha_verified": {
+      "run_id": 43777398215,
+      "job_id": 133006699574,
+      "conclusion": "success",
+      "artifact_id": 14187007842,
+      "artifact_digest": "sha256:fef3c6dd93accdb736b89e4673281a8ccc5f80be7b45d1e7e6922c9e318f426e",
+      "report_status": "GT_PARTICLE108_TWO_EXTERNAL_ALPHA_IMAGES_ONE_LOCAL_TEXTURE_PPTR_PENDING",
+      "original_texture2d_objects": 3,
+      "original_materials": 5,
+      "original_texenv_reference_slots": 10,
+      "same_export_external_texture_importer_images": 2,
+      "local_type0_unresolved": 1,
+      "external_image_alpha_counts": {
+        "linked_exported_images_decoded": 2,
+        "has_explicit_alpha": 2,
+        "all_opaque": 1,
+        "has_transparent_pixels": 1,
+        "has_partially_transparent_pixels": 1,
+        "fully_transparent_pixel_present": 1
+      },
+      "external_importers": {
+        "alphaIsTransparency": {
+          "1": 2
+        },
+        "alphaSource": {
+          "missing": 2
+        },
+        "mipmapEnabled": {
+          "missing": 2
+        },
+        "sRGBTexture": {
+          "1": 2
+        }
+      },
+      "source_Texture2D_SHA_proven": true,
+      "material_Texture_PPtr_and_UV_slots_exact": true,
+      "original_source_texture_pixels_compared": false,
+      "device_fire_pixels_verified": false
+    },
+    "original_local_type0_trace_probe": {
+      "script": "scripts/gt_particle108_export_alpha_diagnostic.py",
+      "commit": "caa2a26c4234da373c3fafa644b66e119278d90b",
+      "test_commit": "0eccbcda89d7905a61eebc32c14b829616f45163",
+      "static_run": 43778269494,
+      "static_conclusion": "success",
+      "real_run": 43778269514,
+      "real_status_last_checked": "pending",
+      "scope": "exact source owner and PathID -> same-export Texture2D28 PPtr comparison; no external GUID substitution or image proof",
+      "actual_local_ptr_match_UNVERIFIED": true
+    }
   },
   "water_fft_foam_depth_kernel6_unresolved": true,
   "animation_deferred": true,
