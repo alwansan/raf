@@ -172,6 +172,44 @@ def safe_original_six_property_flag_attribute_census(parsed):
     }
 
 
+def source_only_static_parameter_binding_failure_category(exc):
+    """Map a PRIVATE source error to an exact PUBLIC constant authored in code.
+
+    Never print the exception itself unless it exactly matches a local static
+    ValueError literal from an allowlisted parameter decoder/rebinder module.
+    Raw source names, register symbols and private shader bytes never leave CI.
+    """
+    import ast
+    from importlib import import_module
+    modules=(
+        "scripts.gt_original_921_all_variants",
+        "scripts.a12_shader_parameter_decode",
+        "scripts.b25_foam_cb_namebridge",
+        "scripts.gt_original_921_cb_hlsl",
+        "scripts.gt_original_921_cb_layout",
+        "scripts.gt_original_921_resource_rebind",
+        "scripts.gt_original_921_semantics",
+        "scripts.w1_rebind_depth_resources",
+    )
+    allowed=set()
+    for name in modules:
+        module=import_module(name)
+        source_file=Path(module.__file__).resolve()
+        if not source_file.is_relative_to(Path(__file__).resolve().parent):
+            raise ValueError("unsafe_source_original_parameter_failure_classifier")
+        tree=ast.parse(source_file.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if (isinstance(node,ast.Raise) and
+                    isinstance(node.exc,ast.Call) and
+                    isinstance(node.exc.func,ast.Name) and
+                    node.exc.func.id=="ValueError" and node.exc.args and
+                    isinstance(node.exc.args[0],ast.Constant) and
+                    type(node.exc.args[0].value) is str):
+                allowed.add(node.exc.args[0].value)
+    candidate=str(exc)
+    return candidate if candidate in allowed else "UNCLASSIFIED_PRIVATE_PARAMETER_BINDING_FAILURE"
+
+
 def validate_authentic_source_ranges(parsed):
     """Fail closed on malformed ORIGINAL Range lanes, never expect next23 counts."""
     census=original_range_contract_safe_census(parsed)
@@ -338,6 +376,12 @@ def run(original,manifest,quality,private):
                 report["source_original_Shader48_range_contract_numeric_census"]=original_range_contract_safe_census(parsed)
             if exc.category=="PROPERTY_FLAGS_OR_ATTRIBUTES":
                 report["source_original_Shader48_property_flags_attributes_safe_census"]=safe_original_six_property_flag_attribute_census(parsed)
+        if checkpoint=="bind_source_constant_buffer_resource_and_vertex_semantics":
+            report["original_six_parameter_binding_static_safe_failure_category"]=(
+                source_only_static_parameter_binding_failure_category(exc))
+        # A translated SPIR-V stage is not a restored/compilable ShaderLab:
+        # do not report source restoration success when original bindings fail.
+        report["status"]="ORIGINAL_SIX_SHADER48_SOURCE_PROGRAMS_ONLY_BINDING_UNVERIFIED"
         report["original_ShaderLab_android_Unity_or_device_render_proven"]=False
     return report
 
