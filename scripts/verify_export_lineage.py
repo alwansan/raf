@@ -84,7 +84,8 @@ def check(trace, original_edges, original_shaders, actual, fonts=None, source_fo
                 or set(row) - {'class_id','source','export',
                                'collection_type','exportable'}
                 or ('exportable' in row and type(row['exportable']) is not bool)):
-                raise ValueError('Invalid supplemental texture trace shape' if row['class_id'] in EXTRA_TEXTURE_TRACE_CLASSES\n                                 else 'Invalid supplemental compute trace shape')
+                raise ValueError('Invalid supplemental texture trace shape' if row['class_id'] in EXTRA_TEXTURE_TRACE_CLASSES
+                                 else 'Invalid supplemental compute trace shape')
             identity(row['source'])
             pointer(row['export'])
             if row['class_id'] in EXTRA_COMPUTE_TRACE_CLASSES:
