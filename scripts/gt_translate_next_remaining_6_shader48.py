@@ -272,7 +272,8 @@ def run(original,manifest,quality,private):
         layout,details=shaderlab_layout(parsed,passes,
             expected_property_count=len(source_properties),
             allow_out_of_range_defaults=(
-                ranges["source_original_Range_default_outside_lower_upper_count"]>0))
+                ranges["source_original_Range_default_outside_lower_upper_count"]>0),
+            allow_original_per_renderer_and_drawer=True)
         report["source_original_Range_property_count"]=ranges["source_original_ShaderLab_Range_property_count"]
         report["source_original_Range_defaults_outside_bounds_preserved_unclamped"]=ranges["source_original_Range_default_outside_lower_upper_count"]
         (private/"original-private-shaderlab-layout.txt").write_text(layout,encoding="utf-8")
