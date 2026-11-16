@@ -74,3 +74,10 @@
 - الناتج المستهدف في **CI فقط**: 593 non-Dummy و193 Dummy و45 targets؛ الأعداد المثبتة حالياً: **570 non-Dummy و216 Dummy و46 targets**، تغطية 72.5% من مواد Custom فقط. حارس strict 29,213 ملفات unchanged، صفر broken؛ لا XAPK.
 - كود FireAlpha يميز direct trace لكل Texture2D وبين 2 external material GUID وlocal type0 مجهول؛ لا اختلاق GUID للمحلي. Static [43777398225](https://github.com/alwansan/raf/actions/runs/43777398225) SUCCESS، real [43777398215](https://github.com/alwansan/raf/actions/runs/43777398215) قيد التنفيذ و[43777415610](https://github.com/alwansan/raf/actions/runs/43777415610) pending. المطلوب نتيجة real ثم التحقق من Alpha وImporter وأصل الـtype0.
 - ممر العمل التالي: عند فشل CI حدد أول failing step ثم أصلح أصالة المصدر أو الربط، واحفظ السجل، وواصل Shader48 الباقية وماء FFT/Spectrum/Foam/Depth/Kernel6. لا تغلق G0–G6.
+
+## مرحلة GT الجديدة — 16 نوفمبر / نتائج FireAlpha الواقعية وLocal type0
+
+- [43777398215](https://github.com/alwansan/raf/actions/runs/43777398215) **SUCCESS real same-export**: 3 original SHA Texture2D، 5 Materials/10 TexEnv، 2 external TextureImporter images alpha decoded (1 opaque و1 شفافة جزئياً/كلياً)، و1 original local type0 غير مثبت؛ AlphaSource/Mipmap metadata للاثنتين مفقود، لا استنتاج أن النار صارت صحيحة.
+- إضافة `classify_original_local_texture_trace` (commit `caa2a26`) للتحقق من نوع وfileID وGUID المرجع المحلي مباشرةً مقابل `Texture2D28` source owner/PathID داخل نفس export trace، دون تغيير الـGUID أو الصورة. المصدر/unit [43778269494](https://github.com/alwansan/raf/actions/runs/43778269494) **SUCCESS**، real [43778269514](https://github.com/alwansan/raf/actions/runs/43778269514) **pending** وقت آخر تحقق.
+- NEXT23 full ZIP2 [43777150940](https://github.com/alwansan/raf/actions/runs/43777150940) in_progress و[43777283111](https://github.com/alwansan/raf/actions/runs/43777283111) pending؛ الأعداد المثبتة **570/786 non-Dummy، 216 Dummy / 46 targets**. يجب قراءة post15 audit + حفظ SHA لـ29213 قبل تحسين الرقم.
+- استعادة كل موارد الماء وFFT/kernel6 والرسوم والمجسمات والظلال G0-G6، بدون XAPK والأنيميشن مؤجل.
