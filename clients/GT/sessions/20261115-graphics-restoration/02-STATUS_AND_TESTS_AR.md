@@ -1,5 +1,19 @@
 # التقدم وما بقي والفحوص
 
+## GT — آخر فحوص أصل 7-material (16 نوفمبر 2026)
+
+| نطاق | GitHub Actions | الحالة عند الفحص |
+| --- | --- | --- |
+| **آخر SAME EXPORT مقبول** | [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110) | **SUCCESS 628/786 Custom non-Dummy، 158 Dummy/43، 29,213 SHA ثابتة** |
+| NEXT7p11 المصدر الأصلي والتثبيت بنفس GUID | [43925468867](https://github.com/alwansan/raf/actions/runs/43925468867) | IN PROGRESS؛ post22 681/105/38 **غير مثبت** |
+| NEXT7p33 المصدر الأصلي والتثبيت بنفس GUID | [43925787952](https://github.com/alwansan/raf/actions/runs/43925787952) | IN PROGRESS؛ post23 688/98/37 **غير مثبت** |
+| unit source/installer suite | [43925234660](https://github.com/alwansan/raf/actions/runs/43925234660) | SUCCESS فقط static |
+| six full-export stage wiring/provenance guard | [43925851391](https://github.com/alwansan/raf/actions/runs/43925851391) | SUCCESS فقط static |
+
+- source original ZIP2 pinned SHA، original owner/PathID→export original GUID، Unity Vulkan serialized routes، unchanged 29,213 Material/meta/YAML SHA شروط إلزامية لقبول ما بعد التثبيت. **لا تعتبر نجاح الاختبارات الثابتة إثباتاً لرسوم الهاتف أو شمول الموارد**.
+- [تفاصيل الدليل الجديد](../..//evidence/20261116_gt_next7pair_original_guid_pipeline_progress.json). باقي G0–G6، Water/Fire/kernel6 وAdreno pixel parity لم تُغلق.
+
+
 ## فحوص الأربع دفعات الأصلية المحمية — 16 نوفمبر 2026
 
 | مرحلة | تشغيل آخر نسخة صحيحة | النتيجة |
