@@ -1169,5 +1169,61 @@
     "all_original_game_resource_G0_G6_restored": false,
     "adreno_gpu_pixels_verified": false,
     "no_GT_xapk": true
+  },
+  "gt_next_seven_material_original_sources_20261116": {
+    "source": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "current_real_same_export_quality": {
+      "run": 43777283111,
+      "custom_material_docs": 786,
+      "custom_non_dummy": 593,
+      "custom_dummy": 193,
+      "dummy_shader_targets": 45,
+      "source_meta_YAML_unchanged_SHA_files": 29213
+    },
+    "new_seven_material_original_source_groups": [
+      {
+        "identity": "NEXT7p11",
+        "material_docs": 7,
+        "pass_modes_source_verified": true,
+        "pass_routes": [
+          4,
+          5,
+          2
+        ],
+        "original_D3D11": 22,
+        "source_success": 43789264382,
+        "source_artifact": 14190954229,
+        "private_unity_run": 43789424745,
+        "private_unity_accepted": false,
+        "same_export_original_shader_GUID_installed": false
+      },
+      {
+        "identity": "NEXT7p33",
+        "material_docs": 7,
+        "pass_routes": [
+          8,
+          13,
+          8,
+          4
+        ],
+        "original_D3D11": 58,
+        "source_success": 43788590820,
+        "source_artifact": 14190883438,
+        "private_unity_run": 43789192895,
+        "private_unity_success": true,
+        "private_unity_compiler_errors": 0,
+        "private_unity_artifact": 14191093809,
+        "same_export_original_shader_GUID_installed": false
+      }
+    ],
+    "full_native_runs": {
+      "NEXT18_old_misrouted_source_quality": 43786161961,
+      "NEXT18_corrected_pending": 43787527334,
+      "NEXT17_full": 43787809110
+    },
+    "next_action": "Read actual Unity 7p11 serialized Vulkan [4,5,2] receipt; then only original same-export Shader GUID with source owner/PathID and protected material SHA. Monitor and fix the 7.53GB full source export runs. Continue water FFT/kernel6 and Fire original Texture2D local PPtr.",
+    "animation_deferred": true,
+    "G0_G6_closed": false,
+    "XAPK_by_GT_created": false
   }
 }
