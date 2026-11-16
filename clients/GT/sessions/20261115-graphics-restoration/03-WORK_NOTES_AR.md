@@ -1,5 +1,14 @@
 # تفاصيل العمل للجلسة الجديدة
 
+## GT — 7p11/7p33 original GUID install engineering — 16 نوفمبر 2026
+
+- عرّفت `gt_install_next7p11_original_shader48.py` (commit b2c934cb، 11 routes 3 Pass) و`gt_install_next7p33_original_shader48.py` (commit fa17fac3، 33 routes 4 Pass)، وكلاهما يمنع تحوير GUID/Meta/material YAML ويشترط prior SAME EXPORT actual quality، authentic source 82 SHA owners وserialized Vulkan candidate hash. أصلحت source selector الأصلي 7p33 عند 8954001b: source post14 زوج 7-Material، لكن post22 بعد 7p11 يجب أن يحوي واحداً فقط، مع إثبات 4/33/8/58 topology.
+- الاختبارات المنشورة `test_gt_install_next7p11_original_shader48.py` commit 9f81e0b3 و`test_gt_install_next7p33_original_shader48.py` commit 0aba8c43، ووحدة source singleton 7p33 commit e0467f92. CI [43925234660](https://github.com/alwansan/raf/actions/runs/43925234660) SUCCESS.
+- أنشأت FULL SAME EXPORT workflows `raft-gt-next7p11-original-full-export.yml` commit 33af2670، run [43925468867](https://github.com/alwansan/raf/actions/runs/43925468867)، و`raft-gt-next7p33-original-full-export.yml` commit f6957b71، run [43925787952](https://github.com/alwansan/raf/actions/runs/43925787952). بوابة stage wiring لجميع الست [43925851391](https://github.com/alwansan/raf/actions/runs/43925851391) SUCCESS.
+- **آخر SAME EXPORT مثبت هو post17 628/786، 158 Dummy/43، وليس post23 المتوقع 688/98/37**. لا ترفع النسبة إلا بعد safe artifact actual، لا XAPK من GT حتى الموارد الأصلية كافة. NEXT15 43920541904، NEXT11 43920553298، NEXT10p33 43922026302، NEXT10p31 43922253136 أسبق بالترتيب وتعتمد عليها NEXT7p11/33.
+- [Evidence](../../evidence/20261116_gt_next7pair_original_guid_pipeline_progress.json). الماء والـcompute kernel6 والشادِرات الأخرى والألوان/fire alpha لم تكتمل.
+
+
 ## GT — تحديث مسارات الاستعادة الأربع (16 نوفمبر 2026)
 
 - آخر SAME-EXPORT مثبت [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110) SUCCESS: **628/786 Custom Material non-Dummy؛ 158 Dummy/43 Shader GUID**، 0 broken، 29,213 original Material/YAML/meta SHA unchanged؛ لا Adreno pixels ولا XAPK من GT.
