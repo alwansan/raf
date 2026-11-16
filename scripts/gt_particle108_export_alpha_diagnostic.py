@@ -442,7 +442,7 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
     if local_pointers:
         try:
             source_local_alpha=original_local_type0_source_pixel_alpha(original,local_pointers)
-        except (OSError, ValueError, AttributeError, RuntimeError, NotImplementedError) as failure:
+        except Exception as failure:
             # The original image can depend on a separate verified .resS
             # decoder. An unavailable source mip must remain inconclusive,
             # never be silently fabricated from an exported image.
