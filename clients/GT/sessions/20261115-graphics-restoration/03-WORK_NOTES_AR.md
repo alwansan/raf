@@ -1,5 +1,15 @@
 # تفاصيل العمل للجلسة الجديدة
 
+## GT — تحديث مسارات الاستعادة الأربع (16 نوفمبر 2026)
+
+- آخر SAME-EXPORT مثبت [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110) SUCCESS: **628/786 Custom Material non-Dummy؛ 158 Dummy/43 Shader GUID**، 0 broken، 29,213 original Material/YAML/meta SHA unchanged؛ لا Adreno pixels ولا XAPK من GT.
+- أصلحت استدعاء NEXT17 الخاطئ في مرحلتي NEXT15/NEXT11؛ commits `f1625a72`/`8f567bec`، والتشغيلات المصححة [43920541904](https://github.com/alwansan/raf/actions/runs/43920541904) و[43920553298](https://github.com/alwansan/raf/actions/runs/43920553298). لا تعتمد التشغيلات القديمة المنطلقة قبل الإصلاح.
+- أنشأت [NEXT10p33 43922026302](https://github.com/alwansan/raf/actions/runs/43922026302) بعد إصلاح post19 prior audit في commit `a3f20f02`: source original 58 D3D11، 33 VSFS [8,13,8,4] وRange6، post20 expected **664/122/40** فقط بعد تثبيت GUID على same export.
+- أنشأت [NEXT10p31 43922253136](https://github.com/alwansan/raf/actions/runs/43922253136): original 55 D3D11،31 VSFS [8,13,8,2] مع `--next30` للتحقق من جدول Vulkan، Range0. أصلحت `gt_translate_next_remaining_10p31_shader48.py` ومثبته لاستخدام مجموعتين 10-Material عند post14 ومجموعة واحدة عند post20 فقط، مع SHA/Topology/PathID/GUID. post21 expected **674/112/39** وليس فعلياً بعد.
+- Source/installer static [43921213570](https://github.com/alwansan/raf/actions/runs/43921213570) SUCCESS؛ full stage-wiring & distinct prior/current guards [43922343892](https://github.com/alwansan/raf/actions/runs/43922343892) SUCCESS. الأدلة `clients/GT/evidence/20261116_gt_next10pair_original_guid_pipeline_progress.json`.
+- **الخطوة التالية:** افحص Jobs/Logs/Artifacts لـ43920541904 و43920553298 و43922026302 و43922253136. اقبل أي post18/19/20/21 فقط عند SUCCESS وتقرير full SAME EXPORT مع 29,213 SHA. ثم أكمل shader targets وWater Spectrum/Foam/Depth/FFT/kernel6/Fire/G0–G6.
+
+
 - **Parallel NEXT11 chain** .github/workflows/raft-gt-next11-original-full-export.yml commit e8ca45d0, GitHub run [43918847740](https://github.com/alwansan/raf/actions/runs/43918847740) IN PROGRESS. Replays all previous stages in a separate genuine ZIP2 export, then requires post18 143/42, 58 original D3D11, 33 Vulkan VSFS, original GUID, post19 654/132/41 and unchanged 29,213 protected SHA. Values are conditional only; check exact job failure/receipt before promotion.
 
 ## New GT session work notes — 16 Nov 2026
