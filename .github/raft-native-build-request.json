@@ -1,7 +1,7 @@
 {
-  "request_id": "RAFT-BUILDFIX-20261116-1310-WATER-LIVE-03",
-  "reason": "Owner-only full native delivery after prior run 43836053855 proved original Foam Global 2-pass contract satisfied; remove only stale Foam limitation to match exact live unmet Depth Copy, water compute candidate and authentic kernel identity. Strict water gate remains enforced.",
-  "requested_from_sha": "a4e5a34ce5935a982c90c1fa652355de9094271d",
+  "request_id": "RAFT-BUILDFIX-20261116-1752-TIMEOUT360-OWNER-XAPK",
+  "reason": "Owner-requested new signed full APK OBB XAPK after run 43845968578 was cancelled by reconstruct 240-minute timeout while original shader variants were actively compiling; preserve authenticated graphics and strict water/package/sign/release gates; six-hour budget and memory watch regression verified by preflight 43890230420.",
+  "requested_from_sha": "f5f8835cdc98029cad0ce712df8cc0be857d2dcc",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Depth/Depth Copy",
@@ -9,10 +9,10 @@
   ],
   "owner_direct_request": true,
   "owner_instruction": "GT independently owns restoration and native delivery after stopping T1-T5; read ZIP2 SHA15964ea8 exclusively without Git LFS; use verified W1 original owners for original Depth Copy, include ALL source-authentic graphics and strict final no-fake-pass gates. Requested 2026-11-12.",
-  "previous_run_id": 43836053855,
-  "previous_build_source_sha": "8bf83afc8a97ef4ceda8154e31eec0c420556265",
+  "previous_run_id": 43845968578,
+  "previous_build_source_sha": "8eb753f6d69de92c4ed23270136586eba0412f18",
   "previous_failed_unity_run_id": 42281310905,
-  "fix_commit_sha": "20b92a965a5c5b080f24f8fb448fdcc9f21b0306",
+  "fix_commit_sha": "2816dff236679c60e0fe61bf306873a680abcd2e",
   "linked_session_id": "GT-20261112-CHAT-19-SIGNED-NATIVE-RECOVERY-AND-CURRENT-BUILD",
   "preceding_signed_native_recovery_run_id": 43246196803,
   "preceding_signed_native_recovery_artifact_id": 13957022329,
@@ -52,6 +52,6 @@
   "source_only_drift_regression_CI": 43350378817,
   "fully_restored_water_claimed": false,
   "allow_documented_foam_trial": true,
-  "latest_owner_build_note": "Foam Global 2-pass source contract satisfied in run 43836053855, not GPU/device pixel parity. Depth Copy and compute/kernel remain unmet and explicitly documented. Independent owner-only native trial.",
+  "latest_owner_build_note": "Retry after confirmed GitHub job timeout (240m) rather than shader/OMP failure; job capped 360m and memory monitor 6h. Preflight 43890230420 SUCCESS. Keep Foam/Depth/compute limitations truthful. Full signed XAPK proof requires successful Unity, Gradle, package and release.",
   "original_foam_two_pass_still_unverified": false
 }
