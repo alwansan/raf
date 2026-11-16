@@ -52,6 +52,40 @@ class ExportLineageTests(unittest.TestCase):
         self.assertEqual(checked['source_material_edges_verified'],2)
         self.assertFalse(checked['shader_program_equivalence_verified'])
 
+    def test_private_compute_lineage_preserves_strict_shader_proof(self):
+        # --compute-lineage emits ClassID72 in this same private exporter
+        # trace. Its bytes/kernel binding have a separate authenticity gate.
+        trace, edges, shaders, actual = self.fixture()
+        trace['objects'].append({
+            'class_id': 72,
+            'source': {'owner': 'compute-owner.assets', 'path_id': 72},
+            'export': {'file_id': 7200000, 'guid': 'b' * 32, 'type': 3},
+            'collection_type': 'private-source-authenticated-compute',
+            'exportable': True})
+        checked = check(trace, edges, shaders, actual)
+        self.assertTrue(checked['original_exported_material_shader_assignments_verified'])
+        self.assertEqual(checked['supplemental_compute_rows_structurally_checked_only'], 1)
+        self.assertEqual(checked['supplemental_texture_rows_structurally_checked_only'], 0)
+        self.assertEqual(checked['source_shader_objects_traced'], 2)
+        self.assertFalse(checked['shader_program_equivalence_verified'])
+
+    def test_private_compute_trace_refuses_untrusted_shape_and_pointer(self):
+        trace, edges, shaders, actual = self.fixture()
+        record = {
+            'class_id': 72,
+            'source': {'owner': 'compute-owner.assets', 'path_id': 72},
+            'export': {'file_id': 7200000, 'guid': 'b' * 32, 'type': 3},
+            'collection_type': 'private-source-authenticated-compute',
+            'exportable': True}
+        trace['objects'].append(record)
+        record['export']['file_id'] = 0
+        with self.assertRaisesRegex(ValueError, 'trace export pointer'):
+            check(trace, edges, shaders, actual)
+        record['export']['file_id'] = 7200000
+        record['unknown_override'] = True
+        with self.assertRaisesRegex(ValueError, 'supplemental compute trace shape'):
+            check(trace, edges, shaders, actual)
+
     def test_extra_unknown_trace_class_still_fails_closed(self):
         trace, edges, shaders, actual = self.fixture()
         trace['objects'].append({'class_id':999,
