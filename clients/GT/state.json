@@ -1197,5 +1197,54 @@
     },
     "source_full_parsedform_and_pass_states_preserved_runner_private": true,
     "latest_source_only_ci_success": true
+  },
+  "latest_verified_20261116_gt_progress": {
+    "source_branch_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "write_branch": "feature/android-native-port",
+    "post14_same_export": {
+      "run": 43773151176,
+      "success": true,
+      "non_dummy_custom_material_documents": 570,
+      "total_custom_material_documents": 786,
+      "remaining_dummy_custom_material_documents": 216,
+      "remaining_distinct_dummy_shader_targets": 46,
+      "all_material_documents": 1536,
+      "unity_builtin": 750,
+      "broken_shader_material_references": 0,
+      "unchanged_original_material_meta_yaml": 29213,
+      "custom_material_document_coverage_percent_only": 72.5,
+      "device_pixel_parity_verified": false
+    },
+    "next23": {
+      "source_run": 43774524669,
+      "isolated_unity_run": 43774787696,
+      "original_guid_install_completed": false,
+      "full_export_primary_run": 43777150940,
+      "full_export_fixed_fixture_run": 43777283111
+    },
+    "fire_alpha": {
+      "real_run": 43777398215,
+      "real_success": true,
+      "three_original_texture2d_sha_verified": true,
+      "external_exported_images_alpha_decoded": 2,
+      "local_type0_remaining": 1,
+      "device_fire_pixels_verified": false,
+      "local_type0_source_alpha_static_run": 43778717524,
+      "local_type0_source_alpha_real_run": 43778717548,
+      "local_type0_same_export_trace_real_acceptance": false
+    },
+    "post14_remaining_original_shader_topology": {
+      "failing_initial_run": 43778988866,
+      "failure_reason": "artifact_nested_path_not_found",
+      "corrected_run": 43779089456,
+      "expected_dummy_materials": 216,
+      "top_ranked": 16,
+      "source_owner_count": 82,
+      "material_count_source_from_actual_post14": true,
+      "full_real_result_accepted": false
+    },
+    "all_resource_restoration_complete": false,
+    "game_xapk_requested": false,
+    "animation_deferred": true
   }
 }
