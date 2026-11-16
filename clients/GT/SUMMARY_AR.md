@@ -1,5 +1,12 @@
 # ملخص تقدم GT للمالك
 
+## تقدم GT — استعادة أصل Shader48 7-Material (16 نوفمبر)
+
+- **الأساس الحقيقي المقبول** [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110): 628/786 Custom non-Dummy، 158 Dummy/43 Shader GUID، 29,213 SHA أصلية ثابتة، دون دليل pixel parity على الهاتف.
+- **جديد:** original NEXT7p11 [43925468867](https://github.com/alwansan/raf/actions/runs/43925468867)، 22 D3D11/11 Vulkan route/3 Pass، وفحص post22 المستهدف 681/786 non-Dummy و105 Dummy/38؛ original NEXT7p33 [43925787952](https://github.com/alwansan/raf/actions/runs/43925787952)، 58 D3D11/33 Vulkan route/4 Pass وفحص post23 المستهدف 688/786 non-Dummy و98 Dummy/37. تشغيلات SAME-EXPORT حية ولم يُقبل الجرد بعد.
+- source/installer static [43925234660](https://github.com/alwansan/raf/actions/runs/43925234660) SUCCESS؛ six stage wiring [43925851391](https://github.com/alwansan/raf/actions/runs/43925851391) SUCCESS. [Evidence جديدة](evidence/20261116_gt_next7pair_original_guid_pipeline_progress.json). باقي الماء والنار والظلال/الخامات ومطابقة الهاتف لا يزال مفتوحاً.
+
+
 ## GT — دفعة ربط Shader48 ذات الأربعة فحوص الأصيلة (16 نوفمبر 2026)
 
 - **الحالة الفعلية المثبتة**: [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110) SUCCESS: **628/786 Custom Material non-Dummy (79.90% من مستندات Custom Material فقط)**، 158 Dummy/43 Shader GUID متبقياً، 0 broken، و29,213 Material/meta/YAML SHA سليمة. هذا ليس تكافؤ رسوم اللعبة على الهاتف.
