@@ -239,14 +239,14 @@ def original_six_validator_private_failure_safe_topics(private):
         # Classify only statically authored Vulkan validator phrases, never
         # propagate original CB/member names or IDs from the private log.
         categories={
-            "member_overlap":r"member\\s+\\d+.*overlaps previous member",
-            "member_bad_alignment":r"member\\s+\\d+.*(?:not aligned|not properly aligned)",
+            "member_overlap":r"member\s+\d+.*overlaps previous member",
+            "member_bad_alignment":r"member\s+\d+.*(?:not aligned|not properly aligned)",
             "array_stride_invalid":r"arraystride|array stride",
             "matrix_stride_invalid":r"matrixstride|matrix stride",
             "offset_out_of_order":r"out of order",
             "uniform_buffer_standard_layout":r"standard uniform buffer layout",
             "storage_buffer_layout":r"standard storage buffer layout",
-            "block_member_offset":r"member\\s+\\d+.*offset",
+            "block_member_offset":r"member\s+\d+.*offset",
             "nested_struct_layout":r"nested struct|structure member",
             "block_extent_or_padding":r"(?:end of|end at|ending at|padding|padded)",
         }
