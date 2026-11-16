@@ -690,5 +690,81 @@
     "full_real_same_export_install_success_confirmed": false,
     "no_apk": true,
     "adreno_pixels_verified": false
+  },
+  "next_seven_two_distinct_source_Shader48_20261116": {
+    "immutable_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_real_post14_quality_run": 43773151176,
+    "source_original_82_SHA_owner_verified": true,
+    "distinct_name_digests_each_seven_material_docs": 2,
+    "next7p11": {
+      "original_mat_docs": 7,
+      "source_passes": 3,
+      "original_vsfs_by_pass": [
+        4,
+        5,
+        2
+      ],
+      "original_D3D11_vulkan11_roundtrip": 22,
+      "orphan_vertex_variants": 2,
+      "original_source_ShaderLab_properties": 12,
+      "original_Range_properties": 4,
+      "source_CB_offsets": 337,
+      "source_sampler_texture_bindings": 108,
+      "source_varyings": 61,
+      "first_failed_source_run": 43788585885,
+      "first_failure": "composer old route allowlist did not support genuine [4,5,2] source",
+      "original_tag_mode_bridge_commit": "180b5ee7c93a7e23d03107ac2692d8b361663667",
+      "second_failed_source_run": 43789088799,
+      "second_failure": "workflow inherited CI check expected 31 VSFS instead of 11 despite fully composed ShaderLab",
+      "original_CI_assert_fix_commit": "3f585052ee52c20129a7bc38fa2adf1fc9737c52",
+      "accepted_source_run": 43789264382,
+      "accepted_source_artifact_id": 14190954229,
+      "accepted_source_archive_sha256": "abec389870df852cc4dea671884cf6044143690041dbfb6dbb935f82aa104033",
+      "unity_bundle_run": 43789424745,
+      "unity_bundle_success_accepted": false,
+      "same_export_original_guid_installed": false,
+      "adreno_device_shader_pixels_proven": false
+    },
+    "next7p33": {
+      "original_mat_docs": 7,
+      "source_passes": 4,
+      "original_vsfs_by_pass": [
+        8,
+        13,
+        8,
+        4
+      ],
+      "original_D3D11_vulkan11_roundtrip": 58,
+      "orphan_vertex_variants": 8,
+      "original_source_ShaderLab_properties": 9,
+      "original_Range_properties": 0,
+      "source_CB_offsets": 816,
+      "source_sampler_texture_bindings": 364,
+      "source_varyings": 199,
+      "accepted_source_run": 43788590820,
+      "accepted_source_artifact_id": 14190883438,
+      "accepted_source_archive_sha256": "046487eb0db5be19f44bfad10384e02b4f34fc9f504abb1320ae5fef70a9b516",
+      "unity_bundle_run": 43789192895,
+      "unity_bundle_success_accepted": true,
+      "unity_compiler_errors": 0,
+      "unity_passes": 4,
+      "unity_serialized_vulkan_vsfs_by_pass": [
+        8,
+        13,
+        8,
+        4
+      ],
+      "unity_candidate_sha256": "b1f226826ea1c5fb3c805a13f0d03524d0ac34a581697d86f5a4084649301032",
+      "unity_artifact_id": 14191093809,
+      "unity_archive_sha256": "70e821bb1651bc4a6701013aac5f3ae8bf3201b45caf2fa31cddd345107b18dc",
+      "same_export_original_guid_installed": false,
+      "adreno_device_shader_pixels_proven": false
+    },
+    "current_real_same_export_material_custom_non_dummy": 593,
+    "current_real_same_export_material_custom_dummy": 193,
+    "original_dummy_shader_targets_remaining": 45,
+    "original_Material_meta_YAML_unchanged": 29213,
+    "no_new_same_export_guids_installed_by_these_source_runs": true,
+    "no_XAPK": true
   }
 }
