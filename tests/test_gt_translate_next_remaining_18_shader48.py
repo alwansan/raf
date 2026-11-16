@@ -3,6 +3,7 @@ import unittest
 
 from scripts.gt_translate_next_remaining_18_shader48 import (
     STATUS, EXPECTED_TOPOLOGY, select_exact_18_material_name,
+    validate_authentic_source_ranges,
 )
 
 
@@ -19,6 +20,30 @@ class Next18OriginalShaderSourceSelectionTests(unittest.TestCase):
         self.assertEqual(selected,[("resources.assets",10)])
         self.assertEqual(EXPECTED_TOPOLOGY,(4,33,8,58))
         self.assertIn("18_MATERIAL",STATUS)
+
+    def test_range_shape_is_sha_source_driven_not_next23_fixed_3_count(self):
+        p={"m_PropInfo":{"m_Props":[
+            {"m_Type":3,
+             "m_DefValue[0]":2.0,
+             "m_DefValue[1]":0.0,
+             "m_DefValue[2]":1.0,
+             "m_DefValue[3]":0.0},
+            {"m_Type":3,
+             "m_DefValue[0]":0.5,
+             "m_DefValue[1]":0.0,
+             "m_DefValue[2]":1.0,
+             "m_DefValue[3]":0.0},
+        ]}}
+        result=validate_authentic_source_ranges(p)
+        self.assertEqual(result["source_original_ShaderLab_Range_property_count"],2)
+        self.assertEqual(result["source_original_Range_default_outside_lower_upper_count"],1)
+        p["m_PropInfo"]["m_Props"][1]["m_DefValue[1]"]=2.0
+        with self.assertRaisesRegex(ValueError,"invalid_authentic_next18"):
+            validate_authentic_source_ranges(p)
+        p["m_PropInfo"]["m_Props"][1]["m_DefValue[1]"]=0.0
+        p["m_PropInfo"]["m_Props"][0]["m_DefValue[3]"]=1.0
+        with self.assertRaisesRegex(ValueError,"invalid_authentic_next18"):
+            validate_authentic_source_ranges(p)
 
     def test_missing_duplicate_material_names_and_colliding_source_owner_rejected(self):
         sources={("resources.assets",10):"a"*64,("level0",20):"a"*64,
