@@ -1,7 +1,7 @@
 {
-  "request_id": "RAFT-BUILDFIX-20261116-0905-LINEAGE-COMPUTE-01",
-  "reason": "Owner-requested full signed ARM64 APK OBB XAPK after strict export-lineage ClassID72 compute trace fix and conditional exception syntax correction; preserve documented water gaps and all strict gates.",
-  "requested_from_sha": "f7cccde7558d7164e6830ad8bb85cdda14595006",
+  "request_id": "RAFT-BUILDFIX-20261116-1200-FOAM-OWNER-ROOT-02",
+  "reason": "Owner-only full native delivery retry after fixing B20 Foam source root (OWNER already includes Raft_Data); preserve SHA-pinned original verification and exact documented water limitations.",
+  "requested_from_sha": "5588d531939f37819311183a26c8efa07735d7cf",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Depth/Depth Copy",
@@ -10,7 +10,7 @@
   ],
   "owner_direct_request": true,
   "owner_instruction": "GT independently owns restoration and native delivery after stopping T1-T5; read ZIP2 SHA15964ea8 exclusively without Git LFS; use verified W1 original owners for original Depth Copy, include ALL source-authentic graphics and strict final no-fake-pass gates. Requested 2026-11-12.",
-  "previous_run_id": 43781343622,
+  "previous_run_id": 43814524967,
   "previous_build_source_sha": "8bf83afc8a97ef4ceda8154e31eec0c420556265",
   "previous_failed_unity_run_id": 42281310905,
   "fix_commit_sha": "20b92a965a5c5b080f24f8fb448fdcc9f21b0306",
