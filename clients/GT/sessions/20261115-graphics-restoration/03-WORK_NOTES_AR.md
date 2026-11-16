@@ -100,6 +100,9 @@
 
 ## تنفيذ عملي إضافي GT — 16 نوفمبر 2026
 
+- تأكدت نتيجة [43777739448](https://github.com/alwansan/raf/actions/runs/43777739448) **SUCCESS**؛ job `133007783009` نجح في فحص `py_compile` واختبارات `test_gt_install_next23_original_shader48.py` و`test_gt_install_next30_original_shader48.py`. هذا **دليل اختبارات صناعية فقط** وليس تثبيتاً على GUID في التصدير الكامل؛ آخر رقم فعلي **216 Dummy / 46 Shader targets**.
+
+
 - أنشأت بوابة CI سريعة `.github/workflows/raft-gt-next23-installer-static-gate.yml` في commit `272520e57ddfc27547b3066b8587903b020f8e7c`؛ بدأ [43777739448](https://github.com/alwansan/raf/actions/runs/43777739448) لفحوص مصدر NEXT23 والمثبت وNEXT30 دون LFS/XAPK؛ لم تحصل نتيجة نهائية عند بدء التشغيل.\n\n
 
 - كتبت مثبت source-authentic NEXT23 جديداً `scripts/gt_install_next23_original_shader48.py` في commit `4939496dacd0d8635658570769e08106b4abb51a`؛ استخدمت source-owner/PathID→export trace + SHA source census وتوبولوجيا 4Pass/33 VSFS/8 orphan/58 program، verifier receipt SHA، واستبدال atomic للشيدر Dummy فقط. الاختبارات في `tests/test_gt_install_next23_original_shader48.py` وصححت fixture 165 source shaders في `263cda9381db330b0c4fc21972ec38d71ee23511`.
