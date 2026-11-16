@@ -281,7 +281,7 @@ def source_keyword_profile(pairs,orphans,parsed):
         "original_sampler_register_CB0_bindings_proven":False,
     }
 
-def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs):
+def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs, *, original_hlsl_offsets=False):
     """Preserve the per-stage override blobs separately from shared stage bytecode."""
     from scripts.a12_shader_parameter_decode import parse_parameter_blob
     from scripts.b25_foam_cb_namebridge import original_name_registry
@@ -340,7 +340,8 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
             lanes = constant_buffer_lanes(buffer)
             buffer["original_named_lanes"] = lanes
             cb_counts["named_lanes"] += sum(lane is not None for lane in lanes)
-        cb_counts["reflected_offsets"] += verify_named_constant_buffers(bound_stage, stage, buffers)
+        cb_counts["reflected_offsets"] += verify_named_constant_buffers(
+            bound_stage, stage, buffers, original_hlsl_offsets=original_hlsl_offsets)
         if stage == 1:
             mesh_inputs += verify_vertex_inputs(bound_stage, program_dir)
         cb_counts["mapped"] += len(buffers)
