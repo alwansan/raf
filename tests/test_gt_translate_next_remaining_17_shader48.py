@@ -53,7 +53,7 @@ class Next17OriginalShaderSourceSelectionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"missing_or_ambiguous"):
             select_exact_17_material_name(sources,{"a"*64:17,"b"*64:17})
         with self.assertRaisesRegex(ValueError,"missing_or_ambiguous"):
-            select_exact_17_material_name(sources,{"a"*64:23,"b"*64:17})
+            select_exact_17_material_name(sources,{"a"*64:23,"b"*64:16})
 
 
 if __name__=="__main__":
