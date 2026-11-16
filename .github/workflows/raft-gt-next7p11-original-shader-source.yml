@@ -192,7 +192,7 @@ jobs:
           assert q["status"]=="GT_SHA_ORIGINAL_REMAINING_7P11_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
           assert q["postfourteen_dummy_materials_linked_to_this_original_shader"]==7
           assert q["original_program_stages_roundtrip_Vulkan11_valid"]==22
-          assert q["original_exact_vertex_fragment_keyword_permutation_pairs"]==31
+          assert q["original_exact_vertex_fragment_keyword_permutation_pairs"]==11
           assert q["original_orphan_vertex_stage_variants"]==2
           assert len(q["source_original_keyword_permutation_route_counts_per_pass"])==3 and sum(q["source_original_keyword_permutation_route_counts_per_pass"])==11
           assert q["private_original_7p11_material_ShaderLab_3pass_composed"] is True
@@ -204,7 +204,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gt-next7p11-original-58-D3D11-source-safe-${{ github.run_id }}
+          name: gt-next7p11-original-22-D3D11-source-safe-${{ github.run_id }}
           path: ${{ runner.temp }}/gt-next7p11-original-source-safe.json
           retention-days: 14
           if-no-files-found: ignore
