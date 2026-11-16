@@ -1444,5 +1444,77 @@
     "six_original_shader_source_batches_all_passed": true,
     "four_isolated_Unity_accepted_two_pending": true,
     "latest_next23_full_run_step": "Recount original full export custom Materials after authenticated next30 GUID install, audit outstanding"
+  },
+  "latest_gt_verified_post15_material_census_20261116": {
+    "updated": "2026-11-16",
+    "verified_real_same_export": {
+      "run": 43777283111,
+      "stage": "post15_NEXT23",
+      "success": true,
+      "material_docs": 1536,
+      "custom_material_docs": 786,
+      "non_dummy_custom": 593,
+      "dummy_custom": 193,
+      "original_dummy_shader_targets_remaining": 45,
+      "original_protected_material_meta_yaml": 29213,
+      "source_original_export_Shader_GUID_preserved": true,
+      "broken_shader_references": 0,
+      "original_material_shader_coverage_pct_only": 75.45
+    },
+    "six_original_source_and_Unity_batches": [
+      {
+        "name": "NEXT18",
+        "weight": 18,
+        "source": 43779759999,
+        "unity": 43780219002,
+        "real_same_export": false
+      },
+      {
+        "name": "NEXT17",
+        "weight": 17,
+        "source": 43781304391,
+        "unity": 43782074242,
+        "real_same_export": false
+      },
+      {
+        "name": "NEXT15",
+        "weight": 15,
+        "source": 43782323454,
+        "unity": 43782657334,
+        "real_same_export": false
+      },
+      {
+        "name": "NEXT11",
+        "weight": 11,
+        "source": 43782328731,
+        "unity": 43782661831,
+        "real_same_export": false
+      },
+      {
+        "name": "NEXT10p33",
+        "weight": 10,
+        "source": 43785114809,
+        "unity": 43785362318,
+        "real_same_export": false
+      },
+      {
+        "name": "NEXT10p31",
+        "weight": 10,
+        "source": 43785119657,
+        "unity": 43785367029,
+        "real_same_export": false
+      }
+    ],
+    "not_yet_same_export_installed_six_batches_material_docs": 81,
+    "next18_full_original_GUID_export_workflow": "raft-gt-next18-original-full-export.yml",
+    "next18_full_original_GUID_run": 43786161961,
+    "next18_post16_611_non_dummy_175_dummy_44_targets_unverified": true,
+    "other_followup_original_GUID_installers_static_only_runs": [
+      43784558673,
+      43785949219
+    ],
+    "never_claim_all_resources_or_device_parity": true,
+    "requires_water_Spectrum_Foam_Depth_FFT_kernel6_fire_G0_G6": true,
+    "no_xapk_from_GT": true
   }
 }
