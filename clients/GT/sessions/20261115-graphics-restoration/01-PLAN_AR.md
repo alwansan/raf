@@ -1,5 +1,14 @@
 # خطة استكمال استعادة رسوم Raft Android
 
+## GT — قبول فعلي جديد NEXT15 SAME-EXPORT، وفتح مشكلة NEXT6 (16 نوفمبر 2026)
+
+- **تم القبول بالفعل:** [43920541904](https://github.com/alwansan/raf/actions/runs/43920541904) **SUCCESS** بعد إصلاح الخطأ السابق في المصدر، مع artifact `gt-eighteen-next15-source-shader-full-export-audit-43920541904` **ID 14260325739**. تدقيق **بعد التثبيت على original same-export Shader GUID** يثبت **643/786 Custom Material غير Dummy = 81.81% من مستندات Custom Material فقط**، **143 Dummy/42 original Shader GUID targets متبقية**، صفر مراجع Shader مكسورة، و**29,213 أصل Material/YAML/meta SHA سليمة**. يشمل مصدر NEXT15 الأصلي 58 D3D11 و33 VSFS Vulkan [8,13,8,4] و4 Pass. لا يوجد GT XAPK ولا إثبات Adreno pixels.
+- **لا يزال معلّقاً وغير مقبول:** بعد NEXT15 الناجح يجب تدقيق NEXT11 وNEXT10p33 وNEXT10p31 وNEXT7p11 وNEXT7p33 على نفس تصدير ZIP2؛ تشغيلات سلسلة التصحيح `43929654581`, `43929666693`, `43929675711`, `43929686417`, `43929698985`. أرقام ما بعد post18 (654/132/41 → 664/122/40 → 674/112/39 → 681/105/38 → 688/98/37) **أهداف شرطية غير مثبتة** حتى بيانات safe full-export.
+- بعد نجاح بوابة إصلاح المراحل الموروثة [43929969826](https://github.com/alwansan/raf/actions/runs/43929969826) **SUCCESS static**، يعمل فحص جميع 21 ancestor Shader48 source stages قبل الترجمة الفعلية، فلا يُخفي اختباره الأخير خطأ NEXT15 سابقاً.
+- **NEXT6 الأصلي الجديد** (مجموعة 6 Material، 1 Pass، 2 VSFS، 3 D3D11): ثبتت برامج المصدر الثلاثة Vulkan1.1 والتحقق من 8 خصائص وflag=2 `PerRendererData`/drawer الأصلية؛ لكن التوليد الكامل متوقف عند **overlap بين أعضاء Uniform Constant Buffer** يرفضه `spirv-val --target-env vulkan1.1`. خيار `--hlsl-offsets` لم يصلحه. CI [43933591980](https://github.com/alwansan/raf/actions/runs/43933591980) سجل **specific_member_overlap** بأمان من دون أي أسماء أو بيانات شيدر؛ تليه probes 43933639542، ولم يُقبل NEXT6 أو post24 المتوقع (694/92/36).
+- دليل وملفات الاستكمال: [إثباتات NEXT6 وسلاسل الأصول](evidence/20261116_gt_full_shader48_ancestor_gate_next6_source_progress.json)؛ أولى مهام الجلسة القادمة فحص آخر full SAME-EXPORT والتصحيح المتوافق مع Vulkan1.1 دون حذف overlap أو تعطيل التحقق. بقية موارد Water/Spectrum/Foam/Depth/FFT/kernel6، Fire alpha، PostFX، المجسمات/الخامات والألوان وG0–G6، وآثار Adreno غير مغلقة؛ الأنيميشن مؤجل.
+
+
 ## GT — استكمال سلسة Shader48 بعد إصلاح جميع مراحلها + مصدر 6-Material (16 نوفمبر 2026)
 
 - **أحدث نتيجة SAME EXPORT مثبتة:** [43917381834](https://github.com/alwansan/raf/actions/runs/43917381834) SUCCESS، **628/786 Custom Material غير Dummy (79.90% من مستندات المواد فقط)**، 158 Dummy و43 original Shader GUID متبقياً، 0 broken و29,213 Material/meta/YAML SHA أصلية ثابتة. هذا لا يثبت G0–G6/Water/Fire/Adreno pixels ولا يعني اكتمال اللعبة.
