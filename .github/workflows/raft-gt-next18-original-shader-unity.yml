@@ -206,10 +206,8 @@ jobs:
           mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
           cp "$source" "$project/Assets/GTNext18.shader"
           cp android-port/Experiments/GT/Editor/Next18ShaderValidation.cs "$project/Assets/Editor/"
-          printf '%s
-' '{"dependencies":{}}' > "$project/Packages/manifest.json"
-          printf '%s
-' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
       - name: Compile genuine Next18 4-pass 33 VSFS original keyword routes in Unity 2021 Android Vulkan (NO APK)
         uses: game-ci/unity-builder@v4
         env:
