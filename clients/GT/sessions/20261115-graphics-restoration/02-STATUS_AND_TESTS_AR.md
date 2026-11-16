@@ -149,3 +149,9 @@
 - [43780491219](https://github.com/alwansan/raf/actions/runs/43780491219) next17 SOURCE SHA-original 17 Material/43 programs/23 keyword routes/3 Pass started, current source translation, no result adopted. NEXT23 full same-export still pending final.
 - FireAlpha [43778717548](https://github.com/alwansan/raf/actions/runs/43778717548) real original local type0 PPtr same-export class28 exact matched + original top mip alpha decoded; no exported PNG/GUID or device pixel acceptance.
 - Last accepted: 570/786 Custom non-Dummy (72.5% CUSTOM MATERIAL COVERAGE ONLY), 216 Dummy/46 Shader GUID targets, 0 broken, 29213 unchanged Material/meta/YAML.
+
+## Next18 Unity serialized Vulkan full proof — 16 نوفمبر 2026
+
+- [43780219002](https://github.com/alwansan/raf/actions/runs/43780219002) **SUCCESS** job 133015477047؛ `GT_ORIGINAL_921_UNITY_SAFE`: unityVersion 2021.3.45f2, 4 Pass, registeredRoutes 33, errors 0, androidVulkanOnly true, privateBundleCompiled true. `GT_ORIGINAL_921_BUNDLE_ROUTES`: compiled table true, vertex_and_fragment_entrypoints_verified true, `vertex_routes_by_pass=fragment_routes_by_pass=[8,13,8,4]`، source shader SHA256 `e7654374f3eacc6b0487d619487886ae20c3b21d4745d0d915e712dd5ac24cc1`. Artifact `gt-next18-original-unity-33route-safe-43780219002` ID 14188102481، archive SHA256 `0384868233bf970f63bef96861ec41cc12a705eb58a27dd662f9a83eb2b9c49b`. **ISOLATED UNITY** فقط.
+- [43780491219](https://github.com/alwansan/raf/actions/runs/43780491219) FAILED: next17 workflow اختبر وترجم NEXT18 كخطأ plumbing (GT_NEXT_18 log output)، ولدى next17 source حارس موروث 58 عوضاً عن 43؛ أصلاح المصدر `bd9c59d` والworkflow `c855514`، [43780876983](https://github.com/alwansan/raf/actions/runs/43780876983) يتطلب نتيجة فعلية، ولا يوجد source17 accepted بعد.
+- آخر same-export audit NEXT30 43773151176: 570 non-Dummy / 216 Dummy 46 targets، 29213 untouched، 0 broken. لا DEVICE proof أو XAPK.
