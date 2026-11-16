@@ -4,8 +4,8 @@ on:
   push:
     branches: [feature/android-native-port]
     paths:
-      - scripts/gt_translate_next_remaining_18_shader48.py
-      - tests/test_gt_translate_next_remaining_18_shader48.py
+      - scripts/gt_translate_next_remaining_17_shader48.py
+      - tests/test_gt_translate_next_remaining_17_shader48.py
       - .github/workflows/raft-gt-next17-original-shader-source.yml
   workflow_dispatch:
 
@@ -32,7 +32,7 @@ jobs:
       - name: Reject ambiguous original 17-material names, source identities and topology
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/gt_translate_next_remaining_18_shader48.py
+          python3 -m py_compile scripts/gt_translate_next_remaining_17_shader48.py
           python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_18_shader48.py -v
       - name: Load accepted actual post14 216 Dummy material export audit
         uses: actions/download-artifact@v4
@@ -201,7 +201,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gt-next17-original-58-D3D11-source-safe-${{ github.run_id }}
+          name: gt-next17-original-43-D3D11-source-safe-${{ github.run_id }}
           path: ${{ runner.temp }}/gt-next17-original-source-safe.json
           retention-days: 14
           if-no-files-found: ignore
