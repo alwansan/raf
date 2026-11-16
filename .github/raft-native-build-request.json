@@ -1,16 +1,17 @@
 {
-  "request_id": "GT-20261113-WaterLiveLimitExact-Spectrum7-Foam2-native",
-  "reason": "Owner-authorized full Unity Android ARM64 APK OBB XAPK after real Spectrum7 source GUID install proof from failed run43346405263 and original Foam2 stage in queued run43349181838. Preserve strict water gate and exact documented experimental limitations: original Depth alternative subshader [6,3], missing water compute source, unknown original kernel identity. Never claim complete original water graphics.",
-  "requested_from_sha": "301f499f3c602c5c115fc471121825737ae441f2",
+  "request_id": "OWNER-20261116-0430-LATEST-RESTORATION-TRIAL-01",
+  "reason": "Owner-requested full signed ARM64 APK OBB XAPK of latest integrated original model, texture, water, fire and effect restorations; record authentic Foam2 remaining limitation instead of claiming false restoration. All real Unity and package gates remain strict.",
+  "requested_from_sha": "adbbe8b9a1a7061d4b8323188980adacf97d7c16",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Depth/Depth Copy",
+    "shader_pass_contract:UltimateWater/Foam/Global",
     "water_compute_source_candidate"
   ],
   "owner_direct_request": true,
   "owner_instruction": "GT independently owns restoration and native delivery after stopping T1-T5; read ZIP2 SHA15964ea8 exclusively without Git LFS; use verified W1 original owners for original Depth Copy, include ALL source-authentic graphics and strict final no-fake-pass gates. Requested 2026-11-12.",
-  "previous_run_id": 43349181838,
-  "previous_build_source_sha": "c3c71731525465cb2f6297f6bcbdb37c60ae4058",
+  "previous_run_id": 43350559665,
+  "previous_build_source_sha": "8bf83afc8a97ef4ceda8154e31eec0c420556265",
   "previous_failed_unity_run_id": 42281310905,
   "fix_commit_sha": "20b92a965a5c5b080f24f8fb448fdcc9f21b0306",
   "linked_session_id": "GT-20261112-CHAT-19-SIGNED-NATIVE-RECOVERY-AND-CURRENT-BUILD",
@@ -50,5 +51,8 @@
   "water_compute_source_candidate_present_in_previous_real_run": false,
   "experiment_acknowledges_live_unmet_expected_exactly": true,
   "source_only_drift_regression_CI": 43350378817,
-  "fully_restored_water_claimed": false
+  "fully_restored_water_claimed": false,
+  "allow_documented_foam_trial": true,
+  "latest_owner_build_note": "This is an independent owner-requested trial snapshot; GT and other recovery agents continue without blocking. Not proof of complete graphics recovery or on-device pixel parity.",
+  "original_foam_two_pass_still_unverified": true
 }
