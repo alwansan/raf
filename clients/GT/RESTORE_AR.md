@@ -11,6 +11,9 @@
 
 ## أحدث حالة موثقة — GT / 16 نوفمبر 2026 (بعد اكتمال NEXT30)
 
+- تأكدت نتيجة [43777739448](https://github.com/alwansan/raf/actions/runs/43777739448) **SUCCESS**؛ job `133007783009` نجح في فحص `py_compile` واختبارات `test_gt_install_next23_original_shader48.py` و`test_gt_install_next30_original_shader48.py`. هذا **دليل اختبارات صناعية فقط** وليس تثبيتاً على GUID في التصدير الكامل؛ آخر رقم فعلي **216 Dummy / 46 Shader targets**.
+
+
 - أضفت بوابة CI سريعة مستقلة لمثبت NEXT23 `.github/workflows/raft-gt-next23-installer-static-gate.yml` عبر [272520e](https://github.com/alwansan/raf/commit/272520e57ddfc27547b3066b8587903b020f8e7c)، وبدأ [43777739448](https://github.com/alwansan/raf/actions/runs/43777739448). تفحص unit provenance/receipt/meta قبل انتظار تصدير ZIP2 الكامل. **لا تعتبرها إثبات نفس التصدير أو انخفاض الـ216 Dummy**.\n\n
 
 - **NEXT30 ثَبَتَ في نفس التصدير وعلى Shader48 GUID الأصلي**: [43773151176](https://github.com/alwansan/raf/actions/runs/43773151176) **SUCCESS**، commit `988490597b63f6c404536b4b311c03d0f6d3f8dc`، Artifact `gt-fourteen-next30-source-shader-full-export-audit-43773151176` (ID `14186801044`). سلسلة الدليل: ZIP2 SHA أصلية → 55 D3D11/Vulkan → 31 VS/FS routes [8,13,8,2] في Unity 2021.3.45f2 Android Vulkan → export trace owner/PathID إلى Shader GUID الأصلي → تثبيت حقيقي → فحص ملفات Material/meta/YAML والجرد الفعلي. الناتج **570/786 non-Dummy Custom (72.5%)** و**216 Dummy** على **46 Shader targets** من إجمالي 1536 مادة (750 built-in)، **0 broken**، و**29213** ملف مواد/مراجع محمية دون تعديل؛ **لا APK/XAPK**. 72.5% تخص **Custom Material documents ذات ShaderLab non-Dummy فقط**، ولا تعني تكافؤ shader الأصلي أو نسبة استعادة اللعبة.
