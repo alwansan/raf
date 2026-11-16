@@ -354,7 +354,18 @@
         13,
         2
       ],
-      "accepted_isolated_unity": false
+      "accepted_isolated_unity": true,
+      "accepted_run": 43782074242,
+      "accepted_artifact_id": 14189140548,
+      "accepted_artifact_zip_sha256": "f9e7e45c103562f52c74f81e4597805796e248b4a1c4ae5f3612cd9f978ac95c",
+      "source_shader_sha256": "c479018de19d5d26e6aac7dee341bdba585db439b22ad6ea6d58ca31a877907b",
+      "serialized_VSFS_routes_by_pass": [
+        8,
+        13,
+        2
+      ],
+      "unity_compiler_errors": 0,
+      "original_export_shader_GUID_installed": false
     }
   },
   "next23_full_export_current": {
@@ -366,5 +377,57 @@
     "accepted_actual_post15_material_dummy_count": null,
     "accepted_same_export_next23_GUID_install": false,
     "replacement_status": "in_progress"
+  },
+  "next15_original_source": {
+    "run": 43782323454,
+    "conclusion": "success",
+    "original_custom_dummy_material_docs": 15,
+    "original_D3D11_roundtripped_Vulkan11": 58,
+    "VSFS_routes_by_pass": [
+      8,
+      13,
+      8,
+      4
+    ],
+    "orphan_vertex_stages": 8,
+    "private_HLSL_stage_entrypoints_compiled": 66,
+    "original_ShaderLab_composed": true,
+    "properties": 23,
+    "original_Range_count": 12,
+    "parameter_records": 74,
+    "constant_buffer_offsets": 1607,
+    "texture_sampler_mappings": 346,
+    "varyings": 260,
+    "artifact_id": 14188699030,
+    "artifact_zip_sha256": "5fef654d8fc29829de9efe976f6a73d7cc3ece6f621cfb5d464db82daebb7624",
+    "isolated_unity_run": 43782657334,
+    "isolated_unity_final_accepted": false,
+    "same_export_original_GUID_installed": false
+  },
+  "next11_original_source": {
+    "run": 43782328731,
+    "conclusion": "success",
+    "original_custom_dummy_material_docs": 11,
+    "original_D3D11_roundtripped_Vulkan11": 58,
+    "VSFS_routes_by_pass": [
+      8,
+      13,
+      8,
+      4
+    ],
+    "orphan_vertex_stages": 8,
+    "private_HLSL_stage_entrypoints_compiled": 66,
+    "original_ShaderLab_composed": true,
+    "properties": 9,
+    "original_Range_count": 0,
+    "parameter_records": 74,
+    "constant_buffer_offsets": 828,
+    "texture_sampler_mappings": 306,
+    "varyings": 199,
+    "artifact_id": 14187964353,
+    "artifact_zip_sha256": "9c891cecdac3d325fe0ed3e8d25f41ba95dba1a4c7a3d0889d2fd8631ceeb3d9",
+    "isolated_unity_run": 43782661831,
+    "isolated_unity_final_accepted": false,
+    "same_export_original_GUID_installed": false
   }
 }
