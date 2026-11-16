@@ -252,5 +252,75 @@
       "unity_bundle_verified": false,
       "original_guid_same_export_installed": false
     }
+  },
+  "next18_isolated_unity_real_bundle": {
+    "run": 43780219002,
+    "conclusion": "success",
+    "job_id": 133015477047,
+    "artifact_id": 14188102481,
+    "artifact_zip_digest": "sha256:0384868233bf970f63bef96861ec41cc12a705eb58a27dd662f9a83eb2b9c49b",
+    "source_58_of_58_original_D3D11_vulkan_valid": true,
+    "shaderlab_source_properties": 15,
+    "source_ranges": 7,
+    "unity_version": "2021.3.45f2",
+    "android_vulkan_only": true,
+    "unity_shader_compiler_errors": 0,
+    "serialized_vertex_routes_by_pass": [
+      8,
+      13,
+      8,
+      4
+    ],
+    "serialized_fragment_routes_by_pass": [
+      8,
+      13,
+      8,
+      4
+    ],
+    "source_candidate_sha256": "e7654374f3eacc6b0487d619487886ae20c3b21d4745d0d915e712dd5ac24cc1",
+    "game_player_built": false,
+    "same_export_original_shader_guid_installed": false,
+    "android_device_pixels_verified": false
+  },
+  "next18_original_guid_installer_staging": {
+    "installer": "scripts/gt_install_next18_original_shader48.py",
+    "source_commit": "c060b75c8dccf53d40a3d49ac8203c804dee8702",
+    "static_test_ci": 43781139286,
+    "static_ci_conclusion": "success",
+    "static_ci_job": 133018358332,
+    "post15_dummy_required_but_unverified": 193,
+    "post15_non_dummy_required_but_unverified": 593,
+    "post15_distinct_dummy_shader_targets_required_but_unverified": 45,
+    "real_post15_material_quality_required": true,
+    "same_export_source_owner_PathID_to_shader_GUID_required": true,
+    "original_material_meta_yaml_files_to_sha_verify": 29213,
+    "was_installed": false
+  },
+  "next17_source_restoration": {
+    "source_code": "scripts/gt_translate_next_remaining_17_shader48.py",
+    "expected_d3d11": 43,
+    "source_sha_owner_count": 82,
+    "source_shader48_census": 165,
+    "expected_passes": 3,
+    "expected_vsfs_routes": 23,
+    "original_material_documents_linked": 17,
+    "initial_workflow_wrong_module_run": 43780491219,
+    "second_workflow_still_wrong_python_module_run": 43780876983,
+    "third_unit_test_fixture_failure": 43781208317,
+    "corrected_workflow_python_call_commit": "34aa22258c872e80faa04702f8707a8ecc5762ba",
+    "corrected_unit_test_fixture_commit": "adbbe8b9a1a7061d4b8323188980adacf97d7c16",
+    "corrected_live_run": 43781304391,
+    "accepted_original_shaderlab_source": false,
+    "isolated_unity_verified": false,
+    "same_export_installed": false
+  },
+  "next23_full_export_current": {
+    "first_run": 43777150940,
+    "first_conclusion": "failure",
+    "first_failure": "older synthetic 165-owner Shader48 test fixture",
+    "corrected_fixture_commit": "263cda9381db330b0c4fc21972ec38d71ee23511",
+    "replacement_run": 43777283111,
+    "accepted_actual_post15_material_dummy_count": null,
+    "accepted_same_export_next23_GUID_install": false
   }
 }
