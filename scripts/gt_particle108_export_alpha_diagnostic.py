@@ -280,6 +280,47 @@ def classify_original_local_texture_trace(trace, local_pointers):
             "original_local_Type0_external_GUID_inferred":False}
 
 
+def original_local_type0_source_pixel_alpha(original, private_local_pointers):
+    """Decode ONLY the exact authenticated original local Texture2D28 top mip.
+
+    This reads no same-export image, does not publish source bytes or labels,
+    and cannot establish visual GPU parity. The source owner must match the
+    SHA-pinned original Material/Shader owner before any UnityPy decode.
+    """
+    import UnityPy
+    from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+    from scripts.w1_stage_zip2_owners import fingerprint
+
+    if type(private_local_pointers) is not dict or len(private_local_pointers)!=1:
+        raise ValueError("invalid_original_local_Texture2D28_source_pixel_scope")
+    [(original_key,local_ptr)]=list(private_local_pointers.items())
+    if (type(original_key) is not tuple or len(original_key)!=2
+            or original_key[0] not in SHADER_OWNERS
+            or type(original_key[1]) is not int or original_key[1]<=0
+            or type(local_ptr) is not tuple or len(local_ptr)!=3 or local_ptr[2]!=0):
+        raise ValueError("unverified_original_local_Texture2D28_source_identity")
+    owner,pid=original_key
+    path=original/"Raft_Data"/owner
+    if path.is_symlink() or not path.is_file() or fingerprint(path)!=SHADER_OWNERS[owner]:
+        raise ValueError("original_local_Texture2D28_source_owner_SHA_drift")
+    env=UnityPy.load(str(path))
+    matches=[obj for obj in env.file.objects.values() if obj.path_id==pid]
+    if len(matches)!=1 or matches[0].type.name!="Texture2D":
+        raise ValueError("source_original_local_PPtr_not_unique_Texture2D28")
+    texture=matches[0].read()
+    source_image=texture.image
+    if source_image is None:
+        raise ValueError("original_local_Texture2D28_top_mip_image_unavailable")
+    result=alpha_profile(source_image)
+    return {
+        "original_local_Type0_Texture2D28_source_top_mip_alpha_decoded":True,
+        "original_local_Type0_Texture2D28_source_top_mip_alpha_profile":result,
+        "original_local_Type0_texture_has_exported_image_proof":False,
+        "original_local_Type0_original_and_exported_pixels_compared":False,
+        "source_original_texture_bytes_or_identifiers_disclosed":False,
+    }
+
+
 def image_meta_index(assets, wanted):
     """Use exactly the previously traced GUIDs; never infer assets by names."""
     if not assets.is_dir() or assets.is_symlink():
@@ -390,6 +431,22 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
                      "same_export_original_local_PPtr_matches_Texture2D28_trace":False,
                      "original_local_Type0_Texture2D_export_status":"NO_LOCAL_PPTR",
                      "original_local_Type0_external_GUID_inferred":False})
+    mark("decode_original_local_type0_Texture2D28_top_mip")
+    source_local_alpha={
+        "original_local_Type0_Texture2D28_source_top_mip_alpha_decoded":False,
+        "original_local_Type0_Texture2D28_source_top_mip_alpha_profile":None,
+        "original_local_Type0_texture_has_exported_image_proof":False,
+        "original_local_Type0_original_and_exported_pixels_compared":False,
+        "source_original_texture_bytes_or_identifiers_disclosed":False,
+    }
+    if local_pointers:
+        try:
+            source_local_alpha=original_local_type0_source_pixel_alpha(original,local_pointers)
+        except (OSError, ValueError, AttributeError, RuntimeError, NotImplementedError) as failure:
+            # The original image can depend on a separate verified .resS
+            # decoder. An unavailable source mip must remain inconclusive,
+            # never be silently fabricated from an exported image.
+            source_local_alpha["original_local_Type0_source_alpha_safe_error_type"]=type(failure).__name__
     mark("locate_exported_TextureImporter_image")
     if len(mapping) not in (2, EXPECTED_TARGETS):
         raise ValueError("incomplete_original_particle_two_external_texture_alpha_scope")
@@ -415,6 +472,7 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
         "same_export_original_external_TextureImporter_images_confirmed": len(mapping),
         "source_original_all_three_Texture2D_as_exported_images_verified": local_count == 0,
         **local_proof,
+        **source_local_alpha,
         "original_local_Type0_texture_pixel_alpha_verified": False,
         "original_texture_direct_export_trace_guid_usable": direct_mapping is not None,
         "original_material_same_export_GUID_and_UV_linkage_verified": local_count == 0,
@@ -451,6 +509,7 @@ def main():
         "parse_exported_Material_TexEnv_YAML",
         "join_original_Material_TexEnv_to_exported_Texture2D_GUID",
         "classify_same_export_local_Texture2D28_type0_pointer",
+        "decode_original_local_type0_Texture2D28_top_mip",
         "locate_exported_TextureImporter_image",
         "decode_exported_image_alpha",
         "completed",
