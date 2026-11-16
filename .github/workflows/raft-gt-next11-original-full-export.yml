@@ -2493,8 +2493,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/gt_translate_next_remaining_17_shader48.py scripts/gt_install_next11_original_shader48.py
-          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_17_shader48.py -v
+          python3 -m py_compile scripts/gt_translate_next_remaining_11_shader48.py scripts/gt_install_next11_original_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_11_shader48.py -v
           python3 -m unittest discover -s tests -p test_gt_install_next11_original_shader48.py -v
           python3 - <<'PY_GT_REAL_NEXT11_PRIOR'
           import json,os
@@ -2513,7 +2513,7 @@ jobs:
           weights=q["dummy_shader_material_counts_by_name_digest"]
           assert sum(weights.values())==143
           assert list(weights.values()).count(11)==1
-          print("GT_NEXT11_REAL_PRIOR_POST16_611_NON_DUMMY_175_DUMMY_44_TARGETS_SOURCE_ACCEPTED noAPK=true")
+          print("GT_NEXT11_REAL_PRIOR_POST18_643_NON_DUMMY_143_DUMMY_42_TARGETS_SOURCE_ACCEPTED noAPK=true")
           PY_GT_REAL_NEXT11_PRIOR
       - name: Recover NEXT11 58 original D3D11 programs from ZIP2 with exact post14 216-source identity
         shell: bash
@@ -2522,7 +2522,7 @@ jobs:
           work="$RUNNER_TEMP/gt-next11-full-export-private"
           # Source selector contract is independently tied to post14 216/46.
           # Same-export installer contract below is tied to post17 158/58.
-          timeout 2700s python3 -m scripts.gt_translate_next_remaining_17_shader48 \
+          timeout 2700s python3 -m scripts.gt_translate_next_remaining_11_shader48 \
             --original "$RUNNER_TEMP/gt-input/Raft_Data" \
             --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
             --quality "$RUNNER_TEMP/gt-fourteen-shader-postrestore-quality.json" \
@@ -2542,7 +2542,7 @@ jobs:
           assert q["private_original_11_material_ShaderLab_4pass_composed"] is True
           assert q["private_original_11_material_ShaderLab_66_vertex_fragment_entrypoints_validated"] is True
           assert q["source_original_Range_property_count"]==0
-          print("GT_NEXT11_GENUINE_43_D3D11_23_VSFS_SOURCE_3PASS_VERIFIED noAPK=true")
+          print("GT_NEXT11_GENUINE_58_D3D11_33_VSFS_SOURCE_4PASS_VERIFIED noAPK=true")
           PY_GT_NEXT11_SOURCE
           project="$GITHUB_WORKSPACE/gt-next11-full-export-unity"
           mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
@@ -2599,7 +2599,7 @@ jobs:
           assert bundle["vertex_and_fragment_entrypoints_verified"] is True
           assert bundle["vertex_routes_by_pass"]==bundle["fragment_routes_by_pass"]==[8,13,8,4]
           assert bundle["candidate_sha256"]==hashlib.sha256(candidate.read_bytes()).hexdigest()
-          print("GT_NEXT11_UNITY_VULKAN_23_VSFS_4PASS_SERIALIZED_VERIFIED noAPK=true")
+          print("GT_NEXT11_UNITY_VULKAN_33_VSFS_4PASS_SERIALIZED_VERIFIED noAPK=true")
           PY_GT_NEXT11_BUNDLE
       - name: Install NEXT11 original Shader48 on same-export original GUID using actual post18 audit
         shell: bash
