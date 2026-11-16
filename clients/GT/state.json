@@ -1405,6 +1405,44 @@
     ],
     "water_fft_kernel6_fire_Adreno_pipelines_all_verified": false,
     "G0_to_G6_resource_restoration_closed": false,
-    "xapk_created_by_GT": false
+    "xapk_created_by_GT": false,
+    "parallel_authentic_two_ten_material_source_batches": [
+      {
+        "identity": "NEXT10p33",
+        "material_docs": 10,
+        "source_run": 43785114809,
+        "source_success": true,
+        "original_D3D11_programs": 58,
+        "source_VSFS_routes": [
+          8,
+          13,
+          8,
+          4
+        ],
+        "unity_run": 43785362318,
+        "unity_status_last_checked": "in_progress",
+        "same_export_original_GUID_installed": false
+      },
+      {
+        "identity": "NEXT10p31",
+        "material_docs": 10,
+        "source_run": 43785119657,
+        "source_success": true,
+        "original_D3D11_programs": 55,
+        "source_VSFS_routes": [
+          8,
+          13,
+          8,
+          2
+        ],
+        "unity_run": 43785367029,
+        "unity_status_last_checked": "in_progress",
+        "same_export_original_GUID_installed": false
+      }
+    ],
+    "six_source_shaders_candidate_material_docs_not_installed": 81,
+    "six_original_shader_source_batches_all_passed": true,
+    "four_isolated_Unity_accepted_two_pending": true,
+    "latest_next23_full_run_step": "Recount original full export custom Materials after authenticated next30 GUID install, audit outstanding"
   }
 }
