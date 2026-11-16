@@ -1,0 +1,211 @@
+name: GT next original 17-material Shader48 source 43 D3D11 to Vulkan (NO APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_translate_next_remaining_18_shader48.py
+      - tests/test_gt_translate_next_remaining_18_shader48.py
+      - .github/workflows/raft-gt-next17-original-shader-source.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: gt-next17-original-source-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  authenticated-original-17-material-shader48:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Reject ambiguous original 17-material names, source identities and topology
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_translate_next_remaining_18_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_18_shader48.py -v
+      - name: Load accepted actual post14 216 Dummy material export audit
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43773151176
+          name: gt-fourteen-next30-source-shader-full-export-audit-43773151176
+          path: ${{ runner.temp }}/gt-next17-post14-artifact
+      - name: Resolve unique actual accepted post14 material quality report
+        run: |
+          set -euo pipefail
+          python3 - <<'PY_GT_NEXT17_POST14'
+          import json,os,shutil
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"gt-next17-post14-artifact"
+          matches=[p for p in root.rglob("gt-fourteen-shader-postrestore-quality.json")
+                   if p.is_file() and not p.is_symlink()]
+          if len(matches)!=1:
+              raise ValueError("missing_or_ambiguous_real_next17_post14_material_quality")
+          q=json.loads(matches[0].read_text())
+          c=q.get("counts",{})
+          if (q.get("status")!="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+                  or c.get("material_documents")!=1536
+                  or c.get("material_docs_using_local_custom_Shader")!=786
+                  or c.get("material_docs_using_dummy_Shader")!=216
+                  or c.get("distinct_dummy_Shader_targets_referenced")!=46
+                  or c.get("material_docs_using_non_dummy_Shader")!=570
+                  or sum(q.get("dummy_shader_material_counts_by_name_digest",{}).values())!=216
+                  or list(q["dummy_shader_material_counts_by_name_digest"].values()).count(17)!=1):
+              raise ValueError("untrusted_next17_original_post14_real_export_baseline")
+          shutil.copyfile(matches[0],Path(os.environ["RUNNER_TEMP"])/"gt-next17-post14-verified-quality.json")
+          print("GT_NEXT17_ACTUAL_POST14_216_DUMMY_46_SHADER_TARGETS_SOURCE_ACCEPTED noAPK=true")
+          PY_GT_NEXT17_POST14
+      - name: Read immutable ZIP2 serialized owner files only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/level6
+            Raft/Raft_Data/level7
+            Raft/Raft_Data/level8
+            Raft/Raft_Data/level9
+            Raft/Raft_Data/level10
+            Raft/Raft_Data/level11
+            Raft/Raft_Data/level12
+            Raft/Raft_Data/level13
+            Raft/Raft_Data/level14
+            Raft/Raft_Data/level15
+            Raft/Raft_Data/level16
+            Raft/Raft_Data/level17
+            Raft/Raft_Data/level18
+            Raft/Raft_Data/level19
+            Raft/Raft_Data/level20
+            Raft/Raft_Data/level21
+            Raft/Raft_Data/level22
+            Raft/Raft_Data/level23
+            Raft/Raft_Data/level24
+            Raft/Raft_Data/level25
+            Raft/Raft_Data/level26
+            Raft/Raft_Data/level27
+            Raft/Raft_Data/level28
+            Raft/Raft_Data/level29
+            Raft/Raft_Data/level30
+            Raft/Raft_Data/level31
+            Raft/Raft_Data/level32
+            Raft/Raft_Data/level33
+            Raft/Raft_Data/level34
+            Raft/Raft_Data/level35
+            Raft/Raft_Data/level36
+            Raft/Raft_Data/level37
+            Raft/Raft_Data/level38
+            Raft/Raft_Data/level39
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets2.assets
+            Raft/Raft_Data/sharedassets3.assets
+            Raft/Raft_Data/sharedassets4.assets
+            Raft/Raft_Data/sharedassets5.assets
+            Raft/Raft_Data/sharedassets6.assets
+            Raft/Raft_Data/sharedassets7.assets
+            Raft/Raft_Data/sharedassets8.assets
+            Raft/Raft_Data/sharedassets9.assets
+            Raft/Raft_Data/sharedassets10.assets
+            Raft/Raft_Data/sharedassets11.assets
+            Raft/Raft_Data/sharedassets12.assets
+            Raft/Raft_Data/sharedassets13.assets
+            Raft/Raft_Data/sharedassets14.assets
+            Raft/Raft_Data/sharedassets15.assets
+            Raft/Raft_Data/sharedassets16.assets
+            Raft/Raft_Data/sharedassets17.assets
+            Raft/Raft_Data/sharedassets18.assets
+            Raft/Raft_Data/sharedassets19.assets
+            Raft/Raft_Data/sharedassets20.assets
+            Raft/Raft_Data/sharedassets21.assets
+            Raft/Raft_Data/sharedassets22.assets
+            Raft/Raft_Data/sharedassets23.assets
+            Raft/Raft_Data/sharedassets24.assets
+            Raft/Raft_Data/sharedassets25.assets
+            Raft/Raft_Data/sharedassets26.assets
+            Raft/Raft_Data/sharedassets27.assets
+            Raft/Raft_Data/sharedassets28.assets
+            Raft/Raft_Data/sharedassets29.assets
+            Raft/Raft_Data/sharedassets30.assets
+            Raft/Raft_Data/sharedassets31.assets
+            Raft/Raft_Data/sharedassets32.assets
+            Raft/Raft_Data/sharedassets33.assets
+            Raft/Raft_Data/sharedassets34.assets
+            Raft/Raft_Data/sharedassets35.assets
+            Raft/Raft_Data/sharedassets36.assets
+            Raft/Raft_Data/sharedassets37.assets
+            Raft/Raft_Data/sharedassets38.assets
+            Raft/Raft_Data/sharedassets39.assets
+
+      - name: Materialize exact SHA-authenticated 82 Unity serialized owners (no LFS or raw upload)
+        run: |
+          set -euo pipefail
+          test "$(git -C .gt-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m scripts.gt_stage_serialized_owners \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --source .gt-zip2/Raft/Raft_Data \
+            --destination "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --report "$RUNNER_TEMP/gt-original-82-source-proof-private.json" > "$RUNNER_TEMP/gt-original-82-source-private.log"
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+
+      - name: Translate genuine source 17-material Shader48 43 D3D11 programs and compose 3-pass 23-route ShaderLab privately
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          timeout 2700s python3 -m scripts.gt_translate_next_remaining_18_shader48 \
+            --original "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-next17-post14-verified-quality.json" \
+            --private "$RUNNER_TEMP/gt-next17-original-private-source" \
+            --out "$RUNNER_TEMP/gt-next17-original-source-safe.json"
+          python3 - <<'PY_GT_NEXT17_SOURCE'
+          import json,os
+          from pathlib import Path
+          q=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-next17-original-source-safe.json").read_text())
+          assert q["status"]=="GT_SHA_ORIGINAL_REMAINING_17_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
+          assert q["postfourteen_dummy_materials_linked_to_this_original_shader"]==17
+          assert q["original_program_stages_roundtrip_Vulkan11_valid"]==43
+          assert q["original_exact_vertex_fragment_keyword_permutation_pairs"]==23
+          assert q["original_orphan_vertex_stage_variants"]==8
+          assert len(q["source_original_keyword_permutation_route_counts_per_pass"])==3 and sum(q["source_original_keyword_permutation_route_counts_per_pass"])==23
+          assert q["private_original_17_material_ShaderLab_3pass_composed"] is True
+          assert q["private_original_17_material_ShaderLab_46_vertex_fragment_entrypoints_validated"] is True
+          assert q["APK_OBB_XAPK_created"] is False
+          print("GT_NEXT17_AUTHENTIC_43_D3D11_46_VULKAN_SHADERLAB_ROUTE_SOURCE_PASSED noAPK=true")
+          PY_GT_NEXT17_SOURCE
+      - name: Retain counts-only verified 17-material source translation and topology
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-next17-original-58-D3D11-source-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/gt-next17-original-source-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Remove private original 82 owners, translated DXBC HLSL and all ShaderLab
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-original-82-shader-owners" "$RUNNER_TEMP/gt-next17-original-private-source" .gt-zip2
