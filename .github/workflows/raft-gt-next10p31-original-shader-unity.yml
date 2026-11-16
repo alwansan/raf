@@ -1,0 +1,277 @@
+name: GT validate authentic next10p31 31-route Shader48 Unity Android Vulkan bundle (NO APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-next10p31-original-shader-unity.yml
+      - android-port/Experiments/GT/Editor/Next10p31ShaderValidation.cs
+      - scripts/gt_translate_next_remaining_10p31_shader48.py
+      - tests/test_gt_translate_next_remaining_10p31_shader48.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: gt-original-next10p31-unity-vulkan-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  original-10p31-android-vulkan-bundle:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 140
+    environment: UNITY_LICENSE
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/GT/Editor
+      - name: Verify exact 10p31-material SHA-original source selector and numeric range contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_translate_next_remaining_10p31_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_10p31_shader48.py -v
+      - name: Read trusted actual post14 full export 216-Dummy original Material report
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43773151176
+          name: gt-fourteen-next30-source-shader-full-export-audit-43773151176
+          path: ${{ runner.temp }}/gt-next10p31-verified-post14
+      - name: Verify post14 actual 570/786 custom real and 216 Dummy original Shader GUID population
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY_GT_NEXT10P31_QUALITY'
+          import json,os,shutil
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"gt-next10p31-verified-post14"
+          matches=[p for p in root.rglob("gt-fourteen-shader-postrestore-quality.json")
+                   if p.is_file() and not p.is_symlink()]
+          if len(matches)!=1:
+              raise ValueError("untrusted_real_post14_nested_material_artifact")
+          q=json.loads(matches[0].read_text())
+          c=q.get("counts",{})
+          assert q.get("status")=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
+          assert c.get("material_documents")==1536
+          assert c.get("material_docs_using_local_custom_Shader")==786
+          assert c.get("material_docs_using_non_dummy_Shader")==570
+          assert c.get("material_docs_using_dummy_Shader")==216
+          assert c.get("distinct_dummy_Shader_targets_referenced")==46
+          assert c.get("material_docs_with_unknown_or_broken_Shader")==0
+          assert sum(q["dummy_shader_material_counts_by_name_digest"].values())==216
+          assert list(q["dummy_shader_material_counts_by_name_digest"].values()).count(10)==2
+          shutil.copyfile(matches[0],Path(os.environ["RUNNER_TEMP"])/"gt-next10p31-real-post14-quality.json")
+          print("GT_NEXT10P31_ORIGINAL_POST14_ACTUAL_MATERIAL_POPULATION_AUTHENTICATED true")
+          PY_GT_NEXT10P31_QUALITY
+      - name: Read immutable ZIP2 serialized owner files only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/level6
+            Raft/Raft_Data/level7
+            Raft/Raft_Data/level8
+            Raft/Raft_Data/level9
+            Raft/Raft_Data/level10
+            Raft/Raft_Data/level11
+            Raft/Raft_Data/level12
+            Raft/Raft_Data/level13
+            Raft/Raft_Data/level14
+            Raft/Raft_Data/level15
+            Raft/Raft_Data/level16
+            Raft/Raft_Data/level17
+            Raft/Raft_Data/level18
+            Raft/Raft_Data/level19
+            Raft/Raft_Data/level20
+            Raft/Raft_Data/level21
+            Raft/Raft_Data/level22
+            Raft/Raft_Data/level23
+            Raft/Raft_Data/level24
+            Raft/Raft_Data/level25
+            Raft/Raft_Data/level26
+            Raft/Raft_Data/level27
+            Raft/Raft_Data/level28
+            Raft/Raft_Data/level29
+            Raft/Raft_Data/level30
+            Raft/Raft_Data/level31
+            Raft/Raft_Data/level32
+            Raft/Raft_Data/level33
+            Raft/Raft_Data/level34
+            Raft/Raft_Data/level35
+            Raft/Raft_Data/level36
+            Raft/Raft_Data/level37
+            Raft/Raft_Data/level38
+            Raft/Raft_Data/level39
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets2.assets
+            Raft/Raft_Data/sharedassets3.assets
+            Raft/Raft_Data/sharedassets4.assets
+            Raft/Raft_Data/sharedassets5.assets
+            Raft/Raft_Data/sharedassets6.assets
+            Raft/Raft_Data/sharedassets7.assets
+            Raft/Raft_Data/sharedassets8.assets
+            Raft/Raft_Data/sharedassets9.assets
+            Raft/Raft_Data/sharedassets10.assets
+            Raft/Raft_Data/sharedassets11.assets
+            Raft/Raft_Data/sharedassets12.assets
+            Raft/Raft_Data/sharedassets13.assets
+            Raft/Raft_Data/sharedassets14.assets
+            Raft/Raft_Data/sharedassets15.assets
+            Raft/Raft_Data/sharedassets16.assets
+            Raft/Raft_Data/sharedassets17.assets
+            Raft/Raft_Data/sharedassets18.assets
+            Raft/Raft_Data/sharedassets19.assets
+            Raft/Raft_Data/sharedassets20.assets
+            Raft/Raft_Data/sharedassets21.assets
+            Raft/Raft_Data/sharedassets22.assets
+            Raft/Raft_Data/sharedassets23.assets
+            Raft/Raft_Data/sharedassets24.assets
+            Raft/Raft_Data/sharedassets25.assets
+            Raft/Raft_Data/sharedassets26.assets
+            Raft/Raft_Data/sharedassets27.assets
+            Raft/Raft_Data/sharedassets28.assets
+            Raft/Raft_Data/sharedassets29.assets
+            Raft/Raft_Data/sharedassets30.assets
+            Raft/Raft_Data/sharedassets31.assets
+            Raft/Raft_Data/sharedassets32.assets
+            Raft/Raft_Data/sharedassets33.assets
+            Raft/Raft_Data/sharedassets34.assets
+            Raft/Raft_Data/sharedassets35.assets
+            Raft/Raft_Data/sharedassets36.assets
+            Raft/Raft_Data/sharedassets37.assets
+            Raft/Raft_Data/sharedassets38.assets
+            Raft/Raft_Data/sharedassets39.assets
+
+      - name: Materialize exact SHA-authenticated 82 Unity serialized owners (no LFS or raw upload)
+        run: |
+          set -euo pipefail
+          test "$(git -C .gt-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m scripts.gt_stage_serialized_owners \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --source .gt-zip2/Raft/Raft_Data \
+            --destination "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --report "$RUNNER_TEMP/gt-original-82-source-proof-private.json" > "$RUNNER_TEMP/gt-original-82-source-private.log"
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+
+      - name: Restore 58 SHA-original D3D11 stages to private 4-pass 31-route Next10p31 ShaderLab
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          timeout 2700s python3 -m scripts.gt_translate_next_remaining_10p31_shader48 \
+            --original "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-next10p31-real-post14-quality.json" \
+            --private "$RUNNER_TEMP/gt-next10p31-original-unity-source-private" \
+            --out "$RUNNER_TEMP/gt-next10p31-original-unity-source-safe.json"
+          python3 - <<'PY_GT_NEXT10P31_SOURCE'
+          import json,os
+          from pathlib import Path
+          temp=Path(os.environ["RUNNER_TEMP"])
+          r=json.loads((temp/"gt-next10p31-original-unity-source-safe.json").read_text())
+          assert r["status"]=="GT_SHA_ORIGINAL_REMAINING_10P31_MATERIAL_SHADER48_D3D11_PRIVATE_STAGES_TRANSLATED"
+          assert r["original_program_stages_roundtrip_Vulkan11_valid"]==55
+          assert r["private_original_10p31_material_ShaderLab_4pass_composed"] is True
+          assert r["private_original_10p31_material_ShaderLab_62_vertex_fragment_entrypoints_validated"] is True
+          assert r["source_original_keyword_permutation_route_counts_per_pass"]==[8,13,8,2]
+          assert r["source_original_Range_property_count"]==0
+          assert r["source_original_Range_defaults_outside_bounds_preserved_unclamped"]==0
+          print("GT_NEXT10P31_SOURCE_SHA_55_D3D11_4PASS_31_VSFS_AND_ORIGINAL_0_RANGES_READY noAPK=true")
+          PY_GT_NEXT10P31_SOURCE
+          source="$RUNNER_TEMP/gt-next10p31-original-unity-source-private/original-10p31-material-Shader48-private.shader"
+          project="$GITHUB_WORKSPACE/gt-next10p31-original-unity"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          cp "$source" "$project/Assets/GTNext10p31.shader"
+          cp android-port/Experiments/GT/Editor/Next10p31ShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile genuine Next10p31 4-pass 31 VSFS original keyword routes in Unity 2021 Android Vulkan (NO APK)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-next10p31-original-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Next10p31ShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Independently decode Unity serialized next10p31 Vulkan VS and FS routes and exact ShaderLab candidate SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next10p31-original-unity"
+          smolv="$RUNNER_TEMP/gt-next10p31-smolv"
+          mkdir -p "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-next10p31" \
+            --source "$project/Assets/GTNext10p31.shader" \
+            --receipt "$project/ProbeResults/gt-next10p31-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" --next30 \
+            --out "$RUNNER_TEMP/gt-next10p31-original-vulkan-bundle-safe.json"
+          python3 - <<'PY_GT_NEXT10P31_SERIALIZED'
+          import hashlib,json,os
+          from pathlib import Path
+          temp=Path(os.environ["RUNNER_TEMP"])
+          shader=Path("gt-next10p31-original-unity/Assets/GTNext10p31.shader")
+          unity=json.loads(Path("gt-next10p31-original-unity/ProbeResults/gt-next10p31-unity-safe.json").read_text())
+          bundle=json.loads((temp/"gt-next10p31-original-vulkan-bundle-safe.json").read_text())
+          assert unity["unityVersion"]=="2021.3.45f2"
+          assert unity["androidVulkanOnly"] is True and unity["errors"]==0
+          assert unity["privateBundleCompiled"] is True
+          assert unity["passCount"]==4 and unity["registeredRoutes"]==31
+          assert bundle["vulkan_platform_only"] is True
+          assert bundle["compiled_program_table_verified"] is True
+          assert bundle["vertex_and_fragment_entrypoints_verified"] is True
+          assert bundle["vertex_routes_by_pass"]==bundle["fragment_routes_by_pass"]==[8,13,8,2]
+          assert bundle["candidate_sha256"]==hashlib.sha256(shader.read_bytes()).hexdigest()
+          print("GT_NEXT10P31_REAL_UNITY_ANDROID_VULKAN_31_VSFS_4PASS_BUNDLE_VERIFIED noAPK=true")
+          PY_GT_NEXT10P31_SERIALIZED
+      - name: Publish strictly safe next10p31 source, Unity Vulkan and serialized VSFS numeric receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-next10p31-original-unity-31route-safe-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-next10p31-original-unity-source-safe.json
+            gt-next10p31-original-unity/ProbeResults/gt-next10p31-unity-safe.json
+            ${{ runner.temp }}/gt-next10p31-original-vulkan-bundle-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Delete all private original ZIP2 owners and recovered DXBC HLSL ShaderLab and bundles
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-original-82-shader-owners" "$RUNNER_TEMP/gt-next10p31-original-unity-source-private" .gt-zip2
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-next10p31-original-unity"
