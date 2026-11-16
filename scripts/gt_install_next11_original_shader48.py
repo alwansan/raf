@@ -36,6 +36,11 @@ def source_identity(original: Path, manifest: Path, quality: Path):
             or c.get("distinct_dummy_Shader_targets_referenced") != 42
             or c.get("material_docs_with_unknown_or_broken_Shader") != 0):
         raise ValueError("unverified_post18_real_143_dummy_42_guid_scope")
+    by_digest = q.get("dummy_shader_material_counts_by_name_digest")
+    if (type(by_digest) is not dict or not by_digest
+            or any(type(value) is not int or value <= 0 for value in by_digest.values())
+            or sum(by_digest.values()) != 143):
+        raise ValueError("invalid_real_postrestore_dummy_Material_name_digest_population")
     original_data = original / "Raft_Data"
     names, owner_count = gather(original_data, manifest)
     if owner_count != 14 or len(names) != 165:
