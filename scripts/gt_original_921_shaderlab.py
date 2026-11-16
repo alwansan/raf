@@ -235,11 +235,57 @@ def pass_modes_for_routes(counts):
     raise ValueError("original_921_unexpected_shaderlab_routes")
 
 
+NEXT_SEVEN_7P11_ORIGINAL_ROUTES = (4, 5, 2)
+
+
+def verified_source_next_seven_pass_modes(manifest):
+    """Use exact original 7-Material Shader48 m_State.m_Tags, not route-count guesses.
+
+    This source-only bridge is deliberately restricted to a proven three-pass
+    profile. It rejects an absent/ambiguous LightMode rather than silently
+    substituting a mobile fallback, GUID, or approximated original pass.
+    """
+    rows = manifest.get("original_passes")
+    if type(rows) is not list or len(rows) != 3:
+        raise ValueError("source_7p11_missing_exact_three_original_passes")
+    canonical = {name.upper(): name for name in PASS_MODES}
+    selected = []
+    for index, row in enumerate(rows):
+        if (type(row) is not dict or row.get("subshader") != 0
+                or row.get("pass") != index):
+            raise ValueError("source_7p11_ambiguous_SubShader_Pass_ownership")
+        state = row.get("original_state")
+        if type(state) is not dict:
+            raise ValueError("source_7p11_missing_original_render_state")
+        tags = state.get("m_Tags")
+        entries = tags.get("tags") if type(tags) is dict else None
+        if type(entries) is not list:
+            raise ValueError("source_7p11_missing_serialized_pass_tags")
+        lightmode = []
+        for entry in entries:
+            if type(entry) not in (list, tuple) or len(entry) != 2:
+                raise ValueError("source_7p11_malformed_serialized_pass_tags")
+            key, value = entry
+            if not isinstance(key, str) or not isinstance(value, str):
+                raise ValueError("source_7p11_invalid_serialized_pass_tag_values")
+            if key.upper() == "LIGHTMODE":
+                lightmode.append(canonical.get(value.upper()))
+        if len(lightmode) != 1 or lightmode[0] is None:
+            raise ValueError("source_7p11_unknown_original_LightMode")
+        selected.append(lightmode[0])
+    if tuple(selected) != ("ForwardBase", "ForwardAdd", "ShadowCaster"):
+        raise ValueError("source_7p11_original_Pass_LightMode_contract_not_proven")
+    return tuple(selected)
+
+
 def compose(private, engine_keywords=False):
     layout = (private / "original-private-layout.txt").read_text(encoding="utf-8")
     routes = json.loads((private / "original-private-keyword-routes.json").read_text())
     manifest = json.loads((private / "original-private-variant-manifest.json").read_text())
-    pass_modes = pass_modes_for_routes(tuple(len(row["routes"]) for row in routes))
+    counts = tuple(len(row["routes"]) for row in routes)
+    pass_modes = (verified_source_next_seven_pass_modes(manifest)
+                  if counts == NEXT_SEVEN_7P11_ORIGINAL_ROUTES
+                  else pass_modes_for_routes(counts))
     records = json.loads((private / "original-private-parameter-records.json").read_text())["stage_records"]
     stage_sources = {}
     for index, pair in enumerate(manifest["paired"]):
