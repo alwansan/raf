@@ -43,6 +43,21 @@ class NativeWorkflowIsolationTests(unittest.TestCase):
         self.assertIs(engine['cancel-in-progress'],False)
         self.assertEqual(engine['queue'],'max')
 
+    def test_full_native_shader_budget_covers_six_hours_without_disabling_guards(self):
+        # Run 43845968578 hit the 240-minute reconstruct limit while Unity was
+        # actively compiling original BlockPaint variants (no OOM kill).
+        # GitHub-hosted job budget is capped at 360 minutes.
+        job=self.main['jobs']['reconstruct']
+        self.assertEqual(job['timeout-minutes'],360)
+        monitor=next(step for step in job['steps']
+                     if step.get('name','').startswith('Reserve bounded swap'))
+        self.assertIn('--interval 15 --samples 1440',monitor['run'])
+        build=next(step for step in job['steps']
+                   if step.get('id')=='unity_build')
+        self.assertEqual(build['uses'],'game-ci/unity-builder@v4')
+        self.assertIn('-raftTextureProfile fidelity',build['with']['customParameters'])
+        self.assertIn('RaftAndroid.Editor.AndroidNativeBuild.Build',str(build['with']['buildMethod']))
+
     def test_sidecar_is_unit_only_without_unity_or_license_environment(self):
         self.assertIn('scripts/overlay_ilspy_gameplay.py',str(triggers(self.preflight)))
         jobs=self.preflight['jobs']
