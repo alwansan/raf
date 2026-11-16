@@ -210,6 +210,44 @@ def source_only_static_parameter_binding_failure_category(exc):
     return candidate if candidate in allowed else "UNCLASSIFIED_PRIVATE_PARAMETER_BINDING_FAILURE"
 
 
+def original_six_validator_private_failure_safe_topics(private):
+    """No raw glslang/SPIR-V text, original names, IDs or bytes are published."""
+    from collections import Counter
+    import re
+    counts=Counter()
+    diagnostics=list(private.glob("bound-stage-*/original-validator-raw-private.log"))
+    if len(diagnostics)>16:
+        raise ValueError("unsafe_original_six_validator_private_file_population")
+    topics={
+        "offset_or_stride":("offset","stride","alignment","aligned"),
+        "descriptor_or_binding":("descriptor","binding","set 0"),
+        "storage_or_uniform":("storage class","uniform","bufferblock","block"),
+        "type_or_struct":("type mismatch","type of","struct","array"),
+        "pointer_or_access":("pointer","access chain","opaccesschain"),
+        "stage_or_entrypoint":("entry point","execution model","interface","location"),
+        "capability_or_extension":("capability","extension","environment","vulkan"),
+    }
+    for p in diagnostics:
+        if p.is_symlink() or not p.is_file() or p.stat().st_size>65536:
+            raise ValueError("unsafe_original_six_validator_private_diagnostic")
+        raw=p.read_bytes().decode("utf-8","replace").lower()
+        matched=False
+        for code,terms in topics.items():
+            if any(term in raw for term in terms):
+                counts[code]+=1
+                matched=True
+        if not matched:
+            counts["unclassified_spirv_validator_error"]+=1
+        for vuid in re.findall(r"vuid-[a-z0-9-]{1,96}",raw):
+            # Count only; never publish text fragments or private SSA IDs.
+            counts["vulkan_vuid_marker_present"]+=1
+    return {
+        "private_validator_diagnostic_files":len(diagnostics),
+        "safe_problem_topic_counts":dict(sorted(counts.items())),
+        "original_shader_identifiers_hlsl_spirv_or_raw_validator_text_published":False,
+    }
+
+
 def validate_authentic_source_ranges(parsed):
     """Fail closed on malformed ORIGINAL Range lanes, never expect next23 counts."""
     census=original_range_contract_safe_census(parsed)
@@ -379,6 +417,8 @@ def run(original,manifest,quality,private):
         if checkpoint=="bind_source_constant_buffer_resource_and_vertex_semantics":
             report["original_six_parameter_binding_static_safe_failure_category"]=(
                 source_only_static_parameter_binding_failure_category(exc))
+            report["original_six_shaderlab_private_spirv_validator_safe_topics"]=(
+                original_six_validator_private_failure_safe_topics(private))
         # A translated SPIR-V stage is not a restored/compilable ShaderLab:
         # do not report source restoration success when original bindings fail.
         report["status"]="ORIGINAL_SIX_SHADER48_SOURCE_PROGRAMS_ONLY_BINDING_UNVERIFIED"
