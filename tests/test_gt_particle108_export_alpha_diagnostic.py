@@ -2,6 +2,9 @@
 import tempfile
 import unittest
 from pathlib import Path
+import sys
+import types
+from unittest.mock import patch, MagicMock
 
 from PIL import Image
 
@@ -11,6 +14,7 @@ from scripts.gt_particle108_export_alpha_diagnostic import (
     source_material_to_exported_texture_guids,
     verify_external_texture_guid_subset,
     classify_original_local_texture_trace,
+    original_local_type0_source_pixel_alpha,
 )
 
 
@@ -107,6 +111,36 @@ class OriginalParticle108ExportAlphaTests(unittest.TestCase):
             verify_external_texture_guid_subset(direct,dict(materials,bad="d"*32))
         with self.assertRaisesRegex(ValueError,"original_texture_trace_and_Material_YAML_GUID_mismatch"):
             verify_external_texture_guid_subset(direct,{a:"e"*32,b:"b"*32})
+
+    def test_sha_original_local_top_mip_can_be_classified_without_fabricating_exported_image(self):
+        from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+        with tempfile.TemporaryDirectory() as tmp:
+            owner="sharedassets0.assets"
+            path=Path(tmp)/"Raft_Data"/owner
+            path.parent.mkdir()
+            path.write_bytes(b"synthetic owner; source SHA mocked deliberately")
+            image=Image.new("RGBA",(2,1),(7,8,9,255))
+            image.putpixel((1,0),(7,8,9,128))
+            obj=MagicMock()
+            obj.path_id=123
+            obj.type.name="Texture2D"
+            obj.read.return_value.image=image
+            env=MagicMock()
+            env.file.objects={123:obj}
+            unity_mod=types.ModuleType("UnityPy")
+            unity_mod.load=lambda selected:env
+            local={(owner,123):(987,"0"*32,0)}
+            with (patch.dict(sys.modules,{"UnityPy":unity_mod}),
+                  patch("scripts.w1_stage_zip2_owners.fingerprint",
+                        return_value=SHADER_OWNERS[owner])):
+                proof=original_local_type0_source_pixel_alpha(Path(tmp),local)
+                self.assertTrue(proof["original_local_Type0_Texture2D28_source_top_mip_alpha_decoded"])
+                self.assertTrue(proof["original_local_Type0_Texture2D28_source_top_mip_alpha_profile"]["has_partially_transparent_pixels"])
+                self.assertFalse(proof["original_local_Type0_texture_has_exported_image_proof"])
+                self.assertFalse(proof["original_local_Type0_original_and_exported_pixels_compared"])
+            with patch.dict(sys.modules,{"UnityPy":unity_mod}):
+                with self.assertRaisesRegex(ValueError,"source_owner_SHA_drift"):
+                    original_local_type0_source_pixel_alpha(Path(tmp),local)
 
     def test_original_local_type0_PPtr_exact_same_export_source_trace_without_external_GUID(self):
         local=("sharedassets0.assets",3)
