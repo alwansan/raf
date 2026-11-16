@@ -48,7 +48,13 @@
       "post15_dummy_target_expected_but_NOT_VERIFIED": 193,
       "post15_non_dummy_expected_but_NOT_VERIFIED": 593,
       "post15_distinct_dummy_target_expected_but_NOT_VERIFIED": 45,
-      "source_owner_to_actual_export_guid_unverified_in_this_batch": true
+      "source_owner_to_actual_export_guid_unverified_in_this_batch": true,
+      "installer_static_ci": {
+        "run_id": 43777739448,
+        "conclusion": "success",
+        "job_id": 133007783009,
+        "scope": "py_compile plus source-free next23 and next30 installer tests; NOT full-export original GUID acceptance"
+      }
     }
   },
   "fire_alpha": {
@@ -66,7 +72,8 @@
     "tests_changed_run": 43777415610,
     "expected_possible_result": "PARTIAL 2 external images; local unresolved",
     "actual_exported_alpha_NOT_VERIFIED": true,
-    "source_texture_local_GUID_must_not_be_invented": true
+    "source_texture_local_GUID_must_not_be_invented": true,
+    "static_gate_success_latest": 43777415580
   },
   "water_fft_foam_depth_kernel6_unresolved": true,
   "animation_deferred": true,
