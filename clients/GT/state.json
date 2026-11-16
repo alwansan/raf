@@ -1516,5 +1516,30 @@
     "never_claim_all_resources_or_device_parity": true,
     "requires_water_Spectrum_Foam_Depth_FFT_kernel6_fire_G0_G6": true,
     "no_xapk_from_GT": true
+  },
+  "gt_latest_full_shader_guid_integration_runs_20261116": {
+    "phase": "GT_NEXT18_PROVENANCE_FIX_AND_NEXT17_FULL_EXPORT_LAUNCHED",
+    "latest_same_export_success": 43777283111,
+    "accepted_custom_materials": {
+      "total": 786,
+      "non_dummy": 593,
+      "dummy": 193,
+      "targets": 45
+    },
+    "protected_material_meta_yaml_SHA": 29213,
+    "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "initial_next18_full_run": 43786161961,
+    "corrected_next18_full_run": 43787527334,
+    "provenance_fix_commit": "75088aec1379c6baa90276ee0bffc570b30b06d4",
+    "next17_full_run": 43787809110,
+    "next17_full_workflow_commit": "0cfea84897c2bb0f179ae69dfed5c64c8bacf2c3",
+    "source_next18_and_next17_requires_post14_216_46": true,
+    "guid_install_next18_requires_post15_193_45": true,
+    "guid_install_next17_requires_post16_175_44": true,
+    "post16_quality_verified": false,
+    "post17_quality_verified": false,
+    "all_original_game_resource_G0_G6_restored": false,
+    "adreno_gpu_pixels_verified": false,
+    "no_GT_xapk": true
   }
 }
