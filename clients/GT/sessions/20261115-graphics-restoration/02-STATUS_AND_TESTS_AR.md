@@ -112,6 +112,9 @@
 
 ## دفعة برمجة لم تُعتمد بصرياً — 16 نوفمبر 2026
 
+- تأكدت نتيجة [43777739448](https://github.com/alwansan/raf/actions/runs/43777739448) **SUCCESS**؛ job `133007783009` نجح في فحص `py_compile` واختبارات `test_gt_install_next23_original_shader48.py` و`test_gt_install_next30_original_shader48.py`. هذا **دليل اختبارات صناعية فقط** وليس تثبيتاً على GUID في التصدير الكامل؛ آخر رقم فعلي **216 Dummy / 46 Shader targets**.
+
+
 - بدء [43777739448](https://github.com/alwansan/raf/actions/runs/43777739448) للـunit static fail-closed next23 بعد إضافة workflow `raft-gt-next23-installer-static-gate.yml`، لا تحويله إلى ادعاء same-export.\n\n
 
 - أُضيف [مثبت NEXT23](https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/gt_install_next23_original_shader48.py): حارس 216/46 post14، 165 source Shader48 SHA، تمييز shader الـ23 الصحيح بالتوبولوجيا (شيدر آخر 23 مادة مختلف 1156 variants)، receipt Unity [8,13,8,4] VS/FS، ومطابقة source owner/PathID لنفس exporter ShaderGUID مع حفظ .meta. آخر Unity isolated ناجح 43774787696؛ اختبار التثبيت الحقيقي 43777283111 لم ينتهِ.
