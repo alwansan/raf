@@ -1,5 +1,14 @@
 # GT — رسالة الاستعادة الأساسية الحية | 16 تشرين الثاني 2026
 
+## GT — REAL post17 source-authentic Shader GUID progress, 16 Nov 2026
+
+- **Latest accepted full same-export run [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110): SUCCESS.** Actual Custom Material non-Dummy **628/786 (79.90% of Custom Material documents only)**, **158 Dummy /43 remaining original Shader GUID targets**, 750 built-in + 786 Custom = 1536 total, 0 broken shader references, **29,213 original Material/meta/YAML SHA unchanged**. Artifact gt-seventeen-next17-source-shader-full-export-audit-43787809110 ID 14192158339. This is genuine source owner/PathID → same-export original GUID installation, **not Adreno device pixels or full graphics parity**.
+- **[43787527334](https://github.com/alwansan/raf/actions/runs/43787527334) SUCCESS** real post16 NEXT18: 611/786 non-Dummy, 175 Dummy/44 targets; replaces old [43786161961](https://github.com/alwansan/raf/actions/runs/43786161961) FAILED due to post15 quality being incorrectly supplied to original post14 source translator.
+- Corrected erroneous safe-receipt hard-coded prior populations (not the quality guard): NEXT17 175 in commit 44083b60, NEXT15 158 in 1668151a, NEXT11 projected post18 143 in a8f8de32. Static safety run [43917400073](https://github.com/alwansan/raf/actions/runs/43917400073) SUCCESS.
+- Created full same-export original NEXT15 workflow .github/workflows/raft-gt-next15-original-full-export.yml, commit 260001221c7135bfe7d4be31cda96a816797b17c; actual run [43918007004](https://github.com/alwansan/raf/actions/runs/43918007004) **IN PROGRESS at verification**. It replays genuine post17 before source SHA 58 D3D11/4Pass/33 VSFS, Unity Vulkan, source owner/PathID→original GUID, then full protected SHA/Material recensus. Post18 target **643/786 non-Dummy, 143 Dummy/42 targets is NOT VERIFIED**.
+- Safe new evidence: clients/GT/evidence/20261116_gt_post17_real_guid_next15_full_export_progress.json. **NEXT SESSION FIRST** inspect run 43918007004 actual failing step or accepted post18 artifact, then continue NEXT11/10p33/10p31/7p11/7p33 and remaining targets. Water Spectrum/Foam/Depth/FFT/kernel6, Fire alpha, G0–G6 remain open; no GT XAPK or Android device parity proof.
+
+
 > **اقرأ هذا القسم أولاً**؛ نصوص الأسفل سجل تاريخي وقد تحتوي أرقاماً قديمة مثل 770 أو 333 Dummy. هذه الأرقام ليست آخر حالة مثبتة. التحديثات الجديدة تُكتب في مقدمة هذا الملف **عند كل دفعة/فحص/إصلاح وقبل إنهاء كل جلسة**، مع تحديث ملفات خطة GT الثلاثة وملخص المالك ذي الصلة. لا تدّع أن أي تحديث يحدث تلقائياً عندما تتوقف الجلسة؛ يتطلب جلسة عمل أو مهمة مجدولة منفذة.
 
 ## GT — both NEXT7 Shader48 SHA-original + isolated Unity SUCCESS — 16 نوفمبر 2026
