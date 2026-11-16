@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "agent": "GT",
+  "date": "2026-11-16",
+  "repository": "alwansan/raf",
+  "only_write_branch": "feature/android-native-port",
+  "original_source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "last_accepted_full_same_export": {
+    "run": 43917381834,
+    "conclusion": "success",
+    "custom_material_total": 786,
+    "non_dummy": 628,
+    "dummy": 158,
+    "remaining_shader_guid_targets": 43,
+    "original_material_yaml_meta_sha_unchanged": 29213,
+    "broken_shader_refs": 0,
+    "actual_device_pixel_parity": false,
+    "all_original_resources_restored": false
+  },
+  "fixed_real_full_export_lineage": {
+    "confirmed_old_failures": [
+      {
+        "run": 43918007004,
+        "stage": "NEXT15",
+        "code": "inherited_next17_translator_instead_of_next15"
+      },
+      {
+        "run": 43918847740,
+        "stage": "NEXT11 ancestor NEXT15",
+        "code": "inherited_next17_translator_instead_of_next15"
+      },
+      {
+        "run": 43922253136,
+        "stage": "NEXT10p31 ancestor NEXT15",
+        "code": "inherited_next17_translator_instead_of_next15"
+      }
+    ],
+    "corrected_workflows": [
+      {
+        "stage": "NEXT15",
+        "run": 43920541904,
+        "expects_only": {
+          "non_dummy": 643,
+          "dummy": 143,
+          "remaining_targets": 42
+        }
+      },
+      {
+        "stage": "NEXT11",
+        "commit": "fa37aef3277fde43f53fd80ef3e68c9f1a16ceb3",
+        "run": 43929654581,
+        "expects_only": {
+          "non_dummy": 654,
+          "dummy": 132,
+          "remaining_targets": 41
+        }
+      },
+      {
+        "stage": "NEXT10p33",
+        "commit": "b475847f18197be949d043f8409f68bd737f51eb",
+        "run": 43929666693,
+        "expects_only": {
+          "non_dummy": 664,
+          "dummy": 122,
+          "remaining_targets": 40
+        }
+      },
+      {
+        "stage": "NEXT10p31",
+        "commit": "bf9c47c17bdfd311d153a58ebfac58b51e7a05ec",
+        "run": 43929675711,
+        "expects_only": {
+          "non_dummy": 674,
+          "dummy": 112,
+          "remaining_targets": 39
+        }
+      },
+      {
+        "stage": "NEXT7p11",
+        "commit": "2b4b6732542a31203ae9a6bbb6e70e737537ef07",
+        "run": 43929686417,
+        "expects_only": {
+          "non_dummy": 681,
+          "dummy": 105,
+          "remaining_targets": 38
+        }
+      },
+      {
+        "stage": "NEXT7p33",
+        "commit": "8fcb25752c916a64506fa05e8b35feb9b7757ea2",
+        "run": 43929698985,
+        "expects_only": {
+          "non_dummy": 688,
+          "dummy": 98,
+          "remaining_targets": 37
+        }
+      }
+    ],
+    "all_21_ancestor_shader_source_dispatch_wiring_guard": {
+      "run": 43929969826,
+      "status": "success",
+      "commit": "fa58edaf59624e6d30d6cadf715891676fe3d9b5",
+      "same_export_install_not_entailed": true
+    }
+  },
+  "original_next_six_source_restoration": {
+    "current_scope": "SOURCE and ShaderLab only; NO original GUID, Unity Android bundle or device render yet",
+    "original_post14_material_weight": 6,
+    "source_identity": {
+      "original_owner_sha_authenticated": 82,
+      "source_shader48_topology": [
+        1,
+        2,
+        0,
+        3
+      ],
+      "vs_fs_routes": [
+        2
+      ],
+      "d3d11_original_programs_roundtrip_vulkan11_valid": 3
+    },
+    "first_source_run": {
+      "run": 43929330329,
+      "result": "failure",
+      "checkpoint": "property_flags_or_attributes",
+      "diagnosis": "one original PerRendererData flag bit=2 + original MaterialPropertyDrawer not originally supported"
+    },
+    "original_source_property_count": 8,
+    "original_per_renderer_data_flag_count": 1,
+    "source_attribute_unclassified_original_string_count": 1,
+    "property_bridge": {
+      "unity_flag_2_verified_as_per_renderer_data": true,
+      "properties_compose_then_reached_named_constant_buffer_validation": true,
+      "code_commits": [
+        "078f1f97951c6282ca79d9d950731aef5b870062",
+        "a178a9190e00b031fd52bb772ea20c5c80a40a8e",
+        "e7509707fbb6c75849c8ef55e8f31352f5791b4d",
+        "b4a226b7ba15153eceb0876b44105b1e0f3e21cc"
+      ],
+      "scope": "opt-in NEXT6 only; all other shader and Particle/Water strict contracts preserved"
+    },
+    "second_source_failure": {
+      "run": 43931399846,
+      "result": "failure",
+      "checkpoint": "bind_source_constant_buffer_resource_and_vertex_semantics",
+      "source_safe_code": "named_constant_buffer_candidate_spirv_invalid",
+      "raw_original_source_validator_text_published": false
+    },
+    "current_safe_validator_topics_probe": {
+      "run": 43931876021,
+      "status": "in_progress at last check",
+      "commit": "05a42bf70a2e934d9b1c51b650a0803196917358",
+      "notes": "Transient original source diagnostic stored only in private CI staging; public report contains category counts only"
+    },
+    "expected_only_after_real_post23_and_original_guid_install": {
+      "non_dummy": 694,
+      "dummy": 92,
+      "remaining_targets": 36
+    },
+    "source_complete": false,
+    "shaderlab_compilation_complete": false,
+    "original_same_export_guid_installed": false
+  },
+  "remaining_unresolved": [
+    "original 43 shader GUIDs at last real material audit",
+    "G0–G6",
+    "Water Spectrum/Foam/Depth/FFT/kernel6",
+    "Fire original alpha",
+    "PostFX",
+    "Adreno device pixels",
+    "deferred animation"
+  ],
+  "game_xapk_created_by_GT": false,
+  "counted_as_full_game_graphics_recovery": false
+}
