@@ -25,14 +25,13 @@ class OriginalNext10p31SameExportTests(unittest.TestCase):
                 "material_docs_with_unknown_or_broken_Shader": 0,
             },
             "dummy_shader_material_counts_by_name_digest": {
-                "f" * 64: 10, "a" * 64: 10,
-                "b" * 64: 102,
+                "f" * 64: 10, "b" * 64: 112,
             },
         }
         path.write_text(json.dumps(q))
         return q
 
-    def test_source_quality_and_two_10_objects_10p31_must_be_topology_checked(self):
+    def test_real_post20_one_remaining_10p31_source_must_be_topology_checked(self):
         with TemporaryDirectory() as td:
             root = Path(td)
             qfile = root / "post20.json"
@@ -49,14 +48,13 @@ class OriginalNext10p31SameExportTests(unittest.TestCase):
                 checker.assert_called_once()
                 self.assertEqual(checker.call_args.args[0], root / "Raft_Data")
                 self.assertEqual(checker.call_args.args[3],
-                                 {"f" * 64: 10, "a" * 64: 10, "b" * 64: 102})
-            q["dummy_shader_material_counts_by_name_digest"]["a" * 64] += 1
-            q["dummy_shader_material_counts_by_name_digest"]["b" * 64] -= 1
-            qfile.write_text(json.dumps(q))
-            with self.assertRaisesRegex(ValueError,"invalid_original_two_10_Material_digest_population"):
-                source_identity(root, root / "manifest", qfile)
-            q["dummy_shader_material_counts_by_name_digest"]["a" * 64] -= 1
+                                 {"f" * 64: 10, "b" * 64: 112})
+                self.assertEqual(checker.call_args.kwargs, {"expected_name_count": 1})
             q["dummy_shader_material_counts_by_name_digest"]["b" * 64] += 1
+            qfile.write_text(json.dumps(q))
+            with self.assertRaisesRegex(ValueError,"invalid_original_one_remaining_10_Material_digest_population"):
+                source_identity(root, root / "manifest", qfile)
+            q["dummy_shader_material_counts_by_name_digest"]["b" * 64] -= 1
             q["counts"]["material_docs_using_dummy_Shader"] = 216
             qfile.write_text(json.dumps(q))
             with self.assertRaisesRegex(ValueError, "unverified_post20"):
