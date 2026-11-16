@@ -61,7 +61,7 @@ jobs:
           c=q.get("counts",{})
           assert q.get("status")=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
           assert c.get("material_documents")==1536
-          assert c.get("material_docs_using_local_custom_Shader")==686
+          assert c.get("material_docs_using_local_custom_Shader")==786
           assert c.get("material_docs_using_non_dummy_Shader")==570
           assert c.get("material_docs_using_dummy_Shader")==216
           assert c.get("distinct_dummy_Shader_targets_referenced")==46
