@@ -2296,8 +2296,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/gt_translate_next_remaining_17_shader48.py scripts/gt_install_next15_original_shader48.py
-          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_17_shader48.py -v
+          python3 -m py_compile scripts/gt_translate_next_remaining_15_shader48.py scripts/gt_install_next15_original_shader48.py
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_15_shader48.py -v
           python3 -m unittest discover -s tests -p test_gt_install_next15_original_shader48.py -v
           python3 - <<'PY_GT_REAL_NEXT15_PRIOR'
           import json,os
@@ -2316,7 +2316,7 @@ jobs:
           weights=q["dummy_shader_material_counts_by_name_digest"]
           assert sum(weights.values())==158
           assert list(weights.values()).count(15)==1
-          print("GT_NEXT15_REAL_PRIOR_POST16_611_NON_DUMMY_175_DUMMY_44_TARGETS_SOURCE_ACCEPTED noAPK=true")
+          print("GT_NEXT15_REAL_PRIOR_POST17_628_NON_DUMMY_158_DUMMY_43_TARGETS_SOURCE_ACCEPTED noAPK=true")
           PY_GT_REAL_NEXT15_PRIOR
       - name: Recover NEXT15 58 original D3D11 programs from ZIP2 with exact post14 216-source identity
         shell: bash
@@ -2325,7 +2325,7 @@ jobs:
           work="$RUNNER_TEMP/gt-next15-full-export-private"
           # Source selector contract is independently tied to post14 216/46.
           # Same-export installer contract below is tied to post17 158/58.
-          timeout 2700s python3 -m scripts.gt_translate_next_remaining_17_shader48 \
+          timeout 2700s python3 -m scripts.gt_translate_next_remaining_15_shader48 \
             --original "$RUNNER_TEMP/gt-input/Raft_Data" \
             --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
             --quality "$RUNNER_TEMP/gt-fourteen-shader-postrestore-quality.json" \
@@ -2345,7 +2345,7 @@ jobs:
           assert q["private_original_15_material_ShaderLab_4pass_composed"] is True
           assert q["private_original_15_material_ShaderLab_66_vertex_fragment_entrypoints_validated"] is True
           assert q["source_original_Range_property_count"]==12
-          print("GT_NEXT15_GENUINE_43_D3D11_23_VSFS_SOURCE_3PASS_VERIFIED noAPK=true")
+          print("GT_NEXT15_GENUINE_58_D3D11_33_VSFS_SOURCE_4PASS_VERIFIED noAPK=true")
           PY_GT_NEXT15_SOURCE
           project="$GITHUB_WORKSPACE/gt-next15-full-export-unity"
           mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
@@ -2402,7 +2402,7 @@ jobs:
           assert bundle["vertex_and_fragment_entrypoints_verified"] is True
           assert bundle["vertex_routes_by_pass"]==bundle["fragment_routes_by_pass"]==[8,13,8,4]
           assert bundle["candidate_sha256"]==hashlib.sha256(candidate.read_bytes()).hexdigest()
-          print("GT_NEXT15_UNITY_VULKAN_23_VSFS_4PASS_SERIALIZED_VERIFIED noAPK=true")
+          print("GT_NEXT15_UNITY_VULKAN_33_VSFS_4PASS_SERIALIZED_VERIFIED noAPK=true")
           PY_GT_NEXT15_BUNDLE
       - name: Install NEXT15 original Shader48 on same-export original GUID using actual post17 audit
         shell: bash
