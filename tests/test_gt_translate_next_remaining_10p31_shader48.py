@@ -27,6 +27,22 @@ class TwoTenMaterialAuthenticSourceTopologyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"not_one_authentic"):
             select_exact_10p31_material_name(src,{"a"*64:10,"b"*64:10})
 
+    def test_post20_single_remaining_name_requires_explicit_source_scope(self):
+        source={("original",11):"a"*64,("original",22):"b"*64}
+        post20={"a"*64:10,"b"*64:112}
+        with self.assertRaisesRegex(ValueError,"missing_or_ambiguous"):
+            select_exact_10p31_material_name(source,post20)
+        self.assertEqual(
+            select_exact_10p31_material_name(
+                source,post20,expected_name_count=1),
+            [("original",11)])
+        with self.assertRaisesRegex(ValueError,"missing_or_ambiguous"):
+            select_exact_10p31_material_name(
+                source,{"a"*64:10,"b"*64:10},expected_name_count=1)
+        with self.assertRaisesRegex(ValueError,"invalid_original_10p31_expected"):
+            select_exact_10p31_material_name(
+                source,post20,expected_name_count=3)
+
     def test_source_range_contract_must_preserve_original_count(self):
         source={"m_PropInfo":{"m_Props":[
             {"m_Type":3, "m_DefValue[0]":2.5,"m_DefValue[1]":0.0,
