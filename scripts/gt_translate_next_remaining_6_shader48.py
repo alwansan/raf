@@ -107,6 +107,71 @@ def original_range_contract_safe_census(parsed):
     return out
 
 
+def safe_original_six_property_flag_attribute_census(parsed):
+    """Safe NUMERIC schema evidence; never publish names, attributes, values.
+
+    Source owner/PathID/keyword identifiers, attribute contents and shader text
+    remain private. Public evidence is only type, bit-flag and attribute-class
+    populations so an explicit ShaderLab attribute bridge can be authorized.
+    """
+    from collections import Counter
+    props=parsed.get("m_PropInfo",{}).get("m_Props",[])
+    if type(props) is not list or len(props)>128:
+        raise ValueError("unverified_original_6_property_schema")
+    flags=Counter()
+    attr_classes=Counter()
+    types=Counter()
+    for prop in props:
+        if type(prop) is not dict or type(prop.get("m_Flags")) is not int:
+            raise ValueError("unverified_original_6_property_flags_schema")
+        flag=prop["m_Flags"]
+        if flag<0 or flag>65535:
+            raise ValueError("unverified_original_6_property_flags_range")
+        flags[str(flag)]+=1
+        types[str(prop.get("m_Type"))]+=1
+        attributes=prop.get("m_Attributes")
+        if type(attributes) is not list:
+            raise ValueError("unverified_original_6_property_attributes_schema")
+        if not attributes:
+            attr_classes["none"]+=1
+        for attr in attributes:
+            if type(attr) is not str or len(attr)>1024:
+                raise ValueError("unverified_original_6_property_attribute_string")
+            if attr=="Toggle":
+                kind="toggle"
+            elif attr.startswith("Toggle(") and attr.endswith(")"):
+                kind="toggle_keyword"
+            elif attr.startswith("Enum(") and attr.endswith(")"):
+                kind="enum"
+            elif attr.startswith("KeywordEnum(") and attr.endswith(")"):
+                kind="keyword_enum"
+            elif attr.startswith("Header(") and attr.endswith(")"):
+                kind="header"
+            elif attr.startswith("Space(") and attr.endswith(")"):
+                kind="space"
+            elif attr=="NoScaleOffset":
+                kind="no_scale_offset"
+            elif attr=="Normal":
+                kind="normal"
+            elif attr=="HDR":
+                kind="hdr"
+            elif attr=="Gamma":
+                kind="gamma"
+            elif attr=="PerRendererData":
+                kind="per_renderer_data"
+            else:
+                kind="other_unclassified"
+            attr_classes[kind]+=1
+    return {
+        "schema_version":1,
+        "count":len(props),
+        "original_shader_property_type_histogram":dict(sorted(types.items())),
+        "original_shader_property_flag_histogram":dict(sorted(flags.items())),
+        "original_shader_property_attribute_class_histogram":dict(sorted(attr_classes.items())),
+        "names_values_identifiers_and_attribute_strings_published":False,
+    }
+
+
 def validate_authentic_source_ranges(parsed):
     """Fail closed on malformed ORIGINAL Range lanes, never expect next23 counts."""
     census=original_range_contract_safe_census(parsed)
@@ -270,6 +335,8 @@ def run(original,manifest,quality,private):
             report["source_original_property_contract_safe_failure_category"]=exc.category
             if exc.category=="PROPERTY_RANGE":
                 report["source_original_Shader48_range_contract_numeric_census"]=original_range_contract_safe_census(parsed)
+            if exc.category=="PROPERTY_FLAGS_OR_ATTRIBUTES":
+                report["source_original_Shader48_property_flags_attributes_safe_census"]=safe_original_six_property_flag_attribute_census(parsed)
         report["original_ShaderLab_android_Unity_or_device_render_proven"]=False
     return report
 
