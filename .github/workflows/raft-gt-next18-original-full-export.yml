@@ -1932,10 +1932,12 @@ jobs:
         run: |
           set -euo pipefail
           work="$RUNNER_TEMP/gt-next18-full-export-private"
+          # The ORIGINAL translator authenticates source identity against exact post14 216/46.
+          # Installer below independently requires the same-export post15 193/45 audit.
           timeout 2700s python3 -m scripts.gt_translate_next_remaining_18_shader48 \
             --original "$RUNNER_TEMP/gt-input/Raft_Data" \
             --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
-            --quality "$RUNNER_TEMP/gt-fifteen-shader-postrestore-quality.json" \
+            --quality "$RUNNER_TEMP/gt-fourteen-shader-postrestore-quality.json" \
             --private "$work" --out "$RUNNER_TEMP/gt-next18-full-export-source-safe.json"
           python3 - <<'PY_GT_NEXT18_SOURCE'
           import json,os
