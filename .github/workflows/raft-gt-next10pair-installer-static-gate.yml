@@ -5,8 +5,12 @@ on:
     paths:
       - scripts/gt_install_next10p33_original_shader48.py
       - scripts/gt_install_next10p31_original_shader48.py
+      - scripts/gt_translate_next_remaining_10p33_shader48.py
+      - scripts/gt_translate_next_remaining_10p31_shader48.py
       - tests/test_gt_install_next10p33_original_shader48.py
       - tests/test_gt_install_next10p31_original_shader48.py
+      - tests/test_gt_translate_next_remaining_10p33_shader48.py
+      - tests/test_gt_translate_next_remaining_10p31_shader48.py
       - .github/workflows/raft-gt-next10pair-installer-static-gate.yml
   workflow_dispatch:
 
@@ -33,9 +37,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/gt_install_next10p33_original_shader48.py scripts/gt_install_next10p31_original_shader48.py
+          python3 -m py_compile scripts/gt_install_next10p33_original_shader48.py scripts/gt_install_next10p31_original_shader48.py scripts/gt_translate_next_remaining_10p33_shader48.py scripts/gt_translate_next_remaining_10p31_shader48.py
           python3 -m unittest discover -s tests -p 'test_gt_install_next10p33_original_shader48.py' -v
           python3 -m unittest discover -s tests -p 'test_gt_install_next10p31_original_shader48.py' -v
+          python3 -m unittest discover -s tests -p 'test_gt_translate_next_remaining_10p33_shader48.py' -v
+          python3 -m unittest discover -s tests -p 'test_gt_translate_next_remaining_10p31_shader48.py' -v
           python3 - <<'PY'
           from scripts.gt_install_next10p33_original_shader48 import ROUTES as a
           from scripts.gt_install_next10p31_original_shader48 import ROUTES as b
