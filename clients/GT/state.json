@@ -1597,5 +1597,83 @@
     "animation_deferred": true,
     "G0_G6_closed": false,
     "XAPK_by_GT_created": false
+  },
+  "gt_latest_eight_source_plus_unity_original_shader48_20261116": {
+    "source_original_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "proofs": [
+      {
+        "count": 18,
+        "source": 43779759999,
+        "isolated_unity": 43780219002,
+        "installed": false
+      },
+      {
+        "count": 17,
+        "source": 43781304391,
+        "isolated_unity": 43782074242,
+        "installed": false
+      },
+      {
+        "count": 15,
+        "source": 43782323454,
+        "isolated_unity": 43782657334,
+        "installed": false
+      },
+      {
+        "count": 11,
+        "source": 43782328731,
+        "isolated_unity": 43782661831,
+        "installed": false
+      },
+      {
+        "count": 10,
+        "source": 43785114809,
+        "isolated_unity": 43785362318,
+        "installed": false
+      },
+      {
+        "count": 10,
+        "source": 43785119657,
+        "isolated_unity": 43785367029,
+        "installed": false
+      },
+      {
+        "count": 7,
+        "source": 43789264382,
+        "isolated_unity": 43789424745,
+        "original_routes": [
+          4,
+          5,
+          2
+        ],
+        "installed": false
+      },
+      {
+        "count": 7,
+        "source": 43788590820,
+        "isolated_unity": 43789192895,
+        "original_routes": [
+          8,
+          13,
+          8,
+          4
+        ],
+        "installed": false
+      }
+    ],
+    "candidate_custom_material_documents_not_original_GUID_installed": 95,
+    "actual_original_export_material_audit_last_success_run": 43777283111,
+    "actual_original_custom_non_dummy": 593,
+    "actual_original_custom_dummy": 193,
+    "original_dummy_shader_targets_remaining": 45,
+    "source_original_meta_material_yaml_SHA_unchanged": 29213,
+    "full_export_next18_initial": 43786161961,
+    "full_export_next18_fixed": 43787527334,
+    "full_export_next17": 43787809110,
+    "checked_real_post16_success": false,
+    "checked_real_post17_success": false,
+    "FFT_kernel6_and_water_Foam_Depth_and_fire_visual_parity_complete": false,
+    "G0_G6_all_restored": false,
+    "no_GT_XAPK_created": true
   }
 }
