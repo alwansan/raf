@@ -6,7 +6,7 @@ from pathlib import Path
 import struct
 import subprocess
 
-from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, NEXT_30_MATERIAL_ROUTES, SKIN_ROUTES, expected_routes_for_shader
+from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, NEXT_30_MATERIAL_ROUTES, SKIN_ROUTES, NEXT_SEVEN_7P11_ORIGINAL_ROUTES, expected_routes_for_shader
 from scripts.restore_builtin_shaders import exported_shader_identity
 from scripts.w1_recover_depth_passes import stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
@@ -86,16 +86,17 @@ def vulkan_execution_models(blob, decoder):
     return models
 
 
-def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None, *, next30=False, next17=False):
+def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None, *, next30=False, next17=False, next7p11=False):
     import UnityPy
 
     shader = source.read_bytes()
     expected_name = exported_shader_identity(shader.decode("utf-8"))
-    if next30 and next17:
-        raise ValueError("mutually_exclusive_original_17_and_30_shader_source_routes")
-    # This 3-pass identity is authenticated from the unique 17-material
-    # original source topology; do not infer Shader GUID or game device pixels.
-    counts = (SKIN_ROUTES if next17 else
+    if sum(bool(value) for value in (next30, next17, next7p11)) > 1:
+        raise ValueError("mutually_exclusive_original_shader_source_route_profiles")
+    # This profile only validates serialized private candidate routes; never
+    # interpret a matching source Shader48 name as an exported GUID.
+    counts = (NEXT_SEVEN_7P11_ORIGINAL_ROUTES if next7p11 else
+              SKIN_ROUTES if next17 else
               NEXT_30_MATERIAL_ROUTES if next30 else
               expected_routes_for_shader(expected_name))
     unity = json.loads(receipt.read_text(encoding="utf-8"))
@@ -209,8 +210,9 @@ def main():
     variant_profile = parser.add_mutually_exclusive_group()
     variant_profile.add_argument("--next30", action="store_true", help="Require verified original 30-material [8,13,8,2] routes")
     variant_profile.add_argument("--next17", action="store_true", help="Require SHA-original 17-material 3-pass [8,13,2] routes")
+    variant_profile.add_argument("--next7p11", action="store_true", help="Require SHA-original distinct 7-material 3-pass [4,5,2] routes")
     args = parser.parse_args()
-    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest, args.smolv_decoder, next30=args.next30, next17=args.next17)
+    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest, args.smolv_decoder, next30=args.next30, next17=args.next17, next7p11=args.next7p11)
     args.out.write_text(json.dumps(result, sort_keys=True) + "\n", encoding="utf-8")
     print("GT_ORIGINAL_921_BUNDLE_ROUTES " + json.dumps(result, sort_keys=True))
 
