@@ -35,7 +35,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_628_OF_786_CUSTOM_NON_DUMMY_158_DUMMY_43_SHADER_TARGETS_ACTUAL__FOUR_ORIGINAL_GUID_CI_CHAINS_ACTIVE",
+  "status": "GT_ACTUAL_POST17_628_786_CUSTOM_NON_DUMMY_158_DUMMY_43_GUID__SIX_SAME_EXPORT_SHADER48_RESTORATION_CHAINS_ACTIVE",
   "latest_921_source_receipt": "clients/GT/evidence/20261113_original_921_routes_layout_parameters.json",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
-  "next_action": "Check exact corrected run jobs/logs/artifacts in order: 43920541904, 43920553298, 43922026302, 43922253136. Recheck actual postinstall material/meta SHA before promoting any count. Do not mistake source-only or isolated Unity for same-export GUID or Adreno pixels.",
+  "next_action": "Check latest corrected NEXT15=43920541904, NEXT11=43920553298, NEXT10p33=43922026302, NEXT10p31=43922253136, NEXT7p11=43925468867 and NEXT7p33=43925787952, accept only full same-export original GUID postinstall SHA 29213 success; inspect first failed step and repair only feature/android-native-port.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1724,16 +1724,12 @@
     "evidence": "clients/GT/evidence/20261116_gt_next10pair_original_guid_pipeline_progress.json",
     "last_accepted_same_export": {
       "run": 43787809110,
-      "conclusion": "success",
-      "original_custom_material_non_dummy": 628,
-      "custom_material_total": 786,
-      "dummy_custom_materials": 158,
-      "dummy_shader_guid_targets": 43,
-      "coverage_pct_of_custom_material_documents_only": 79.9,
-      "original_protected_material_yaml_meta_files_sha_unchanged": 29213,
-      "broken_shader_references": 0,
-      "android_device_pixels_verified": false,
-      "xapk_created": false
+      "non_dummy": 628,
+      "custom_total": 786,
+      "dummy": 158,
+      "original_shader_guid_targets": 43,
+      "protected_material_yaml_meta_original_sha_files": 29213,
+      "broken_shader_references": 0
     },
     "full_export_chains_corrected": [
       {
@@ -1790,6 +1786,89 @@
     "source_zip2_pinned_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "git_lfs_used": false,
     "animation_deferred": true,
-    "xapk_test_deferred_until_all_original_resources_restored": true
+    "xapk_test_deferred_until_all_original_resources_restored": true,
+    "six_full_export_stages": [
+      {
+        "stage": "NEXT15",
+        "corrected_run": 43920541904,
+        "expected_post": {
+          "non_dummy": 643,
+          "dummy": 143,
+          "targets": 42
+        }
+      },
+      {
+        "stage": "NEXT11",
+        "corrected_run": 43920553298,
+        "expected_post": {
+          "non_dummy": 654,
+          "dummy": 132,
+          "targets": 41
+        }
+      },
+      {
+        "stage": "NEXT10p33",
+        "corrected_run": 43922026302,
+        "expected_post": {
+          "non_dummy": 664,
+          "dummy": 122,
+          "targets": 40
+        }
+      },
+      {
+        "stage": "NEXT10p31",
+        "run": 43922253136,
+        "expected_post": {
+          "non_dummy": 674,
+          "dummy": 112,
+          "targets": 39
+        }
+      },
+      {
+        "stage": "NEXT7p11",
+        "run": 43925468867,
+        "source_programs": 22,
+        "routes": [
+          4,
+          5,
+          2
+        ],
+        "expected_post": {
+          "non_dummy": 681,
+          "dummy": 105,
+          "targets": 38
+        }
+      },
+      {
+        "stage": "NEXT7p33",
+        "run": 43925787952,
+        "source_programs": 58,
+        "routes": [
+          8,
+          13,
+          8,
+          4
+        ],
+        "expected_post": {
+          "non_dummy": 688,
+          "dummy": 98,
+          "targets": 37
+        }
+      }
+    ],
+    "source_installer_static_seven_material_run": {
+      "run": 43925234660,
+      "result": "success",
+      "same_export_install_verified": false
+    },
+    "six_original_guid_stage_wiring_run": {
+      "run": 43925851391,
+      "result": "success",
+      "same_export_install_verified": false
+    },
+    "evidence_7pair": "clients/GT/evidence/20261116_gt_next7pair_original_guid_pipeline_progress.json",
+    "expected_post23_counts_are_accepted": false,
+    "xapk_before_complete_resource_restoration": false,
+    "last_device_pixel_parity_proven": false
   }
 }
