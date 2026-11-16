@@ -6,6 +6,8 @@ on:
     paths:
       - scripts/gt_translate_next_remaining_7p11_shader48.py
       - tests/test_gt_translate_next_remaining_7p11_shader48.py
+      - tests/test_gt_original_7p11_source_pass_modes.py
+      - scripts/gt_original_921_shaderlab.py
       - .github/workflows/raft-gt-next7p11-original-shader-source.yml
   workflow_dispatch:
 
@@ -34,6 +36,7 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/gt_translate_next_remaining_7p11_shader48.py
           python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_7p11_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_original_7p11_source_pass_modes.py -v
       - name: Load accepted actual post14 216 Dummy material export audit
         uses: actions/download-artifact@v4
         with:
