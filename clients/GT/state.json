@@ -1301,5 +1301,110 @@
     "fft_water_kernel6_and_G0_to_G6_closed": false,
     "animation_deferred": true,
     "xapk_created": false
+  },
+  "latest_gt_20261116_authentic_shader_source_unity_and_guards": {
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "verification": "four distinct original Shader48 source programs + Unity isolated; NONE installed on real exported original GUID",
+    "verified_source_and_unity": [
+      {
+        "material_documents": 18,
+        "source_run": 43779759999,
+        "unity_run": 43780219002,
+        "passes": 4,
+        "vsfs_routes": [
+          8,
+          13,
+          8,
+          4
+        ]
+      },
+      {
+        "material_documents": 17,
+        "source_run": 43781304391,
+        "unity_run": 43782074242,
+        "passes": 3,
+        "vsfs_routes": [
+          8,
+          13,
+          2
+        ]
+      },
+      {
+        "material_documents": 15,
+        "source_run": 43782323454,
+        "unity_run": 43782657334,
+        "passes": 4,
+        "vsfs_routes": [
+          8,
+          13,
+          8,
+          4
+        ]
+      },
+      {
+        "material_documents": 11,
+        "source_run": 43782328731,
+        "unity_run": 43782661831,
+        "passes": 4,
+        "vsfs_routes": [
+          8,
+          13,
+          8,
+          4
+        ]
+      }
+    ],
+    "total_material_documents_candidates_not_installed": 61,
+    "current_accepted_same_export": {
+      "material_documents": 1536,
+      "custom_material_documents": 786,
+      "custom_non_dummy": 570,
+      "custom_dummy": 216,
+      "original_dummy_shader_targets": 46,
+      "protected_material_meta_yaml_file_Shas": 29213,
+      "run_id": 43773151176
+    },
+    "next23_full_same_export_run": 43777283111,
+    "next23_final_material_quality_accepted": false,
+    "guarded_future_installers_static_CI": {
+      "run_id": 43784558673,
+      "success": true,
+      "tests_passed": 9,
+      "paths": [
+        "scripts/gt_install_next17_original_shader48.py",
+        "scripts/gt_install_next15_original_shader48.py",
+        "scripts/gt_install_next11_original_shader48.py"
+      ],
+      "executed_on_real_export": false
+    },
+    "sequential_material_baselines_are_projections_not_proofs": [
+      {
+        "phase": "before_next18",
+        "dummy": 193,
+        "non_dummy": 593,
+        "targets": 45
+      },
+      {
+        "phase": "before_next17",
+        "dummy": 175,
+        "non_dummy": 611,
+        "targets": 44
+      },
+      {
+        "phase": "before_next15",
+        "dummy": 158,
+        "non_dummy": 628,
+        "targets": 43
+      },
+      {
+        "phase": "before_next11",
+        "dummy": 143,
+        "non_dummy": 643,
+        "targets": 42
+      }
+    ],
+    "water_fft_kernel6_fire_Adreno_pipelines_all_verified": false,
+    "G0_to_G6_resource_restoration_closed": false,
+    "xapk_created_by_GT": false
   }
 }
