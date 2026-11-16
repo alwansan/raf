@@ -35,7 +35,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_ACTUAL_VERIFIED_NEXT17_SUCCESS_43917381834_628_OF_786_CUSTOM_NON_DUMMY_158_DUMMY_43_TARGETS_SIX_SOURCE_SHADER_CI_ACTIVE",
+  "status": "GT_REAL_SAME_EXPORT_POST17_628_786_CUSTOM_NON_DUMMY__SIX_FULL_WORKFLOWS_21_ANCESTOR_LINEAGE_GUARD_SUCCESS__NEXT6_SOURCE_CB_VULKAN_LAYOUT_OPEN",
   "latest_921_source_receipt": "clients/GT/evidence/20261113_original_921_routes_layout_parameters.json",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
-  "next_action": "Check corrected source-original full export runs NEXT15 43920541904, NEXT11 43920553298, NEXT10p33 43926288406 (43922026302 cancelled superseded), NEXT10p31 43922253136, NEXT7p11 running 43925468867/newer pending 43926307167, NEXT7p33 running 43925787952/newer pending 43926312944. Inspect exact first failing step and full same-export original GUID postinstall artifact before any material count promotion. Keep only feature/android-native-port writable.",
+  "next_action": "Check NEXT6 source diagnostic run 43933639542 (or latest 43933591980) for specific Vulkan original uniform block-offset overlap/alignment classification; fix actual CB layout in SHA-owner original source without disabling spirv-val Vulkan1.1/reflect or allowing unproven scalar block feature; keep source names private. In parallel track 6 full original GUID workflows NEXT15 43920541904, NEXT11 43929654581, NEXT10p33 43929666693, NEXT10p31 43929675711, NEXT7p11 43929686417, NEXT7p33 43929698985; accept counts only on actual same-export successful postinstall safe SHA audit.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1888,6 +1888,48 @@
       }
     ],
     "device_render_verified": false,
-    "last_post18_post23_genuine_success": false
+    "last_post18_post23_genuine_success": false,
+    "six_full_export_lineage_all_ancestor_static_guard": {
+      "run": 43929969826,
+      "result": "success",
+      "lineage_checks": 21,
+      "source_and_stage_only": true,
+      "original_same_export_guid_success_not_claimed": true
+    },
+    "next_six_original_source": {
+      "original_source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "original_source_material_documents": 6,
+      "original_shader_pass_count": 1,
+      "original_vsfs_routes": [
+        2
+      ],
+      "original_d3d11_programs_translated_and_vulkan11_roundtrip_valid": 3,
+      "original_ShaderLab_property_count": 8,
+      "source_original_Range_property_count": 0,
+      "original_per_renderer_data_flag_2_count": 1,
+      "original_material_property_drawer_source_owned_count": 1,
+      "original_source_properties_layout_generated": true,
+      "source_named_constant_buffer_binding": "SPIRV_VULKAN11_VALIDATOR_FAILED_UNRESOLVED",
+      "vulkan1_1_relaxed_block_layout_is_default": true,
+      "original_hlsl_offsets_experiment_did_not_fix": true,
+      "private_validator_safe_detail_run": 43933639542,
+      "original_source_shaderlab_full_compiled": false,
+      "same_export_original_shader_guid_installed": false,
+      "device_pixels_verified": false,
+      "conditional_future_material_census_only": {
+        "non_dummy": 694,
+        "dummy": 92,
+        "remaining_original_shader_targets": 36
+      },
+      "actual_last_accepted_material_census": {
+        "run": 43917381834,
+        "non_dummy": 628,
+        "custom_total": 786,
+        "dummy": 158,
+        "targets": 43
+      },
+      "evidence": "clients/GT/evidence/20261116_gt_full_shader48_ancestor_gate_next6_source_progress.json",
+      "no_gt_xapk": true
+    }
   }
 }
