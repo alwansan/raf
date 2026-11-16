@@ -1,0 +1,48 @@
+name: GT next17 15 11 original Shader48 GUID installers safety (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_install_next17_original_shader48.py
+      - scripts/gt_install_next15_original_shader48.py
+      - scripts/gt_install_next11_original_shader48.py
+      - tests/test_gt_install_next17_original_shader48.py
+      - tests/test_gt_install_next15_original_shader48.py
+      - tests/test_gt_install_next11_original_shader48.py
+      - .github/workflows/raft-gt-next17-15-11-installer-static-gate.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-staged-next17-15-11-installer-guard-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  strict-original-guid-static:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Prove source-only tests reject all forged previous material census and candidate identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_install_next17_original_shader48.py scripts/gt_install_next15_original_shader48.py scripts/gt_install_next11_original_shader48.py
+          python3 -m unittest discover -s tests -p 'test_gt_install_next17_original_shader48.py' -v
+          python3 -m unittest discover -s tests -p 'test_gt_install_next15_original_shader48.py' -v
+          python3 -m unittest discover -s tests -p 'test_gt_install_next11_original_shader48.py' -v
+          python3 - <<'PY'
+          from scripts.gt_install_next17_original_shader48 import ROUTES as next17
+          from scripts.gt_install_next15_original_shader48 import ROUTES as next15
+          from scripts.gt_install_next11_original_shader48 import ROUTES as next11
+          assert next17==(8,13,2) and next15==next11==(8,13,8,4)
+          print("GT_NEXT17_15_11_GUARDED_INSTALLERS_STATIC_SAFE only=true real_export_installed=false APK_OBB_XAPK_created=false")
+          PY
