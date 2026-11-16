@@ -105,15 +105,24 @@ def rebind_constant_buffers(source, buffers):
     return source
 
 
-def verify_named_constant_buffers(private, stage, buffers):
+def verify_named_constant_buffers(private, stage, buffers, *, original_hlsl_offsets=False):
     candidate = private / "named-constant-buffers.hlsl"
     baseline = private / "resource-bound.hlsl"
     candidate.write_text(rebind_constant_buffers(baseline.read_text(encoding="utf-8"), buffers),
                          encoding="utf-8")
     binary = candidate.with_suffix(".spv")
     suffix = {0: "frag", 1: "vert"}[stage]
-    if not command(["glslangValidator", "-V", "-D", "-S", suffix, "-e", "main",
-                    "-o", str(binary), str(candidate)]):
+    # HLSL's original explicit packoffset layout can differ from GLSL's
+    # default block-packing policy. Only source-authenticated NEXT6 opts in.
+    # Keep spirv-val Vulkan 1.1 and exact original offset reflection STRICT.
+    compile_argv = ["glslangValidator", "-V", "-D"]
+    if original_hlsl_offsets is True:
+        compile_argv.append("--hlsl-offsets")
+    elif original_hlsl_offsets is not False:
+        raise ValueError("unverified_original_hlsl_offsets_opt_in")
+    compile_argv.extend(["-S", suffix, "-e", "main",
+                         "-o", str(binary), str(candidate)])
+    if not command(compile_argv):
         raise ValueError("named_constant_buffer_candidate_compile_failed")
     # Keep raw Vulkan validator diagnostics PRIVATE to this temporary stage.
     # The public source report may expose only a broad numeric/category
