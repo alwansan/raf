@@ -1,0 +1,38 @@
+name: GT original full-export Shader48 source/install quality provenance guard (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-original-shader-quality-provenance-gate.yml
+      - .github/workflows/raft-gt-next18-original-full-export.yml
+      - .github/workflows/raft-gt-next17-original-full-export.yml
+      - scripts/gt_translate_next_remaining_18_shader48.py
+      - scripts/gt_translate_next_remaining_17_shader48.py
+      - scripts/gt_install_next18_original_shader48.py
+      - scripts/gt_install_next17_original_shader48.py
+      - tests/test_gt_full_shader_guid_quality_provenance.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prove-original-material-quality-boundaries:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            .github/workflows
+      - name: Reject wrong post14 source audit, wrong post15/post16 GUID install and lost 29213 SHA checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tests/test_gt_full_shader_guid_quality_provenance.py
+          python3 -m unittest discover -s tests -p test_gt_full_shader_guid_quality_provenance.py -v
+          echo "GT_ORIGINAL_SHADER_QUALITY_PROVENANCE_STATIC_PASS noAPK=true realExportInstall=false"
