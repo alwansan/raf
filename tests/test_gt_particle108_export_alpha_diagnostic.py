@@ -10,6 +10,7 @@ from scripts.gt_particle108_export_alpha_diagnostic import (
     source_texture_export_map,
     source_material_to_exported_texture_guids,
     verify_external_texture_guid_subset,
+    classify_original_local_texture_trace,
 )
 
 
@@ -107,6 +108,28 @@ class OriginalParticle108ExportAlphaTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"original_texture_trace_and_Material_YAML_GUID_mismatch"):
             verify_external_texture_guid_subset(direct,{a:"e"*32,b:"b"*32})
 
+    def test_original_local_type0_PPtr_exact_same_export_source_trace_without_external_GUID(self):
+        local=("sharedassets0.assets",3)
+        source={"owner":"Raft_Data/sharedassets0.assets","path_id":3}
+        export={"file_id":2800000,"guid":"b"*32,"type":0}
+        trace={"objects":[{"class_id":28,"source":source,"export":export}]}
+        pointers={local:(2800000,"b"*32,0)}
+        proof=classify_original_local_texture_trace(trace,pointers)
+        self.assertTrue(proof["same_export_original_local_PPtr_matches_Texture2D28_trace"])
+        self.assertEqual(proof["original_local_Type0_Texture2D_export_status"],
+                         "ORIGINAL_LOCAL_POINTER_EXACT_TRACE_MATCH")
+        self.assertFalse(proof["original_local_Type0_external_GUID_inferred"])
+        different={local:(2800000,"a"*32,0)}
+        mismatch=classify_original_local_texture_trace(trace,different)
+        self.assertFalse(mismatch["same_export_original_local_PPtr_matches_Texture2D28_trace"])
+        self.assertEqual(mismatch["original_local_Type0_Texture2D_export_status"],
+                         "SOURCE_TEXTURE_TRACE_POINTER_DIFFERS_FROM_LOCAL_MATERIAL_PPTR")
+        missing=classify_original_local_texture_trace({"objects":[]},pointers)
+        self.assertEqual(missing["same_export_original_local_Texture2D28_trace_rows"],0)
+        with self.assertRaisesRegex(ValueError,"ambiguous_source"):
+            classify_original_local_texture_trace(
+                {"objects":[trace["objects"][0],trace["objects"][0]]},pointers)
+
     def test_local_type0_Texture2D_is_proven_original_but_not_fabricated_image_guid(self):
         originals={("sharedassets0.assets",i):1 for i in (1,2,3)}
         original_materials={}
@@ -135,8 +158,12 @@ class OriginalParticle108ExportAlphaTests(unittest.TestCase):
             original_materials[key]=props
             exported[(2100000,guid)]=dst
         metrics={}
+        local_pointers={}
         result=source_material_to_exported_texture_guids(
-            trace,original_materials,originals,exported,metrics=metrics)
+            trace,original_materials,originals,exported,metrics=metrics,
+            private_local_pointers=local_pointers)
+        self.assertEqual(len(local_pointers),1)
+        self.assertEqual(next(iter(local_pointers.values())),(123,"0"*32,0))
         self.assertEqual(len(result),2)
         self.assertEqual(metrics["source_Type0_local_original_Texture2D_targets"],1)
         self.assertEqual(metrics["source_Type0_local_texture_pointer_slots"],1)
