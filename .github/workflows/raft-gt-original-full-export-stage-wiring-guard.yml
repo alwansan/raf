@@ -134,7 +134,7 @@ jobs:
                   )
                   for token in required:
                       assert token in section, terminal+" inherited stage "+name+" missing: "+token
-                  dispatches=re.findall(r'python3 -m (scripts\\.gt_translate_next_remaining_[a-z0-9]+_shader48)',section)
+                  dispatches=re.findall(r'python3 -m (scripts\.gt_translate_next_remaining_[a-z0-9]+_shader48)',section)
                   assert dispatches==["scripts.gt_translate_next_remaining_"+name+"_shader48"],(
                       terminal+" inherited wrong SOURCE translator in "+name+": "+repr(dispatches))
                   print("GT_ORIGINAL_FULL_EXPORT_STAGE_LINEAGE_OK terminal="+terminal
