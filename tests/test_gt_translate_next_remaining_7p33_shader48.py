@@ -28,6 +28,20 @@ class TwoSevenMaterialOriginalShaderSafety(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"not_one_authentic"):
             select_exact_7p33_material_name(src,{"a"*64:7,"b"*64:7})
 
+    def test_post22_only_one_original_7_material_name_left(self):
+        src={("source",101):"a"*64,("source",202):"b"*64}
+        actual={"a"*64:7,"b"*64:98}
+        with self.assertRaisesRegex(ValueError,"missing_or_ambiguous"):
+            select_exact_7p33_material_name(src,actual)
+        self.assertEqual(
+            select_exact_7p33_material_name(src,actual,expected_name_count=1),
+            [("source",101)])
+        with self.assertRaisesRegex(ValueError,"missing_or_ambiguous"):
+            select_exact_7p33_material_name(
+                src,{"a"*64:7,"b"*64:7},expected_name_count=1)
+        with self.assertRaisesRegex(ValueError,"invalid_original_7p33_expected"):
+            select_exact_7p33_material_name(src,actual,expected_name_count=3)
+
     def test_original_numeric_Range_contract_fail_closed(self):
         parsed={"m_PropInfo":{"m_Props":[{
             "m_Type":3,"m_DefValue[0]":2.5,
