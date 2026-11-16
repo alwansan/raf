@@ -2823,7 +2823,7 @@ jobs:
           import hashlib,json,os
           from pathlib import Path
           root=Path(os.environ["RUNNER_TEMP"])
-          prior=json.loads((root/"gt-twenty-shader-postrestore-quality.json").read_text())
+          prior=json.loads((root/"gt-nineteen-shader-postrestore-quality.json").read_text())
           q=json.loads((root/"gt-twenty-shader-postrestore-quality.json").read_text())
           before=json.loads((root/"gt-full-smoke-private-unchanged-material-meta.json").read_text())
           c=q["counts"]
