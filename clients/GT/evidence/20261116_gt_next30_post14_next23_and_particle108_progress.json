@@ -312,7 +312,50 @@
     "corrected_live_run": 43781304391,
     "accepted_original_shaderlab_source": false,
     "isolated_unity_verified": false,
-    "same_export_installed": false
+    "same_export_installed": false,
+    "real_source_pass": {
+      "run": 43781304391,
+      "conclusion": "success",
+      "artifact_id": 14188333139,
+      "artifact_zip_digest": "sha256:1a78b9b9b46d26a4b1014dcf58461f95a5f2ac297f8d6018ab6f25a75f3bd468",
+      "source_82_SHA_authenticated": true,
+      "unique_17_custom_material_Shader48_source": true,
+      "original_D3D11_Vulkan11_HLSL_roundtrips": 43,
+      "paired_routes_by_pass": [
+        8,
+        13,
+        2
+      ],
+      "orphan_vertex_stages": 8,
+      "private_ShaderLab_stage_entrypoints_validated": 46,
+      "shaderlab_passes": 3,
+      "original_shaderlab_properties": 15,
+      "original_Range_properties": 6,
+      "source_range_defaults_outside_bounds": 0,
+      "shader_parameter_records": 54,
+      "constant_buffer_offsets": 901,
+      "texture_sampler_bindings": 338,
+      "vertex_fragment_varyings": 176,
+      "unity_android_vulkan_serialized_bundle_verified": false,
+      "source_export_original_shader_GUID_installed": false
+    },
+    "isolated_unity_ci": {
+      "script": "android-port/Experiments/GT/Editor/Next17ShaderValidation.cs",
+      "workflow": ".github/workflows/raft-gt-next17-original-shader-unity.yml",
+      "next17_bundle_route_verifier_flag": "--next17",
+      "first_run": 43781774987,
+      "first_run_conclusion": "failure",
+      "first_failure": "generated baseline assert accidentally expected 686 custom rather than 786",
+      "corrective_commit": "01cb0801ed7aaf0b127d9e1f5980dd30bdcd452f",
+      "replacement_run": 43781873039,
+      "latest_state": "in_progress",
+      "expect_vulkan_serialized_routes": [
+        8,
+        13,
+        2
+      ],
+      "accepted_isolated_unity": false
+    }
   },
   "next23_full_export_current": {
     "first_run": 43777150940,
@@ -321,6 +364,7 @@
     "corrected_fixture_commit": "263cda9381db330b0c4fc21972ec38d71ee23511",
     "replacement_run": 43777283111,
     "accepted_actual_post15_material_dummy_count": null,
-    "accepted_same_export_next23_GUID_install": false
+    "accepted_same_export_next23_GUID_install": false,
+    "replacement_status": "in_progress"
   }
 }
