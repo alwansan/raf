@@ -1,5 +1,13 @@
 # التقدم وما بقي والفحوص
 
+## GT — آخر تحقق للمرحلة الحية (16 نوفمبر)
+
+- SAME EXPORT NEXT17 [43917381834](https://github.com/alwansan/raf/actions/runs/43917381834) **SUCCESS**، 628/786 Custom Material غير Dummy و158 Dummy/43 Shader GUID، 0 broken، 29,213 material/meta/YAML SHA untouched؛ لا Pixel/device parity. [artifact](https://github.com/alwansan/raf/actions/runs/43917381834/artifacts/14256010749).
+- NEXT15 القديم [43918007004](https://github.com/alwansan/raf/actions/runs/43918007004) FAILED بسبب wrong inherited NEXT17 translator؛ المصحح [43920541904](https://github.com/alwansan/raf/actions/runs/43920541904) IN PROGRESS. NEXT11 المصحح [43920553298](https://github.com/alwansan/raf/actions/runs/43920553298) IN PROGRESS.
+- NEXT10p33 أحدث PENDING هو [43926288406](https://github.com/alwansan/raf/actions/runs/43926288406)، والقديم pending 43922026302 CANCELLED بسبب replacement؛ NEXT10p31 [43922253136](https://github.com/alwansan/raf/actions/runs/43922253136) IN PROGRESS. NEXT7p11 [43925468867](https://github.com/alwansan/raf/actions/runs/43925468867) وNEXT7p33 [43925787952](https://github.com/alwansan/raf/actions/runs/43925787952) IN PROGRESS؛ أحدث نسخ pending 43926307167 و43926312944. الاختبارات الثابتة نجحت لكن لا تُحسب كـSAME EXPORT.
+- أهداف post18 حتى post23 المشروطة فقط 643/143/42 → 654/132/41 → 664/122/40 → 674/112/39 → 681/105/38 → 688/98/37. يجب انتظار تقارير postinstall الحقيقية قبل إعلان التقدم.
+
+
 ## GT — آخر فحوص أصل 7-material (16 نوفمبر 2026)
 
 | نطاق | GitHub Actions | الحالة عند الفحص |
