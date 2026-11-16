@@ -37,7 +37,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m py_compile scripts/gt_translate_next_remaining_17_shader48.py
-          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_18_shader48.py -v
+          python3 -m unittest discover -s tests -p test_gt_translate_next_remaining_17_shader48.py -v
       - name: Read trusted actual post14 full export 216-Dummy original Material report
         uses: actions/download-artifact@v4
         with:
@@ -181,7 +181,7 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
-          timeout 2700s python3 -m scripts.gt_translate_next_remaining_18_shader48 \
+          timeout 2700s python3 -m scripts.gt_translate_next_remaining_17_shader48 \
             --original "$RUNNER_TEMP/gt-original-82-shader-owners" \
             --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
             --quality "$RUNNER_TEMP/gt-next17-real-post14-quality.json" \
