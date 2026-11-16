@@ -1,5 +1,13 @@
 # خطة استكمال استعادة رسوم Raft Android
 
+## GT next engineering batch — real post17 and next15 (16 Nov 2026)
+
+- Latest accepted **[43787809110](https://github.com/alwansan/raf/actions/runs/43787809110) SUCCESS** same-export NEXT17: **628/786 non-Dummy Custom Materials**, **158 Dummy/43 original Shader GUID targets**; 29,213 Material/YAML/meta protected original SHA unchanged, zero broken references, no APK/XAPK. NEXT18 prior real [43787527334](https://github.com/alwansan/raf/actions/runs/43787527334) accepted 611/786, 175/44.
+- New original SHA-bound NEXT15 full workflow .github/workflows/raft-gt-next15-original-full-export.yml commit 26000122, running [43918007004](https://github.com/alwansan/raf/actions/runs/43918007004). Require genuine post17 158/43, 58 SHA-source D3D11 programs, Unity Vulkan 4 Pass/33 VSFS, authentic same-export GUID and all 29,213 original SHA. **Post18 643 non-Dummy/143 Dummy/42 targets is a conditional gate, NOT established.**
+- Next: check actual run outcome and repair only verified failing step; then original NEXT11, 10p33/31, 7p11/33; finish all remaining 43 original Shader targets with full recensus. Separately close water Spectrum/Foam/Depth/FFT/kernel6, Fire Alpha, texture/mesh/shadow PostFX G0–G6. Android pixels and XAPK only after resource restoration per owner directive.
+- Three report-field corrections commits 44083b60/1668151a/a8f8de32; static CI [43917400073](https://github.com/alwansan/raf/actions/runs/43917400073) success. Evidence: clients/GT/evidence/20261116_gt_post17_real_guid_next15_full_export_progress.json.
+
+
 آخر تحديث 15 تشرين الثاني 2026، توقيت بغداد. الخطة تغطي استعادة الرسوم قبل اختبار الهاتف.
 
 | المرحلة | ما أُنجز | المطلوب لإغلاقها |
