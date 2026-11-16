@@ -147,10 +147,10 @@
       "raw_original_source_validator_text_published": false
     },
     "current_safe_validator_topics_probe": {
-      "run": 43931876021,
-      "status": "in_progress at last check",
-      "commit": "05a42bf70a2e934d9b1c51b650a0803196917358",
-      "notes": "Transient original source diagnostic stored only in private CI staging; public report contains category counts only"
+      "run": 43933220100,
+      "status": "in_progress",
+      "commit": "5e2c0a04c814d6e7f7abb3d0035202aca10481c7",
+      "names_published": false
     },
     "expected_only_after_real_post23_and_original_guid_install": {
       "non_dummy": 694,
@@ -171,5 +171,55 @@
     "deferred animation"
   ],
   "game_xapk_created_by_GT": false,
-  "counted_as_full_game_graphics_recovery": false
+  "counted_as_full_game_graphics_recovery": false,
+  "last_inspection_nov16": {
+    "latest_accepted_export": {
+      "run": 43917381834,
+      "actual_custom_non_dummy": 628,
+      "total_custom_material_docs": 786,
+      "actual_dummy": 158,
+      "remaining_original_shader_targets": 43,
+      "protected_original_sha": 29213
+    },
+    "all_full_export_ancestor_stages_guard": {
+      "run": 43929969826,
+      "conclusion": "success",
+      "scope": "21 SHA-original source and Unity source translator lineage checks across six workflow chains; NOT original GUID proof"
+    },
+    "next_six_original_d3d11": {
+      "programs": 3,
+      "source_valid": true,
+      "one_pass_two_routes": true
+    },
+    "next_six_property_flag_fix": {
+      "real_property_count": 8,
+      "one_source_flag_2_per_renderer": true,
+      "one_original_source_owned_drawer": true,
+      "original_range_count": 0,
+      "property_layout_valid": true
+    },
+    "next_six_binding_failure": {
+      "run": 43931876021,
+      "static_error_category": "named_constant_buffer_candidate_spirv_invalid",
+      "private_error_topics": [
+        "offset_or_stride",
+        "storage_or_uniform",
+        "type_or_struct"
+      ],
+      "vulkan11_validation_rejected": true
+    },
+    "hlsl_offsets_experiment": {
+      "run": 43932735394,
+      "result": "failure",
+      "source_owned_opt_in_only": true,
+      "retained_strict_vulkan11_validator": true,
+      "source_original_offset_reflection_not_yet_proven": true
+    },
+    "updated_private_diagnostics_source_run": {
+      "run": 43933220100,
+      "at_last_check": "in_progress",
+      "note": "Publishing only static safe Vulkan block layout categories, never shader names or private logs"
+    },
+    "next_work": "Inspect validated specific SPIRV block member overlap/alignment error from 43933220100; repair exact original CB layout without bypassing Vulkan 1.1 validation; then build isolated Unity shader and same-export original GUID after previous shader installs are proven"
+  }
 }
