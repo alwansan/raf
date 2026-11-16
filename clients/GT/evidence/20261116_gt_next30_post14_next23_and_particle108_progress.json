@@ -721,9 +721,19 @@
       "accepted_source_artifact_id": 14190954229,
       "accepted_source_archive_sha256": "abec389870df852cc4dea671884cf6044143690041dbfb6dbb935f82aa104033",
       "unity_bundle_run": 43789424745,
-      "unity_bundle_success_accepted": false,
+      "unity_bundle_success_accepted": true,
       "same_export_original_guid_installed": false,
-      "adreno_device_shader_pixels_proven": false
+      "adreno_device_shader_pixels_proven": false,
+      "unity_compiler_errors": 0,
+      "unity_pass_count": 3,
+      "unity_serialized_vulkan_vsfs_by_pass": [
+        4,
+        5,
+        2
+      ],
+      "unity_candidate_sha256": "e780a47b69fd7ed438d9f56b2ec5d44ef765fad44aa36643e71288d70567d4e3",
+      "unity_artifact_id": 14192041314,
+      "unity_archive_sha256": "78fd16e4709aa536f60e200dfc0f754c4d2492cb6ff92f4274862a50be885421"
     },
     "next7p33": {
       "original_mat_docs": 7,
@@ -766,5 +776,56 @@
     "original_Material_meta_YAML_unchanged": 29213,
     "no_new_same_export_guids_installed_by_these_source_runs": true,
     "no_XAPK": true
+  },
+  "eight_pending_source_plus_unity_original_Shader48_groups_20261116": {
+    "groups": [
+      {
+        "material_documents": 18,
+        "source": 43779759999,
+        "unity": 43780219002
+      },
+      {
+        "material_documents": 17,
+        "source": 43781304391,
+        "unity": 43782074242
+      },
+      {
+        "material_documents": 15,
+        "source": 43782323454,
+        "unity": 43782657334
+      },
+      {
+        "material_documents": 11,
+        "source": 43782328731,
+        "unity": 43782661831
+      },
+      {
+        "material_documents": 10,
+        "source": 43785114809,
+        "unity": 43785362318
+      },
+      {
+        "material_documents": 10,
+        "source": 43785119657,
+        "unity": 43785367029
+      },
+      {
+        "material_documents": 7,
+        "source": 43789264382,
+        "unity": 43789424745
+      },
+      {
+        "material_documents": 7,
+        "source": 43788590820,
+        "unity": 43789192895
+      }
+    ],
+    "candidate_custom_material_docs_not_same_export_installed": 95,
+    "real_same_export_original_guid_current_non_dummy": 593,
+    "real_same_export_dummy": 193,
+    "real_same_export_dummy_shader_targets": 45,
+    "protected_original_mat_meta_YAML_sha_count": 29213,
+    "device_visual_parity_proven": false,
+    "full_restoration_G0_to_G6_complete": false
   }
 }
