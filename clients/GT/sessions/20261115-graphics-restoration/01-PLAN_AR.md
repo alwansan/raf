@@ -1,5 +1,14 @@
 # خطة استكمال استعادة رسوم Raft Android
 
+## خطة GT — إعادة التشغيل الصحيح لـNEXT15/NEXT11 ثم 10p33/10p31 (16 نوفمبر)
+
+- **المرجع المثبت الوحيد حالياً** SAME EXPORT post17 [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110): **628/786 Custom Material non-Dummy و158 Dummy/43 GUID**؛ 29,213 protected original SHA unchanged، 0 broken.
+- يجب فحص التشغيلات المصححة، لا القديمة: NEXT15 [43920541904](https://github.com/alwansan/raf/actions/runs/43920541904)، NEXT11 [43920553298](https://github.com/alwansan/raf/actions/runs/43920553298). إصلاح المترجم الموروث NEXT17 تم عند f1625a72 و8f567bec.
+- NEXT10p33 [43922026302](https://github.com/alwansan/raf/actions/runs/43922026302) يستلزم أولاً post19 الحقيقي 654 non-Dummy/132 Dummy/41 targets، ثم original 58 D3D11/33 VSFS/4 Pass مع GUID أصلي و29,213 SHA؛ post20 المشروط 664/122/40. NEXT10p31 [43922253136](https://github.com/alwansan/raf/actions/runs/43922253136) يستلزم post20 ثم original 55 D3D11/31 VSFS [8,13,8,2] ومجموعة واحدة 10-Material؛ post21 المشروط 674/112/39. **كل الأعداد المستقبلية gates وليست إنجازات حتى SUCCESS والـsafe report.**
+- إذا فشل أي مسار: استخرج أول step فاشلة من logs، حدّد السبب، أصلح فرع feature/android-native-port فقط، واطلق Workflow مصححاً يحافظ على SHA/GUID/Meta. بعد الشيدرات أكمل Spectrum/Foam/Depth/FFT/kernel6 وFire alpha ومطابقة الموارد والرسوم G0–G6. لا XAPK من GT الآن.
+- Evidence: `clients/GT/evidence/20261116_gt_next10pair_original_guid_pipeline_progress.json`. CI static wiring [43922343892](https://github.com/alwansan/raf/actions/runs/43922343892) SUCCESS.
+
+
 - **Parallel next11 real same-export verification:** [43918847740](https://github.com/alwansan/raf/actions/runs/43918847740) IN PROGRESS from workflow raft-gt-next11-original-full-export.yml commit e8ca45d0; requires actual next15 643/143/42 before original NEXT11 GUID install, then full post19 SHA recensus. **654/132/41 remains future gate ONLY**.
 
 ## GT next engineering batch — real post17 and next15 (16 Nov 2026)
