@@ -1,0 +1,74 @@
+name: GT original Shader48 full-export stage wiring and provenance gate (NO APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-original-full-export-stage-wiring-guard.yml
+      - .github/workflows/raft-gt-next15-original-full-export.yml
+      - .github/workflows/raft-gt-next11-original-full-export.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-real-source-wiring:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            .github/workflows
+      - name: Fail closed if final original-source translator does not match its Shader48 GUID installer
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY_GT_WIRING'
+          from pathlib import Path
+          configs = [
+              ("15","17","158","143","628","643","43","42","33","58","[8,13,8,4]","12"),
+              ("11","18","143","132","643","654","42","41","33","58","[8,13,8,4]","0"),
+          ]
+          for shader, prior_stage, before, after, before_non_dummy, after_non_dummy, prior_targets, after_targets, routes, source_stages, route_table, range_properties in configs:
+              workflow=Path(".github/workflows/raft-gt-next"+shader+"-original-full-export.yml")
+              all_text=workflow.read_text(encoding="utf-8")
+              anchor="      - name: Check genuine post"+prior_stage+" original-guid material coverage and NEXT"+shader+" source-free safety"
+              tail_anchor="      - name: Publish aggregate evidence only, never original scenes/meshes/export/trace"
+              assert all_text.count(anchor)==1, "original_final_stage_anchor_"+shader
+              start=all_text.index(anchor)
+              stop=all_text.find(tail_anchor,start)
+              assert stop>start, "missing_aggregate_only_stage_"+shader
+              section=all_text[start:stop]
+              checks=[
+                  "python3 -m scripts.gt_translate_next_remaining_"+shader+"_shader48",
+                  "scripts/gt_translate_next_remaining_"+shader+"_shader48.py",
+                  "test_gt_translate_next_remaining_"+shader+"_shader48.py",
+                  "python3 -m scripts.gt_install_next"+shader+"_original_shader48",
+                  'assert c["material_docs_using_dummy_Shader"]=='+before,
+                  'assert c["material_docs_using_non_dummy_Shader"]=='+before_non_dummy,
+                  'assert c["distinct_dummy_Shader_targets_referenced"]=='+prior_targets,
+                  'assert q["original_program_stages_roundtrip_Vulkan11_valid"]=='+source_stages,
+                  'assert q["source_original_keyword_permutation_route_counts_per_pass"]=='+route_table,
+                  'assert q["source_original_Range_property_count"]=='+range_properties,
+                  'assert unity["registeredRoutes"]=='+routes,
+                  'assert c["material_docs_using_dummy_Shader"]=='+after,
+                  'assert c["material_docs_using_non_dummy_Shader"]=='+after_non_dummy,
+                  'assert c["distinct_dummy_Shader_targets_referenced"]=='+after_targets,
+                  'assert sha==before,',
+                  'gt-fourteen-shader-postrestore-quality.json',
+                  'original-source' if False else 'original',
+              ]
+              for token in checks:
+                  assert token in section, shader+" missing required provenance: "+token
+              expected="scripts.gt_translate_next_remaining_"+shader+"_shader48"
+              for line in section.splitlines():
+                  if "python3 -m scripts.gt_translate_next_remaining_" in line:
+                      assert expected in line,shader+" source translator points to wrong Shader48"
+              assert all_text.count("  workflow_dispatch:")==1
+              assert "cancel-in-progress: false" in all_text
+              print("GT_AUTHENTIC_FULL_EXPORT_STAGE_WIRING_OK "+shader+" prior="+before+"/"+prior_targets+" post="+after+"/"+after_targets)
+          PY_GT_WIRING
