@@ -1,5 +1,7 @@
 # خطة استكمال استعادة رسوم Raft Android
 
+- **Parallel next11 real same-export verification:** [43918847740](https://github.com/alwansan/raf/actions/runs/43918847740) IN PROGRESS from workflow raft-gt-next11-original-full-export.yml commit e8ca45d0; requires actual next15 643/143/42 before original NEXT11 GUID install, then full post19 SHA recensus. **654/132/41 remains future gate ONLY**.
+
 ## GT next engineering batch — real post17 and next15 (16 Nov 2026)
 
 - Latest accepted **[43787809110](https://github.com/alwansan/raf/actions/runs/43787809110) SUCCESS** same-export NEXT17: **628/786 non-Dummy Custom Materials**, **158 Dummy/43 original Shader GUID targets**; 29,213 Material/YAML/meta protected original SHA unchanged, zero broken references, no APK/XAPK. NEXT18 prior real [43787527334](https://github.com/alwansan/raf/actions/runs/43787527334) accepted 611/786, 175/44.
