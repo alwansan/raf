@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "agent": "GT",
+  "date_baghdad": "2026-11-16",
+  "repository": "alwansan/raf",
+  "write_branch": "feature/android-native-port",
+  "source_zip2_pinned_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "latest_accepted_full_same_export": {
+    "run_id": 43787809110,
+    "conclusion": "success",
+    "source_original_Shader48_guid_installed_through": "NEXT17",
+    "source_owners_sha_authenticated": 82,
+    "materials_total": 1536,
+    "unity_builtin_materials": 750,
+    "custom_material_documents_total": 786,
+    "custom_materials_original_non_dummy_shader": 628,
+    "custom_materials_dummy_shader": 158,
+    "distinct_dummy_source_shader_guid_targets_remaining": 43,
+    "custom_material_shader_non_dummy_coverage_percent": 79.9,
+    "protected_Material_YAML_meta_SHA_unchanged": 29213,
+    "broken_material_shader_references": 0,
+    "original_source_to_export_shader_guid_verified": true,
+    "unity_Android_Vulkan_shader_bundle_verified": true,
+    "Android_Adreno_device_pixels_verified": false,
+    "XAPK_created": false,
+    "artifact_name": "gt-seventeen-next17-source-shader-full-export-audit-43787809110",
+    "artifact_id": 14192158339
+  },
+  "preceding_real_export": {
+    "next23": {
+      "run_id": 43777283111,
+      "non_dummy": 593,
+      "dummy": 193,
+      "targets": 45
+    },
+    "next18": {
+      "run_id": 43787527334,
+      "non_dummy": 611,
+      "dummy": 175,
+      "targets": 44,
+      "artifact_id": 14194589079
+    },
+    "next17": {
+      "run_id": 43787809110,
+      "non_dummy": 628,
+      "dummy": 158,
+      "targets": 43
+    }
+  },
+  "failed_obsolete_run": {
+    "run_id": 43786161961,
+    "conclusion": "failure",
+    "last_safe_status": "INCONCLUSIVE at NEXT18 source translator quality contract",
+    "root_cause": "source translator incorrectly given post15 193/45 quality instead of authentic post14 216/46",
+    "corrected_run": 43787527334
+  },
+  "fixes_applied": [
+    {
+      "path": "scripts/gt_install_next17_original_shader48.py",
+      "commit": "44083b6023e99facf73e0b8f289c70bc267e7b68",
+      "repair": "post16 report 193 -> 175; underlying source quality gate was already 175"
+    },
+    {
+      "path": "scripts/gt_install_next15_original_shader48.py",
+      "commit": "1668151a0f44fc0eeb03e687ce0d52f895c38335",
+      "repair": "post17 report 193 -> 158; source quality gate is 158"
+    },
+    {
+      "path": "scripts/gt_install_next11_original_shader48.py",
+      "commit": "a8f8de325702680f05a33ce0bebef34d6e1e8d95",
+      "repair": "projected post18 report 193 -> 143, not actual yet"
+    }
+  ],
+  "next15_running": {
+    "path": ".github/workflows/raft-gt-next15-original-full-export.yml",
+    "commit": "260001221c7135bfe7d4be31cda96a816797b17c",
+    "run_id": 43918007004,
+    "last_checked_status": "in_progress",
+    "expected_only_if_full_real_post18_success": {
+      "non_dummy": 643,
+      "dummy": 143,
+      "remaining_targets": 42
+    },
+    "source_original_D3D11_programs": 58,
+    "isolated_Unity_Vulkan_routes_per_pass": [
+      8,
+      13,
+      8,
+      4
+    ],
+    "post14_original_source_identity_quality": "216 Dummy / 46 GUID",
+    "required_post17_install_quality": "158 Dummy / 43 GUID",
+    "strict_full_sha_audit": true,
+    "APK_OBB_XAPK_created": false
+  },
+  "not_completed": [
+    "remaining 158 Custom Dummy documents at last accepted run",
+    "source-only original Shader48 candidates for next11/next10/next7/other groups",
+    "water Spectrum Foam Depth FFT kernel6 original Vulkan runtime parity",
+    "Fire Alpha linked exported-pixel parity",
+    "G0-G6 real project export and visual device parity",
+    "animation intentionally deferred"
+  ],
+  "owner_priority": "All source-authentic graphic resources before general test XAPK; distinguish SOURCE, ISOLATED UNITY, SAME EXPORT GUID, DEVICE PIXEL."
+}
