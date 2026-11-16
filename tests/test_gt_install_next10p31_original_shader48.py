@@ -43,7 +43,7 @@ class OriginalNext10p31SameExportTests(unittest.TestCase):
             source_names[original_key] = "f" * 64
             with (patch("scripts.gt_install_next10p31_original_shader48.gather",
                         return_value=(source_names, 14)),
-                  patch("scripts.gt_install_next10p31_original_shader48.choose_original_18_by_topology",
+                  patch("scripts.gt_install_next10p31_original_shader48.choose_original_10p31_by_topology",
                         return_value=original_key) as checker):
                 self.assertEqual(source_identity(root, root / "manifest", qfile), original_key)
                 checker.assert_called_once()
