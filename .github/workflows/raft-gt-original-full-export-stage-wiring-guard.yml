@@ -7,6 +7,7 @@ on:
       - .github/workflows/raft-gt-original-full-export-stage-wiring-guard.yml
       - .github/workflows/raft-gt-next15-original-full-export.yml
       - .github/workflows/raft-gt-next11-original-full-export.yml
+      - .github/workflows/raft-gt-next10p33-original-full-export.yml
   workflow_dispatch:
 
 permissions:
@@ -32,11 +33,12 @@ jobs:
           configs = [
               ("15","17","158","143","628","643","43","42","33","58","[8,13,8,4]","12"),
               ("11","18","143","132","643","654","42","41","33","58","[8,13,8,4]","0"),
+              ("10p33","19","132","122","654","664","41","40","33","58","[8,13,8,4]","6"),
           ]
           for shader, prior_stage, before, after, before_non_dummy, after_non_dummy, prior_targets, after_targets, routes, source_stages, route_table, range_properties in configs:
               workflow=Path(".github/workflows/raft-gt-next"+shader+"-original-full-export.yml")
               all_text=workflow.read_text(encoding="utf-8")
-              anchor="      - name: Check genuine post"+prior_stage+" original-guid material coverage and NEXT"+shader+" source-free safety"
+              anchor="      - name: Check genuine post"+prior_stage+" original-guid material coverage and NEXT"+shader.upper()+" source-free safety"
               tail_anchor="      - name: Publish aggregate evidence only, never original scenes/meshes/export/trace"
               assert all_text.count(anchor)==1, "original_final_stage_anchor_"+shader
               start=all_text.index(anchor)
