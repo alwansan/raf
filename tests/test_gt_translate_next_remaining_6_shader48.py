@@ -6,7 +6,7 @@ the actual original post14 216-Dummy census. No GUID is inferred from a name.
 import unittest
 from scripts.gt_translate_next_remaining_6_shader48 import (
     STATUS, EXPECTED_TOPOLOGY, select_exact_6_material_name,
-    validate_authentic_source_ranges,
+    validate_authentic_source_ranges, safe_original_six_property_flag_attribute_census,
 )
 
 
@@ -35,6 +35,32 @@ class SixMaterialAuthenticOriginalShader48(unittest.TestCase):
             select_exact_6_material_name(original,{"a"*64:6,"b"*64:5})
         with self.assertRaisesRegex(ValueError,"malformed_original"):
             select_exact_6_material_name(original,{"a"*63:6,"b"*64:5})
+
+    def test_safe_source_property_flags_census_leaks_no_attribute_values(self):
+        props=[
+            {"m_Type":2,"m_Flags":1,
+             "m_Attributes":["Toggle(SECRET_KEYWORD)"],"m_Name":"PRIVATE_NAME"},
+            {"m_Type":4,"m_Flags":4,
+             "m_Attributes":["PerRendererData","NoScaleOffset"],"m_Name":"HIDDEN"},
+            {"m_Type":0,"m_Flags":0,"m_Attributes":[],"m_Name":"SOURCE"},
+        ]
+        q=safe_original_six_property_flag_attribute_census(
+            {"m_PropInfo":{"m_Props":props}})
+        self.assertEqual(q["count"],3)
+        self.assertEqual(q["original_shader_property_flag_histogram"],
+                         {"0":1,"1":1,"4":1})
+        self.assertEqual(q["original_shader_property_attribute_class_histogram"],
+                         {"no_scale_offset":1,"none":1,"per_renderer_data":1,
+                          "toggle_keyword":1})
+        self.assertFalse(q["names_values_identifiers_and_attribute_strings_published"])
+        import json
+        public=json.dumps(q)
+        for private in ("SECRET_KEYWORD","PRIVATE_NAME","HIDDEN","SOURCE"):
+            self.assertNotIn(private,public)
+        props[0]["m_Attributes"]=[123]
+        with self.assertRaisesRegex(ValueError,"property_attribute_string"):
+            safe_original_six_property_flag_attribute_census(
+                {"m_PropInfo":{"m_Props":props}})
 
     def test_original_range_properties_must_not_inherit_another_shader(self):
         parsed={"m_PropInfo":{"m_Props":[{
