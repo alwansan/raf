@@ -7,6 +7,7 @@ import unittest
 from scripts.gt_translate_next_remaining_6_shader48 import (
     STATUS, EXPECTED_TOPOLOGY, select_exact_6_material_name,
     validate_authentic_source_ranges, safe_original_six_property_flag_attribute_census,
+    source_only_static_parameter_binding_failure_category,
 )
 
 
@@ -61,6 +62,16 @@ class SixMaterialAuthenticOriginalShader48(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"property_attribute_string"):
             safe_original_six_property_flag_attribute_census(
                 {"m_PropInfo":{"m_Props":props}})
+
+    def test_original_binding_errors_are_static_safe_or_suppressed(self):
+        self.assertEqual(
+            source_only_static_parameter_binding_failure_category(
+                ValueError("original_texture_or_sampler_binding_ambiguous")),
+            "original_texture_or_sampler_binding_ambiguous")
+        self.assertEqual(
+            source_only_static_parameter_binding_failure_category(
+                ValueError("PRIVATE_SHADERS_NAME_PRIVATE_RESOURCE_TEXTURE")),
+            "UNCLASSIFIED_PRIVATE_PARAMETER_BINDING_FAILURE")
 
     def test_original_range_properties_must_not_inherit_another_shader(self):
         parsed={"m_PropInfo":{"m_Props":[{
