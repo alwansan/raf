@@ -20,11 +20,14 @@ from scripts.w1_recover_graphics_programs import decoded_platforms, records
 
 STATUS="GT_TOP_REAL_DUMMY_MATERIAL_SHADER48_ORIGINAL_D3D11_PASS_TOPOLOGY_PROBED"
 TOP=12
+VERIFIED_CENSUS_SCOPES=frozenset((333,246,216))
 
 
-def ranked_candidates(original_hashes, materials, *, top=TOP):
+def ranked_candidates(original_hashes, materials, *, top=TOP, expected_dummy_materials=333):
     if (type(original_hashes) is not dict or type(materials) is not dict
-            or top<1 or top>32 or sum(materials.values())!=333):
+            or type(expected_dummy_materials) is not int
+            or expected_dummy_materials not in VERIFIED_CENSUS_SCOPES
+            or top<1 or top>32 or sum(materials.values())!=expected_dummy_materials):
         raise ValueError("unverified_remaining_source_D3D11_probe_scope")
     by_name=defaultdict(list)
     for key,digest in original_hashes.items():
@@ -44,9 +47,10 @@ def ranked_candidates(original_hashes, materials, *, top=TOP):
     return out
 
 
-def inspect(original, manifest, source_name_hashes, materials, *, top=TOP):
+def inspect(original, manifest, source_name_hashes, materials, *, top=TOP, expected_dummy_materials=333):
     import UnityPy
-    candidates=ranked_candidates(source_name_hashes,materials,top=top)
+    candidates=ranked_candidates(source_name_hashes,materials,top=top,
+                                 expected_dummy_materials=expected_dummy_materials)
     expected=read_expected(manifest)
     result=[]
     # Cache no game source once the original-identity candidate is inspected.
@@ -97,6 +101,7 @@ def inspect(original, manifest, source_name_hashes, materials, *, top=TOP):
         "schema_version":1,
         "status":STATUS,
         "probe_ranked_by_current_real_export_Material_usage":True,
+        "verified_real_export_dummy_material_scope":expected_dummy_materials,
         "source_original_82_owner_Shader48_SHA_verified":True,
         "top_original_dummy_Material_shader_targets_requested":top,
         "top_actual_unresolved_Material_link_weights":[x[0] for x in candidates],
@@ -112,7 +117,11 @@ def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
     for key in ("original","manifest","quality","out"):
         parser.add_argument("--"+key,type=Path,required=True)
+    parser.add_argument("--expected-dummy-materials",type=int,choices=(333,246,216),default=333)
+    parser.add_argument("--top",type=int,default=TOP)
     args=parser.parse_args(argv)
+    if not 1<=args.top<=32:
+        parser.error("--top must be between 1 and 32")
     if (args.out.exists() or args.out.is_symlink() or
             args.out.resolve().is_relative_to(args.original.resolve())
             or args.out.resolve().is_relative_to(args.quality.resolve())):
@@ -121,11 +130,12 @@ def main(argv=None):
         hashes,owners=gather(args.original,args.manifest)
         report=json.loads(args.quality.read_text(encoding="utf-8"))
         if (report.get("status")!="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
-                or report.get("counts",{}).get("material_docs_using_dummy_Shader")!=333
+                or report.get("counts",{}).get("material_docs_using_dummy_Shader")!=args.expected_dummy_materials
                 or report.get("counts",{}).get("material_documents")!=1536):
             raise ValueError("unsupported_real_postnine_Shader_quality_report")
         output=inspect(args.original,args.manifest,hashes,
-                       report["dummy_shader_material_counts_by_name_digest"])
+                       report["dummy_shader_material_counts_by_name_digest"],
+                       top=args.top,expected_dummy_materials=args.expected_dummy_materials)
         output["original_Shader48_distinct_source_objects"]=len(hashes)
         output["original_owners_with_original_Shader48"]=owners
     except Exception as error:
