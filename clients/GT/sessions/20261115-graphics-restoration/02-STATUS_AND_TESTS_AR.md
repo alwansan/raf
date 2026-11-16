@@ -1,5 +1,7 @@
 # التقدم وما بقي والفحوص
 
+- **Additional running CI:** [43918847740](https://github.com/alwansan/raf/actions/runs/43918847740) NEXT11 full export, must prove post18 first, then authenticated same-export NEXT11. Target post19 **654/786 non-Dummy, 132 Dummy/41 targets is not established**. Newest accepted remains 628/786, 158/43.
+
 ## Verified full SAME-EXPORT status — 16 Nov 2026
 
 | Stage | Actual accepted audit | Source |
