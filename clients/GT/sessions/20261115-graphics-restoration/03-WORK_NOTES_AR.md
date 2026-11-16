@@ -1,5 +1,7 @@
 # تفاصيل العمل للجلسة الجديدة
 
+- **Parallel NEXT11 chain** .github/workflows/raft-gt-next11-original-full-export.yml commit e8ca45d0, GitHub run [43918847740](https://github.com/alwansan/raf/actions/runs/43918847740) IN PROGRESS. Replays all previous stages in a separate genuine ZIP2 export, then requires post18 143/42, 58 original D3D11, 33 Vulkan VSFS, original GUID, post19 654/132/41 and unchanged 29,213 protected SHA. Values are conditional only; check exact job failure/receipt before promotion.
+
 ## New GT session work notes — 16 Nov 2026
 
 - Checked live feature/android-native-port. Genuine full ZIP2 source SHA pinned at 15964ea8f246b6e076ce26b60931ee2e1a9a2385. [43786161961](https://github.com/alwansan/raf/actions/runs/43786161961) FAILED because NEXT18 source translator saw post15 193/45 quality in place of original post14 216/46. Corrected [43787527334](https://github.com/alwansan/raf/actions/runs/43787527334) SUCCESS post16 611/175/44; then [43787809110](https://github.com/alwansan/raf/actions/runs/43787809110) SUCCESS post17 628/158/43. No APK; same-export original GUID, 29,213 Material/YAML/meta SHA protected, 0 broken.
