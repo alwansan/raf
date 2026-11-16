@@ -1,4 +1,4 @@
-"""Recover source-authentic next unresolved 10p33-Material Shader48 D3D11 stages.
+"""Recover source-authentic next unresolved seven-Material 4-pass Shader48 D3D11 stages.
 
 Select exactly one remaining shader from 82 SHA-pinned original ZIP2 owners
 using the post-fourteen exact 10p33-Material name digest and source Shader48 identity.
