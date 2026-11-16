@@ -65,6 +65,9 @@
 
 ## دفعة تنفيذ NEXT23 وFireAlpha — 16 نوفمبر 2026
 
+- تأكدت نتيجة [43777739448](https://github.com/alwansan/raf/actions/runs/43777739448) **SUCCESS**؛ job `133007783009` نجح في فحص `py_compile` واختبارات `test_gt_install_next23_original_shader48.py` و`test_gt_install_next30_original_shader48.py`. هذا **دليل اختبارات صناعية فقط** وليس تثبيتاً على GUID في التصدير الكامل؛ آخر رقم فعلي **216 Dummy / 46 Shader targets**.
+
+
 - فحص مبكر مستقل جديد للمثبت `raft-gt-next23-installer-static-gate.yml`: [43777739448](https://github.com/alwansan/raf/actions/runs/43777739448)، وليس اختبار Full-Export أو Vulkan نفسه.\n\n
 
 - كود الاستعادة: `scripts/gt_install_next23_original_shader48.py`، اختبار `tests/test_gt_install_next23_original_shader48.py`، وربط `raft-gt-original-export-smoke.yml` على commit [5d44b41](https://github.com/alwansan/raf/commit/5d44b41fb3f94556122ca073f74061e0cf9e687b) ثم اختبار مبكر في [ae503180](https://github.com/alwansan/raf/commit/ae503180c3238fcb359dd89e684be8353abc2b02). [43777150940](https://github.com/alwansan/raf/actions/runs/43777150940) قيد التنفيذ من snapshot أولي؛ [43777283111](https://github.com/alwansan/raf/actions/runs/43777283111) أحدث snapshot بحماية الاختبار وكان pending عند التوثيق. لا تقبل post15 إلا بجرد صادر **حقيقي** وMaterial/meta SHA.
