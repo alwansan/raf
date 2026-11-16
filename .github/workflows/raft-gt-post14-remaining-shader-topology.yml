@@ -45,10 +45,16 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY_GT_POST14_BASELINE'
-          import json,os
+          import json,os,shutil
           from pathlib import Path
-          p=Path(os.environ["RUNNER_TEMP"])/"gt-original-post14-material-quality/gt-fourteen-shader-postrestore-quality.json"
+          root=Path(os.environ["RUNNER_TEMP"])/"gt-original-post14-material-quality"
+          matches=[p for p in root.rglob("gt-fourteen-shader-postrestore-quality.json")
+                   if p.is_file() and not p.is_symlink()]
+          if len(matches)!=1:
+              raise ValueError("ambiguous_or_missing_real_post14_GitHub_artifact_quality_json")
+          p=matches[0]
           q=json.loads(p.read_text())
+          shutil.copyfile(p,Path(os.environ["RUNNER_TEMP"])/"gt-post14-verified-quality.json")
           c=q["counts"]
           assert q["status"]=="NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_ONLY"
           assert c["material_documents"]==1536 and c["material_docs_using_Unity_builtin_Shader"]==750
@@ -171,7 +177,7 @@ jobs:
           python3 -m scripts.gt_probe_remaining_original_shader_dxbc_topology \
             --original "$RUNNER_TEMP/gt-original-82-shader-owners" \
             --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
-            --quality "$RUNNER_TEMP/gt-original-post14-material-quality/gt-fourteen-shader-postrestore-quality.json" \
+            --quality "$RUNNER_TEMP/gt-post14-verified-quality.json" \
             --expected-dummy-materials 216 --top 16 \
             --out "$RUNNER_TEMP/gt-post14-original-shader-topology-safe.json"
           python3 - <<'PY_GT_POST14_OUTPUT'
