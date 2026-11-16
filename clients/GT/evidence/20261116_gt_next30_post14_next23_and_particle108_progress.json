@@ -369,14 +369,28 @@
     }
   },
   "next23_full_export_current": {
-    "first_run": 43777150940,
-    "first_conclusion": "failure",
-    "first_failure": "older synthetic 165-owner Shader48 test fixture",
-    "corrected_fixture_commit": "263cda9381db330b0c4fc21972ec38d71ee23511",
+    "primary_run": 43777150940,
+    "primary_conclusion": "failure_synthetic_165_owner_test_fixture_only",
     "replacement_run": 43777283111,
-    "accepted_actual_post15_material_dummy_count": null,
-    "accepted_same_export_next23_GUID_install": false,
-    "replacement_status": "in_progress"
+    "replacement_conclusion": "success",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "same_export_next23_original_shader48_GUID_installed": true,
+    "unity_Vulkan_all_33_original_VSFS_routes_verified": true,
+    "same_export_post15_real_quality": {
+      "original_material_documents": 1536,
+      "custom_material_documents": 786,
+      "unity_builtin_material_documents": 750,
+      "non_dummy_custom_material_documents": 593,
+      "dummy_custom_material_documents": 193,
+      "original_dummy_shader_targets_remaining": 45,
+      "broken_shader_material_references": 0,
+      "material_meta_yaml_SHA_unchanged": 29213,
+      "original_export_shader_GUID_preserved": true,
+      "full_game_adreno_shader_pixels_verified": false
+    },
+    "audit_artifact_id": 14190151552,
+    "audit_artifact_zip_sha256": "41f534719e2d63507e3ec06d489b964d5a0800908b0faaa072805e7d1ed830cf",
+    "status": "GT_FIFTEEN_NEXT23_SOURCE_SHADER48_SAME_EXPORT_GUID_ACCEPTED_NO_APK"
   },
   "next15_original_source": {
     "run": 43782323454,
@@ -572,8 +586,12 @@
       "source_texture_sampler_bindings": 538,
       "source_varyings": 211,
       "unity_run": 43785362318,
-      "unity_final_accepted": false,
-      "original_export_GUID_installed": false
+      "unity_final_accepted": true,
+      "original_export_GUID_installed": false,
+      "unity_artifact_id": 14190078538,
+      "unity_artifact_sha256": "3981d968b6cc56dcc43495b091fda99a0471562c4e7128cb0cbc1c46561efc0b",
+      "unity_candidate_sha256": "3ff8016d267fd7e2e5a9faf835e6b5fc3fe2d18f70fc9e567aad53c51c481bae",
+      "unity_shader_errors": 0
     },
     "next10p31": {
       "source_run": 43785119657,
@@ -595,10 +613,46 @@
       "source_texture_sampler_bindings": 306,
       "source_varyings": 201,
       "unity_run": 43785367029,
-      "unity_final_accepted": false,
-      "original_export_GUID_installed": false
+      "unity_final_accepted": true,
+      "original_export_GUID_installed": false,
+      "unity_artifact_id": 14189184448,
+      "unity_artifact_sha256": "aa155eefc1021f693bad1f060d39e3f028571b78255c4261b98b3ef2e3e031d5",
+      "unity_candidate_sha256": "efccbe88ce3545de5222b2857a421ed7fab170116491ee99ed340aae5e775691",
+      "unity_shader_errors": 0
     },
     "emitted_source_shader_program_bytes_or_GUIDs": false,
     "device_gpu_pixel_parity_verified": false
+  },
+  "next10_pair_original_guid_installer_staged": {
+    "static_run": 43785949219,
+    "static_result": "success",
+    "static_tests_passed": 6,
+    "installed_on_real_export": false,
+    "next10p33_required_future_real_prior": {
+      "dummy_custom": 132,
+      "non_dummy_custom": 654,
+      "remaining_dummy_targets": 41
+    },
+    "next10p31_required_future_real_prior": {
+      "dummy_custom": 122,
+      "non_dummy_custom": 664,
+      "remaining_dummy_targets": 40
+    },
+    "above_priors_are_projections_not_yet_confirmed": true
+  },
+  "next18_new_full_same_export_integrator": {
+    "workflow": ".github/workflows/raft-gt-next18-original-full-export.yml",
+    "commit": "cbca1efe3e857eb4eb5adb7bda8ad46cbe73f966",
+    "run": 43786161961,
+    "expected_after_original_guid_install": {
+      "custom_non_dummy": 611,
+      "custom_dummy": 175,
+      "remaining_original_dummy_targets": 44
+    },
+    "acceptance_from_same_export_run_confirmed": false,
+    "sources_correctly_authenticated": true,
+    "unity_private_compiled_independently": true,
+    "complete_project_render_pixel_verified": false,
+    "no_xapk": true
   }
 }
