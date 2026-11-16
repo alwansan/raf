@@ -750,8 +750,8 @@ jobs:
           # zip2@15964ea8 source sharedassets0.assets. No Git LFS.
           foam="$RUNNER_TEMP/gt-native-foam-private"
           mkdir "$foam"
-          original="$RUNNER_TEMP/w1-original/Raft_Data"
-          test -s "$original/sharedassets0.assets"
+          original="$RUNNER_TEMP/w1-original"
+          test -s "$original/Raft_Data/sharedassets0.assets"
           if ! timeout 540s python3 -m scripts.b20_private_foam_packet \
             --source "$original" --repo "$GITHUB_WORKSPACE" \
             --private "$foam/packet" --out "$foam/packet.json"; then
