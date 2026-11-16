@@ -40,17 +40,19 @@ def source_identity(original: Path, manifest: Path, quality: Path):
     if (type(weights) is not dict or not weights
             or any(type(amount) is not int or amount <= 0 for amount in weights.values())
             or sum(weights.values()) != 122
-            or list(weights.values()).count(10) != 2):
-        raise ValueError("invalid_original_two_10_Material_digest_population")
+            or list(weights.values()).count(10) != 1):
+        raise ValueError("invalid_original_one_remaining_10_Material_digest_population")
     original_data = original / "Raft_Data"
     names, owner_count = gather(original_data, manifest)
     if owner_count != 14 or len(names) != 165:
         raise ValueError("original_82_source_Shader48_population_drift")
-    # Only one source Shader48 name digest serves 10 materials in post20, and
-    # its unique source owner and 4/31/8/55 topology must still be proven.
+    # Two original SHA-verified 10-Material names existed at post14; NEXT10p33
+    # must already be installed on its original GUID, leaving exactly ONE at
+    # the authenticated post20 122/40 census. Require actual 4/31/8/55 source
+    # topology, never a fabricated GUID or name-only mapping.
     return choose_original_10p31_by_topology(
         original_data, manifest, names,
-        q["dummy_shader_material_counts_by_name_digest"])
+        q["dummy_shader_material_counts_by_name_digest"], expected_name_count=1)
 
 
 def verify_receipt(candidate: bytes, receipt: dict):
