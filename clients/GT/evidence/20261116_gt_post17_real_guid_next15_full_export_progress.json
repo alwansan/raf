@@ -94,6 +94,7 @@
     "APK_OBB_XAPK_created": false
   },
   "not_completed": [
+    "NEXT15 and NEXT11 full original GUID audit pending; post18/post19 projected counts are not accepted",
     "remaining 158 Custom Dummy documents at last accepted run",
     "source-only original Shader48 candidates for next11/next10/next7/other groups",
     "water Spectrum Foam Depth FFT kernel6 original Vulkan runtime parity",
@@ -101,5 +102,31 @@
     "G0-G6 real project export and visual device parity",
     "animation intentionally deferred"
   ],
-  "owner_priority": "All source-authentic graphic resources before general test XAPK; distinguish SOURCE, ISOLATED UNITY, SAME EXPORT GUID, DEVICE PIXEL."
+  "owner_priority": "All source-authentic graphic resources before general test XAPK; distinguish SOURCE, ISOLATED UNITY, SAME EXPORT GUID, DEVICE PIXEL.",
+  "next11_queued": {
+    "path": ".github/workflows/raft-gt-next11-original-full-export.yml",
+    "commit": "e8ca45d0c4bb3a0cb78e3c465edab46d0d6cf277",
+    "run_id": 43918847740,
+    "last_checked_status": "queued",
+    "required_actual_post18_before_original_GUID_install": {
+      "non_dummy": 643,
+      "dummy": 143,
+      "targets": 42
+    },
+    "expected_only_if_full_real_post19_success": {
+      "non_dummy": 654,
+      "dummy": 132,
+      "remaining_targets": 41
+    },
+    "source_original_programs_D3D11": 58,
+    "unity_android_vulkan_VSFS_routes": [
+      8,
+      13,
+      8,
+      4
+    ],
+    "selected_source_quality": "original post14 216 Dummy/46 targets for SHA owner identity",
+    "full_unchanged_material_meta_sha_required": 29213,
+    "no_game_XAPK": true
+  }
 }
