@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "timestamp_label": "2026-11-16 Asia/Baghdad",
+  "identity": "GT",
+  "repository": "alwansan/raf",
+  "writable_branch": "feature/android-native-port",
+  "source_zip2_pinned_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "latest_accepted_real_same_export": {
+    "run_id": 43787809110,
+    "status": "success",
+    "custom_material_non_dummy": 628,
+    "custom_material_total": 786,
+    "custom_material_dummy": 158,
+    "remaining_original_shader_guid_targets": 43,
+    "total_material_count": 1536,
+    "builtins": 750,
+    "protected_material_and_yaml_meta_original_sha_count": 29213,
+    "broken_material_shader_references": 0,
+    "percentage_of_custom_material_documents_only": 79.9,
+    "device_pixel_visual_parity_proven": false,
+    "whole_game_restoration_complete": false
+  },
+  "running_or_queued_original_export_install_workflows": [
+    {
+      "stage": "NEXT15",
+      "latest_corrected_run": 43920541904,
+      "expected_after_acceptance": {
+        "non_dummy": 643,
+        "dummy": 143,
+        "target_shader_guids": 42
+      }
+    },
+    {
+      "stage": "NEXT11",
+      "latest_corrected_run": 43920553298,
+      "expected_after_acceptance": {
+        "non_dummy": 654,
+        "dummy": 132,
+        "target_shader_guids": 41
+      }
+    },
+    {
+      "stage": "NEXT10p33",
+      "latest_corrected_run": 43922026302,
+      "expected_after_acceptance": {
+        "non_dummy": 664,
+        "dummy": 122,
+        "target_shader_guids": 40
+      }
+    },
+    {
+      "stage": "NEXT10p31",
+      "run": 43922253136,
+      "expected_after_acceptance": {
+        "non_dummy": 674,
+        "dummy": 112,
+        "target_shader_guids": 39
+      }
+    },
+    {
+      "stage": "NEXT7p11",
+      "run": 43925468867,
+      "source_programs": 22,
+      "vsfs_by_pass": [
+        4,
+        5,
+        2
+      ],
+      "original_shader_passes": 3,
+      "original_source_range_count": 4,
+      "real_prior_required": {
+        "non_dummy": 674,
+        "dummy": 112,
+        "target_shader_guids": 39,
+        "two_original_7_material_name_digests": true
+      },
+      "expected_after_acceptance": {
+        "non_dummy": 681,
+        "dummy": 105,
+        "target_shader_guids": 38
+      },
+      "guid_install_guard": "source owner/PathID -> real same-export original Shader GUID, 29213 unchanged SHA"
+    },
+    {
+      "stage": "NEXT7p33",
+      "run": 43925787952,
+      "source_programs": 58,
+      "vsfs_by_pass": [
+        8,
+        13,
+        8,
+        4
+      ],
+      "original_shader_passes": 4,
+      "original_source_range_count": 0,
+      "real_prior_required": {
+        "non_dummy": 681,
+        "dummy": 105,
+        "target_shader_guids": 38,
+        "one_remaining_original_7_material_name_digest": true
+      },
+      "expected_after_acceptance": {
+        "non_dummy": 688,
+        "dummy": 98,
+        "target_shader_guids": 37
+      },
+      "guid_install_guard": "source owner/PathID -> real same-export original Shader GUID, 29213 unchanged SHA"
+    }
+  ],
+  "new_source_install_scripts": [
+    {
+      "stage": "NEXT7p11",
+      "path": "scripts/gt_install_next7p11_original_shader48.py",
+      "commit": "b2c934cb7d8f523c63e5e4fe747ed6feb4b45c8a"
+    },
+    {
+      "stage": "NEXT7p33",
+      "path": "scripts/gt_install_next7p33_original_shader48.py",
+      "commit": "fa17fac322b0705e2d0631c07efc1f366f2385e4"
+    },
+    {
+      "stage": "NEXT7p33 original 7 used digest scope fix",
+      "path": "scripts/gt_translate_next_remaining_7p33_shader48.py",
+      "commit": "8954001b6e8b1dd0c97c074a1660fd169f6159fb"
+    }
+  ],
+  "latest_verified_static_checks": [
+    {
+      "run_id": 43925234660,
+      "status": "success",
+      "scope": "NEXT7p11 and NEXT7p33 source/installer unit tests with 11/33 routes; no actual export install"
+    },
+    {
+      "run_id": 43925851391,
+      "status": "success",
+      "scope": "all six original full-export final stages translator/provenance/real prior/expected post audit wiring; not actual GUID install"
+    },
+    {
+      "run_id": 43922343892,
+      "status": "success",
+      "scope": "prior four-stage source wiring guard"
+    }
+  ],
+  "upcoming_verified_original_resources": [
+    "remaining original 37 Shader GUID targets IF six real workflows all success",
+    "G0-G6",
+    "water Spectrum/Foam/Depth/FFT/kernel6",
+    "Fire alpha device and original export parity",
+    "mesh and texture scene material parity",
+    "PostFX",
+    "deferred animation"
+  ],
+  "acceptance_rule": "Do not promote any expected counts unless full same-instance AssetRipper source-owner mapping, Unity serialized Vulkan bundle, original GUID installation and postinstall all-protected-SHA census have all succeeded. No GT game XAPK until resources-first directive is satisfied.",
+  "automatic_background_agent_assumed": false
+}
