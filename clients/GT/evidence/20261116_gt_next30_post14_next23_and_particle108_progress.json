@@ -642,17 +642,53 @@
   },
   "next18_new_full_same_export_integrator": {
     "workflow": ".github/workflows/raft-gt-next18-original-full-export.yml",
-    "commit": "cbca1efe3e857eb4eb5adb7bda8ad46cbe73f966",
-    "run": 43786161961,
-    "expected_after_original_guid_install": {
+    "initial_commit": "cbca1efe3e857eb4eb5adb7bda8ad46cbe73f966",
+    "initial_run": 43786161961,
+    "initial_status_at_last_check": "in_progress on old post15 translator quality; failure expected if reaches NEXT18 source",
+    "source_provenance_fix_commit": "75088aec1379c6baa90276ee0bffc570b30b06d4",
+    "source_original_quality": "real post14 216 Dummy/46 targets",
+    "source_translator_expects_post14": true,
+    "installer_original_guid_quality": "real post15 193 Dummy/45 targets",
+    "corrected_run": 43787527334,
+    "corrected_status_at_last_check": "pending",
+    "post16_expected_audit_NOT_VERIFIED": {
       "custom_non_dummy": 611,
       "custom_dummy": 175,
-      "remaining_original_dummy_targets": 44
+      "remaining_dummy_shader_targets": 44,
+      "unchanged_material_meta_yaml": 29213
     },
-    "acceptance_from_same_export_run_confirmed": false,
-    "sources_correctly_authenticated": true,
-    "unity_private_compiled_independently": true,
-    "complete_project_render_pixel_verified": false,
-    "no_xapk": true
+    "complete_success_and_same_export_post16_accepted": false,
+    "no_apk": true
+  },
+  "next17_new_full_same_export_integrator": {
+    "workflow": ".github/workflows/raft-gt-next17-original-full-export.yml",
+    "first_commit": "0cfea84897c2bb0f179ae69dfed5c64c8bacf2c3",
+    "first_run": 43787809110,
+    "status_at_last_check": "in_progress",
+    "rebuild_source": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "git_lfs": false,
+    "source_translator_quality": "real post14 216 Dummy/46 targets",
+    "original_programs_D3D11_expected": 43,
+    "source_passes_expected": 3,
+    "unity_VSFS_route_counts_expected": [
+      8,
+      13,
+      2
+    ],
+    "original_source_Shader48_PathID_to_same_export_guid_required": true,
+    "original_guid_installer_quality": "real post16 175 Dummy/44 targets after NEXT18",
+    "post17_expected_audit_NOT_VERIFIED": {
+      "custom_non_dummy": 628,
+      "custom_dummy": 158,
+      "remaining_dummy_shader_targets": 43,
+      "unchanged_material_meta_yaml": 29213
+    },
+    "source_and_isolated_Unity_prior_success_runs": [
+      43781304391,
+      43782074242
+    ],
+    "full_real_same_export_install_success_confirmed": false,
+    "no_apk": true,
+    "adreno_pixels_verified": false
   }
 }
