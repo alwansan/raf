@@ -9,6 +9,8 @@ on:
       - .github/workflows/raft-gt-next11-original-full-export.yml
       - .github/workflows/raft-gt-next10p33-original-full-export.yml
       - .github/workflows/raft-gt-next10p31-original-full-export.yml
+      - .github/workflows/raft-gt-next7p11-original-full-export.yml
+      - .github/workflows/raft-gt-next7p33-original-full-export.yml
   workflow_dispatch:
 
 permissions:
@@ -36,8 +38,10 @@ jobs:
               ("11","18","143","132","643","654","42","41","33","58","[8,13,8,4]","0"),
               ("10p33","19","132","122","654","664","41","40","33","58","[8,13,8,4]","6"),
               ("10p31","20","122","112","664","674","40","39","31","55","[8,13,8,2]","0"),
+              ("7p11","21","112","105","674","681","39","38","11","22","[4,5,2]","4"),
+              ("7p33","22","105","98","681","688","38","37","33","58","[8,13,8,4]","0"),
           ]
-          quality_names={"17":"seventeen","18":"eighteen","19":"nineteen","20":"twenty","21":"twentyone"}
+          quality_names={"17":"seventeen","18":"eighteen","19":"nineteen","20":"twenty","21":"twentyone","22":"twentytwo","23":"twentythree"}
           for shader, prior_stage, before, after, before_non_dummy, after_non_dummy, prior_targets, after_targets, routes, source_stages, route_table, range_properties in configs:
               workflow=Path(".github/workflows/raft-gt-next"+shader+"-original-full-export.yml")
               all_text=workflow.read_text(encoding="utf-8")
@@ -72,6 +76,10 @@ jobs:
                   checks.extend(['--next30', 'assert list(weights.values()).count(10)==1'])
               if shader=="10p33":
                   checks.append('assert list(weights.values()).count(10)==2')
+              if shader=="7p11":
+                  checks.extend(['--next7p11', 'assert list(weights.values()).count(7)==2'])
+              if shader=="7p33":
+                  checks.append('assert list(weights.values()).count(7)==1')
               for token in checks:
                   assert token in section, shader+" missing required provenance: "+token
               expected="scripts.gt_translate_next_remaining_"+shader+"_shader48"
