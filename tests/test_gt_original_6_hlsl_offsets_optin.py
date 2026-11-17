@@ -51,6 +51,33 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
             return recorded
 
 
+    def test_vulkan_overlap_classifies_private_original_vs_padding_only_as_counts(self):
+        from scripts.gt_original_921_cb_hlsl import (
+            original_compiled_cb_numeric_offset_profile)
+        block = {
+            "translated_binding": 4,
+            "members": [{"name": "SECRET_SOURCE_ARRAY", "index": 0,
+                         "array_size": 4, "matrix": False}],
+            "structs": [],
+        }
+        reflection = {
+            "ubos": [{"set": 0, "binding": 4, "type": "SECRET_UBO"}],
+            "types": {"SECRET_UBO": {"members": [
+                {"name": "SECRET_SOURCE_ARRAY", "offset": 0,
+                 "array_stride": 16, "array": [4]},
+                {"name": "raft921_cb0_pad4", "offset": 16},
+            ]}},
+        }
+        report = original_compiled_cb_numeric_offset_profile(
+            reflection, [block],
+            validator_text="Structure member 1 at offset 16 overlaps "
+                           "previous member ending at offset 63; SECRET_UBO")
+        self.assertEqual(report["validator_overlap_pair_reflection_matches"], 1)
+        self.assertEqual(report["validator_overlap_previous_source_field"], 1)
+        self.assertEqual(report["validator_overlap_current_synthetic_padding"], 1)
+        self.assertEqual(report["validator_overlap_previous_original_array"], 1)
+        self.assertNotIn("SECRET", json.dumps(report))
+
     def test_compiled_cb_numeric_offset_profile_hides_original_names(self):
         from scripts.gt_original_921_cb_hlsl import (
             original_compiled_cb_numeric_offset_profile)
