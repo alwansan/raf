@@ -111,7 +111,31 @@
     "validation_status_at_recording": "pending",
     "vulkan11_validation_kept_strict": true,
     "original_uniform_offsets_unchanged": true,
-    "protected_source_names_bytes_not_published": true
+    "protected_source_names_bytes_not_published": true,
+    "retest_run_earlier": 43995925446,
+    "retest_run_earlier_result": "failure",
+    "latest_strict_source_run": 43996884492,
+    "latest_run_status_at_recording": "pending (needs check by run id)",
+    "actual_numeric_private_reflection_run": 43996386140,
+    "actual_numeric_private_reflection_result": "failure",
+    "original_member_offsets_match_compiler": 8,
+    "generated_other_reflection_members": 1552,
+    "reflected_uniform_block_members_total": 1560,
+    "original_source_buffers_reflected": 1,
+    "reflected_offsets_differ_original": 0,
+    "compiled_array_stride_mismatch_count": 0,
+    "validation_overlap_bucket": "65+ bytes",
+    "next_diagnostic_commits": [
+      "c6285bc4a3cc42be297a425a73571063a6d5cd95",
+      "8981fbb3bdfa5b03aa275c1027bcc39ec414c8a6",
+      "2b832609214f2c4f73bebd657d42f65f2429da7d",
+      "8e965709c1a355f50c4d41e03cb640e1f898992a",
+      "ad5d24f451390ca8202e9fd3ba250c5a60a161f6",
+      "7ddcd3a1fd34ecc3c07c4394fbeb9f515282cfa7",
+      "a745c4e00c77782fb81b9bb14e71a0e4ae23fd0a"
+    ],
+    "next_engineering_decision": "check 43996884492 source-only and reflected array sizes; if still overlapped use private source-owned physical CB type span/stride diagnosis and fix typed layout, never disable spirv-val or fake original GUID",
+    "no_new_accepted_original_material_restoration": true
   },
   "remaining_work": [
     "NEXT6 real Vulkan source and Unity isolated and original same-export GUID",
