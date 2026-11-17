@@ -292,6 +292,13 @@ def original_six_validator_private_failure_safe_topics(private):
         "compiled_array_missing_reflected_type",
         "compiled_members_struct_or_array",
         "compiled_members_matrix",
+        "validator_overlap_pair_reflection_matches",
+        "validator_overlap_previous_source_field",
+        "validator_overlap_previous_synthetic_padding",
+        "validator_overlap_current_source_field",
+        "validator_overlap_current_synthetic_padding",
+        "validator_overlap_previous_original_array",
+        "validator_overlap_current_original_array",
     }
     numeric=list(private.glob(
         "bound-stage-*/original-validator-layout-counts-private.json"))
