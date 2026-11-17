@@ -52,13 +52,13 @@ jobs:
           import os
           from scripts.gt_remaining_original_guid_weights import safe_remaining_weights
           import json
-          root=Path(os.environ["${{ runner.temp }}"])/"gt-post23-verified-audit"
+          root=Path(os.environ["RUNNER_TEMP"])/"gt-post23-verified-audit"
           matches=[p for p in root.rglob("gt-twentythree-shader-postrestore-quality.json")
                    if p.is_file() and not p.is_symlink()]
           if len(matches)!=1:
               raise ValueError("missing_or_ambiguous_accepted_real_post23_quality")
           report=safe_remaining_weights(json.loads(matches[0].read_text(encoding="utf-8")))
-          out=Path(os.environ["${{ runner.temp }}"])/"gt-post23-remaining-original-shader-weights-safe.json"
+          out=Path(os.environ["RUNNER_TEMP"])/"gt-post23-remaining-original-shader-weights-safe.json"
           out.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n",encoding="utf-8")
           print("GT_POST23_REMAINING_ORIGINAL_SHADER_GUID_WEIGHTS "+
                 json.dumps(report,sort_keys=True))
