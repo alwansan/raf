@@ -355,6 +355,31 @@ def original_six_validator_private_failure_safe_topics(private):
         safe["private_compiled_cb_binding_diagnostic_files"]=len(binding_files)
         safe["compiled_cb_binding_source_usage_count_only"]=dict(
             sorted(binding_total.items()))
+    noopt_keys={
+        "source_cb_no_opt_compiled",
+        "source_cb_no_opt_spirv_val_vulkan11_valid",
+        "source_cb_no_opt_reflected_ubo_count",
+        "source_cb_no_opt_original_offsets_verified",
+        "source_cb_no_opt_original_named_member_count",
+    }
+    noopt_files=list(private.glob(
+        "bound-stage-*/original-noopt-reflection-counts-private.json"))
+    if len(noopt_files)>16:
+        raise ValueError("unsafe_original_six_private_noopt_probe_population")
+    noopt_total={key:0 for key in noopt_keys}
+    for p in noopt_files:
+        if p.is_symlink() or not p.is_file() or p.stat().st_size>2048:
+            raise ValueError("unsafe_original_six_private_noopt_probe")
+        item=json.loads(p.read_text("utf-8"))
+        if (type(item) is not dict or set(item)!=noopt_keys
+                or any(type(v) is not int or not 0<=v<=100000
+                       for v in item.values())):
+            raise ValueError("untrusted_original_six_noopt_numeric_report")
+        for key,value in item.items():
+            noopt_total[key]+=value
+    if noopt_files:
+        safe["source_private_noopt_probe_files"]=len(noopt_files)
+        safe["compiled_cb_noopt_reflection_count_only"]=dict(sorted(noopt_total.items()))
     return safe
 
 
