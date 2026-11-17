@@ -394,8 +394,14 @@ def verify_offsets(reflection, buffers):
         expected = buffer["name"]
         if expected == "$Globals":
             expected = f'raft921_cb{buffer["source_slot"]}_Globals'
-        if resource is None or resource["name"] != expected:
-            raise ValueError("named_constant_buffer_binding_mismatch")
+        if resource is None:
+            # Fail closed but distinguish a reflection-elided buffer from
+            # a source-name match at a different descriptor location.
+            if any(row.get("name") == expected for row in resources):
+                raise ValueError("named_constant_buffer_source_name_at_wrong_descriptor")
+            raise ValueError("named_constant_buffer_source_block_not_reflected")
+        if resource.get("name") != expected:
+            raise ValueError("named_constant_buffer_source_block_name_changed")
         total += verify_members(buffer["members"] + buffer["structs"],
                                 types[resource["type"]]["members"])
     return total
