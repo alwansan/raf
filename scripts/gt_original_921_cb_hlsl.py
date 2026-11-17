@@ -110,6 +110,75 @@ def rebind_constant_buffers(source, buffers):
     return source
 
 
+
+def original_compiled_cb_numeric_offset_profile(reflection, buffers):
+    """PRIVATE reflection comparison with counts-only, source-name-free output.
+
+    This is diagnostic, never a waiver of strict Vulkan 1.1 validation or
+    original member offset/array-stride verification.
+    """
+    resources = reflection.get("ubos", [])
+    types = reflection.get("types", {})
+    if not isinstance(resources, list) or not isinstance(types, dict):
+        raise ValueError("untrusted_original_cb_reflection_shape")
+    slots = {(row.get("set"), row.get("binding")): row
+             for row in resources if isinstance(row, dict)}
+    result = {
+        "compiled_reflection_available": 1,
+        "original_source_buffers_checked": 0,
+        "original_member_fields_checked": 0,
+        "compiled_members_without_source_match": 0,
+        "compiled_member_offsets_match_original": 0,
+        "compiled_member_offsets_differ_original": 0,
+        "compiled_member_offsets_nonmonotonic": 0,
+        "compiled_array_strides_differ_original": 0,
+        "compiled_members_struct_or_array": 0,
+        "compiled_members_matrix": 0,
+    }
+    for buffer in buffers:
+        row = slots.get((0, buffer["translated_binding"]))
+        if row is None:
+            continue
+        typename = row.get("type")
+        layout = types.get(typename)
+        if not isinstance(layout, dict) or not isinstance(layout.get("members"), list):
+            continue
+        result["original_source_buffers_checked"] += 1
+        original = {m["name"]: m for m in
+                    (buffer["members"] + buffer["structs"])}
+        previous_offset = -1
+        for field in layout["members"]:
+            if not isinstance(field, dict):
+                continue
+            result["original_member_fields_checked"] += 1
+            off = field.get("offset")
+            if type(off) is not int or off < 0:
+                result["compiled_members_without_source_match"] += 1
+                continue
+            if previous_offset > off:
+                result["compiled_member_offsets_nonmonotonic"] += 1
+            previous_offset = off
+            source = original.get(field.get("name"))
+            if source is None:
+                result["compiled_members_without_source_match"] += 1
+                continue
+            key = ("compiled_member_offsets_match_original" if source["index"] == off
+                   else "compiled_member_offsets_differ_original")
+            result[key] += 1
+            is_struct = "members" in source
+            is_array = bool(source.get("array_size"))
+            is_matrix = bool(source.get("matrix"))
+            result["compiled_members_struct_or_array"] += int(is_struct or is_array)
+            result["compiled_members_matrix"] += int(is_matrix)
+            expected_stride = (
+                source.get("size") if is_struct else
+                64 if is_matrix else 16
+            )
+            if (is_array and field.get("array_stride") != expected_stride):
+                result["compiled_array_strides_differ_original"] += 1
+    return result
+
+
 def verify_named_constant_buffers(private, stage, buffers, *, original_hlsl_offsets=False):
     candidate = private / "named-constant-buffers.hlsl"
     baseline = private / "resource-bound.hlsl"
@@ -141,6 +210,21 @@ def verify_named_constant_buffers(private, stage, buffers, *, original_hlsl_offs
     if check.returncode:
         raw = (check.stderr + b"\\n" + check.stdout)[:65536]
         (private / "original-validator-raw-private.log").write_bytes(raw)
+        # On failure, inspect only counts from the privately reflected SPIR-V;
+        # no shader source names, offsets, or private IDs leave the runner.
+        safe_counts = {"compiled_reflection_available": 0}
+        try:
+            candidate_reflection = subprocess.run(
+                ["spirv-cross", str(binary), "--reflect"],
+                capture_output=True, timeout=30, check=False)
+            if candidate_reflection.returncode == 0:
+                safe_counts = original_compiled_cb_numeric_offset_profile(
+                    json.loads(candidate_reflection.stdout), buffers)
+        except (ValueError, TypeError, KeyError, OSError,
+                subprocess.TimeoutExpired, json.JSONDecodeError):
+            pass  # Diagnostics must not alter the authoritative failure.
+        (private / "original-validator-layout-counts-private.json").write_text(
+            json.dumps(safe_counts, sort_keys=True) + "\n", encoding="utf-8")
         raise ValueError("named_constant_buffer_candidate_spirv_invalid")
 
 
