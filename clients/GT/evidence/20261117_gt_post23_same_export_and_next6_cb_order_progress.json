@@ -114,8 +114,8 @@
     "protected_source_names_bytes_not_published": true,
     "retest_run_earlier": 43995925446,
     "retest_run_earlier_result": "failure",
-    "latest_strict_source_run": 43996884492,
-    "latest_run_status_at_recording": "pending (needs check by run id)",
+    "latest_strict_source_run": 43997202849,
+    "latest_run_status_at_recording": "completed failure at named_constant_buffer_candidate_spirv_invalid",
     "actual_numeric_private_reflection_run": 43996386140,
     "actual_numeric_private_reflection_result": "failure",
     "original_member_offsets_match_compiler": 8,
@@ -134,8 +134,21 @@
       "7ddcd3a1fd34ecc3c07c4394fbeb9f515282cfa7",
       "a745c4e00c77782fb81b9bb14e71a0e4ae23fd0a"
     ],
-    "next_engineering_decision": "check 43996884492 source-only and reflected array sizes; if still overlapped use private source-owned physical CB type span/stride diagnosis and fix typed layout, never disable spirv-val or fake original GUID",
-    "no_new_accepted_original_material_restoration": true
+    "next_engineering_decision": "Inspect PRIVATE original typed array/struct span vs synthetic generated HLSL padding, preserving original member offsets and raw source; require strict spirv-val --target-env vulkan1.1, then isolated Unity and original SAME-EXPORT GUID test; no 694/92/36 acceptance",
+    "no_new_accepted_original_material_restoration": true,
+    "last_actual_numeric_private_reflection": {
+      "run": 43997202849,
+      "source_vulkan11_valid": 3,
+      "source_original_named_member_offsets_matching": 8,
+      "source_original_named_member_offsets_differing": 0,
+      "generated_or_unmatched_compiled_buffer_members": 1552,
+      "compiled_buffer_member_total": 1560,
+      "source_original_array_stride_mismatch": 0,
+      "source_original_array_element_count_mismatch": 0,
+      "source_original_array_reflection_missing": 0,
+      "overlap_bucket": "65+ bytes",
+      "validator_overlap_pair_reflection_matches": 0
+    }
   },
   "remaining_work": [
     "NEXT6 real Vulkan source and Unity isolated and original same-export GUID",
