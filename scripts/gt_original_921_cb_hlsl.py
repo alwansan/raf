@@ -302,6 +302,52 @@ def original_compiled_cb_numeric_offset_profile(reflection, buffers, *, validato
     return result
 
 
+def original_source_cb_reflection_missing_census(source, reflection, buffers):
+    """Private source-use proof; export counts only, never names or offsets."""
+    slots = {(row.get("set"), row.get("binding"))
+             for row in reflection.get("ubos", []) if isinstance(row, dict)}
+    blocks = {}
+    for block in BLOCK.finditer(source):
+        slot = int(block[2])
+        register_array = re.search(r"\b(cb\d+_0(?:_\d+)?_m0)\[", block[0])
+        if slot in blocks or register_array is None:
+            raise ValueError("ambiguous_original_raw_cb_usage_proof")
+        tail = source[block.end():]
+        array = register_array[1]
+        matches = list(re.finditer(
+            r"\b" + re.escape(array) + r"\[([^\[\]]+)\]", tail))
+        # Count all occurrences separately so parser gaps never support an
+        # "unused" claim; no original identifiers leave the private runner.
+        occurrences = len(re.findall(r"\b" + re.escape(array) + r"\b", tail))
+        blocks[slot] = (len(matches), max(0, occurrences - len(matches)))
+    counts = {
+        "source_declared_buffer_count": len(buffers),
+        "reflected_vulkan_ubo_count": len(reflection.get("ubos", [])),
+        "source_cb_raw_load_site_count": 0,
+        "source_cb_unparsed_access_count": 0,
+        "source_cb_missing_reflection_count": 0,
+        "source_cb_missing_reflection_with_raw_reads": 0,
+        "source_cb_missing_reflection_without_raw_reads": 0,
+        "source_cb_missing_reflection_raw_read_sites": 0,
+    }
+    for buffer in buffers:
+        slot = buffer["source_slot"]
+        if slot not in blocks:
+            raise ValueError("source_declared_cb_block_usage_unverifiable")
+        uses, unparsed = blocks[slot]
+        counts["source_cb_raw_load_site_count"] += uses
+        counts["source_cb_unparsed_access_count"] += unparsed
+        missing = (0, buffer["translated_binding"]) not in slots
+        if missing:
+            counts["source_cb_missing_reflection_count"] += 1
+            counts["source_cb_missing_reflection_raw_read_sites"] += uses
+            key = ("source_cb_missing_reflection_with_raw_reads"
+                   if uses or unparsed else
+                   "source_cb_missing_reflection_without_raw_reads")
+            counts[key] += 1
+    return counts
+
+
 def verify_named_constant_buffers(private, stage, buffers, *, original_hlsl_offsets=False):
     candidate = private / "named-constant-buffers.hlsl"
     baseline = private / "resource-bound.hlsl"
@@ -358,7 +404,17 @@ def verify_named_constant_buffers(private, stage, buffers, *, original_hlsl_offs
                                capture_output=True, timeout=30, check=False)
     if reflected.returncode:
         raise ValueError("named_constant_buffer_reflection_failed")
-    return verify_offsets(json.loads(reflected.stdout), buffers)
+    reflection = json.loads(reflected.stdout)
+    try:
+        return verify_offsets(reflection, buffers)
+    except ValueError:
+        # A source-original CB can disappear from SPIR-V when unused, but
+        # accept no exception or fallback without verified raw-read census.
+        stats = original_source_cb_reflection_missing_census(
+            baseline.read_text(encoding="utf-8"), reflection, buffers)
+        (private / "original-binding-reflection-counts-private.json").write_text(
+            json.dumps(stats, sort_keys=True) + "\n", encoding="utf-8")
+        raise
 
 
 def verify_offsets(reflection, buffers):
