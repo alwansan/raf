@@ -1,0 +1,73 @@
+name: GT actual post23 remaining original Shader GUID weights (safe, NO APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_remaining_original_guid_weights.py
+      - tests/test_gt_remaining_original_guid_weights.py
+      - .github/workflows/raft-gt-remaining-original-guid-weights-safe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: gt-original-remaining-weights-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  accepted-post23-remaining-shader-weights:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+
+      - name: Reject forged post23 material population and digest leaks
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_remaining_original_guid_weights.py
+          python3 -m unittest discover -s tests -p test_gt_remaining_original_guid_weights.py -v
+
+      - name: Retrieve actual accepted post23 SAME-EXPORT audit (not a projected count)
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43929698985
+          name: gt-twentythree-next7p33-source-shader-full-export-audit-43929698985
+          path: ${{ runner.temp }}/gt-post23-verified-audit
+
+      - name: Recount remaining original Shader GUID weights (numeric only)
+        run: |
+          set -euo pipefail
+          python3 - <<'PY_GT_POST23_REMAINING_ONLY'
+          from pathlib import Path
+          import os
+          from scripts.gt_remaining_original_guid_weights import safe_remaining_weights
+          import json
+          root=Path(os.environ["${{ runner.temp }}"])/"gt-post23-verified-audit"
+          matches=[p for p in root.rglob("gt-twentythree-shader-postrestore-quality.json")
+                   if p.is_file() and not p.is_symlink()]
+          if len(matches)!=1:
+              raise ValueError("missing_or_ambiguous_accepted_real_post23_quality")
+          report=safe_remaining_weights(json.loads(matches[0].read_text(encoding="utf-8")))
+          out=Path(os.environ["${{ runner.temp }}"])/"gt-post23-remaining-original-shader-weights-safe.json"
+          out.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          print("GT_POST23_REMAINING_ORIGINAL_SHADER_GUID_WEIGHTS "+
+                json.dumps(report,sort_keys=True))
+          PY_GT_POST23_REMAINING_ONLY
+
+      - name: Publish only numeric-safe weights (never shader digests)
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-post23-remaining-original-shader-guid-weights-${{ github.run_id }}
+          path: ${{ runner.temp }}/gt-post23-remaining-original-shader-weights-safe.json
+          if-no-files-found: error
+          retention-days: 21
