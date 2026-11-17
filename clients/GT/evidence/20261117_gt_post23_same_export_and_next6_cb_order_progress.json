@@ -114,8 +114,8 @@
     "protected_source_names_bytes_not_published": true,
     "retest_run_earlier": 43995925446,
     "retest_run_earlier_result": "failure",
-    "latest_strict_source_run": 43997202849,
-    "latest_run_status_at_recording": "completed failure at named_constant_buffer_candidate_spirv_invalid",
+    "latest_strict_source_run": 43998866656,
+    "latest_run_status_at_recording": "completed failure at named_constant_buffer_source_block_not_reflected after Vulkan 1.1 candidate validated",
     "actual_numeric_private_reflection_run": 43996386140,
     "actual_numeric_private_reflection_result": "failure",
     "original_member_offsets_match_compiler": 8,
@@ -148,7 +148,49 @@
       "source_original_array_reflection_missing": 0,
       "overlap_bucket": "65+ bytes",
       "validator_overlap_pair_reflection_matches": 0
-    }
+    },
+    "proven_private_padding_overlap": {
+      "run": 43998058202,
+      "synthetic_padding_inside_one_source_array_span": 1535,
+      "synthetic_padding_outside_source_array_span": 17,
+      "source_array_field_count": 1,
+      "reflection_original_member_fields_matching": 8,
+      "original_array_count_and_stride_differences": 0
+    },
+    "source_guarded_typed_array_padding_patch": {
+      "source": "49ee057696d41121400376b4589933bcbb45fb24",
+      "compose": "2015872e707a5b38e08f51268c6208886466db94",
+      "next6_only": "439b1fa183f9abb32b1703447e54c14a511c84c4",
+      "tests": "fe71eb50944cfdbcf4f16471462748cbb7bc8c96",
+      "scope": "Only remove generated padding members in source-authenticated original typed array when raw HLSL register swizzles prove none are read; all other shaders unchanged."
+    },
+    "actual_vulkan_cbuffer_validation_transition": {
+      "run": 43998634863,
+      "prior_fail": "specific_member_overlap",
+      "validator_after_guard": "passed and reached reflection check",
+      "new_safe_fail": "named_constant_buffer_binding_mismatch",
+      "detailed_run": 43998866656,
+      "detailed_safe_fail": "named_constant_buffer_source_block_not_reflected"
+    },
+    "next_proof": {
+      "run": 43999198356,
+      "status_at_recording": "pending",
+      "purpose": "count private source HLSL CB read usages to determine if missing reflected CB is genuinely unused or compiler-elided despite live reads",
+      "code": [
+        "da6313d9c2c8f5528b2e597881c3972155bdaa48",
+        "622899b12547bab06fff1c590d27c400469ef4e4",
+        "0c3d24d7464c109187a9dc022906789a94f11399"
+      ],
+      "requires_before_acceptance": [
+        "strict Vulkan1.1 spirv-val",
+        "exact named-original source member offsets and array counts",
+        "Unity Android serialized VSFS route verification",
+        "original same-export GUID install and protected 29213 SHA recensus"
+      ]
+    },
+    "original_same_export_guid_installed": false,
+    "original_shaderlab_source_complete": false,
+    "actual_adreno_device_pixels_proven": false
   },
   "remaining_work": [
     "NEXT6 real Vulkan source and Unity isolated and original same-export GUID",
