@@ -114,8 +114,8 @@
     "protected_source_names_bytes_not_published": true,
     "retest_run_earlier": 43995925446,
     "retest_run_earlier_result": "failure",
-    "latest_strict_source_run": 43998866656,
-    "latest_run_status_at_recording": "completed failure at named_constant_buffer_source_block_not_reflected after Vulkan 1.1 candidate validated",
+    "latest_strict_source_run": 44000200229,
+    "latest_run_status_at_recording": "completed failure at original_array_padding_source_full_vector_read_unproven",
     "actual_numeric_private_reflection_run": 43996386140,
     "actual_numeric_private_reflection_result": "failure",
     "original_member_offsets_match_compiler": 8,
@@ -134,7 +134,7 @@
       "7ddcd3a1fd34ecc3c07c4394fbeb9f515282cfa7",
       "a745c4e00c77782fb81b9bb14e71a0e4ae23fd0a"
     ],
-    "next_engineering_decision": "Inspect PRIVATE original typed array/struct span vs synthetic generated HLSL padding, preserving original member offsets and raw source; require strict spirv-val --target-env vulkan1.1, then isolated Unity and original SAME-EXPORT GUID test; no 694/92/36 acceptance",
+    "next_engineering_decision": "Preserve original source and avoid zero approximations for potentially live raw vector lanes; pursue source-authenticated lane-level DXBC/HLSL dataflow or raw CB representation, no fabricated GUID; meanwhile target remaining 23-material group",
     "no_new_accepted_original_material_restoration": true,
     "last_actual_numeric_private_reflection": {
       "run": 43997202849,
@@ -234,7 +234,15 @@
       "purpose": "Distinguish whole float4 read from literal reserved component swizzle and refuse silent behavior approximation"
     },
     "latest_pending_run": 44000200229,
-    "accepted_next6_same_export_post24": false
+    "accepted_next6_same_export_post24": false,
+    "full_source_restoration_unverified": true,
+    "original_material_sha_source_untouched": true,
+    "last_strict_fail_closed_read": {
+      "run": 44000200229,
+      "code": "original_array_padding_source_full_vector_read_unproven",
+      "reason": "at least one raw whole-vector read cannot be proven independent of anonymous array padding; zeroing source-unknown lanes rejected",
+      "previous_validation": "Vulkan1.1 -Od preserved original UBOs and source named offsets in first probed source stage"
+    }
   },
   "remaining_work": [
     "NEXT6 real Vulkan source and Unity isolated and original same-export GUID",
@@ -246,5 +254,31 @@
     "Adreno GPU phone pixels",
     "animation deferred"
   ],
-  "gt_xapk_created": false
+  "gt_xapk_created": false,
+  "next_remaining_real_post23_inventory": {
+    "run": 44000794430,
+    "conclusion": "success",
+    "actual_export_run": 43929698985,
+    "custom_non_dummy": 688,
+    "custom_dummy": 98,
+    "remaining_shader_guid_targets": 37,
+    "remaining_shader_name_digest_groups": 35,
+    "materials_per_source_name_digest_weight_histogram": {
+      "1": 18,
+      "2": 3,
+      "3": 6,
+      "4": 3,
+      "5": 3,
+      "6": 1,
+      "23": 1
+    },
+    "source_or_guid_names_exported": false,
+    "new_restoration_claimed": false,
+    "scripts": [
+      "scripts/gt_remaining_original_guid_weights.py",
+      "tests/test_gt_remaining_original_guid_weights.py",
+      ".github/workflows/raft-gt-remaining-original-guid-weights-safe.yml"
+    ],
+    "next_priority": "unique remaining weight-23 original shader source topology census, then original Shader48 translation and same-export GUID after source & Unity validation"
+  }
 }
