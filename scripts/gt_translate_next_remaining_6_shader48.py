@@ -324,6 +324,37 @@ def original_six_validator_private_failure_safe_topics(private):
     safe["private_compiled_cb_numeric_diagnostic_files"]=len(numeric)
     if numeric:
         safe["compiled_cb_offset_reflection_count_only"]=dict(sorted(total.items()))
+    # Keep the source-usage reflection diagnosis separate from invalid Vulkan
+    # diagnostics; never include a dynamic key or shader/CB identifier.
+    binding_keys = {
+        "source_declared_buffer_count",
+        "reflected_vulkan_ubo_count",
+        "source_cb_raw_load_site_count",
+        "source_cb_unparsed_access_count",
+        "source_cb_missing_reflection_count",
+        "source_cb_missing_reflection_with_raw_reads",
+        "source_cb_missing_reflection_without_raw_reads",
+        "source_cb_missing_reflection_raw_read_sites",
+    }
+    binding_files=list(private.glob(
+        "bound-stage-*/original-binding-reflection-counts-private.json"))
+    if len(binding_files)>16:
+        raise ValueError("unsafe_original_six_private_cb_binding_population")
+    binding_total={key:0 for key in binding_keys}
+    for p in binding_files:
+        if p.is_symlink() or not p.is_file() or p.stat().st_size>4096:
+            raise ValueError("unsafe_original_six_private_cb_binding_diagnostic")
+        item=json.loads(p.read_text("utf-8"))
+        if (type(item) is not dict or set(item)!=binding_keys
+                or any(type(v) is not int or not 0<=v<=100000
+                       for v in item.values())):
+            raise ValueError("untrusted_original_six_private_cb_binding_counts")
+        for key,value in item.items():
+            binding_total[key]+=value
+    if binding_files:
+        safe["private_compiled_cb_binding_diagnostic_files"]=len(binding_files)
+        safe["compiled_cb_binding_source_usage_count_only"]=dict(
+            sorted(binding_total.items()))
     return safe
 
 
