@@ -299,6 +299,11 @@ def original_six_validator_private_failure_safe_topics(private):
         "validator_overlap_current_synthetic_padding",
         "validator_overlap_previous_original_array",
         "validator_overlap_current_original_array",
+        "compiled_synthetic_padding_within_original_array_span",
+        "compiled_synthetic_padding_within_original_struct_span",
+        "compiled_synthetic_padding_outside_original_typed_spans",
+        "original_source_array_field_count",
+        "original_source_struct_field_count",
     }
     numeric=list(private.glob(
         "bound-stage-*/original-validator-layout-counts-private.json"))
