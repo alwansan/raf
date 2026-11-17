@@ -469,7 +469,7 @@ def run(original,manifest,quality,private):
         report["original_named_constant_buffer_offsets_verified"]=named["named_constant_buffer_reflected_offsets_verified"]
         report["original_texture_sampler_bindings_rebound"]=named["translated_texture_declarations_mapped_to_source_name"]+named["translated_sampler_declarations_mapped_to_source_texture"]
         checkpoint="compose_one_pass_recovered_original_shaderlab"
-        shader=compose(private,engine_keywords=False)
+        shader=compose(private,engine_keywords=False,original_array_padding_zero=True)
         (private/"original-6-material-Shader48-private.shader").write_text(
             shader,encoding="utf-8")
         route_sets=[
