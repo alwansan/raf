@@ -30,12 +30,23 @@ class RemainingGuidWeights(unittest.TestCase):
         self.assertEqual(result["custom_dummy_actual"],98)
         self.assertEqual(result["remaining_original_shader_guid_targets_actual"],37)
         self.assertEqual(
-            result["original_materials_per_shader_guid_weight_histogram"],
+            result["original_materials_per_name_digest_weight_histogram"],
             {"33":1,"30":1,"1":35})
         published=json.dumps(result)
         for digest in original["dummy_shader_material_counts_by_name_digest"]:
             self.assertNotIn(digest,published)
         self.assertFalse(result["source_names_guids_and_digest_identifiers_exported"])
+
+    def test_source_name_group_count_is_not_forced_to_equal_shader_guid_count(self):
+        report=fixture()
+        names=report["dummy_shader_material_counts_by_name_digest"]
+        keys=list(names)
+        names[keys[1]] += names.pop(keys[2])
+        result=safe_remaining_weights(report)
+        self.assertEqual(result["remaining_original_shader_guid_targets_actual"],37)
+        self.assertEqual(result["remaining_original_shader_name_digest_groups_actual"],36)
+        self.assertEqual(result["custom_dummy_actual"],98)
+        self.assertNotIn(keys[2],json.dumps(result))
 
     def test_prior_or_forged_real_material_counts_rejected(self):
         cases=[]
