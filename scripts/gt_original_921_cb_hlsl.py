@@ -48,7 +48,7 @@ def rebind_constant_buffers(source, buffers):
         widths = {}
         for member in buffer["members"]:
             offset = member["index"]
-            lines.append(f'{declaration(member)} : packoffset(c{offset // 16}.{"xyzw"[offset % 16 // 4]});')
+            lines.append((offset, f'{declaration(member)} : packoffset(c{offset // 16}.{"xyzw"[offset % 16 // 4]});'))
             widths[(member["name"],)] = member["columns"]
         for index, struct in enumerate(buffer["structs"]):
             type_name = f"{stem}_type{index}"
@@ -63,7 +63,7 @@ def rebind_constant_buffers(source, buffers):
             structs.append("struct " + type_name + " {\n" +
                            "\n".join(field for _, field in sorted(fields)) + "\n};")
             suffix = f'[{struct["array_size"]}]' if struct["array_size"] else ""
-            lines.append(f'{type_name} {struct["name"]}{suffix} : packoffset(c{start // 4});')
+            lines.append((struct["index"], f'{type_name} {struct["name"]}{suffix} : packoffset(c{start // 4});'))
 
         def expression(index):
             lane = lanes[index]
@@ -76,7 +76,7 @@ def rebind_constant_buffers(source, buffers):
                         suffix = f"[{element}]" if struct["array_size"] else ""
                         return f'{struct["name"]}{suffix}.{stem}_pad{offset}'
                 name = f"{stem}_pad{index}"
-                lines.append(f'float {name} : packoffset(c{index // 4}.{"xyzw"[index % 4]});')
+                lines.append((index * 4, f'float {name} : packoffset(c{index // 4}.{"xyzw"[index % 4]});'))
                 return name
             path = lane["path"]
             value = path[0] + "".join(f"[{part}]" if isinstance(part, int) else "." + part
@@ -93,8 +93,13 @@ def rebind_constant_buffers(source, buffers):
         lookup.extend(f"case {index}: return {value};" for index, value in enumerate(registers))
         # Out-of-range original DXBC constant-buffer loads return zero.
         lookup.extend(["default: return float4(0, 0, 0, 0);", "}", "}"])
+        # SPIR-V Block members must appear in increasing byte-offset order.
+        # Original metadata can list higher offsets first; gap fields are
+        # discovered later while rebuilding source reads. Preserve original
+        # offsets and values; sort only the HLSL declaration order.
+        ordered_lines = [line for _, line in sorted(lines, key=lambda item: item[0])]
         replacement = "\n".join([*structs, f"cbuffer {cb_name} : register(b{binding}) {{",
-                                 *lines, "};", *lookup])
+                                 *ordered_lines, "};", *lookup])
         tail = re.sub(r"\b" + re.escape(array) + r"\[([^\[\]]+)\]",
                       lambda match: f"{stem}_read({match[1]})", source[block.end():])
         if re.search(r"\b" + re.escape(array) + r"\b", tail):
