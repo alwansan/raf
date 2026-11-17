@@ -39,6 +39,7 @@ public final class PerformanceSampler implements Runnable {
     private long sample=0;
     private final ResourceDetails details=new ResourceDetails();
     private long lastSampleAt=-1;
+    private long lastCollectorCpu=-1,lastCollectorAt=-1;
     private long lastFrameProgressMs=-1;
     private Double lastPresentedP95Ms=null, lastPresentedWorstMs=null;
     private int lastPresentedFrameCount=0;
@@ -173,6 +174,10 @@ public final class PerformanceSampler implements Runnable {
         row.put("fps_method","SurfaceFlinger --latency app SurfaceView; video playback presentation, NOT UI responsiveness");
         row.put("fps_surface",surfaceLayer==null?JSONObject.NULL:surfaceLayer);
         details.enrich(row,pid,workerPid,now,ticksPerSecond);
+        long collectorCpu=android.os.Process.getElapsedCpuTime(),collectorAt=SystemClock.elapsedRealtime();
+        row.put("clog_shell_cpu_percent_one_core",lastCollectorAt>=0&&collectorAt>lastCollectorAt?Math.round(10000.0*(collectorCpu-lastCollectorCpu)/(collectorAt-lastCollectorAt))/100.0:JSONObject.NULL);
+        row.put("clog_shell_java_heap_used_bytes",Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory());
+        lastCollectorCpu=collectorCpu;lastCollectorAt=collectorAt;
         row.put("sample_duration_ms",SystemClock.elapsedRealtime()-now);
         return row;
     }

@@ -152,7 +152,7 @@ public final class CaptureService extends Service {
                     DocumentsContract.Document.MIME_TYPE_DIR,"CLog-"+session);
             if(sessionFolder==null) throw new IOException("Folder creation failed");
             active=true; stopping=false; failed=false; totalBytes=0; metricsSegmentBytes=0; part=0; metricsPart=0;
-            fileUris.clear(); auditUri=null;
+            fileUris.clear(); auditUri=null;coverageUri=null;
             Config.prefs(this).edit().remove("metrics_last").remove("last_exit_history_sample").remove("exit_history_status").remove("work_audit_last").apply();
             String metadata="CLog "+BuildConfig.VERSION_NAME+"\nTarget="+Config.PACKAGE+
                     "\nRecoveryRestart="+recovering+
@@ -192,6 +192,7 @@ public final class CaptureService extends Service {
                                 Config.prefs(CaptureService.this).edit().putString("work_audit_last",summary.toString()).apply();
                                 appendWorkAudit(summary);
                             }
+                            @Override public void onCoverage(org.json.JSONObject coverage){appendCoverage(coverage);}
                             @Override public void onIssue(String issue){
                                 try{sink.onFailure(issue);}
                                 catch(android.os.RemoteException ignored){}
@@ -211,7 +212,13 @@ public final class CaptureService extends Service {
         }
     }
 
-    private Uri auditUri;
+    private Uri auditUri,coverageUri;
+    private void appendCoverage(org.json.JSONObject row){
+        synchronized(writeLock){if(!active)return;try{
+            if(coverageUri==null){coverageUri=StorageAccess.create(getContentResolver(),sessionFolder,"application/json","work-log-coverage.jsonl");fileUris.add(coverageUri.toString());Config.prefs(this).edit().putString("files",new JSONArray(fileUris).toString()).apply();}
+            try(OutputStream s=new FileOutputStream(StorageAccess.outputFile(coverageUri),true)){s.write((row.toString()+"\n").getBytes(StandardCharsets.UTF_8));}
+        }catch(Exception e){android.util.Log.w("CLog","Coverage output unavailable",e);}}
+    }
     private void appendWorkAudit(org.json.JSONObject row){
         synchronized(writeLock){if(!active)return;try{
             if(auditUri==null){auditUri=StorageAccess.create(getContentResolver(),sessionFolder,"application/json","work-audit.jsonl");fileUris.add(auditUri.toString());Config.prefs(this).edit().putString("files",new JSONArray(fileUris).toString()).apply();}

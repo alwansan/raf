@@ -20,6 +20,7 @@ public final class CinemanaWorkLogCollector implements Runnable {
         void onNewFile(Uri file);
         void onIssue(String message);
         default void onAudit(org.json.JSONObject summary) {}
+        default void onCoverage(org.json.JSONObject coverage) {}
     }
     private static final long SEGMENT_LIMIT=16L*1024L*1024L;
     private static final int CHUNK_LIMIT=256*1024;
@@ -152,12 +153,20 @@ public final class CinemanaWorkLogCollector implements Runnable {
         }
         if(allowed.isEmpty())return;
         int start=scanStart%allowed.size(),count=Math.min(MAX_FILES_PER_POLL,allowed.size());
-        int budget=1024*1024;
+        int budget=1024*1024,visited=0;
         for(int i=0;i<count&&budget>0&&active.get();i++){
-            File f=allowed.get((start+i)%allowed.size());
+            File f=allowed.get((start+i)%allowed.size());visited++;
             try{budget-=directTail(f,Math.min(budget,CHUNK_LIMIT));}catch(Exception e){warnOnce("Direct log tail unavailable: "+e.getClass().getSimpleName());}
         }
-        scanStart=(start+count)%allowed.size();
+        scanStart=(start+Math.max(1,visited))%allowed.size();
+        try{
+            long remaining=0;int filesBehind=0;
+            for(File f:allowed){long len=f.length(),offset=offsets.getOrDefault(f.getName(),0L);long lag=len<offset?len:len-offset;if(lag>0){remaining+=lag;filesBehind++;}}
+            listener.onCoverage(new org.json.JSONObject().put("timestamp_unix_ms",System.currentTimeMillis())
+                .put("elapsed_ms",now).put("eligible_log_files",allowed.size()).put("visited",visited)
+                .put("bytes_copied_this_poll",1024*1024-budget).put("estimated_bytes_not_yet_copied",remaining)
+                .put("files_behind",filesBehind).put("note","Snapshot estimate; rotation or subsequent app writes may change coverage."));
+        }catch(Exception ignored){}
     }
     private int directTail(File f,int budget)throws Exception{
         String key=f.getName(), identity;

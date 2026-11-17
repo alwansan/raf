@@ -24,7 +24,8 @@ public final class MainActivity extends Activity {
     private static final int SHIZUKU_REQUEST=202;
     private static final int PICK_WORK_LOGS=203;
     private static final int STORAGE_REQUEST=204;
-    private boolean pendingStart=false;
+    private boolean pendingStart=false,setupRequestInFlight=false;
+    private final Runnable setupPermissions=()->advanceSetupPermissions();
     private TextView status, folderLabel, performanceLabel;
     private Button start, stop, share;
     private final Handler handler=new Handler(Looper.getMainLooper());
@@ -35,7 +36,7 @@ public final class MainActivity extends Activity {
         if(code==SHIZUKU_REQUEST) runOnUiThread(()-> {
             if(result==PackageManager.PERMISSION_GRANTED) { if(pendingStart) startCapture(); else message("Shizuku permitted ✓"); }
             else message("Shizuku permission denied");
-            pendingStart=false;
+            pendingStart=false;setupRequestInFlight=false;
         });
     };
 
@@ -130,18 +131,36 @@ public final class MainActivity extends Activity {
 
         try { Shizuku.addRequestPermissionResultListener(permissionListener); }
         catch(Throwable t){ message("Shizuku API error: "+t.getMessage()); }
-        if(Build.VERSION.SDK_INT>=33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)
-            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},301);
-        if(!Config.prefs(this).getBoolean("storage_prompted",false)){ Config.prefs(this).edit().putBoolean("storage_prompted",true).apply(); handler.postDelayed(()->{if(!isFinishing()&&!StorageAccess.direct(this))requestStorage();},900); }
+    }
+    private void advanceSetupPermissions(){
+        if(isFinishing()||isDestroyed()||setupRequestInFlight)return;
+        android.content.SharedPreferences p=Config.prefs(this);
+        if(Build.VERSION.SDK_INT>=33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED && !p.getBoolean("notification_prompted_v2",false)){
+            p.edit().putBoolean("notification_prompted_v2",true).apply();
+            setupRequestInFlight=true;requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},301);return;
+        }
+        if(!StorageAccess.direct(this)&&!p.getBoolean("storage_prompted_v2",false)){
+            p.edit().putBoolean("storage_prompted_v2",true).apply();
+            requestStorage();return;
+        }
+        try{
+            if(Shizuku.pingBinder()&&!Shizuku.isPreV11()&&Shizuku.checkSelfPermission()!=PackageManager.PERMISSION_GRANTED&&!Shizuku.shouldShowRequestPermissionRationale()&&!p.getBoolean("shizuku_prompted_v2",false)){
+                p.edit().putBoolean("shizuku_prompted_v2",true).apply();setupRequestInFlight=true;requestShizuku(false);
+            }
+        }catch(Throwable ignored){}
+    }
+    @Override public void onRequestPermissionsResult(int code,String[] permissions,int[] results){
+        super.onRequestPermissionsResult(code,permissions,results);
+        if(code==301||code==STORAGE_REQUEST){setupRequestInFlight=false;handler.removeCallbacks(setupPermissions);handler.postDelayed(setupPermissions,350);update();}
     }
     private void requestStorage(){
         if(StorageAccess.direct(this)){update();message("التخزين مفعّل؛ المسارات تلقائية");return;}
-        try{if(Build.VERSION.SDK_INT>=30){Intent i=new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,Uri.parse("package:"+getPackageName()));startActivityForResult(i,STORAGE_REQUEST);}
+        try{setupRequestInFlight=true;if(Build.VERSION.SDK_INT>=30){Intent i=new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,Uri.parse("package:"+getPackageName()));startActivityForResult(i,STORAGE_REQUEST);}
             else requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},STORAGE_REQUEST);
-        }catch(Exception e){message("فعّل الوصول إلى جميع الملفات من إعدادات التطبيق أو اختر مجلد SAF");}
+        }catch(Exception e){setupRequestInFlight=false;message("فعّل الوصول إلى جميع الملفات من إعدادات التطبيق أو اختر مجلد SAF");}
     }
-    @Override protected void onResume(){super.onResume();handler.removeCallbacks(refresh);handler.post(refresh);}
-    @Override protected void onPause(){handler.removeCallbacks(refresh);super.onPause();}
+    @Override protected void onResume(){super.onResume();handler.removeCallbacks(refresh);handler.post(refresh);handler.removeCallbacks(setupPermissions);handler.postDelayed(setupPermissions,350);}
+    @Override protected void onPause(){handler.removeCallbacks(refresh);handler.removeCallbacks(setupPermissions);super.onPause();}
 
     private void requestShizuku(boolean thenStart){
         try {
@@ -158,7 +177,7 @@ public final class MainActivity extends Activity {
             // Only auto-start after the permission request if the user pressed Start.
             pendingStart=thenStart;
             Shizuku.requestPermission(SHIZUKU_REQUEST);
-        }catch(Throwable e){message("Shizuku: "+e);}
+        }catch(Throwable e){setupRequestInFlight=false;message("Shizuku: "+e);}
     }
     private void startCapture(){
         if(Config.folder(this)==null){requestStorage();message("امنح التخزين أو اختر مجلد الحفظ البديل ثم ابدأ");return;}
@@ -297,6 +316,7 @@ public final class MainActivity extends Activity {
 
     @Override protected void onActivityResult(int request,int result,Intent data){
         super.onActivityResult(request,result,data);
+        if(request==STORAGE_REQUEST){setupRequestInFlight=false;handler.removeCallbacks(setupPermissions);handler.postDelayed(setupPermissions,350);update();}
         if(request==PICK_WORK_LOGS && result==RESULT_OK && data!=null && data.getData()!=null){
             Uri u=data.getData();
             try{
@@ -332,7 +352,7 @@ public final class MainActivity extends Activity {
                 if(files.length()==0)throw new IOException("Empty session");
                 Uri parent=Uri.parse(dir);
                 if(StorageAccess.file(parent))parent=Uri.fromFile(StorageAccess.OUTPUT);
-                String zipName="CLog-"+System.currentTimeMillis()+".zip";
+                String zipName=StorageAccess.file(Uri.parse(dir))?new File(Uri.parse(dir).getPath()).getName()+"-"+System.currentTimeMillis()+".zip":"CLog-"+System.currentTimeMillis()+".zip";
                 Uri outputUri=StorageAccess.create(getContentResolver(),parent,"application/zip",zipName);
                 if(outputUri==null)throw new IOException("ZIP creation failed");
                 try (OutputStream stream=StorageAccess.write(getContentResolver(),outputUri);
@@ -369,7 +389,7 @@ public final class MainActivity extends Activity {
     }
 
     @Override protected void onDestroy(){
-        handler.removeCallbacks(refresh);
+        handler.removeCallbacks(refresh);handler.removeCallbacks(setupPermissions);
         Shizuku.removeRequestPermissionResultListener(permissionListener);
         super.onDestroy();
     }
