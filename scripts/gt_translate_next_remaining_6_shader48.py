@@ -288,6 +288,8 @@ def original_six_validator_private_failure_safe_topics(private):
         "compiled_member_offsets_differ_original",
         "compiled_member_offsets_nonmonotonic",
         "compiled_array_strides_differ_original",
+        "compiled_array_element_counts_differ_original",
+        "compiled_array_missing_reflected_type",
         "compiled_members_struct_or_array",
         "compiled_members_matrix",
     }
