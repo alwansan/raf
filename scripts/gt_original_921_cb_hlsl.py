@@ -414,7 +414,11 @@ def verify_named_constant_buffers(private, stage, buffers, *, original_hlsl_offs
     # Keep spirv-val Vulkan 1.1 and exact original offset reflection STRICT.
     compile_argv = ["glslangValidator", "-V", "-D"]
     if original_hlsl_offsets is True:
-        compile_argv.append("--hlsl-offsets")
+        # Exact original NEXT6 UBO bindings survive glslang only when the
+        # source compiler's optimization pass is disabled. The diagnostic
+        # 43999572780 proved -Od retains 3 original UBOs, strict Vulkan1.1
+        # validity and exact original named member offsets.
+        compile_argv.extend(["--hlsl-offsets", "-Od"])
     elif original_hlsl_offsets is not False:
         raise ValueError("unverified_original_hlsl_offsets_opt_in")
     compile_argv.extend(["-S", suffix, "-e", "main",
