@@ -1,7 +1,7 @@
 {
-  "request_id": "RAFT-BUILDFIX-20261117-OOM137-MEM13G-WORKER1-XAPK",
-  "reason": "Owner authorized full native APK+OBB+XAPK after evidenced Unity Bee exit 137/OOM in run 43890431951; test bounded 13g GameCI container and single Editor job worker at commit c3aec6d; preserve shader fidelity, ZIP2 authenticity and strict water/package/sign/release gates. Synthetic preflight 43998162140 passed.",
-  "requested_from_sha": "c3aec6d539b621cd93cd2ad24e53bff86e997383",
+  "request_id": "RAFT-BUILDFIX-20261117-1210-SWAP12G-OOM137-OWNER-XAPK",
+  "reason": "Owner-authorized full signed APK+OBB+XAPK trial after Unity Bee exit 137/OOM in run 43998306352 despite 13g container and one Unity worker. Tested fix f40b8a9 reserves 12GiB swap with 16GiB free-disk guard; regression preflight 44044741835 SUCCESS. Preserve original shaders, fidelity, ZIP2 authenticity and strict water/package/sign/release gates; do not claim device GPU proof.",
+  "requested_from_sha": "6ca4336b378b7c4a2b07485889a53df300e467de",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Depth/Depth Copy",
@@ -9,10 +9,10 @@
   ],
   "owner_direct_request": true,
   "owner_instruction": "GT independently owns restoration and native delivery after stopping T1-T5; read ZIP2 SHA15964ea8 exclusively without Git LFS; use verified W1 original owners for original Depth Copy, include ALL source-authentic graphics and strict final no-fake-pass gates. Requested 2026-11-12.",
-  "previous_run_id": 43890431951,
-  "previous_build_source_sha": "e73579e826e1259a641548a700722cd204ed1b9d",
-  "previous_failed_unity_run_id": 43890431951,
-  "fix_commit_sha": "c3aec6d539b621cd93cd2ad24e53bff86e997383",
+  "previous_run_id": 43998306352,
+  "previous_build_source_sha": "478ccab1b735a5515c3dfcd41c98cc415ff7b2a1",
+  "previous_failed_unity_run_id": 43998306352,
+  "fix_commit_sha": "f40b8a9f0f099be2b94ac27915c3463800e707d1",
   "linked_session_id": "GT-20261112-CHAT-19-SIGNED-NATIVE-RECOVERY-AND-CURRENT-BUILD",
   "preceding_signed_native_recovery_run_id": 43246196803,
   "preceding_signed_native_recovery_artifact_id": 13957022329,
@@ -36,7 +36,7 @@
   "original_Foam_CB0_sampler_upload_proven": false,
   "original_Spectrum_CB0_sampler_RT_upload_proven": false,
   "original_Adreno_pixel_parity_verified": false,
-  "previous_failed_native_run_id": 43890431951,
+  "previous_failed_native_run_id": 43998306352,
   "previous_failed_water_contract_step": "Authentic water gate (strict) or exact documented trial limitation",
   "previous_real_spectrum_source_exported_guid_install_success": true,
   "previous_real_spectrum_source_report_artifact_id": 14002987883,
@@ -52,6 +52,6 @@
   "source_only_drift_regression_CI": 43350378817,
   "fully_restored_water_claimed": false,
   "allow_documented_foam_trial": true,
-  "latest_owner_build_note": "2026-11-17: run 43890431951 ended exit 137 during Bee Player, kernel OOM occurrences=2, peak process RSS=12,238,312 KiB. Bounded mitigation: memory 12g→13g, worker 2→1. Preflight 43998162140 SUCCESS. Rebuild trial only; do not claim GPU, water or complete APK+OBB+XAPK until all gates pass.",
+  "latest_owner_build_note": "2026-11-17 12:10 Asia/Baghdad: prior native 43998306352 failed Unity Bee exit 137 with OOM. Bounded swap 8GiB->12GiB and 16GiB free disk guard; preflight 44044741835 success. Full signed build is trial only; maintain water limitations and no false GPU/phone success.",
   "original_foam_two_pass_still_unverified": false
 }
