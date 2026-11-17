@@ -1,5 +1,10 @@
 # خطة استكمال استعادة رسوم Raft Android
 
+## GT — أحدث NEXT6 strict Vulkan1.1 غير مقبول | 17 نوفمبر 2026
+
+- [43997202849](https://github.com/alwansan/raf/actions/runs/43997202849) **FAILED فعلياً** في named constant buffer Vulkan1.1؛ 3/3 D3D11 source ثابتة، لكن original ShaderLab / original GUID لم يثبتا. عكس SPIR-V خاص بلا أسماء: **1,560 عضو، 8 أصلية متطابقة في offsets، و1,552 أخرى generated/unmatched**؛ فروق offset/array count/stride الأصلية المعكوسة جميعها 0، بينما `spirv-val --target-env vulkan1.1` يرفض overlap 65+ bytes. ارتباط العضو المتداخل بحقل أصلي أم حشو غير محسوم (numeric reflected pair matches = 0). لا تخفف التحقق ولا تغيّر قيم المصدر ولا تقبل post24 المتوقع 694/92/36.
+- آخر قبول same-export يبقى [43929698985](https://github.com/alwansan/raf/actions/runs/43929698985): **688/786 Custom non-Dummy (87.53% من Custom Material docs فقط)، 98 Dummy /37 original GUID، 29,213 Material/YAML/meta SHA محمية**. NEXT6 يحتاج عزل typed array/struct span مقابل synthetic padding ثم SOURCE+Unity Vulkan وGUID الأصلي. [دليل numeric جديد](../../evidence/20261117_gt_post23_same_export_and_next6_cb_order_progress.json). بقية الموارد Water/Fire/PostFX/G0–G6 وAdreno غير مكتملة ولا GT XAPK.
+
 ## GT — NEXT6 Vulkan strict: original/compiled numeric offset probe (17 نوفمبر 2026)
 
 - **تأكيد الفصل بين النجاح والفشل:** آخر original same-export postinstall صالح [43929698985](https://github.com/alwansan/raf/actions/runs/43929698985) **688/786 Custom non-Dummy = 87.53% من مستندات Custom Material فقط، 98 Dummy/37 GUID، 29,213 SHA محمية**؛ لا تقبل أي 694/92/36 على أنها منجزة. [43996334071](https://github.com/alwansan/raf/actions/runs/43996334071) **SUCCESS** لمسار 921 source variants، وليس Adreno/device أو اللعبة كاملة.
