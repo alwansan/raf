@@ -88,12 +88,19 @@ def authenticated_shader_reader(original: Path):
 
     return get_tree
 
-def enumerate_all(parsed,table,*,variants,permutation,linker,topology=DEFAULT_TOPOLOGY):
+def enumerate_all(parsed,table,*,variants,permutation,linker,topology=DEFAULT_TOPOLOGY, per_stage_variant_cap=256):
     """Never pair unrelated player buckets, tiers or keyword permutations."""
     if type(parsed) is not dict or type(parsed.get("m_SubShaders")) is not list or not parsed["m_SubShaders"]:
         raise ValueError("missing_original_shader_pass_graph")
     if type(table) is not list or not table:
         raise ValueError("missing_original_D3D11_stage_table")
+    if (type(per_stage_variant_cap) is not int or
+            not 1<=per_stage_variant_cap<=2048):
+        raise ValueError("untrusted_original_variant_stage_cap")
+    # Any raised bound is source-specific and must not weaken other shaders.
+    if (per_stage_variant_cap>256 and
+            topology!=(4,1156,0,134)):
+        raise ValueError("original_high_variant_cap_requires_verified_next23b_topology")
     pairs,orphans,passes=[],[],[]
     distinct={}
     n_passes=0
@@ -110,7 +117,7 @@ def enumerate_all(parsed,table,*,variants,permutation,linker,topology=DEFAULT_TO
                 if type(program) is not dict:
                     raise ValueError("missing_original_pass_stage")
                 original_variants=variants(program)
-                if not 0<len(original_variants)<=256:
+                if not 0<len(original_variants)<=per_stage_variant_cap:
                     raise ValueError("unbounded_or_empty_original_stage_variant_table")
                 by_key={}
                 for bucket,ordinal,metadata in original_variants:
