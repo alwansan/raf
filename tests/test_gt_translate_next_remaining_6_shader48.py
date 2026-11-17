@@ -85,6 +85,35 @@ class SixMaterialAuthenticOriginalShader48(unittest.TestCase):
             self.assertFalse(actual[
                 "original_shader_identifiers_hlsl_spirv_or_raw_validator_text_published"])
 
+    def test_numeric_cb_profile_cannot_expose_source_names(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        import json
+        with TemporaryDirectory() as td:
+            root=Path(td)
+            stage=root/"bound-stage-000"
+            stage.mkdir()
+            (stage/"original-validator-raw-private.log").write_text(
+                "Structure member 2 overlaps previous member: SOURCE_SECRET")
+            (stage/"original-validator-layout-counts-private.json").write_text(
+                json.dumps({
+                    "compiled_reflection_available": 1,
+                    "original_source_buffers_checked": 1,
+                    "compiled_member_offsets_differ_original": 2}))
+            safe=original_six_validator_private_failure_safe_topics(root)
+            exposed=json.dumps(safe)
+            self.assertEqual(
+                safe["compiled_cb_offset_reflection_count_only"][
+                    "compiled_member_offsets_differ_original"],2)
+            self.assertNotIn("SOURCE_SECRET",exposed)
+            # Never accept dynamic keys (which could contain private names).
+            (stage/"original-validator-layout-counts-private.json").write_text(
+                json.dumps({"private_shader_identifier": 3,
+                            "compiled_reflection_available": 1}))
+            with self.assertRaisesRegex(
+                    ValueError, "untrusted_original_six_compiled_cb_numeric_counts"):
+                original_six_validator_private_failure_safe_topics(root)
+
     def test_original_binding_errors_are_static_safe_or_suppressed(self):
         self.assertEqual(
             source_only_static_parameter_binding_failure_category(
