@@ -143,6 +143,11 @@ def original_compiled_cb_numeric_offset_profile(reflection, buffers, *, validato
         "validator_overlap_current_synthetic_padding": 0,
         "validator_overlap_previous_original_array": 0,
         "validator_overlap_current_original_array": 0,
+        "compiled_synthetic_padding_within_original_array_span": 0,
+        "compiled_synthetic_padding_within_original_struct_span": 0,
+        "compiled_synthetic_padding_outside_original_typed_spans": 0,
+        "original_source_array_field_count": 0,
+        "original_source_struct_field_count": 0,
     }
     for buffer in buffers:
         row = slots.get((0, buffer["translated_binding"]))
@@ -155,6 +160,23 @@ def original_compiled_cb_numeric_offset_profile(reflection, buffers, *, validato
         result["original_source_buffers_checked"] += 1
         original = {m["name"]: m for m in
                     (buffer["members"] + buffer["structs"])}
+        # A scalar/vector array occupies a full 16-byte register for every
+        # source element, even when only .x or .xy is explicitly named. Any
+        # added padding declaration inside that typed footprint overlaps
+        # valid original array storage in Vulkan's Block layout.
+        typed_spans = []
+        for member in buffer["members"]:
+            count = member.get("array_size", 0)
+            if count:
+                span = (64 if member.get("matrix") else 16) * count
+                typed_spans.append((member["index"], member["index"] + span,
+                                    "array"))
+                result["original_source_array_field_count"] += 1
+        for member in buffer["structs"]:
+            span = member["size"] * max(1, member.get("array_size", 0))
+            typed_spans.append((member["index"], member["index"] + span,
+                                "struct"))
+            result["original_source_struct_field_count"] += 1
         # Original identifiers are inspected privately only. Correlate the
         # numeric SPIR-V validator member index with reflected UBO members.
         # Export only fixed counts, never names/indices/byte offsets.
@@ -194,6 +216,15 @@ def original_compiled_cb_numeric_offset_profile(reflection, buffers, *, validato
             source = original.get(field.get("name"))
             if source is None:
                 result["compiled_members_without_source_match"] += 1
+                overlap_types = {
+                    kind for lo, hi, kind in typed_spans if lo <= off < hi
+                }
+                if "array" in overlap_types:
+                    result["compiled_synthetic_padding_within_original_array_span"] += 1
+                if "struct" in overlap_types:
+                    result["compiled_synthetic_padding_within_original_struct_span"] += 1
+                if not overlap_types:
+                    result["compiled_synthetic_padding_outside_original_typed_spans"] += 1
                 continue
             key = ("compiled_member_offsets_match_original" if source["index"] == off
                    else "compiled_member_offsets_differ_original")
