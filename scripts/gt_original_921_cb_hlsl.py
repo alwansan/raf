@@ -23,7 +23,41 @@ def declaration(member):
     return f"{type_name} {name}{array}"
 
 
-def rebind_constant_buffers(source, buffers):
+def prove_original_typed_padding_is_unread(source_tail, register_array, reserved_lanes):
+    """Fail closed before omitting undefined typed-array padding.
+
+    HLSL scalar/vector arrays use 16-byte element strides. Vulkan Block
+    layout forbids new scalar fields inside those original reserved bytes.
+    Substitute zero ONLY if every source read provably avoids anonymous
+    array lanes; dynamic indexing with a potentially unsafe swizzle fails.
+    """
+    if not reserved_lanes:
+        return 0
+    pattern = re.compile(
+        r"\b" + re.escape(register_array) +
+        r"\[([^\[\]]+)\](?:\.([A-Za-z_]\w*))?")
+    positions = set(reserved_lanes)
+    seen = 0
+    for access in pattern.finditer(source_tail):
+        seen += 1
+        swizzle = access.group(2)
+        if not swizzle or len(swizzle) > 4 or any(ch not in "xyzw" for ch in swizzle):
+            raise ValueError("original_array_padding_raw_read_not_proven")
+        index = access.group(1).strip()
+        for ch in swizzle:
+            component = "xyzw".index(ch)
+            if index.isascii() and index.isdecimal():
+                if int(index) * 4 + component in positions:
+                    raise ValueError("original_array_padding_raw_read_not_proven")
+            elif any(lane % 4 == component for lane in positions):
+                raise ValueError("original_array_padding_dynamic_read_not_proven")
+    if re.search(r"\b" + re.escape(register_array) + r"\b",
+                 pattern.sub("", source_tail)):
+        raise ValueError("original_array_padding_unparsed_raw_read")
+    return seen
+
+
+def rebind_constant_buffers(source, buffers, *, original_array_padding_zero=False):
     used = {int(binding) for binding in re.findall(r"register\([bstu](\d+)\)", source)}
     helper_binding = max(used, default=-1) + 1
     source = VERTEX_INFO.sub(
@@ -44,6 +78,21 @@ def rebind_constant_buffers(source, buffers):
         if not IDENT.fullmatch(cb_name):
             raise ValueError("invalid_original_buffer_identifier")
 
+        reserved_typed_padding_lanes = set()
+        if original_array_padding_zero is True:
+            for member in buffer["members"]:
+                count = member.get("array_size", 0)
+                if not count:
+                    continue
+                stride = 64 if member["matrix"] else 16
+                for byte in range(member["index"], member["index"] + count * stride, 4):
+                    at = byte // 4
+                    if at < len(lanes) and lanes[at] is None:
+                        reserved_typed_padding_lanes.add(at)
+            prove_original_typed_padding_is_unread(
+                source[block.end():], array, reserved_typed_padding_lanes)
+        elif original_array_padding_zero is not False:
+            raise ValueError("unverified_original_typed_padding_zero_optin")
         lines, structs = [], []
         widths = {}
         for member in buffer["members"]:
@@ -68,6 +117,10 @@ def rebind_constant_buffers(source, buffers):
         def expression(index):
             lane = lanes[index]
             if lane is None:
+                # The raw DXBC source audit proves this reserved anonymous
+                # typed-array component cannot be read by the shader.
+                if index in reserved_typed_padding_lanes:
+                    return "0.0"
                 for struct in buffer["structs"]:
                     start = struct["index"] // 4
                     width = struct["size"] // 4
@@ -252,8 +305,10 @@ def original_compiled_cb_numeric_offset_profile(reflection, buffers, *, validato
 def verify_named_constant_buffers(private, stage, buffers, *, original_hlsl_offsets=False):
     candidate = private / "named-constant-buffers.hlsl"
     baseline = private / "resource-bound.hlsl"
-    candidate.write_text(rebind_constant_buffers(baseline.read_text(encoding="utf-8"), buffers),
-                         encoding="utf-8")
+    candidate.write_text(rebind_constant_buffers(
+        baseline.read_text(encoding="utf-8"), buffers,
+        original_array_padding_zero=(original_hlsl_offsets is True)),
+        encoding="utf-8")
     binary = candidate.with_suffix(".spv")
     suffix = {0: "frag", 1: "vert"}[stage]
     # HLSL's original explicit packoffset layout can differ from GLSL's
