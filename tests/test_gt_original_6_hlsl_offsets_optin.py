@@ -51,6 +51,33 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
             return recorded
 
 
+    def test_compiled_cb_numeric_offset_profile_hides_original_names(self):
+        from scripts.gt_original_921_cb_hlsl import (
+            original_compiled_cb_numeric_offset_profile)
+        block = {"translated_binding": 2,
+                 "members": [
+                     {"name": "PRIVATE_ALPHA", "index": 0,
+                      "array_size": 0, "matrix": False},
+                     {"name": "PRIVATE_BETA", "index": 80,
+                      "array_size": 3, "matrix": False}],
+                 "structs": []}
+        reflection = {
+            "ubos": [{"set": 0, "binding": 2, "type": "PRIVATE_STRUCT"}],
+            "types": {"PRIVATE_STRUCT": {
+                "members": [
+                    {"name": "PRIVATE_ALPHA", "offset": 0},
+                    {"name": "PRIVATE_BETA", "offset": 16, "array_stride": 32}]
+            }}
+        }
+        counts = original_compiled_cb_numeric_offset_profile(
+            reflection, [block])
+        self.assertEqual(counts["compiled_member_offsets_match_original"], 1)
+        self.assertEqual(counts["compiled_member_offsets_differ_original"], 1)
+        self.assertEqual(counts["compiled_array_strides_differ_original"], 1)
+        self.assertNotIn("PRIVATE_ALPHA", json.dumps(counts))
+        self.assertNotIn("PRIVATE_BETA", json.dumps(counts))
+        self.assertNotIn("PRIVATE_STRUCT", json.dumps(counts))
+
     def test_original_hlsl_cb_declarations_are_sorted_by_byte_offset(self):
         # Source fields may be reversed and padding is generated afterward.
         # Strict SPIR-V uniform layouts require monotonic member offsets.
