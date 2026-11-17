@@ -190,7 +190,51 @@
     },
     "original_same_export_guid_installed": false,
     "original_shaderlab_source_complete": false,
-    "actual_adreno_device_pixels_proven": false
+    "actual_adreno_device_pixels_proven": false,
+    "proven_noopt_source_cb_probe": {
+      "run": 43999572780,
+      "source_original_ubo_count_reflected": 3,
+      "source_original_named_offsets_verified": 3,
+      "glibc_spirv_source_compile_success": true,
+      "vulkan11_spirv_val_pass": true,
+      "original_same_export_guid_installed": false,
+      "proof_scope": "PRIVATE SOURCE mode only, not ShaderLab/Unity/Adreno",
+      "no_wavied_validation": true
+    },
+    "noopt_source_path_patches": [
+      {
+        "commit": "574f8f0662e17b02dd163f68fbe1e3ba3e969f70",
+        "file": "scripts/gt_original_921_cb_hlsl.py"
+      },
+      {
+        "commit": "8b6beef5287105974aad95c0908b174364320eae",
+        "file": "scripts/gt_original_921_shaderlab.py"
+      },
+      {
+        "commit": "9ba97676a059d7fb037af0efc1d6d452007fdbe5",
+        "file": "scripts/gt_translate_next_remaining_6_shader48.py"
+      },
+      {
+        "commit": "027320bce447133c9c31052926f6f61c02f8bb90",
+        "file": "tests/test_gt_original_6_hlsl_offsets_optin.py"
+      }
+    ],
+    "followup_source_padding_guard": {
+      "run": 43999934329,
+      "result": "failure",
+      "checkpoint": "bind_source_constant_buffer_resource_and_vertex_semantics",
+      "error": "original_array_padding_raw_read_not_proven",
+      "meaning": "A subsequent source stage accesses source-authenticated raw CB data in a way which cannot yet be shown to exclude unnamed typed-array lanes, so zero substitutions correctly refused."
+    },
+    "typed_padding_raw_read_diagnosis": {
+      "source_fix": "541bf62bb565b3d38a2f967245d23b943bb97f7d",
+      "unit_test": "ca7d7e810f62f7192294b2a9a333c0fb6d6d9d38",
+      "run": 44000200229,
+      "result_at_recording": "in progress",
+      "purpose": "Distinguish whole float4 read from literal reserved component swizzle and refuse silent behavior approximation"
+    },
+    "latest_pending_run": 44000200229,
+    "accepted_next6_same_export_post24": false
   },
   "remaining_work": [
     "NEXT6 real Vulkan source and Unity isolated and original same-export GUID",
