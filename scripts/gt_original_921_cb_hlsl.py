@@ -111,7 +111,7 @@ def rebind_constant_buffers(source, buffers):
 
 
 
-def original_compiled_cb_numeric_offset_profile(reflection, buffers):
+def original_compiled_cb_numeric_offset_profile(reflection, buffers, *, validator_text=""):
     """PRIVATE reflection comparison with counts-only, source-name-free output.
 
     This is diagnostic, never a waiver of strict Vulkan 1.1 validation or
@@ -136,6 +136,13 @@ def original_compiled_cb_numeric_offset_profile(reflection, buffers):
         "compiled_array_missing_reflected_type": 0,
         "compiled_members_struct_or_array": 0,
         "compiled_members_matrix": 0,
+        "validator_overlap_pair_reflection_matches": 0,
+        "validator_overlap_previous_source_field": 0,
+        "validator_overlap_previous_synthetic_padding": 0,
+        "validator_overlap_current_source_field": 0,
+        "validator_overlap_current_synthetic_padding": 0,
+        "validator_overlap_previous_original_array": 0,
+        "validator_overlap_current_original_array": 0,
     }
     for buffer in buffers:
         row = slots.get((0, buffer["translated_binding"]))
@@ -148,6 +155,30 @@ def original_compiled_cb_numeric_offset_profile(reflection, buffers):
         result["original_source_buffers_checked"] += 1
         original = {m["name"]: m for m in
                     (buffer["members"] + buffer["structs"])}
+        # Original identifiers are inspected privately only. Correlate the
+        # numeric SPIR-V validator member index with reflected UBO members.
+        # Export only fixed counts, never names/indices/byte offsets.
+        for incident in re.finditer(
+                r"structure member (\d+) at offset (\d+) overlaps previous "
+                r"member ending at offset (\d+)",
+                validator_text, flags=re.IGNORECASE):
+            member_index, start, end = map(int, incident.groups())
+            fields = layout["members"]
+            if not 0 < member_index < len(fields) or end < start:
+                continue
+            current = fields[member_index]
+            previous = fields[member_index-1]
+            if current.get("offset") != start:
+                continue
+            result["validator_overlap_pair_reflection_matches"] += 1
+            for role, field in (("previous", previous), ("current", current)):
+                source = original.get(field.get("name"))
+                result["validator_overlap_" + role +
+                       ("_source_field" if source is not None
+                        else "_synthetic_padding")] += 1
+                if source is not None and source.get("array_size"):
+                    result["validator_overlap_" + role +
+                           "_original_array"] += 1
         previous_offset = -1
         for field in layout["members"]:
             if not isinstance(field, dict):
@@ -227,7 +258,8 @@ def verify_named_constant_buffers(private, stage, buffers, *, original_hlsl_offs
                 capture_output=True, timeout=30, check=False)
             if candidate_reflection.returncode == 0:
                 safe_counts = original_compiled_cb_numeric_offset_profile(
-                    json.loads(candidate_reflection.stdout), buffers)
+                    json.loads(candidate_reflection.stdout), buffers,
+                    validator_text=raw.decode("utf-8", "replace"))
         except (ValueError, TypeError, KeyError, OSError,
                 subprocess.TimeoutExpired, json.JSONDecodeError):
             pass  # Diagnostics must not alter the authoritative failure.
