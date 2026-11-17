@@ -41,14 +41,16 @@ def prove_original_typed_padding_is_unread(source_tail, register_array, reserved
     for access in pattern.finditer(source_tail):
         seen += 1
         swizzle = access.group(2)
-        if not swizzle or len(swizzle) > 4 or any(ch not in "xyzw" for ch in swizzle):
-            raise ValueError("original_array_padding_raw_read_not_proven")
+        if not swizzle:
+            raise ValueError("original_array_padding_source_full_vector_read_unproven")
+        if len(swizzle) > 4 or any(ch not in "xyzw" for ch in swizzle):
+            raise ValueError("original_array_padding_source_swizzle_unverifiable")
         index = access.group(1).strip()
         for ch in swizzle:
             component = "xyzw".index(ch)
             if index.isascii() and index.isdecimal():
                 if int(index) * 4 + component in positions:
-                    raise ValueError("original_array_padding_raw_read_not_proven")
+                    raise ValueError("original_array_padding_source_constant_reserved_component_read")
             elif any(lane % 4 == component for lane in positions):
                 raise ValueError("original_array_padding_dynamic_read_not_proven")
     if re.search(r"\b" + re.escape(register_array) + r"\b",
