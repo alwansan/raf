@@ -50,6 +50,46 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
                         (directory/"original-validator-raw-private.log").is_file())
             return recorded
 
+
+    def test_original_hlsl_cb_declarations_are_sorted_by_byte_offset(self):
+        # Source fields may be reversed and padding is generated afterward.
+        # Strict SPIR-V uniform layouts require monotonic member offsets.
+        from scripts.gt_original_921_cb_hlsl import rebind_constant_buffers
+        import re
+        source = (
+            "cbuffer Old : register(b1) {\n"
+            "float4 cb0_0_m0[4] : packoffset(c0);\n"
+            "};\n"
+            "float4 main() : SV_Target { return cb0_0_m0[0]; }\n"
+        )
+        lanes = [None] * 16
+        for index, name in ((0, "low"), (12, "high")):
+            lanes[index] = {
+                "path": [name], "row": 0, "column": 0,
+                "type": 0, "matrix": False,
+            }
+        def member(name, offset):
+            return {
+                "name": name, "index": offset, "type": 0,
+                "array_size": 0, "rows": 1, "columns": 1, "matrix": False,
+            }
+        buffer = {
+            "name": "ActualCB", "source_slot": 0,
+            "original_named_lanes": lanes,
+            "members": [member("high", 48), member("low", 0)],
+            "structs": [],
+        }
+        result = rebind_constant_buffers(source, [buffer])
+        cbuffer = result.split("cbuffer ActualCB : register(b1) {", 1)[1].split("};", 1)[0]
+        addresses = [
+            int(reg) * 4 + "xyzw".index(lane)
+            for reg, lane in re.findall(r"packoffset\(c(\d+)\.([xyzw])\)", cbuffer)
+        ]
+        self.assertEqual(addresses, sorted(addresses))
+        self.assertEqual(addresses, list(range(16)))
+        self.assertIn("float low : packoffset(c0.x);", cbuffer)
+        self.assertIn("float high : packoffset(c3.x);", cbuffer)
+
     def test_all_existing_shaders_still_use_default_strict_offsets(self):
         recorded=self.run_candidate()
         self.assertEqual(len(recorded),1)
