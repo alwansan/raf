@@ -26,8 +26,11 @@ def safe_remaining_weights(quality):
             or counts.get("material_docs_using_dummy_Shader")!=98
             or counts.get("distinct_dummy_Shader_targets_referenced")!=37):
         raise ValueError("untrusted_original_post23_material_population")
-    if len(values)!=37:
-        raise ValueError("untrusted_original_post23_shader_target_population")
+    # A shader name digest and the original exported Shader GUID are NOT
+    # necessarily bijective: several original owners may share a source name.
+    # Never impose the 37 GUID count on the digest-key population.
+    if not 1<=len(values)<=98:
+        raise ValueError("untrusted_original_post23_shader_name_group_population")
     for digest,weight in values.items():
         if (type(digest) is not str or re.fullmatch(r"[0-9a-f]{64}",digest) is None
                 or type(weight) is not int or not 1<=weight<=98):
@@ -45,7 +48,8 @@ def safe_remaining_weights(quality):
         "custom_non_dummy_actual":688,
         "custom_dummy_actual":98,
         "remaining_original_shader_guid_targets_actual":37,
-        "original_materials_per_shader_guid_weight_histogram":
+        "remaining_original_shader_name_digest_groups_actual":len(values),
+        "original_materials_per_name_digest_weight_histogram":
             {str(weight):counts_only[weight] for weight in sorted(counts_only,reverse=True)},
         "source_names_guids_and_digest_identifiers_exported":False,
         "original_same_export_new_shader_installs_done_by_this_workflow":False,
