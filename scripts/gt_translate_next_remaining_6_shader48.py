@@ -272,11 +272,45 @@ def original_six_validator_private_failure_safe_topics(private):
         for vuid in re.findall(r"vuid-[a-z0-9-]{1,96}",raw):
             # Count only; never publish text fragments or private SSA IDs.
             counts["vulkan_vuid_marker_present"]+=1
-    return {
+    safe={
         "private_validator_diagnostic_files":len(diagnostics),
         "safe_problem_topic_counts":dict(sorted(counts.items())),
         "original_shader_identifiers_hlsl_spirv_or_raw_validator_text_published":False,
     }
+    # Only fixed count keys, bounded integers. Private SPIR-V/CB names,
+    # member IDs, offsets, and shader bytes remain on the CI runner.
+    keys={
+        "compiled_reflection_available",
+        "original_source_buffers_checked",
+        "original_member_fields_checked",
+        "compiled_members_without_source_match",
+        "compiled_member_offsets_match_original",
+        "compiled_member_offsets_differ_original",
+        "compiled_member_offsets_nonmonotonic",
+        "compiled_array_strides_differ_original",
+        "compiled_members_struct_or_array",
+        "compiled_members_matrix",
+    }
+    numeric=list(private.glob(
+        "bound-stage-*/original-validator-layout-counts-private.json"))
+    if len(numeric)>16:
+        raise ValueError("unsafe_original_six_private_cb_diagnostic_population")
+    total={key:0 for key in keys}
+    for p in numeric:
+        if p.is_symlink() or not p.is_file() or p.stat().st_size>4096:
+            raise ValueError("unsafe_original_six_private_cb_numeric_diagnostic")
+        item=json.loads(p.read_text("utf-8"))
+        if (type(item) is not dict or not set(item).issubset(keys)
+                or "compiled_reflection_available" not in item
+                or any(type(v) is not int or not 0 <= v <= 100000
+                       for v in item.values())):
+            raise ValueError("untrusted_original_six_compiled_cb_numeric_counts")
+        for key,amount in item.items():
+            total[key]+=amount
+    safe["private_compiled_cb_numeric_diagnostic_files"]=len(numeric)
+    if numeric:
+        safe["compiled_cb_offset_reflection_count_only"]=dict(sorted(total.items()))
+    return safe
 
 
 def validate_authentic_source_ranges(parsed):
