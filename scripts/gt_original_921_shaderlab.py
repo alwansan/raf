@@ -328,7 +328,7 @@ def verified_source_next_seven_pass_modes(manifest):
     return tuple(selected)
 
 
-def compose(private, engine_keywords=False):
+def compose(private, engine_keywords=False, *, original_array_padding_zero=False):
     layout = (private / "original-private-layout.txt").read_text(encoding="utf-8")
     routes = json.loads((private / "original-private-keyword-routes.json").read_text())
     manifest = json.loads((private / "original-private-variant-manifest.json").read_text())
@@ -348,7 +348,9 @@ def compose(private, engine_keywords=False):
                    tuple(sorted(row["original_variant_metadata"]["m_KeywordIndices"])))
             directory = private / f"bound-stage-{index * 2 + offset:03d}"
             source = rebind_constant_buffers(
-                (directory / "resource-bound.hlsl").read_text(encoding="utf-8"), layouts[offset])
+                (directory / "resource-bound.hlsl").read_text(encoding="utf-8"),
+                layouts[offset],
+                original_array_padding_zero=original_array_padding_zero)
             if stage == "vs":
                 dxbc = (private / row["program_ref"] / "source.dxbc").read_bytes()
                 source, _ = restore_vertex_inputs(source, dxbc)
