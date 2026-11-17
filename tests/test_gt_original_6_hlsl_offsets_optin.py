@@ -107,6 +107,34 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
             rebind_constant_buffers(
                 valid, [buffer], original_array_padding_zero="True")
 
+    def test_missing_reflected_cb_is_classified_by_actual_raw_source_reads(self):
+        from scripts.gt_original_921_cb_hlsl import (
+            original_source_cb_reflection_missing_census)
+        source = (
+            "cbuffer OriginalCB : register(b1) {\n"
+            "float4 cb0_0_m0[4] : packoffset(c0);\n"
+            "};\n"
+        )
+        buffer = [{"source_slot": 0, "translated_binding": 1}]
+        reflection = {"ubos": []}
+        used = original_source_cb_reflection_missing_census(
+            source + "float4 main() : SV_Target {"
+            "return cb0_0_m0[2].x; }\n", reflection, buffer)
+        self.assertEqual(used["source_cb_missing_reflection_with_raw_reads"], 1)
+        self.assertEqual(used["source_cb_missing_reflection_raw_read_sites"], 1)
+        self.assertEqual(used["source_cb_missing_reflection_without_raw_reads"], 0)
+        unused = original_source_cb_reflection_missing_census(
+            source + "float4 main() : SV_Target {return 1;}\n",
+            reflection, buffer)
+        self.assertEqual(unused["source_cb_missing_reflection_without_raw_reads"], 1)
+        self.assertEqual(unused["source_cb_missing_reflection_raw_read_sites"], 0)
+        kept = original_source_cb_reflection_missing_census(
+            source + "float4 main() : SV_Target {return cb0_0_m0[2].x;}",
+            {"ubos": [{"set": 0, "binding": 1}]}, buffer)
+        self.assertEqual(kept["source_cb_missing_reflection_count"], 0)
+        self.assertNotIn("OriginalCB", json.dumps(used))
+        self.assertNotIn("cb0_0_m0", json.dumps(used))
+
     def test_original_named_cb_binding_diagnostics_fail_closed(self):
         from scripts.gt_original_921_cb_hlsl import verify_offsets
         source = [{"name": "OriginalCB", "source_slot": 0,
