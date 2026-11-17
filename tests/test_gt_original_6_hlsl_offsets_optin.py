@@ -107,6 +107,24 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
             rebind_constant_buffers(
                 valid, [buffer], original_array_padding_zero="True")
 
+    def test_original_named_cb_binding_diagnostics_fail_closed(self):
+        from scripts.gt_original_921_cb_hlsl import verify_offsets
+        source = [{"name": "OriginalCB", "source_slot": 0,
+                   "translated_binding": 2, "members": [], "structs": []}]
+        with self.assertRaisesRegex(
+                ValueError, "named_constant_buffer_source_block_not_reflected"):
+            verify_offsets({"ubos": [], "types": {}}, source)
+        with self.assertRaisesRegex(
+                ValueError, "named_constant_buffer_source_name_at_wrong_descriptor"):
+            verify_offsets({"ubos": [
+                {"set": 0, "binding": 3, "name": "OriginalCB"}],
+                "types": {}}, source)
+        with self.assertRaisesRegex(
+                ValueError, "named_constant_buffer_source_block_name_changed"):
+            verify_offsets({"ubos": [
+                {"set": 0, "binding": 2, "name": "DIFFERENT_PRIVATE_NAME"}],
+                "types": {}}, source)
+
     def test_vulkan_overlap_classifies_private_original_vs_padding_only_as_counts(self):
         from scripts.gt_original_921_cb_hlsl import (
             original_compiled_cb_numeric_offset_profile)
