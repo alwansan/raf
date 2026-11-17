@@ -56,6 +56,12 @@ class NativeWorkflowIsolationTests(unittest.TestCase):
                    if step.get('id')=='unity_build')
         self.assertEqual(build['uses'],'game-ci/unity-builder@v4')
         self.assertIn('-raftTextureProfile fidelity',build['with']['customParameters'])
+        # OOM 43890431951: keep a bounded worker/memory mitigation without
+        # modifying original shader variants or Android package layout.
+        self.assertEqual(build['with']['dockerMemoryLimit'],'13g')
+        self.assertIn('-job-worker-count 1',build['with']['customParameters'])
+        self.assertNotIn('-job-worker-count 2',build['with']['customParameters'])
+        self.assertIn('-raftPackageLayout split',build['with']['customParameters'])
         self.assertIn('RaftAndroid.Editor.AndroidNativeBuild.Build',str(build['with']['buildMethod']))
 
     def test_sidecar_is_unit_only_without_unity_or_license_environment(self):
