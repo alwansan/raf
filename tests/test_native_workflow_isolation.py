@@ -52,6 +52,10 @@ class NativeWorkflowIsolationTests(unittest.TestCase):
         monitor=next(step for step in job['steps']
                      if step.get('name','').startswith('Reserve bounded swap'))
         self.assertIn('--interval 15 --samples 1440',monitor['run'])
+        # Run 43998306352 exhausted its 8 GiB swap before Bee exit 137.
+        # Reserve more disk-backed swap, but refuse insufficient free disk.
+        self.assertIn('sudo fallocate -l 12G /mnt/raft-unity.swap',monitor['run'])
+        self.assertIn('16777216',monitor['run'])
         build=next(step for step in job['steps']
                    if step.get('id')=='unity_build')
         self.assertEqual(build['uses'],'game-ci/unity-builder@v4')
