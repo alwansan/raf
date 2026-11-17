@@ -147,12 +147,12 @@ public final class CaptureService extends Service {
             }
             folder=selected;
             session = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS",Locale.US).format(new Date());
-            Uri base=DocumentsContract.buildDocumentUriUsingTree(folder,DocumentsContract.getTreeDocumentId(folder));
-            sessionFolder=DocumentsContract.createDocument(getContentResolver(),base,
+            Uri base=StorageAccess.base(getContentResolver(),folder);
+            sessionFolder=StorageAccess.create(getContentResolver(),base,
                     DocumentsContract.Document.MIME_TYPE_DIR,"CLog-"+session);
             if(sessionFolder==null) throw new IOException("Folder creation failed");
             active=true; stopping=false; failed=false; totalBytes=0; metricsSegmentBytes=0; part=0; metricsPart=0;
-            fileUris.clear();
+            fileUris.clear(); auditUri=null;
             Config.prefs(this).edit().remove("metrics_last").remove("last_exit_history_sample").remove("exit_history_status").remove("work_audit_last").apply();
             String metadata="CLog "+BuildConfig.VERSION_NAME+"\nTarget="+Config.PACKAGE+
                     "\nRecoveryRestart="+recovering+
@@ -163,11 +163,11 @@ public final class CaptureService extends Service {
                     "Capture=Cinemana UID plus Cinemana-associated system/crash events\n"+
                     "Note=Logs only when emitted; cannot capture internal unlogged state\n"+
                     "Telemetry=3s sampling CPU process, process/system memory, KGSL GPU, thermal, battery, SurfaceFlinger displayed frames\n"+
-                    "Missing metrics are null, not measured zeros. Game-internal FPS needs Unity logging.\n"+
+                    "Missing metrics are null, not measured zeros. UI jank uses gfxinfo; displayed FPS is not UI frame rate.\n"+
                     "Warnings=Low available RAM, raw log flood, and suspected presented-frame stalls are heuristic indicators.\n";
-            Uri meta=DocumentsContract.createDocument(getContentResolver(),sessionFolder,"text/plain","session-info.txt");
+            Uri meta=StorageAccess.create(getContentResolver(),sessionFolder,"text/plain","session-info.txt");
             if(meta==null) throw new IOException("Metadata creation failed");
-            try(OutputStream out=getContentResolver().openOutputStream(meta,"w")){
+            try(OutputStream out=StorageAccess.write(getContentResolver(),meta)){
                 if(out==null) throw new IOException("Cannot write metadata");
                 out.write(metadata.getBytes(StandardCharsets.UTF_8));
             }
@@ -189,8 +189,8 @@ public final class CaptureService extends Service {
                                 }
                             }
                             @Override public void onAudit(org.json.JSONObject summary){
-                                Config.prefs(CaptureService.this).edit()
-                                        .putString("work_audit_last",summary.toString()).apply();
+                                Config.prefs(CaptureService.this).edit().putString("work_audit_last",summary.toString()).apply();
+                                appendWorkAudit(summary);
                             }
                             @Override public void onIssue(String issue){
                                 try{sink.onFailure(issue);}
@@ -201,7 +201,7 @@ public final class CaptureService extends Service {
                 workLogThread.start();
             }
             args=new Shizuku.UserServiceArgs(new ComponentName(getPackageName(),RemoteLogService.class.getName()))
-                .daemon(false).processNameSuffix("lograf").debuggable(false).version(1);
+                .daemon(false).processNameSuffix("lograf").debuggable(false).version(2);
             Shizuku.bindUserService(args,connection);
             return START_STICKY;
         } catch(Exception e) {
@@ -211,13 +211,20 @@ public final class CaptureService extends Service {
         }
     }
 
+    private Uri auditUri;
+    private void appendWorkAudit(org.json.JSONObject row){
+        synchronized(writeLock){if(!active)return;try{
+            if(auditUri==null){auditUri=StorageAccess.create(getContentResolver(),sessionFolder,"application/json","work-audit.jsonl");fileUris.add(auditUri.toString());Config.prefs(this).edit().putString("files",new JSONArray(fileUris).toString()).apply();}
+            try(OutputStream s=StorageAccess.file(auditUri)?new FileOutputStream(StorageAccess.outputFile(auditUri),true):getContentResolver().openOutputStream(auditUri,"wa")){if(s!=null)s.write((row.toString()+"\n").getBytes(StandardCharsets.UTF_8));}
+        }catch(Exception e){android.util.Log.w("CLog","Work audit output unavailable",e);}}
+    }
     private void openSegment() throws IOException {
         if(output!=null) { output.flush(); output.close(); }
         part++;
-        String name=String.format(Locale.US,"raft-%s-%05d.log",session,part);
-        Uri u=DocumentsContract.createDocument(getContentResolver(),sessionFolder,"text/plain",name);
+        String name=String.format(Locale.US,"cinemana-logcat-%s-%05d.log",session,part);
+        Uri u=StorageAccess.create(getContentResolver(),sessionFolder,"text/plain",name);
         if(u==null) throw new IOException("Cannot create "+name);
-        output=getContentResolver().openOutputStream(u,"w");
+        output=StorageAccess.write(getContentResolver(),u);
         if(output==null) throw new IOException("Output stream unavailable for "+u);
         fileUris.add(u.toString());
         segmentBytes=0;
@@ -229,7 +236,7 @@ public final class CaptureService extends Service {
         synchronized(writeLock) {
             if(!active || output==null)return;
             try {
-                String marker="[USER MARKER] "+new Date().toString()+" : User noticed an issue while playing Cinemana\n";
+                String marker="[USER MARKER] "+new Date().toString()+" : User noticed an issue while using Cinemana\n";
                 byte[] data=marker.getBytes(StandardCharsets.UTF_8);
                 if(segmentBytes+data.length>SEGMENT_BYTES)openSegment();
                 output.write(data);output.flush();segmentBytes+=data.length;totalBytes+=data.length;
@@ -242,9 +249,9 @@ public final class CaptureService extends Service {
         if(metricsOutput!=null){metricsOutput.flush();metricsOutput.close();}
         metricsPart++;
         String name=String.format(Locale.US,"metrics-%s-%05d.jsonl",session,metricsPart);
-        Uri uri=DocumentsContract.createDocument(getContentResolver(),sessionFolder,"application/octet-stream",name);
+        Uri uri=StorageAccess.create(getContentResolver(),sessionFolder,"application/octet-stream",name);
         if(uri==null)throw new IOException("Cannot create telemetry segment: "+name);
-        metricsOutput=getContentResolver().openOutputStream(uri,"w");
+        metricsOutput=StorageAccess.write(getContentResolver(),uri);
         if(metricsOutput==null)throw new IOException("Cannot open telemetry segment");
         fileUris.add(uri.toString()); metricsSegmentBytes=0;
         Config.prefs(this).edit().putString("files",new JSONArray(fileUris).toString()).apply();
@@ -290,7 +297,7 @@ public final class CaptureService extends Service {
                 try{report.put("last_work_filesystem_audit",new org.json.JSONObject(audit));}
                 catch(org.json.JSONException ignored){}
             }
-            report.put("internal_source_access","user-selected read-only SAF; source files never edited");
+            report.put("internal_source_access","automatic fixed path or user-selected read-only SAF; source files never edited");
             report.put("game_process_exit_cause","unknown unless explicitly supported by exit evidence");
             String raw=Config.prefs(this).getString("metrics_last","");
             if(!raw.trim().isEmpty()) {
@@ -302,10 +309,10 @@ public final class CaptureService extends Service {
                 try{report.put("last_game_exit_evidence",new org.json.JSONObject(exit.trim()));}
                 catch(org.json.JSONException e){report.put("exit_evidence_error","invalid JSON");}
             }
-            Uri file=DocumentsContract.createDocument(getContentResolver(),sessionFolder,
+            Uri file=StorageAccess.create(getContentResolver(),sessionFolder,
                     "application/json","session-summary.json");
             if(file==null)return;
-            try(OutputStream stream=getContentResolver().openOutputStream(file,"w")) {
+            try(OutputStream stream=StorageAccess.write(getContentResolver(),file)) {
                 if(stream==null)return;
                 stream.write(report.toString(2).getBytes(StandardCharsets.UTF_8));
                 stream.flush();

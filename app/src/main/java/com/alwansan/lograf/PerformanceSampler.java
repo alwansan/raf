@@ -37,6 +37,8 @@ public final class PerformanceSampler implements Runnable {
     private Double batteryTemp=null;
     private String surfaceLayer=null;
     private long sample=0;
+    private final ResourceDetails details=new ResourceDetails();
+    private long lastSampleAt=-1;
     private long lastFrameProgressMs=-1;
     private Double lastPresentedP95Ms=null, lastPresentedWorstMs=null;
     private int lastPresentedFrameCount=0;
@@ -71,13 +73,14 @@ public final class PerformanceSampler implements Runnable {
         row.put("schema",1).put("source","clog_shell").put("timestamp_unix_ms",System.currentTimeMillis())
                 .put("elapsed_ms",now).put("sample",++sample).put("package",target)
                 .put("pid",pid>0?pid:JSONObject.NULL).put("cpu_cores_online",cpuCount);
+        row.put("sample_interval_ms",lastSampleAt<0?JSONObject.NULL:now-lastSampleAt);lastSampleAt=now;
         row.put("app_process_type","main");
         row.put("filedownloader_pid",workerPid>0?workerPid:JSONObject.NULL);
         row.put("filedownloader",sampleDownloader(workerPid,now));
         if(pid!=lastObservedPid) {
             row.put("process_transition",pid>0?"game_started":lastObservedPid>0?"game_exited":"none");
             row.put("previous_pid",lastObservedPid>0?lastObservedPid:JSONObject.NULL);
-            if(pid<=0 && lastObservedPid>0) {
+            if(lastObservedPid>0) {
                 // The shell UID can query Android's app-exit tracker. Logcat
                 // process death alone never proves native crash, ANR or LMK.
                 // Capture the package-scoped history only once per exit.
@@ -99,10 +102,10 @@ public final class PerformanceSampler implements Runnable {
             lastObservedPid=pid;
         }
         if(pid<=0) {
-            row.put("state","game_not_running");
+            row.put("state","app_not_running");
             previousPid=-1; previousTicks=-1; previousAt=-1; previousPresent=-1;
         } else {
-            row.put("state","game_running");
+            row.put("state","app_running");
             JSONObject cpu;
             try { cpu=cpuUsage(pid,now); }
             catch(Exception e) { cpu=new JSONObject(); row.put("process_cpu_error",e.getClass().getSimpleName()); }
@@ -169,8 +172,8 @@ public final class PerformanceSampler implements Runnable {
         row.put("available_ram_under_1gib_watch",sys.optLong("MemAvailable",Long.MAX_VALUE)<1048576);
         row.put("fps_method","SurfaceFlinger --latency app SurfaceView; video playback presentation, NOT UI responsiveness");
         row.put("fps_surface",surfaceLayer==null?JSONObject.NULL:surfaceLayer);
-        row.put("unity_frame_cpu_ms",JSONObject.NULL).put("unity_frame_gpu_ms",JSONObject.NULL);
-        row.put("unity_frame_timing_reason","Not applicable: Cinemana is an Android UI/media app, not Unity");
+        details.enrich(row,pid,workerPid,now,ticksPerSecond);
+        row.put("sample_duration_ms",SystemClock.elapsedRealtime()-now);
         return row;
     }
 

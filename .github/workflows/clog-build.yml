@@ -63,4 +63,4 @@ jobs:
           gh release create "clog-${GITHUB_RUN_NUMBER}" CLog-signed.apk CLog-signed.apk.sha256 \
             --title "CLog Cinemana diagnostics APK (build ${GITHUB_RUN_NUMBER})" \
             --prerelease --target "${GITHUB_SHA}" \
-            --notes "CLog monitors com.cinemana.pro and :filedownloader via Shizuku, optional SAF work/log mirror. Separate package com.alwansan.clog. Public test signing key."
+            --notes "CLog monitors com.cinemana.pro and :filedownloader via Shizuku, automatic fixed paths with storage permission or optional SAF work/log mirror. Separate package com.alwansan.clog. Public test signing key."

@@ -66,3 +66,6 @@ Build and signing use GitHub Actions on **only** `clog`, independent from LogRaf
 If CLog is granted read-only access to the `Cinemana/work` folder, it counts direct-child `.mp4`, final `.mkv`, `.part`, `.temp`, `.srt` and `.vtt` entries without reading video/subtitle bytes. It also mirrors newly appended logs from `Cinemana/work/log` into the recording session. A part file older than 30 minutes is an **age-based candidate only**, never proof that FFmpeg has finished or that it can be deleted. CLog does not remove or change Cinemana files.
 
 If you select only `Cinemana/work/log`, logs can be captured but parent media counts remain unavailable. The final `session-summary.json` includes the last numeric media census.
+
+## CP-DL diagnostics update
+Grant All files access on first launch (Android 11+) for automatic read-only Cinemana/work and output Download/Games/cl/Clog; SAF remains fallback. The tool never deletes source files. Raw per-source *.raw parts in automatic mode preserve bytes, concatenate numbered parts for each unchanged source (rotation is a new part; don't assume continuity across rotation). Metadata audit is bounded and may be partial. Diskstats are device-wide; gateway ping is at most once/minute and not server RTT. Raw logs may contain sensitive data: inspect locally before sharing. No automatic upload.

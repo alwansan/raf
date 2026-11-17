@@ -100,6 +100,7 @@ public final class CinemanaWorkLogCollector implements Runnable {
     }
 
     private void scanOnce() throws IOException {
+        if(StorageAccess.file(selectedTree)){scanDirect();return;}
         Uri root=DocumentsContract.buildDocumentUriUsingTree(selectedTree,
                 DocumentsContract.getTreeDocumentId(selectedTree));
         List<Item> entries=children(root);
@@ -127,6 +128,94 @@ public final class CinemanaWorkLogCollector implements Runnable {
         scanStart=(start+count)%files.size();
     }
 
+    private final Map<String,String> directIdentity=new HashMap<>();
+    private final Map<String,Uri> directOutputs=new HashMap<>();
+    private final Map<String,Integer> directParts=new HashMap<>();
+    private long directLastCensus=0;
+    private void scanDirect() throws IOException {
+        File root=StorageAccess.WORK.getCanonicalFile(), log=new File(root,"log").getCanonicalFile();
+        if(!log.getPath().startsWith(root.getPath()+File.separator))throw new IOException("Unexpected log path");
+        if(!root.isDirectory()){warnOnce("Cinemana/work not yet created; recording continues");return;}
+        long now=android.os.SystemClock.elapsedRealtime();
+        if(now-directLastCensus>=30000 || directLastCensus==0){
+            directLastCensus=now;
+            censusDirect(root);
+        }
+        File[] entries=log.listFiles();
+        if(entries==null)return;
+        Arrays.sort(entries,Comparator.comparing(File::getName));
+        ArrayList<File> allowed=new ArrayList<>();
+        for(File f:entries){
+            String n=f.getName().toLowerCase(Locale.ROOT);
+            if(f.isFile() && (n.endsWith(".log")||n.endsWith(".jsonl")||n.equals("tree.txt")) && f.getCanonicalFile().getParentFile().equals(log))allowed.add(f);
+            if(allowed.size()>=4000)break;
+        }
+        if(allowed.isEmpty())return;
+        int start=scanStart%allowed.size(),count=Math.min(MAX_FILES_PER_POLL,allowed.size());
+        int budget=1024*1024;
+        for(int i=0;i<count&&budget>0&&active.get();i++){
+            File f=allowed.get((start+i)%allowed.size());
+            try{budget-=directTail(f,Math.min(budget,CHUNK_LIMIT));}catch(Exception e){warnOnce("Direct log tail unavailable: "+e.getClass().getSimpleName());}
+        }
+        scanStart=(start+count)%allowed.size();
+    }
+    private int directTail(File f,int budget)throws Exception{
+        String key=f.getName(), identity;
+        try{android.system.StructStat stat=android.system.Os.stat(f.getPath());identity=stat.st_dev+":"+stat.st_ino;}catch(Exception e){identity=key;}
+        long offset=offsets.getOrDefault(key,0L);
+        if(!identity.equals(directIdentity.get(key))||f.length()<offset){offset=0;directOutputs.remove(key);directIdentity.put(key,identity);offsets.put(key,0L);}
+        if(f.length()==offset)return 0;
+        int copied=0;
+        try(RandomAccessFile in=new RandomAccessFile(f,"r")){
+            in.seek(offset);
+            while(budget>0&&active.get()){
+                int n=in.read(buffer,0,Math.min(buffer.length,budget));if(n<=0)break;
+                Uri dest=directOutputs.get(key);
+                if(dest==null || StorageAccess.outputFile(dest).length()+n>SEGMENT_LIMIT){
+                    int part=directParts.getOrDefault(key,0)+1;directParts.put(key,part);
+                    String safe=key.replaceAll("[^a-zA-Z0-9._-]","_");
+                    dest=StorageAccess.create(resolver,sessionDir,"application/octet-stream",String.format(Locale.US,"internal-%s-%08x-%04d.raw",safe,key.hashCode(),part));
+                    directOutputs.put(key,dest);listener.onNewFile(dest);
+                }
+                try(OutputStream out=new FileOutputStream(StorageAccess.outputFile(dest),true)){out.write(buffer,0,n);}
+                offset+=n;offsets.put(key,offset);copied+=n;budget-=n;
+            }
+        }
+        return copied;
+    }
+    private void censusDirect(File root){
+        try{
+            long begin=android.os.SystemClock.elapsedRealtime(),files=0,dirs=0,empty=0,mp4=0,mkv=0,part=0,temp=0,subs=0,mp4Bytes=0,mkvBytes=0,partBytes=0,tempBytes=0,oldest=Long.MAX_VALUE;
+            long limit=begin+600;boolean capped=false;
+            ArrayDeque<File> q=new ArrayDeque<>();q.add(root);
+            while(!q.isEmpty()&&active.get()){
+                if(files+dirs>=20000||android.os.SystemClock.elapsedRealtime()>limit){capped=true;break;}
+                File dir=q.removeFirst();File[] entries=dir.listFiles();dirs++;
+                if(entries==null){capped=true;continue;}if(entries.length==0)empty++;
+                for(File f:entries){
+                    if(files+dirs>=20000||android.os.SystemClock.elapsedRealtime()>limit){capped=true;break;}
+                    if(!f.getCanonicalPath().startsWith(root.getPath()+File.separator)||!f.getCanonicalFile().equals(f.getAbsoluteFile()))continue;
+                    if(f.isDirectory()){if(!f.getName().equals("log")&&q.size()<2000)q.add(f);else if(!f.getName().equals("log"))capped=true;continue;}
+                    if(!f.isFile())continue;files++;
+                    String n=f.getName().toLowerCase(Locale.ROOT);long len=f.length();
+                    if(n.endsWith(".mp4")){mp4++;mp4Bytes+=len;if(f.lastModified()>0)oldest=Math.min(oldest,f.lastModified());}
+                    else if(n.endsWith(".mkv")){mkv++;mkvBytes+=len;}
+                    else if(n.endsWith(".part")){part++;partBytes+=len;}
+                    else if(n.endsWith(".temp")){temp++;tempBytes+=len;}
+                    else if(n.endsWith(".srt")||n.endsWith(".vtt")||n.endsWith(".ass"))subs++;
+                }
+            }
+            org.json.JSONObject x=new org.json.JSONObject().put("timestamp_unix_ms",System.currentTimeMillis()).put("elapsed_ms",begin)
+                .put("scope","Cinemana/work recursive metadata, excludes log").put("scan_capped",capped||!q.isEmpty())
+                .put("scan_duration_ms",android.os.SystemClock.elapsedRealtime()-begin).put("entries_scanned",files+dirs)
+                .put("directories",dirs).put("empty_directories",empty).put("mp4_files",mp4).put("mp4_bytes",mp4Bytes)
+                .put("mkv_files",mkv).put("mkv_bytes",mkvBytes).put("part_files",part).put("part_bytes",partBytes)
+                .put("temp_files",temp).put("temp_bytes",tempBytes).put("subtitle_files",subs)
+                .put("oldest_mp4_age_ms",oldest==Long.MAX_VALUE?org.json.JSONObject.NULL:Math.max(0,System.currentTimeMillis()-oldest))
+                .put("source","metadata only; extension is not completion proof");
+            listener.onAudit(x);
+        }catch(Exception e){warnOnce("Direct metadata audit unavailable: "+e.getClass().getSimpleName());}
+    }
     private void auditRootMetadata(List<Item> files){
         // SAF *metadata only*: no reads of MP4, subtitles, .part or Room files.
         try{
@@ -195,9 +284,9 @@ public final class CinemanaWorkLogCollector implements Runnable {
     private void openSegment() throws IOException {
         if(stream!=null){stream.flush();stream.close();}
         String name=String.format(Locale.US,"cinemana-internal-%05d.log",++part);
-        Uri uri=DocumentsContract.createDocument(resolver,sessionDir,"text/plain",name);
+        Uri uri=StorageAccess.create(resolver,sessionDir,"text/plain",name);
         if(uri==null)throw new IOException("Cannot create work-log mirror");
-        stream=resolver.openOutputStream(uri,"w");
+        stream=StorageAccess.write(resolver,uri);
         if(stream==null)throw new IOException("Cannot open work-log mirror");
         segmentBytes=0;
         listener.onNewFile(uri);

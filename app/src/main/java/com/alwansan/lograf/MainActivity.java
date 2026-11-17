@@ -23,6 +23,7 @@ public final class MainActivity extends Activity {
     private static final int PICK_FOLDER=201;
     private static final int SHIZUKU_REQUEST=202;
     private static final int PICK_WORK_LOGS=203;
+    private static final int STORAGE_REQUEST=204;
     private boolean pendingStart=false;
     private TextView status, folderLabel, performanceLabel;
     private Button start, stop, share;
@@ -59,14 +60,16 @@ public final class MainActivity extends Activity {
         layout.setPadding(dp,dp,dp,dp);
         scroll.addView(layout);
 
-        TextView head=title("CLog  •  مسجل تشخيص لعبة Cinemana",23);
+        TextView head=title("CLog  •  مسجل تشخيص Cinemana Pro",23);
         head.setTextColor(0xff163c52);
         layout.addView(head);
-        layout.addView(title("مخصص للعبة com.alwansan.raft.androidtest. يلتقط Unity / Java / IL2CPP / FMOD / GPU عند ظهورها في Logcat، مع أحداث النظام المرتبطة باللعبة.",15));
+        layout.addView(title("مخصص لتشخيص تطبيق Cinemana Pro: التنزيلات والتحويل وقواعد البيانات والأداء، مع مراقبة العملية الرئيسية وخدمة FileDownloader.",15));
         folderLabel=title("",14); layout.addView(folderLabel);
         layout.addView(title("التطبيق المستهدف: com.cinemana.pro (العملية الرئيسية و:filedownloader)",14));
 
-        Button folder=button("1  •  اختر مجلد حفظ اللوقات");
+        Button auto=button("1  •  السماح بالتخزين (المسارات التلقائية)");
+        auto.setOnClickListener(v->requestStorage()); layout.addView(auto);
+        Button folder=button("بديل اختياري: اختر مجلد حفظ السجلات");
         folder.setOnClickListener(v-> {
             Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION|
@@ -92,7 +95,7 @@ public final class MainActivity extends Activity {
         start.setOnClickListener(v->requestShizuku(true));
         layout.addView(start);
 
-        Button launch=button("افتح لعبة Cinemana");
+        Button launch=button("افتح تطبيق Cinemana");
         launch.setOnClickListener(v->{
             Intent i=getPackageManager().getLaunchIntentForPackage(Config.PACKAGE);
             if(i==null) message("Cinemana ليست مثبتة بالحزمة المحددة");
@@ -129,8 +132,16 @@ public final class MainActivity extends Activity {
         catch(Throwable t){ message("Shizuku API error: "+t.getMessage()); }
         if(Build.VERSION.SDK_INT>=33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)
             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},301);
-        handler.post(refresh);
+        if(!Config.prefs(this).getBoolean("storage_prompted",false)){ Config.prefs(this).edit().putBoolean("storage_prompted",true).apply(); handler.postDelayed(()->{if(!isFinishing()&&!StorageAccess.direct(this))requestStorage();},900); }
     }
+    private void requestStorage(){
+        if(StorageAccess.direct(this)){update();message("التخزين مفعّل؛ المسارات تلقائية");return;}
+        try{if(Build.VERSION.SDK_INT>=30){Intent i=new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,Uri.parse("package:"+getPackageName()));startActivityForResult(i,STORAGE_REQUEST);}
+            else requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},STORAGE_REQUEST);
+        }catch(Exception e){message("فعّل الوصول إلى جميع الملفات من إعدادات التطبيق أو اختر مجلد SAF");}
+    }
+    @Override protected void onResume(){super.onResume();handler.removeCallbacks(refresh);handler.post(refresh);}
+    @Override protected void onPause(){handler.removeCallbacks(refresh);super.onPause();}
 
     private void requestShizuku(boolean thenStart){
         try {
@@ -150,7 +161,7 @@ public final class MainActivity extends Activity {
         }catch(Throwable e){message("Shizuku: "+e);}
     }
     private void startCapture(){
-        if(Config.folder(this)==null){message("اختر المجلد أولاً");return;}
+        if(Config.folder(this)==null){requestStorage();message("امنح التخزين أو اختر مجلد الحفظ البديل ثم ابدأ");return;}
         try {
             Intent i=new Intent(this,CaptureService.class).setAction(CaptureService.START);
             startForegroundService(i);
@@ -163,7 +174,7 @@ public final class MainActivity extends Activity {
         Uri u=Config.folder(this);
         folderLabel.setText("مجلد الحفظ: "+(u==null ? "لم يتم التحديد" : u.toString())+
                 "\nمصدر سجلات Cinemana الداخلي: "+
-                (Config.workLogsFolder(this)==null?"غير محدد (اختياري)":"مفعّل للقراءة فقط"));
+                (Config.workLogsFolder(this)==null?"غير محدد (اختياري)":StorageAccess.direct(this)?StorageAccess.WORK.getPath()+" (قراءة فقط)":"مفعّل للقراءة فقط"));
         String text=Config.prefs(this).getString("status","جاهز");
         boolean recording=Config.prefs(this).getBoolean("recording",false);
         status.setText("الحالة: "+text+"\nالمشروع: Cinemana\nالتسجيل: "+(recording?"نشط":"متوقف")+
@@ -172,7 +183,7 @@ public final class MainActivity extends Activity {
         String raw=Config.prefs(this).getString("metrics_last","");
         if(!raw.isEmpty()) try {
             JSONObject m=new JSONObject(raw.trim());
-            performanceLabel.setText("قراءات Cinemana المباشرة (تتحدث كل 3 ثوانٍ):"+
+            performanceLabel.setText("قراءات Cinemana المباشرة (دورية؛ الزمن الفعلي في السجل):"+
                 "\nCinemana main CPU: "+metric(m,"process_cpu_percent_one_core","% of one core")+
                 "\n:filedownloader CPU: "+subMetric(m,"filedownloader","cpu_percent_one_core","% of one core")+
                 "\n:filedownloader RSS: "+subMetric(m,"filedownloader","rss_kb","KiB")+
@@ -188,20 +199,22 @@ public final class MainActivity extends Activity {
                 "\nGPU busy (device-wide): "+metric(m,"gpu_busy_percent","%")+
                 "\nCPU frequencies: "+frequencySummary(m)+
                 "\nFree storage: "+storageSummary(m)+
+                "\nMain read B/s: "+metric(m,"process_read_bytes_per_second","")+
+                "\nMain write B/s: "+metric(m,"process_write_bytes_per_second","")+
+                "\nDownloader write B/s: "+subMetric(m,"filedownloader","write_bytes_per_second","")+
+                "\nStorage total: "+metric(m,"device_storage_total_bytes","bytes")+
+                "\nGateway ping: "+subMetric(m,"gateway_ping","rtt_ms","ms")+
                 "\nGPU clock: "+metric(m,"gpu_clock_hz","Hz")+
                 "\nDisplayed FPS estimate: "+metric(m,"presented_fps_estimate","fps")+
                 "\nBattery: "+metric(m,"battery_level_percent","%")+
                 "\nBattery temp: "+metric(m,"battery_temp_c","°C")+
                 "\nThermal status code: "+metric(m,"thermal_status_code","")+
-                "\nLogcat game lines: "+metric(m,"game_log_lines","")+
+                "\nCinemana logcat lines: "+metric(m,"game_log_lines","")+
                 "\nSystem event lines: "+metric(m,"system_context_lines","")+
                 "\nStream reconnects (potential gaps): "+metric(m,"logcat_reconnects","")+
                 "\nLog lines/sec: "+metric(m,"game_log_lines_per_second","")+
                 "\nCinemana diagnostics: "+eventCounts(m)+
-                "\nShader pass errors (legacy): "+metric(m,"shader_pass_errors_total","")+
-                "\nCompute kernel errors: "+metric(m,"invalid_compute_kernel_total","")+
-                "\nMissing asset paths: "+metric(m,"missing_asset_path_errors_total","")+
-                "\nGame process death events: "+metric(m,"game_process_death_events_total","")+
+                "\nProcess death markers: "+metric(m,"game_process_death_events_total","")+
                 "\nFrame pacing P95: "+metric(m,"presented_frame_p95_ms","ms")+
                 "\nLast frame progress: "+metric(m,"last_present_progress_age_ms","ms")+
                 "\nAlerts: "+metricWarnings(m)+
@@ -213,7 +226,7 @@ public final class MainActivity extends Activity {
 
     private String workAuditSummary(){
         String raw=Config.prefs(this).getString("work_audit_last","");
-        if(raw.isEmpty())return "غير مفعّل؛ اختر Cinemana/work";
+        if(raw.isEmpty())return "بانتظار فحص Cinemana/work أو صلاحية القراءة";
         try {
             JSONObject x=new JSONObject(raw);
             return x.optString("scope","selected")+
@@ -318,19 +331,20 @@ public final class MainActivity extends Activity {
                 JSONArray files=new JSONArray(raw);
                 if(files.length()==0)throw new IOException("Empty session");
                 Uri parent=Uri.parse(dir);
+                if(StorageAccess.file(parent))parent=Uri.fromFile(StorageAccess.OUTPUT);
                 String zipName="CLog-"+System.currentTimeMillis()+".zip";
-                Uri outputUri=DocumentsContract.createDocument(getContentResolver(),parent,"application/zip",zipName);
+                Uri outputUri=StorageAccess.create(getContentResolver(),parent,"application/zip",zipName);
                 if(outputUri==null)throw new IOException("ZIP creation failed");
-                try (OutputStream stream=getContentResolver().openOutputStream(outputUri,"w");
+                try (OutputStream stream=StorageAccess.write(getContentResolver(),outputUri);
                      ZipOutputStream zip=new ZipOutputStream(stream)) {
                     if(stream==null)throw new IOException("ZIP cannot be opened");
                     byte[] buffer=new byte[65536];
                     for(int i=0;i<files.length();i++){
                         Uri file=Uri.parse(files.getString(i));
-                        String name=DocumentsContract.getDocumentId(file);
+                        String name=StorageAccess.name(file);
                         name=name.substring(name.lastIndexOf('/')+1).replace('\\','_');
                         zip.putNextEntry(new ZipEntry(String.format(Locale.US,"%04d-",i)+name));
-                        try(InputStream input=getContentResolver().openInputStream(file)){
+                        try(InputStream input=StorageAccess.read(getContentResolver(),file)){
                             if(input==null) throw new IOException("Cannot read "+file);
                             int read;
                             while((read=input.read(buffer))!=-1)zip.write(buffer,0,read);
@@ -341,8 +355,9 @@ public final class MainActivity extends Activity {
                 runOnUiThread(()-> {
                     Intent shareIntent=new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("application/zip");
-                    shareIntent.putExtra(Intent.EXTRA_STREAM,outputUri);
-                    shareIntent.setClipData(ClipData.newRawUri("CLog",outputUri));
+                    Uri shared=StorageAccess.file(outputUri)?androidx.core.content.FileProvider.getUriForFile(this,getPackageName()+".exports",new File(outputUri.getPath())):outputUri;
+                    shareIntent.putExtra(Intent.EXTRA_STREAM,shared);
+                    shareIntent.setClipData(ClipData.newRawUri("CLog",shared));
                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivity(Intent.createChooser(shareIntent,"Share Cinemana logs"));
                     share.setEnabled(true);

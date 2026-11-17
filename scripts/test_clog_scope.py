@@ -41,3 +41,11 @@ assert '"work_logs_folder"' in ui
 for forbidden in ("deleteDocument(", "openFileDescriptor(source,\"w\"", "Runtime.getRuntime().exec", "POST /upload"):
     assert forbidden not in collector, forbidden
 print("CLog isolation, multi-process capture, telemetry, optional SAF and signing scope: PASS")
+
+assert 'MANAGE_EXTERNAL_STORAGE' in manifest
+assert 'StorageAccess.WORK' in config and 'StorageAccess.OUTPUT' in config
+assert 'raft-' not in service and 'com.alwansan.raft.androidtest' not in ui
+assert 'scanDirect()' in collector and 'new RandomAccessFile(f,"r")' in collector
+assert 'sqlite_connection_leak_warnings' in counters and 'android_kill_markers' in counters
+assert 'sample_duration_ms' in perf and 'ResourceDetails' in perf
+assert 'FileProvider.getUriForFile' in ui
