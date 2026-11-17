@@ -415,7 +415,7 @@ def compose(private, engine_keywords=False, *, original_array_padding_zero=False
     return shader
 
 
-def verify_entrypoints(shader, directory, routes=None):
+def verify_entrypoints(shader, directory, routes=None, *, original_hlsl_offsets=False):
     """Compile both real entries of every generated ShaderLab route."""
     from scripts.w1_recover_graphics_programs import command
     from scripts.t3_spirv_interface_name_drift import read_reflection
@@ -439,8 +439,15 @@ def verify_entrypoints(shader, directory, routes=None):
                     ("vert", "VERTEX", "gt_vs_main"),
                     ("frag", "FRAGMENT", "gt_fs_main"),
                 ):
-                    args = ["glslangValidator", "-V", "-D", "--target-env", "vulkan1.1",
-                            "-S", suffix, "-e", entry, f"-DSHADER_STAGE_{macro}=1"]
+                    args = ["glslangValidator", "-V", "-D", "--target-env", "vulkan1.1"]
+                    if original_hlsl_offsets is True:
+                        # Source-authenticated NEXT6: the original typed
+                        # CBuffer array otherwise gets optimized out.
+                        args.extend(["--hlsl-offsets", "-Od"])
+                    elif original_hlsl_offsets is not False:
+                        raise ValueError("unverified_original_hlsl_offsets_opt_in")
+                    args.extend(["-S", suffix, "-e", entry,
+                                 f"-DSHADER_STAGE_{macro}=1"])
                     binary.unlink(missing_ok=True)
                     if not command([*args, *route, "-o", str(binary), str(source)]):
                         raise ValueError("original_921_shaderlab_entrypoint_compile_failed")
