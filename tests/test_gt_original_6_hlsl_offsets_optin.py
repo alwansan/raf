@@ -34,7 +34,7 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
                     stdout=json.dumps({"ubos":[],"types":{}}).encode())
             with patch("scripts.gt_original_921_cb_hlsl.command",compiler), \
                  patch("scripts.gt_original_921_cb_hlsl.rebind_constant_buffers",
-                       lambda source,buffers:source), \
+                       lambda source,buffers,**kwargs:source), \
                  patch("scripts.gt_original_921_cb_hlsl.subprocess.run",
                        side_effect=subprocess_result):
                 if validator_ok:
@@ -50,6 +50,62 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
                         (directory/"original-validator-raw-private.log").is_file())
             return recorded
 
+
+    def test_original_typed_array_holes_only_zero_if_source_reads_prove_safe(self):
+        from scripts.gt_original_921_cb_hlsl import rebind_constant_buffers
+        buffer = {
+            "name": "ActualCB", "source_slot": 0,
+            "members": [{
+                "name": "SOURCE_ARRAY", "index": 0, "array_size": 4,
+                "type": 0, "rows": 1, "columns": 1, "matrix": False,
+            }],
+            "structs": [],
+            "original_named_lanes": [
+                {"path": ["SOURCE_ARRAY", i // 4], "row": 0,
+                 "column": 0, "type": 0, "matrix": False}
+                if i % 4 == 0 else None for i in range(16)
+            ],
+        }
+        header = (
+            "cbuffer Old : register(b1) {\n"
+            "float4 cb0_0_m0[4] : packoffset(c0);\n"
+            "};\n"
+        )
+        valid = header + (
+            "float4 main() : SV_Target { "
+            "return float4(cb0_0_m0[1].x, 0, 0, 1); }\n"
+        )
+        result = rebind_constant_buffers(
+            valid, [buffer], original_array_padding_zero=True)
+        block = result.split(
+            "cbuffer ActualCB : register(b1) {", 1)[1].split("};", 1)[0]
+        self.assertIn("float SOURCE_ARRAY[4] : packoffset(c0.x);", block)
+        self.assertNotIn("_pad", block)
+        self.assertIn("0.0", result)
+        legacy = rebind_constant_buffers(valid, [buffer])
+        old_block = legacy.split(
+            "cbuffer ActualCB : register(b1) {", 1)[1].split("};", 1)[0]
+        self.assertIn("raft921_cb0_pad1", old_block)
+        dynamic = header + (
+            "float4 main() : SV_Target { "
+            "return float4(cb0_0_m0[int(1)].y, 0, 0, 1); }\n"
+        )
+        with self.assertRaisesRegex(
+                ValueError, "original_array_padding_dynamic_read_not_proven"):
+            rebind_constant_buffers(
+                dynamic, [buffer], original_array_padding_zero=True)
+        literal = header + (
+            "float4 main() : SV_Target { "
+            "return float4(cb0_0_m0[1].y, 0, 0, 1); }\n"
+        )
+        with self.assertRaisesRegex(
+                ValueError, "original_array_padding_raw_read_not_proven"):
+            rebind_constant_buffers(
+                literal, [buffer], original_array_padding_zero=True)
+        with self.assertRaisesRegex(
+                ValueError, "unverified_original_typed_padding_zero_optin"):
+            rebind_constant_buffers(
+                valid, [buffer], original_array_padding_zero="True")
 
     def test_vulkan_overlap_classifies_private_original_vs_padding_only_as_counts(self):
         from scripts.gt_original_921_cb_hlsl import (
@@ -169,7 +225,7 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
             directory=Path(td)
             (directory/"resource-bound.hlsl").write_text("source")
             with patch("scripts.gt_original_921_cb_hlsl.rebind_constant_buffers",
-                       lambda source,buffers:source):
+                       lambda source,buffers,**kwargs:source):
                 with self.assertRaisesRegex(ValueError,"unverified_original_hlsl_offsets_opt_in"):
                     verify_named_constant_buffers(
                         directory,0,[],original_hlsl_offsets="true")
