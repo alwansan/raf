@@ -348,6 +348,58 @@ def original_source_cb_reflection_missing_census(source, reflection, buffers):
     return counts
 
 
+def original_source_cb_no_optimization_private_probe(candidate, stage, buffers):
+    """Vulkan1.1 comparison only; never changes original validator verdict.
+
+    Compile the same HLSL a second time without optimization. This determines
+    whether SPIR-V UBO reflection was lost to compiler optimization. The source
+    names, SPIR-V bytes, diagnostics and offsets remain private.
+    """
+    result = {
+        "source_cb_no_opt_compiled": 0,
+        "source_cb_no_opt_spirv_val_vulkan11_valid": 0,
+        "source_cb_no_opt_reflected_ubo_count": 0,
+        "source_cb_no_opt_original_offsets_verified": 0,
+        "source_cb_no_opt_original_named_member_count": 0,
+    }
+    output = candidate.parent / "original-noopt-cb-probe-private.spv"
+    argv = ["glslangValidator", "-V", "-D", "--hlsl-offsets", "-Od",
+            "-S", {0: "frag", 1: "vert"}[stage], "-e", "main",
+            "-o", str(output), str(candidate)]
+    try:
+        compiled = subprocess.run(argv, capture_output=True,
+                                  timeout=120, check=False)
+        if compiled.returncode:
+            return result
+        result["source_cb_no_opt_compiled"] = 1
+        valid = subprocess.run(
+            ["spirv-val", "--target-env", "vulkan1.1", str(output)],
+            capture_output=True, timeout=30, check=False)
+        if valid.returncode:
+            return result
+        result["source_cb_no_opt_spirv_val_vulkan11_valid"] = 1
+        reflected = subprocess.run(
+            ["spirv-cross", str(output), "--reflect"],
+            capture_output=True, timeout=30, check=False)
+        if reflected.returncode:
+            return result
+        data = json.loads(reflected.stdout)
+        result["source_cb_no_opt_reflected_ubo_count"] = len(
+            data.get("ubos", []))
+        try:
+            count = verify_offsets(data, buffers)
+        except (ValueError, KeyError, TypeError):
+            pass
+        else:
+            result["source_cb_no_opt_original_offsets_verified"] = 1
+            result["source_cb_no_opt_original_named_member_count"] = count
+    except (OSError, subprocess.TimeoutExpired, ValueError, TypeError):
+        pass
+    finally:
+        output.unlink(missing_ok=True)
+    return result
+
+
 def verify_named_constant_buffers(private, stage, buffers, *, original_hlsl_offsets=False):
     candidate = private / "named-constant-buffers.hlsl"
     baseline = private / "resource-bound.hlsl"
@@ -414,6 +466,13 @@ def verify_named_constant_buffers(private, stage, buffers, *, original_hlsl_offs
             baseline.read_text(encoding="utf-8"), reflection, buffers)
         (private / "original-binding-reflection-counts-private.json").write_text(
             json.dumps(stats, sort_keys=True) + "\n", encoding="utf-8")
+        if original_hlsl_offsets is True:
+            # Same HLSL with -Od, still strict spirv-val and exact reflection.
+            # Diagnostic-only: the default candidate's failure stays a failure.
+            noopt = original_source_cb_no_optimization_private_probe(
+                candidate, stage, buffers)
+            (private / "original-noopt-reflection-counts-private.json").write_text(
+                json.dumps(noopt, sort_keys=True) + "\n", encoding="utf-8")
         raise
 
 
