@@ -534,7 +534,7 @@ def run(original,manifest,quality,private):
             for pass_index,route_count in enumerate(routing["source_exact_keyword_routes_by_pass"])
         ]
         checkpoint="verify_4_compiled_shaderlab_vertex_fragment_entrypoints"
-        verify_entrypoints(shader,private,routes=route_sets)
+        verify_entrypoints(shader,private,routes=route_sets,original_hlsl_offsets=True)
         report["private_original_6_material_ShaderLab_1pass_composed"]=True
         report["private_original_6_material_ShaderLab_4_vertex_fragment_entrypoints_validated"]=True
         report["original_ShaderLab_android_Unity_or_device_render_proven"]=False
