@@ -66,7 +66,7 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
             "types": {"PRIVATE_STRUCT": {
                 "members": [
                     {"name": "PRIVATE_ALPHA", "offset": 0},
-                    {"name": "PRIVATE_BETA", "offset": 16, "array_stride": 32}]
+                    {"name": "PRIVATE_BETA", "offset": 16, "array": [4], "array_stride": 32}]
             }}
         }
         counts = original_compiled_cb_numeric_offset_profile(
@@ -74,6 +74,7 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
         self.assertEqual(counts["compiled_member_offsets_match_original"], 1)
         self.assertEqual(counts["compiled_member_offsets_differ_original"], 1)
         self.assertEqual(counts["compiled_array_strides_differ_original"], 1)
+        self.assertEqual(counts["compiled_array_element_counts_differ_original"], 1)
         self.assertNotIn("PRIVATE_ALPHA", json.dumps(counts))
         self.assertNotIn("PRIVATE_BETA", json.dumps(counts))
         self.assertNotIn("PRIVATE_STRUCT", json.dumps(counts))
