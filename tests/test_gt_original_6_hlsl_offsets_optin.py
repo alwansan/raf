@@ -143,9 +143,16 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
             "return float4(cb0_0_m0[1].y, 0, 0, 1); }\n"
         )
         with self.assertRaisesRegex(
-                ValueError, "original_array_padding_raw_read_not_proven"):
+                ValueError, "original_array_padding_source_constant_reserved_component_read"):
             rebind_constant_buffers(
                 literal, [buffer], original_array_padding_zero=True)
+        whole = header + (
+            "float4 main() : SV_Target { return cb0_0_m0[1]; }\n"
+        )
+        with self.assertRaisesRegex(
+                ValueError, "original_array_padding_source_full_vector_read_unproven"):
+            rebind_constant_buffers(
+                whole, [buffer], original_array_padding_zero=True)
         with self.assertRaisesRegex(
                 ValueError, "unverified_original_typed_padding_zero_optin"):
             rebind_constant_buffers(
