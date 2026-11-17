@@ -132,6 +132,8 @@ def original_compiled_cb_numeric_offset_profile(reflection, buffers):
         "compiled_member_offsets_differ_original": 0,
         "compiled_member_offsets_nonmonotonic": 0,
         "compiled_array_strides_differ_original": 0,
+        "compiled_array_element_counts_differ_original": 0,
+        "compiled_array_missing_reflected_type": 0,
         "compiled_members_struct_or_array": 0,
         "compiled_members_matrix": 0,
     }
@@ -176,6 +178,12 @@ def original_compiled_cb_numeric_offset_profile(reflection, buffers):
             )
             if (is_array and field.get("array_stride") != expected_stride):
                 result["compiled_array_strides_differ_original"] += 1
+            if is_array:
+                elements = field.get("array")
+                if type(elements) is not list or len(elements) != 1:
+                    result["compiled_array_missing_reflected_type"] += 1
+                elif type(elements[0]) is not int or elements[0] != source["array_size"]:
+                    result["compiled_array_element_counts_differ_original"] += 1
     return result
 
 
