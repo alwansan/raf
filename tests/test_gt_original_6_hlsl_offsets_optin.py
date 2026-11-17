@@ -107,6 +107,55 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
             rebind_constant_buffers(
                 valid, [buffer], original_array_padding_zero="True")
 
+    def test_private_noopt_probe_still_requires_vulkan11_and_original_reflection(self):
+        from scripts.gt_original_921_cb_hlsl import (
+            original_source_cb_no_optimization_private_probe)
+        with TemporaryDirectory() as td:
+            candidate = Path(td) / "candidate.hlsl"
+            candidate.write_text("private source not logged")
+            source = [{
+                "name": "OriginalCB", "source_slot": 0,
+                "translated_binding": 1, "members": [], "structs": [],
+            }]
+            argv_seen=[]
+            def fake_subprocess(argv, **kwargs):
+                argv_seen.append(list(argv))
+                if argv[0] == "glslangValidator":
+                    return SimpleNamespace(returncode=0, stdout=b"", stderr=b"")
+                if argv[0] == "spirv-val":
+                    return SimpleNamespace(returncode=0, stdout=b"", stderr=b"")
+                return SimpleNamespace(
+                    returncode=0, stderr=b"",
+                    stdout=json.dumps({"ubos": [{
+                        "name": "OriginalCB", "set": 0,
+                        "binding": 1, "type": "T"}],
+                        "types": {"T": {"members": []}}}).encode())
+            with patch("scripts.gt_original_921_cb_hlsl.subprocess.run",
+                       side_effect=fake_subprocess):
+                good = original_source_cb_no_optimization_private_probe(
+                    candidate, 0, source)
+            self.assertEqual(good["source_cb_no_opt_compiled"], 1)
+            self.assertEqual(good["source_cb_no_opt_spirv_val_vulkan11_valid"], 1)
+            self.assertEqual(good["source_cb_no_opt_original_offsets_verified"], 1)
+            self.assertIn("-Od", argv_seen[0])
+            self.assertIn("--hlsl-offsets", argv_seen[0])
+            self.assertEqual(
+                argv_seen[1][:3], ["spirv-val", "--target-env", "vulkan1.1"])
+            self.assertNotIn("OriginalCB", json.dumps(good))
+            def reject_validator(argv, **kwargs):
+                return SimpleNamespace(
+                    returncode=1 if argv[0] == "spirv-val" else 0,
+                    stdout=b"", stderr=b"PRIVATE CB name NEVER PUBLISH")
+            with patch("scripts.gt_original_921_cb_hlsl.subprocess.run",
+                       side_effect=reject_validator):
+                bad=original_source_cb_no_optimization_private_probe(
+                    candidate, 0, source)
+            self.assertEqual(
+                bad["source_cb_no_opt_original_offsets_verified"], 0)
+            self.assertEqual(
+                bad["source_cb_no_opt_spirv_val_vulkan11_valid"], 0)
+            self.assertNotIn("PRIVATE CB", json.dumps(bad))
+
     def test_missing_reflected_cb_is_classified_by_actual_raw_source_reads(self):
         from scripts.gt_original_921_cb_hlsl import (
             original_source_cb_reflection_missing_census)
