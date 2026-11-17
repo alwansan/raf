@@ -76,6 +76,11 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
         self.assertEqual(report["validator_overlap_previous_source_field"], 1)
         self.assertEqual(report["validator_overlap_current_synthetic_padding"], 1)
         self.assertEqual(report["validator_overlap_previous_original_array"], 1)
+        self.assertEqual(report["original_source_array_field_count"], 1)
+        self.assertEqual(
+            report["compiled_synthetic_padding_within_original_array_span"], 1)
+        self.assertEqual(
+            report["compiled_synthetic_padding_outside_original_typed_spans"], 0)
         self.assertNotIn("SECRET", json.dumps(report))
 
     def test_compiled_cb_numeric_offset_profile_hides_original_names(self):
