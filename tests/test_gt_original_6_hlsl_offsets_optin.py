@@ -51,6 +51,50 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
             return recorded
 
 
+    def test_private_shaderlab_routes_only_opt_into_proven_noopt(self):
+        from scripts.gt_original_921_shaderlab import verify_entrypoints
+        hlsl = (
+            "HLSLPROGRAM\n"
+            "float4 gt_vs_main() : SV_Position {return 0;}\n"
+            "float4 gt_fs_main() : SV_Target {return 0;}\n"
+            "ENDHLSL\n"
+        )
+        with TemporaryDirectory() as td:
+            recorded = []
+            state = {"entry": ""}
+            def fake_command(argv):
+                recorded.append(list(argv))
+                if argv[0] == "glslangValidator":
+                    state["entry"] = argv[argv.index("-e")+1]
+                return True
+            def fake_reflection(binary):
+                return {"entryPoints": [{"name": state["entry"]}]}
+            with patch("scripts.w1_recover_graphics_programs.command",
+                       side_effect=fake_command), patch(
+                       "scripts.t3_spirv_interface_name_drift.read_reflection",
+                       side_effect=fake_reflection):
+                verify_entrypoints(
+                    hlsl, Path(td), routes=[[[]]],
+                    original_hlsl_offsets=True)
+                opt_in_compiles=[
+                    args for args in recorded if args[0] == "glslangValidator"]
+                self.assertEqual(len(opt_in_compiles), 2)
+                self.assertTrue(all(
+                    "-Od" in args and "--hlsl-offsets" in args
+                    for args in opt_in_compiles))
+                self.assertEqual(len([
+                    args for args in recorded if args[0] == "spirv-val"]), 2)
+                recorded.clear()
+                verify_entrypoints(hlsl, Path(td), routes=[[[]]])
+                self.assertTrue(all(
+                    "-Od" not in args and "--hlsl-offsets" not in args
+                    for args in recorded if args[0] == "glslangValidator"))
+                with self.assertRaisesRegex(
+                        ValueError, "unverified_original_hlsl_offsets_opt_in"):
+                    verify_entrypoints(
+                        hlsl, Path(td), routes=[[[]]],
+                        original_hlsl_offsets="true")
+
     def test_original_typed_array_holes_only_zero_if_source_reads_prove_safe(self):
         from scripts.gt_original_921_cb_hlsl import rebind_constant_buffers
         buffer = {
@@ -305,12 +349,14 @@ class SourceOriginalHLSLOffsets(unittest.TestCase):
         recorded=self.run_candidate()
         self.assertEqual(len(recorded),1)
         self.assertNotIn("--hlsl-offsets",recorded[0])
+        self.assertNotIn("-Od",recorded[0])
         self.assertIn("glslangValidator",recorded[0])
 
     def test_explicit_sha_original_six_uses_hlsl_offsets_only_opt_in(self):
         recorded=self.run_candidate(True)
         self.assertEqual(len(recorded),1)
         self.assertIn("--hlsl-offsets",recorded[0])
+        self.assertIn("-Od",recorded[0])
 
     def test_original_shader_still_requires_real_vulkan_validator(self):
         self.assertIn("--hlsl-offsets",self.run_candidate(True,validator_ok=False)[0])
