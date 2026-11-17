@@ -2115,9 +2115,9 @@ jobs:
           sudo rm -rf /usr/local/lib/android/sdk/ndk /usr/local/lib/android/sdk/platforms /usr/local/lib/android/sdk/system-images /usr/local/lib/android/sdk/cmake /opt/hostedtoolcache/CodeQL
           sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
           test -d "$sdk_root/build-tools"
-          test "$(df -Pk /mnt | awk 'NR==2 {print $4}')" -gt 12582912
+          test "$(df -Pk /mnt | awk 'NR==2 {print $4}')" -gt 16777216
           test ! -e /mnt/raft-unity.swap
-          sudo fallocate -l 8G /mnt/raft-unity.swap
+          sudo fallocate -l 12G /mnt/raft-unity.swap
           sudo chmod 600 /mnt/raft-unity.swap
           sudo mkswap /mnt/raft-unity.swap
           sudo swapon /mnt/raft-unity.swap
