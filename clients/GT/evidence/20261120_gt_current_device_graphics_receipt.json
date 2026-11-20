@@ -1,0 +1,40 @@
+{
+  "pinned_cl_commit": "8db59a417be025dd8194f202a6dd29aaa132d300",
+  "water_roots": {
+    "1|UltimateWater/Utilities/FFT Utilities|1": 484,
+    "1|UltimateWater/Foam/Global|1": 484
+  },
+  "first_root_lines": {
+    "1|UltimateWater/Utilities/FFT Utilities|1": 488,
+    "1|UltimateWater/Foam/Global|1": 592
+  },
+  "native_abort_line": 26843,
+  "native_cause": "Scudo internal map failure: Out of memory",
+  "vulkan_renderpass_frame_line": 26870,
+  "run112_head": "f5115a4eb3593e91228d2f05727604ab69b1eaf6",
+  "artifact_identity": "versionCode112 inferred from patch.112 path; cryptographic APK equality unverified",
+  "schema": 1,
+  "session": "20261120-194258-229",
+  "source_raw_bytes": 2700147,
+  "shader_pass_error_roots": 968,
+  "compute_kernel_error_roots": 0,
+  "obb_guid_load_error_roots": 3,
+  "cursor_format_warning_roots": 1,
+  "native_fatal_markers": 3,
+  "native_crashes": 1,
+  "target_package": "com.alwansan.raft.androidtest",
+  "app_version": "1.1.01",
+  "unity_version": "2021.3.45f2",
+  "scripting_backend": "il2cpp",
+  "architecture": "arm64-v8a",
+  "graphics_api_evidence": "Adreno Vulkan vkCmdBeginRenderPass frame",
+  "peak_process_rss_kb": 1351408,
+  "peak_process_pss_kb": 2024760,
+  "causation_limit": "Native allocation failure during Vulkan render-pass begin is proven; exact allocation size, resource owner, leak and causal relationship to invalid passes are not established. OBB GUID error does not prove missing expansion data.",
+  "source_urls": {
+    "summary": "https://github.com/alwansan/CL/blob/8db59a417be025dd8194f202a6dd29aaa132d300/raft%20log/lf/LogRaft-20261120-194258-229/session-summary.json",
+    "raw": "https://github.com/alwansan/CL/blob/8db59a417be025dd8194f202a6dd29aaa132d300/raft%20log/lf/LogRaft-20261120-194258-229/raft-20261120-194258-229-00001.log.txt",
+    "run": "https://github.com/alwansan/raf/actions/runs/44053092399"
+  },
+  "fft_pass_requirement_provenance": "484 pass-index1 failures prove minimum2, complete original topology unverified; no substitute pass authored"
+}

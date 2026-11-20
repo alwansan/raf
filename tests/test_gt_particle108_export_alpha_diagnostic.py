@@ -164,6 +164,27 @@ class OriginalParticle108ExportAlphaTests(unittest.TestCase):
             classify_original_local_texture_trace(
                 {"objects":[trace["objects"][0],trace["objects"][0]]},pointers)
 
+    def test_local_texture_exportability_is_not_inferred_from_pointer_match(self):
+        source={"owner":"Raft_Data/sharedassets0.assets","path_id":3}
+        row={"class_id":28,"source":source,
+             "export":{"file_id":2800000,"guid":"b"*32,"type":0}}
+        pointers={("sharedassets0.assets",3):(2800000,"b"*32,0)}
+        for value in (False, True, None):
+            with self.subTest(exportable=value):
+                candidate=dict(row)
+                if value is not None:
+                    candidate["exportable"]=value
+                proof=classify_original_local_texture_trace(
+                    {"objects":[candidate]},pointers)
+                self.assertIs(proof["original_local_Type0_collection_exportable"],value)
+                self.assertEqual(
+                    proof["original_local_Type0_nonexportable_collection_proven"],
+                    value is False)
+                self.assertFalse(proof["original_local_Type0_external_GUID_inferred"])
+        row["exportable"]="false"
+        with self.assertRaisesRegex(ValueError,"invalid_local_Texture2D_exportability"):
+            classify_original_local_texture_trace({"objects":[row]},pointers)
+
     def test_local_type0_Texture2D_is_proven_original_but_not_fabricated_image_guid(self):
         originals={("sharedassets0.assets",i):1 for i in (1,2,3)}
         original_materials={}

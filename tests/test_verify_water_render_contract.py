@@ -19,6 +19,28 @@ def write_shader(assets, name, passes, program=True):
 
 
 class WaterRenderGateTests(unittest.TestCase):
+    def test_nov20_fft_utilities_pass_one_cannot_escape_water_gate(self):
+        # Current-device receipt records 484 requests for pass 1 against a
+        # one-pass FFT Utilities material. Other valid source contracts must
+        # not hide this missing shader contract.
+        with tempfile.TemporaryDirectory() as temp:
+            project = Path(temp)
+            assets = project / "Assets"
+            assets.mkdir()
+            name = "UltimateWater/Utilities/FFT Utilities"
+            for other, count in REQUIRED_PASS_COUNT.items():
+                if other != name:
+                    write_shader(assets, other, count)
+            shader = write_shader(assets, name, 1)
+            result = inspect(project)
+            self.assertFalse(result["all_logged_shader_pass_requirements_satisfied"])
+            self.assertEqual(result["shader_contracts"][name]["required_passes_from_device_log"], 2)
+            self.assertFalse(result["shader_contracts"][name]["contract_satisfied"])
+            shader.write_text(shader.read_text().replace("} }", "Pass { CGPROGRAM\nvoid main() {}\nENDCG\n} } }"))
+            restored = inspect(project)
+            self.assertTrue(restored["shader_contracts"][name]["contract_satisfied"])
+            self.assertFalse(native_ready(restored))
+
     def test_exact_observed_passes_and_water_kernel_are_required(self):
         with tempfile.TemporaryDirectory() as temp:
             project = Path(temp)

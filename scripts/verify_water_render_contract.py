@@ -1,7 +1,8 @@
 """Fail-closed audit for original water shader passes observed missing on Android.
 
 No shader source is generated, rewritten, downloaded or published. The exact
-pass-index minima are grounded in the owner's November 2 device error log.
+pass-index minima are grounded in the owner's November 2 and November 20
+device error logs.
 This gate is intended to run AFTER authored shader restorations but BEFORE
 an expensive Unity native build when the owner eventually authorizes one.
 """
@@ -16,6 +17,10 @@ from scripts.b47_compute_kernel_contract import kernel_entrypoint_profile
 # Unity logs show requests for these maximum pass indices. Valid index N
 # requires a restored ShaderLab source with at least N+1 authored passes.
 REQUIRED_PASS_COUNT = {
+    # CL 8db59a4 / LogRaft-20261120-194258-229, raw lines 488 onward:
+    # 484 pass-1 failures with one active pass. This is an observed minimum,
+    # not a claim that the complete original shader has only two passes.
+    "UltimateWater/Utilities/FFT Utilities": 2,
     "UltimateWater/Spectrum/Water Spectrum": 6,  # logged index 5
     "UltimateWater/Utilities/Blur (Subsurface Scattering)": 2,  # 1
     "UltimateWater/Foam/Global": 2,  # 1

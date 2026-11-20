@@ -269,11 +269,21 @@ def classify_original_local_texture_trace(trace, local_pointers):
         return {"same_export_original_local_Texture2D28_trace_rows":0,
                 "same_export_original_local_PPtr_matches_Texture2D28_trace":False,
                 "original_local_Type0_Texture2D_export_status":"NO_DIRECT_SOURCE_TEXTURE28_TRACE",
+                "original_local_Type0_collection_exportable":None,
+                "original_local_Type0_nonexportable_collection_proven":False,
                 "original_local_Type0_external_GUID_inferred":False}
+    # A same-instance pointer does not imply a separately exported image.
+    # Preserve missing legacy metadata as unknown; do not infer from type0.
+    exportable=rows[0].get("exportable")
+    if exportable is not None and type(exportable) is not bool:
+        raise ValueError("invalid_local_Texture2D_exportability")
     fid,guid,kind=pointer(rows[0]["export"])
     is_match=(fid,guid,int(kind))==local
     return {"same_export_original_local_Texture2D28_trace_rows":1,
             "same_export_original_local_PPtr_matches_Texture2D28_trace":is_match,
+            "original_local_Type0_collection_exportable":exportable,
+            "original_local_Type0_nonexportable_collection_proven":(
+                is_match and exportable is False),
             "original_local_Type0_Texture2D_export_status":(
                 "ORIGINAL_LOCAL_POINTER_EXACT_TRACE_MATCH" if is_match
                 else "SOURCE_TEXTURE_TRACE_POINTER_DIFFERS_FROM_LOCAL_MATERIAL_PPTR"),
@@ -430,6 +440,8 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
                      "same_export_original_local_Texture2D28_trace_rows":0,
                      "same_export_original_local_PPtr_matches_Texture2D28_trace":False,
                      "original_local_Type0_Texture2D_export_status":"NO_LOCAL_PPTR",
+                     "original_local_Type0_collection_exportable":None,
+                     "original_local_Type0_nonexportable_collection_proven":False,
                      "original_local_Type0_external_GUID_inferred":False})
     mark("decode_original_local_type0_Texture2D28_top_mip")
     source_local_alpha={
