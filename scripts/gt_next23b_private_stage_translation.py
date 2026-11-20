@@ -72,18 +72,20 @@ def compose_private(parsed, paired, orphans, passes, table, refs, private, repor
             for route in row['routes']:
                 for stage in ('vs', 'fs'):
                     route[stage] = refs[route[stage]]
+        checkpoint = 'source_property_and_pass_layout'
+        properties = parsed.get('m_PropInfo', {}).get('m_Props', [])
+        if type(properties) is not list:
+            raise ValueError('invalid_next23b_source_properties')
+        layout, _ = shaderlab_layout(parsed, passes, expected_property_count=len(properties),
+                                      allow_original_per_renderer_and_drawer=True,
+                                      allow_next23b_texture_hdr_flags=True)
+        (private / 'original-private-keyword-routes.json').write_text(json.dumps(packet, sort_keys=True) + '\n', encoding='utf-8')
+        (private / 'original-private-layout.txt').write_text(layout, encoding='utf-8')
         checkpoint = 'compile_all_source_keyword_routes'
         compiled = compile_routed_stages(packet, private)
         if type(compiled) is not int or compiled != 2312:
             raise ValueError('next23b_complete_routed_stage_compile_required')
         report['private_exact_keyword_routed_stages_compiled'] = compiled
-        checkpoint = 'source_property_and_pass_layout'
-        properties = parsed.get('m_PropInfo', {}).get('m_Props', [])
-        if type(properties) is not list:
-            raise ValueError('invalid_next23b_source_properties')
-        layout, _ = shaderlab_layout(parsed, passes, expected_property_count=len(properties))
-        (private / 'original-private-keyword-routes.json').write_text(json.dumps(packet, sort_keys=True) + '\n', encoding='utf-8')
-        (private / 'original-private-layout.txt').write_text(layout, encoding='utf-8')
         checkpoint = 'source_CB_sampler_and_varying_bindings'
         named = stage_parameter_records(paired, orphans, passes, table, private, refs)
         if named.get('original_variant_stages_with_parameter_records') != 2312:
@@ -113,6 +115,9 @@ def compose_private(parsed, paired, orphans, passes, table, refs, private, repor
             traceback.print_exc(file=log)
         report['composition_safe_checkpoint'] = checkpoint
         report['composition_error_type'] = type(exc).__name__
+        from scripts.t3_particle108_source_propstate import PrivateContractError, CATEGORIES
+        if isinstance(exc, PrivateContractError) and exc.category in CATEGORIES:
+            report['composition_safe_failure_category'] = exc.category
     return report
 
 

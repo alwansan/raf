@@ -119,6 +119,16 @@ class Next23BStageTranslation(unittest.TestCase):
             compiler.assert_not_called()
         self.assertEqual(report['status'], 'INCONCLUSIVE_NEXT23B_PRIVATE_COMPOSITION')
 
+    def test_only_allowlisted_property_failure_category_is_public(self):
+        from scripts.t3_particle108_source_propstate import PrivateContractError
+        module = 'scripts.gt_next23b_private_stage_translation'
+        report = {}
+        with tempfile.TemporaryDirectory() as tmp, \
+                patch(module + '.keyword_routes', side_effect=PrivateContractError('PROPERTY_RANGE')):
+            compose_private({}, [], [], [], [], {}, Path(tmp), report)
+        self.assertEqual(report['composition_safe_failure_category'], 'PROPERTY_RANGE')
+        self.assertEqual(report['status'], 'INCONCLUSIVE_NEXT23B_PRIVATE_COMPOSITION')
+
     def test_truthy_compiler_strings_do_not_prove_translation(self):
         distinct = {(i % 2, str(i)): dict(stage=i % 2, source_code=bytes([i]))
                     for i in range(134)}

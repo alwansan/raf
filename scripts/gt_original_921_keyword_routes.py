@@ -76,11 +76,13 @@ def keyword_routes(parsed, pairs, orphans, passes):
 
 def shaderlab_layout(parsed, passes, expected_property_count=35, *,
                      allow_out_of_range_defaults=False,
-                     allow_original_per_renderer_and_drawer=False):
+                     allow_original_per_renderer_and_drawer=False,
+                     allow_next23b_texture_hdr_flags=False):
     properties, counts = serialize_properties(
         parsed, allow_hidden_and_toggle=True,
         allow_out_of_range_defaults=allow_out_of_range_defaults,
-        allow_original_per_renderer_and_drawer=allow_original_per_renderer_and_drawer)
+        allow_original_per_renderer_and_drawer=allow_original_per_renderer_and_drawer,
+        allow_next23b_texture_hdr_flags=allow_next23b_texture_hdr_flags)
     if counts["original_authored_property_count"] != expected_property_count:
         raise ValueError("original_921_property_count_drift")
     lines = ["// Private layout fragment. Attach recovered HLSL before import.",

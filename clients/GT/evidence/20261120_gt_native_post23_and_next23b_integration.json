@@ -153,5 +153,40 @@
   "completion": "NOT_COMPLETE: remaining98 Dummy, authentic NEXT23b translation, NEXT6 source semantics, water/FFT Utilities/Foam actual restoration, local fire texture runtime alpha, native memory failure and device pixels remain open",
   "next23b_translation_artifact": 14650794395,
   "next23b_all_three_compiler_gates_valid": 134,
-  "next23b_private_shaderlab_composition_or_Unity_or_GUID_proven": false
+  "next23b_private_shaderlab_composition_or_Unity_or_GUID_proven": false,
+  "next23b_composition_run": 44781063594,
+  "next23b_composition_result": "INCONCLUSIVE_NEXT23B_PRIVATE_COMPOSITION",
+  "next23b_composition_artifact": 14651057331,
+  "next23b_routed_stages_compiled_before_layout_rejection": 2312,
+  "next23b_rejection_checkpoint": "source_property_and_pass_layout",
+  "next23b_local_SHA_original_property_probe": {
+    "unique_matching_source_profile_in_two_owners": 1,
+    "route_counts": [
+      512,
+      4,
+      128,
+      512
+    ],
+    "property_count": 19,
+    "flags_counts": {
+      "0": 13,
+      "2": 2,
+      "4": 3,
+      "16": 1
+    },
+    "attribute_count_distribution": {
+      "0": 14,
+      "1": 5
+    },
+    "source_serializer_rejection": "PROPERTY_FLAGS_OR_ATTRIBUTES"
+  },
+  "next23b_property_flags_primary_reference": "https://github.com/Unity-Technologies/UnityCsReference/blob/2021.3/Runtime/Export/Shaders/ShaderProperties.cs",
+  "next23b_source_property_layout_after_exact_flag_fix": {
+    "SHA_verified_owners": 2,
+    "unique_exact_source_profile": 1,
+    "original_properties_preserved": 19,
+    "original_passes_preserved": 4,
+    "source_routes_retained": 1156,
+    "Unity_or_GPU_success_claimed": false
+  }
 }

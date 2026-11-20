@@ -45,7 +45,8 @@ def require(test, category):
 
 def serialize_properties(parsed, *, allow_hidden_and_toggle=False,
                          allow_out_of_range_defaults=False,
-                         allow_original_per_renderer_and_drawer=False):
+                         allow_original_per_renderer_and_drawer=False,
+                         allow_next23b_texture_hdr_flags=False):
     """Return only private text + public-safe type counts; never log source values."""
     info = parsed.get("m_PropInfo") if type(parsed) is dict else None
     require(type(info) is dict and type(info.get("m_Props")) is list,
@@ -91,7 +92,8 @@ def serialize_properties(parsed, *, allow_hidden_and_toggle=False,
                 exact_source_drawer=source_drawer
         source_flag_contract = (
             allow_original_per_renderer_and_drawer and
-            type(flags) is int and flags in (0,1,2) and
+            type(flags) is int and (flags in (0,1,2) or
+                (allow_next23b_texture_hdr_flags is True and flags in (4,16))) and
             type(attributes) is list and
             (not attributes or toggle is not None or exact_source_drawer is not None))
         require(type(flags) is int and type(attributes) is list and
@@ -102,6 +104,9 @@ def serialize_properties(parsed, *, allow_hidden_and_toggle=False,
         typ=prop["m_Type"]
         require(type(typ) is int and typ in (0,1,2,3,4),
                 "PROPERTY_TYPE_UNSUPPORTED")
+        if allow_next23b_texture_hdr_flags is True:
+            require((flags != 4 or typ == 4) and (flags != 16 or typ == 0),
+                    "PROPERTY_FLAGS_OR_ATTRIBUTES")
         values=[prop["m_DefValue[%d]"%i] for i in range(4)]
         require(all(type(v) in (int,float) and math.isfinite(v)
                     for v in values), "PROPERTY_DEFAULT_NUMERIC")
@@ -152,6 +157,11 @@ def serialize_properties(parsed, *, allow_hidden_and_toggle=False,
             # not HideInInspector. Other unproven bit combinations still fail.
             prefixes=("[HideInInspector] " if flags == 1 else "") + (
                 "[PerRendererData] " if flags == 2 else "")
+            # Unity 2021.3 ShaderPropertyFlags is synchronized with serialized
+            # ShaderLab flags: NoScaleOffset=1<<2, HDR=1<<4. Exact NEXT23b
+            # flags only; no bit combinations or additional flags inferred.
+            if allow_next23b_texture_hdr_flags is True:
+                prefixes += "[NoScaleOffset] " if flags == 4 else "[HDR] " if flags == 16 else ""
             if exact_source_drawer is not None:
                 prefixes+=f"[{exact_source_drawer}] "
             elif toggle:

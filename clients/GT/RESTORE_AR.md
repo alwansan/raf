@@ -1,3 +1,9 @@
+## GT — دعم خصائصNEXT23b الأصلية ورفضFFT داخلUnity — 20 نوفمبر
+
+- توقفNEXT23b44781063594 عندتحويلخصائصالمصدر، بعدنجاح134برنامجاً و2312مرحلةمرتبطة. فحصالأصلحقق19خاصية بأعلام0/2/4/16؛ أضيفopt-in محدد لـNoScaleOffset4 علىTexture وHDR16 علىColor معPerRendererData/drawers الأصلية، بالاعتمادعلىUnityCsReference2021.3، دونتغييرقيمأوحدودRange أوتوسيعالعقودالسابقة. فحصSHAالمحليأصبحيسلسل19خاصية و4Pass و1156route. المراجعةوالاختباراتنجحت؛ لاShaderLab/Unityقبولكاملحتىالفحصالتالي.
+- فشلFFT Utilities44781701884 فعلياًفيUnity:passCount7 وregisteredKeywordVariants1، لكنerrors1 وprivateBundleCompiledfalse. رسالةالمترجم:generated SPIR-V invalid Expected Coordinate to be float scalar or vector، ضمنgt_fs_main. ترجمة12/12المصدر و14entrypointsمحلياًتبقىمثبتة، لكنلاUnity/GUID/Androidقبول. المثبتالمهيألهبوابةثلاثةإيصالاتمستقلةوسيبقىغيرمفعّلحتىتصحيحالمترجموقبولالحزمةالحقيقية.
+- لاXAPKجديد. العملمستمرللاستعادةالكاملة، والقبولالمادييبقى688/786 و98Dummy/37GUID.
+
 ## GT — FFT Utilities: استعادة مصدر محلية كاملة وفحصUnity مستقل — 20 نوفمبر
 
 - استُعيد المصدر SHAالأصلي محلياً:12/12برنامجDXBC مترجمة وroundtripVulkan1.1،7Pass أصلية بلاkeywords،14 نقطةدخول بعد ربطCB/samplers/varyings المصدرية. SHAالمرشحf8575ebd855cff193c9fdb506b5f2b2d427d4c583eb9c5c7af0d6ff39c948b23. الدليل:evidence/20261120_gt_fft_utilities_original_topology.json.

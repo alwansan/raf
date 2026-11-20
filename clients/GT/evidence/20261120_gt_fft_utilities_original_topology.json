@@ -39,5 +39,15 @@
     "status": "GT_FFT_UTILITIES_AUTHENTIC_SEVEN_PASS_SOURCE_COMPILED"
   },
   "focused_fft_tests_passed": 7,
-  "independent_review": "no blocking findings in source/Unity-probe/bundle proof; actual Unity not executed"
+  "independent_review": "no blocking findings in source/Unity-probe/bundle proof; actual Unity not executed",
+  "Unity_attempt_run": 44781701884,
+  "Unity_attempt_result": {
+    "passCount": 7,
+    "registeredKeywordVariants": 1,
+    "errors": 1,
+    "privateBundleCompiled": false,
+    "failure": "generated SPIR-V invalid: Expected Coordinate to be float scalar or vector",
+    "shader_stage_entry": "gt_fs_main",
+    "same_export_GUID_install_enabled": false
+  }
 }
