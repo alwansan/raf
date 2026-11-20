@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "baseline_sha": "f5115a4eb3593e91228d2f05727604ab69b1eaf6",
+  "date": "2026-11-20",
+  "native_next_groups_wired": [
+    "30",
+    "23",
+    "18",
+    "17",
+    "15",
+    "11",
+    "10p33",
+    "10p31",
+    "7p11",
+    "7p33"
+  ],
+  "native_pipeline_executed_after_change": false,
+  "new_XAPK_requested": false,
+  "accepted_same_export_run": 43929698985,
+  "accepted_custom_non_dummy_material_documents": 688,
+  "accepted_custom_total_material_documents": 786,
+  "accepted_dummy_material_documents": 98,
+  "accepted_remaining_original_shader_GUID_targets": 37,
+  "accepted_native_or_device_new_count": false,
+  "fresh_all82_pristine_source_staging_required": true,
+  "native_protected_hash_baseline": "actual post9 project captured dynamically; equality checked after each accepted batch; do not assume standalone29213 file count",
+  "next23b_topology_source_run": 44001193147,
+  "next23b_expected_topology": {
+    "passes": 4,
+    "paired_VSFS_routes": 1156,
+    "unpaired": 0,
+    "distinct_D3D11_programs": 134
+  },
+  "next23b_actual_translation_run": null,
+  "focused_tests_passed": 58,
+  "bash_syntax_steps_passed": 179,
+  "isolated_test_file_population": 740,
+  "initial_passed_test_files": 712,
+  "initial_failed_test_files": 28,
+  "new_historical_fixture_contract_failure_fixed": true,
+  "remaining_failing_test_files_reproduced_on_baseline": [
+    {
+      "file": "test_android_delivery_package.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_fft_requested_workload.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_stage_fmod_android_runtime.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t1_fft_dispatch_group_validation.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t1_fft_pair_pass_identity_c8f1.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t1_fft_rgba_error_signature.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t1_fft_trace_first_divergence_7c3a.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t1_kernel6_error_classification.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t1_kernel6_log_context.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t1_water_first_raw_context.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t2_cfg_malformed_records.py",
+      "baseline_code": 5
+    },
+    {
+      "file": "test_t2_cil_return_join_gate.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t2_external_pptr_manifest_resolver.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t2_foam_pass1_gate.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t2_foam_pass_role_matrix.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t3_dxbc_signature_contract.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t3_material_shader_meta_orphan.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t3_rgb_drift_strata.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t3_shader_owner_type.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t3_smoke_pass_state_gate_v2.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t3_smoke_render_state_gate.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t3_stage_particle_nonexportable_trace.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t3_vf_spirv_component_coverage.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t4_capture_reader_summary_boundary.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t4_ledger_event_identity.py",
+      "baseline_code": 1
+    },
+    {
+      "file": "test_t5_unified_saf_stream_contract.py",
+      "baseline_code": 5
+    },
+    {
+      "file": "test_we_blur_failure_categories.py",
+      "baseline_code": 1
+    }
+  ],
+  "full_suite_green": false,
+  "independent_review": "No concrete blocking findings; focused source/path/cleanup review only; no Unity or device validation",
+  "completion": "NOT_COMPLETE: remaining98 Dummy, authentic NEXT23b translation, NEXT6 source semantics, water/FFT Utilities/Foam actual restoration, local fire texture runtime alpha, native memory failure and device pixels remain open"
+}

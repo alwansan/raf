@@ -23,11 +23,11 @@ class OriginalFoamNativeIntegrationContract(unittest.TestCase):
 
     def test_original_zip2_only_four_stage_private_source_and_existing_guid(self):
         begin=self.flow.index("      - name: GT restore original Foam Global")
-        end=self.flow.index("      - name: Inventory actual exported Material")
+        end=self.flow.index("      - name: Retain only safe Foam",begin)
         code=self.flow[begin:end]
         for snippet in (
-            'original="$RUNNER_TEMP/w1-original/Raft_Data"',
-            'test -s "$original/sharedassets0.assets"',
+            'original="$RUNNER_TEMP/w1-original"',
+            'test -s "$original/Raft_Data/sharedassets0.assets"',
             "scripts.b20_private_foam_packet",
             "scripts.t2_foam_private_shaderlab_candidate",
             "scripts.t2_foam_private_installer",
@@ -40,13 +40,17 @@ class OriginalFoamNativeIntegrationContract(unittest.TestCase):
             "assert r['Android_water_pixels_verified'] is False",
         ):
             self.assertIn(snippet,code)
+        # OWNER already includes Raft_Data/. The documented trial must verify
+        # the same authenticated file as the packet rather than a doubled path.
+        self.assertIn("src = Path(os.environ['RUNNER_TEMP']) / 'w1-original' / OWNER",code)
         self.assertNotIn("git lfs pull",code.lower())
         self.assertNotIn("git lfs fetch",code.lower())
         self.assertNotIn("guid: ",code.lower())
 
     def test_cleanup_and_only_numeric_safe_receipt_uploaded(self):
         start=self.flow.index("      - name: GT restore original Foam Global")
-        end=self.flow.index("      - name: Recover original Particle108 ShaderLab")
+        cleanup=self.flow.index("      - name: Remove private original Foam",start)
+        end=self.flow.index("      - name:",cleanup+len("      - name:"))
         block=self.flow[start:end]
         self.assertEqual(block.count("actions/upload-artifact@v4"),1)
         self.assertIn('rm -rf -- "$RUNNER_TEMP/gt-native-foam-private"',block)

@@ -49,10 +49,21 @@ class T5LiveWaterAcknowledgment(unittest.TestCase):
         self.assertEqual(p["job_id"], 127331915972)
         self.assertIn("Authentic water gate", p["failed_step"])
 
-    def test_original_shader_contract_population_is_complete(self):
+    def test_historical_shader_population_precedes_nov20_fft_requirement(self):
+        historical = {
+            "Sandbox/VolumetricLight",
+            "UltimateWater/Depth/Depth Copy",
+            "UltimateWater/Foam/Global",
+            "UltimateWater/Spectrum/Water Spectrum",
+            "UltimateWater/Utilities/Blur (Subsurface Scattering)",
+        }
         self.assertEqual(
-            set(self.report["shader_contracts"]), set(REQUIRED_PASS_COUNT)
+            set(self.report["shader_contracts"]), historical
         )
+        # Keep the frozen November 5 receipt unchanged. It cannot stand in
+        # for the new FFT Utilities requirement observed on November 20.
+        self.assertEqual(set(REQUIRED_PASS_COUNT) - historical,
+                         {"UltimateWater/Utilities/FFT Utilities"})
         self.assertFalse(native_ready(self.report))
         self.assertFalse(self.report["device_execution_verified"])
         self.assertFalse(self.report["authentic_water_kernel_identity_verified"])
