@@ -1,3 +1,9 @@
+## GT — FFT Utilities: استعادة مصدر محلية كاملة وفحصUnity مستقل — 20 نوفمبر
+
+- استُعيد المصدر SHAالأصلي محلياً:12/12برنامجDXBC مترجمة وroundtripVulkan1.1،7Pass أصلية بلاkeywords،14 نقطةدخول بعد ربطCB/samplers/varyings المصدرية. SHAالمرشحf8575ebd855cff193c9fdb506b5f2b2d427d4c583eb9c5c7af0d6ff39c948b23. الدليل:evidence/20261120_gt_fft_utilities_original_topology.json.
+- أضيف فحصUnity2021.3.45f2AndroidVulkan مستقل فيraft-gt-fft-utilities-source.yml. يتطلب7Pass فعلية وحزمة خاصة مفكوكة تثبتVS/FS لكلPass وصفرkeywords ومطابقةSHA. الـSVC يسجلvariantواحدةNormal تغطيالسبع؛ لا7 سجلات وهمية. اجتاز7اختباراتFFT و19 انحدار921 ومراجعةمستقلة؛ Unityلمينفذبعدهذهالكتابة، ولاGUIDاللعبة أوالهاتفثبتا.
+- بدأ تركيبNEXT23b الكامل في44781063594، وليس قبولاًحتىانتهاءفحوصه. حافظعلىآخرقبول688/786 و98Dummy/37GUID. لاXAPKجديد.
+
 ## GT — مصدر NEXT23b134/134 وFFT Utilities7Pass — 20 نوفمبر
 
 - [44779897149](https://github.com/alwansan/raf/actions/runs/44779897149) نجح فعلياً في خطوة الترجمة؛ قُرئ artifact14650794395:134/134 DXBC→SPIR-V Vulkan1.1→HLSL→roundtripVulkan1.1،4Pass و1156 VSFSroutes و0orphan. **هذا مصدر stages فقط، لا ShaderLab مكتمل أو Unity أو GUID أو مواد إضافية مقبولة**؛ يبقى قبول688/786 و98Dummy كما هو. جارٍ استكمال composition من الخواص والـCB والـsamplers الأصلية.

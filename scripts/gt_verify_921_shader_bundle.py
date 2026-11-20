@@ -86,23 +86,31 @@ def vulkan_execution_models(blob, decoder):
     return models
 
 
-def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None, *, next30=False, next17=False, next7p11=False):
+def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None, *, next30=False, next17=False, next7p11=False, fft_utilities=False):
     import UnityPy
 
     shader = source.read_bytes()
     expected_name = exported_shader_identity(shader.decode("utf-8"))
-    if sum(bool(value) for value in (next30, next17, next7p11)) > 1:
+    if sum(bool(value) for value in (next30, next17, next7p11, fft_utilities)) > 1:
         raise ValueError("mutually_exclusive_original_shader_source_route_profiles")
     # This profile only validates serialized private candidate routes; never
     # interpret a matching source Shader48 name as an exported GUID.
-    counts = (NEXT_SEVEN_7P11_ORIGINAL_ROUTES if next7p11 else
+    counts = ((1,) * 7 if fft_utilities else
+              NEXT_SEVEN_7P11_ORIGINAL_ROUTES if next7p11 else
               SKIN_ROUTES if next17 else
               NEXT_30_MATERIAL_ROUTES if next30 else
               expected_routes_for_shader(expected_name))
+    if fft_utilities and expected_name != "UltimateWater/Utilities/FFT Utilities":
+        raise ValueError("fft_utilities_exact_original_lookup_name_required")
+    if fft_utilities and (smolv_decoder is None or engine_route_manifest is not None):
+        raise ValueError("fft_utilities_requires_decoded_empty_keyword_routes")
     unity = json.loads(receipt.read_text(encoding="utf-8"))
+    if fft_utilities and (unity.get("passCount") != 7 or unity.get("errors") != 0):
+        raise ValueError("fft_utilities_unity_seven_pass_compilation_unverified")
     if (unity.get("privateBundleCompiled") is not True
             or unity.get("androidVulkanOnly") is not True
-            or unity.get("registeredRoutes") != sum(counts)
+            or (unity.get("registeredKeywordVariants") != 1 if fft_utilities
+                else unity.get("registeredRoutes") != sum(counts))
             or unity.get("candidateSha256") != sha256(shader).hexdigest()):
         raise ValueError("original_921_unity_bundle_unverified")
     trees = [obj.read_typetree() for obj in UnityPy.load(str(bundle)).objects
@@ -121,14 +129,16 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
                          for item in packet["passes"]]
         if tuple(map(len, engine_routes)) != counts:
             raise ValueError("original_921_engine_route_contract_mismatch")
-    result = verify_routes(tree["m_ParsedForm"], records(segments), engine_routes, smolv_decoder, counts)
+    result = verify_routes(tree["m_ParsedForm"], records(segments), engine_routes, smolv_decoder, counts, zero_keywords=fft_utilities)
     return dict(result, candidate_sha256=unity["candidateSha256"],
                 engine_keywords_verified=engine_routes is not None,
                 vertex_and_fragment_entrypoints_verified=smolv_decoder is not None)
 
 
-def verify_routes(parsed, entries=None, engine_routes=None, smolv_decoder=None, expected_counts=EXPECTED_ROUTES):
+def verify_routes(parsed, entries=None, engine_routes=None, smolv_decoder=None, expected_counts=EXPECTED_ROUTES, *, zero_keywords=False):
     keywords = parsed["m_KeywordNames"]
+    if zero_keywords and (keywords or tuple(expected_counts) != (1,) * 7 or engine_routes is not None):
+        raise ValueError("fft_utilities_bundle_requires_seven_zero_keyword_routes")
     subshaders = parsed["m_SubShaders"]
     if len(subshaders) != 1 or len(subshaders[0]["m_Passes"]) != len(expected_counts):
         raise ValueError("original_921_bundle_pass_topology_mismatch")
@@ -164,6 +174,8 @@ def verify_routes(parsed, entries=None, engine_routes=None, smolv_decoder=None, 
                         if (0 if stage == "progVertex" else 4) not in decoded[blob_index]:
                             continue
                 indices = row["m_KeywordIndices"]
+                if zero_keywords and (indices or row.get("m_GlobalKeywordIndices") or row.get("m_LocalKeywordIndices")):
+                    raise ValueError("fft_utilities_bundle_nonempty_source_keywords")
                 if any(type(key) is not int or not 0 <= key < len(keywords) for key in indices):
                     raise ValueError("original_921_bundle_keyword_index_invalid")
                 names = {keywords[key] for key in indices}
@@ -211,8 +223,9 @@ def main():
     variant_profile.add_argument("--next30", action="store_true", help="Require verified original 30-material [8,13,8,2] routes")
     variant_profile.add_argument("--next17", action="store_true", help="Require SHA-original 17-material 3-pass [8,13,2] routes")
     variant_profile.add_argument("--next7p11", action="store_true", help="Require SHA-original distinct 7-material 3-pass [4,5,2] routes")
+    variant_profile.add_argument("--fft-utilities", action="store_true", help="Require seven source passes with one empty-keyword VSFS route each")
     args = parser.parse_args()
-    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest, args.smolv_decoder, next30=args.next30, next17=args.next17, next7p11=args.next7p11)
+    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest, args.smolv_decoder, next30=args.next30, next17=args.next17, next7p11=args.next7p11, fft_utilities=args.fft_utilities)
     args.out.write_text(json.dumps(result, sort_keys=True) + "\n", encoding="utf-8")
     print("GT_ORIGINAL_921_BUNDLE_ROUTES " + json.dumps(result, sort_keys=True))
 

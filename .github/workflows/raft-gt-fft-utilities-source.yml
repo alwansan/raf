@@ -1,0 +1,160 @@
+name: GT authentic FFT Utilities seven Unity Vulkan passes (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_fft_utilities_restore.py
+      - tests/test_gt_fft_utilities_restore.py
+      - .github/workflows/raft-gt-fft-utilities-source.yml
+      - scripts/gt_verify_921_shader_bundle.py
+      - tests/test_gt_fft_utilities_bundle.py
+      - android-port/Experiments/GT/Editor/FFTUtilitiesShaderValidation.cs
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gt-fft-utilities-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-recovery:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            .github/workflows
+            scripts
+            tests
+            android-port/Experiments/GT/Editor
+      - run: |
+          python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3
+          python3 -m unittest discover -s tests -p 'test_gt_fft_utilities*.py' -v
+          python3 -m unittest discover -s tests -p test_gt_original_921_bundle.py -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/sharedassets0.assets
+      - name: Materialize two SHA-owned original serialized files privately
+        run: |
+          set -euo pipefail
+          test "$(git -C .gt-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage,PINS
+          selected={key:value for key,value in PINS.items() if key in ('Raft_Data/resources.assets','Raft_Data/sharedassets0.assets')}
+          stage(Path('.gt-zip2'),Path(os.environ['RUNNER_TEMP'])/'gt-fft-original',pins=selected)
+          PY
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Recover all twelve original programs and compile fourteen bound entrypoints
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_fft_utilities_restore \
+            --original "$RUNNER_TEMP/gt-fft-original/Raft_Data" \
+            --private "$RUNNER_TEMP/gt-fft-private" \
+            --out "$RUNNER_TEMP/gt-fft-utilities-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          from scripts.gt_fft_utilities_restore import STATUS
+          q=json.loads((Path(os.environ['RUNNER_TEMP'])/'gt-fft-utilities-safe.json').read_text())
+          assert q['status']==STATUS
+          assert q['original_passes']==7 and q['original_keyword_pairs']==7
+          assert q['original_distinct_D3D11_programs']==12
+          assert q['named_ShaderLab_entrypoints_compiled']==14
+          assert q['Unity_import_proven'] is False and q['APK_OBB_XAPK_created'] is False
+          PY
+      - name: Stage isolated original-derived candidate and exact source receipt digest
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,shutil
+          from pathlib import Path
+          temp=Path(os.environ['RUNNER_TEMP'])
+          q=json.loads((temp/'gt-fft-utilities-safe.json').read_text())
+          project=Path('gt-fft-utilities-unity')
+          for child in ('Assets/Editor','Packages','ProjectSettings'):
+              (project/child).mkdir(parents=True,exist_ok=False)
+          shutil.copyfile(temp/'gt-fft-private/fft-utilities-private.shader',project/'Assets/GTFFTUtilities.shader')
+          shutil.copyfile('android-port/Experiments/GT/Editor/FFTUtilitiesShaderValidation.cs',project/'Assets/Editor/FFTUtilitiesShaderValidation.cs')
+          (project/'CandidateSha256.txt').write_text(q['candidate_shader_sha256']+'\n')
+          (project/'Packages/manifest.json').write_text('{"dependencies":{}}\n')
+          (project/'ProjectSettings/ProjectVersion.txt').write_text('m_EditorVersion: 2021.3.45f2\n')
+          PY
+      - name: Compile isolated shader bundle in Unity Android Vulkan (NO APK)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-fft-utilities-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.FFTUtilitiesShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Independently decode all seven actual Vulkan vertex and fragment routes
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-fft-utilities-unity"
+          smolv="$RUNNER_TEMP/gt-fft-smolv"
+          mkdir -p "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-fft-utilities" \
+            --source "$project/Assets/GTFFTUtilities.shader" \
+            --receipt "$project/ProbeResults/gt-fft-utilities-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" --fft-utilities \
+            --out "$RUNNER_TEMP/gt-fft-utilities-bundle-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          temp=Path(os.environ['RUNNER_TEMP'])
+          source=json.loads((temp/'gt-fft-utilities-safe.json').read_text())
+          unity=json.loads(Path('gt-fft-utilities-unity/ProbeResults/gt-fft-utilities-unity-safe.json').read_text())
+          bundle=json.loads((temp/'gt-fft-utilities-bundle-safe.json').read_text())
+          assert unity['unityVersion']=='2021.3.45f2' and unity['errors']==0
+          assert unity['passCount']==7 and unity['registeredKeywordVariants']==1
+          assert unity['privateBundleCompiled'] is True and unity['androidVulkanOnly'] is True
+          assert unity['gamePlayerBuilt'] is False and unity['devicePixelsProven'] is False
+          assert bundle['compiled_program_table_verified'] is True
+          assert bundle['vertex_and_fragment_entrypoints_verified'] is True
+          assert bundle['vertex_routes_by_pass']==bundle['fragment_routes_by_pass']==[1]*7
+          assert bundle['candidate_sha256']==unity['candidateSha256']==source['candidate_shader_sha256']
+          print('GT_FFT_UTILITIES_SEVEN_ACTUAL_VULKAN_VSFS_ROUTES_VERIFIED noAPK=true')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gt-fft-utilities-source-safe-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-fft-utilities-safe.json
+            ${{ runner.temp }}/gt-fft-utilities-bundle-safe.json
+            gt-fft-utilities-unity/ProbeResults/gt-fft-utilities-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Remove private original and translated shader data
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-fft-original" "$RUNNER_TEMP/gt-fft-private" .gt-zip2
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-fft-utilities-unity"

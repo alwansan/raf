@@ -15,10 +15,29 @@
   "source_unmatched_fragment_permutations": 0,
   "source_stage_variants_with_keywords": 0,
   "safe_source_topology_probe_succeeded": true,
-  "translated_or_Unity_compiled": false,
   "original_GUID_installed": false,
   "device_pixels_verified": false,
   "pass_gate_requirement": 7,
   "gate_minimum2_superseded_by_complete_original_source7": true,
-  "original_program_bytes_or_private_IDs_published": false
+  "original_program_bytes_or_private_IDs_published": false,
+  "source_translation_proven": true,
+  "Unity_compilation_proven": false,
+  "source_translation_receipt": {
+    "APK_OBB_XAPK_created": false,
+    "Android_device_pixels_proven": false,
+    "Unity_import_proven": false,
+    "candidate_shader_sha256": "f8575ebd855cff193c9fdb506b5f2b2d427d4c583eb9c5c7af0d6ff39c948b23",
+    "named_ShaderLab_entrypoints_compiled": 14,
+    "original_SHA_owned_serialized_files": 2,
+    "original_distinct_D3D11_programs": 12,
+    "original_keyword_pairs": 7,
+    "original_orphan_stages": 0,
+    "original_passes": 7,
+    "original_properties": 2,
+    "original_stages_roundtrip_validated": 12,
+    "source_bytes_or_IDs_published": false,
+    "status": "GT_FFT_UTILITIES_AUTHENTIC_SEVEN_PASS_SOURCE_COMPILED"
+  },
+  "focused_fft_tests_passed": 7,
+  "independent_review": "no blocking findings in source/Unity-probe/bundle proof; actual Unity not executed"
 }
