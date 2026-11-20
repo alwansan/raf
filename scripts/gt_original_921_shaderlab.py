@@ -328,12 +328,84 @@ def verified_source_next_seven_pass_modes(manifest):
     return tuple(selected)
 
 
+
+def verified_source_next23b_pass_modes(manifest):
+    """Read source tags only after exact NEXT23b topology/provenance checks.
+
+    SHA authentication and bytecode stage verification happen upstream. Require
+    their preserved per-variant link records here, never infer modes from counts.
+    """
+    rows, pairs = manifest.get('original_passes'), manifest.get('paired')
+    if (type(rows) is not list or len(rows) != 4
+            or type(pairs) is not list or len(pairs) != 1156
+            or manifest.get('unpaired') != []):
+        raise ValueError('source_next23b_exact_original_topology_required')
+    by_pass = [0] * 4
+    refs = {'vs': set(), 'fs': set()}
+    for pair in pairs:
+        if (type(pair) is not dict or type(pair.get('subshader')) is not int
+                or pair['subshader'] != 0 or type(pair.get('pass')) is not int
+                or not 0 <= pair['pass'] < 4):
+            raise ValueError('source_next23b_ambiguous_pair_ownership')
+        by_pass[pair['pass']] += 1
+        for stage in ('vs', 'fs'):
+            row = pair.get(stage)
+            if type(row) is not dict:
+                raise ValueError('source_next23b_missing_original_stage')
+            ref = row.get('program_ref')
+            metadata, link = row.get('original_variant_metadata'), row.get('original_D3D11_link')
+            if (not isinstance(ref, str) or not re.fullmatch(r'program-[0-9]{3}', ref)
+                    or type(row.get('bucket_ordinal')) is not int or row['bucket_ordinal'] < 0
+                    or (row.get('player_bucket') is not None and
+                        (type(row['player_bucket']) is not int or row['player_bucket'] < 0))
+                    or type(metadata) is not dict or type(link) is not dict
+                    or type(metadata.get('m_BlobIndex')) is not int
+                    or metadata['m_BlobIndex'] < 0
+                    or link.get('blob_index') != metadata['m_BlobIndex']
+                    or type(link.get('segment_index')) is not int or link['segment_index'] < 0
+                    or any(not isinstance(link.get(k), str) or not re.fullmatch(r'[0-9a-f]{64}', link[k])
+                           for k in ('metadata_sha256', 'entry_sha256'))):
+                raise ValueError('source_next23b_missing_original_D3D11_stage_provenance')
+            refs[stage].add(ref)
+    if (refs['vs'] & refs['fs'] or len(refs['vs'] | refs['fs']) != 134
+            or refs['vs'] | refs['fs'] != {f'program-{i:03d}' for i in range(134)}):
+        raise ValueError('source_next23b_original_134_stage_identity_drift')
+    selected = []
+    canonical = {name.upper(): name for name in (*PASS_MODES, 'Always')}
+    for index, row in enumerate(rows):
+        if (type(row) is not dict or type(row.get('subshader')) is not int
+                or row['subshader'] != 0 or type(row.get('pass')) is not int
+                or row['pass'] != index or type(row.get('matched_pairs')) is not int
+                or row['matched_pairs'] != by_pass[index] or by_pass[index] == 0
+                or type(row.get('unmatched_vertex')) is not int or row['unmatched_vertex'] != 0
+                or type(row.get('unmatched_fragment')) is not int or row['unmatched_fragment'] != 0):
+            raise ValueError('source_next23b_original_pass_population_drift')
+        state = row.get('original_state')
+        tags = state.get('m_Tags') if type(state) is dict else None
+        entries = tags.get('tags') if type(tags) is dict else None
+        if type(entries) is not list:
+            raise ValueError('source_next23b_missing_original_pass_tags')
+        modes = []
+        for entry in entries:
+            if (type(entry) not in (list, tuple) or len(entry) != 2
+                    or any(not isinstance(v, str) for v in entry)):
+                raise ValueError('source_next23b_malformed_original_pass_tags')
+            if entry[0].upper() == 'LIGHTMODE':
+                modes.append(canonical.get(entry[1].upper()))
+        if len(modes) > 1 or modes and modes[0] is None:
+            raise ValueError('source_next23b_unknown_or_duplicate_original_LightMode')
+        selected.append(modes[0] if modes else 'Untagged')
+    return tuple(selected)
+
+
 def compose(private, engine_keywords=False, *, original_array_padding_zero=False):
     layout = (private / "original-private-layout.txt").read_text(encoding="utf-8")
     routes = json.loads((private / "original-private-keyword-routes.json").read_text())
     manifest = json.loads((private / "original-private-variant-manifest.json").read_text())
     counts = tuple(len(row["routes"]) for row in routes)
-    pass_modes = (verified_source_next_six_pass_modes(manifest)
+    pass_modes = (verified_source_next23b_pass_modes(manifest)
+                  if len(counts) == 4 and sum(counts) == 1156 else
+                  verified_source_next_six_pass_modes(manifest)
                   if counts == NEXT_SIX_ORIGINAL_ROUTES else
                   verified_source_next_seven_pass_modes(manifest)
                   if counts == NEXT_SEVEN_7P11_ORIGINAL_ROUTES

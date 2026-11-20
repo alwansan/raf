@@ -2,8 +2,9 @@
 import tempfile
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 from scripts.gt_next23b_private_stage_translation import (
-    validate_topology, recover_programs, STATUS,
+    validate_topology, recover_programs, compose_private, STATUS,
 )
 
 
@@ -59,6 +60,64 @@ class Next23BStageTranslation(unittest.TestCase):
         self.assertNotIn('game-ci/', workflow)
         self.assertNotIn('UNITY_LICENSE', workflow)
         self.assertNotIn('raft-native-build-request', workflow)
+
+    def test_composition_failure_retains_numeric_translation_proof_without_success(self):
+        report = {'status': 'TRANSLATED', 'all_three_compiler_gates_valid': 134}
+        with tempfile.TemporaryDirectory() as tmp:
+            compose_private({}, [], [], [], [], {}, Path(tmp), report)
+        self.assertEqual(report['status'], 'INCONCLUSIVE_NEXT23B_PRIVATE_COMPOSITION')
+        self.assertEqual(report['all_three_compiler_gates_valid'], 134)
+        self.assertEqual(report['composition_safe_checkpoint'], 'source_keyword_routes')
+        self.assertNotIn('error_message', report)
+
+    def test_all_1156_routes_required_and_strict_binding_failure_stops_composition(self):
+        module = 'scripts.gt_next23b_private_stage_translation'
+        packet = [{'routes': [{'vs': (1, 'v'), 'fs': (0, 'f')} for _ in range(289)]} for _ in range(4)]
+        routing = {'source_exact_keyword_routes_by_pass': [289] * 4}
+        report = {'all_three_compiler_gates_valid': 134}
+        with tempfile.TemporaryDirectory() as tmp, \
+                patch(module + '.keyword_routes', return_value=(packet, routing)), \
+                patch(module + '.compile_routed_stages', return_value=2312), \
+                patch(module + '.shaderlab_layout', return_value=('layout', {})), \
+                patch(module + '.stage_parameter_records', side_effect=ValueError('private member name')), \
+                patch(module + '.compose') as composer:
+            compose_private({'m_PropInfo': {'m_Props': []}}, [], [], [], [],
+                            {(1, 'v'): 'program-0', (0, 'f'): 'program-1'}, Path(tmp), report)
+            composer.assert_not_called()
+        self.assertEqual(report['status'], 'INCONCLUSIVE_NEXT23B_PRIVATE_COMPOSITION')
+        self.assertEqual(report['composition_safe_checkpoint'], 'source_CB_sampler_and_varying_bindings')
+        self.assertNotIn('private member name', str(report))
+        self.assertEqual(report['private_exact_keyword_routed_stages_compiled'], 2312)
+
+    def test_success_requires_all_routes_bindings_and_composed_entrypoint_validation(self):
+        module = 'scripts.gt_next23b_private_stage_translation'
+        packet = [{'routes': [{'vs': (1, 'v'), 'fs': (0, 'f')} for _ in range(289)]} for _ in range(4)]
+        named = dict(original_variant_stages_with_parameter_records=2312,
+                     original_vertex_fragment_varying_records_matched=1156,
+                     named_constant_buffer_reflected_offsets_verified=2312)
+        report = {}
+        with tempfile.TemporaryDirectory() as tmp, \
+                patch(module + '.keyword_routes', return_value=(packet, {'source_exact_keyword_routes_by_pass': [289] * 4})), \
+                patch(module + '.compile_routed_stages', return_value=2312), \
+                patch(module + '.shaderlab_layout', return_value=('layout', {})), \
+                patch(module + '.stage_parameter_records', return_value=named), \
+                patch(module + '.compose', return_value='shader'), \
+                patch(module + '.verify_entrypoints') as verifier:
+            compose_private({'m_PropInfo': {'m_Props': []}}, [], [], [], [],
+                            {(1, 'v'): 'program-0', (0, 'f'): 'program-1'}, Path(tmp), report)
+            self.assertEqual(sum(map(len, verifier.call_args.kwargs['routes'])), 1156)
+        self.assertEqual(report['status'], STATUS)
+        self.assertEqual(report['private_ShaderLab_vertex_fragment_entrypoints_validated'], 2312)
+
+    def test_missing_route_stops_before_any_compilation(self):
+        module = 'scripts.gt_next23b_private_stage_translation'
+        report = {}
+        with tempfile.TemporaryDirectory() as tmp, \
+                patch(module + '.keyword_routes', return_value=([], {'source_exact_keyword_routes_by_pass': [289, 289, 289, 288]})), \
+                patch(module + '.compile_routed_stages') as compiler:
+            compose_private({}, [], [], [], [], {}, Path(tmp), report)
+            compiler.assert_not_called()
+        self.assertEqual(report['status'], 'INCONCLUSIVE_NEXT23B_PRIVATE_COMPOSITION')
 
     def test_truthy_compiler_strings_do_not_prove_translation(self):
         distinct = {(i % 2, str(i)): dict(stage=i % 2, source_code=bytes([i]))

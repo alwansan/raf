@@ -1934,5 +1934,22 @@
     },
     "next15_post18_accepted": true,
     "source6_CB_overlap_unresolved": true
+  },
+  "latest_20261120_graphics_continuation": {
+    "integration_commit": "6c071a41471ea63ab67e665e15a5145acdb8894d",
+    "native_accepted_post23_batches_wired": true,
+    "native_pipeline_after_wiring_executed": false,
+    "new_XAPK_requested": false,
+    "source_translation_next23b_run": 44779897149,
+    "source_translation_next23b_all_three_gates_valid": 134,
+    "next23b_ShaderLab_Unity_GUID_proven": false,
+    "fft_utilities_original_source_passes": 7,
+    "fft_utilities_original_source_programs": 12,
+    "latest_CL_commit": "8db59a417be025dd8194f202a6dd29aaa132d300",
+    "latest_CL_session": "20261120-194258-229",
+    "device_shader_pass_error_roots": 968,
+    "device_native_abort": "Scudo out of memory in Adreno Vulkan render-pass begin; exact allocation owner unproven",
+    "graphics_restoration_complete": false,
+    "evidence": "evidence/20261120_gt_native_post23_and_next23b_integration.json"
   }
 }

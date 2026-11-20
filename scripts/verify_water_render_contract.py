@@ -18,9 +18,10 @@ from scripts.b47_compute_kernel_contract import kernel_entrypoint_profile
 # requires a restored ShaderLab source with at least N+1 authored passes.
 REQUIRED_PASS_COUNT = {
     # CL 8db59a4 / LogRaft-20261120-194258-229, raw lines 488 onward:
-    # 484 pass-1 failures with one active pass. This is an observed minimum,
-    # not a claim that the complete original shader has only two passes.
-    "UltimateWater/Utilities/FFT Utilities": 2,
+    # 484 pass-1 failures with one active pass. Subsequent SHA-authenticated
+    # ZIP2 source inspection proves all seven original passes, not just the
+    # logged minimum of two (20261120_gt_fft_utilities_original_topology.json).
+    "UltimateWater/Utilities/FFT Utilities": 7,
     "UltimateWater/Spectrum/Water Spectrum": 6,  # logged index 5
     "UltimateWater/Utilities/Blur (Subsurface Scattering)": 2,  # 1
     "UltimateWater/Foam/Global": 2,  # 1

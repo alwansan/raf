@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_origin": "local previously staged ZIP2 resources.assets and sharedassets0.assets, both fingerprint == W1 PINS before UnityPy parsing",
+  "decoder": "UnityPy1.23.0",
+  "public_shader_identity": "UltimateWater/Utilities/FFT Utilities",
+  "source_SubShader_count": 1,
+  "source_Pass_count": 7,
+  "source_pass_counts_per_SubShader": [
+    7
+  ],
+  "source_paired_VSFS_routes": 7,
+  "source_distinct_D3D11_programs": 12,
+  "source_unmatched_vertex_permutations": 0,
+  "source_unmatched_fragment_permutations": 0,
+  "source_stage_variants_with_keywords": 0,
+  "safe_source_topology_probe_succeeded": true,
+  "translated_or_Unity_compiled": false,
+  "original_GUID_installed": false,
+  "device_pixels_verified": false,
+  "pass_gate_requirement": 7,
+  "gate_minimum2_superseded_by_complete_original_source7": true,
+  "original_program_bytes_or_private_IDs_published": false
+}

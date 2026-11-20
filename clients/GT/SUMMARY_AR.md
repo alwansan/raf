@@ -1,3 +1,7 @@
+## متابعة20 نوفمبر2026
+
+حُفظ دمج دفعاتpost23 فيNative عند6c071a414، مع توثيق82owner أصلياً وSHAالـYAML/meta؛ لم ينفذNative المعدل ولاXAPK جديد. نجح مصدرNEXT23b134/134 في44779897149؛ تركيبShaderLab وUnity/GUID لم يثبتا. FFT Utilities الأصلي7Pass/12برنامج؛ استعادته جارية. آخرCL20261120 يسجل968 خطأPass وScudoOOM أثناءVulkan؛ لا اكتمال بصري أو جهاز. [تفاصيل الاستئناف](RESTORE_AR.md) و[الدليل](evidence/20261120_gt_native_post23_and_next23b_integration.json).
+
 # ملخص تقدم GT للمالك
 
 ## GT — مرحلة NEXT6 fail-closed + جرد post23 المتبقي المقبول (17 نوفمبر 2026)

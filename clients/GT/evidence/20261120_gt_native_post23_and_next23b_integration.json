@@ -31,7 +31,7 @@
     "unpaired": 0,
     "distinct_D3D11_programs": 134
   },
-  "next23b_actual_translation_run": null,
+  "next23b_actual_translation_run": 44779897149,
   "focused_tests_passed": 58,
   "bash_syntax_steps_passed": 179,
   "isolated_test_file_population": 740,
@@ -150,5 +150,8 @@
   ],
   "full_suite_green": false,
   "independent_review": "No concrete blocking findings; focused source/path/cleanup review only; no Unity or device validation",
-  "completion": "NOT_COMPLETE: remaining98 Dummy, authentic NEXT23b translation, NEXT6 source semantics, water/FFT Utilities/Foam actual restoration, local fire texture runtime alpha, native memory failure and device pixels remain open"
+  "completion": "NOT_COMPLETE: remaining98 Dummy, authentic NEXT23b translation, NEXT6 source semantics, water/FFT Utilities/Foam actual restoration, local fire texture runtime alpha, native memory failure and device pixels remain open",
+  "next23b_translation_artifact": 14650794395,
+  "next23b_all_three_compiler_gates_valid": 134,
+  "next23b_private_shaderlab_composition_or_Unity_or_GUID_proven": false
 }

@@ -1,3 +1,9 @@
+## GT — مصدر NEXT23b134/134 وFFT Utilities7Pass — 20 نوفمبر
+
+- [44779897149](https://github.com/alwansan/raf/actions/runs/44779897149) نجح فعلياً في خطوة الترجمة؛ قُرئ artifact14650794395:134/134 DXBC→SPIR-V Vulkan1.1→HLSL→roundtripVulkan1.1،4Pass و1156 VSFSroutes و0orphan. **هذا مصدر stages فقط، لا ShaderLab مكتمل أو Unity أو GUID أو مواد إضافية مقبولة**؛ يبقى قبول688/786 و98Dummy كما هو. جارٍ استكمال composition من الخواص والـCB والـsamplers الأصلية.
+- فحص محلي UnityPy1.23.0 بعد SHA/sizeW1 PINS للأصل أثبت **FFT Utilities الأصلي7Pass،7routes بلاkeywords،12برنامجD3D11،0orphans**. صار فاحص الماء يطلب7 كاملة، بدلاً من2 المستنتجة منPass1 في اللوق. 17 اختبار gate ناجح. الدليل:evidence/20261120_gt_fft_utilities_original_topology.json. المصدر لم يُركب أو يُثبت داخلUnity بعد؛ لاPass بديل أوDummy مقبول.
+- دمج الشيدرات في فرع المشروع محفوظ في6c071a41471ea63ab67e665e15a5145acdb8894d. لا بناءXAPK جديد. الهدف الكلي غير مكتمل: الماء والنار وبقية98Dummy وNEXT6 والذاكرة وبكسلات الهاتف ما زالت مفتوحة.
+
 ## GT — 20 نوفمبر: دمج مسار post23 وكشف FFT Utilities من لوق حديث
 
 - دُمجت برمجياً عشر دفعات NEXT30→NEXT7p33 في مسار Native، بعد فحوص Unity Vulkan المعزولة وSHA المرشح وGUID الأصلي. يتطلب المسار جرد post9 ثم post13 ثم كل دفعة إلى post23، مع SHA فعلية للـMaterial/YAML/meta. أضيف staging جديد لـ82 owner أصلياً من ZIP2 لأن W1 يضم14 فقط. **لم يُشغَّل Native المعدل بعد؛ يبقى قبول688/786 و98 Dummy/37 GUID من التصدير السابق43929698985، وليس من هاتف أو بناء جديد.**
