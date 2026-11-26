@@ -1,0 +1,17 @@
+{
+  "asset_ripper_execution_proven": false,
+  "assetripper_input_ready_for_selected_scope": true,
+  "files_newly_materialized": 134,
+  "files_verified_and_reused": 0,
+  "git_lfs_used": false,
+  "original_bytes_materialized_or_reused": 7532909297,
+  "original_payload_sha256_and_size_verified": true,
+  "original_placeholder_pointers_replaced": 0,
+  "original_resources_verified": 134,
+  "profile": "full",
+  "schema": "GT_ZIP2_REAL_EXPORT_RESOURCE_RESTORATION_V1",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_file_content_exported_in_report": false,
+  "source_verified_bytes": 7532909297,
+  "unity_android_gpu_verified": false
+}

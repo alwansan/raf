@@ -1,0 +1,1 @@
+{"candidate_sha256": "e7654374f3eacc6b0487d619487886ae20c3b21d4745d0d915e712dd5ac24cc1", "compiled_program_table_verified": true, "engine_keywords_verified": false, "fragment_routes_by_pass": [8, 13, 8, 4], "vertex_and_fragment_entrypoints_verified": true, "vertex_routes_by_pass": [8, 13, 8, 4], "vulkan_platform_only": true}

@@ -1,0 +1,12 @@
+{
+    "unityVersion": "2021.3.45f2",
+    "failureType": "",
+    "checkpoint": "compiler_results",
+    "passCount": 3,
+    "registeredRoutes": 11,
+    "errors": 0,
+    "compilerErrorGroups": [],
+    "androidVulkanOnly": true,
+    "privateBundleCompiled": true,
+    "candidateSha256": "e780a47b69fd7ed438d9f56b2ec5d44ef765fad44aa36643e71288d70567d4e3"
+}

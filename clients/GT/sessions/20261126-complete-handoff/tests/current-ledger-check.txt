@@ -1,0 +1,1 @@
+GT_RESTORATION_PLAN_CHECK {"device_proof_workstreams": 0, "milestones": 6, "native_build_latest_result_unverified": true, "original_source_sha_pinned": true, "owner_device_water_error_count": 42229, "remaining_postvendor_dummy_material_docs": 770, "source_owner_count": 82, "status": "GT_SOURCE_BACKED_RESTORATION_LEDGER_VALID", "workstreams": 12}

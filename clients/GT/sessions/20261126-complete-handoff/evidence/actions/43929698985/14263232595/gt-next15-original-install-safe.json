@@ -1,0 +1,20 @@
+{
+  "APK_OBB_XAPK_created": false,
+  "Adreno_pixels_or_runtime_keyword_parity_verified": false,
+  "Unity_Android_Vulkan_bundle_33_routes_verified": true,
+  "original_4_pass_VS_FS_routes_installed": [
+    8,
+    13,
+    8,
+    4
+  ],
+  "original_Material_meta_and_YAML_modified": false,
+  "original_export_Shader48_GUID_preserved": true,
+  "original_source_82_owners_SHA_verified": true,
+  "post17_actual_dummy_Material_population_verified": 158,
+  "same_export_owner_PathID_to_original_Shader_GUID_checked": true,
+  "schema_version": 1,
+  "source_original_names_GUIDs_PathIDs_or_program_bytes_published": false,
+  "source_original_unrestored_Material_documents_selected": 15,
+  "status": "GT_EXACT_ORIGINAL_NEXT15_SAME_EXPORT_SHADER48_GUID_INSTALLED_NO_APK"
+}

@@ -1,0 +1,40 @@
+{
+  "android_shader_compilation_or_gpu_pixels_verified": false,
+  "completed_original_vendor_restorer_steps": [
+    "tmp",
+    "postfx",
+    "histogram_compute",
+    "volumetric"
+  ],
+  "git_lfs_used": false,
+  "new_vendor_meta_documents_added": 3,
+  "original_Raft_Shader48_DXBC_to_Adreno_parity_verified": false,
+  "original_exported_meta_bytes_unchanged": false,
+  "original_exported_meta_documents": 18368,
+  "original_meta_changed": 0,
+  "original_meta_contract_preserved_with_verified_compute_relocation": true,
+  "original_meta_removed": 1,
+  "original_meta_removed_unapproved": 0,
+  "postrestore_material_quality": {
+    "android_shader_compilation_or_pixels_verified": false,
+    "dummy_material_documents_decreased_by": 16,
+    "original_exported_meta_integrity_contract_preserved": true,
+    "original_material_yaml_count_unchanged": true,
+    "original_shader_variant_parity_proven": false,
+    "postrestore_custom_dummy_material_documents": 770,
+    "postrestore_non_dummy_custom_material_documents": 16,
+    "postrestore_shader_files_with_dummy_marker": 112,
+    "postrestore_shaders_with_programmed_pass": 142,
+    "raw_custom_dummy_material_documents": 786,
+    "raw_non_dummy_custom_material_documents": 0,
+    "raw_shader_files_with_dummy_marker": 140,
+    "schema": "GT_REAL_EXPORTED_VENDOR_SHADER_RESTORATION_COMPARISON_V1",
+    "status": "POST_RESTORE_SOURCE_QUALITY_COMPARED",
+    "target_original_game_data_modified": false,
+    "total_exported_material_documents": 1536
+  },
+  "schema": "GT_ACTUAL_ISOLATED_VENDOR_SHADER_RESTORATION_V1",
+  "source_original_game_assets_modified": false,
+  "status": "POST_RESTORE_SOURCE_QUALITY_COMPARED",
+  "verified_ComputeShader_GUID_relocation_count": 1
+}

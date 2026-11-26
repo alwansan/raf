@@ -16,6 +16,7 @@ namespace RaftGT
             public string failureType;
             public string checkpoint;
             public string candidateSha256;
+            public string compilerControl;
             public int passCount;
             public int registeredKeywordVariants;
             public int errors;
@@ -48,6 +49,9 @@ namespace RaftGT
                         .Replace("-", "").ToLowerInvariant();
                 if (result.candidateSha256 != File.ReadAllText(Path.Combine(root, "CandidateSha256.txt")).Trim())
                     throw new InvalidOperationException("SourceReceiptCandidateMismatch");
+                result.compilerControl = File.ReadAllText(Path.Combine(root, "CandidateCompiler.txt")).Trim();
+                if (result.compilerControl != "dxc" && result.compilerControl != "hlslcc")
+                    throw new InvalidOperationException("UnsupportedCompilerControl");
                 result.checkpoint = "import";
                 AssetDatabase.ImportAsset(shaderPath,
                     ImportAssetOptions.ForceSynchronousImport | ImportAssetOptions.ForceUpdate);

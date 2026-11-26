@@ -1,0 +1,18 @@
+{
+  "Android_device": false,
+  "Unity_render_executed": false,
+  "Vulkan_raster_validation_passed": false,
+  "XAPK": false,
+  "production_pixels": false,
+  "reason": "Unity_prerequisite_unavailable:active_linear_color_space_required",
+  "receipt_reason": "active_linear_color_space_required",
+  "receipt_status": "NOT_RUN",
+  "run_id": "45760345978-1-a23d8d6f4794c987b3ac351f8799c90bb897d6dd",
+  "schema_version": 1,
+  "source_hashes": {
+    "Assets/Editor/SyntheticMaterialAlphaValidation.cs": "fd21e1014de836aacda1c7f2d2640d50d632d1614b8aa6106f921a2abf9e8ed3",
+    "Assets/SyntheticMaterialAlpha.shader": "cd0014106a2bc71a196d8389ce33b20e0b052fca1effe212f6822cac3288b8fc"
+  },
+  "status": "NOT_RUN",
+  "synthetic_only": true
+}

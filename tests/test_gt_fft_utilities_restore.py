@@ -21,3 +21,10 @@ class TopologyTests(unittest.TestCase):
         self.assertNotIn('multi_compile',shader)
         self.assertNotIn('Original stage programs attach here',shader)
         with self.assertRaises(ValueError): fft.attach_programs(layout,['x']*6)
+
+    def test_compiler_control_changes_only_seven_dxc_pragmas(self):
+        source='header\n'+('#pragma use_dxc vulkan\nfloat4 original_body;\n'*7)
+        self.assertEqual(fft.compiler_control(source,'dxc'),source)
+        self.assertEqual(fft.compiler_control(source,'hlslcc'),source.replace('#pragma use_dxc vulkan\n',''))
+        with self.assertRaises(ValueError): fft.compiler_control(source,'unknown')
+        with self.assertRaises(ValueError): fft.compiler_control(source.replace('#pragma use_dxc vulkan\n','',1),'hlslcc')

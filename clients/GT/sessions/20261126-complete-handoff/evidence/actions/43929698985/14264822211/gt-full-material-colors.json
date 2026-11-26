@@ -1,0 +1,18 @@
+{
+  "changed_color_values": 0,
+  "color_slots_compared": 4903,
+  "engine_material_redirects_excluded": 6,
+  "font_importer_materials_excluded": 14,
+  "materials_with_original_nonidentity_colors": 1485,
+  "mismatched_materials": 0,
+  "missing_color_slots": 0,
+  "nonfinite_channel_drift": 0,
+  "nonfinite_channels_compared": 16,
+  "original_material_color_values_preserved": true,
+  "outside_scope_trace_materials": 2,
+  "schema_version": 1,
+  "shader_program_or_device_fidelity_verified": false,
+  "source_materials_verified": 1556,
+  "unexpected_color_slots": 0,
+  "yaml_materials_compared": 1536
+}

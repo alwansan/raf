@@ -1,0 +1,18 @@
+{
+  "APK_OBB_XAPK_created": false,
+  "Unity_Android_Adreno_game_pixels_verified": false,
+  "after_nine_shader_dummy_material_documents": 333,
+  "after_thirteen_shader_dummy_material_documents": 246,
+  "after_thirteen_shader_non_dummy_material_documents": 540,
+  "all_original_Material_and_meta_sha256_unchanged": true,
+  "custom_shader_material_documents": 786,
+  "full_export_material_documents": 1536,
+  "protected_unchanged_Material_YAML_and_meta_files": 29213,
+  "remaining_dummy_shader_guid_targets_referenced": 47,
+  "schema_version": 1,
+  "source_authentic_model_shader_targets_installed": 9,
+  "source_authentic_particle_shader_targets_installed": 4,
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "status": "GT_THIRTEEN_ORIGINAL_SHADER_SAME_EXPORT_GUID_VERIFIED_NO_APK",
+  "unity_builtin_shader_material_documents": 750
+}

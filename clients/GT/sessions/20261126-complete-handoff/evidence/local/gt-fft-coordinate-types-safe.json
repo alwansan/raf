@@ -1,0 +1,26 @@
+{
+  "original.spv": {
+    "sample_coordinate_count": 6,
+    "float_coordinate_vector_widths": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "integer_sample_coordinates": 0
+  },
+  "roundtrip.spv": {
+    "sample_coordinate_count": 6,
+    "float_coordinate_vector_widths": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "integer_sample_coordinates": 0
+  }
+}

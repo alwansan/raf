@@ -1,0 +1,13 @@
+{
+  "run": 45759923748,
+  "artifact": 15089112136,
+  "zip_sha256": "7db0cb3610394e1ac198a97de5c354581c8531c49a93af13f4cf9acaf75edbff",
+  "members": [
+    {
+      "archive_member": "verified.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/45759923748/verified.json",
+      "sha256": "d1f59547160c4b160fbb1baef0ec76a0601820bad31a620a3aad65192dfc69de",
+      "bytes": 596
+    }
+  ]
+}

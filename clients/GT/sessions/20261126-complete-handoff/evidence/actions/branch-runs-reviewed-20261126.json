@@ -1,0 +1,186 @@
+{
+  "observed_date": "2026-11-26",
+  "source_api": "https://api.github.com/repos/alwansan/raf/actions/runs?branch=feature%2Fandroid-native-port&per_page=20",
+  "runs": [
+    {
+      "id": 45760877767,
+      "name": "GT synthetic Unity Vulkan material and alpha pixels (NO APK)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "df1cf4b474393ff7edff38c5d75e456d8182d578",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/45760877767",
+      "created_at": "2026-11-26T05:19:53Z"
+    },
+    {
+      "id": 45760345978,
+      "name": "GT synthetic Unity Vulkan material and alpha pixels (NO APK)",
+      "status": "completed",
+      "conclusion": "failure",
+      "head_sha": "a23d8d6f4794c987b3ac351f8799c90bb897d6dd",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/45760345978",
+      "created_at": "2026-11-26T05:15:04Z"
+    },
+    {
+      "id": 45760345909,
+      "name": "Raft CI runner compatibility guard (Ubuntu 26.04 transition)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "a23d8d6f4794c987b3ac351f8799c90bb897d6dd",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/45760345909",
+      "created_at": "2026-11-26T05:15:04Z"
+    },
+    {
+      "id": 45759923748,
+      "name": "GT synthetic Unity Vulkan material and alpha pixels (NO APK)",
+      "status": "completed",
+      "conclusion": "failure",
+      "head_sha": "6665724f299598a8cab2d159ad5b5b767f83688f",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/45759923748",
+      "created_at": "2026-11-26T05:11:16Z"
+    },
+    {
+      "id": 45759923445,
+      "name": "Raft CI runner compatibility guard (Ubuntu 26.04 transition)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "6665724f299598a8cab2d159ad5b5b767f83688f",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/45759923445",
+      "created_at": "2026-11-26T05:11:16Z"
+    },
+    {
+      "id": 44783011957,
+      "name": "GT NEXT23b private source composition Vulkan1.1 (NO APK)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "7e9925fdba601f84f495f3a9e6ba6d752544fe22",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44783011957",
+      "created_at": "2026-11-20T17:24:33Z"
+    },
+    {
+      "id": 44783011802,
+      "name": "Raft CI runner compatibility guard (Ubuntu 26.04 transition)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "7e9925fdba601f84f495f3a9e6ba6d752544fe22",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44783011802",
+      "created_at": "2026-11-20T17:24:33Z"
+    },
+    {
+      "id": 44783011844,
+      "name": "GT restoration plan source/device evidence consistency",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "7e9925fdba601f84f495f3a9e6ba6d752544fe22",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44783011844",
+      "created_at": "2026-11-20T17:24:33Z"
+    },
+    {
+      "id": 44783011838,
+      "name": "GT original 921-slot shader all compiled variants (source only, NO XAPK)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "7e9925fdba601f84f495f3a9e6ba6d752544fe22",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44783011838",
+      "created_at": "2026-11-20T17:24:33Z"
+    },
+    {
+      "id": 44783011963,
+      "name": "GT next original 6-material Shader48 source 3 D3D11 to Vulkan (NO APK)",
+      "status": "completed",
+      "conclusion": "failure",
+      "head_sha": "7e9925fdba601f84f495f3a9e6ba6d752544fe22",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44783011963",
+      "created_at": "2026-11-20T17:24:33Z"
+    },
+    {
+      "id": 44783012023,
+      "name": "GT recover next authentic 23-material Shader48 58 original D3D11 stages (NO APK)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "7e9925fdba601f84f495f3a9e6ba6d752544fe22",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44783012023",
+      "created_at": "2026-11-20T17:24:33Z"
+    },
+    {
+      "id": 44781701670,
+      "name": "GT validate authentic next7p11 11-route Shader48 Unity Android Vulkan bundle (NO APK)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "ef321ee900aa60ead810675a753d5bb474304a03",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44781701670",
+      "created_at": "2026-11-20T17:16:31Z"
+    },
+    {
+      "id": 44781701690,
+      "name": "GT restoration plan source/device evidence consistency",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "ef321ee900aa60ead810675a753d5bb474304a03",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44781701690",
+      "created_at": "2026-11-20T17:16:31Z"
+    },
+    {
+      "id": 44781701743,
+      "name": "Raft CI runner compatibility guard (Ubuntu 26.04 transition)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "ef321ee900aa60ead810675a753d5bb474304a03",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44781701743",
+      "created_at": "2026-11-20T17:16:31Z"
+    },
+    {
+      "id": 44781701680,
+      "name": "Raft Android offline platform adapter - build and test",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "ef321ee900aa60ead810675a753d5bb474304a03",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44781701680",
+      "created_at": "2026-11-20T17:16:31Z"
+    },
+    {
+      "id": 44781701657,
+      "name": "GT original 921-slot shader all compiled variants (source only, NO XAPK)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "ef321ee900aa60ead810675a753d5bb474304a03",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44781701657",
+      "created_at": "2026-11-20T17:16:31Z"
+    },
+    {
+      "id": 44781701884,
+      "name": "GT authentic FFT Utilities seven Unity Vulkan passes (NO APK)",
+      "status": "completed",
+      "conclusion": "failure",
+      "head_sha": "ef321ee900aa60ead810675a753d5bb474304a03",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44781701884",
+      "created_at": "2026-11-20T17:16:31Z"
+    },
+    {
+      "id": 44781063659,
+      "name": "GT original 921-slot shader all compiled variants (source only, NO XAPK)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "c066f2997e80b7c9e0fab3da0b3ce0c6f982f2de",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44781063659",
+      "created_at": "2026-11-20T17:12:39Z"
+    },
+    {
+      "id": 44781063483,
+      "name": "B20 WATER-001 ShaderLab authored Pass scope (source-only)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "c066f2997e80b7c9e0fab3da0b3ce0c6f982f2de",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44781063483",
+      "created_at": "2026-11-20T17:12:39Z"
+    },
+    {
+      "id": 44781063460,
+      "name": "B49 WATER-001 authored ShaderLab pass guard (synthetic)",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "c066f2997e80b7c9e0fab3da0b3ce0c6f982f2de",
+      "html_url": "https://github.com/alwansan/raf/actions/runs/44781063460",
+      "created_at": "2026-11-20T17:12:39Z"
+    }
+  ]
+}

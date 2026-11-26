@@ -1,0 +1,1450 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-26",
+  "reviewed_branch": "feature/android-native-port",
+  "reviewed_base": "f3c8a2cdacf04fdbfbced5f87a1407da223e3a15",
+  "purpose": "preserve all available authoring tools, tests, aggregate receipts and explanations; not restoration completion",
+  "CI_commit_skip_required": true,
+  "files": [
+    {
+      "path": ".github/workflows/raft-gt-fft-utilities-source.yml",
+      "bytes": 8703,
+      "sha256": "ae6335aed1d0011a38d72c463ba7696eed99f1adb6888b35081fc068823774e5"
+    },
+    {
+      "path": ".github/workflows/raft-gt-next23b-original-shader-unity.yml",
+      "bytes": 12544,
+      "sha256": "91ee8dda0a1c8989c99c34db3c72f92969fb96776a596cce7adc2ed77e5c1423"
+    },
+    {
+      "path": "README.md",
+      "bytes": 12526,
+      "sha256": "b43012a99bacaab0160391fc2553701804a8653fe4a47872b6280fcbba40bfad"
+    },
+    {
+      "path": "android-port/Experiments/GT/Editor/FFTUtilitiesShaderValidation.cs",
+      "bytes": 5889,
+      "sha256": "120fe2797695f113244173c29f6b7dd2beea79f10f48d1f6c3f9288c2af6dd72"
+    },
+    {
+      "path": "android-port/Experiments/GT/Editor/Next23bShaderValidation.cs",
+      "bytes": 8813,
+      "sha256": "2df3ddc2530ca01009d55a55be0c8627105ce3cd11c45a0c0b7b0557e4c68d8b"
+    },
+    {
+      "path": "clients/GT/MEMORY.md",
+      "bytes": 75985,
+      "sha256": "64c11a7e47e2386bb7c52a469f19c1c83b6859053069618d9120dd46164be0d8"
+    },
+    {
+      "path": "clients/GT/README.md",
+      "bytes": 2773,
+      "sha256": "6c62b80e990ddf078242ae9c255b9a006423b987df1079084f01205b8370cf09"
+    },
+    {
+      "path": "clients/GT/RESTORATION_PLAN.json",
+      "bytes": 74718,
+      "sha256": "25ae7995b10c77e8ffb68f77c328d56762f2319603b9e2c94a2856a54f6ff029"
+    },
+    {
+      "path": "clients/GT/RESTORATION_PLAN_AR.md",
+      "bytes": 43679,
+      "sha256": "0dffd9cd60c90501534d15a0b9cc5e196e1b1cf6436b270db7b229347378e292"
+    },
+    {
+      "path": "clients/GT/RESTORE_AR.md",
+      "bytes": 11424,
+      "sha256": "2ae79e53150184e3862f42cd2959f38466ba43787dd56764a49fc4535924955a"
+    },
+    {
+      "path": "clients/GT/START_AR.md",
+      "bytes": 2211,
+      "sha256": "ec9ee9bf9ff156aa0680fc721b86aac62671c261c9e95a049b9a20335e32b463"
+    },
+    {
+      "path": "clients/GT/SUMMARY_AR.md",
+      "bytes": 120035,
+      "sha256": "132867a09ee59a6943234df6574905cdb3a74f73d0c93f3ff0bc2ba6580d9991"
+    },
+    {
+      "path": "clients/GT/evidence/20261121_gt_next23b_source_composition_verified.json",
+      "bytes": 1808,
+      "sha256": "b457a2263a93cfa0ee5f29b537a93a974d87bec678ec2c8965c7578a56832006"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/FINDINGS_AND_LIMITS_AR.md",
+      "bytes": 5520,
+      "sha256": "8b7d55a3a1098388a335f919d9c684ff1c5311af166a4cc9ac1050b812b68529"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/PLAN_AND_GOALS_AR.md",
+      "bytes": 5370,
+      "sha256": "68e17960cf8d801df7803c763ddc3945691092c98396f292149ba7a09b525f2c"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/README_AR.md",
+      "bytes": 5627,
+      "sha256": "a8cf658c668fe54f03a769ce3d41a53320cd05b075a634cf22548de906c624e7"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/REFERENCES_AR.md",
+      "bytes": 4382,
+      "sha256": "bb2badc869964bc937765501f13ad79a45ba4fe02ccee58622d043e5dc306502"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/TESTS_AND_RESULTS_AR.md",
+      "bytes": 2973,
+      "sha256": "0a2254873374c157d0ffc394883ea34f62ed935b6f0dcb17d4f07d552d947899"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/TOOLS_AND_REPRODUCTION_AR.md",
+      "bytes": 6072,
+      "sha256": "13f9ca262140191118b963ec80e9ad02eac5fd559887cbb6d492e6fe928c475d"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/CL_reference_reviewed_20261126.json",
+      "bytes": 362,
+      "sha256": "f0bda7de9675535f7f39c8869a52ccaaf6290342b26f2140a07f57867747cc6b"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14261973912/artifact-provenance.json",
+      "bytes": 879,
+      "sha256": "115006ee3f80ce4892e3dcdbefff42e6a233c1636f6a4b01b8afee563f43be01"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14261973912/gt-nine-shader-postrestore-quality.json",
+      "bytes": 5476,
+      "sha256": "54501de89b29f53fe74cbc210b63841119ebae572834cae26db89d2bf40c2971"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14261973912/gt-nine-shader-postrestore-summary-safe.json",
+      "bytes": 4277,
+      "sha256": "5029c3923b6ea0527c64d749a8b888d650cd031f173f440140748141c00e5842"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/artifact-provenance.json",
+      "bytes": 2213,
+      "sha256": "fc2bfdf138892aebc82b914d0350de87eba3a1726548b8015bbe8d94050b0bfd"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-candle16-install-safe.json",
+      "bytes": 405,
+      "sha256": "abcfac09515f27737d418ab378321087a6aa4c4656fba5f5e02f4c77fb0c272c"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-particle108-install-safe.json",
+      "bytes": 409,
+      "sha256": "471255cf4fb9d2e5fa53d539ee25b679240e23276bb4f0b1749ae34075b5c169"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-particle20-install-safe.json",
+      "bytes": 407,
+      "sha256": "379033be9f2c4f77dfaf029023b771b2b77c3b9fba1e518f49fb27b03f02f9a5"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-shader-postrestore-quality.json",
+      "bytes": 5172,
+      "sha256": "0a2433d2a2a12d7fa9069c7cb0076b0edbb103855dd728d466a7731844419761"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-shader-postrestore-summary-safe.json",
+      "bytes": 851,
+      "sha256": "8f6467f344c2d5088ba79d62e3349a5305cf9a94e8f7b45a65b702bc41b81738"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-smoke34-install-safe.json",
+      "bytes": 404,
+      "sha256": "12bda26bafcaccdf37930aade0a792f1bb5805df66d8362bf353a8e853ab7d84"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262863837/artifact-provenance.json",
+      "bytes": 2257,
+      "sha256": "14c6329f636431aa222e3dd914c572184b738b2499953fa17136764e32cdaffd"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262863837/gt-fifteen-shader-postrestore-quality.json",
+      "bytes": 5020,
+      "sha256": "94248ba32d8882279d45845ece5478c716d959080d4afac80c97c493555ffca9"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262863837/gt-fifteen-shader-postrestore-summary-safe.json",
+      "bytes": 609,
+      "sha256": "cdc49662cd7d7fc5a0ce6d028ce40ce60e656ae33ed9abff96dc8c04d6f43f1b"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262863837/gt-next23-full-export-bundle-safe.json",
+      "bytes": 327,
+      "sha256": "5d46143630ec00cf2addefb86254fad0eb685dc80c7ef009423e953645e49fda"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262863837/gt-next23-full-export-source-safe.json",
+      "bytes": 1753,
+      "sha256": "b8b7f44e006046944c59b51d97608a00ddfec1b9a1a388aa0d8d0c03ad88573d"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262863837/gt-next23-original-install-safe.json",
+      "bytes": 760,
+      "sha256": "4b0e1096502dca5681042cba29bc071ae947b7be7fb1bff1604735a5b1e9d1fb"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262863837/gt-next23-unity-safe.json",
+      "bytes": 351,
+      "sha256": "827b32d5da421e17502bef6f6d8b2149ea0513322d288f439ed897ee40388c36"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263153467/artifact-provenance.json",
+      "bytes": 2257,
+      "sha256": "0b71f0500e0545aedd8adb6623b588fb3fc3666a4451ab3714807e7e90f749f9"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263153467/gt-next18-full-export-bundle-safe.json",
+      "bytes": 327,
+      "sha256": "ef6bfbda9dd4f3d538ae9a5f6150dbef605283b5816b560621a7d676431b9bc3"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263153467/gt-next18-full-export-source-safe.json",
+      "bytes": 1791,
+      "sha256": "227785eeedca46c59d3d50b7c7351bd6677dc8f44e31eca013e44f8f7ad1f379"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263153467/gt-next18-original-install-safe.json",
+      "bytes": 760,
+      "sha256": "5cc3ea6d1e4c99f3ef314486d55adee865cc7576c92b6cd7d83dcc67c4158e00"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263153467/gt-next18-unity-safe.json",
+      "bytes": 351,
+      "sha256": "2ba9dc378b9a593d311f4e08acb3ab931684e352418250ac712c666b68571993"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263153467/gt-sixteen-shader-postrestore-quality.json",
+      "bytes": 4944,
+      "sha256": "b6ac8c2b76597fed1ad0aba734eb9cd83047383b8c7f9831b9946fa70851645e"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263153467/gt-sixteen-shader-postrestore-summary-safe.json",
+      "bytes": 623,
+      "sha256": "b012f1467a77793996a08ca74fbf215178454cd1307164393b013bd5bec9872d"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263232595/artifact-provenance.json",
+      "bytes": 2262,
+      "sha256": "86e73b662224de64a7edae4ff49886fb0143c81bf0b3e964853618db893e471d"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263232595/gt-eighteen-shader-postrestore-quality.json",
+      "bytes": 4791,
+      "sha256": "79cc457950d98f7246a80249f8e354438089c24026d0f573b9c532763038b21e"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263232595/gt-eighteen-shader-postrestore-summary-safe.json",
+      "bytes": 623,
+      "sha256": "dc564d54fbdf2701d0f094841452e703c80cb7b2497f1a9a3ebe6d948157ec8d"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263232595/gt-next15-full-export-bundle-safe.json",
+      "bytes": 327,
+      "sha256": "e5ae23dce3e790f794918081988ea97f0e474ec21930262002b4ac5dfb293379"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263232595/gt-next15-full-export-source-safe.json",
+      "bytes": 1792,
+      "sha256": "e2d8fcdb232682faa241d0d0768e80b4c7e9fda0f8755ae2c825e60fd2014e03"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263232595/gt-next15-original-install-safe.json",
+      "bytes": 760,
+      "sha256": "322dcb07631980006f648d4c33a02a0d565dd5eb8e9f8f9470ff32f9783e81a1"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263232595/gt-next15-unity-safe.json",
+      "bytes": 351,
+      "sha256": "f39b4d51b77b6979f886502c02fef54fae797d74754315c17943317204874d19"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263560386/artifact-provenance.json",
+      "bytes": 2262,
+      "sha256": "aaaa559564456a3cf6faa88a53cbf4c0f23d4104136596a619b102c7d5e6e54f"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263560386/gt-fourteen-shader-postrestore-quality.json",
+      "bytes": 5096,
+      "sha256": "8782efbe3ace4c10d9c7af285f52ad6e90cbcdbc2a1bce9b60da4729b45f1c35"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263560386/gt-fourteen-shader-postrestore-summary-safe.json",
+      "bytes": 657,
+      "sha256": "d186b64acdd299bddfcba3696b80ee7192f482257b7f3c19cb7a550ed3d76a21"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263560386/gt-next30-full-export-bundle-safe.json",
+      "bytes": 327,
+      "sha256": "eaa6c961a81e7858fd8960f5763fa2bb6ba872558a5e5fc510c65a625ff29334"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263560386/gt-next30-original-install-safe.json",
+      "bytes": 719,
+      "sha256": "c5bbc1677620ad38db82f237ddfdbd0325477ba818a20a3d1ece4e4b2828c5a9"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263560386/gt-next30-source-translation-safe.json",
+      "bytes": 1668,
+      "sha256": "51569f7c610afc866d6bcf3439f8fd6da1dc86b49063f4fc5e9d313b396b559f"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14263560386/gt-next30-unity-safe.json",
+      "bytes": 351,
+      "sha256": "a1cc8f31e0fa5bf00dbbb38df7fdfcb0635255bee710ce4f6eb6d23ac0c32cb7"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264742322/artifact-provenance.json",
+      "bytes": 2297,
+      "sha256": "c259cbe33f6dfbd8081c7162f094970ce9933ae8a892beaa2038084865770e12"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264742322/gt-next7p33-full-export-bundle-safe.json",
+      "bytes": 327,
+      "sha256": "69699e368edd1ac5c2ba24fbea228f4b23f301d4a26a70d5e2b7aa8d3ffbcc8f"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264742322/gt-next7p33-full-export-source-safe.json",
+      "bytes": 1794,
+      "sha256": "cff27d4607ef83e2e9ee40b3f15bd53b0263af4f9ab17f0bd036142bb4fdbabb"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264742322/gt-next7p33-original-install-safe.json",
+      "bytes": 761,
+      "sha256": "b8d6ff3765dad008b89b0b11a17991b6e211e1ab851972885f6a6230eae3e301"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264742322/gt-next7p33-unity-safe.json",
+      "bytes": 351,
+      "sha256": "9febf8d014885f8c47d7a0fdc2617fc3976276f9c05a73499cbb47a744d91e8c"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264742322/gt-twentythree-shader-postrestore-quality.json",
+      "bytes": 4412,
+      "sha256": "af9e31c8248251652595fa47b887fa8bce7dd9a9940eefb254d8c21b88ed910d"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264742322/gt-twentythree-shader-postrestore-summary-safe.json",
+      "bytes": 627,
+      "sha256": "f19fc3c1ae587c0474b21fe9348f3d4690f60e0df547296383a0cfdc0e8195d4"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/artifact-provenance.json",
+      "bytes": 4398,
+      "sha256": "5e10c57a4a366776bfc9304de856b043edaedf8662728534d02492442a408317"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-actual-postrestore-shader-quality.json",
+      "bytes": 1717,
+      "sha256": "94fdc1552f719722c1825b8a31b1ad626e2e62e7ae1ff55b4cc3e815f18ff480"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-b05-actual-original-to-export-texenv.json",
+      "bytes": 1030,
+      "sha256": "1de33bf881e0c3fa7cef906c23ac882b94cceacca3138ef89e76a2980ba945f5"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-export-all-texture-target-categories.json",
+      "bytes": 229,
+      "sha256": "a782aff0196109b714b2415a80bc98ef0cb0884c2d8f01d66f6cb01bef80ba15"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-export-original-restore.json",
+      "bytes": 658,
+      "sha256": "5498ee9a07f473da7c0f5d71929f061f1b01337e23d5f208432400990c6713d2"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-export-texture-guard-safe.json",
+      "bytes": 90,
+      "sha256": "affe9c5455caa5198c42361b77778c7545a733c6ed386b5ad2ac6c85525d20bb"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-full-material-colors.json",
+      "bytes": 600,
+      "sha256": "4a54e4250ffc45c9e632ae610e7518ba8b354d9b196918491a8e9bee57a3d592"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-full-real-82-owner-texenv.json",
+      "bytes": 1629,
+      "sha256": "45a1b65dae5b02b28d55b7db81cf52d25b305d6cef58ed36c809ad434e4e6b63"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-raw-export-program-quality.json",
+      "bytes": 6455,
+      "sha256": "894c487e6ba0a144b4a0f030ed2a92eca20c088146d0c5c046f51aa47ae64f26"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-real-cubemap-export-lineage.json",
+      "bytes": 379,
+      "sha256": "f0850be35d81b42c3a1588e82bc4edcdac1559b10e9ebc725929ab6bd4ab37e1"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-real-export-aggregate.json",
+      "bytes": 335,
+      "sha256": "08fbfb2bd181a534ed290cfd41e0716a078d7a5d0d7fe1f52b26e74eb41a3d3f"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-real-external-texture-links.json",
+      "bytes": 699,
+      "sha256": "7ca5eef2d28b9aa89827383d7b02e51155d36a020ff84054eb442f1324eb31c7"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-real-mesh-export-geometry.json",
+      "bytes": 372,
+      "sha256": "d9834ba336bddb9075d55c1d264b1a549773dd902169b8e9f4940dd77461587c"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-real-original-array-private-Editor-gate-aggregate.json",
+      "bytes": 617,
+      "sha256": "ccd69d3578ee00189ef3b92010ca197d5a6efdb500a983fad60b973b122f6462"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264845476/artifact-provenance.json",
+      "bytes": 2267,
+      "sha256": "b0d36b1de9f2678bc279ceaefe3a050d82dc64d1bdb1f068159fc365584c9f65"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264845476/gt-next17-full-export-bundle-safe.json",
+      "bytes": 321,
+      "sha256": "d43ce1e67a54eed59d1abab00223c754a4d2b861e4614f073459f9c535f03df8"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264845476/gt-next17-full-export-source-safe.json",
+      "bytes": 1783,
+      "sha256": "a8b208a83b640b6914a84bf7f4b6e32cc3f8b12af487cac48304538d41824039"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264845476/gt-next17-original-install-safe.json",
+      "bytes": 753,
+      "sha256": "4eaf3a378cdcd9e0553bc83ecbc82431af38fcf3decd0d038fcdda74df21f606"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264845476/gt-next17-unity-safe.json",
+      "bytes": 351,
+      "sha256": "d2cd87285fa35d55fe09e3c57088c1aacd3336349a7cd2b70e43d6f5e35c7165"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264845476/gt-seventeen-shader-postrestore-quality.json",
+      "bytes": 4868,
+      "sha256": "63d1f52f0eb0ea6bbec011a5a64b8344563898560790632e9566d82446296f9f"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264845476/gt-seventeen-shader-postrestore-summary-safe.json",
+      "bytes": 624,
+      "sha256": "8bc7a3378a334b7b520a4b2fb01f3334abf032bfb47c880e0f6db28105d6c671"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/artifact-provenance.json",
+      "bytes": 2282,
+      "sha256": "17207ad74032cc8dc38f902c167ab1022e426f07af14a296e041f5fff2613954"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-next10p33-full-export-bundle-safe.json",
+      "bytes": 327,
+      "sha256": "eacf9a53e788f40719add6a906af54e94125bad299e9abe55f8bd87c18e6e5bf"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-next10p33-full-export-source-safe.json",
+      "bytes": 1799,
+      "sha256": "a163c61b9888c63dc9e4e86d5bd9631e40b27a70531769876ff0d62b2ebb95f8"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-next10p33-original-install-safe.json",
+      "bytes": 763,
+      "sha256": "455ab12f1a2b1fe64bfae114bc8b5d04e548f801208bcd358d1eec7f9beb889f"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-next10p33-unity-safe.json",
+      "bytes": 351,
+      "sha256": "5d1b95cc306fb2b0220d4aa8626afcbee1a158549826de8ac2d7eccc310fa3a3"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-twenty-shader-postrestore-quality.json",
+      "bytes": 4639,
+      "sha256": "cda0a75de7ed8874201201cd11cd8a4a351777884fcdee4d1ebdd7b33efdb67f"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-twenty-shader-postrestore-summary-safe.json",
+      "bytes": 624,
+      "sha256": "c9f8e13e000d0b9d79b8375d6559e6f6e1bd9f2d4b2fe8d084a1f4f93ab2291b"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265171560/artifact-provenance.json",
+      "bytes": 2287,
+      "sha256": "adcae749731e679df9adc259d93621fd6223c7833fbd2a179e9748f5459f4592"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265171560/gt-next7p11-full-export-bundle-safe.json",
+      "bytes": 319,
+      "sha256": "c3ada3e4b8598a59c445efdfecef6ce30572137c0f9cad867d990ff6f2b85f85"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265171560/gt-next7p11-full-export-source-safe.json",
+      "bytes": 1786,
+      "sha256": "ea30f6cbf9a7070b8436cb3b704181134f2b9d190a74f6c8e2bb5f094c956e9c"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265171560/gt-next7p11-original-install-safe.json",
+      "bytes": 753,
+      "sha256": "81a694c509ed4f3d77a1e30788c1970593f38dcff37737eea0443ee89b8eee1f"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265171560/gt-next7p11-unity-safe.json",
+      "bytes": 351,
+      "sha256": "35675187e6edd1431e26e1bf61385e8bb34e2633f01357e7399b789df7a18958"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265171560/gt-twentytwo-shader-postrestore-quality.json",
+      "bytes": 4488,
+      "sha256": "419b7a73bf54ee3257b16766cccb2b33a76def0a80e6df852751efe2d5ea658c"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265171560/gt-twentytwo-shader-postrestore-summary-safe.json",
+      "bytes": 626,
+      "sha256": "db83fba88c0a6c190aba0f5e8df9087798d34465656eaf17a2126f5ddb51c1bf"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265255920/artifact-provenance.json",
+      "bytes": 2297,
+      "sha256": "0c6db48ca5efcc983f6fd7f68ba28cf4f14cd556fbc6e33364f31ec376822d6e"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265255920/gt-next10p31-full-export-bundle-safe.json",
+      "bytes": 327,
+      "sha256": "bb240612a6afc686726d66df6d779fa05f104a2abda7f6291684f447439dcf35"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265255920/gt-next10p31-full-export-source-safe.json",
+      "bytes": 1798,
+      "sha256": "e1d97d9177bdc72573f0738bbb1f806f3c11644acbc29263e45ec0449c0f2759"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265255920/gt-next10p31-original-install-safe.json",
+      "bytes": 763,
+      "sha256": "ec2b56df124b39d0207d45b4d4c2a28bc55ac827333730236e456cf0b1c421ed"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265255920/gt-next10p31-unity-safe.json",
+      "bytes": 351,
+      "sha256": "b64bbf323d14cef2307e56b7f1d94d30f6c34bc9f0fbe03a8486ee3e91cb702b"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265255920/gt-twentyone-shader-postrestore-quality.json",
+      "bytes": 4563,
+      "sha256": "56c8297d9726d9baff6d8fa9333a0d0a020f589dfa4773eda9f149b795c5d5e7"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265255920/gt-twentyone-shader-postrestore-summary-safe.json",
+      "bytes": 627,
+      "sha256": "3826b1e020d0dfa32a2dae7093d4353867a756590c9e8d0694924d8b030ad454"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265355044/artifact-provenance.json",
+      "bytes": 2262,
+      "sha256": "ab580c503568429181cc46115c722e02d0ec3ac2f6ec18d7002682ed941f9a12"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265355044/gt-next11-full-export-bundle-safe.json",
+      "bytes": 327,
+      "sha256": "88f8f68c8f304c5503217f17b7bedfa089db3a04f8015201666a8a556311361e"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265355044/gt-next11-full-export-source-safe.json",
+      "bytes": 1789,
+      "sha256": "8d0543e22c89eeb4d30154964783deace0057875d6eaea71e0c07721bd250f08"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265355044/gt-next11-original-install-safe.json",
+      "bytes": 760,
+      "sha256": "a857d8c496d760d0a9ce153e8e6452a24c659848206d4f824b266bc0ac6cc961"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265355044/gt-next11-unity-safe.json",
+      "bytes": 351,
+      "sha256": "339d72d575d8e9d5b2deae70b187cc07181935121fa3005ce0fd2c2b54bc8462"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265355044/gt-nineteen-shader-postrestore-quality.json",
+      "bytes": 4715,
+      "sha256": "1b7200da7b7422609636cb044b366958dd6034857e172700aecb8802b3eedb11"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265355044/gt-nineteen-shader-postrestore-summary-safe.json",
+      "bytes": 623,
+      "sha256": "52f175017ed6c5b75aaf5f04f426e4fb129fa493e98615805871dea81f01abfc"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/44781701884/artifact-provenance.json",
+      "bytes": 795,
+      "sha256": "ab5c0547631691e0819e7f1c9040c91ebfa9cf3ab5e213e017029dd0f03ac1dd"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/44781701884/gt-fft-utilities-safe.json",
+      "bytes": 608,
+      "sha256": "c25c9ab85e05a756e41f0c8df20da3de73de159dbaa95d6c9977034fdec39f8c"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/44781701884/gt-fft-utilities-unity-safe.json",
+      "bytes": 433,
+      "sha256": "60c3692d9998e738f2bf749560ed9349e4458246ad64962137ca827d9f06c642"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/44783011957/artifact-provenance.json",
+      "bytes": 461,
+      "sha256": "cb496077c00e83c4641fc6cfe9bd44986b54a8c811943f00f4402a1251662f73"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/44783011957/gt-next23b-private-stage-safe.json",
+      "bytes": 1213,
+      "sha256": "6273dcedb951c205281d547340d24d252989b96f69036aaba8b2698c5edd7b8e"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/45759923748/artifact-provenance.json",
+      "bytes": 418,
+      "sha256": "49624c6fe9ce48d8109ba890d7c8efbdbda1e55760aee13468824b08f103ff24"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/45759923748/verified.json",
+      "bytes": 596,
+      "sha256": "d1f59547160c4b160fbb1baef0ec76a0601820bad31a620a3aad65192dfc69de"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/45760345978/artifact-provenance.json",
+      "bytes": 683,
+      "sha256": "965e353b5c498cad7d415ae8744b547314ed0ab59d3e2709ee398525a80c44a7"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/45760345978/raw.unity.json",
+      "bytes": 794,
+      "sha256": "1c491091ea2a8120abf224ec051c32726ba64317f66f46dab5ef61f399eeedf6"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/45760345978/verified.json",
+      "bytes": 729,
+      "sha256": "5c538427e426d0c37b02f008053825737ce111f7a927576d0b05c7cebfe9a7f2"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/45760877767/artifact-provenance.json",
+      "bytes": 686,
+      "sha256": "52374f85ba773d71e0f8267b069c6428d512ace8765e88210ae03c6b151a832d"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/45760877767/raw.unity.json",
+      "bytes": 76711,
+      "sha256": "44fa5ae78b1bc35ec66ec2753107b874c56f6a77f407b69a287377c5bd304ccb"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/45760877767/verified.json",
+      "bytes": 1043,
+      "sha256": "cde915d24595a59f86618ea4df9b67e7a10a6ae4c7202d7c75910dbce130cd5d"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/branch-runs-reviewed-20261126.json",
+      "bytes": 7417,
+      "sha256": "7da831aa115316903e4da68f0400ae64c97e19998160060cd13d2092f43d7eec"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/local/gt-fft-coordinate-types-safe.json",
+      "bytes": 394,
+      "sha256": "8c9a0d3453927ae1f9521aa7efbe0cf3217650e1a692655dfc0a04a300cc6437"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/local/gt-fft-utilities-hlslcc-safe.json",
+      "bytes": 905,
+      "sha256": "a699c7d94698aefc41d98d698195be3a2d4efa998ed7094620b943fbbe7e6d09"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/local/gt-fft-utilities-safe-v2.json",
+      "bytes": 608,
+      "sha256": "c25c9ab85e05a756e41f0c8df20da3de73de159dbaa95d6c9977034fdec39f8c"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/local/gt-fft-utilities-safe.json",
+      "bytes": 511,
+      "sha256": "f5e4c22782bb2a7df2c168d87c3531f84e5a1b5aa63e54280dd48faf27af7f65"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/local/next23b-compose-44783011957-safe.json",
+      "bytes": 1213,
+      "sha256": "6273dcedb951c205281d547340d24d252989b96f69036aaba8b2698c5edd7b8e"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/ten-group-runtime-keyword-audit.json",
+      "bytes": 3093,
+      "sha256": "225fde3fcd1b1a8ef9810b5b4c2df7539a59acf77fef02d2bad3c7a81f49eb71"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/history/RESTORE_IMPORTED_AR.md",
+      "bytes": 189907,
+      "sha256": "58264c78a117b607bb404257a9cbbd4462e1e26b6708bde50e1ebaa3bf56d3cc"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/history/RESTORE_LOCAL_BEFORE_HANDOFF_AR.md",
+      "bytes": 197753,
+      "sha256": "793e6c160053297fb87ca59b2e450ab1b0af8f55be88622b587ec2aff53571ba"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/history/RESTORE_REMOTE_BEFORE_HANDOFF_AR.md",
+      "bytes": 223570,
+      "sha256": "3131aad1f819eb5da38e332858b7cdf72faa3d6c89ca4a6f2f2dbeacfe4e4c56"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
+      "bytes": 1572,
+      "sha256": "f8dd8e0f104fda9494f3b0951713c98d9ad1323c5404532355d894e12dbf2764"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/inventory/preserved-code-and-document-paths.json",
+      "bytes": 18011,
+      "sha256": "b5585af70d4f641ed71971f0afbc68330df5c4da707b1c6735e8cc915d3ac1e2"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/tests/current-focused-test-command.json",
+      "bytes": 1178,
+      "sha256": "379f35b9ee36340a6361df24a19f01baca29f3c4738abb5a09678f2ab6edb407"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/tests/current-focused-tests.txt",
+      "bytes": 21865,
+      "sha256": "43c88ffc22fc9578291f2772ed44ad976ea2f1fa122ea94a28c8a3d13a9b018f"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/tests/current-ledger-check.txt",
+      "bytes": 348,
+      "sha256": "570e8fe5042e27ec28e6ef60620e6cfdaa5ee25c758989372744759ea46a5ab3"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/tests/historical-baseline-results.json",
+      "bytes": 2240,
+      "sha256": "e3c5edc21f063a1d58e622355f4c888f65501529f0dd04135d6ef2614a7545cc"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/tests/historical-results.json",
+      "bytes": 72174,
+      "sha256": "d3aca1cbb36c82285588814aabad6e3ba91114393b3ec3685fc223201224ce26"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/tests/historical-test-logs-manifest.json",
+      "bytes": 146880,
+      "sha256": "d9cb7e0309585499c421ca2ba26ff1f7be45d5c2b959b16006c8d38481ef6e28"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/tests/historical-test-logs.zip",
+      "bytes": 212097,
+      "sha256": "f6905a401b474395a45774c8a280eedf5067421833cc97384b723dd17a8dbece"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/toolchain/python-freeze-historical.txt",
+      "bytes": 214,
+      "sha256": "3704c4da56167ad56b8d43ecaa037c6c7492643cbc5c93a4c1dcf3ddd94a3b40"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/toolchain/source-free-requirements.txt",
+      "bytes": 29,
+      "sha256": "3caea4e2bacafc530a525614ddd8a7bffd0470d69195454ca393eda566271326"
+    },
+    {
+      "path": "clients/GT/sessions/20261126-complete-handoff/toolchain/versions-and-checksums.json",
+      "bytes": 1793,
+      "sha256": "35efd846490337f481fa1b8e6e8dd2523752325cbf99692354513b7bf889c558"
+    },
+    {
+      "path": "clients/GT/state.json",
+      "bytes": 90756,
+      "sha256": "40ea8342e7de698b0108a0f71c6b7a71e57c9a42dd4427d22fd7c4041e5ca781"
+    },
+    {
+      "path": "prompt/STATUS.md",
+      "bytes": 541232,
+      "sha256": "66eb83fde90eb307d3bceb6de26bec3cab0b1b2af67067f84e426984cf1137d4"
+    },
+    {
+      "path": "scripts/gt_fft_utilities_restore.py",
+      "bytes": 9193,
+      "sha256": "f506070324d83b88f3506f26e1cc367d1c3810b2a7f849a4848b85e84e550cc1"
+    },
+    {
+      "path": "scripts/gt_install_fft_utilities_original.py",
+      "bytes": 9255,
+      "sha256": "6c9a55d1215c4f80753896c6586b4f838db4b8943a6e631c67087e1402fedd22"
+    },
+    {
+      "path": "scripts/gt_next23b_private_stage_translation.py",
+      "bytes": 12904,
+      "sha256": "31f8761c540cf4b93c3a6ada4354807cc0dcee6667c7cc5135f7a4cd3d6fc6d9"
+    },
+    {
+      "path": "scripts/gt_original_921_shaderlab.py",
+      "bytes": 28721,
+      "sha256": "0c41a31ee31f578f033c26278180935cb97500b1d426a0b45ddc6cac70da8354"
+    },
+    {
+      "path": "scripts/gt_verify_921_shader_bundle.py",
+      "bytes": 14763,
+      "sha256": "8f5a76338e23f948288fb500ae9d055d870a84b6f090347a346fad1e5d3facf9"
+    },
+    {
+      "path": "tests/test_gt_fft_utilities_restore.py",
+      "bytes": 1984,
+      "sha256": "e6ec91bc7ce073e5b2d282d22d014c14ae43553b35ab8ad46ac2cd3cccb1362c"
+    },
+    {
+      "path": "tests/test_gt_fft_utilities_unity_contract.py",
+      "bytes": 2294,
+      "sha256": "fbaddc9fb283761c6a4eb17e6716230e161cd9bf7ddbefd3a31b1aebc93736c2"
+    },
+    {
+      "path": "tests/test_gt_install_fft_utilities_original.py",
+      "bytes": 6042,
+      "sha256": "99d8d76b8b13bbed2c0f7d095ce8211147c05bb94da9726564588431553f03b6"
+    },
+    {
+      "path": "tests/test_gt_next23b_unity_gate.py",
+      "bytes": 1817,
+      "sha256": "a614c7d7d38b0dec1f2131b243e26e340b59c52ac424180897089db3a0478a4a"
+    },
+    {
+      "path": "tools/gt_handoff/20261126/README_AR.md",
+      "bytes": 1317,
+      "sha256": "463399d42f90b17cf1b69558d3a6b3515d2a6e7fce947986d0cc74369818da84"
+    },
+    {
+      "path": "tools/gt_handoff/20261126/finalize_manifest.py",
+      "bytes": 2762,
+      "sha256": "b663abe86646b2372063ba0a6cb6314eabd627923a088b6c3fdfa0651269c108"
+    },
+    {
+      "path": "tools/gt_handoff/20261126/port_post23_native.py",
+      "bytes": 4303,
+      "sha256": "baae01a81bdf0b6b6c8db57be0ecfc2223645c9e6477c5aac3b0c5eb5655222f"
+    },
+    {
+      "path": "tools/gt_handoff/20261126/preserve.py",
+      "bytes": 6756,
+      "sha256": "0c2e44516264c0aab8275ad55044bb5f2907ec66c68e5d5e8528bb49cb333e1a"
+    },
+    {
+      "path": "tools/gt_handoff/20261126/run-tests-isolated.py",
+      "bytes": 1140,
+      "sha256": "0c1cc4a0f4519af2ed6538635ff5e09f7fc79f9b3f8ce324866ad6b1f6c14312"
+    },
+    {
+      "path": "tools/gt_handoff/20261126/test_current.py",
+      "bytes": 1685,
+      "sha256": "20d12939c9438b6ee1cf4ab8a007f5f79022b15a2b04d6d5b9a25cf645ade413"
+    },
+    {
+      "path": "tools/gt_handoff/20261126/write_docs.py",
+      "bytes": 43654,
+      "sha256": "6184d34bfd2edace6e39485bdd4c3662707c023eec2b300ff8d07298018fb3be"
+    },
+    {
+      "path": "tools/gt_handoff/verify_handoff.py",
+      "bytes": 3519,
+      "sha256": "e3d53f5fd73096657e3f01b37f241f9ffea6e6592d271184863fe2f9d069e6cf"
+    }
+  ],
+  "existing_repository_references": [
+    {
+      "path": "clients/GT/METHOD_AR.md",
+      "bytes": 3370,
+      "sha256": "ef921eb8b8e5f0d6adbc6c9d9d00afa73729f98824b8727305094315fea59a05"
+    },
+    {
+      "path": "clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md",
+      "bytes": 7690,
+      "sha256": "9c76979dd87e5ae2f2e677375430b4a3db69db51a77233e7533f0b8021ac44c4"
+    },
+    {
+      "path": "docs/ZIP2_SOURCE_PROVIDER.md",
+      "bytes": 4353,
+      "sha256": "2f3800b6f4e3692692b5890470c8f25988df684bd98b2c96e8ab374936b7611c"
+    },
+    {
+      "path": "scripts/b44_verify_material_colors.py",
+      "bytes": 16504,
+      "sha256": "8e214ebe1e5c88ebf85c4b30abfb7b1b3a9d269dfdefe90eabcd0afa0fbc54bd"
+    },
+    {
+      "path": "scripts/gt_bc3_array_layout.py",
+      "bytes": 3345,
+      "sha256": "473b35d8b1329617ec1c8192f677b83ff3ef497d1796cae38ff57d1ffda410a5"
+    },
+    {
+      "path": "scripts/gt_compare_original_bc3_to_flipbook_pixels.py",
+      "bytes": 11277,
+      "sha256": "1ee2eb0e41a2c588e34641f0bc909f55460ab8c6da401182e8f9826e846fd813"
+    },
+    {
+      "path": "scripts/gt_compare_shader_restore_quality.py",
+      "bytes": 4907,
+      "sha256": "1ca0f00f41eefc815cc81ac077abb27d0563e9da33ed3ad08667f5aeae1516a1"
+    },
+    {
+      "path": "scripts/gt_decode_smolv.cpp",
+      "bytes": 580,
+      "sha256": "1635f0eeeccf0c2ed3e7a0662777477b04e37cea3abb238cd13a793c1c0f670c"
+    },
+    {
+      "path": "scripts/gt_device_graphics_acceptance.py",
+      "bytes": 9703,
+      "sha256": "ee5dd0148c35a611178ad92acc5c74b415dd8a98e4e6a6872d0d9bb5d4290d71"
+    },
+    {
+      "path": "scripts/gt_diagnose_export_texture_targets.py",
+      "bytes": 7061,
+      "sha256": "147fc880837ab31b8a961d22a3aa70cf405fe05c6933298976f270444113fd3a"
+    },
+    {
+      "path": "scripts/gt_diagnose_texture_export_lineage.py",
+      "bytes": 8005,
+      "sha256": "ed77bc7bbe439acd8b4eaeb77f5ea0be708547a3d23afe79d6ef598f065da7a8"
+    },
+    {
+      "path": "scripts/gt_external_original_texture_links.py",
+      "bytes": 12954,
+      "sha256": "5e183e97b5fbc1791777abb87cae85d6cc0f8fd60749a4e596074231b36db7a6"
+    },
+    {
+      "path": "scripts/gt_full_original_export_texenvs.py",
+      "bytes": 7813,
+      "sha256": "7ba9af0dfd507abc71cc10769b25312aa4418399368c146d1c88478751f8f457"
+    },
+    {
+      "path": "scripts/gt_install_next10p31_original_shader48.py",
+      "bytes": 7861,
+      "sha256": "19f5d96d5217114941ebe42cc0c4173c13ffe182ce474456cb30831f304acd3e"
+    },
+    {
+      "path": "scripts/gt_install_next10p33_original_shader48.py",
+      "bytes": 7687,
+      "sha256": "6c0df84cc38c15aacef7a5dac2304446aee681bd30931161d9bbaec60828ea62"
+    },
+    {
+      "path": "scripts/gt_install_next11_original_shader48.py",
+      "bytes": 7600,
+      "sha256": "c2832dec6cf847fe7c390e2fe373b4982c02146cccf7d0600ea7c1474857e060"
+    },
+    {
+      "path": "scripts/gt_install_next15_original_shader48.py",
+      "bytes": 7600,
+      "sha256": "affaeb3f29f59db62a065458f6b843f475d4966cb863b5e30ad536d8325a9cb7"
+    },
+    {
+      "path": "scripts/gt_install_next17_original_shader48.py",
+      "bytes": 7597,
+      "sha256": "d708c90855c3b55c89ec7a01c92952663bf4fe06f84b98c76c580c67650defad"
+    },
+    {
+      "path": "scripts/gt_install_next18_original_shader48.py",
+      "bytes": 7250,
+      "sha256": "a7368b4aed7e5c2a74e8d418df218c5294706b85a2dbf9beee38125bf21ce415"
+    },
+    {
+      "path": "scripts/gt_install_next23_original_shader48.py",
+      "bytes": 7243,
+      "sha256": "196b036edea840f576eb939fbe7373e9a84a7cae45c7383ccd8599f40536ed6d"
+    },
+    {
+      "path": "scripts/gt_install_next30_original_shader48.py",
+      "bytes": 4584,
+      "sha256": "dc26fbb442aa782f6cdadd54d48ce674b6db3e9418a95be27a7b276e66e92e2d"
+    },
+    {
+      "path": "scripts/gt_install_next7p11_original_shader48.py",
+      "bytes": 7733,
+      "sha256": "55c6556c337f205ad4359b9f88d1c49b67b511a7046155775cc6bbe4b29dc928"
+    },
+    {
+      "path": "scripts/gt_install_next7p33_original_shader48.py",
+      "bytes": 7839,
+      "sha256": "2d08110800f425f71c688a8b3583dd3415f76413aabd8ad8118b7e62f3bdbf61"
+    },
+    {
+      "path": "scripts/gt_install_original_particle108.py",
+      "bytes": 13361,
+      "sha256": "ca72dad51b396d1076d5709296f7efe736b46162efd5a4c44a1478f2ed148a59"
+    },
+    {
+      "path": "scripts/gt_install_original_spectrum.py",
+      "bytes": 11118,
+      "sha256": "9f65015a499d888232b30d447af2ed658c288fd8851af8001479fdf91ca1a7ba"
+    },
+    {
+      "path": "scripts/gt_install_recovered_model_shader.py",
+      "bytes": 4715,
+      "sha256": "b6111485cd85ca44e97748cabf595f4e38636c1f5279bbddb4f927d183278607"
+    },
+    {
+      "path": "scripts/gt_mesh_restoration_priority.py",
+      "bytes": 9868,
+      "sha256": "a8804674bc03061193e10cbd9b7d73fd957cda07f9c5d841474d849e92c5996a"
+    },
+    {
+      "path": "scripts/gt_next23b_source_topology_census.py",
+      "bytes": 5271,
+      "sha256": "9808bcb5dc4807233d118e6af26c162c4fe9e7dc5ca7ee728f2546665c88c7b7"
+    },
+    {
+      "path": "scripts/gt_original_921_all_variants.py",
+      "bytes": 27754,
+      "sha256": "07431258139fd0285921faa94f43c5dca5d8e066fbde846a18af907e6aa6340d"
+    },
+    {
+      "path": "scripts/gt_original_921_cb_hlsl.py",
+      "bytes": 27094,
+      "sha256": "505ccf905de7cbca1f78e02854c37c3393c82dfc1754da9b9162abb5929db191"
+    },
+    {
+      "path": "scripts/gt_original_921_cb_layout.py",
+      "bytes": 6170,
+      "sha256": "6c6be4cb385af558fb4ccb39bd3796d4980454082cb32e2da79ca23d9620ea0a"
+    },
+    {
+      "path": "scripts/gt_original_921_keyword_routes.py",
+      "bytes": 8114,
+      "sha256": "d40c550e6c128a79329d4520089a2d1932b57a886262eac9267bbc6e435163e8"
+    },
+    {
+      "path": "scripts/gt_original_921_resource_rebind.py",
+      "bytes": 2692,
+      "sha256": "7b382b0b8f6e01d86e918eb7f8227bb8052388e545ee18180fcd1b2cb793a495"
+    },
+    {
+      "path": "scripts/gt_original_921_semantics.py",
+      "bytes": 6442,
+      "sha256": "863c309867d026cc810cdfa782d3157f2a4bb0d6fe52dd00ee9c2b17be33857c"
+    },
+    {
+      "path": "scripts/gt_original_character_rig_links.py",
+      "bytes": 12235,
+      "sha256": "e4af3bf0be079a19a545d55a2599314f3ca8edfb68eddf694fde4737930dbee8"
+    },
+    {
+      "path": "scripts/gt_original_graphics_critical_gate.py",
+      "bytes": 5179,
+      "sha256": "aee07a19ae054c01ee5f738267b992e9deb19752dd771eb7cff961dd7e58e555"
+    },
+    {
+      "path": "scripts/gt_original_material_link_graph.py",
+      "bytes": 9214,
+      "sha256": "ed6fece060d76b9a054b23e4d051b8b002e055415be9e2b7be53a74e24061ad6"
+    },
+    {
+      "path": "scripts/gt_original_mesh_texture_graph.py",
+      "bytes": 11123,
+      "sha256": "dcb9b16f617df249b2fb7c2ff1ad058bc52a91b5410034330805f0b87eeeca21"
+    },
+    {
+      "path": "scripts/gt_particle108_export_alpha_diagnostic.py",
+      "bytes": 31274,
+      "sha256": "051be0b8c59eaf71eba0c27ccf6f5fb3b764309765c3921feb641581278c2bc5"
+    },
+    {
+      "path": "scripts/gt_particle108_original_dxbc_sampler_decl.py",
+      "bytes": 13994,
+      "sha256": "1fc861a00345c5184bfc754880da51eda22911abfb0588d30b42d38b82a4c407"
+    },
+    {
+      "path": "scripts/gt_particle108_private_unity_project.py",
+      "bytes": 9588,
+      "sha256": "f2ebcd399b950cdc2c97140f6fe51d9bb99f47a8135b9f54d6a476c40f497cb9"
+    },
+    {
+      "path": "scripts/gt_particle108_source_sampling_pairs.py",
+      "bytes": 12562,
+      "sha256": "e261fd917c4ee3f9569cc4b6c4a3fa42622cd6862b1d79e89ea25c0775fcfb61"
+    },
+    {
+      "path": "scripts/gt_particle108_unbound_inline_samplers.py",
+      "bytes": 6245,
+      "sha256": "dfefcf6358aa815d2218ec662d0b1fb1198875d3ccdcbe75209b202b0a3e465c"
+    },
+    {
+      "path": "scripts/gt_particle108_unity_bindings.py",
+      "bytes": 23282,
+      "sha256": "c01f99f6534a3e48f3dd1685b0a7e612b411b41c6bcf9d5909ded19c6ecc904f"
+    },
+    {
+      "path": "scripts/gt_particle20_source_bound_shader.py",
+      "bytes": 6222,
+      "sha256": "a575995888ebd29042544b924d3a1549d4aa9b97626ab70d918798840307d9bb"
+    },
+    {
+      "path": "scripts/gt_probe_remaining_original_shader_dxbc_topology.py",
+      "bytes": 8033,
+      "sha256": "6f1280aa0a1c78c3cd387d30363b66e3d83ed7cd5a68fe7e162770c4bd56f566"
+    },
+    {
+      "path": "scripts/gt_rank_all82_original_shader_names_after_nine.py",
+      "bytes": 8083,
+      "sha256": "0488f2ee00c9b32d0d33c88fd6af3927d6c98d3f8d584ce7603471824d164305"
+    },
+    {
+      "path": "scripts/gt_rank_full_export_dummy_shader_sources.py",
+      "bytes": 10903,
+      "sha256": "4a6475970352fa0924ec67675769a0f56a6cf330b555f10bbe645487873ac056"
+    },
+    {
+      "path": "scripts/gt_rank_remaining_original_shader_by_export_materials.py",
+      "bytes": 8049,
+      "sha256": "41a3b138e91dae323fb1272a5c7b22655283603b4d72894c80c967898bfc0b56"
+    },
+    {
+      "path": "scripts/gt_recover_original_array_layers.py",
+      "bytes": 12162,
+      "sha256": "b5a6d3c9d26dcccfea1d0b263449e84555cd7713e4dcf9c7b59455fce504cb1f"
+    },
+    {
+      "path": "scripts/gt_remaining_original_guid_weights.py",
+      "bytes": 3534,
+      "sha256": "ea49f3086bad814ba77bd71ca180afaea6089096aeb931a33512ef2e9e095d93"
+    },
+    {
+      "path": "scripts/gt_repair_array_flipbook_importers.py",
+      "bytes": 12088,
+      "sha256": "acf88f3a893e1a3c9d173572a20e2e9d0d72857af84e1eba043f0cfb62c9ddae"
+    },
+    {
+      "path": "scripts/gt_restoration_plan_check.py",
+      "bytes": 12656,
+      "sha256": "7965d4e4134aba724623dc954e9afa586b4d9788de6aaa47342f414284d22b1a"
+    },
+    {
+      "path": "scripts/gt_restore_first_shader_priority.py",
+      "bytes": 10912,
+      "sha256": "e17c9dacf36c418e6a0ff554125f132ac1b0d9934c583e5ea324bf6fa4afcca6"
+    },
+    {
+      "path": "scripts/gt_scene_graphics_inventory.py",
+      "bytes": 10319,
+      "sha256": "487287e512df02149951f695a2d71b4d0dad66d5c179a85c5cec8f845d2ec35a"
+    },
+    {
+      "path": "scripts/gt_serialized_graphics_counts.py",
+      "bytes": 6339,
+      "sha256": "ff3d722da25aa623e0f20ad88f9395c26e203c44f8c94c964c9707eec4fd4a19"
+    },
+    {
+      "path": "scripts/gt_smoke34_source_bound_shader.py",
+      "bytes": 9531,
+      "sha256": "19a76e23bfe362314d68639fc8ac4cfbe1c6f153629f6984b7ecc96ab467b3cb"
+    },
+    {
+      "path": "scripts/gt_spectrum_all82_original_material_closure.py",
+      "bytes": 9506,
+      "sha256": "5a84f5a451b3668e4337be3f587f8ebdc9bcfd3275b78756f5ad11e2debbb9f4"
+    },
+    {
+      "path": "scripts/gt_spectrum_ci_console_gate.py",
+      "bytes": 3897,
+      "sha256": "fda1c0beeeef3b5605959bb8ff42e1c791d1bb25c6ec101e6bcc41270438a7cf"
+    },
+    {
+      "path": "scripts/gt_spectrum_keyword_flag_semantics_control.py",
+      "bytes": 7245,
+      "sha256": "c4f5f08901c6e2b5d05f5b9f38978084df1aae2c233e243c70c6b545f4320438"
+    },
+    {
+      "path": "scripts/gt_spectrum_keyword_private_unity_project.py",
+      "bytes": 5443,
+      "sha256": "9d91d6001976a483f70f2eae8ab94509e3b55079565523498a6e0d58399a34b6"
+    },
+    {
+      "path": "scripts/gt_spectrum_original_keyword_flags.py",
+      "bytes": 4862,
+      "sha256": "1a16e588b60579aac767cc6d7a2a45aed7059f1b76a1ae67bf7ebd9d81d023fa"
+    },
+    {
+      "path": "scripts/gt_spectrum_original_material_keyword_link.py",
+      "bytes": 9889,
+      "sha256": "e02634687e818ca0b6d53bd94caa614c17d7be610a119d78b6b41525dbbdf2ef"
+    },
+    {
+      "path": "scripts/gt_spectrum_original_pair_compile.py",
+      "bytes": 10165,
+      "sha256": "bea55648438f8d56cdb858d2ecd06e5d7f9bae43424ec6311e9457bc42e03bc4"
+    },
+    {
+      "path": "scripts/gt_spectrum_original_pass_states.py",
+      "bytes": 6190,
+      "sha256": "97d409d6e984578fd3af16fe9f286d2689b1410096d78cdabf04c0f950d21678"
+    },
+    {
+      "path": "scripts/gt_spectrum_original_private_seven_pass_shaderlab.py",
+      "bytes": 14927,
+      "sha256": "560c1e399a7407686dc1f79ba3a74abe19a3f2572ea60473560b0c1774e2b652"
+    },
+    {
+      "path": "scripts/gt_spectrum_original_sampler_source_bridge.py",
+      "bytes": 3041,
+      "sha256": "5e2c4e30fe70ae9614e9d4388229fc78bcaca3ccd854aafd8420a9903f3147be"
+    },
+    {
+      "path": "scripts/gt_spectrum_original_shaderfind_name.py",
+      "bytes": 2358,
+      "sha256": "a680169ee46082b6148a157c0431d747e108e9103af028f9bfcb042d2e710404"
+    },
+    {
+      "path": "scripts/gt_spectrum_private_keyword_routed_shaderlab.py",
+      "bytes": 12825,
+      "sha256": "9c04f8d10c4ba12c466ad5592dffe6bc62f8fd9038dfec8f811ee0cd54af703d"
+    },
+    {
+      "path": "scripts/gt_spectrum_private_stage_buffer_isolation.py",
+      "bytes": 4304,
+      "sha256": "8e7648ffd22de3bbf07dd3b40d05f38ba21cf1db8c4800b3e18a91bdcbdafde2"
+    },
+    {
+      "path": "scripts/gt_spectrum_private_unity_project.py",
+      "bytes": 7758,
+      "sha256": "f611fbc6406cf62aedbd24ba256154c423c54c581f6338a550a8c439be0b7e42"
+    },
+    {
+      "path": "scripts/gt_spectrum_unified_ci_console_gate.py",
+      "bytes": 2424,
+      "sha256": "92a7f593087d50019b95b35d8e756525ac651d1f44e7f927007f5994a738a04b"
+    },
+    {
+      "path": "scripts/gt_stage_indexed_fft_candidate.py",
+      "bytes": 11044,
+      "sha256": "43c6c5b9a807d3770a77f437f8aa8795f1120adc911f4c268ffb45f4f2b0d3d2"
+    },
+    {
+      "path": "scripts/gt_stage_serialized_owners.py",
+      "bytes": 6404,
+      "sha256": "0d0cfc6abcc88c5a1cff5a88f12f925fa8ac4042ab9d033f9f5a803d331c16e3"
+    },
+    {
+      "path": "scripts/gt_synthetic_material_alpha.py",
+      "bytes": 15805,
+      "sha256": "2026702d63401793e8678bedabe0c2ad5a4dd3dfc764bf4435867a1de7cdfbbc"
+    },
+    {
+      "path": "scripts/gt_test_vendor_shader_restoration.py",
+      "bytes": 10379,
+      "sha256": "0ed09442764686b04ffa005bfd888671000b7c13076a8c473ecb6f8f8334f186"
+    },
+    {
+      "path": "scripts/gt_translate_next_remaining_10p31_shader48.py",
+      "bytes": 17341,
+      "sha256": "4ceb0aaf4fe1f0372da7645b41de96941188878f873c8c5b7f6f1ebb85e0671d"
+    },
+    {
+      "path": "scripts/gt_translate_next_remaining_10p33_shader48.py",
+      "bytes": 16747,
+      "sha256": "0e9f7dbe95b0666660229d2940b86c50aee6586fe875e2bb0a28d049367517cc"
+    },
+    {
+      "path": "scripts/gt_translate_next_remaining_11_shader48.py",
+      "bytes": 16678,
+      "sha256": "76097cf8f331c5830f272c3b337e787649fe550a816cef4be0c0259a5e63ff51"
+    },
+    {
+      "path": "scripts/gt_translate_next_remaining_15_shader48.py",
+      "bytes": 16678,
+      "sha256": "ccb9792945c6fe9bb0747073b7d6b49ea284c96c9b915ddc938a30c025520123"
+    },
+    {
+      "path": "scripts/gt_translate_next_remaining_17_shader48.py",
+      "bytes": 16679,
+      "sha256": "25a6aab423030ff42a7a40a22d97af1eb2fc4e84196811bf228126a6407402e2"
+    },
+    {
+      "path": "scripts/gt_translate_next_remaining_18_shader48.py",
+      "bytes": 16678,
+      "sha256": "e1a1dbe1987b9f5ae725a8d8412bc833f3f64fa4935949203abe3246c0ea9ac9"
+    },
+    {
+      "path": "scripts/gt_translate_next_remaining_23_shader48.py",
+      "bytes": 16323,
+      "sha256": "aefef24bdd1629b0c6392734ad2cdcf2363975cbfbd911b70b2eae06408cd2e1"
+    },
+    {
+      "path": "scripts/gt_translate_next_remaining_30_shader48.py",
+      "bytes": 11467,
+      "sha256": "0260fa415d7072acf20d313547bd5dad49fa866c711bcd94b682e53d7157eaad"
+    },
+    {
+      "path": "scripts/gt_translate_next_remaining_6_shader48.py",
+      "bytes": 31710,
+      "sha256": "706527d48dff5c33dbdf678baa118f26db508a56aa0dbc45831f01e67b4507ad"
+    },
+    {
+      "path": "scripts/gt_translate_next_remaining_7p11_shader48.py",
+      "bytes": 16729,
+      "sha256": "71c55b3c9a9144a3a0a0d74a8ebf05b9f9e01710c0c89ee5eadbe6bcd1ca2158"
+    },
+    {
+      "path": "scripts/gt_translate_next_remaining_7p33_shader48.py",
+      "bytes": 17304,
+      "sha256": "9a1b39cedd912203d6ee06bdbc655f50ca3922c337fca821712c9b511bffbc9a"
+    },
+    {
+      "path": "scripts/gt_validate_bc3_array_slice_order.py",
+      "bytes": 9214,
+      "sha256": "e50b14d99c7887ad1ac7baa265b06e2fbe1a5279c75201272a0703c0f1619c0e"
+    },
+    {
+      "path": "scripts/gt_validate_texture2darray_flipbook.py",
+      "bytes": 8265,
+      "sha256": "75f3278fba3a31c91f0ee5cdfe712fe088797052ffc08cea4f4bfaa6f90780a4"
+    },
+    {
+      "path": "scripts/gt_verify_native_array_mips.py",
+      "bytes": 8523,
+      "sha256": "1acbf1d3a3ec3715c12a2dc7bbaed0170fcf91272b98aaddfe0084d484dd964d"
+    },
+    {
+      "path": "scripts/gt_verify_original_array_export.py",
+      "bytes": 10156,
+      "sha256": "3bd9ec4b08910507a8ce9666c67f08f1a8e5f9b94cdc5dbff56b2128c4fd3dc6"
+    },
+    {
+      "path": "scripts/gt_verify_original_array_material_refs.py",
+      "bytes": 5197,
+      "sha256": "82c9d8d771380d0b023b9873d72972537f2a8a55db4aa2056d87b34579953e68"
+    },
+    {
+      "path": "scripts/gt_verify_original_mesh_export.py",
+      "bytes": 11850,
+      "sha256": "0dd6796e7c790220ca5cec8c2fb31b88c1682211e755c19409a7843473c4a906"
+    },
+    {
+      "path": "scripts/gt_write_unity_array_import_contract.py",
+      "bytes": 7350,
+      "sha256": "8c15510ba3252d9d24c32b5ade9b3c3d31f360b3c0d166a4bee9a7d42fa8892d"
+    },
+    {
+      "path": "scripts/gt_zip2_export_resources.py",
+      "bytes": 10623,
+      "sha256": "8448a9043d6a7e3045a2b9bb5fa7ad3e349d52fb2c93a813676c6427c12714b1"
+    },
+    {
+      "path": "scripts/gt_zip2_payloads.py",
+      "bytes": 10120,
+      "sha256": "ea7d0d20b5a57ff09450a0a6f6b8d62088c3ddeb7a0770974baf5475bd3d486c"
+    },
+    {
+      "path": "scripts/t3_particle108_source_propstate.py",
+      "bytes": 14688,
+      "sha256": "7c2784014bd429c9d39f20d651321d42c23c046974ea75f655be6f582c2d45cc"
+    },
+    {
+      "path": "scripts/verify_water_render_contract.py",
+      "bytes": 8823,
+      "sha256": "2d3f6d9132d4a0df73d6f8298f853832014d6fcf992d4b3ed1d4eb686cfd5227"
+    },
+    {
+      "path": "scripts/w1_audit_export_material_shaders.py",
+      "bytes": 6122,
+      "sha256": "21309815227c7aa6140958fc3cd4cf2db84cdc1969de8ff3149b9ea764e1b138"
+    },
+    {
+      "path": "scripts/w1_build_depth_wrapper.py",
+      "bytes": 9665,
+      "sha256": "991907cce16cada43e44dc6955a499499a40c4ba8acf0a8a243a408c86717c02"
+    },
+    {
+      "path": "scripts/w1_depth_fragment_numeric.py",
+      "bytes": 9577,
+      "sha256": "8d32c712dc0f7df6f57900be562f8144df4bcf9584d30e2f26a869f5b5c62e22"
+    },
+    {
+      "path": "scripts/w1_depth_fragment_vulkan.cpp",
+      "bytes": 19439,
+      "sha256": "2ee8e6d5cd205f8a573349ee31e390e85d0eb35189a9410dd7c0efce360be69b"
+    },
+    {
+      "path": "scripts/w1_depth_raster_numeric.py",
+      "bytes": 13614,
+      "sha256": "bbdffd31451832107a2684eaafd09f53d73a1a31f572196216ab40f98b597896"
+    },
+    {
+      "path": "scripts/w1_depth_raster_vulkan.cpp",
+      "bytes": 31070,
+      "sha256": "a66534982059019331b99ae34cad3d8f8e355897b5fcade24b44f615f69a16a6"
+    },
+    {
+      "path": "scripts/w1_depth_shaderlab.py",
+      "bytes": 11884,
+      "sha256": "853fac5981a72b8dfed280f39d4d5b0000afb2cad79ed48cc9b2815d4cd61ee9"
+    },
+    {
+      "path": "scripts/w1_full_engine_sources.py",
+      "bytes": 2053,
+      "sha256": "ef7790945663a243af0e0fe14eb94c2fd410b85360f7e7a46aec01ebc81a82a9"
+    },
+    {
+      "path": "scripts/w1_install_depth_copy.py",
+      "bytes": 5646,
+      "sha256": "0bbc1e918cab8101428d71fbd4eca8989b59058c60305f069110cb1231dcd4da"
+    },
+    {
+      "path": "scripts/w1_match_embedded_engine_shaders.py",
+      "bytes": 4736,
+      "sha256": "d44c4ad50f7fc12dfcbb74c91184f416c9eb31f43af29010b00edffff7e383c8"
+    },
+    {
+      "path": "scripts/w1_prepare_engine_unity.py",
+      "bytes": 3822,
+      "sha256": "38a26e4f24a8f639e94fdb550a0711b99c83ab655a42f1841567c6209593bd7f"
+    },
+    {
+      "path": "scripts/w1_prepare_full_engine_unity.py",
+      "bytes": 4297,
+      "sha256": "866d0f229b72d7c849f32157ecb97eadd938574eff7d92ecf4910c546cddac09"
+    },
+    {
+      "path": "scripts/w1_probe_engine_shader_redirects.py",
+      "bytes": 4826,
+      "sha256": "b024599145f4130b9a43b0696baf5c1c7a7dd9c385ed09db1fc47a7245488d8d"
+    },
+    {
+      "path": "scripts/w1_probe_original_shader_links.py",
+      "bytes": 11176,
+      "sha256": "33ca5932e3d18c6ec18ac084a6b0d24a9f9957b4ceb356362eb62d5b6c7149a1"
+    },
+    {
+      "path": "scripts/w1_rebind_depth_resources.py",
+      "bytes": 6214,
+      "sha256": "08f61757ccee297e35375d0873ab272498487cd0ea6c2512bd659312480ee7c7"
+    },
+    {
+      "path": "scripts/w1_recover_depth_passes.py",
+      "bytes": 12862,
+      "sha256": "4bf76318468bd40404ddcd7a4f6f4c165775549fe2eb083e2a377ca7f145f233"
+    },
+    {
+      "path": "scripts/w1_recover_graphics_programs.py",
+      "bytes": 9195,
+      "sha256": "b8d57271f142b7ebed2388f4d177883f89c7edcacf05ed1c741e24a99cc1c5df"
+    },
+    {
+      "path": "scripts/w1_stage_zip2_owners.py",
+      "bytes": 4943,
+      "sha256": "eb8ce01afb88ae06d856f016d8f030909723224ab8a78fae8121f5545100ab1d"
+    },
+    {
+      "path": "scripts/w1_verify_engine_export.py",
+      "bytes": 8650,
+      "sha256": "e2ef4dd82d55d9d5210bf3f1fa5e56fb62fda837ccc5457320e45b72451b958b"
+    },
+    {
+      "path": "tools/synthetic_material_alpha/SyntheticMaterialAlpha.shader",
+      "bytes": 1744,
+      "sha256": "cd0014106a2bc71a196d8389ce33b20e0b052fca1effe212f6822cac3288b8fc"
+    },
+    {
+      "path": "tools/synthetic_material_alpha/SyntheticMaterialAlphaValidation.cs",
+      "bytes": 15231,
+      "sha256": "fd21e1014de836aacda1c7f2d2640d50d632d1614b8aa6106f921a2abf9e8ed3"
+    }
+  ],
+  "manifest_self_hash_omitted": true,
+  "known_missing_batches": 3,
+  "private_assets_or_credentials_included": false
+}

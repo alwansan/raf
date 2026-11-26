@@ -1,0 +1,99 @@
+{
+  "read_only_review": true,
+  "date": "2026-11-26",
+  "source_base": "f3c8a2cdacf04fdbfbced5f87a1407da223e3a15",
+  "mechanism": "compose(engine_keywords=False) emits private GT_ORIGINAL_921_Pn_Vn; absence selects route0; original material keywords do not select the remaining source permutations",
+  "groups": [
+    {
+      "group": "NEXT30",
+      "source_script": "scripts/gt_translate_next_remaining_30_shader48.py",
+      "compose_call_lines": [
+        159
+      ],
+      "private_compile_selector_mode": true,
+      "original_runtime_keyword_selection_verified": false
+    },
+    {
+      "group": "NEXT23",
+      "source_script": "scripts/gt_translate_next_remaining_23_shader48.py",
+      "compose_call_lines": [
+        236
+      ],
+      "private_compile_selector_mode": true,
+      "original_runtime_keyword_selection_verified": false
+    },
+    {
+      "group": "NEXT18",
+      "source_script": "scripts/gt_translate_next_remaining_18_shader48.py",
+      "compose_call_lines": [
+        243
+      ],
+      "private_compile_selector_mode": true,
+      "original_runtime_keyword_selection_verified": false
+    },
+    {
+      "group": "NEXT17",
+      "source_script": "scripts/gt_translate_next_remaining_17_shader48.py",
+      "compose_call_lines": [
+        243
+      ],
+      "private_compile_selector_mode": true,
+      "original_runtime_keyword_selection_verified": false
+    },
+    {
+      "group": "NEXT15",
+      "source_script": "scripts/gt_translate_next_remaining_15_shader48.py",
+      "compose_call_lines": [
+        243
+      ],
+      "private_compile_selector_mode": true,
+      "original_runtime_keyword_selection_verified": false
+    },
+    {
+      "group": "NEXT11",
+      "source_script": "scripts/gt_translate_next_remaining_11_shader48.py",
+      "compose_call_lines": [
+        243
+      ],
+      "private_compile_selector_mode": true,
+      "original_runtime_keyword_selection_verified": false
+    },
+    {
+      "group": "NEXT10p33",
+      "source_script": "scripts/gt_translate_next_remaining_10p33_shader48.py",
+      "compose_call_lines": [
+        243
+      ],
+      "private_compile_selector_mode": true,
+      "original_runtime_keyword_selection_verified": false
+    },
+    {
+      "group": "NEXT10p31",
+      "source_script": "scripts/gt_translate_next_remaining_10p31_shader48.py",
+      "compose_call_lines": [
+        250
+      ],
+      "private_compile_selector_mode": true,
+      "original_runtime_keyword_selection_verified": false
+    },
+    {
+      "group": "NEXT7p11",
+      "source_script": "scripts/gt_translate_next_remaining_7p11_shader48.py",
+      "compose_call_lines": [
+        243
+      ],
+      "private_compile_selector_mode": true,
+      "original_runtime_keyword_selection_verified": false
+    },
+    {
+      "group": "NEXT7p33",
+      "source_script": "scripts/gt_translate_next_remaining_7p33_shader48.py",
+      "compose_call_lines": [
+        250
+      ],
+      "private_compile_selector_mode": true,
+      "original_runtime_keyword_selection_verified": false
+    }
+  ],
+  "material_census_is_pixel_or_runtime_proof": false
+}

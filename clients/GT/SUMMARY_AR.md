@@ -1,3 +1,5 @@
+> **نقطة التسليم الشاملة — 26 نوفمبر 2026:** ابدأ من [رسالة الاستعادة](RESTORE_AR.md) و[حزمة الأدوات والنتائج والخطة](sessions/20261126-complete-handoff/README_AR.md). السجل أدناه تاريخي؛ الاستعادة الكاملة وruntime keywords وUnity/GUID/device ما زالت غير مكتملة. طلب هذه الجلسة هو الحفظ والنشر فقط.
+
 ## متابعة20 نوفمبر2026
 
 حُفظ دمج دفعاتpost23 فيNative عند6c071a414، مع توثيق82owner أصلياً وSHAالـYAML/meta؛ لم ينفذNative المعدل ولاXAPK جديد. نجح مصدرNEXT23b134/134 في44779897149؛ تركيبShaderLab وUnity/GUID لم يثبتا. FFT Utilities الأصلي7Pass/12برنامج؛ استعادته جارية. آخرCL20261120 يسجل968 خطأPass وScudoOOM أثناءVulkan؛ لا اكتمال بصري أو جهاز. [تفاصيل الاستئناف](RESTORE_AR.md) و[الدليل](evidence/20261120_gt_native_post23_and_next23b_integration.json).

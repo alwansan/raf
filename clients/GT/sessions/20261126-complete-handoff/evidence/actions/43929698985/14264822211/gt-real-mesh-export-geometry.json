@@ -1,0 +1,13 @@
+{
+  "all_source_mesh_geometry_matches": true,
+  "authenticated_mesh_streams": 23,
+  "authenticated_source_owners": 82,
+  "counts": {
+    "matched_mesh_geometry": 4708,
+    "source_meshes": 4708,
+    "unmatched_source_trace_records": 0
+  },
+  "mismatch_fields": {},
+  "renderer_bindings_or_unity_import_verified": false,
+  "schema": "GT_ORIGINAL_MESH_EXPORT_GEOMETRY_V1"
+}

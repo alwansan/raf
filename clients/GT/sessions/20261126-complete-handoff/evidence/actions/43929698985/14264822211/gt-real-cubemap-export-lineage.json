@@ -1,0 +1,10 @@
+{
+  "all_nonstandard_targets_proven_importable": false,
+  "android_device_gpu_verified": false,
+  "counts": {},
+  "distinct_nonstandard_image_pointers": 0,
+  "original_guids_names_pathids_disclosed": false,
+  "original_source_objects_or_meta_modified": false,
+  "schema": "GT_REAL_EXPORTED_NONSTANDARD_TEXTURE_LINEAGE_V1",
+  "source_exporter_same_instance_trace_checked": true
+}

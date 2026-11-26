@@ -1,0 +1,27 @@
+{
+  "Android_device": false,
+  "Unity_render_executed": true,
+  "Unity_version": "2021.3.45f2",
+  "Vulkan_raster_validation_passed": true,
+  "XAPK": false,
+  "backend": "Vulkan",
+  "graphics_device_name": "llvmpipe (LLVM 15.0.7, 256 bits)",
+  "max_error": 0.0,
+  "negative_controls_detected": 3,
+  "positive_cases": 2,
+  "production_pixels": false,
+  "reason": "independent_synthetic_pixel_validation_passed",
+  "receipt_reason": "five_synthetic_vulkan_readbacks_verified",
+  "receipt_sha256": "44fa5ae78b1bc35ec66ec2753107b874c56f6a77f407b69a287377c5bd304ccb",
+  "receipt_status": "PASS",
+  "run_id": "45760877767-1-df1cf4b474393ff7edff38c5d75e456d8182d578",
+  "schema_version": 1,
+  "source_hashes": {
+    "Assets/Editor/SyntheticMaterialAlphaValidation.cs": "fd21e1014de836aacda1c7f2d2640d50d632d1614b8aa6106f921a2abf9e8ed3",
+    "Assets/SyntheticMaterialAlpha.shader": "cd0014106a2bc71a196d8389ce33b20e0b052fca1effe212f6822cac3288b8fc"
+  },
+  "status": "PASS",
+  "synthetic_only": true,
+  "validated_cases": 5,
+  "validated_pixels": 120
+}

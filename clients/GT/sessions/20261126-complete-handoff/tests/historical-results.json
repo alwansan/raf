@@ -1,0 +1,3702 @@
+[
+  {
+    "file": "test_a10_offline_source_selection.py",
+    "code": 0,
+    "seconds": 2.24
+  },
+  {
+    "file": "test_a10_original_save_selector.py",
+    "code": 0,
+    "seconds": 1.04
+  },
+  {
+    "file": "test_a11_shader_export_scope.py",
+    "code": 0,
+    "seconds": 3.82
+  },
+  {
+    "file": "test_a12_original_blur_passes.py",
+    "code": 0,
+    "seconds": 0.73
+  },
+  {
+    "file": "test_a12_original_blur_wrapper.py",
+    "code": 0,
+    "seconds": 0.5
+  },
+  {
+    "file": "test_a12_shader_parameter_decode.py",
+    "code": 0,
+    "seconds": 0.33
+  },
+  {
+    "file": "test_a12_vendor_identity_overlap.py",
+    "code": 0,
+    "seconds": 0.6
+  },
+  {
+    "file": "test_a12r_190657_blur_cb_reflection.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_a12r_dx11_cb_declarations.py",
+    "code": 0,
+    "seconds": 0.32
+  },
+  {
+    "file": "test_a12r_zip2_shader_owners.py",
+    "code": 0,
+    "seconds": 0.5
+  },
+  {
+    "file": "test_a13_builtin_coverage_integrity.py",
+    "code": 0,
+    "seconds": 0.89
+  },
+  {
+    "file": "test_a13_exported_material_shader_guids.py",
+    "code": 0,
+    "seconds": 0.59
+  },
+  {
+    "file": "test_a13_material_shader_links.py",
+    "code": 0,
+    "seconds": 0.34
+  },
+  {
+    "file": "test_a14_builtin_backup_atomicity.py",
+    "code": 0,
+    "seconds": 0.92
+  },
+  {
+    "file": "test_a14_shader_meta_guid_preflight.py",
+    "code": 0,
+    "seconds": 0.63
+  },
+  {
+    "file": "test_a15_builtin_restore_rollback.py",
+    "code": 0,
+    "seconds": 0.87
+  },
+  {
+    "file": "test_a15_original_shader_passes.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_a15_render_contract_lexical.py",
+    "code": 0,
+    "seconds": 1.0
+  },
+  {
+    "file": "test_a3_builtin_shader_symlink_paths.py",
+    "code": 0,
+    "seconds": 1.09
+  },
+  {
+    "file": "test_a3_package_singlepart_publish.py",
+    "code": 0,
+    "seconds": 0.57
+  },
+  {
+    "file": "test_a3_reassembly_publish_race.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_a3_vendor_shader_restore_transaction.py",
+    "code": 0,
+    "seconds": 4.19
+  },
+  {
+    "file": "test_a3_zip_entry_paths.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_a4_gpu_cache_destroy_callgraph.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_a4_gpu_cache_owner_callpaths.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_a4_original_gpu_cache_lifecycle.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_a9_builtin_shader_identity.py",
+    "code": 0,
+    "seconds": 0.71
+  },
+  {
+    "file": "test_a9_streaming_stage_atomic.py",
+    "code": 0,
+    "seconds": 50.31
+  },
+  {
+    "file": "test_adapt_editor_mesh_cleanup.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_adapt_original_save_paths.py",
+    "code": 0,
+    "seconds": 1.39
+  },
+  {
+    "file": "test_adapt_unity_url_codecs.py",
+    "code": 0,
+    "seconds": 0.38
+  },
+  {
+    "file": "test_add_unity_packages.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_android_apk_audit.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_android_delivery_package.py",
+    "code": 1,
+    "seconds": 3.47
+  },
+  {
+    "file": "test_android_diagnostics_policy.py",
+    "code": 0,
+    "seconds": 0.33
+  },
+  {
+    "file": "test_android_expansion_audit.py",
+    "code": 0,
+    "seconds": 1.28
+  },
+  {
+    "file": "test_android_native_scene_policy.py",
+    "code": 0,
+    "seconds": 0.31
+  },
+  {
+    "file": "test_android_offline_startup.py",
+    "code": 0,
+    "seconds": 0.91
+  },
+  {
+    "file": "test_android_render_lifetimes.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_android_testpack.py",
+    "code": 0,
+    "seconds": 0.34
+  },
+  {
+    "file": "test_android_touch_gamepad_policy.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_archive_parts_reader.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_assetripper_script_import.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_audit_fmod_unity_package.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_audit_original_compute_metadata.py",
+    "code": 0,
+    "seconds": 0.86
+  },
+  {
+    "file": "test_b02_stage_texture_lineage.py",
+    "code": 0,
+    "seconds": 0.6
+  },
+  {
+    "file": "test_b02_texture_import_color_guard.py",
+    "code": 0,
+    "seconds": 0.9
+  },
+  {
+    "file": "test_b03_original_renderer_materials.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_b03_original_renderer_target_resolution.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_b03_remaining_renderer_material_owners.py",
+    "code": 0,
+    "seconds": 0.7
+  },
+  {
+    "file": "test_b03_verify_archive_payload.py",
+    "code": 0,
+    "seconds": 0.85
+  },
+  {
+    "file": "test_b03_verify_renderer_material_links.py",
+    "code": 0,
+    "seconds": 0.63
+  },
+  {
+    "file": "test_b04_restore_original_color_settings.py",
+    "code": 0,
+    "seconds": 0.95
+  },
+  {
+    "file": "test_b04_runtime_quality_snapshot.py",
+    "code": 0,
+    "seconds": 0.38
+  },
+  {
+    "file": "test_b05_probe_original_texenv_shapes.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_b05_verify_material_texenv_bindings.py",
+    "code": 0,
+    "seconds": 0.76
+  },
+  {
+    "file": "test_b07_probe_original_world_callbacks.py",
+    "code": 0,
+    "seconds": 0.72
+  },
+  {
+    "file": "test_b07_world_callback_trace.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_b07_world_coroutine_trace.py",
+    "code": 0,
+    "seconds": 0.82
+  },
+  {
+    "file": "test_b08_fft_kernel_registry.py",
+    "code": 0,
+    "seconds": 0.53
+  },
+  {
+    "file": "test_b08_fft_spirv_descriptor_abi.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_b09_spectrum_topology_contract.py",
+    "code": 0,
+    "seconds": 0.64
+  },
+  {
+    "file": "test_b09_stage_original_spectrum.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_b09_translate_original_spectrum.py",
+    "code": 0,
+    "seconds": 1.76
+  },
+  {
+    "file": "test_b10_volumetric_notice_atomic.py",
+    "code": 0,
+    "seconds": 2.22
+  },
+  {
+    "file": "test_b11_restore_original_color_gamuts.py",
+    "code": 0,
+    "seconds": 0.58
+  },
+  {
+    "file": "test_b12_scene_render_snapshot.py",
+    "code": 0,
+    "seconds": 0.31
+  },
+  {
+    "file": "test_b14_original_save_call_order.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_b15_probe_authentic_original_sampler.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_b15_texture_sampler_parity.py",
+    "code": 0,
+    "seconds": 1.43
+  },
+  {
+    "file": "test_b16_compute_preprocessor_contract.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_b17_spectrum_compiled_bindings.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_b17_spectrum_namebridge.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_b17_spectrum_stage_descriptors.py",
+    "code": 0,
+    "seconds": 0.69
+  },
+  {
+    "file": "test_b18_fft_compiled_rdef_bindings.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_b18_fft_spirv_binding_roles.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_b18_fft_spirv_descriptor_identity.py",
+    "code": 0,
+    "seconds": 0.59
+  },
+  {
+    "file": "test_b18_spirv_variable_identity.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_b20_blur_atomic_rollback.py",
+    "code": 0,
+    "seconds": 0.83
+  },
+  {
+    "file": "test_b20_foam_cb_descriptor_lineage.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_b20_foam_cb_size_parity.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_b20_private_foam_packet.py",
+    "code": 0,
+    "seconds": 2.12
+  },
+  {
+    "file": "test_b20_shaderlab_scope.py",
+    "code": 0,
+    "seconds": 1.07
+  },
+  {
+    "file": "test_b21_compare_export_lights.py",
+    "code": 0,
+    "seconds": 1.1
+  },
+  {
+    "file": "test_b21_compare_light_owners.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_b21_original_dynamic_lights.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_b21_scene_lightmap_links.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_b21_stage_light_lineage.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_b22_runtime_stage_integrity.py",
+    "code": 0,
+    "seconds": 1.7
+  },
+  {
+    "file": "test_b22_verify_material_scalars.py",
+    "code": 0,
+    "seconds": 0.56
+  },
+  {
+    "file": "test_b24_offline_candidate_trace_parity.py",
+    "code": 0,
+    "seconds": 0.56
+  },
+  {
+    "file": "test_b24_original_foam_stage_translation.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_b25_foam_cb_namebridge.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_b25_foam_pass_state.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_b30_fft_variantmap_routing.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_b31_graphics_hydration.py",
+    "code": 0,
+    "seconds": 1.3
+  },
+  {
+    "file": "test_b31_texture_provider_provenance.py",
+    "code": 0,
+    "seconds": 0.64
+  },
+  {
+    "file": "test_b37_probe_original_cursor.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_b38_material_render_state.py",
+    "code": 0,
+    "seconds": 0.5
+  },
+  {
+    "file": "test_b38_material_yaml_uniqueness.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_b43_material_keyword_fidelity.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_b44_verify_material_colors.py",
+    "code": 0,
+    "seconds": 0.95
+  },
+  {
+    "file": "test_b45_blur_properties.py",
+    "code": 0,
+    "seconds": 0.31
+  },
+  {
+    "file": "test_b45_blur_wrapper_preflight.py",
+    "code": 0,
+    "seconds": 0.62
+  },
+  {
+    "file": "test_b45_install_original_blur.py",
+    "code": 0,
+    "seconds": 1.4
+  },
+  {
+    "file": "test_b45_stage_original_blur.py",
+    "code": 0,
+    "seconds": 0.88
+  },
+  {
+    "file": "test_b47_compute_kernel_contract.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_b49_shaderlab_pass_contract.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_b50_probe_original_cheat_steam.py",
+    "code": 0,
+    "seconds": 1.15
+  },
+  {
+    "file": "test_blur_cb_instruction.py",
+    "code": 0,
+    "seconds": 0.53
+  },
+  {
+    "file": "test_blur_cb_lane_map.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_blur_cb_operand.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_blur_cb_original_observation.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_blur_private_binding_plan.py",
+    "code": 0,
+    "seconds": 0.59
+  },
+  {
+    "file": "test_blur_sample_operands.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_build_sdk_script_manifest.py",
+    "code": 0,
+    "seconds": 0.98
+  },
+  {
+    "file": "test_buildfix_hydrated_graphics.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_builtin_engine_ownership.py",
+    "code": 0,
+    "seconds": 0.58
+  },
+  {
+    "file": "test_ci_memory_watch.py",
+    "code": 0,
+    "seconds": 0.8
+  },
+  {
+    "file": "test_collect_original_water_quality_packet.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_compare_exported_mesh_geometry.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_csharp_namespace_compat.py",
+    "code": 0,
+    "seconds": 0.65
+  },
+  {
+    "file": "test_csharp_overlay.py",
+    "code": 0,
+    "seconds": 1.89
+  },
+  {
+    "file": "test_dynamic_resolution_timings.py",
+    "code": 0,
+    "seconds": 0.35
+  },
+  {
+    "file": "test_early_apk_distribution_policy.py",
+    "code": 0,
+    "seconds": 0.32
+  },
+  {
+    "file": "test_export_lineage.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_export_managed_providers.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_exported_font_materials.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_fft_requested_workload.py",
+    "code": 1,
+    "seconds": 0.38
+  },
+  {
+    "file": "test_fmod_resource_path_policy.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_gradle_payload_audit.py",
+    "code": 0,
+    "seconds": 0.58
+  },
+  {
+    "file": "test_gt_bc3_array_layout.py",
+    "code": 0,
+    "seconds": 0.64
+  },
+  {
+    "file": "test_gt_compare_original_bc3_to_flipbook_pixels.py",
+    "code": 0,
+    "seconds": 1.48
+  },
+  {
+    "file": "test_gt_compare_shader_restore_quality.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_gt_device_graphics_acceptance.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_gt_diagnose_export_texture_targets.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_gt_diagnose_texture_export_lineage.py",
+    "code": 0,
+    "seconds": 0.68
+  },
+  {
+    "file": "test_gt_external_original_texture_links.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_gt_full_original_export_texenvs.py",
+    "code": 0,
+    "seconds": 4.19
+  },
+  {
+    "file": "test_gt_full_shader_guid_quality_provenance.py",
+    "code": 0,
+    "seconds": 0.34
+  },
+  {
+    "file": "test_gt_install_next10p31_original_shader48.py",
+    "code": 0,
+    "seconds": 0.83
+  },
+  {
+    "file": "test_gt_install_next10p33_original_shader48.py",
+    "code": 0,
+    "seconds": 0.77
+  },
+  {
+    "file": "test_gt_install_next11_original_shader48.py",
+    "code": 0,
+    "seconds": 0.78
+  },
+  {
+    "file": "test_gt_install_next15_original_shader48.py",
+    "code": 0,
+    "seconds": 0.72
+  },
+  {
+    "file": "test_gt_install_next17_original_shader48.py",
+    "code": 0,
+    "seconds": 0.94
+  },
+  {
+    "file": "test_gt_install_next18_original_shader48.py",
+    "code": 0,
+    "seconds": 0.73
+  },
+  {
+    "file": "test_gt_install_next23_original_shader48.py",
+    "code": 0,
+    "seconds": 0.83
+  },
+  {
+    "file": "test_gt_install_next30_original_shader48.py",
+    "code": 0,
+    "seconds": 0.64
+  },
+  {
+    "file": "test_gt_install_next7p11_original_shader48.py",
+    "code": 0,
+    "seconds": 0.91
+  },
+  {
+    "file": "test_gt_install_next7p33_original_shader48.py",
+    "code": 0,
+    "seconds": 0.71
+  },
+  {
+    "file": "test_gt_install_original_particle108.py",
+    "code": 0,
+    "seconds": 1.6
+  },
+  {
+    "file": "test_gt_install_original_spectrum.py",
+    "code": 0,
+    "seconds": 0.94
+  },
+  {
+    "file": "test_gt_install_recovered_model_shader.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_gt_native_array_import_contract.py",
+    "code": 0,
+    "seconds": 0.33
+  },
+  {
+    "file": "test_gt_native_foam_workflow_contract.py",
+    "code": 0,
+    "seconds": 0.35
+  },
+  {
+    "file": "test_gt_native_post23_integration.py",
+    "code": 0,
+    "seconds": 1.13
+  },
+  {
+    "file": "test_gt_native_spectrum_workflow_contract.py",
+    "code": 0,
+    "seconds": 0.35
+  },
+  {
+    "file": "test_gt_native_zip2_integration.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_gt_next23b_private_stage_translation.py",
+    "code": 0,
+    "seconds": 1.4
+  },
+  {
+    "file": "test_gt_next23b_source_topology_census.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_gt_original_6_hlsl_offsets_optin.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_gt_original_6_material_property_source_bridge.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_gt_original_6_source_pass_modes.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_gt_original_7p11_source_pass_modes.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_gt_original_921_all_variants.py",
+    "code": 0,
+    "seconds": 1.04
+  },
+  {
+    "file": "test_gt_original_921_bundle.py",
+    "code": 0,
+    "seconds": 0.67
+  },
+  {
+    "file": "test_gt_original_921_cb_layout.py",
+    "code": 0,
+    "seconds": 0.32
+  },
+  {
+    "file": "test_gt_original_graphics_critical_gate.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_gt_original_material_link_graph.py",
+    "code": 0,
+    "seconds": 0.73
+  },
+  {
+    "file": "test_gt_original_mesh_texture_graph.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_gt_particle108_export_alpha_diagnostic.py",
+    "code": 0,
+    "seconds": 0.99
+  },
+  {
+    "file": "test_gt_particle108_original_dxbc_sampler_decl.py",
+    "code": 0,
+    "seconds": 0.57
+  },
+  {
+    "file": "test_gt_particle108_phone_probe_contract.py",
+    "code": 0,
+    "seconds": 0.35
+  },
+  {
+    "file": "test_gt_particle108_private_unity_project.py",
+    "code": 0,
+    "seconds": 0.74
+  },
+  {
+    "file": "test_gt_particle108_source_sampling_pairs.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_gt_particle108_unbound_inline_samplers.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_gt_particle108_unity_bindings.py",
+    "code": 0,
+    "seconds": 0.79
+  },
+  {
+    "file": "test_gt_probe_remaining_original_shader_dxbc_topology.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_gt_rank_all82_original_shader_names_after_nine.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_gt_rank_full_export_dummy_shader_sources.py",
+    "code": 0,
+    "seconds": 0.69
+  },
+  {
+    "file": "test_gt_rank_remaining_original_shader_by_export_materials.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_gt_recover_original_array_layers.py",
+    "code": 0,
+    "seconds": 0.77
+  },
+  {
+    "file": "test_gt_remaining_original_guid_weights.py",
+    "code": 0,
+    "seconds": 0.34
+  },
+  {
+    "file": "test_gt_repair_array_flipbook_importers.py",
+    "code": 0,
+    "seconds": 2.68
+  },
+  {
+    "file": "test_gt_restoration_plan_check.py",
+    "code": 0,
+    "seconds": 0.5
+  },
+  {
+    "file": "test_gt_restore_first_shader_priority.py",
+    "code": 0,
+    "seconds": 0.59
+  },
+  {
+    "file": "test_gt_scene_graphics_inventory.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_gt_serialized_graphics_counts.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_gt_spectrum_all82_original_material_closure.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_gt_spectrum_ci_console_gate.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_gt_spectrum_keyword_flag_semantics_control.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_gt_spectrum_keyword_private_unity_project.py",
+    "code": 0,
+    "seconds": 0.5
+  },
+  {
+    "file": "test_gt_spectrum_original_keyword_flags.py",
+    "code": 0,
+    "seconds": 0.34
+  },
+  {
+    "file": "test_gt_spectrum_original_material_keyword_link.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_gt_spectrum_original_pair_compile.py",
+    "code": 0,
+    "seconds": 1.38
+  },
+  {
+    "file": "test_gt_spectrum_original_pass_states.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_gt_spectrum_original_private_seven_pass_shaderlab.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_gt_spectrum_original_sampler_source_bridge.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_gt_spectrum_original_shaderfind_name.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_gt_spectrum_private_keyword_routed_shaderlab.py",
+    "code": 0,
+    "seconds": 0.75
+  },
+  {
+    "file": "test_gt_spectrum_private_stage_buffer_isolation.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_gt_spectrum_private_unity_project.py",
+    "code": 0,
+    "seconds": 0.74
+  },
+  {
+    "file": "test_gt_spectrum_unified_ci_console_gate.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_gt_stage_serialized_owners.py",
+    "code": 0,
+    "seconds": 0.68
+  },
+  {
+    "file": "test_gt_test_vendor_shader_restoration.py",
+    "code": 0,
+    "seconds": 1.01
+  },
+  {
+    "file": "test_gt_translate_next_remaining_10p31_shader48.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_gt_translate_next_remaining_10p33_shader48.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_gt_translate_next_remaining_11_shader48.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_gt_translate_next_remaining_15_shader48.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_gt_translate_next_remaining_17_shader48.py",
+    "code": 0,
+    "seconds": 0.83
+  },
+  {
+    "file": "test_gt_translate_next_remaining_18_shader48.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_gt_translate_next_remaining_23_shader48.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_gt_translate_next_remaining_30_shader48.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_gt_translate_next_remaining_6_shader48.py",
+    "code": 0,
+    "seconds": 1.08
+  },
+  {
+    "file": "test_gt_translate_next_remaining_7p11_shader48.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_gt_translate_next_remaining_7p33_shader48.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_gt_validate_bc3_array_slice_order.py",
+    "code": 0,
+    "seconds": 1.14
+  },
+  {
+    "file": "test_gt_validate_texture2darray_flipbook.py",
+    "code": 0,
+    "seconds": 1.01
+  },
+  {
+    "file": "test_gt_verify_original_array_export.py",
+    "code": 0,
+    "seconds": 0.6
+  },
+  {
+    "file": "test_gt_verify_original_array_material_refs.py",
+    "code": 0,
+    "seconds": 2.91
+  },
+  {
+    "file": "test_gt_verify_original_mesh_export.py",
+    "code": 0,
+    "seconds": 0.68
+  },
+  {
+    "file": "test_gt_water_unity_editor_probe.py",
+    "code": 0,
+    "seconds": 0.35
+  },
+  {
+    "file": "test_gt_write_unity_array_import_contract.py",
+    "code": 0,
+    "seconds": 0.67
+  },
+  {
+    "file": "test_gt_zip2_export_resources.py",
+    "code": 0,
+    "seconds": 4.9
+  },
+  {
+    "file": "test_gt_zip2_payloads.py",
+    "code": 0,
+    "seconds": 2.39
+  },
+  {
+    "file": "test_haptic_archive_adapter.py",
+    "code": 0,
+    "seconds": 0.57
+  },
+  {
+    "file": "test_inline_mesh_ranges.py",
+    "code": 0,
+    "seconds": 0.65
+  },
+  {
+    "file": "test_inspect_fft_candidate_identity.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_isolate_sdk_source_assemblies.py",
+    "code": 0,
+    "seconds": 0.59
+  },
+  {
+    "file": "test_mesh_range_manifest.py",
+    "code": 0,
+    "seconds": 0.38
+  },
+  {
+    "file": "test_mesh_stream_coverage.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_native_depth_pristine_source.py",
+    "code": 0,
+    "seconds": 0.34
+  },
+  {
+    "file": "test_native_workflow_isolation.py",
+    "code": 0,
+    "seconds": 2.64
+  },
+  {
+    "file": "test_original_blur_member_layout.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_original_dxbc_translation_probe.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_original_mesh_positions.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_probe_a2_canvas_scaler_monoscript.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_probe_a2_controls_layout_context.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_probe_a2_scaler_raw_shapes.py",
+    "code": 0,
+    "seconds": 0.69
+  },
+  {
+    "file": "test_probe_a2_scaler_value_decode.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_probe_a2_scene_ui_layout.py",
+    "code": 0,
+    "seconds": 4.06
+  },
+  {
+    "file": "test_probe_a2_settings_layout.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_probe_a2_settings_metadata_contract.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_probe_a2_settings_owner_links.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_probe_a2_settings_typed_fields.py",
+    "code": 0,
+    "seconds": 0.64
+  },
+  {
+    "file": "test_probe_authentic_fft_dxbc_translation.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_probe_authenticated_water_compute_inventory.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_probe_b48_fft_selector_program_compat.py",
+    "code": 0,
+    "seconds": 0.87
+  },
+  {
+    "file": "test_probe_collider_stream.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_probe_directx_shader_bridge.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_probe_fft_managed_asset_links.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_probe_fft_monoscript_field.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_probe_fft_spirv_extinst_profile.py",
+    "code": 0,
+    "seconds": 0.67
+  },
+  {
+    "file": "test_probe_fft_spirv_formatless_repair.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_probe_fft_spirv_image_flow.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_probe_fft_spirv_images.py",
+    "code": 0,
+    "seconds": 0.64
+  },
+  {
+    "file": "test_probe_fft_spirv_math_profile.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_probe_fft_spirv_operand_edges.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_probe_fft_spirv_operation_profile.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_probe_fft_variant_table.py",
+    "code": 0,
+    "seconds": 0.85
+  },
+  {
+    "file": "test_probe_haptics_asset_manifest.py",
+    "code": 0,
+    "seconds": 4.73
+  },
+  {
+    "file": "test_probe_original_android_display_paths.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_probe_original_compute_containers.py",
+    "code": 0,
+    "seconds": 0.66
+  },
+  {
+    "file": "test_probe_original_fft_cache_dataflow.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_probe_original_fft_cache_implementation.py",
+    "code": 0,
+    "seconds": 0.53
+  },
+  {
+    "file": "test_probe_original_fft_cache_lifetime.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_probe_original_fft_caller_graph.py",
+    "code": 0,
+    "seconds": 0.35
+  },
+  {
+    "file": "test_probe_original_fft_index_derivation.py",
+    "code": 0,
+    "seconds": 0.59
+  },
+  {
+    "file": "test_probe_original_fft_inherited_seed.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_probe_original_fft_kernel_callsites.py",
+    "code": 0,
+    "seconds": 0.38
+  },
+  {
+    "file": "test_probe_original_fft_resource_bindings.py",
+    "code": 0,
+    "seconds": 0.89
+  },
+  {
+    "file": "test_probe_original_fft_serialized_refs.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_probe_original_fft_size_argument.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_probe_original_fft_software_vulkan.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_probe_original_fft_target_formats.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_probe_original_fft_two_pass_software_vulkan.py",
+    "code": 0,
+    "seconds": 0.81
+  },
+  {
+    "file": "test_probe_original_scene_audio.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_probe_original_water_compute.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_probe_original_water_quality_values.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_probe_original_world_readiness.py",
+    "code": 0,
+    "seconds": 0.81
+  },
+  {
+    "file": "test_probe_settings_dynamic_reachability.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_record_documented_water_limitation.py",
+    "code": 0,
+    "seconds": 1.32
+  },
+  {
+    "file": "test_recover_empty_ilspy_sources.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_reembed_scene_bound_assets.py",
+    "code": 0,
+    "seconds": 0.92
+  },
+  {
+    "file": "test_refresh_b_team.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_refresh_t_team.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_repair_asset_case_collisions.py",
+    "code": 0,
+    "seconds": 0.92
+  },
+  {
+    "file": "test_repair_assetripper_stubs.py",
+    "code": 0,
+    "seconds": 0.85
+  },
+  {
+    "file": "test_repair_exported_mesh_vertices.py",
+    "code": 0,
+    "seconds": 0.62
+  },
+  {
+    "file": "test_resolve_managed_closure.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_restore_builtin_shaders.py",
+    "code": 0,
+    "seconds": 3.91
+  },
+  {
+    "file": "test_restore_fmod_resource_layout.py",
+    "code": 0,
+    "seconds": 0.93
+  },
+  {
+    "file": "test_restore_postfx_compute.py",
+    "code": 0,
+    "seconds": 0.82
+  },
+  {
+    "file": "test_restore_postfx_shaders.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_restore_tmp_shaders.py",
+    "code": 0,
+    "seconds": 0.83
+  },
+  {
+    "file": "test_restore_volumetric_shaders.py",
+    "code": 0,
+    "seconds": 0.69
+  },
+  {
+    "file": "test_runtime_operation_traces.py",
+    "code": 0,
+    "seconds": 0.64
+  },
+  {
+    "file": "test_scene_mesh_coverage.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_scene_stream_restoration.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_sdk_asmdef_rename.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_shared_lab_votes.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_stage_fmod_android_runtime.py",
+    "code": 1,
+    "seconds": 0.38
+  },
+  {
+    "file": "test_stage_original_streaming_assets.py",
+    "code": 0,
+    "seconds": 45.31
+  },
+  {
+    "file": "test_stage_raft_managed_dlls.py",
+    "code": 0,
+    "seconds": 1.18
+  },
+  {
+    "file": "test_stage_zip2_fft_owner.py",
+    "code": 0,
+    "seconds": 0.56
+  },
+  {
+    "file": "test_stage_zip2_master_bank.py",
+    "code": 0,
+    "seconds": 5.26
+  },
+  {
+    "file": "test_standalone_original_data_gate.py",
+    "code": 0,
+    "seconds": 2.21
+  },
+  {
+    "file": "test_summarize_native_exceptions.py",
+    "code": 0,
+    "seconds": 0.33
+  },
+  {
+    "file": "test_summarize_native_geometry.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_summarize_unity_imports.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_supplement_ilspy_gameplay.py",
+    "code": 0,
+    "seconds": 0.96
+  },
+  {
+    "file": "test_t1_compute_context_gate.py",
+    "code": 0,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_t1_device_water_summary_contract.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_t1_device_water_summary_gate.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_t1_fft_address_provenance_gate.py",
+    "code": 0,
+    "seconds": 0.5
+  },
+  {
+    "file": "test_t1_fft_bank1_validation.py",
+    "code": 0,
+    "seconds": 0.53
+  },
+  {
+    "file": "test_t1_fft_binding_sensitivity.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_t1_fft_bitcarrier_texture_fixture.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_t1_fft_candidate_keyed_trace_audit.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_t1_fft_capture_alias.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_t1_fft_capture_integrity_gate.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_t1_fft_capture_race.py",
+    "code": 0,
+    "seconds": 0.87
+  },
+  {
+    "file": "test_t1_fft_carrier_context_fixture.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_t1_fft_carrier_context_result_gate.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t1_fft_carrier_report_shape.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_t1_fft_coordinate_axis_overlap_gate.py",
+    "code": 0,
+    "seconds": 0.57
+  },
+  {
+    "file": "test_t1_fft_coordinate_probe_compare.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t1_fft_dispatch_evidence.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_t1_fft_dispatch_group_validation.py",
+    "code": 1,
+    "seconds": 0.64
+  },
+  {
+    "file": "test_t1_fft_dispatch_indirect_regression.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_t1_fft_dispatch_member_calls.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_t1_fft_dispatch_pair_audit.py",
+    "code": 0,
+    "seconds": 0.77
+  },
+  {
+    "file": "test_t1_fft_dispatch_pair_jsonl.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t1_fft_dispatch_pair_native_jsonl.py",
+    "code": 0,
+    "seconds": 0.6
+  },
+  {
+    "file": "test_t1_fft_dispatch_result_4d91.py",
+    "code": 0,
+    "seconds": 0.53
+  },
+  {
+    "file": "test_t1_fft_empty_capture_guard.py",
+    "code": 0,
+    "seconds": 0.38
+  },
+  {
+    "file": "test_t1_fft_first_divergence.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_t1_fft_first_divergence_capture_guard.py",
+    "code": 0,
+    "seconds": 0.63
+  },
+  {
+    "file": "test_t1_fft_first_pass_channel_diagnostic.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_t1_fft_float32_ulp_diagnostic.py",
+    "code": 0,
+    "seconds": 0.35
+  },
+  {
+    "file": "test_t1_fft_historical_ci_log_verify.py",
+    "code": 0,
+    "seconds": 0.87
+  },
+  {
+    "file": "test_t1_fft_hlsl_nested_phi_lineage.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_t1_fft_hlsl_phi_input_origins.py",
+    "code": 0,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_t1_fft_invocation_pair_gate.py",
+    "code": 0,
+    "seconds": 0.77
+  },
+  {
+    "file": "test_t1_fft_invocation_trace_cli.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_t1_fft_keyword_variant_fixture.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_t1_fft_local_store_writers.py",
+    "code": 0,
+    "seconds": 0.65
+  },
+  {
+    "file": "test_t1_fft_manifest_relative_paths.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_t1_fft_multipair_provenance.py",
+    "code": 0,
+    "seconds": 0.34
+  },
+  {
+    "file": "test_t1_fft_native_trace_contract.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_t1_fft_original_direct_dispatch_gate.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_t1_fft_original_direct_keyed_recorder.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_t1_fft_original_existing_gid_audit.py",
+    "code": 0,
+    "seconds": 0.7
+  },
+  {
+    "file": "test_t1_fft_original_global_id_inject.py",
+    "code": 0,
+    "seconds": 0.65
+  },
+  {
+    "file": "test_t1_fft_original_kernel6_candidates.py",
+    "code": 0,
+    "seconds": 0.5
+  },
+  {
+    "file": "test_t1_fft_original_keyed_preflight.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_t1_fft_original_phi_bridge.py",
+    "code": 0,
+    "seconds": 0.78
+  },
+  {
+    "file": "test_t1_fft_pair_gate_synthetic_k7p4.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_t1_fft_pair_pass_identity_c8f1.py",
+    "code": 1,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_t1_fft_pair_presence_b8e4.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_t1_fft_pair_provenance_a6f2.py",
+    "code": 0,
+    "seconds": 0.6
+  },
+  {
+    "file": "test_t1_fft_paired_diagnostic.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_t1_fft_pass0_load_inventory.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_t1_fft_pass0_spatial_diagnostic.py",
+    "code": 0,
+    "seconds": 0.69
+  },
+  {
+    "file": "test_t1_fft_pass0_trace_variant.py",
+    "code": 0,
+    "seconds": 0.56
+  },
+  {
+    "file": "test_t1_fft_pass_label_preflight.py",
+    "code": 0,
+    "seconds": 0.57
+  },
+  {
+    "file": "test_t1_fft_phi_merge_texture_fixture.py",
+    "code": 0,
+    "seconds": 0.88
+  },
+  {
+    "file": "test_t1_fft_private_invocation_pair_report.py",
+    "code": 0,
+    "seconds": 0.98
+  },
+  {
+    "file": "test_t1_fft_private_unity_ftz_diagnostic.py",
+    "code": 0,
+    "seconds": 0.93
+  },
+  {
+    "file": "test_t1_fft_private_unity_input_join.py",
+    "code": 0,
+    "seconds": 2.39
+  },
+  {
+    "file": "test_t1_fft_private_unity_paired_capture.py",
+    "code": 0,
+    "seconds": 1.57
+  },
+  {
+    "file": "test_t1_fft_readback_parity.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_t1_fft_readback_provenance.py",
+    "code": 0,
+    "seconds": 0.35
+  },
+  {
+    "file": "test_t1_fft_real_gpu_variant_delta_gate.py",
+    "code": 0,
+    "seconds": 0.68
+  },
+  {
+    "file": "test_t1_fft_rgba_error_signature.py",
+    "code": 1,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_t1_fft_runtime_bijection_r4c8.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_t1_fft_runtime_gate_syntax_f9c2.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_t1_fft_runtime_identity_h7q4.py",
+    "code": 0,
+    "seconds": 0.35
+  },
+  {
+    "file": "test_t1_fft_site1_x_writer_lineage.py",
+    "code": 0,
+    "seconds": 0.98
+  },
+  {
+    "file": "test_t1_fft_site1_y_branch_paths.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_t1_fft_site1_y_inequal_source.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_t1_fft_site2_y_cfg.py",
+    "code": 0,
+    "seconds": 0.56
+  },
+  {
+    "file": "test_t1_fft_site2_y_hlsl_pair.py",
+    "code": 0,
+    "seconds": 0.94
+  },
+  {
+    "file": "test_t1_fft_site2_y_phi_inputs.py",
+    "code": 0,
+    "seconds": 1.24
+  },
+  {
+    "file": "test_t1_fft_site2_y_phi_path_tag.py",
+    "code": 0,
+    "seconds": 0.78
+  },
+  {
+    "file": "test_t1_fft_site2_y_phi_recurrence.py",
+    "code": 0,
+    "seconds": 0.72
+  },
+  {
+    "file": "test_t1_fft_site2_y_phi_vulkan_runtime.py",
+    "code": 0,
+    "seconds": 1.63
+  },
+  {
+    "file": "test_t1_fft_source_integer_coordinates.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_t1_fft_source_integer_coordinates_adversarial.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_t1_fft_sourcefree_bitcarrier_contract.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_t1_fft_spirv_alias_origins.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t1_fft_spirv_lane_alias_effect.py",
+    "code": 0,
+    "seconds": 0.7
+  },
+  {
+    "file": "test_t1_fft_spirv_reaching_stores.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_t1_fft_spirv_read_provenance.py",
+    "code": 0,
+    "seconds": 0.69
+  },
+  {
+    "file": "test_t1_fft_spirv_scalar_writer_carrier.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t1_fft_tolerance_overflow.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_t1_fft_tolerance_preflight.py",
+    "code": 0,
+    "seconds": 0.66
+  },
+  {
+    "file": "test_t1_fft_tolerance_validation.py",
+    "code": 0,
+    "seconds": 0.67
+  },
+  {
+    "file": "test_t1_fft_trace_compare.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t1_fft_trace_consistency.py",
+    "code": 0,
+    "seconds": 0.82
+  },
+  {
+    "file": "test_t1_fft_trace_duplicate_keys.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t1_fft_trace_first_divergence_7c3a.py",
+    "code": 1,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t1_fft_trace_mutation.py",
+    "code": 0,
+    "seconds": 1.62
+  },
+  {
+    "file": "test_t1_fft_trace_short_read.py",
+    "code": 0,
+    "seconds": 1.03
+  },
+  {
+    "file": "test_t1_fft_unity_evidence_gate.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t1_fft_unity_gpu_resource_bridge.py",
+    "code": 0,
+    "seconds": 0.98
+  },
+  {
+    "file": "test_t1_fft_unity_gpu_result_gate.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_t1_fft_unity_trace_producer_gate.py",
+    "code": 0,
+    "seconds": 2.28
+  },
+  {
+    "file": "test_t1_gameci_private_result_gate.py",
+    "code": 0,
+    "seconds": 0.38
+  },
+  {
+    "file": "test_t1_kernel6_error_classification.py",
+    "code": 1,
+    "seconds": 0.35
+  },
+  {
+    "file": "test_t1_kernel6_log_context.py",
+    "code": 1,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t1_kernel6_negative_context.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_t1_kernel6_parenthesized.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t1_kernel_index_identity_gate.py",
+    "code": 0,
+    "seconds": 0.34
+  },
+  {
+    "file": "test_t1_logcat_exact_boundary.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t1_mini_fft_butterfly_source.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_t1_shared_fft_device_evidence.py",
+    "code": 0,
+    "seconds": 0.5
+  },
+  {
+    "file": "test_t1_sourcefree_unity_fixture.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_t1_spirv_interface_component_audit.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_t1_spirv_interface_roundtrip_drift.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_t1_stage_original_fft_compute_candidates.py",
+    "code": 0,
+    "seconds": 0.94
+  },
+  {
+    "file": "test_t1_stage_original_fft_dispatch_trace.py",
+    "code": 0,
+    "seconds": 0.97
+  },
+  {
+    "file": "test_t1_stage_unity_fft_kernel_probe.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_t1_unity_import_boundary.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_t1_unity_vulkan_cli_failure_classifier.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_t1_vulkan_editor_smoke_gate.py",
+    "code": 0,
+    "seconds": 0.99
+  },
+  {
+    "file": "test_t1_water_first_raw_context.py",
+    "code": 1,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_t1_water_logcat_first_roots.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_t1_water_startup_order.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_t2_cfg_malformed_records.py",
+    "code": 5,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t2_cil_return_join_gate.py",
+    "code": 1,
+    "seconds": 0.69
+  },
+  {
+    "file": "test_t2_device_water_summary.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_t2_external_pptr_manifest_resolver.py",
+    "code": 1,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_t2_foam_alias_dataflow.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_t2_foam_blit_operand_gate.py",
+    "code": 0,
+    "seconds": 0.56
+  },
+  {
+    "file": "test_t2_foam_candidate_embedded_validation.py",
+    "code": 0,
+    "seconds": 0.86
+  },
+  {
+    "file": "test_t2_foam_cb0_extent_gate.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_t2_foam_crosscheck_cli_json_boundary.py",
+    "code": 0,
+    "seconds": 1.06
+  },
+  {
+    "file": "test_t2_foam_embedded_descriptor_layout.py",
+    "code": 0,
+    "seconds": 0.78
+  },
+  {
+    "file": "test_t2_foam_embedded_stage_io.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_t2_foam_evidence_cli_integration.py",
+    "code": 0,
+    "seconds": 2.18
+  },
+  {
+    "file": "test_t2_foam_evidence_gate_20261110.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_t2_foam_explicit_descriptor_identity.py",
+    "code": 0,
+    "seconds": 0.59
+  },
+  {
+    "file": "test_t2_foam_export_binding_probe.py",
+    "code": 0,
+    "seconds": 2.6
+  },
+  {
+    "file": "test_t2_foam_json_product_guard.py",
+    "code": 0,
+    "seconds": 0.66
+  },
+  {
+    "file": "test_t2_foam_managed_literal_targets.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_t2_foam_material_property_bridge.py",
+    "code": 0,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_t2_foam_member_abi.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_t2_foam_native_spv_active_join.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_t2_foam_original_blit_report.py",
+    "code": 0,
+    "seconds": 0.36
+  },
+  {
+    "file": "test_t2_foam_original_dxbc_registers.py",
+    "code": 0,
+    "seconds": 1.02
+  },
+  {
+    "file": "test_t2_foam_original_external_pptr_graph.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_t2_foam_original_manifest_pptr.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_t2_foam_original_operand_gate.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_t2_foam_original_pair_compile.py",
+    "code": 0,
+    "seconds": 0.85
+  },
+  {
+    "file": "test_t2_foam_original_sample_edges.py",
+    "code": 0,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_t2_foam_original_target_name_relation.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_t2_foam_parent_ancestor_symlink.py",
+    "code": 0,
+    "seconds": 0.6
+  },
+  {
+    "file": "test_t2_foam_parent_symlink.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_t2_foam_pass1_gate.py",
+    "code": 1,
+    "seconds": 0.3
+  },
+  {
+    "file": "test_t2_foam_pass_aggregate_consistency.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_t2_foam_pass_aggregate_matrix.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_t2_foam_pass_crosscheck.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_t2_foam_pass_crosscheck_finite_json.py",
+    "code": 0,
+    "seconds": 0.66
+  },
+  {
+    "file": "test_t2_foam_pass_crosscheck_original_integration.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_t2_foam_pass_role_duplicate_json.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_t2_foam_pass_role_gate.py",
+    "code": 0,
+    "seconds": 0.34
+  },
+  {
+    "file": "test_t2_foam_pass_role_matrix.py",
+    "code": 1,
+    "seconds": 0.33
+  },
+  {
+    "file": "test_t2_foam_private_cb0_index_access.py",
+    "code": 0,
+    "seconds": 0.64
+  },
+  {
+    "file": "test_t2_foam_private_cb0_managed_targets.py",
+    "code": 0,
+    "seconds": 0.58
+  },
+  {
+    "file": "test_t2_foam_private_cb0_member_shape.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_t2_foam_private_descriptor_set_remap.py",
+    "code": 0,
+    "seconds": 1.04
+  },
+  {
+    "file": "test_t2_foam_private_installer.py",
+    "code": 0,
+    "seconds": 1.86
+  },
+  {
+    "file": "test_t2_foam_private_shaderlab_candidate.py",
+    "code": 0,
+    "seconds": 0.39
+  },
+  {
+    "file": "test_t2_foam_publish_aggregate.py",
+    "code": 0,
+    "seconds": 2.43
+  },
+  {
+    "file": "test_t2_foam_report_boundary.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_t2_foam_resource_abi.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_t2_foam_rhs_classifier_synthetic.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t2_foam_rhs_verified_preconditions.py",
+    "code": 0,
+    "seconds": 0.38
+  },
+  {
+    "file": "test_t2_foam_rt_terminal_regression.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_t2_foam_shaderfind_return_report.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_t2_foam_spirv_sampler_use.py",
+    "code": 0,
+    "seconds": 1.15
+  },
+  {
+    "file": "test_t2_foam_texture_identity.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_t2_gles_device_jsonl_gate.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t2_original_external_guid_evidence.py",
+    "code": 0,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_t2_original_foam_material_host_scan.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t2_original_foam_shaderfind_name.py",
+    "code": 0,
+    "seconds": 1.02
+  },
+  {
+    "file": "test_t2_original_monoscript_managed_class_bridge.py",
+    "code": 0,
+    "seconds": 0.65
+  },
+  {
+    "file": "test_t2_original_monoscript_target_attestation.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_t2_original_monoscript_target_join.py",
+    "code": 0,
+    "seconds": 0.99
+  },
+  {
+    "file": "test_t2_original_opaque_monoscript_head.py",
+    "code": 0,
+    "seconds": 0.63
+  },
+  {
+    "file": "test_t2_original_scene_foam_component_scan.py",
+    "code": 0,
+    "seconds": 0.56
+  },
+  {
+    "file": "test_t2_original_scene_managed_subset.py",
+    "code": 0,
+    "seconds": 1.18
+  },
+  {
+    "file": "test_t2_pass1_stack_provenance.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_t2_rt_return_cfg.py",
+    "code": 0,
+    "seconds": 0.5
+  },
+  {
+    "file": "test_t2_rt_return_cfg_independent.py",
+    "code": 0,
+    "seconds": 0.86
+  },
+  {
+    "file": "test_t3_audit_exported_material_programs.py",
+    "code": 0,
+    "seconds": 1.53
+  },
+  {
+    "file": "test_t3_cl_png_pixel_audit.py",
+    "code": 0,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_t3_decoded_texture_pixel_parity.py",
+    "code": 0,
+    "seconds": 0.58
+  },
+  {
+    "file": "test_t3_decompile_shader_output_quality.py",
+    "code": 0,
+    "seconds": 1.76
+  },
+  {
+    "file": "test_t3_dxbc_signature_contract.py",
+    "code": 1,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_t3_dxbc_spirv_contract_join.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_t3_dxbc_spirv_contract_join_extra_fields.py",
+    "code": 0,
+    "seconds": 0.75
+  },
+  {
+    "file": "test_t3_exported_renderer_shader_impact.py",
+    "code": 0,
+    "seconds": 3.4
+  },
+  {
+    "file": "test_t3_exported_texture_inventory.py",
+    "code": 0,
+    "seconds": 0.63
+  },
+  {
+    "file": "test_t3_external_texture_export.py",
+    "code": 0,
+    "seconds": 0.84
+  },
+  {
+    "file": "test_t3_external_texture_lineage.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_t3_guid_ambiguity.py",
+    "code": 0,
+    "seconds": 0.44
+  },
+  {
+    "file": "test_t3_guid_audit_hashed_unresolved.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t3_guid_audit_oversize_coverage.py",
+    "code": 0,
+    "seconds": 0.6
+  },
+  {
+    "file": "test_t3_guid_audit_regression.py",
+    "code": 0,
+    "seconds": 1.0
+  },
+  {
+    "file": "test_t3_linked_texture_sampler_export.py",
+    "code": 0,
+    "seconds": 0.68
+  },
+  {
+    "file": "test_t3_material_dependency_pair_audit.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_t3_material_shader_link_audit.py",
+    "code": 0,
+    "seconds": 0.72
+  },
+  {
+    "file": "test_t3_material_shader_meta_orphan.py",
+    "code": 1,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_t3_material_shader_same_export.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_t3_material_texture_binding_audit.py",
+    "code": 0,
+    "seconds": 1.52
+  },
+  {
+    "file": "test_t3_meta_guid_top_level.py",
+    "code": 0,
+    "seconds": 1.22
+  },
+  {
+    "file": "test_t3_native_original_921_shader_target_audit.py",
+    "code": 0,
+    "seconds": 1.13
+  },
+  {
+    "file": "test_t3_normalmap_dxt5_semantic.py",
+    "code": 0,
+    "seconds": 0.77
+  },
+  {
+    "file": "test_t3_original_921_dxbc_readmask_spirv.py",
+    "code": 0,
+    "seconds": 3.41
+  },
+  {
+    "file": "test_t3_original_921_dxbc_semantic_join.py",
+    "code": 0,
+    "seconds": 1.33
+  },
+  {
+    "file": "test_t3_original_921_material_property_contract.py",
+    "code": 0,
+    "seconds": 0.72
+  },
+  {
+    "file": "test_t3_original_921_t1_raw_spirv_audit.py",
+    "code": 0,
+    "seconds": 1.34
+  },
+  {
+    "file": "test_t3_original_921_vf_component_bridge.py",
+    "code": 0,
+    "seconds": 1.7
+  },
+  {
+    "file": "test_t3_original_material_shader_target.py",
+    "code": 0,
+    "seconds": 1.08
+  },
+  {
+    "file": "test_t3_original_normalmap_dxt5_usage.py",
+    "code": 0,
+    "seconds": 0.88
+  },
+  {
+    "file": "test_t3_original_particle108_dxbc_feasibility.py",
+    "code": 0,
+    "seconds": 2.25
+  },
+  {
+    "file": "test_t3_original_particle108_dxbc_semantic_join.py",
+    "code": 0,
+    "seconds": 0.93
+  },
+  {
+    "file": "test_t3_original_particle108_spirv_translation.py",
+    "code": 0,
+    "seconds": 1.33
+  },
+  {
+    "file": "test_t3_original_particle_emitter_semantics.py",
+    "code": 0,
+    "seconds": 2.13
+  },
+  {
+    "file": "test_t3_original_particle_material_texenv.py",
+    "code": 0,
+    "seconds": 1.19
+  },
+  {
+    "file": "test_t3_original_particle_shader_state.py",
+    "code": 0,
+    "seconds": 0.72
+  },
+  {
+    "file": "test_t3_original_particle_smoke_rank.py",
+    "code": 0,
+    "seconds": 1.8
+  },
+  {
+    "file": "test_t3_original_particle_stream_provider.py",
+    "code": 0,
+    "seconds": 0.88
+  },
+  {
+    "file": "test_t3_original_particle_texture_targets.py",
+    "code": 0,
+    "seconds": 0.83
+  },
+  {
+    "file": "test_t3_original_renderer_shader_impact.py",
+    "code": 0,
+    "seconds": 2.01
+  },
+  {
+    "file": "test_t3_original_shader_builtin_eligibility.py",
+    "code": 0,
+    "seconds": 0.94
+  },
+  {
+    "file": "test_t3_original_shader_pass_topology.py",
+    "code": 0,
+    "seconds": 0.71
+  },
+  {
+    "file": "test_t3_original_smoke34_dxbc_program_inventory.py",
+    "code": 0,
+    "seconds": 2.24
+  },
+  {
+    "file": "test_t3_original_smoke34_dxbc_semantic_join.py",
+    "code": 0,
+    "seconds": 1.13
+  },
+  {
+    "file": "test_t3_original_smoke34_pass_probe.py",
+    "code": 0,
+    "seconds": 0.84
+  },
+  {
+    "file": "test_t3_original_smoke34_ps_readmask_spirv.py",
+    "code": 0,
+    "seconds": 2.03
+  },
+  {
+    "file": "test_t3_original_smoke34_spirv_translation.py",
+    "code": 0,
+    "seconds": 0.95
+  },
+  {
+    "file": "test_t3_original_smoke34_usersemantic_probe.py",
+    "code": 0,
+    "seconds": 0.83
+  },
+  {
+    "file": "test_t3_original_texture_stream_dependencies.py",
+    "code": 0,
+    "seconds": 0.92
+  },
+  {
+    "file": "test_t3_original_top_shader_dxbc_feasibility.py",
+    "code": 0,
+    "seconds": 0.64
+  },
+  {
+    "file": "test_t3_original_top_shader_fourpass_translation.py",
+    "code": 0,
+    "seconds": 0.66
+  },
+  {
+    "file": "test_t3_particle108_cb_size_semantics.py",
+    "code": 0,
+    "seconds": 1.12
+  },
+  {
+    "file": "test_t3_particle108_dcl_spv_family_census.py",
+    "code": 0,
+    "seconds": 1.06
+  },
+  {
+    "file": "test_t3_particle108_explicit_map_packet.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_t3_particle108_glslang_io_map_experiment.py",
+    "code": 0,
+    "seconds": 0.71
+  },
+  {
+    "file": "test_t3_particle108_hlsl_output_width_origin.py",
+    "code": 0,
+    "seconds": 0.8
+  },
+  {
+    "file": "test_t3_particle108_original_dxbc_declarations.py",
+    "code": 0,
+    "seconds": 0.59
+  },
+  {
+    "file": "test_t3_particle108_original_dxbc_operand_bindings.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t3_particle108_original_dxbc_rdef.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_t3_particle108_original_explicit_probe.py",
+    "code": 0,
+    "seconds": 3.26
+  },
+  {
+    "file": "test_t3_particle108_original_keyword_lattice.py",
+    "code": 0,
+    "seconds": 1.22
+  },
+  {
+    "file": "test_t3_particle108_original_keyword_names.py",
+    "code": 0,
+    "seconds": 0.63
+  },
+  {
+    "file": "test_t3_particle108_paired_hlsl_link.py",
+    "code": 0,
+    "seconds": 0.84
+  },
+  {
+    "file": "test_t3_particle108_postvendor_delta.py",
+    "code": 0,
+    "seconds": 1.2
+  },
+  {
+    "file": "test_t3_particle108_private_keyword_routed_shaderlab.py",
+    "code": 0,
+    "seconds": 1.53
+  },
+  {
+    "file": "test_t3_particle108_private_shaderlab_variants.py",
+    "code": 0,
+    "seconds": 1.5
+  },
+  {
+    "file": "test_t3_particle108_private_stagewrapper_compile.py",
+    "code": 0,
+    "seconds": 0.87
+  },
+  {
+    "file": "test_t3_particle108_reflected_name_bridge.py",
+    "code": 0,
+    "seconds": 0.9
+  },
+  {
+    "file": "test_t3_particle108_register_location_probe.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_t3_particle108_resource_binding_parity.py",
+    "code": 0,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_t3_particle108_roundtrip_interface_diagnostic.py",
+    "code": 0,
+    "seconds": 2.17
+  },
+  {
+    "file": "test_t3_particle108_sameexport_values.py",
+    "code": 0,
+    "seconds": 1.96
+  },
+  {
+    "file": "test_t3_particle108_shaderlab_export_quality.py",
+    "code": 0,
+    "seconds": 0.99
+  },
+  {
+    "file": "test_t3_particle108_shaderlab_property_parity.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_t3_particle108_source_propstate.py",
+    "code": 0,
+    "seconds": 0.63
+  },
+  {
+    "file": "test_t3_particle108_spirv_explicit_pair.py",
+    "code": 0,
+    "seconds": 0.57
+  },
+  {
+    "file": "test_t3_particle_external_material_resolution.py",
+    "code": 0,
+    "seconds": 0.6
+  },
+  {
+    "file": "test_t3_particle_renderer_yaml_audit.py",
+    "code": 0,
+    "seconds": 0.88
+  },
+  {
+    "file": "test_t3_particle_same_export_bindings.py",
+    "code": 0,
+    "seconds": 0.72
+  },
+  {
+    "file": "test_t3_pixel_diagnostic_boundary.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_t3_pixel_drift_diagnostics.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_t3_render_state_pair_diff.py",
+    "code": 0,
+    "seconds": 1.92
+  },
+  {
+    "file": "test_t3_render_state_source_bytes.py",
+    "code": 0,
+    "seconds": 1.0
+  },
+  {
+    "file": "test_t3_rgb_drift_strata.py",
+    "code": 1,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_t3_same_export_material_colors.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t3_same_export_material_keywords.py",
+    "code": 0,
+    "seconds": 1.23
+  },
+  {
+    "file": "test_t3_same_export_material_texenv.py",
+    "code": 0,
+    "seconds": 0.56
+  },
+  {
+    "file": "test_t3_same_export_shader_pass_topology.py",
+    "code": 0,
+    "seconds": 0.85
+  },
+  {
+    "file": "test_t3_semantic_location_uniqueness.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_t3_semantic_non_normal_input_guard.py",
+    "code": 0,
+    "seconds": 1.24
+  },
+  {
+    "file": "test_t3_shader_identity_gate.py",
+    "code": 0,
+    "seconds": 1.72
+  },
+  {
+    "file": "test_t3_shader_orphan_meta.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_t3_shader_owner_type.py",
+    "code": 1,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_t3_shared_visual_frame.py",
+    "code": 0,
+    "seconds": 0.63
+  },
+  {
+    "file": "test_t3_smoke34_location_provenance_gate.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_t3_smoke34_sameexport_shaderlab.py",
+    "code": 0,
+    "seconds": 1.69
+  },
+  {
+    "file": "test_t3_smoke34_spirv_usersemantic_annotations.py",
+    "code": 0,
+    "seconds": 2.01
+  },
+  {
+    "file": "test_t3_smoke_pass_state_gate_v2.py",
+    "code": 1,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_t3_smoke_render_state_gate.py",
+    "code": 1,
+    "seconds": 0.8
+  },
+  {
+    "file": "test_t3_source_renderer_shader_to_postvendor_export.py",
+    "code": 0,
+    "seconds": 1.07
+  },
+  {
+    "file": "test_t3_spirv_interface_name_drift.py",
+    "code": 0,
+    "seconds": 1.47
+  },
+  {
+    "file": "test_t3_spv_reflected_name_integration.py",
+    "code": 0,
+    "seconds": 1.26
+  },
+  {
+    "file": "test_t3_stage_io_drift.py",
+    "code": 0,
+    "seconds": 0.77
+  },
+  {
+    "file": "test_t3_stage_particle_nonexportable_trace.py",
+    "code": 1,
+    "seconds": 0.62
+  },
+  {
+    "file": "test_t3_stream_extent_guard.py",
+    "code": 0,
+    "seconds": 0.41
+  },
+  {
+    "file": "test_t3_texture_importer_presence.py",
+    "code": 0,
+    "seconds": 1.9
+  },
+  {
+    "file": "test_t3_top_original_shader_builtin_coverage.py",
+    "code": 0,
+    "seconds": 1.39
+  },
+  {
+    "file": "test_t3_vf_spirv_component_coverage.py",
+    "code": 1,
+    "seconds": 0.66
+  },
+  {
+    "file": "test_t4_adapt_original_mouse_axes.py",
+    "code": 0,
+    "seconds": 1.64
+  },
+  {
+    "file": "test_t4_adapt_original_mouse_buttons_wheel.py",
+    "code": 0,
+    "seconds": 0.84
+  },
+  {
+    "file": "test_t4_analyze_mouse_lab_routes.py",
+    "code": 0,
+    "seconds": 1.19
+  },
+  {
+    "file": "test_t4_android_immersive_system_bars.py",
+    "code": 0,
+    "seconds": 0.69
+  },
+  {
+    "file": "test_t4_android_load_snapshot.py",
+    "code": 0,
+    "seconds": 0.83
+  },
+  {
+    "file": "test_t4_android_pointer_capture_policy.py",
+    "code": 0,
+    "seconds": 1.21
+  },
+  {
+    "file": "test_t4_audit_team_event_identities.py",
+    "code": 0,
+    "seconds": 1.08
+  },
+  {
+    "file": "test_t4_capture_acceptance_gate.py",
+    "code": 0,
+    "seconds": 0.63
+  },
+  {
+    "file": "test_t4_capture_callback_semantics.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_t4_capture_eligibility_contract.py",
+    "code": 0,
+    "seconds": 0.89
+  },
+  {
+    "file": "test_t4_capture_gap_classifier.py",
+    "code": 0,
+    "seconds": 1.24
+  },
+  {
+    "file": "test_t4_capture_reader_summary_boundary.py",
+    "code": 1,
+    "seconds": 1.56
+  },
+  {
+    "file": "test_t4_captured_action_contract.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t4_classify_mouse_capture_log.py",
+    "code": 0,
+    "seconds": 0.82
+  },
+  {
+    "file": "test_t4_compare_private_ilspy_runs.py",
+    "code": 0,
+    "seconds": 0.76
+  },
+  {
+    "file": "test_t4_diagnose_mouse_eligibility.py",
+    "code": 0,
+    "seconds": 1.1
+  },
+  {
+    "file": "test_t4_filemanager_declaration_shapes.py",
+    "code": 0,
+    "seconds": 0.77
+  },
+  {
+    "file": "test_t4_gap_classifier_cli.py",
+    "code": 0,
+    "seconds": 1.98
+  },
+  {
+    "file": "test_t4_ledger_event_identity.py",
+    "code": 1,
+    "seconds": 3.91
+  },
+  {
+    "file": "test_t4_mouse_capture_routing_guard.py",
+    "code": 0,
+    "seconds": 0.74
+  },
+  {
+    "file": "test_t4_mouse_epoch_telemetry.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_t4_mouse_retry_telemetry_contract.py",
+    "code": 0,
+    "seconds": 0.64
+  },
+  {
+    "file": "test_t4_original_button_wheel_routing.py",
+    "code": 0,
+    "seconds": 0.82
+  },
+  {
+    "file": "test_t4_original_filemanager_contract.py",
+    "code": 0,
+    "seconds": 0.98
+  },
+  {
+    "file": "test_t4_original_mouse_routing.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_t4_original_rgd_load_contract.py",
+    "code": 0,
+    "seconds": 0.82
+  },
+  {
+    "file": "test_t4_owner5nov_jsonl_lifecycle.py",
+    "code": 0,
+    "seconds": 0.77
+  },
+  {
+    "file": "test_t4_owner_world_roundtrip.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t4_physical_mouse_presence_policy.py",
+    "code": 0,
+    "seconds": 0.89
+  },
+  {
+    "file": "test_t4_pointer_view_identity_contract.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_t4_probe_ilspy_reference_context.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_t4_stage_owner5nov_world_rgds.py",
+    "code": 0,
+    "seconds": 2.13
+  },
+  {
+    "file": "test_t4_support_t3_visual_png_audit.py",
+    "code": 0,
+    "seconds": 0.71
+  },
+  {
+    "file": "test_t4_validate_original_file_io_flow.py",
+    "code": 0,
+    "seconds": 0.7
+  },
+  {
+    "file": "test_t4_validate_original_managed_stream_roundtrip.py",
+    "code": 0,
+    "seconds": 0.68
+  },
+  {
+    "file": "test_t4_validate_original_rgd_init_context.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t4_validate_original_rgd_loadt.py",
+    "code": 0,
+    "seconds": 0.71
+  },
+  {
+    "file": "test_t4_validate_original_rgd_precall_slice.py",
+    "code": 0,
+    "seconds": 0.66
+  },
+  {
+    "file": "test_t4_validate_original_rgd_producer.py",
+    "code": 0,
+    "seconds": 0.52
+  },
+  {
+    "file": "test_t4_validate_original_rgd_runtime_load.py",
+    "code": 0,
+    "seconds": 0.56
+  },
+  {
+    "file": "test_t4_verify_cl_shared_mouse_evidence.py",
+    "code": 0,
+    "seconds": 3.28
+  },
+  {
+    "file": "test_t4_verify_device_world_save_log.py",
+    "code": 0,
+    "seconds": 5.51
+  },
+  {
+    "file": "test_t4_verify_original_rgd_save_roundtrip.py",
+    "code": 0,
+    "seconds": 2.82
+  },
+  {
+    "file": "test_t4_world_completion_trace.py",
+    "code": 0,
+    "seconds": 2.97
+  },
+  {
+    "file": "test_t5_arabic_portrait.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t5_audit_published_raft_release.py",
+    "code": 0,
+    "seconds": 0.79
+  },
+  {
+    "file": "test_t5_bundled_reassembly_e2e.py",
+    "code": 0,
+    "seconds": 3.27
+  },
+  {
+    "file": "test_t5_cl_fps_cohort_gate.py",
+    "code": 0,
+    "seconds": 0.5
+  },
+  {
+    "file": "test_t5_cl_pid_cohort_integration.py",
+    "code": 0,
+    "seconds": 0.7
+  },
+  {
+    "file": "test_t5_cl_pid_epoch_audit.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_t5_cl_pid_startup_prefix_real_gate.py",
+    "code": 0,
+    "seconds": 0.68
+  },
+  {
+    "file": "test_t5_cl_unity_surface_bridge.py",
+    "code": 0,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_t5_classify_obb_guid_logs.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_t5_extract_actual_signed_pair.py",
+    "code": 0,
+    "seconds": 1.03
+  },
+  {
+    "file": "test_t5_live_water_ack.py",
+    "code": 1,
+    "seconds": 0.74
+  },
+  {
+    "file": "test_t5_lograft_presented_fps.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_t5_native_delivery_fallback_policy.py",
+    "code": 0,
+    "seconds": 1.57
+  },
+  {
+    "file": "test_t5_native_early_editor_abi.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_t5_native_material_texture_integration.py",
+    "code": 0,
+    "seconds": 0.98
+  },
+  {
+    "file": "test_t5_native_milestone_gate.py",
+    "code": 0,
+    "seconds": 0.83
+  },
+  {
+    "file": "test_t5_native_package_postattest.py",
+    "code": 0,
+    "seconds": 0.94
+  },
+  {
+    "file": "test_t5_native_run_verdict.py",
+    "code": 0,
+    "seconds": 1.19
+  },
+  {
+    "file": "test_t5_offline_runtime_support_deps.py",
+    "code": 0,
+    "seconds": 1.55
+  },
+  {
+    "file": "test_t5_png_idat_integrity.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_t5_portable_reassembly.py",
+    "code": 0,
+    "seconds": 0.75
+  },
+  {
+    "file": "test_t5_probe_github_artifact_zip_range.py",
+    "code": 0,
+    "seconds": 0.92
+  },
+  {
+    "file": "test_t5_probe_real_unity_obb_guid.py",
+    "code": 0,
+    "seconds": 0.76
+  },
+  {
+    "file": "test_t5_probe_signed_nested_zip_range.py",
+    "code": 0,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_t5_probe_signed_obb_asset_routes.py",
+    "code": 0,
+    "seconds": 2.97
+  },
+  {
+    "file": "test_t5_reconcile_owner_saf_obb.py",
+    "code": 0,
+    "seconds": 0.75
+  },
+  {
+    "file": "test_t5_retained_delivery_duplicate_json.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_t5_right_diagnostic_safe_area.py",
+    "code": 0,
+    "seconds": 0.4
+  },
+  {
+    "file": "test_t5_right_safe_area_buttons.py",
+    "code": 0,
+    "seconds": 0.94
+  },
+  {
+    "file": "test_t5_runtime_staging_bytes.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_t5_runtime_staging_parity.py",
+    "code": 0,
+    "seconds": 0.94
+  },
+  {
+    "file": "test_t5_shared_surface_screenshot_contract.py",
+    "code": 0,
+    "seconds": 0.42
+  },
+  {
+    "file": "test_t5_short_safe_panels.py",
+    "code": 0,
+    "seconds": 0.79
+  },
+  {
+    "file": "test_t5_stage_zip2_render_owners.py",
+    "code": 0,
+    "seconds": 18.37
+  },
+  {
+    "file": "test_t5_unified_saf_stream_contract.py",
+    "code": 1,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_t5_unity_interval_epoch.py",
+    "code": 0,
+    "seconds": 0.75
+  },
+  {
+    "file": "test_t5_validate_filemanager_metadata.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_t5_validate_filemanager_runtime.py",
+    "code": 0,
+    "seconds": 1.1
+  },
+  {
+    "file": "test_t5_validate_original_resolution_parameter.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_t5_validate_resolution_apply_callers.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_t5_validate_resolution_delegate_probe.py",
+    "code": 0,
+    "seconds": 0.57
+  },
+  {
+    "file": "test_t5_validate_resolution_il_probe.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_t5_verify_apk_obb_pair.py",
+    "code": 0,
+    "seconds": 2.45
+  },
+  {
+    "file": "test_t5_verify_apk_obb_pair_badging.py",
+    "code": 0,
+    "seconds": 0.67
+  },
+  {
+    "file": "test_t5_verify_real_signed_apk.py",
+    "code": 0,
+    "seconds": 0.63
+  },
+  {
+    "file": "test_t5_verify_real_signed_obb.py",
+    "code": 0,
+    "seconds": 0.6
+  },
+  {
+    "file": "test_t5_verify_release_manifest_bytes.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_t5_verify_retained_delivery_archive.py",
+    "code": 0,
+    "seconds": 0.75
+  },
+  {
+    "file": "test_t5_verify_xapk_cross_delivery.py",
+    "code": 0,
+    "seconds": 2.53
+  },
+  {
+    "file": "test_t_team_trial_votes.py",
+    "code": 0,
+    "seconds": 0.37
+  },
+  {
+    "file": "test_texture_stream_coverage.py",
+    "code": 0,
+    "seconds": 0.48
+  },
+  {
+    "file": "test_trace_collision_mesh_sources.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_unified_testpack.py",
+    "code": 0,
+    "seconds": 0.53
+  },
+  {
+    "file": "test_verified_archive_plan.py",
+    "code": 0,
+    "seconds": 0.62
+  },
+  {
+    "file": "test_verified_mesh_ranges.py",
+    "code": 0,
+    "seconds": 0.79
+  },
+  {
+    "file": "test_verify_a8_zip2_local_save_provider.py",
+    "code": 0,
+    "seconds": 0.73
+  },
+  {
+    "file": "test_verify_exported_material_texture_links.py",
+    "code": 0,
+    "seconds": 1.97
+  },
+  {
+    "file": "test_verify_original_butterfly_numeric.py",
+    "code": 0,
+    "seconds": 0.8
+  },
+  {
+    "file": "test_verify_original_fft_array_provenance.py",
+    "code": 0,
+    "seconds": 0.62
+  },
+  {
+    "file": "test_verify_original_fft_format_matrix.py",
+    "code": 0,
+    "seconds": 0.49
+  },
+  {
+    "file": "test_verify_targeted_lfs_compute_sources.py",
+    "code": 0,
+    "seconds": 0.46
+  },
+  {
+    "file": "test_verify_water_render_contract.py",
+    "code": 0,
+    "seconds": 1.23
+  },
+  {
+    "file": "test_w1_depth_install.py",
+    "code": 0,
+    "seconds": 0.89
+  },
+  {
+    "file": "test_w1_depth_pass_linkage.py",
+    "code": 0,
+    "seconds": 0.56
+  },
+  {
+    "file": "test_w1_depth_raster_bindings.py",
+    "code": 0,
+    "seconds": 0.77
+  },
+  {
+    "file": "test_w1_depth_resource_rebinding.py",
+    "code": 0,
+    "seconds": 0.57
+  },
+  {
+    "file": "test_w1_depth_shaderlab.py",
+    "code": 0,
+    "seconds": 0.43
+  },
+  {
+    "file": "test_w1_engine_database_mapping.py",
+    "code": 0,
+    "seconds": 0.83
+  },
+  {
+    "file": "test_w1_export_material_shaders.py",
+    "code": 0,
+    "seconds": 0.6
+  },
+  {
+    "file": "test_w1_graphics_program_segments.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_w1_original_shader_links.py",
+    "code": 0,
+    "seconds": 0.77
+  },
+  {
+    "file": "test_w1_verify_engine_export.py",
+    "code": 0,
+    "seconds": 0.74
+  },
+  {
+    "file": "test_w1_zip2_owners.py",
+    "code": 0,
+    "seconds": 0.74
+  },
+  {
+    "file": "test_w2_color_space_settings.py",
+    "code": 0,
+    "seconds": 0.58
+  },
+  {
+    "file": "test_w2_compute_kernel_inventory.py",
+    "code": 0,
+    "seconds": 1.1
+  },
+  {
+    "file": "test_w2_empty_config_materials.py",
+    "code": 0,
+    "seconds": 0.51
+  },
+  {
+    "file": "test_w2_external_material_shader_refs.py",
+    "code": 0,
+    "seconds": 0.71
+  },
+  {
+    "file": "test_w2_fullgame_texture_colors.py",
+    "code": 0,
+    "seconds": 1.96
+  },
+  {
+    "file": "test_w2_material_property_stats.py",
+    "code": 0,
+    "seconds": 0.69
+  },
+  {
+    "file": "test_w2_material_scalar_properties.py",
+    "code": 0,
+    "seconds": 0.58
+  },
+  {
+    "file": "test_w2_material_texture_bindings.py",
+    "code": 0,
+    "seconds": 0.73
+  },
+  {
+    "file": "test_w2_material_tint_stats.py",
+    "code": 0,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_w2_resource_census.py",
+    "code": 0,
+    "seconds": 1.07
+  },
+  {
+    "file": "test_w2_settings_panel_route.py",
+    "code": 0,
+    "seconds": 0.55
+  },
+  {
+    "file": "test_w2_texture_color_formats.py",
+    "code": 0,
+    "seconds": 0.54
+  },
+  {
+    "file": "test_w2_texture_sampler_settings.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_w2_ui_scaler_census.py",
+    "code": 0,
+    "seconds": 0.47
+  },
+  {
+    "file": "test_w2_water_shader_stage_bindings.py",
+    "code": 0,
+    "seconds": 0.93
+  },
+  {
+    "file": "test_w5_blur_recovery.py",
+    "code": 0,
+    "seconds": 0.61
+  },
+  {
+    "file": "test_w5_blur_uniform_rebinding.py",
+    "code": 0,
+    "seconds": 0.45
+  },
+  {
+    "file": "test_we_blur_failure_categories.py",
+    "code": 1,
+    "seconds": 0.73
+  }
+]

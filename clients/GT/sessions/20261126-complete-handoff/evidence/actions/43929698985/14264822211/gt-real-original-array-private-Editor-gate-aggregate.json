@@ -1,0 +1,14 @@
+{
+  "Android_GPU_color_parity_verified": false,
+  "Unity_Editor_import_execution_verified": false,
+  "exact_original_mip_payload_bytes": 69906400,
+  "native_array_assets": 9,
+  "nine_original_source_guids_and_arrays_in_private_Editor_manifest": 9,
+  "original_class187_material_refs_source_proven": 28,
+  "original_exported_PNG_and_meta_modified": false,
+  "original_layers_with_streamed_source_pixels": 50,
+  "original_logical_layers": 52,
+  "original_source_array_guids_printed_or_uploaded": false,
+  "schema": "GT_PRIVATE_EDITOR_NATIVE_ARRAY_IMPORT_GATE_STAGED_V1",
+  "source_zero_pixel_original_array_refs": 20
+}

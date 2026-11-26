@@ -1,0 +1,22 @@
+{
+    "schema_version": 1,
+    "run_id": "45760345978-1-a23d8d6f4794c987b3ac351f8799c90bb897d6dd",
+    "status": "NOT_RUN",
+    "reason": "active_linear_color_space_required",
+    "Unity_version": "2021.3.45f2",
+    "backend": "Vulkan",
+    "active_color_space": "Gamma",
+    "graphics_device_name": "llvmpipe (LLVM 15.0.7, 256 bits)",
+    "shader_sha256": "cd0014106a2bc71a196d8389ce33b20e0b052fca1effe212f6822cac3288b8fc",
+    "probe_sha256": "fd21e1014de836aacda1c7f2d2640d50d632d1614b8aa6106f921a2abf9e8ed3",
+    "rendered_case_count": 0,
+    "positive_case_count": 0,
+    "negative_controls_detected": 0,
+    "max_error": 0.0,
+    "synthetic_only": true,
+    "Unity_render_executed": false,
+    "Android_device": false,
+    "production_pixels": false,
+    "XAPK": false,
+    "cases": []
+}

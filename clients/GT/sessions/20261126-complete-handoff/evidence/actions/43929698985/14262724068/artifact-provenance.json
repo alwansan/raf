@@ -1,0 +1,44 @@
+{
+  "run": 43929698985,
+  "artifact": 14262724068,
+  "name": "gt-thirteen-source-shader-full-export-audit-43929698985",
+  "zip_sha256": "f0b92b8acc47af7d769e6b138bd5c62e669d58a840809dbccbaa49e0ec6187e2",
+  "members": [
+    {
+      "archive_member": "gt-thirteen-shader-postrestore-summary-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-shader-postrestore-summary-safe.json",
+      "bytes": 851,
+      "sha256": "8f6467f344c2d5088ba79d62e3349a5305cf9a94e8f7b45a65b702bc41b81738"
+    },
+    {
+      "archive_member": "gt-thirteen-shader-postrestore-quality.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-shader-postrestore-quality.json",
+      "bytes": 5172,
+      "sha256": "0a2433d2a2a12d7fa9069c7cb0076b0edbb103855dd728d466a7731844419761"
+    },
+    {
+      "archive_member": "gt-thirteen-particle108-install-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-particle108-install-safe.json",
+      "bytes": 409,
+      "sha256": "471255cf4fb9d2e5fa53d539ee25b679240e23276bb4f0b1749ae34075b5c169"
+    },
+    {
+      "archive_member": "gt-thirteen-particle20-install-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-particle20-install-safe.json",
+      "bytes": 407,
+      "sha256": "379033be9f2c4f77dfaf029023b771b2b77c3b9fba1e518f49fb27b03f02f9a5"
+    },
+    {
+      "archive_member": "gt-thirteen-smoke34-install-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-smoke34-install-safe.json",
+      "bytes": 404,
+      "sha256": "12bda26bafcaccdf37930aade0a792f1bb5805df66d8362bf353a8e853ab7d84"
+    },
+    {
+      "archive_member": "gt-thirteen-candle16-install-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14262724068/gt-thirteen-candle16-install-safe.json",
+      "bytes": 405,
+      "sha256": "abcfac09515f27737d418ab378321087a6aa4c4656fba5f5e02f4c77fb0c272c"
+    }
+  ]
+}

@@ -20,7 +20,7 @@
   "agent": "GT",
   "repository": "alwansan/raf",
   "write_branch": "feature/android-native-port",
-  "updated_date": "2026-11-13",
+  "updated_date": "2026-11-26",
   "original_source": {
     "ref": "zip2",
     "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -1303,5 +1303,32 @@
     "FFT_kernel6_and_water_Foam_Depth_and_fire_visual_parity_complete": false,
     "G0_G6_all_restored": false,
     "no_GT_XAPK_created": true
-  }
+  },
+  "current_handoff": {
+    "date": "2026-11-26",
+    "reviewed_remote_head": "f3c8a2cdacf04fdbfbced5f87a1407da223e3a15",
+    "purpose": "preserve all available work; restoration goal remains paused until resume",
+    "restore": "clients/GT/RESTORE_AR.md",
+    "index": "clients/GT/sessions/20261126-complete-handoff/README_AR.md",
+    "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
+    "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
+    "restoration_complete": false,
+    "historical_same_export_materials": {
+      "non_dummy": 688,
+      "total_custom": 786,
+      "dummy": 98,
+      "original_guid_targets_remaining": 37,
+      "run": 43929698985,
+      "runtime_keyword_parity_proven": false
+    },
+    "NEXT23b_private_composition_verified_run": 44783011957,
+    "NEXT23b_Unity_engine_routes_proven": false,
+    "FFT_HLSLcc_Unity_bundle_proven": false,
+    "synthetic_Unity_pixel_run": 45760877767,
+    "synthetic_pixels": 120,
+    "production_pixels_proven": false,
+    "new_XAPK_requested": false,
+    "CI_suppressed_for_preservation_commit": true
+  },
+  "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."
 }

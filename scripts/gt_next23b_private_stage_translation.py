@@ -16,7 +16,7 @@ from scripts.gt_stage_serialized_owners import read_expected
 from scripts.gt_serialized_graphics_counts import verify
 from scripts.gt_original_921_all_variants import enumerate_all, stage_parameter_records
 from scripts.gt_original_921_keyword_routes import keyword_routes, compile_routed_stages, shaderlab_layout
-from scripts.gt_original_921_shaderlab import compose, verify_entrypoints
+from scripts.gt_original_921_shaderlab import compose, verify_entrypoints, engine_route_keys, verified_source_next23b_pass_modes
 from scripts.t3_original_top_shader_dxbc_feasibility import summarize
 from scripts.w1_recover_depth_passes import linked_program, stage_variants, variant_key
 from scripts.w1_recover_graphics_programs import decoded_platforms, records, translate
@@ -56,7 +56,7 @@ def recover_programs(distinct, private, translator=translate):
 
 
 
-def compose_private(parsed, paired, orphans, passes, table, refs, private, report):
+def compose_private(parsed, paired, orphans, passes, table, refs, private, report, *, engine_keywords=False):
     """Keep every source route; stop on any semantic or CBuffer proof failure."""
     checkpoint = 'source_keyword_routes'
     report['status'] = 'INCONCLUSIVE_NEXT23B_PRIVATE_COMPOSITION'
@@ -99,14 +99,25 @@ def compose_private(parsed, paired, orphans, passes, table, refs, private, repor
                 raise ValueError('invalid_next23b_binding_proof_counter')
             report[key] = value
         checkpoint = 'compose_source_four_pass_shaderlab'
-        shader = compose(private, engine_keywords=False)
+        shader = compose(private, engine_keywords=engine_keywords)
         (private / 'original-next23b-Shader48-private.shader').write_text(shader, encoding='utf-8')
         routes = [[[] if i == 0 else [f'GT_ORIGINAL_921_P{p}_V{i}']
                    for i in range(n)] for p, n in enumerate(route_counts)]
+        if engine_keywords:
+            manifest = json.loads((private / 'original-private-variant-manifest.json').read_text())
+            modes = verified_source_next23b_pass_modes(manifest)
+            if route_counts != [512, 4, 128, 512]:
+                raise ValueError('next23b_exact_original_pass_routes_required')
+            routes = [engine_route_keys(row, index, modes) for index, row in enumerate(packet)]
+            route_packet = {'passes': [{'passType': 'Normal' if mode in ('Always', 'Untagged') else mode,
+                                       'variants': [{'keywords': list(key)} for key in keys]}
+                                      for mode, keys in zip(modes, routes)]}
+            (private / 'Next23bEngineRoutes.json').write_text(json.dumps(route_packet), encoding='utf-8')
         checkpoint = 'verify_all_composed_entrypoints_Vulkan11'
         verify_entrypoints(shader, private, routes=routes)
         report.update(status=STATUS, source_exact_keyword_routes_by_pass=route_counts,
                       private_ShaderLab_four_pass_composed=True,
+                      original_runtime_engine_keywords_preserved=engine_keywords,
                       private_ShaderLab_vertex_fragment_entrypoints_validated=2312)
     except Exception as exc:
         # Tracebacks may contain source names or identifiers; only this fixed
@@ -121,7 +132,7 @@ def compose_private(parsed, paired, orphans, passes, table, refs, private, repor
     return report
 
 
-def run(original, manifest, quality, private):
+def run(original, manifest, quality, private, *, engine_keywords=False):
     import UnityPy
     for tool in ("vkd3d-compiler", "spirv-val", "spirv-cross", "glslangValidator"):
         if shutil.which(tool) is None:
@@ -183,13 +194,14 @@ def run(original, manifest, quality, private):
     if counts['all_three_valid'] != 134:
         return report
     return compose_private(tree['m_ParsedForm'], paired, orphans, passes,
-                           table, refs, private, report)
+                           table, refs, private, report, engine_keywords=engine_keywords)
 
 
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     for key in ("original", "manifest", "quality", "private", "out"):
         p.add_argument("--" + key, type=Path, required=True)
+    p.add_argument("--engine-keywords", action="store_true")
     a = p.parse_args(argv)
     if (a.out.exists() or a.out.is_symlink() or a.private.is_symlink()
             or a.out.resolve().is_relative_to(a.original.resolve())
@@ -197,7 +209,7 @@ def main(argv=None):
             or a.private.resolve().is_relative_to(a.original.resolve())):
         raise ValueError("unsafe_next23b_public_private_separation")
     try:
-        report = run(a.original, a.manifest, a.quality, a.private)
+        report = run(a.original, a.manifest, a.quality, a.private, engine_keywords=a.engine_keywords)
     except Exception as exc:
         report = {"schema_version": 1, "status": "INCONCLUSIVE", "error_type": type(exc).__name__,
                   "original_names_digests_owner_PathIDs_GUIDs_shader_bytes_exported": False,

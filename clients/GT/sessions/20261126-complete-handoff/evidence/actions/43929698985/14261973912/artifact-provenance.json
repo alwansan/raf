@@ -1,0 +1,20 @@
+{
+  "run": 43929698985,
+  "artifact": 14261973912,
+  "name": "gt-nine-shader-full-export-audit-43929698985",
+  "zip_sha256": "3904c8daf99be4fa1af5cfe51181c3348901a0901c8bcbb77a266e4d2d83dbbe",
+  "members": [
+    {
+      "archive_member": "gt-nine-shader-postrestore-quality.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14261973912/gt-nine-shader-postrestore-quality.json",
+      "bytes": 5476,
+      "sha256": "54501de89b29f53fe74cbc210b63841119ebae572834cae26db89d2bf40c2971"
+    },
+    {
+      "archive_member": "gt-nine-shader-postrestore-summary-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14261973912/gt-nine-shader-postrestore-summary-safe.json",
+      "bytes": 4277,
+      "sha256": "5029c3923b6ea0527c64d749a8b888d650cd031f173f440140748141c00e5842"
+    }
+  ]
+}

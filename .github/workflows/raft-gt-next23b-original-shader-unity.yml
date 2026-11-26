@@ -1,0 +1,267 @@
+name: GT NEXT23b original engine routes Unity Android Vulkan (NO APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_next23b_private_stage_translation.py
+      - tests/test_gt_next23b_private_stage_translation.py
+      - scripts/gt_original_921_shaderlab.py
+      - scripts/gt_verify_921_shader_bundle.py
+      - tests/test_gt_next23b_unity_gate.py
+      - android-port/Experiments/GT/Editor/Next23bShaderValidation.cs
+      - scripts/gt_original_921_keyword_routes.py
+      - scripts/t3_particle108_source_propstate.py
+      - tests/test_gt_next23b_source_property_flags.py
+      - tests/test_gt_original_next23b_source_pass_modes.py
+      - .github/workflows/raft-gt-next23b-original-shader-unity.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: gt-next23b-private-stage-translation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  unique-remaining-23-material-original-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/GT/Editor/Next23bShaderValidation.cs
+            .github/workflows/raft-gt-next23b-original-shader-unity.yml
+
+      - name: Fail closed on post23 unique source selector and source-free invariants
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_next23b_unity_gate.py -v
+          python3 -m py_compile scripts/gt_next23b_private_stage_translation.py
+          python3 -m unittest discover -s tests -p test_gt_next23b_private_stage_translation.py -v
+          python3 -m unittest discover -s tests -p test_gt_original_next23b_source_pass_modes.py -v
+          python3 -m unittest discover -s tests -p test_gt_next23b_source_property_flags.py -v
+          python3 -m unittest discover -s tests -p test_gt_remaining_original_guid_weights.py -v
+
+      - name: Retrieve accepted actual post23 same-export material census
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 43929698985
+          name: gt-twentythree-next7p33-source-shader-full-export-audit-43929698985
+          path: ${{ runner.temp }}/gt-next23b-real-post23-quality
+
+      - name: Validate real 688 Custom non-Dummy / 98 Dummy / 37 original GUID population
+        run: |
+          set -euo pipefail
+          python3 - <<'PY_NEXT23B_REAL_QUALITY'
+          import json,os,shutil
+          from pathlib import Path
+          from scripts.gt_remaining_original_guid_weights import safe_remaining_weights
+          root=Path(os.environ["RUNNER_TEMP"])/"gt-next23b-real-post23-quality"
+          matches=[p for p in root.rglob("gt-twentythree-shader-postrestore-quality.json")
+                   if p.is_file() and not p.is_symlink()]
+          if len(matches)!=1:
+              raise ValueError("missing_unique_real_next23b_post23_quality")
+          safe_remaining_weights(json.loads(matches[0].read_text(encoding="utf-8")))
+          shutil.copyfile(matches[0],Path(os.environ["RUNNER_TEMP"])/"gt-next23b-post23-quality.json")
+          print("GT_NEXT23B_ACTUAL_POST23_688_NON_DUMMY_98_DUMMY_SOURCE_ACCEPTED noAPK=true")
+          PY_NEXT23B_REAL_QUALITY
+
+      - name: Read immutable ZIP2 serialized owner files only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/level6
+            Raft/Raft_Data/level7
+            Raft/Raft_Data/level8
+            Raft/Raft_Data/level9
+            Raft/Raft_Data/level10
+            Raft/Raft_Data/level11
+            Raft/Raft_Data/level12
+            Raft/Raft_Data/level13
+            Raft/Raft_Data/level14
+            Raft/Raft_Data/level15
+            Raft/Raft_Data/level16
+            Raft/Raft_Data/level17
+            Raft/Raft_Data/level18
+            Raft/Raft_Data/level19
+            Raft/Raft_Data/level20
+            Raft/Raft_Data/level21
+            Raft/Raft_Data/level22
+            Raft/Raft_Data/level23
+            Raft/Raft_Data/level24
+            Raft/Raft_Data/level25
+            Raft/Raft_Data/level26
+            Raft/Raft_Data/level27
+            Raft/Raft_Data/level28
+            Raft/Raft_Data/level29
+            Raft/Raft_Data/level30
+            Raft/Raft_Data/level31
+            Raft/Raft_Data/level32
+            Raft/Raft_Data/level33
+            Raft/Raft_Data/level34
+            Raft/Raft_Data/level35
+            Raft/Raft_Data/level36
+            Raft/Raft_Data/level37
+            Raft/Raft_Data/level38
+            Raft/Raft_Data/level39
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets2.assets
+            Raft/Raft_Data/sharedassets3.assets
+            Raft/Raft_Data/sharedassets4.assets
+            Raft/Raft_Data/sharedassets5.assets
+            Raft/Raft_Data/sharedassets6.assets
+            Raft/Raft_Data/sharedassets7.assets
+            Raft/Raft_Data/sharedassets8.assets
+            Raft/Raft_Data/sharedassets9.assets
+            Raft/Raft_Data/sharedassets10.assets
+            Raft/Raft_Data/sharedassets11.assets
+            Raft/Raft_Data/sharedassets12.assets
+            Raft/Raft_Data/sharedassets13.assets
+            Raft/Raft_Data/sharedassets14.assets
+            Raft/Raft_Data/sharedassets15.assets
+            Raft/Raft_Data/sharedassets16.assets
+            Raft/Raft_Data/sharedassets17.assets
+            Raft/Raft_Data/sharedassets18.assets
+            Raft/Raft_Data/sharedassets19.assets
+            Raft/Raft_Data/sharedassets20.assets
+            Raft/Raft_Data/sharedassets21.assets
+            Raft/Raft_Data/sharedassets22.assets
+            Raft/Raft_Data/sharedassets23.assets
+            Raft/Raft_Data/sharedassets24.assets
+            Raft/Raft_Data/sharedassets25.assets
+            Raft/Raft_Data/sharedassets26.assets
+            Raft/Raft_Data/sharedassets27.assets
+            Raft/Raft_Data/sharedassets28.assets
+            Raft/Raft_Data/sharedassets29.assets
+            Raft/Raft_Data/sharedassets30.assets
+            Raft/Raft_Data/sharedassets31.assets
+            Raft/Raft_Data/sharedassets32.assets
+            Raft/Raft_Data/sharedassets33.assets
+            Raft/Raft_Data/sharedassets34.assets
+            Raft/Raft_Data/sharedassets35.assets
+            Raft/Raft_Data/sharedassets36.assets
+            Raft/Raft_Data/sharedassets37.assets
+            Raft/Raft_Data/sharedassets38.assets
+            Raft/Raft_Data/sharedassets39.assets
+
+      - name: Materialize exact SHA-authenticated 82 Unity serialized owners (no LFS or raw upload)
+        run: |
+          set -euo pipefail
+          test "$(git -C .gt-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m scripts.gt_stage_serialized_owners \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --source .gt-zip2/Raft/Raft_Data \
+            --destination "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --report "$RUNNER_TEMP/gt-original-82-source-proof-private.json" > "$RUNNER_TEMP/gt-original-82-source-private.log"
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+
+
+      - name: Translate 134 programs and compose all 1156 source routes privately
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          timeout 6000s python3 -m scripts.gt_next23b_private_stage_translation \
+            --original "$RUNNER_TEMP/gt-original-82-shader-owners" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --quality "$RUNNER_TEMP/gt-next23b-post23-quality.json" \
+            --private "$RUNNER_TEMP/gt-next23b-private-stages" \
+            --engine-keywords \
+            --out "$RUNNER_TEMP/gt-next23b-private-stage-safe.json" \
+            > "$RUNNER_TEMP/gt-next23b-private-compiler.log" 2>&1
+
+      - name: Prepare isolated source-only Unity project
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next23b-full-export-unity"
+          work="$RUNNER_TEMP/gt-next23b-private-stages"
+          mkdir -p "$project/Assets/Editor" "$project/Packages" "$project/ProjectSettings"
+          cp "$work/original-next23b-Shader48-private.shader" "$project/Assets/GTNext23b.shader"
+          cp "$work/Next23bEngineRoutes.json" "$project/Next23bEngineRoutes.json"
+          cp android-port/Experiments/GT/Editor/Next23bShaderValidation.cs "$project/Assets/Editor/"
+          printf '%s\n' '{"dependencies":{}}' > "$project/Packages/manifest.json"
+          printf '%s\n' 'm_EditorVersion: 2021.3.45f2' > "$project/ProjectSettings/ProjectVersion.txt"
+      - name: Compile exact original next23b Shader48 in isolated Unity 2021 Android Vulkan (NO APK)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-next23b-full-export-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.Next23bShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify exact source next23b Vulkan 1156-route VS/FS original bundle and candidate SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="$GITHUB_WORKSPACE/gt-next23b-full-export-unity"
+          smolv="$RUNNER_TEMP/gt-next23b-full-export-smolv"
+          mkdir -p "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          python3 -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-next23b" \
+            --source "$project/Assets/GTNext23b.shader" \
+            --receipt "$project/ProbeResults/gt-next23b-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" --next23b \
+            --engine-route-manifest "$project/Next23bEngineRoutes.json" \
+            --out "$RUNNER_TEMP/gt-next23b-full-export-bundle-safe.json"
+
+      - name: Publish numeric-only translation and composition proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-next23b-private-stage-safe-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-next23b-private-stage-safe.json
+            gt-next23b-full-export-unity/ProbeResults/gt-next23b-unity-safe.json
+            ${{ runner.temp }}/gt-next23b-full-export-bundle-safe.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Remove private original source owners, name digests and shader bytes
+        if: always()
+        run: |
+          set -euo pipefail
+          rm -rf "$RUNNER_TEMP/gt-next23b-private-stages" \
+                 "$RUNNER_TEMP/gt-next23b-private-compiler.log" \
+                 "$RUNNER_TEMP/gt-original-82-shader-owners" \
+                 "$RUNNER_TEMP/gt-next23b-real-post23-quality" \
+                 "$RUNNER_TEMP/gt-next23b-post23-quality.json" \
+                 "$RUNNER_TEMP/gt-original-82-source-proof-private.json" \
+                 "$RUNNER_TEMP/gt-original-82-source-private.log"
+          sudo rm -rf "$GITHUB_WORKSPACE/gt-next23b-full-export-unity"
+          rm -rf .gt-zip2

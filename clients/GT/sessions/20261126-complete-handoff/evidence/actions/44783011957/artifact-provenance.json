@@ -1,0 +1,13 @@
+{
+  "run": 44783011957,
+  "artifact": 14654640691,
+  "zip_sha256": "3aaf0f599a311f34d6c2363f3b777c5005a47e3e762e45c1aeb5af0265e5de02",
+  "members": [
+    {
+      "archive_member": "gt-next23b-private-stage-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/44783011957/gt-next23b-private-stage-safe.json",
+      "sha256": "6273dcedb951c205281d547340d24d252989b96f69036aaba8b2698c5edd7b8e",
+      "bytes": 1213
+    }
+  ]
+}

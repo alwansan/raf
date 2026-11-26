@@ -1,0 +1,32 @@
+{
+  "search_roots": [
+    "/home/a/Documents/Codex",
+    "/home/a/Downloads",
+    "/mnt/data"
+  ],
+  "available_in_this_checkout": false,
+  "reconstruct_missing_bytes_from_hashes": false,
+  "remote_narrative_preserved": "history/RESTORE_REMOTE_BEFORE_HANDOFF_AR.md",
+  "items": [
+    {
+      "name": "raft-batch3-synthetic-bindings/",
+      "verification_summary_sha256": "d5f08e9519b19e9f118ba46d3246f1f0ab9441417ce017c13b509277ce12474e",
+      "historical_claim": "two local Vulkan runs /240 pixels; raw execution receipts not present here"
+    },
+    {
+      "name": "raft-batch4-resource-metadata/",
+      "verification_summary_sha256": "6536ae8fd8caef25c9fd0942aa0c1b42e4bf7f887c12bbdfc63916473fec62cc",
+      "historical_claim": "two local Vulkan runs /240 pixels; adapter.py and upstream candidate patch not present here",
+      "upstream_candidate_patch_sha256": "247217382b6d87655fb9da24bbc0d699038456f943a0acf906831c7a4100d150",
+      "candidate_sha256": "7ae5c42ffe7630709dee27d046bdc38d9424bfb774e601e5cd8027431b410a24"
+    },
+    {
+      "name": "raft-batch5-local-recovery-20261126.zip",
+      "sha256": "a7b0a80c25c753f6e081f9307c804575399d833e5deec5ff338ef4ceee5222a6",
+      "test_file": "raft-batch5-stage-enumeration/test_enumeration.py",
+      "test_file_sha256": "73f532759de1541d782a9955ec415669718040d48ca5d09c8ea03539ff9628ca",
+      "tests_log_sha256": "3bac234ddbc3e96c5d3b3c156185765d67788464930a2a3d163640933c26cc32",
+      "historical_claim": "15 isolated enumeration tests; actual production stage_parameter_records not executed"
+    }
+  ]
+}

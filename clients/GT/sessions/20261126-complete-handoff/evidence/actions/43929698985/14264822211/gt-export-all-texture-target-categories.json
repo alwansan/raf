@@ -1,0 +1,7 @@
+{
+  "error_code": "oversized_asset",
+  "original_exported_assets_modified": false,
+  "schema": "GT_EXPORTED_MATERIAL_TEXTURE_TARGET_AGGREGATE_V1",
+  "shader_program_or_device_pixels_verified": false,
+  "status": "INCONCLUSIVE"
+}

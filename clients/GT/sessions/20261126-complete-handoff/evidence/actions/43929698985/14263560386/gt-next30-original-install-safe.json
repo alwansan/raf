@@ -1,0 +1,19 @@
+{
+  "Android_Adreno_pixels_verified": false,
+  "game_Player_or_XAPK_created": false,
+  "original_ShaderLab_4_pass_routes_installed": [
+    8,
+    13,
+    8,
+    2
+  ],
+  "original_export_Shader48_GUID_preserved": true,
+  "original_fragment_and_vertex_routes_Android_Vulkan_bundle_verified": true,
+  "original_material_yaml_meta_modified": false,
+  "original_source_82_owners_SHA_verified": true,
+  "original_source_Shader_names_GUIDs_PathIDs_or_program_bytes_published": false,
+  "post13_actual_Dummy_Material_population_verified": 246,
+  "schema_version": 1,
+  "source_original_unrestored_Material_documents_for_selected_Shader": 30,
+  "status": "GT_EXACT_ORIGINAL_NEXT30_SAME_EXPORT_SHADER48_GUID_INSTALLED_NO_APK"
+}

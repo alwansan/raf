@@ -1951,5 +1951,41 @@
     "device_native_abort": "Scudo out of memory in Adreno Vulkan render-pass begin; exact allocation owner unproven",
     "graphics_restoration_complete": false,
     "evidence": "evidence/20261120_gt_native_post23_and_next23b_integration.json"
+  },
+  "latest_20261121_graphics_continuation": {
+    "next23b_composition_run": 44783011957,
+    "next23b_private_shaderlab_entrypoints_verified": 2312,
+    "next23b_source_CB_offsets_verified": 20085,
+    "next23b_original_engine_keyword_routing_Unity_GUID_device_proven": false,
+    "fft_dxc_unity_rejected_run": 44781701884,
+    "fft_hlslcc_compiler_control_pending": true,
+    "graphics_restoration_complete": false,
+    "new_XAPK_requested": false
+  },
+  "current_handoff": {
+    "date": "2026-11-26",
+    "reviewed_remote_head": "f3c8a2cdacf04fdbfbced5f87a1407da223e3a15",
+    "purpose": "preserve all available work; restoration goal remains paused until resume",
+    "restore": "clients/GT/RESTORE_AR.md",
+    "index": "clients/GT/sessions/20261126-complete-handoff/README_AR.md",
+    "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
+    "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
+    "restoration_complete": false,
+    "historical_same_export_materials": {
+      "non_dummy": 688,
+      "total_custom": 786,
+      "dummy": 98,
+      "original_guid_targets_remaining": 37,
+      "run": 43929698985,
+      "runtime_keyword_parity_proven": false
+    },
+    "NEXT23b_private_composition_verified_run": 44783011957,
+    "NEXT23b_Unity_engine_routes_proven": false,
+    "FFT_HLSLcc_Unity_bundle_proven": false,
+    "synthetic_Unity_pixel_run": 45760877767,
+    "synthetic_pixels": 120,
+    "production_pixels_proven": false,
+    "new_XAPK_requested": false,
+    "CI_suppressed_for_preservation_commit": true
   }
 }

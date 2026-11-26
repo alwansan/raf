@@ -24,6 +24,16 @@ from scripts.w1_stage_zip2_owners import PINS, fingerprint
 
 TARGET = 'UltimateWater/Utilities/FFT Utilities'
 STATUS = 'GT_FFT_UTILITIES_AUTHENTIC_SEVEN_PASS_SOURCE_COMPILED'
+FAILED_DXC_CANDIDATE_SHA256 = 'f8575ebd855cff193c9fdb506b5f2b2d427d4c583eb9c5c7af0d6ff39c948b23'
+
+
+def compiler_control(shader, mode):
+    # Deliberately bounded compiler-lowering control: no HLSL expressions,
+    # resource bindings, properties or source render states change.
+    pragma = '#pragma use_dxc vulkan\n'
+    if mode not in ('dxc', 'hlslcc') or shader.count(pragma) != 7:
+        raise ValueError('fft_utilities_unverified_compiler_control')
+    return shader if mode == 'dxc' else shader.replace(pragma, '')
 
 
 def validate_routes(routes):
@@ -92,7 +102,7 @@ def compose(private, pairs, stage_records, layout):
     return attach_programs(layout, programs)
 
 
-def recover(original, private):
+def recover(original, private, *, compiler_mode="dxc"):
     for binary in ('vkd3d-compiler', 'spirv-val', 'spirv-cross', 'glslangValidator'):
         if shutil.which(binary) is None:
             raise ValueError('fft_utilities_translation_tool_unavailable')
@@ -126,10 +136,16 @@ def recover(original, private):
     named = json.loads((private/'original-private-parameter-records.json').read_text())['stage_records']
     materialized = [dict(pair, **{stage: dict(pair[stage], program_ref=folders[pair[stage]['program_ref']])
                     for stage in ('vs','fs')}) for pair in pairs]
-    shader = compose(private, materialized, named, layout)
+    dxc_shader = compose(private, materialized, named, layout)
+    shader = compiler_control(dxc_shader, compiler_mode)
+    (private/'fft-utilities-dxc-private.shader').write_text(dxc_shader)
     (private/'fft-utilities-private.shader').write_text(shader)
     verify_entrypoints(shader, private, routes=[[[]] for _ in range(7)])
     return dict(status=STATUS, candidate_shader_sha256=sha256(shader.encode()).hexdigest(),
+        compiler_control=compiler_mode,
+        compiler_control_only_dxc_pragma_removed=compiler_mode == "hlslcc",
+        dxc_candidate_shader_sha256=sha256(dxc_shader.encode()).hexdigest(),
+        historical_failed_dxc_candidate_sha256=FAILED_DXC_CANDIDATE_SHA256,
         original_SHA_owned_serialized_files=2,
         original_passes=7, original_keyword_pairs=7, original_orphan_stages=0,
         original_distinct_D3D11_programs=12, original_stages_roundtrip_validated=12,
@@ -143,13 +159,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for key in ('original','private','out'):
         parser.add_argument('--'+key, type=Path, required=True)
+    parser.add_argument("--compiler-control", choices=("dxc", "hlslcc"), default="dxc")
     args = parser.parse_args()
     if (args.out.exists() or args.out.is_symlink()
             or args.out.resolve().is_relative_to(args.original.resolve())
             or args.out.resolve().is_relative_to(args.private.resolve())):
         raise ValueError('fft_utilities_unsafe_safe_receipt_path')
     try:
-        result = recover(args.original, args.private)
+        result = recover(args.original, args.private, compiler_mode=args.compiler_control)
     except Exception as exc:
         result = dict(status='INCONCLUSIVE', error_type=type(exc).__name__,
             source_bytes_or_IDs_published=False, Unity_import_proven=False,

@@ -1,0 +1,86 @@
+{
+  "run": 43929698985,
+  "artifact": 14264822211,
+  "name": "gt-real-original-export-43929698985",
+  "zip_sha256": "f0f5a56f0ec70a90684f0f47b07ee5faed3aac5baba87f660b4d0911c9616aa6",
+  "members": [
+    {
+      "archive_member": "gt-export-original-restore.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-export-original-restore.json",
+      "bytes": 658,
+      "sha256": "5498ee9a07f473da7c0f5d71929f061f1b01337e23d5f208432400990c6713d2"
+    },
+    {
+      "archive_member": "gt-real-mesh-export-geometry.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-real-mesh-export-geometry.json",
+      "bytes": 372,
+      "sha256": "d9834ba336bddb9075d55c1d264b1a549773dd902169b8e9f4940dd77461587c"
+    },
+    {
+      "archive_member": "gt-real-export-aggregate.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-real-export-aggregate.json",
+      "bytes": 335,
+      "sha256": "08fbfb2bd181a534ed290cfd41e0716a078d7a5d0d7fe1f52b26e74eb41a3d3f"
+    },
+    {
+      "archive_member": "gt-export-texture-guard-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-export-texture-guard-safe.json",
+      "bytes": 90,
+      "sha256": "affe9c5455caa5198c42361b77778c7545a733c6ed386b5ad2ac6c85525d20bb"
+    },
+    {
+      "archive_member": "gt-export-all-texture-target-categories.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-export-all-texture-target-categories.json",
+      "bytes": 229,
+      "sha256": "a782aff0196109b714b2415a80bc98ef0cb0884c2d8f01d66f6cb01bef80ba15"
+    },
+    {
+      "archive_member": "gt-real-original-array-private-Editor-gate-aggregate.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-real-original-array-private-Editor-gate-aggregate.json",
+      "bytes": 617,
+      "sha256": "ccd69d3578ee00189ef3b92010ca197d5a6efdb500a983fad60b973b122f6462"
+    },
+    {
+      "archive_member": "gt-real-cubemap-export-lineage.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-real-cubemap-export-lineage.json",
+      "bytes": 379,
+      "sha256": "f0850be35d81b42c3a1588e82bc4edcdac1559b10e9ebc725929ab6bd4ab37e1"
+    },
+    {
+      "archive_member": "gt-b05-actual-original-to-export-texenv.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-b05-actual-original-to-export-texenv.json",
+      "bytes": 1030,
+      "sha256": "1de33bf881e0c3fa7cef906c23ac882b94cceacca3138ef89e76a2980ba945f5"
+    },
+    {
+      "archive_member": "gt-full-real-82-owner-texenv.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-full-real-82-owner-texenv.json",
+      "bytes": 1629,
+      "sha256": "45a1b65dae5b02b28d55b7db81cf52d25b305d6cef58ed36c809ad434e4e6b63"
+    },
+    {
+      "archive_member": "gt-full-material-colors.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-full-material-colors.json",
+      "bytes": 600,
+      "sha256": "4a54e4250ffc45c9e632ae610e7518ba8b354d9b196918491a8e9bee57a3d592"
+    },
+    {
+      "archive_member": "gt-real-external-texture-links.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-real-external-texture-links.json",
+      "bytes": 699,
+      "sha256": "7ca5eef2d28b9aa89827383d7b02e51155d36a020ff84054eb442f1324eb31c7"
+    },
+    {
+      "archive_member": "gt-raw-export-program-quality.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-raw-export-program-quality.json",
+      "bytes": 6455,
+      "sha256": "894c487e6ba0a144b4a0f030ed2a92eca20c088146d0c5c046f51aa47ae64f26"
+    },
+    {
+      "archive_member": "gt-actual-postrestore-shader-quality.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14264822211/gt-actual-postrestore-shader-quality.json",
+      "bytes": 1717,
+      "sha256": "94fdc1552f719722c1825b8a31b1ad626e2e62e7ae1ff55b4cc3e815f18ff480"
+    }
+  ]
+}

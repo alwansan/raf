@@ -1,0 +1,14 @@
+{
+  "APK_OBB_XAPK_created": false,
+  "all_original_Material_meta_and_YAML_sha256_unchanged": true,
+  "device_pixel_or_original_keyword_runtime_parity_verified": false,
+  "original_Shader48_source_identity_and_UnityVulkan_bundle_verified": true,
+  "original_shader_GUID_preserved": true,
+  "post13_dummy_material_documents": 246,
+  "post14_dummy_material_documents": 216,
+  "post14_non_dummy_custom_material_documents": 570,
+  "protected_unchanged_original_Material_YAML_and_meta_files": 29213,
+  "remaining_dummy_Shader_GUID_targets_referenced": 46,
+  "schema_version": 1,
+  "status": "GT_FOURTEEN_NEXT30_SOURCE_SHADER48_SAME_EXPORT_GUID_ACCEPTED_NO_APK"
+}

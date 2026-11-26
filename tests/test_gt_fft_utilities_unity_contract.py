@@ -12,7 +12,8 @@ class UnityProbeContract(unittest.TestCase):
                          'PassType.Normal, Array.Empty<string>()',
                          'ForceRebuildAssetBundle | BuildAssetBundleOptions.StrictMode',
                          'result.errors == 0 && !ShaderUtil.ShaderHasError(shader)',
-                         'SourceReceiptCandidateMismatch','2021.3.45f2'):
+                         'SourceReceiptCandidateMismatch','2021.3.45f2',
+                         'CandidateCompiler.txt', 'UnsupportedCompilerControl'):
             self.assertIn(required,source)
         self.assertNotIn('BuildPlayer(',source)
         self.assertNotIn('registeredRoutes =',source)
@@ -31,3 +32,7 @@ class UnityProbeContract(unittest.TestCase):
         self.assertIn('--fft-utilities',proof)
         self.assertIn("bundle['vertex_routes_by_pass']==bundle['fragment_routes_by_pass']==[1]*7",proof)
         self.assertIn("source['candidate_shader_sha256']",proof)
+        self.assertIn("unity['compilerControl']==source['compiler_control']=='hlslcc'",proof)
+        recover=next(s['run'] for s in steps if '--compiler-control' in s.get('run',''))
+        self.assertIn('--compiler-control hlslcc',recover)
+        self.assertIn("q['compiler_control_only_dxc_pragma_removed'] is True",recover)

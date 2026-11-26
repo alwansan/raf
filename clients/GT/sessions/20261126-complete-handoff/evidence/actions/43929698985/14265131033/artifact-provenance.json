@@ -1,0 +1,44 @@
+{
+  "run": 43929698985,
+  "artifact": 14265131033,
+  "name": "gt-twenty-next10p33-source-shader-full-export-audit-43929698985",
+  "zip_sha256": "3e7c2b298062b9df37fd3f8a004914c9f547f8e35d15da80a1a22b64d12cf267",
+  "members": [
+    {
+      "archive_member": "raf/raf/gt-next10p33-full-export-unity/ProbeResults/gt-next10p33-unity-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-next10p33-unity-safe.json",
+      "bytes": 351,
+      "sha256": "5d1b95cc306fb2b0220d4aa8626afcbee1a158549826de8ac2d7eccc310fa3a3"
+    },
+    {
+      "archive_member": "_temp/gt-next10p33-full-export-bundle-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-next10p33-full-export-bundle-safe.json",
+      "bytes": 327,
+      "sha256": "eacf9a53e788f40719add6a906af54e94125bad299e9abe55f8bd87c18e6e5bf"
+    },
+    {
+      "archive_member": "_temp/gt-next10p33-full-export-source-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-next10p33-full-export-source-safe.json",
+      "bytes": 1799,
+      "sha256": "a163c61b9888c63dc9e4e86d5bd9631e40b27a70531769876ff0d62b2ebb95f8"
+    },
+    {
+      "archive_member": "_temp/gt-next10p33-original-install-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-next10p33-original-install-safe.json",
+      "bytes": 763,
+      "sha256": "455ab12f1a2b1fe64bfae114bc8b5d04e548f801208bcd358d1eec7f9beb889f"
+    },
+    {
+      "archive_member": "_temp/gt-twenty-shader-postrestore-summary-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-twenty-shader-postrestore-summary-safe.json",
+      "bytes": 624,
+      "sha256": "c9f8e13e000d0b9d79b8375d6559e6f6e1bd9f2d4b2fe8d084a1f4f93ab2291b"
+    },
+    {
+      "archive_member": "_temp/gt-twenty-shader-postrestore-quality.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/43929698985/14265131033/gt-twenty-shader-postrestore-quality.json",
+      "bytes": 4639,
+      "sha256": "cda0a75de7ed8874201201cd11cd8a4a351777884fcdee4d1ebdd7b33efdb67f"
+    }
+  ]
+}

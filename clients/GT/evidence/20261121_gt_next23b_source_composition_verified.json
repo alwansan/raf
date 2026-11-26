@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-11-21",
+  "actual_run": 44783011957,
+  "actual_artifact": 14654640691,
+  "immutable_run_source_sha": "7e9925fdba601f84f495f3a9e6ba6d752544fe22",
+  "numeric_artifact_inspected": true,
+  "source_proof": {
+    "APK_OBB_XAPK_created": false,
+    "Unity_shader_installation_same_export_GUID_or_device_render_proven": false,
+    "actual_source_material_quality_run": 43929698985,
+    "all_three_compiler_gates_valid": 134,
+    "hlsl_recovered": 134,
+    "named_constant_buffer_reflected_offsets_verified": 20085,
+    "original_names_digests_owner_PathIDs_GUIDs_shader_bytes_exported": false,
+    "original_source_82_owners_authenticated": true,
+    "original_variant_stages_with_parameter_records": 2312,
+    "original_vertex_fragment_varying_records_matched": 7516,
+    "private_ShaderLab_four_pass_composed": true,
+    "private_ShaderLab_vertex_fragment_entrypoints_validated": 2312,
+    "private_exact_keyword_routed_stages_compiled": 2312,
+    "private_programs_attempted": 134,
+    "roundtrip_vulkan11_valid": 134,
+    "schema_version": 1,
+    "source_Shader48_Pass_count": 4,
+    "source_distinct_D3D11_programs": 134,
+    "source_exact_keyword_routes_by_pass": [
+      512,
+      4,
+      128,
+      512
+    ],
+    "source_paired_VSFS_routes": 1156,
+    "source_unpaired_variants": 0,
+    "source_variant_named_CB_sampler_stage_bindings_verified": true,
+    "status": "GT_NEXT23B_SHA_ORIGINAL_PRIVATE_STAGES_AND_SHADERLAB_COMPOSED_VALIDATED",
+    "vulkan11_valid": 134
+  },
+  "boundary": "Source ShaderLab composition and2312entrypoints validated. This candidate uses private compile-selector keywords; original runtime keyword selection, Unity bundle, original GUID installation and device pixels still require proof. No material count increase accepted."
+}

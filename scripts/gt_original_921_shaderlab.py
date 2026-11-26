@@ -541,7 +541,10 @@ def main():
     routes = None
     if args.engine_keywords:
         packet = json.loads((args.private / "original-private-keyword-routes.json").read_text())
-        pass_modes = pass_modes_for_routes(tuple(len(row["routes"]) for row in packet))
+        counts = tuple(len(row["routes"]) for row in packet)
+        manifest = json.loads((args.private / "original-private-variant-manifest.json").read_text())
+        pass_modes = (verified_source_next23b_pass_modes(manifest)
+                      if counts == (512, 4, 128, 512) else pass_modes_for_routes(counts))
         routes = [engine_route_keys(row, index, pass_modes) for index, row in enumerate(packet)]
     if args.verify_entrypoints:
         verify_entrypoints(shader, args.private, routes)

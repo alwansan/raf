@@ -1,0 +1,8 @@
+{
+  "repository": "alwansan/CL",
+  "head_sha": "c664bf94173778ffa13541060d44c01162c4d22c",
+  "latest_commit_date": "2026-11-26T15:59:11Z",
+  "raw_capture_downloaded_now": false,
+  "historical_analysis_source": "clients/GT/evidence/20261120_gt_current_device_graphics_receipt.json",
+  "scope": "reference refresh only; historical error counters not remeasured"
+}

@@ -1,3 +1,5 @@
+> **GT — تسليم26نوفمبر2026:** [رسالة الاستعادة الشاملة](clients/GT/RESTORE_AR.md) · [الأدوات والاختبارات والنتائج والخطة](clients/GT/sessions/20261126-complete-handoff/README_AR.md). الاستعادة الكاملة غير منجزة؛ هذا حفظ للعمل دونXAPKجديد.
+
 > **GT — استعادة رسوميات Raft:** [واجهة العامل](clients/GT/README.md) · [الاستكشاف](clients/GT/DISCOVERY_AR.md) · [ملخص التقدم](clients/GT/SUMMARY_AR.md)
 
 <!-- OWNER_SHARED_MINI_LAB_20261108 -->

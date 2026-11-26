@@ -1,0 +1,19 @@
+{
+  "run": 45760877767,
+  "artifact": 15089632294,
+  "zip_sha256": "fbd13686d8b74d22a9ce65479396ed15a6aa14c3991f58acc87b43ff95ab2a73",
+  "members": [
+    {
+      "archive_member": "raw.unity.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/45760877767/raw.unity.json",
+      "sha256": "44fa5ae78b1bc35ec66ec2753107b874c56f6a77f407b69a287377c5bd304ccb",
+      "bytes": 76711
+    },
+    {
+      "archive_member": "verified.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/45760877767/verified.json",
+      "sha256": "cde915d24595a59f86618ea4df9b67e7a10a6ae4c7202d7c75910dbce130cd5d",
+      "bytes": 1043
+    }
+  ]
+}

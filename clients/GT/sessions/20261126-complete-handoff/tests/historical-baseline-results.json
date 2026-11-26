@@ -1,0 +1,110 @@
+[
+  {
+    "file": "test_android_delivery_package.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_fft_requested_workload.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_stage_fmod_android_runtime.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t1_fft_dispatch_group_validation.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t1_fft_pair_pass_identity_c8f1.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t1_fft_rgba_error_signature.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t1_fft_trace_first_divergence_7c3a.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t1_kernel6_error_classification.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t1_kernel6_log_context.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t1_water_first_raw_context.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t2_cfg_malformed_records.py",
+    "baseline_code": 5
+  },
+  {
+    "file": "test_t2_cil_return_join_gate.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t2_external_pptr_manifest_resolver.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t2_foam_pass1_gate.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t2_foam_pass_role_matrix.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t3_dxbc_signature_contract.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t3_material_shader_meta_orphan.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t3_rgb_drift_strata.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t3_shader_owner_type.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t3_smoke_pass_state_gate_v2.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t3_smoke_render_state_gate.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t3_stage_particle_nonexportable_trace.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t3_vf_spirv_component_coverage.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t4_capture_reader_summary_boundary.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t4_ledger_event_identity.py",
+    "baseline_code": 1
+  },
+  {
+    "file": "test_t5_unified_saf_stream_contract.py",
+    "baseline_code": 5
+  },
+  {
+    "file": "test_we_blur_failure_categories.py",
+    "baseline_code": 1
+  }
+]

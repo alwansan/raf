@@ -5,6 +5,9 @@ on:
     paths:
       - scripts/gt_fft_utilities_restore.py
       - tests/test_gt_fft_utilities_restore.py
+      - scripts/gt_install_fft_utilities_original.py
+      - tests/test_gt_install_fft_utilities_original.py
+      - tests/test_gt_fft_utilities_unity_contract.py
       - .github/workflows/raft-gt-fft-utilities-source.yml
       - scripts/gt_verify_921_shader_bundle.py
       - tests/test_gt_fft_utilities_bundle.py
@@ -33,6 +36,7 @@ jobs:
       - run: |
           python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3
           python3 -m unittest discover -s tests -p 'test_gt_fft_utilities*.py' -v
+          python3 -m unittest tests.test_gt_install_fft_utilities_original -v
           python3 -m unittest discover -s tests -p test_gt_original_921_bundle.py -v
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -59,12 +63,13 @@ jobs:
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
           sudo apt-get update -qq
           sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
-      - name: Recover all twelve original programs and compile fourteen bound entrypoints
+      - name: Recover all twelve original programs; bounded FFT HLSLcc compiler-lowering control
         run: |
           set -euo pipefail
           python3 -m scripts.gt_fft_utilities_restore \
             --original "$RUNNER_TEMP/gt-fft-original/Raft_Data" \
             --private "$RUNNER_TEMP/gt-fft-private" \
+            --compiler-control hlslcc \
             --out "$RUNNER_TEMP/gt-fft-utilities-safe.json"
           python3 - <<'PY'
           import json,os
@@ -72,6 +77,8 @@ jobs:
           from scripts.gt_fft_utilities_restore import STATUS
           q=json.loads((Path(os.environ['RUNNER_TEMP'])/'gt-fft-utilities-safe.json').read_text())
           assert q['status']==STATUS
+          assert q['compiler_control']=='hlslcc'
+          assert q['compiler_control_only_dxc_pragma_removed'] is True
           assert q['original_passes']==7 and q['original_keyword_pairs']==7
           assert q['original_distinct_D3D11_programs']==12
           assert q['named_ShaderLab_entrypoints_compiled']==14
@@ -90,6 +97,7 @@ jobs:
               (project/child).mkdir(parents=True,exist_ok=False)
           shutil.copyfile(temp/'gt-fft-private/fft-utilities-private.shader',project/'Assets/GTFFTUtilities.shader')
           shutil.copyfile('android-port/Experiments/GT/Editor/FFTUtilitiesShaderValidation.cs',project/'Assets/Editor/FFTUtilitiesShaderValidation.cs')
+          (project/'CandidateCompiler.txt').write_text(q['compiler_control']+'\n')
           (project/'CandidateSha256.txt').write_text(q['candidate_shader_sha256']+'\n')
           (project/'Packages/manifest.json').write_text('{"dependencies":{}}\n')
           (project/'ProjectSettings/ProjectVersion.txt').write_text('m_EditorVersion: 2021.3.45f2\n')
@@ -134,6 +142,7 @@ jobs:
           unity=json.loads(Path('gt-fft-utilities-unity/ProbeResults/gt-fft-utilities-unity-safe.json').read_text())
           bundle=json.loads((temp/'gt-fft-utilities-bundle-safe.json').read_text())
           assert unity['unityVersion']=='2021.3.45f2' and unity['errors']==0
+          assert unity['compilerControl']==source['compiler_control']=='hlslcc'
           assert unity['passCount']==7 and unity['registeredKeywordVariants']==1
           assert unity['privateBundleCompiled'] is True and unity['androidVulkanOnly'] is True
           assert unity['gamePlayerBuilt'] is False and unity['devicePixelsProven'] is False

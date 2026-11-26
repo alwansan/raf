@@ -1,0 +1,19 @@
+{
+  "run": 44781701884,
+  "artifact": 14652293367,
+  "zip_sha256": "68da5bc4d5bc2fdb4f7f2c52d61e9b359e6806e7833ff815c12e09bcc839ae6e",
+  "members": [
+    {
+      "archive_member": "_temp/gt-fft-utilities-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/44781701884/gt-fft-utilities-safe.json",
+      "sha256": "c25c9ab85e05a756e41f0c8df20da3de73de159dbaa95d6c9977034fdec39f8c",
+      "bytes": 608
+    },
+    {
+      "archive_member": "raf/raf/gt-fft-utilities-unity/ProbeResults/gt-fft-utilities-unity-safe.json",
+      "path": "clients/GT/sessions/20261126-complete-handoff/evidence/actions/44781701884/gt-fft-utilities-unity-safe.json",
+      "sha256": "60c3692d9998e738f2bf749560ed9349e4458246ad64962137ca827d9f06c642",
+      "bytes": 433
+    }
+  ]
+}
