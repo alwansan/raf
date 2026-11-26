@@ -110,7 +110,7 @@ jobs:
           dockerMemoryLimit: 6g
           dockerCpuLimit: 2
           customParameters: >-
-            -force-vulkan -job-worker-count 2
+            -force-vulkan -force-device-index 0 -job-worker-count 2
             -raftSyntheticAlphaRunId ${{ env.RAFT_ALPHA_RUN_ID }}
             -raftSyntheticAlphaReport /github/workspace/synthetic-alpha-results/raw.unity.json
       - name: Independently verify all 120 readback pixels and negative controls
