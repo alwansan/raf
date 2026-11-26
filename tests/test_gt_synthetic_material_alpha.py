@@ -78,6 +78,11 @@ class SyntheticMaterialAlphaTests(unittest.TestCase):
                 "Assets/Editor/SyntheticMaterialAlphaValidation.cs", "Packages/manifest.json",
                 "ProjectSettings/ProjectVersion.txt", "ProjectSettings/ProjectSettings.asset",
                 "synthetic-alpha-fixture.json"})
+            # Unity 2021.3 resolves this serialized key; m_ColorSpace silently
+            # leaves the project in Gamma (observed in the isolated CI probe).
+            settings = (project / "ProjectSettings/ProjectSettings.asset").read_text().splitlines()
+            self.assertEqual([line.strip() for line in settings if "ColorSpace:" in line],
+                             ["m_ActiveColorSpace: 1"])
             before = {name: (project / name).read_bytes() for name in names}
             self.assertEqual(alpha.check_project(project), alpha.source_hashes())
             with self.assertRaises(ValueError):

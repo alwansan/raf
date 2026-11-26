@@ -36,7 +36,7 @@ PlayerSettings:
   serializedVersion: 26
   companyName: SyntheticValidation
   productName: SyntheticMaterialAlpha
-  m_ColorSpace: 1
+  m_ActiveColorSpace: 1
 """
 
 
