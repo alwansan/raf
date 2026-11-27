@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/README_AR.md",
-  "next_action": "Inspect actual V17 raster run 45979650728 on immutable 1fb6a0be70ead8c48915c24b73b520c88a1423b9; require actual fragment packed/normal/UV readbacks on four real authored submesh slots, independent V16 mip-byte oracle, two actual transient controls and restoration, seven receipt falsifiers. Keep V16 accepted separately; retain failure or PASS with exact archive. Then return to authentic source provenance and white-mesh/black-fire G0–G6 work; no original acquisition without authorization.",
+  "next_action": "Return to original provenance and scope: inspect only already retained safe aggregate metadata, pinned historical source/route receipts and live Actions status for white meshes, NEXT23b and Particle108/fire. Establish an exact next authorized original-source acceptance gate; A3 stays blocked unless rights and source provenance independently established. No more synthetic DXT5nm repetitions without a distinct remaining gap. Preserve historical counts; no original acquisition, production activation or XAPK.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1967,8 +1967,8 @@
       "id": 45979650728,
       "job": 140439999714,
       "head": "1fb6a0be70ead8c48915c24b73b520c88a1423b9",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "compatibility_guard": {
         "id": 45979650667,
         "conclusion": "success"
@@ -1986,8 +1986,8 @@
       }
     },
     "date": "2026-11-27",
-    "reviewed_remote_head": "1fb6a0be70ead8c48915c24b73b520c88a1423b9",
-    "purpose": "V16 actual authored PASS retained; V17 exact candidate raster route in progress; original source acceptance blocked",
+    "reviewed_remote_head": "4321f252f09dedf344bc6dfb28720e394efe2d79",
+    "purpose": "V17 actual authored raster PASS retained; original-source provenance and white mesh/fire priorities resumed; A3 blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
     "index": "clients/GT/sessions/20261127-dxt5nm-raster-route-v17/README_AR.md",
@@ -6306,7 +6306,7 @@
     "recheck": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/recheck_three_archives.py"
   },
   "v17_dxt5nm_raster_route_checkpoint": {
-    "status": "IN_PROGRESS_AUTHORED_V16_CANDIDATE_RASTER_ROUTE",
+    "status": "PASS_ACTUAL_AUTHORED_V16_CANDIDATE_RASTER_ROUTE",
     "starting_head": "a813024fac5ac051e5536cb47d50a892c3e5a1e5",
     "source_head": "06301fff698b0a73662c87881c69ad4853856d58",
     "float_RT_guard_head": "ca25dd2c6dce017d08c9dbe62c1d772a1ac390dd",
@@ -6315,8 +6315,8 @@
       "id": 45979650728,
       "job": 140439999714,
       "head": "1fb6a0be70ead8c48915c24b73b520c88a1423b9",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "compatibility_guard": {
         "id": 45979650667,
         "conclusion": "success"
@@ -6330,7 +6330,7 @@
     "planned_renderer_routes": 2,
     "planned_submesh_slots": 4,
     "planned_mip_draws": 12,
-    "actual_Unity_raster_verified": false,
+    "actual_Unity_raster_verified": true,
     "native_sampler_parity_verified": false,
     "manual_alpha_edit": false,
     "original_assets_read": false,
@@ -6341,6 +6341,35 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-raster-route-v17/README_AR.md",
-    "next": "Inspect actual V17 raster run 45979650728 on immutable 1fb6a0be70ead8c48915c24b73b520c88a1423b9; require actual fragment packed/normal/UV readbacks on four real authored submesh slots, independent V16 mip-byte oracle, two actual transient controls and restoration, seven receipt falsifiers. Keep V16 accepted separately; retain failure or PASS with exact archive. Then return to authentic source provenance and white-mesh/black-fire G0–G6 work; no original acquisition without authorization."
+    "next": "Return to original provenance and scope: inspect only already retained safe aggregate metadata, pinned historical source/route receipts and live Actions status for white meshes, NEXT23b and Particle108/fire. Establish an exact next authorized original-source acceptance gate; A3 stays blocked unless rights and source provenance independently established. No more synthetic DXT5nm repetitions without a distinct remaining gap. Preserve historical counts; no original acquisition, production activation or XAPK.",
+    "actual_source_regressions": 306,
+    "actual_historical_V11_V12_controls": 37,
+    "actual_V15_controls": 6,
+    "actual_V17_receipt_falsifiers": 7,
+    "actual_transient_controls": {
+      "wrong_texture_changed_pixels": 94,
+      "wrong_UV_changed_pixels": 94,
+      "exact_restoration": true
+    },
+    "actual_renderer_routes": 2,
+    "actual_submesh_slots": 4,
+    "actual_mip_draw_pairs": 12,
+    "actual_packed_pixels": 1288,
+    "actual_normal_pixels": 1288,
+    "actual_RT_orientation": "top_first",
+    "exact_candidate_metadata_unchanged": true,
+    "independent_max_packed_error": 7.409675450986697e-8,
+    "independent_max_normal_error": 4.584636849047641e-7,
+    "archive": {
+      "id": 15188827195,
+      "bytes": 72201,
+      "sha256": "f4f94ad3cc8223582bbc14b4438a6448ed9486998fa5893299697e6deeccc44a",
+      "members": 47,
+      "crc_verified": true,
+      "all_member_sha256_verified": true
+    },
+    "independent_actual_two_archive_recheck": true,
+    "evidence": "clients/GT/sessions/20261127-dxt5nm-raster-route-v17/actual-pass-45979650728.json",
+    "recheck": "clients/GT/sessions/20261127-dxt5nm-raster-route-v17/recheck_v17_archives.py"
   }
 }
