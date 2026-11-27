@@ -1,6 +1,6 @@
 name: GT authored DXT5nm Unity reimport route observation (NO APK)
 on:
-  # Dedicated authored-only V13 activation; no original game acquisition.
+  # Dedicated authored-only V13 shader pointer adapter retry activation; no original game acquisition.
   workflow_dispatch:
   push:
     branches: [feature/android-native-port]
@@ -163,7 +163,7 @@ jobs:
               m=re.search(r"^Ran (\d+) tests? in ",s,re.M)
               assert m and re.search(r"^OK$",s,re.M)
               tests[p.name]=int(m[1])
-          assert len(tests)==16 and sum(tests.values())==271 and tests['test_gt_dxt5nm_unity_reimport.py.log']==8 and tests['test_gt_imported_dxt5nm_route_importer.py.log']==12
+          assert len(tests)==16 and sum(tests.values())==272 and tests['test_gt_dxt5nm_unity_reimport.py.log']==9 and tests['test_gt_imported_dxt5nm_route_importer.py.log']==12
           j=json.loads((root/"normalmap-route-join.json").read_text())
           assert j["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_DXT5NM_PNG_ROUTE_JOIN"
           assert j["counterfactual_count"]==12 and j["unique_authored_pixels_exact"]==70
