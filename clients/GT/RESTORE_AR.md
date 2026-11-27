@@ -1,3 +1,9 @@
+# GT V10 — focused diagnostic activated | 27 نوفمبر 2026
+
+[b734df6](https://github.com/alwansan/raf/commit/b734df6fde87bad3e478697367a8e7f5b12342d6) preserves the real RGB mismatch, adds bounded authored forensic output before unchanged strict gate. [01ccb8f](https://github.com/alwansan/raf/commit/01ccb8f171511e6069a335b4ed969fd070699d23) activates diagnostic [45962397906](https://github.com/alwansan/raf/actions/runs/45962397906), job 140383056608 in_progress, guard 45962397871. No V10 pass. Next: Read exact run 45962397906; download/verify artifact and inspect per-channel histograms, stored block indices and actual PNG pixels. Derive a justified correction only from evidence; strict V10 remains false. Separately fix authored fixture alpha-zero visibility. A3 remains blocked. No original assets, Unity, Android or XAPK. G0–G6 remain open; no force push or non-target branch writes.
+
+---
+
 # GT V10 — actual BC3 RGB mismatch, diagnostic prepared | 27 نوفمبر 2026
 
 [45962079936](https://github.com/alwansan/raf/actions/runs/45962079936) 242 source regressions and pinned public .NET build passed; actual two authored PNG collections exported, strict route proof FAILED for both renderers with same_route_png_RGB_DRIFT:2. No tolerance or normalization accepted; no V10 pass. Verified artifact 15181053655, 8745 bytes SHA256 42206ac56d230c8a673a40aaa13b151c545144c761086ad75976692af2bfaf10, CRC 16 members. Added bounded per-pixel diagnostic to retain exact authored PNGs, source 64-byte top mip hex, expected/actual RGBA, block and selector, channel deltas, orientation and channel-swap diagnostics before unchanged strict gate abort. Exact same fixture bytes retained for reproduction. Independent local Pillow check also identified fixture 0 missing visible alpha-zero pixels due NPOT crop; later adjust selector separately, not to hide RGB mismatch. A3 blocked, G0–G6 open; no original assets or XAPK.
