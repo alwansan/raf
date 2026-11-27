@@ -1,4 +1,70 @@
 {
+  "latest_fft_native_api_boundary": {
+    "status": "PASS_AUTHORED_NATIVE_API_BOUNDARY_ONLY",
+    "starting_head": "10e8f9362f0042f379f8016f3385a1fd0ad6e546",
+    "preparation_commit": "a6f9208bfe3fad82440a13d1ad9b430f637ab7ed",
+    "execution_head": "3ca727ac09a544cd64d2c867ed85b2132925484c",
+    "run": 46034718655,
+    "job": 140627105821,
+    "conclusion": "success",
+    "lint_run": 46034718442,
+    "lint_job": 140627105805,
+    "lint_conclusion": "success",
+    "tests_passed": 24,
+    "authored_scenarios": 16,
+    "source_blobs": {
+      "tools/gt_fft_native_api_boundary/audit.py": "f80d31276c5f9dafc68d585d8216ec65508b9521",
+      "tools/gt_fft_native_api_boundary/test_audit.py": "51fa98dab9487a699fee2e9234eaa6b54ea26332",
+      "scripts/t1_fft_dispatch_pair_audit.py": "d5f1baf038c2d2ffd0d26178d6c94551046f6273",
+      "scripts/t1_stage_original_fft_dispatch_trace.py": "5ae1489dae1f8e63611279461b6779d2dd27f6c7",
+      "android-port/Runtime/Platform/T1FftDirectDispatchTrace.cs": "0e1121a4788d3cf7da708bc1fcd77c39aade1c01",
+      "android-port/Runtime/Platform/PersistentDiagnosticLog.cs": "9cc35f1ac9ce73bd241c7107d1b7cda58fcb5942"
+    },
+    "artifact": {
+      "id": 15215253876,
+      "outer_bytes": 23298,
+      "outer_sha256": "2b0e6eeb2e7bfe5962ab6d43526bc881b52ed74bcb35ff8071b119427bc93221",
+      "outer_members": 21,
+      "inner_bytes": 12457,
+      "inner_sha256": "1f54ad8b37d6364864b9752c9a6f1f2c5bf9b655182d488cc03ba000d1e19438",
+      "inner_members": 20,
+      "git_blob": "b26f76c6a733c87efa2ce2d5c855d1ace30425a8",
+      "path": "clients/GT/sessions/20261127-fft-native-api-boundary/actual-evidence-46034718655.zip",
+      "verified_locally": "outer and inner SHA256, CRC, every inner member byte equality, all 16 authored JSONL SHA256 and report no-proof assertions; Git blob SHA independently matched"
+    },
+    "legacy_counterexamples": {
+      "binding_throw_count": 0,
+      "cross_thread_paired_count": 1
+    },
+    "new_counterexamples": {
+      "binding_throw_count": 1,
+      "cross_thread_invalid_pair": 1,
+      "cross_thread_paired_return": 0
+    },
+    "positive_authored_two_pass": {
+      "binding_returns": 6,
+      "dispatch_returns": 2,
+      "source_order_windows": 2,
+      "numeric6_source_compatible_windows": 1
+    },
+    "dispatch_sync_throw": {
+      "source_order_windows": 1,
+      "api": "Dispatch"
+    },
+    "scope": "strict native persisted envelope, global vs family-local sequence, same thread/session, source marker, site/pass order, matching frame/instance, bounded prefix, gap/overflow/overlap controls, synchronous return vs throw; observations only",
+    "runtime_invocation_identity_proven": false,
+    "actual_first_unity_failure_proven": false,
+    "original_bank_measured": false,
+    "original_runtime_kernel_mapping_proven": false,
+    "gpu_execution_proven": false,
+    "water_rendering_proven": false,
+    "original_assets_fetched": false,
+    "production_changed": false,
+    "unity_or_device_invoked": false,
+    "xapk_started": false,
+    "next_action": "G1-G2-original-renderer-material-fanout-authorized-admission: G4 native API boundary source-only audit and G5 authored collection collision are complete in their limited scopes. Do not repeat these synthetic checks or prior seven-pass/mesh/PNG/keyword route proofs. Review P04/P05 highest-impact original Shader48 / renderer fanout and material GUID/keyword/variant evidence for a distinct integration gap, prioritizing authorized original source-backed restoration when independently established. If source access/authorization is unavailable, document the precise blocker and only implement a demonstrable new non-original gate defect; do not claim recovery or generate substitutes. Original FFT Kernel6 still requires independently authorized source+typed shader owner, managed caller and same-instance actual importer/dispatch evidence (invocation token, exact bound resources, compiled route identity, actual first Unity API/error, runtime bank/size and output). Prior numeric 6/source slot 6 and authored logs are not original runtime proof. A3, original Particle108, NEXT23b, G0-G6, ten runtime groups remain open; no original acquisition, production/native request, Unity game/device/APK/XAPK until integrated G0-G6 closure; CL/lab read only, BLACK/animation excluded.",
+    "session": "clients/GT/sessions/20261127-fft-native-api-boundary/README_AR.md"
+  },
   "latest_particle108_collection_cause": {
     "status": "PASS_AUTHORED_CACHE_KEY_COLLISION_SAME_EXPORT",
     "starting_head": "3a53ee83a99dd87e3604db7bc3cbadbee47c9bbb",
@@ -1783,8 +1849,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-particle108-nonexportable-cause/README_AR.md",
-  "next_action": "G4-FFT-kernel6-authorized-runtime-identity: do not repeat G5 authored cache collision or prior FFT authored seven-pass row replay. Read B08_FFT_KERNEL_REGISTRY_2026-11-04, T1_FFT_ORIGINAL_KERNEL6_SOURCE_CASE_2026-11-08, T1_ORIGINAL_FFT_EVENT_CORRELATION_2026-11-09 and current indexed-FFT/receipt gates. Distinguish the original single distinct name / 20 compiled entries, direct numeric Dx11FFT calls (zero FindKernel), conditional index 6 at size256 bank0 pass0, and actual runtime kernel identity. Only address a distinct source/receipt/route gap with bounded authored controls, or require independently authorized original shader+managed source and same-instance importer/dispatch evidence. Do not infer runtime index from serialized slot or install guessed kernels. Particle108 original cause and recovery remain blocked pending exact authorized source and redirect target evidence described in latest session. A3, NEXT23b, ten runtime groups, G0-G6 remain open. No original acquisition, production, native request, Unity game/device/APK/XAPK until integrated G0-G6 closure; CL/lab read only, BLACK/animation excluded.",
+  "latest_session": "clients/GT/sessions/20261127-fft-native-api-boundary/README_AR.md",
+  "next_action": "G1-G2-original-renderer-material-fanout-authorized-admission: G4 native API boundary source-only audit and G5 authored collection collision are complete in their limited scopes. Do not repeat these synthetic checks or prior seven-pass/mesh/PNG/keyword route proofs. Review P04/P05 highest-impact original Shader48 / renderer fanout and material GUID/keyword/variant evidence for a distinct integration gap, prioritizing authorized original source-backed restoration when independently established. If source access/authorization is unavailable, document the precise blocker and only implement a demonstrable new non-original gate defect; do not claim recovery or generate substitutes. Original FFT Kernel6 still requires independently authorized source+typed shader owner, managed caller and same-instance actual importer/dispatch evidence (invocation token, exact bound resources, compiled route identity, actual first Unity API/error, runtime bank/size and output). Prior numeric 6/source slot 6 and authored logs are not original runtime proof. A3, original Particle108, NEXT23b, G0-G6, ten runtime groups remain open; no original acquisition, production/native request, Unity game/device/APK/XAPK until integrated G0-G6 closure; CL/lab read only, BLACK/animation excluded.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
