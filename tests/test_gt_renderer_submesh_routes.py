@@ -129,6 +129,22 @@ class OrderedRoutes(unittest.TestCase):
     def test_missing_mesh_filter_membership(self):
         self.docs[(self.scene,100)][1]["m_Component"].pop(0)
         self.assertIn("mesh_filter_gameobject_membership_mismatch",self.run_audit()["reason_counts"])
+    def test_same_document_explicit_external_gameobject_reference_rejected(self):
+        self.docs[(self.scene,102)][1]["m_GameObject"]=ext(100,self.scene)
+        self.assertIn("renderer_gameobject_not_local",self.run_audit()["reason_counts"])
+    def test_matching_gameobject_in_different_document_rejected(self):
+        old=self.docs.pop((self.scene,100))
+        other=guid(101)
+        self.docs[(other,100)]=old
+        self.docs[(other,100)][1]["m_Component"]=[{"component":ext(101,self.scene)},{"component":ext(102,self.scene)}]
+        self.docs[(self.scene,101)][1]["m_GameObject"]=ext(100,other)
+        self.docs[(self.scene,102)][1]["m_GameObject"]=ext(100,other)
+        next(r for r in self.mappings if r["class_id"]==1)["export"]["guid"]=other
+        self.assertIn("renderer_gameobject_document_mismatch",self.run_audit()["reason_counts"])
+    def test_serialized_native_type3_trace_not_promoted(self):
+        row=next(r for r in self.mappings if r["class_id"]==23)
+        row["export"]["type"]=3
+        self.assertIn("serialized_document_trace_type_mismatch",self.run_audit()["reason_counts"])
     def test_missing_renderer_trace_unproven(self):
         self.mappings=[r for r in self.mappings if r["class_id"]!=23]
         result=self.run_audit()

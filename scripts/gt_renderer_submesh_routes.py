@@ -180,7 +180,7 @@ def actual_index(project,mapping):
         asset=path.with_suffix("")
         require(asset.is_file(),"missing_export_asset",Unknown)
         files[guid]=(asset,meta)
-        if asset.suffix not in {".mat",".asset",".prefab",".unity",".cubemap",".rendertexture"}:continue
+        if asset.suffix.lower() not in {".mat",".asset",".prefab",".unity",".cubemap",".rendertexture",".texture2d",".texture3d",".texture2darray"}:continue
         raw=bounded_snapshot(asset,MAX_DOC)
         if not raw.lstrip(b"\xef\xbb\xbf").startswith(b"%YAML"):continue
         text=raw.decode("utf-8-sig")
@@ -276,6 +276,7 @@ def compare(objects,externals,mapping,files,docs):
         doc=docs.get(ptr[:2])
         if doc is not None:
             require(doc[0]==cls,"export_target_wrong_class")
+            require(ptr[2]==2,"serialized_document_trace_type_mismatch")
             return ptr,doc[1]
         require(ptr[0] in files,"missing_actual_export_target",Unknown)
         path,meta=files[ptr[0]]
@@ -319,20 +320,31 @@ def compare(objects,externals,mapping,files,docs):
             go=edge(key[0],tree["m_GameObject"],rp[0],actual["m_GameObject"],{1})
             require(go is not None,"renderer_gameobject_missing")
             gp,gactual=target(go,{1})
+            # A component is owned by its GameObject in the same serialized
+            # document. A matching cross-document GUID/anchor is not a legal
+            # substitute for the actual local hierarchy edge.
+            require(rp[0]==gp[0],"renderer_gameobject_document_mismatch")
+            require(actual_pointer(actual["m_GameObject"],rp[0])==(gp[0],gp[1],0),
+                    "renderer_gameobject_not_local")
             _,gsource=source(go,{1})
             src_members=[src_target(go[0],p,externals) for p in component_members(gsource)]
             exp_members=[actual_pointer(p,gp[0]) for p in component_members(gactual,True)]
-            require(src_members.count(key)==1 and sum(p is not None and p[:2]==rp[:2] for p in exp_members)==1,
+            require(src_members.count(key)==1 and exp_members.count((rp[0],rp[1],0))==1 and
+                    sum(p is not None and p[:2]==rp[:2] for p in exp_members)==1,
                     "renderer_gameobject_membership_mismatch")
             if cls==23:
                 candidates=filters.get(go,[])
                 require(len(candidates)==1,"ambiguous_or_missing_source_mesh_filter",Unknown)
                 fk=candidates[0];fp,fa=target(fk,{33})
-                require(src_members.count(fk)==1 and sum(p is not None and p[:2]==fp[:2] for p in exp_members)==1,
+                require(fp[0]==gp[0],"mesh_filter_gameobject_document_mismatch")
+                require(src_members.count(fk)==1 and exp_members.count((fp[0],fp[1],0))==1 and
+                        sum(p is not None and p[:2]==fp[:2] for p in exp_members)==1,
                         "mesh_filter_gameobject_membership_mismatch")
                 _,ft=source(fk,{33})
                 require(edge(fk[0],ft["m_GameObject"],fp[0],fa["m_GameObject"],{1})==go,
                         "mesh_filter_gameobject_mismatch")
+                require(actual_pointer(fa["m_GameObject"],fp[0])==(gp[0],gp[1],0),
+                        "mesh_filter_gameobject_not_local")
                 mesh=edge(fk[0],ft["m_Mesh"],fp[0],fa["m_Mesh"],{43})
             else:mesh=edge(key[0],tree["m_Mesh"],rp[0],actual["m_Mesh"],{43})
             require(mesh is not None,"mesh_null_unproven",Unknown)
