@@ -5186,7 +5186,7 @@
     }
   },
   "v11_dxt5nm_checkpoint": {
-    "status": "CI_RUNNING_SOURCE_REGRESSION_STEP_SUCCESS_ACTUAL_EXPORT_PENDING",
+    "status": "PASS_ACTUAL_AUTHORED_PUBLIC_DXT5NM_PNG_ROUTE_JOIN",
     "starting_head": "5973d0fc26d86736779b869273d504d43a43d444",
     "source_commit": "bc18e5414b88b2b8288af22df076c0166a43a41f",
     "witness_commit": "bce1467a2d38c96961e71f19cf2498fcdd34c5cd",
@@ -5196,28 +5196,66 @@
     "planned_tests": 251,
     "planned_counterfactuals": 12,
     "planned_authored_unique_pixels": 70,
-    "actual_export_verified": false,
+    "actual_export_verified": true,
     "original_assets_read": false,
     "Unity_import_verified": false,
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-route-v11/README_AR.md",
-    "next": "Inspect actual run 45966950183, archive, controls and exact receipt; no original acquisition.",
+    "next": "G1-G2-DXT5nm-importer-supported-state-same-route (V12)",
     "activation_head": "448fb0c77b116fbceeed856a617ba33046f01826",
     "run": {
       "id": 45966950183,
       "job": 140397789957,
       "head": "448fb0c77b116fbceeed856a617ba33046f01826",
-      "status": "in_progress",
-      "source_regressions_step": "success",
-      "public_build": "in_progress",
-      "actual_export_verified": false,
+      "status": "completed",
+      "conclusion": "success",
+      "source_regressions": 251,
+      "counterfactuals": 12,
+      "unique_authored_pixels_exact": 70,
+      "actual_export_verified": true,
       "compatibility_guard": {
         "id": 45966949749,
-        "status": "completed",
         "conclusion": "success"
       }
     },
-    "local_fixture_check": "clients/GT/sessions/20261127-dxt5nm-route-v11/local-fixture-check.json"
+    "local_fixture_check": "clients/GT/sessions/20261127-dxt5nm-route-v11/local-fixture-check.json",
+    "archive": {
+      "id": 15183386252,
+      "bytes": 16588,
+      "sha256": "82313e8c86cf2c78ec73f80cc3a75424d2788937c6b77fb3535faee2f1549bc0",
+      "calculated_git_blob_sha1": "7fc5a2bbd5de796493e19c19c6ae37623fb8a999",
+      "downloaded": true,
+      "zip_crc_verified": true,
+      "member_count": 24,
+      "member_sha256": {
+        "build.json": "ad8de273a1f65baa49c4c4d0f3c184e28a0bb03162744ad3df9a45067c3073e5",
+        "normalmap-authored-0.png": "9e6be9b9f97d2bf835fbf3ae21d79f889170b7588dddde3f1c351f85cc3b0a54",
+        "bc3-patch.json": "083270cb86eab100edb52e235d6e6ef43a019075cc72f08abec7654b4d7f3162",
+        "normalmap-authored-1.png": "5ab65d8dc9fb153f045cdc8ea0b5e8293d0e9006ec22938b7aafcddb9ed575d1",
+        "normalmap-baseline.json": "7fd0357e2ff48b94ac0f5b45511210222eac5922b09f5f7a1bce641e369f9803",
+        "normalmap-diagnostic.json": "4c752bd0e0a6cc1d258ab25462c371ffe3b364fe84350b4df2d40864a89a5fa7",
+        "normalmap-report.json": "94bcf1cef42fe7d2acab3a6eec4649e4a47b88a7f92470d8019f4109f52e89c0",
+        "normalmap-route-join.json": "98ed034bf9c9d85520b27a93e7365cdfcadebbde659bf47a5939022439db8db5",
+        "normalmap-witness.log": "44f7a0069cee04484827fcaa1eee568f905fc54b27aab99b252dd63c9391e0ae",
+        "test_b03_verify_renderer_material_links.py.log": "c28e4d716a01ac768cf6d55e50d36f32ec6422e9561960fb35485eb759985a6b",
+        "test_gt_imported_bc3_route_pixels.py.log": "1c3a1efd044f71308f82a76751a9af58492aa717d3a8c9c7b858e2ab7e0863d1",
+        "test_gt_imported_dxt5nm_route_pixels.py.log": "277c092c3c88abdf8cdb5efd3299d5832b539e9f53ca7455820ed7f8d6115590",
+        "test_gt_imported_png_route_importer.py.log": "34d0c95606ffc4ad018d89d13d00bfd3da6275a8187a16bd50427fb253b2462d",
+        "test_gt_imported_png_route_pixels.py.log": "b60d2c1ad4f79f4a6ae54a0eebaf76bfaaf3b4a2fa1e86e3545ca04457365987",
+        "test_gt_material_route_keyword_state.py.log": "b5564e9ad0a434ba970799d601968536064ee7ec976e9cf08f0e947d39892323",
+        "test_gt_material_route_values.py.log": "17d5f1e01f5e9471d1e11bae9c37b94b4a3c2b8101632eb604383a3b883cc075",
+        "test_gt_mesh_vertex_payload.py.log": "3592569deb9e574c78d939c3e348de592cc10626faab9a71940a838dadd11deb",
+        "test_gt_native_texture_route_sampler.py.log": "342a9508cecb6a65c4002d47e7887ebc28d0804667c78693e54b58bb00ecbe97",
+        "test_gt_patch_bc3_export_decoder.py.log": "4fa1d2e863b0fe525b616d8cce798835b283ad0f230c0ce36f441b08ed405c85",
+        "test_gt_renderer_submesh_routes.py.log": "6ae82ae529331a8c6a6386bcb051a6fc3878f25ec196b766fcc76b772ad4ff1a",
+        "test_gt_streamed_texture_route_payload.py.log": "59777da3a599c30b235dc59ca2cffe5ad2f5915686aad9c0e311254109200d5a",
+        "test_gt_texture_route_payload.py.log": "bc098817d5467397be38124a1a80dd20906aef5df11da61ba8209e3c354ebfc5",
+        "test_gt_verify_original_mesh_export.py.log": "4fa1e34501cc7873993fcc2fc567b180527cc1ff3a5442f97cdd224b1a32258a",
+        "tool-smoke.log": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+      },
+      "actual_PNG_RGBA_verified_against_independent_expected": true
+    },
+    "evidence": "clients/GT/sessions/20261127-dxt5nm-route-v11/actual-pass-45966950183.json"
   }
 }
