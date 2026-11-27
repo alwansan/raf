@@ -1,3 +1,4 @@
+# Source-only Mesh parser replay on both PyYAML backends; no native build or acquisition.
 name: GT exported Mesh YAML unique mapping (NO original assets)
 on:
   push:
