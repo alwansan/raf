@@ -10,6 +10,7 @@ on:
         options:
           - material-alpha
           - next23b-receipt
+          - keyword-pixels
   push:
     branches: [feature/android-native-port]
     paths:
@@ -28,7 +29,7 @@ concurrency:
 
 jobs:
   synthetic-pixels:
-    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 30
@@ -274,3 +275,130 @@ jobs:
         run: |
           test -f synthetic-next23b-project/SyntheticSourceManifest.json
           sudo rm -rf synthetic-next23b-project
+
+  keyword-pixels:
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-next23b-receipt]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'keyword-pixels'))
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 30
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+      queue: max
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      GT_KEYWORD_IMAGE: raft-synthetic-keyword-unity:local
+      GT_KEYWORD_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}
+    steps:
+      - name: Checkout only authored keyword probe and router
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/synthetic_material_alpha/keyword_pixels.py
+            /tools/synthetic_material_alpha/SyntheticKeywordPixelValidation.cs
+            /scripts/gt_runtime_keyword_contract.py
+            /.github/workflows/raft-gt-synthetic-material-alpha.yml
+      - name: Verify oracle and stage a new authored keyword project
+        id: stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          python3 -B tools/synthetic_material_alpha/keyword_pixels.py selftest
+          python3 -B tools/synthetic_material_alpha/keyword_pixels.py stage \
+            --project synthetic-keyword-project --out synthetic-keyword-results/stage.json
+      - name: Require existing activation inputs and disk budget
+        shell: bash
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && { [ -z "${UNITY_SERIAL:-}" ] || [ -z "${UNITY_EMAIL:-}" ] || [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo 'GT_KEYWORD_PIXELS activation_inputs_missing=true raster_not_run=true'
+            exit 1
+          fi
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+      - name: Prepare an ephemeral Unity image with software Vulkan
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/raft-keyword-docker"
+          cat > "$RUNNER_TEMP/raft-keyword-docker/Dockerfile" <<'DOCKERFILE'
+          FROM unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3
+          USER root
+          RUN apt-get update -qq && \
+              DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
+                libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb xauth && \
+              rm -rf /var/lib/apt/lists/*
+          ENV VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+          DOCKERFILE
+          docker build --quiet --tag "$GT_KEYWORD_IMAGE" "$RUNNER_TEMP/raft-keyword-docker"
+          docker run --rm --entrypoint /bin/bash "$GT_KEYWORD_IMAGE" -lc \
+            'test -f "$VK_ICD_FILENAMES" && xvfb-run -a vulkaninfo --summary > /tmp/keyword-vulkaninfo.log 2>&1'
+      - name: Render actual authored material keyword transitions in Unity Vulkan
+        id: render
+        continue-on-error: true
+        uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          customImage: raft-synthetic-keyword-unity:local
+          projectPath: synthetic-keyword-project
+          targetPlatform: StandaloneLinux64
+          buildMethod: SyntheticKeywordPixelValidation.Run
+          manualExit: true
+          enableGpu: true
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 6g
+          dockerCpuLimit: 2
+          customParameters: >-
+            -force-vulkan -force-device-index 0 -job-worker-count 2
+            -gtKeywordRunId ${{ env.GT_KEYWORD_RUN_ID }}
+            -gtKeywordReport /github/workspace/synthetic-keyword-results/raw.unity.json
+      - name: Independently verify all readback pixels and wrong-route controls
+        if: always() && steps.stage.outcome == 'success'
+        env:
+          RENDER_STEP_OUTCOME: ${{ steps.render.outcome }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo chown -R "$(id -u):$(id -g)" synthetic-keyword-results
+          test -f synthetic-keyword-results/raw.unity.json
+          code=1
+          if [ "$RENDER_STEP_OUTCOME" = success ]; then code=0; fi
+          python3 -B tools/synthetic_material_alpha/keyword_pixels.py verify \
+            --receipt synthetic-keyword-results/raw.unity.json \
+            --out synthetic-keyword-results/verified.json \
+            --run-id "$GT_KEYWORD_RUN_ID" --exit-code "$code"
+      - name: Retain only authored numeric receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-synthetic-keyword-pixels-${{ github.run_id }}
+          path: synthetic-keyword-results/*.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove only the authored keyword test project and image
+        if: always()
+        shell: bash
+        run: |
+          if test -f synthetic-keyword-project/synthetic-keyword-fixture.json; then
+            sudo rm -rf synthetic-keyword-project
+          fi
+          docker image rm "$GT_KEYWORD_IMAGE" >/dev/null 2>&1 || true
+          rm -rf "$RUNNER_TEMP/raft-keyword-docker"
