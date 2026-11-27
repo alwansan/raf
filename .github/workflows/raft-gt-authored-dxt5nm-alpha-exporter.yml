@@ -1,6 +1,6 @@
 name: GT authored selective DXT5nm PNG alpha exporter policy (NO Unity or APK)
 on:
-  # Dedicated authored-only V15 preparation; no original game acquisition.
+  # Dedicated authored-only V15 activation; no original game acquisition.
   workflow_dispatch:
   push:
     branches: [feature/android-native-port]
