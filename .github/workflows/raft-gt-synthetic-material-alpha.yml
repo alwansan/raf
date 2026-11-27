@@ -1775,6 +1775,7 @@ jobs:
             /tests/test_gt_texture_route_payload.py
             /tests/test_gt_streamed_texture_route_payload.py
             /tests/test_gt_native_texture_route_sampler.py
+            /tests/test_gt_imported_png_route_pixels.py
             /android-port/Experiments/ExportLineage/
             /tools/synthetic_material_alpha/RaftAuthoredSceneRouteWitness.cs
             /.github/workflows/raft-gt-synthetic-material-alpha.yml
@@ -1786,7 +1787,7 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/gt-authored-scene-python"
           py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
           "$py" -m pip install --disable-pip-version-check Pillow==11.3.0 PyYAML==6.0.3
-          for test_file in test_gt_native_texture_route_sampler.py test_gt_streamed_texture_route_payload.py test_gt_texture_route_payload.py test_gt_material_route_keyword_state.py test_gt_material_route_values.py test_gt_mesh_vertex_payload.py test_gt_verify_original_mesh_export.py test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
+          for test_file in test_gt_imported_png_route_pixels.py test_gt_native_texture_route_sampler.py test_gt_streamed_texture_route_payload.py test_gt_texture_route_payload.py test_gt_material_route_keyword_state.py test_gt_material_route_values.py test_gt_mesh_vertex_payload.py test_gt_verify_original_mesh_export.py test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
             "$py" -B -m unittest discover -s tests -p "$test_file" -v 2>&1 | tee "authored-scene-results/$test_file.log"
           done
       - uses: actions/setup-dotnet@v4
@@ -1821,6 +1822,11 @@ jobs:
           p.write_text(text.replace(mark,'''if (args.Length == 2 && args[0] == "--probe-authored-scene-routes")
           {
               RaftAuthoredSceneRouteWitness.Run(args[1]);
+              return;
+          }
+          if (args.Length == 2 && args[0] == "--probe-authored-png-routes")
+          {
+              RaftAuthoredSceneRouteWitness.Run(args[1],true);
               return;
           }
           '''+mark))
@@ -1907,7 +1913,7 @@ jobs:
               m=re.search(r"^Ran (\d+) tests? in ",s,re.M)
               assert m and int(m[1])>0 and re.search(r"^OK$",s,re.M)
               tests[p.name]=int(m[1])
-          assert len(tests)==9
+          assert len(tests)==10
           report=dict(status="PASS_AUTHORED_ACTUAL_EXPORT_NATIVE_TEXTURE_SAMPLER_ROUTE_GATE",
               run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
               test_counts=tests,total_regression_tests=sum(tests.values()),
@@ -1950,15 +1956,57 @@ jobs:
           (root/"report.json").write_text(json.dumps(report,sort_keys=True,indent=2)+"\n")
           print(json.dumps(report,sort_keys=True))
           PY
+      - name: Execute separate actual PNG top-mip and importer route proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/gt-authored-png-fixture"
+          dotnet "$RUNNER_TEMP/gt-authored-scene-tool/ExportLineage.dll" \
+            --probe-authored-png-routes "$root" 2>&1 | tee authored-scene-results/png-witness.log
+          py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
+          "$py" -B -m scripts.gt_authored_imported_png_route_witness \
+            --root "$root" --out authored-scene-results/png-route-join.json
+          "$py" -B - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path("authored-scene-results")
+          v7=json.loads((root/"report.json").read_text())
+          j=json.loads((root/"png-route-join.json").read_text())
+          assert j["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_IMPORTED_PNG_TOP_MIP_ROUTE_JOIN"
+          assert j["counterfactual_count"]==13
+          assert j["baseline"]["selected_same_route_imported_png_top_mip_verified"] is True
+          assert j["baseline"]["selected_same_route_native_texture_sampler_verified"] is False
+          assert j["baseline"]["selected_nonnull_same_route_texture_payloads_verified"] is False
+          assert j["baseline"]["imported_png_lower_mip_or_Unity_import_verified"] is False
+          assert j["independent_T3_per_channel_checks"]==2
+          assert j["actual_png_textures"]==2
+          assert j["baseline"]["counts"]["imported_png_top_mip_slots_matched"]==4
+          assert j["baseline"]["counts"]["imported_png_pixels_matched_per_route"]==16
+          assert j["baseline"]["counts"]["imported_png_RGBA_channels_matched_per_route"]==64
+          assert v7["serialized_native_texture_sampler_verified"] is True
+          assert v7["counterfactual_count"]==43
+          report=dict(status="PASS_AUTHORED_ACTUAL_EXPORT_IMPORTED_PNG_TOP_MIP_ROUTE_GATE",
+              run_id=v7["run_id"],head=v7["head"],test_counts=v7["test_counts"],
+              total_regression_tests=v7["total_regression_tests"],native_V7_counterfactuals=43,
+              imported_png_counterfactuals=13,actual_png_textures=2,actual_png_submesh_routes=4,
+              imported_png_slots=4,imported_png_pixels_per_route=16,imported_png_RGBA_channels_per_route=64,
+              independent_T3_per_channel_checks=2,importer_unset_bias_schema_only=True,
+              repinned_lower_mip_change_intentionally_outside_scope=True,
+              native_V7_separate_witness_verified=True,native_full_mip_parity_from_png=False,
+              native_sampler_parity_from_png=False,Unity_import_or_GPU_verified=False,
+              original_assets_read=False,original_serialized_source_verified=False,XAPK=False)
+          (root/"png-report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(report,sort_keys=True))
+          PY
       - name: Retain only public-tool build and aggregate route evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gt-authored-native-texture-sampler-route-join-${{ github.run_id }}
+          name: gt-authored-imported-png-route-join-${{ github.run_id }}
           path: authored-scene-results/*
           if-no-files-found: warn
           retention-days: 14
       - name: Remove only authored fixture tree
         if: always()
         shell: bash
-        run: rm -rf "$RUNNER_TEMP/gt-authored-scene-fixture"
+        run: rm -rf "$RUNNER_TEMP/gt-authored-scene-fixture" "$RUNNER_TEMP/gt-authored-png-fixture"
