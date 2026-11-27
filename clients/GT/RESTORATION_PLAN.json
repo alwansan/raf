@@ -5335,7 +5335,7 @@
     "evidence": "clients/GT/sessions/20261127-dxt5nm-importer-v12/actual-pass-45967942717.json"
   },
   "v13_dxt5nm_unity_checkpoint": {
-    "status": "ADAPTER_RETRY_EXPORT_AND_STAGE_SUCCESS_UNITY_PENDING",
+    "status": "PASS_ACTUAL_AUTHORED_UNITY_DXT5NM_ROUTE_OBSERVATION",
     "starting_head": "9e45cc7cbb5d2f4195fe9ee4c54d20855e54a7c7",
     "activation_head": "d2385ff469cd64ecf5ddd648af23c9b4fe36468e",
     "run": {
@@ -5357,7 +5357,7 @@
     "planned_v13_controls": 9,
     "scene_route_replay": true,
     "shader_adapter": true,
-    "actual_Unity_import_verified": false,
+    "actual_Unity_import_verified": true,
     "source_lower_mip_parity_verified": false,
     "shader_program_parity_verified": false,
     "serialized_swizzle_verified": false,
@@ -5365,7 +5365,7 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-unity-v13/README_AR.md",
-    "next": "Inspect retry actual Unity output; verify artifact independently and preserve raw observations, API differences and failure/acceptance scope.",
+    "next": "V14 same-route exact unfiltered Texture2D.Load per-mip authored alphaIsTransparency A/B/A reversal; isolate alpha-zero RGB dilation and filtered sampling, no original source or lower-mip parity claim.",
     "source_regressions": 272,
     "actual_v11_v12_controls": 37,
     "unique_authored_pixels_exact": 70,
@@ -5385,11 +5385,8 @@
       "id": 45970415390,
       "job": 140409189432,
       "head": "61d149ff03b24b3f857a47d2269970ba18dbb508",
-      "status": "in_progress",
-      "regression_step": "success",
-      "actual_export_step": "success",
-      "stage_step": "success",
-      "unity_activation_preflight": "success",
+      "status": "completed",
+      "conclusion": "success",
       "compatibility_guard": {
         "id": 45970415411,
         "conclusion": "success"
@@ -5400,6 +5397,34 @@
       "blob": "7dd534a8e8f143cd04dc451a3d700233d7262d2a",
       "first_failed_archive_checked": true,
       "first_failed_archive_member_count": 31
-    }
+    },
+    "actual_v13_controls": 9,
+    "renderer_route_replay_matches": 2,
+    "submesh_material_texture_matches": 4,
+    "adapted_shader_identity_matches": 4,
+    "all_supported_importer_API_fields_match": true,
+    "normal_unpack_readback_pixels": 84,
+    "maximum_unpack_error": 6.428974774763674e-8,
+    "source_mip_count": 2,
+    "actual_mip_count": 3,
+    "actual_mip_dimensions": [
+      [
+        5,
+        7
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "actual_format": "RGBA32",
+    "source_normal_GPU_parity_verified": false,
+    "CPU_repack_matches": 32,
+    "CPU_repack_alpha_zero_mismatches": 3,
+    "evidence": "clients/GT/sessions/20261127-dxt5nm-unity-v13/actual-pass-45970415390.json"
   }
 }

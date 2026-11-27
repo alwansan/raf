@@ -1,0 +1,257 @@
+{
+  "status": "PASS_ACTUAL_AUTHORED_UNITY_DXT5NM_ROUTE_OBSERVATION",
+  "run": 45970415390,
+  "job": 140409189432,
+  "head": "61d149ff03b24b3f857a47d2269970ba18dbb508",
+  "guard": 45970415411,
+  "source_regressions": 272,
+  "V11_V12_controls": 37,
+  "V13_controls": 9,
+  "unique_authored_pixels_exact": 70,
+  "verified": {
+    "Android_device": false,
+    "XAPK": false,
+    "actual_Unity_import_verified": true,
+    "actual_receipt_negative_control_count": 9,
+    "actual_receipt_negative_controls": {
+      "adapter_shader_slot_swap": "Unity_asset_identity_or_file_bytes_drift",
+      "material_slot_swap": "Unity_asset_identity_or_file_bytes_drift",
+      "mesh_base_vertex_drift": "Unity_submesh_layout_drift",
+      "mip_dimension_drift": "Unity_actual_mip_dimensions",
+      "texture_slot_swap": "Unity_asset_identity_or_file_bytes_drift",
+      "wrong_editor": "exact_editor_run_environment",
+      "wrong_normal_readback": "Unity_UnpackNormal_oracle_mismatch",
+      "wrong_pixel_file_bytes": "Unity_asset_identity_or_file_bytes_drift",
+      "wrong_run": "exact_editor_run_environment"
+    },
+    "adapted_shader_identity_matches": 4,
+    "all_supported_importer_API_fields_match": true,
+    "material_shader_pointer_type_adapted": true,
+    "maximum_unpack_error": 6.428974774763674e-8,
+    "meta_rewrite_observations_per_route": 0,
+    "normal_unpack_readback_pixels": 84,
+    "original_assets_read": false,
+    "renderer_route_replay_matches": 2,
+    "rows": [
+      {
+        "actual_dimensions": [
+          [
+            5,
+            7
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "actual_format": "RGBA32",
+        "actual_mip_count": 3,
+        "cpu_status": "cpu_GetPixels32_observed",
+        "graphics_format": "R8G8B8A8_UNorm",
+        "guid": "da8c6da433802544494444ecd11a9972",
+        "importer_API_differences": {},
+        "macro_mode": 0,
+        "maximum_unpack_error": 4.2290354551610676e-8,
+        "runtime_readable": true,
+        "runtime_streaming": false,
+        "source_XY_diagnostic": {
+          "as_recorded": {
+            "max": 1.3452855348587036,
+            "mean": 0.42353072990222473
+          },
+          "flip_y": {
+            "max": 1.112707495689392,
+            "mean": 0.314685795931589
+          }
+        },
+        "source_mip_count": 2
+      },
+      {
+        "actual_dimensions": [
+          [
+            5,
+            7
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "actual_format": "RGBA32",
+        "actual_mip_count": 3,
+        "cpu_status": "not_readable_as_imported",
+        "graphics_format": "R8G8B8A8_UNorm",
+        "guid": "c78d02a9fa3177e4b9cbe89102216a83",
+        "importer_API_differences": {},
+        "macro_mode": 0,
+        "maximum_unpack_error": 6.428974774763674e-8,
+        "runtime_readable": false,
+        "runtime_streaming": true,
+        "source_XY_diagnostic": {
+          "as_recorded": {
+            "max": 1.5758782625198364,
+            "mean": 0.5160698786202599
+          },
+          "flip_y": {
+            "max": 0.989595585009631,
+            "mean": 0.33072360068476164
+          }
+        },
+        "source_mip_count": 2
+      }
+    ],
+    "scene_import_verified": false,
+    "serialized_swizzle_verified": false,
+    "shader_program_parity_verified": false,
+    "source_lower_mip_parity_verified": false,
+    "source_normal_GPU_parity_verified": false,
+    "status": "PASS_ACTUAL_AUTHORED_UNITY_DXT5NM_ROUTE_OBSERVATION",
+    "submesh_material_texture_matches": 4
+  },
+  "archive": {
+    "id": 15184254788,
+    "bytes": 34104,
+    "sha256": "66a83fa5b1b951897bc384e189147cd9159f99c796907c61a5c4b95c2c073d53",
+    "git_blob_sha1": "a13d8026163123afc4d50d4027c5b9a48cf877f0",
+    "member_count": 31,
+    "CRC_verified": true,
+    "member_sha256": {
+      "bc3-patch.json": "083270cb86eab100edb52e235d6e6ef43a019075cc72f08abec7654b4d7f3162",
+      "build.json": "e656f9ca485bee4546c2bed31c02bc1f0287f797b519bf5ec37998049227cb29",
+      "normalmap-authored-0.png": "9e6be9b9f97d2bf835fbf3ae21d79f889170b7588dddde3f1c351f85cc3b0a54",
+      "normalmap-authored-1.png": "5ab65d8dc9fb153f045cdc8ea0b5e8293d0e9006ec22938b7aafcddb9ed575d1",
+      "normalmap-baseline.json": "7fd0357e2ff48b94ac0f5b45511210222eac5922b09f5f7a1bce641e369f9803",
+      "normalmap-diagnostic.json": "4f5cc576db7b66609e78ca13d0f446eef9c605666222d56555d7658214432328",
+      "normalmap-importer-diagnostic.json": "03f910eb83c2e3c992c84a09e7d1a0aef9af52905a451d6f2aa4474d0282534f",
+      "normalmap-importer-report.json": "9618600e35c91d590228fd3b153af69891293749cee35492f8f40fcb64272967",
+      "normalmap-importer-route-join.json": "be11bfbc25c76acaa995085f1169b8cfd273cc5b311e5d0524f7d77bc43cce02",
+      "normalmap-route-join.json": "495e638b42c1a665b306f8c1528495125ec0d77271564c44ff93746f47782180",
+      "normalmap-unity-manifest.json": "ab3494a73a75f17e360210a2b0c72395a542bada4328b9c908e189ec3cbed851",
+      "normalmap-unity-raw.json": "9c271c3b746f7b149bb2fa86be4e777503448380907682e8083c62fddd5fe851",
+      "normalmap-unity-verified.json": "b3b12623fc8d2aa17d4399e36321427576d755c15b5b2722da669a86409cdbcf",
+      "normalmap-witness.log": "44f7a0069cee04484827fcaa1eee568f905fc54b27aab99b252dd63c9391e0ae",
+      "test_b03_verify_renderer_material_links.py.log": "f42630e693291f8d1340ecde68487ef4e54b1470562f2774244ef1b3e66fe717",
+      "test_gt_dxt5nm_unity_reimport.py.log": "61372ef61886d39c85c4e3b6ec2b76990988836f7bfaa4151f7fd0684f14e54c",
+      "test_gt_imported_bc3_route_pixels.py.log": "edf2c98535c0a61e3f878272cea2c405ba1537275ef1a5031d44186720cc0c48",
+      "test_gt_imported_dxt5nm_route_importer.py.log": "fab2f362bbd74e6f941aab9bcb475c4337d281aceb7997a918b3fdd734ba55b2",
+      "test_gt_imported_dxt5nm_route_pixels.py.log": "2cfe604b1034dbc01a0aa81960db8bd8b6453af4c7b09556ade16a019b653551",
+      "test_gt_imported_png_route_importer.py.log": "3d15b755251904e5882e4ef07deadc12537faa5f3397014274d293158a29354f",
+      "test_gt_imported_png_route_pixels.py.log": "0848ac5654e25860487e40157527a0957aa8b00bdac4f75137a70c9544e81ae5",
+      "test_gt_material_route_keyword_state.py.log": "83a1b4babefd3799306739cc134ed4185046f6eb961dd17e6d75fb2767528b2c",
+      "test_gt_material_route_values.py.log": "49022684362d70185899f2a38ca84598a244ea0d905da35d00159778b6338696",
+      "test_gt_mesh_vertex_payload.py.log": "3817f85f3fa97a845e3c638f1f7fbc31dc5634ec24a20b02f0ae9429ee90b229",
+      "test_gt_native_texture_route_sampler.py.log": "8b5502a965ccccee98e7fc7492070e86f704a66a262396d327a258ca5eb1772d",
+      "test_gt_patch_bc3_export_decoder.py.log": "10b1fb575424d9643f536f737ffd79b6779d312e00cd48fa6a594a4d0f1c5461",
+      "test_gt_renderer_submesh_routes.py.log": "57445b47773c92bf9af1c96fd31e296a1a62248aa375cd04efd20db2d30df697",
+      "test_gt_streamed_texture_route_payload.py.log": "377df5a5e77c143fc6ff86579f64ccb1ca4e998e691010e7c82aa10720090742",
+      "test_gt_texture_route_payload.py.log": "e2cc35e7f4a2909b2c93272602d61afeed9e2eb50594564c8bb29ad66a0107b1",
+      "test_gt_verify_original_mesh_export.py.log": "d4f25f9bab53fd0a2e1b4a0db0a816d4cdf3ec25b9c19c7abdd6177c565146d2",
+      "tool-smoke.log": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+    }
+  },
+  "independent": {
+    "same_path_GUID_fileID_and_bytes_including_meta": true,
+    "route_mesh_layout_uv_shader_identity_checked": true,
+    "unpack_recomputed": true,
+    "unique_packed_and_normal_vectors_per_texture_mip": [
+      35,
+      6,
+      1
+    ],
+    "RGBA_sha256": [
+      "c4613e57a409b503b1b7c354b38ff2c8656a48a842159ca8c1765b2826c1f895",
+      "e284bacc769e1e86fcb71099a4c7473a84c143c540edee397b67c769e466dc1e"
+    ],
+    "source_zero_alpha_counts": [
+      3,
+      2
+    ],
+    "readable_texture_actual_CPU_RGBA_bottom_first": "ff8282f0ff828210ff8282d0ff8282b0ffffff00ff8282d0ff8282b0ff828290ff828270ffa8a8ffff828290ff828270ff828250ff828230ffd3d3a0ff828250ff828230ff8282f0ff828210ff7d7dffffa7a7d0ffcdcdb0ff828290ff828290ffd3d300ffcdcd90ff828270ff828270ffa7a730ff7d7dffff828250ff828250ffa7a7f0ffcdcd10ffffffff",
+    "readable_texture_CPU_repack_matches": 32,
+    "readable_texture_CPU_repack_mismatch": [
+      {
+        "source_top_xy": [
+          1,
+          0
+        ],
+        "source_rgba": [
+          48,
+          243,
+          127,
+          0
+        ],
+        "expected": [
+          255,
+          243,
+          243,
+          48
+        ],
+        "actual": [
+          255,
+          130,
+          130,
+          80
+        ]
+      },
+      {
+        "source_top_xy": [
+          2,
+          1
+        ],
+        "source_rgba": [
+          80,
+          243,
+          153,
+          0
+        ],
+        "expected": [
+          255,
+          243,
+          243,
+          80
+        ],
+        "actual": [
+          255,
+          130,
+          130,
+          112
+        ]
+      },
+      {
+        "source_top_xy": [
+          3,
+          2
+        ],
+        "source_rgba": [
+          112,
+          243,
+          179,
+          0
+        ],
+        "expected": [
+          255,
+          243,
+          243,
+          112
+        ],
+        "actual": [
+          255,
+          130,
+          130,
+          144
+        ]
+      }
+    ],
+    "nonreadable_texture_CPU_unavailable": true,
+    "observed_sampler_state_matches_source": true
+  },
+  "next": "V14 same-route exact unfiltered Texture2D.Load per-mip authored alphaIsTransparency A/B/A reversal; isolate alpha-zero RGB dilation and filtered sampling, no original source or lower-mip parity claim."
+}
