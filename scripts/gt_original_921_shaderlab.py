@@ -7,6 +7,7 @@ from pathlib import Path
 
 from scripts.b49_shaderlab_pass_contract import pass_coverage
 from scripts.gt_original_921_keyword_routes import routed_stage
+from scripts.gt_runtime_keyword_contract import strict_engine_router
 from scripts.gt_original_921_cb_layout import constant_buffer_lanes
 from scripts.gt_original_921_cb_hlsl import rebind_constant_buffers
 from scripts.gt_original_921_semantics import pin_varying_locations, restore_vertex_inputs
@@ -455,7 +456,11 @@ def compose(private, engine_keywords=False, *, original_array_padding_zero=False
             programs[number] = combine_stages(*pair_sources)
             clauses.append({"enabled": [names[number - 1]] if number else [],
                             "program": number})
-        if engine_keywords:
+        if engine_keywords and len(counts) == 4 and sum(counts) == 1156:
+            # NEXT23b strict candidate: never substitute route zero for a missing set.
+            pragmas, code = strict_engine_router(engine_keys, programs)
+        elif engine_keywords:
+            # Legacy diagnostic mode; not original runtime-route acceptance.
             names = sorted({name for key in engine_keys for name in key})
             clauses = [{"enabled": key, "program": number}
                        for number, key in enumerate(engine_keys)]

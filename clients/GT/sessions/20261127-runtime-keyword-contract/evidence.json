@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-27",
+  "base_commit": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
+  "base_tree": "46a98d188189da7cd5b7dc1831db32eb1b97f029",
+  "branch": "feature/android-native-port",
+  "read_only_lab_head": "f933c4429803583d1ed5fa26e46bb0d3227f2027",
+  "scope": "NEXT23b strict source route construction and serialized keyword-set rejection contract only; authored fixtures; no original game bytes or material changes",
+  "source_base_matches_handoff_sha256": [
+    "scripts/gt_original_921_shaderlab.py",
+    "scripts/gt_verify_921_shader_bundle.py",
+    "tests/test_gt_next23b_unity_gate.py"
+  ],
+  "python": "3.13.5",
+  "cpp": "Debian 14.2.0-19, 14.2.0",
+  "test_command": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_gt_runtime_keyword_*.py",
+    "-v"
+  ],
+  "tests": {
+    "new_contract_and_integration_passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "focused_existing_gate_passed": 2,
+    "existing_static_workflow_probe_check": "PASS via pinned GitHub reads",
+    "fresh_isolated_snapshot_replay_passed": 14,
+    "cpp_authored_route_selections": 1156,
+    "pass_counts": [
+      512,
+      4,
+      128,
+      512
+    ],
+    "actual_game_or_unity_route_selections": 0
+  },
+  "verified_function_slices": {
+    "compose_sha256": "d9b171aba244af93d6b5c3e94bf93b3b1aec3749fbef7c062f877599dfc6e3d8",
+    "validate_and_verify_routes_sha256": "93e0ca6e811ffe9c461cb8d374fd250d465091802cdf12b47b10dcca3cccdfc0"
+  },
+  "local_environment": {
+    "prior_checkout_present": false,
+    "direct_github_dns": false,
+    "git_connector_source_reads": true,
+    "unity_present": false,
+    "glslangValidator_present": false,
+    "spirv_val_present": false,
+    "clean_full_checkout_verified": false,
+    "clean_isolated_function_snapshot_verified": true,
+    "old_manifest_complete_verification": "NOT_RUN; historical manifest belongs to immutable handoff commit"
+  },
+  "findings": {
+    "strict_next23b_no_unmapped_route_zero": true,
+    "independent_toggle_lattice_must_be_complete": true,
+    "exact_keyword_rows_reject_projection": true,
+    "ambiguous_program_blob_rejected": true,
+    "unproved_global_local_indices_rejected": true,
+    "legacy_diagnostic_and_ten_group_private_selectors_unchanged": true,
+    "original_keyword_scope_pass_type_provenance_pending": true,
+    "original_program_selection_from_real_bundle_pending": true
+  },
+  "status": {
+    "original_metadata_read": false,
+    "original_runtime_keyword_parity": "NOT_PROVEN",
+    "Unity": "NOT_RUN",
+    "SPIRV": "NOT_RUN",
+    "Android": "NOT_RUN",
+    "native_integration": "NOT_RUN",
+    "G0_G6": "OPEN",
+    "XAPK": "NOT_REQUESTED",
+    "CI": "SKIPPED_INTENTIONALLY_ON_PUSH"
+  },
+  "historical": {
+    "latest_same_export_run": 43929698985,
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "dummy_guids": 37,
+    "synthetic_unity_run": 45760877767,
+    "synthetic_pixels": 120,
+    "batch5_archive_recovered_exact": true,
+    "batch3_and4_archives_missing": true,
+    "batch5_zip_members_reviewed": 3,
+    "batch5_historical_tests_not_counted_as_new": true
+  },
+  "files": [
+    {
+      "path": "scripts/gt_runtime_keyword_contract.py",
+      "git_blob_sha": "617a4ca349281a8e2ad99bf4f04364a028fb7c16",
+      "sha256": "b92c83c304fa2c401f218b6ce19b6397de737c7f3fd8981ec17e3bec7a4c417f"
+    },
+    {
+      "path": "scripts/gt_original_921_shaderlab.py",
+      "git_blob_sha": "043447f1f1328b456deeb7d57a92e66af2514b31",
+      "sha256": "dfeffeb50fac8726e2e773eecdadb02dee051b72f9f5c77e594ce7d80215376b"
+    },
+    {
+      "path": "scripts/gt_verify_921_shader_bundle.py",
+      "git_blob_sha": "de586b504b6ccf6a023cb49d8e142ef160d74476",
+      "sha256": "c228284103ac0c7e5fdd0dbfb41d06f8218b6804efe8f633bb8fc6908afd6ea8"
+    },
+    {
+      "path": "tests/test_gt_runtime_keyword_contract.py",
+      "git_blob_sha": "8023bef0efa8edbd2ff74c61278d1655b530e173",
+      "sha256": "77646e1dd5cfb22b1d6ab2626143a8dd38cf8ab6e31b6ced6b84764e7b6b319e"
+    },
+    {
+      "path": "tests/test_gt_runtime_keyword_integration.py",
+      "git_blob_sha": "874c1fd4eec13d0453b1272e09721547975ab97a",
+      "sha256": "303b4a2282855cc803a55a177909de4272bb2a82d4ca3b5065814903107a19e4"
+    },
+    {
+      "path": "tests/test_gt_next23b_unity_gate.py",
+      "git_blob_sha": "5c3b90821f785f12f97ff13d9484454f664a1e68",
+      "sha256": "50adf9d4c902b5e8d94ba538b9e8e87ecd59a52191749c58c9f9f28b0784de86"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-runtime-keyword-contract/tests.log",
+      "git_blob_sha": "c0db12e534b798a40592cfa5fb17b6102b2f045a",
+      "sha256": "75d44f106bdf50da6a137fe7fe09f2c8ac00d788cfeda85a06e565185350ee22"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-runtime-keyword-contract/next23b-existing-gate.log",
+      "git_blob_sha": "624f231a66acbfacbb3c966f52ce946deec6fd76",
+      "sha256": "14b6f1454101dda4406ddc2183fd2ba2cae8dbacfc950acb169abf21d15d3436"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-runtime-keyword-contract/clean-replay.log",
+      "git_blob_sha": "6d1d1734dcf154d9e7f953a0dbdebae7fcf27d41",
+      "sha256": "949578e6783323d0d04ff7d38bd34cec1afba4cd48980f078c3c9507f4e5d2ca"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-runtime-keyword-contract/recovered-batch5-local-20261126.zip",
+      "git_blob_sha": "9f73442389eab98f0b79e2f8b2a1451995ce5ee5",
+      "sha256": "a7b0a80c25c753f6e081f9307c804575399d833e5deec5ff338ef4ceee5222a6"
+    }
+  ]
+}

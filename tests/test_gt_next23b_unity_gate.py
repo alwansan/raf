@@ -7,8 +7,8 @@ from scripts.gt_verify_921_shader_bundle import validate_next23b_engine_manifest
 
 def packet():
     return {"passes": [{"passType": "Normal", "variants": [
-        {"keywords": ["SOURCE_%d" % i]} for i in range(n)]}
-        for n in (512, 4, 128, 512)]}
+        {"keywords": ["SOURCE_%d" % bit for bit in range(n) if i & (1 << bit)]}
+        for i in range(1 << n)]} for n in (9, 2, 7, 9)]}
 
 
 class Next23bUnityGate(unittest.TestCase):

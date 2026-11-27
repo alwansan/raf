@@ -1,0 +1,19 @@
+test_all_1156_authored_route_selections_in_real_cpp (test_gt_runtime_keyword_contract.RuntimeKeywordContract.test_all_1156_authored_route_selections_in_real_cpp) ... ok
+test_bad_names_and_collisions_fail (test_gt_runtime_keyword_contract.RuntimeKeywordContract.test_bad_names_and_collisions_fail) ... ok
+test_bundle_exact_key_and_other_pass_names (test_gt_runtime_keyword_contract.RuntimeKeywordContract.test_bundle_exact_key_and_other_pass_names) ... ok
+test_bundle_rejects_projection_wrong_scope_and_bad_indices (test_gt_runtime_keyword_contract.RuntimeKeywordContract.test_bundle_rejects_projection_wrong_scope_and_bad_indices) ... ok
+test_full_lattice_route_order_and_pragmas (test_gt_runtime_keyword_contract.RuntimeKeywordContract.test_full_lattice_route_order_and_pragmas) ... ok
+test_instancing_directive_and_empty_lattice (test_gt_runtime_keyword_contract.RuntimeKeywordContract.test_instancing_directive_and_empty_lattice) ... ok
+test_program_table_requires_exact_nonempty_route_slots (test_gt_runtime_keyword_contract.RuntimeKeywordContract.test_program_table_requires_exact_nonempty_route_slots) ... ok
+test_sparse_or_missing_empty_route_fails_before_emission (test_gt_runtime_keyword_contract.RuntimeKeywordContract.test_sparse_or_missing_empty_route_fails_before_emission) ... ok
+test_unmapped_branch_is_error_not_route_zero (test_gt_runtime_keyword_contract.RuntimeKeywordContract.test_unmapped_branch_is_error_not_route_zero) ... ok
+test_next23b_composer_refuses_unproved_lattice (test_gt_runtime_keyword_integration.RuntimeKeywordProductionIntegration.test_next23b_composer_refuses_unproved_lattice) ... ok
+test_next23b_composer_uses_strict_branch_for_all_four_passes (test_gt_runtime_keyword_integration.RuntimeKeywordProductionIntegration.test_next23b_composer_uses_strict_branch_for_all_four_passes) ... ok
+test_production_manifest_rejects_sparse_or_invalid_names (test_gt_runtime_keyword_integration.RuntimeKeywordProductionIntegration.test_production_manifest_rejects_sparse_or_invalid_names) ... ok
+test_strict_verifier_rejects_ambiguous_program_and_missing_route (test_gt_runtime_keyword_integration.RuntimeKeywordProductionIntegration.test_strict_verifier_rejects_ambiguous_program_and_missing_route) ... ok
+test_strict_verifier_rejects_old_projection_false_accept (test_gt_runtime_keyword_integration.RuntimeKeywordProductionIntegration.test_strict_verifier_rejects_old_projection_false_accept) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 4.186s
+
+OK

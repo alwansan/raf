@@ -8,6 +8,7 @@ import subprocess
 
 from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, NEXT_30_MATERIAL_ROUTES, SKIN_ROUTES, NEXT_SEVEN_7P11_ORIGINAL_ROUTES, expected_routes_for_shader
 from scripts.restore_builtin_shaders import exported_shader_identity
+from scripts.gt_runtime_keyword_contract import exact_independent_toggle_plan, strict_bundle_route_key
 from scripts.w1_recover_depth_passes import stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
 
@@ -162,10 +163,13 @@ def validate_next23b_engine_manifest(packet):
             keys.append(frozenset(names))
         if len(set(keys)) != count:
             raise ValueError("next23b_engine_route_collision")
+        exact_independent_toggle_plan([sorted(key) for key in keys])
 
 
 def verify_routes(parsed, entries=None, engine_routes=None, smolv_decoder=None, expected_counts=EXPECTED_ROUTES, *, zero_keywords=False, strict_engine=False):
     keywords = parsed["m_KeywordNames"]
+    if strict_engine and (engine_routes is None or len(engine_routes) != len(expected_counts)):
+        raise ValueError("original_runtime_exact_engine_manifest_required")
     if zero_keywords and (keywords or tuple(expected_counts) != (1,) * 7 or engine_routes is not None):
         raise ValueError("fft_utilities_bundle_requires_seven_zero_keyword_routes")
     subshaders = parsed["m_SubShaders"]
@@ -190,7 +194,9 @@ def verify_routes(parsed, entries=None, engine_routes=None, smolv_decoder=None, 
                         f"vertexRows={len(rows)} moduleHeadersByBlob={vulkan_blob_header_counts(entries, rows)}"
                     )
             routes = set()
+            strict_blobs = {}
             for _, _, row in rows:
+                strict_key = strict_bundle_route_key(keywords, row, expected_keys) if strict_engine else None
                 if entries is not None:
                     blob_index = row.get("m_BlobIndex")
                     if type(blob_index) is not int or not 0 <= blob_index < len(entries):
@@ -202,14 +208,17 @@ def verify_routes(parsed, entries=None, engine_routes=None, smolv_decoder=None, 
                             decoded[blob_index] = vulkan_execution_models(entries[blob_index][1], smolv_decoder)
                         if (0 if stage == "progVertex" else 4) not in decoded[blob_index]:
                             continue
+                if strict_engine:
+                    if entries is not None and strict_blobs.setdefault(strict_key, blob_index) != blob_index:
+                        raise ValueError("original_runtime_bundle_ambiguous_keyword_program")
+                    routes.add(strict_key)
+                    continue
                 indices = row["m_KeywordIndices"]
                 if zero_keywords and (indices or row.get("m_GlobalKeywordIndices") or row.get("m_LocalKeywordIndices")):
                     raise ValueError("fft_utilities_bundle_nonempty_source_keywords")
                 if any(type(key) is not int or not 0 <= key < len(keywords) for key in indices):
                     raise ValueError("original_921_bundle_keyword_index_invalid")
                 names = {keywords[key] for key in indices}
-                if strict_engine and any(name.startswith("GT_ORIGINAL_921_") for name in names):
-                    raise ValueError("next23b_synthetic_selector_in_bundle")
                 if expected_keys is not None:
                     routes.add(frozenset(names & engine_names))
                     continue
