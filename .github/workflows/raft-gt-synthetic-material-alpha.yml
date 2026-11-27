@@ -24,6 +24,7 @@ on:
           - public-renderer-pointer-witness
           - submesh-route-pixels
           - submesh-color-replay
+          - authored-scene-route-join
   push:
     branches: [feature/android-native-port]
     paths:
@@ -42,7 +43,7 @@ concurrency:
 
 jobs:
   synthetic-pixels:
-    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]') && !contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]') && !contains(github.event.head_commit.message, '[gt-imported-alpha-pixels]') && !contains(github.event.head_commit.message, '[gt-b05-local-documents]') && !contains(github.event.head_commit.message, '[gt-particle-pixel-parity]') && !contains(github.event.head_commit.message, '[gt-particle-local-net-loss]') && !contains(github.event.head_commit.message, '[gt-renderer-submesh-routes]') && !contains(github.event.head_commit.message, '[gt-public-renderer-pointer-witness]') && !contains(github.event.head_commit.message, '[gt-submesh-route-pixels]') && !contains(github.event.head_commit.message, '[gt-submesh-color-replay]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]') && !contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]') && !contains(github.event.head_commit.message, '[gt-imported-alpha-pixels]') && !contains(github.event.head_commit.message, '[gt-b05-local-documents]') && !contains(github.event.head_commit.message, '[gt-particle-pixel-parity]') && !contains(github.event.head_commit.message, '[gt-particle-local-net-loss]') && !contains(github.event.head_commit.message, '[gt-renderer-submesh-routes]') && !contains(github.event.head_commit.message, '[gt-public-renderer-pointer-witness]') && !contains(github.event.head_commit.message, '[gt-submesh-route-pixels]') && !contains(github.event.head_commit.message, '[gt-submesh-color-replay]') && !contains(github.event.head_commit.message, '[gt-authored-scene-route-join]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 30
@@ -1743,3 +1744,150 @@ jobs:
           path: submesh-replay-results/*
           if-no-files-found: warn
           retention-days: 14
+
+
+  authored-scene-route-join:
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-authored-scene-route-join]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'authored-scene-route-join'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      DOTNET_PROCESSOR_COUNT: '2'
+    steps:
+      - name: Checkout authored witness and exact private hook composer only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tests/test_gt_renderer_submesh_routes.py
+            /tests/test_b03_verify_renderer_material_links.py
+            /android-port/Experiments/ExportLineage/
+            /tools/synthetic_material_alpha/RaftAuthoredSceneRouteWitness.cs
+            /.github/workflows/raft-gt-synthetic-material-alpha.yml
+      - name: Run source-only route gate regressions before public build
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir authored-scene-results
+          python3 -m venv "$RUNNER_TEMP/gt-authored-scene-python"
+          py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check Pillow==11.3.0 PyYAML==6.0.3
+          for test_file in test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
+            "$py" -B -m unittest discover -s tests -p "$test_file" -v 2>&1 | tee "authored-scene-results/$test_file.log"
+          done
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Checkout public pinned exporter source only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: Source
+      - name: Compile exact public exporter and authored witness
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git -C ar-host rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          test -d authored-scene-results
+          python3 -m scripts.patch_export_lineage --tool-source ar-host \
+            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --renderer-lineage --native-texture-arrays --compute-lineage
+          cp tools/synthetic_material_alpha/RaftAuthoredSceneRouteWitness.cs ar-host/Source/AssetRipper.Export.UnityProjects/
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("android-port/Experiments/ExportLineage/Program.cs")
+          text=p.read_text()
+          mark='if (args.Length == 1 && args[0] == "--probe-tool")'
+          assert text.count(mark)==1
+          p.write_text(text.replace(mark,'''if (args.Length == 2 && args[0] == "--probe-authored-scene-routes")
+          {
+              RaftAuthoredSceneRouteWitness.Run(args[1]);
+              return;
+          }
+          '''+mark))
+          PY
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/gt-authored-scene-tool" \
+            > "$RUNNER_TEMP/gt-authored-scene-build.log" 2>&1 || {
+              tail -60 "$RUNNER_TEMP/gt-authored-scene-build.log" | tee authored-scene-results/build-failure.log
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/gt-authored-scene-tool/ExportLineage.dll" --probe-tool | tee authored-scene-results/tool-smoke.log
+          test -s "$RUNNER_TEMP/gt-authored-scene-tool/AssetRipper.Export.UnityProjects.dll"
+          python3 - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json,os
+          root=Path("ar-host/Source/AssetRipper.Export.UnityProjects")
+          result=dict(status="COMPILED_PUBLIC_EXPORTER",run_id=os.environ["GITHUB_RUN_ID"],
+              head=os.environ["GITHUB_SHA"],public_tool_revision="036098ab525a3f9f693dc101edeb21faad4d32d8",
+              files={p.name:sha256(p.read_bytes()).hexdigest() for p in
+                  (root/"RaftExportLineage.cs",root/"RaftAuthoredSceneRouteWitness.cs",
+                   Path(os.environ["RUNNER_TEMP"])/"gt-authored-scene-tool/AssetRipper.Export.UnityProjects.dll")},
+              original_assets_read=False,APK=False)
+          Path("authored-scene-results/build.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          PY
+      - name: Export actual authored scene collections and verify routes against pre-export metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/gt-authored-scene-fixture"
+          dotnet "$RUNNER_TEMP/gt-authored-scene-tool/ExportLineage.dll" \
+            --probe-authored-scene-routes "$root" 2>&1 | tee authored-scene-results/witness.log
+          py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
+          "$py" -B -m scripts.gt_authored_scene_route_witness \
+            --root "$root" --out authored-scene-results/route-join.json
+          "$py" -B - <<'PY'
+          import json,os,re
+          from pathlib import Path
+          root=Path("authored-scene-results")
+          j=json.loads((root/"route-join.json").read_text())
+          assert j["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_YAML_ROUTE_JOIN"
+          assert j["baseline"]["selected_renderer_routes_preserved"] is True
+          assert j["counterfactual_count"]==9
+          assert j["original_assets_read"] is False
+          tests={}
+          for p in sorted(root.glob("test_*.log")):
+              s=p.read_text()
+              m=re.search(r"^Ran (\d+) tests? in ",s,re.M)
+              assert m and int(m[1])>0 and re.search(r"^OK$",s,re.M)
+              tests[p.name]=int(m[1])
+          assert len(tests)==2
+          report=dict(status="PASS_AUTHORED_ACTUAL_EXPORT_ROUTE_GATE",
+              run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
+              test_counts=tests,total_regression_tests=sum(tests.values()),
+              actual_exported_documents=j["actual_exported_documents"],
+              actual_native_scene_files=j["actual_native_scene_files"],
+              complete_submesh_routes=j["baseline"]["counts"]["complete_submesh_material_identity_routes"],
+              counterfactual_count=j["counterfactual_count"],
+              original_assets_read=False,original_serialized_source_verified=False,
+              Unity_render_executed=False,XAPK=False)
+          (root/"report.json").write_text(json.dumps(report,sort_keys=True,indent=2)+"\n")
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - name: Retain only public-tool build and aggregate route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-authored-scene-route-join-${{ github.run_id }}
+          path: authored-scene-results/*
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove only authored fixture tree
+        if: always()
+        shell: bash
+        run: rm -rf "$RUNNER_TEMP/gt-authored-scene-fixture"
