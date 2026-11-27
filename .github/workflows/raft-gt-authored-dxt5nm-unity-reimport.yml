@@ -1,6 +1,6 @@
 name: GT authored DXT5nm Unity reimport route observation (NO APK)
 on:
-  # Dedicated authored-only V13 preparation; no original game acquisition.
+  # Dedicated authored-only V13 activation; no original game acquisition.
   workflow_dispatch:
   push:
     branches: [feature/android-native-port]
