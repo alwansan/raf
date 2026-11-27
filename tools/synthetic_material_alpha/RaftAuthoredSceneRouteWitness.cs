@@ -119,8 +119,38 @@ public static class RaftAuthoredSceneRouteWitness
         owner=obj.Collection.Name,path_id=obj.PathID,class_id=obj.ClassID,tree
     };
 
-    public static void Run(string root,bool importedPng=false)
+    // Two NPOT 5x7 DXT5 textures with a 2x3 lower mip: 4+1 blocks.
+    // Distinct blocks and both alpha endpoint modes; selector order is
+    // authored directly, not derived from the public decoder or its PNG.
+    private static byte[] AuthoredBC3(int texture)
     {
+        byte[] bytes=new byte[80];
+        for(int b=0;b<5;b++)
+        {
+            int off=16*b;
+            bool six=((b+texture)&1)!=0;
+            bytes[off]=(byte)(six?0:240); bytes[off+1]=(byte)(six?200:16);
+            ulong alpha=0; uint color=0;
+            for(int y=0;y<4;y++)
+            for(int x=0;x<4;x++)
+            {
+                int p=4*y+x;
+                alpha|=(ulong)((x+2*y+b+texture)%8)<<(3*p);
+                color|=(uint)((x+y+b+2*texture)%4)<<(2*p);
+            }
+            for(int j=0;j<6;j++)bytes[off+2+j]=(byte)(alpha>>(8*j));
+            ushort c0=(ushort)(six?0x07e0:0xf800);
+            ushort c1=(ushort)(six?0xffff:0x001f);
+            bytes[off+8]=(byte)c0;bytes[off+9]=(byte)(c0>>8);
+            bytes[off+10]=(byte)c1;bytes[off+11]=(byte)(c1>>8);
+            for(int j=0;j<4;j++)bytes[off+12+j]=(byte)(color>>(8*j));
+        }
+        return bytes;
+    }
+
+    public static void Run(string root,bool importedPng=false,bool importedBc3=false)
+    {
+        Require(!importedBc3 || importedPng,"bc3_requires_actual_png_export");
         Require(!Directory.Exists(root),"fresh_authored_route_root_required");
         Directory.CreateDirectory(root);
         string project=Path.Combine(root,"project");
@@ -177,7 +207,7 @@ public static class RaftAuthoredSceneRouteWitness
                 topology=(int)sub.GetTopology(),baseVertex=sub.BaseVertex,firstVertex=sub.FirstVertex,vertexCount=sub.VertexCount}).ToArray()
         }));
         const string providerName="authored-textures.resS";
-        var providerData=Enumerable.Repeat((byte)0xA7,61).ToArray();
+        var providerData=Enumerable.Repeat((byte)0xA7,importedBc3?187:61).ToArray();
         var providerRoot=Path.Combine(root,"providers");
         Directory.CreateDirectory(providerRoot);
         var providerPath=Path.Combine(providerRoot,providerName);
@@ -190,8 +220,9 @@ public static class RaftAuthoredSceneRouteWitness
             var tex=(ITexture2D)Add(texOwner,28,"AuthoredTexture"+i);
             // Two complete mip levels, asymmetric RGB and varying alpha.
             // These are native serialized bytes, not decoded GPU pixels.
-            tex.Width_C28=2;tex.Height_C28=2;
-            tex.Format_C28E=AssetRipper.SourceGenerated.Enums.TextureFormat.RGBA32;
+            tex.Width_C28=importedBc3?5:2;tex.Height_C28=importedBc3?7:2;
+            tex.Format_C28E=importedBc3?AssetRipper.SourceGenerated.Enums.TextureFormat.DXT5:AssetRipper.SourceGenerated.Enums.TextureFormat.RGBA32;
+            Require(!importedBc3 || (int)tex.Format_C28E==12,"authored_DXT5_enum_ABI_changed");
             tex.MipCount_C28=2;tex.ImageCount_C28=1;
             int dimension=SetTextureDimension(tex);
             // Distinct source-defined serialized importer states. Capture
@@ -232,10 +263,10 @@ public static class RaftAuthoredSceneRouteWitness
             Require(sampler.FilterMode==1+i && sampler.Aniso==2+i*6 &&
                 sampler.MipBias==(i==0?-.625f:.375f) && sampler.WrapU==i &&
                 sampler.WrapV==2-i && sampler.WrapW==3-i,"authored_sampler_capture_drift");
-            var mipBytes=new byte[]{(byte)(32+64*i),64,192,0,
+            var mipBytes=importedBc3?AuthoredBC3(i):new byte[]{(byte)(32+64*i),64,192,0,
                 128,(byte)(96+32*i),32,255,18,172,93,127,207,9,55,64,
                 (byte)(90+32*i),66,33,171};
-            int extent=7+27*i;
+            int extent=7+(importedBc3?93:27)*i;
             Buffer.BlockCopy(mipBytes,0,providerData,extent,mipBytes.Length);
             tex.ImageData_C28=[];
             if(tex.Has_CompleteImageSize_C28_UInt32()) tex.CompleteImageSize_C28_UInt32=(uint)mipBytes.Length;
@@ -383,7 +414,7 @@ public static class RaftAuthoredSceneRouteWitness
         var externals=owners.ToDictionary(o=>o.Name,o=>o.Dependencies.Skip(1).Select(d=>d?.Name).ToArray());
         // The source contract is captured from generated objects before any
         // export or trace. It is not reconstructed from exported YAML.
-        var source=new {schema_version=importedPng?8:7,authored_generated_objects=true,objects=rows,externals,
+        var source=new {schema_version=importedBc3?10:importedPng?8:7,authored_generated_objects=true,objects=rows,externals,
             providers=new[]{new {name=providerName,bytes=providerData.Length,sha256=providerSHA}},
             hidden=hidden.Select(o=>new {owner=o.Collection.Name,path_id=o.PathID,class_id=o.ClassID}).ToArray()};
         File.WriteAllText(Path.Combine(root,"source.json"),JsonSerializer.Serialize(source));

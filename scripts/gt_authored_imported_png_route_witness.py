@@ -13,6 +13,7 @@ from PIL import Image
 from scripts import gt_renderer_submesh_routes as gate
 from scripts import gt_mesh_vertex_payload as payload
 from scripts import gt_imported_png_route_pixels as png
+from scripts import gt_imported_bc3_route_pixels as bc3
 from scripts import gt_imported_png_route_importer as importer_state
 from scripts import gt_streamed_texture_route_payload as stream
 from scripts.t3_decoded_texture_pixel_parity import compare_pair
@@ -22,7 +23,9 @@ def need(ok,reason):
     if not ok:raise ValueError(reason)
 
 
-def load(root,*,states=None):
+def load(root,*,states=None,bc3_mode=False):
+    need(not bc3_mode or states is None,"bc3_separate_from_V9_scope")
+    decoder=bc3 if bc3_mode else png
     source=gate.strict_json(gate.bounded_snapshot(root/"source.json",1024*1024))
     producer=gate.strict_json(gate.bounded_snapshot(root/"producer.json",256*1024))
     need(producer.get("status")=="OBSERVED_AUTHORED_PUBLIC_PNG_EXPORT" and
@@ -30,11 +33,11 @@ def load(root,*,states=None):
          producer.get("actual_scene_collections")==2 and
          producer.get("actual_imported_png_texture_collections")==2 and
          producer.get("original_assets_read") is False,"actual_png_producer_contract")
-    need(source.get("schema_version")==8 and source.get("authored_generated_objects") is True,
+    need(source.get("schema_version")==(10 if bc3_mode else 8) and source.get("authored_generated_objects") is True,
          "authored_png_source_contract")
     objects={};vertices={};requests={}
     providers=source["providers"]
-    need(len(providers)==1 and providers[0]["name"]=="authored-textures.resS" and providers[0]["bytes"]==61,
+    need(len(providers)==1 and providers[0]["name"]=="authored-textures.resS" and providers[0]["bytes"]==(187 if bc3_mode else 61),
          "authored_png_provider_contract")
     pins={"Raft_Data/"+p["name"]:("plain",p["bytes"],p["sha256"]) for p in providers}
     for row in source["objects"]:
@@ -45,15 +48,16 @@ def load(root,*,states=None):
             need(isinstance(vertices[key],payload.Proof) and vertices[key].length==120,"authored_mesh_payload")
             tree=gate.mesh_layout(tree)
         elif cls==28:
-            requests[key]=png.source_request(tree)
+            requests[key]=decoder.source_request(tree)
             if states is not None:states[key]=importer_state.source_proof(tree)
-            need(isinstance(requests[key],stream.Request) and requests[key].mip_lengths==(16,4),
+            need(isinstance(requests[key],bc3.Request if bc3_mode else stream.Request) and
+                 requests[key].mip_lengths==((64,16) if bc3_mode else (16,4)),
                  "authored_png_two_mips_stream_source")
             tree=None
         objects[key]=(cls,tree)
-    need(len(requests)==2 and sorted(r.offset for r in requests.values())==[7,34],"authored_png_source_extents")
-    resolved=png.resolve_requests(root/"providers",pins,requests)
-    need(all(isinstance(p,png.Proof) and p.from_stream for p in resolved.values()),"authored_png_source_authentication")
+    need(len(requests)==2 and sorted(r.offset for r in requests.values())==([7,100] if bc3_mode else [7,34]),"authored_png_source_extents")
+    resolved=decoder.resolve_requests(root/"providers",pins,requests)
+    need(all(type(p) is (bc3.Proof if bc3_mode else png.Proof) and p.from_stream for p in resolved.values()),"authored_png_source_authentication")
     traces=[gate.strict_json(gate.bounded_snapshot(root/f,1024*1024)) for f in ("materials.json","meshes.json","components.json")]
     mapping=gate.traces(*traces)
     need(set(mapping)==set(objects),"actual_png_trace_population")
