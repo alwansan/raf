@@ -11,6 +11,7 @@ on:
           - material-alpha
           - next23b-receipt
           - keyword-pixels
+          - resource-bindings
   push:
     branches: [feature/android-native-port]
     paths:
@@ -29,7 +30,7 @@ concurrency:
 
 jobs:
   synthetic-pixels:
-    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 30
@@ -402,3 +403,61 @@ jobs:
           fi
           docker image rm "$GT_KEYWORD_IMAGE" >/dev/null 2>&1 || true
           rm -rf "$RUNNER_TEMP/raft-keyword-docker"
+
+  resource-bindings:
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-resource-bindings]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'resource-bindings'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      GT_RESOURCE_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}
+    steps:
+      - name: Checkout only source functions and authored resource fixtures
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/gt_resource_register_contract.py
+            /scripts/w1_rebind_depth_resources.py
+            /scripts/gt_original_921_resource_rebind.py
+            /scripts/gt_original_921_all_variants.py
+            /scripts/gt_original_921_shaderlab.py
+            /scripts/a12_shader_parameter_decode.py
+            /scripts/b25_foam_cb_namebridge.py
+            /tests/test_gt_resource_register_contract.py
+            /tests/test_w1_depth_resource_rebinding.py
+            /tools/synthetic_material_alpha/resource_register_probe.py
+            /.github/workflows/raft-gt-synthetic-material-alpha.yml
+      - name: Run authored declaration and legacy depth regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          mkdir resource-register-results
+          python3 -B -m unittest discover -s tests -p test_gt_resource_register_contract.py -v 2>&1 | tee resource-register-results/source-tests.log
+          python3 -B -m unittest discover -s tests -p test_w1_depth_resource_rebinding.py -v 2>&1 | tee resource-register-results/depth-tests.log
+      - name: Install public HLSL and SPIR-V compiler tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends glslang-tools spirv-tools
+      - name: Execute production metadata-to-SPIR-V resource equivalence probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B tools/synthetic_material_alpha/resource_register_probe.py \
+            --out resource-register-results/compiler.json --run-id "$GT_RESOURCE_RUN_ID"
+      - name: Retain only authored resource proof and unit test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-synthetic-resource-bindings-${{ github.run_id }}
+          path: resource-register-results/*
+          if-no-files-found: warn
+          retention-days: 14
