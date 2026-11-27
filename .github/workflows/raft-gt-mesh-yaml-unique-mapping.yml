@@ -1,3 +1,4 @@
+# Retry after correcting fixture-only root anchor (first run 46003838995 failed before comparison).
 # Source-only Mesh parser replay on both PyYAML backends; no native build or acquisition.
 name: GT exported Mesh YAML unique mapping (NO original assets)
 on:
