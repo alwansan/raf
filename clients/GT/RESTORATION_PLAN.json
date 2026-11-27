@@ -1306,7 +1306,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "e0fdd5c1737cee1cf38973372684855cf15a5063",
+    "reviewed_remote_head": "b849a677830c036dc3ef7bca128285da8b407cf7",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -1562,9 +1562,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G1-G2-material-scalar-color-same-route-value-binding",
-      "status": "PYTHON_PASS_PUBLIC_BUILD_FAILED_FIX_PENDING",
-      "next": "Run focused authored public build with typed indexed capture fix; retain success/failure. Do not rerun Unity raster."
+      "id": "G1-G2-material-keyword-pass-same-route-state-binding",
+      "status": "NEXT_PRODUCTIVE",
+      "next": "Extend V3 to same-route serialized Material m_ValidKeywords, m_InvalidKeywords and disabledShaderPasses using B43 and gt_runtime_keyword_contract; preserve separate valid/invalid sets, reject duplicates, missing or unsupported legacy schema, private compile selector names and wrong pass state even if V3 values/geometry/texture identity match. Use actual authored public exporter YAML and independent typed pre-export source metadata, not a claim about active Unity variant or runtime global/local scope. Add V3-pass/V4-reject controls (valid/invalid bucket swap, added/removed keyword, disabled pass drift). Keep previous A2 360 pixels and original runtime route evidence separate; do not repeat raster without new purpose. A3 remains blocked pending verified authorized original source. No original acquisition, phone or XAPK."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -2669,7 +2669,7 @@
       }
     },
     "latest_material_value_route_binding": {
-      "status": "PYTHON_PASS_PUBLIC_BUILD_FAILED_FIX_PENDING",
+      "status": "PASS_AUTHORED_ACTUAL_EXPORT_MATERIAL_VALUE_ROUTE_GATE",
       "base": "37b2aa410615288c09b443946fedbd0eb4a05d16",
       "gate": "G1-G2-material-scalar-color-same-route-value-binding",
       "session": "clients/GT/sessions/20261127-material-value-route-binding/README_AR.md",
@@ -2679,7 +2679,11 @@
       "white_or_fire_fixed": false,
       "unity_render_executed": false,
       "XAPK": false,
-      "next": "Run focused authored public build with typed indexed capture fix; retain success/failure. Do not rerun Unity raster.",
+      "next": {
+        "id": "G1-G2-material-keyword-pass-same-route-state-binding",
+        "status": "NEXT_PRODUCTIVE",
+        "next": "Extend V3 to same-route serialized Material m_ValidKeywords, m_InvalidKeywords and disabledShaderPasses using B43 and gt_runtime_keyword_contract; preserve separate valid/invalid sets, reject duplicates, missing or unsupported legacy schema, private compile selector names and wrong pass state even if V3 values/geometry/texture identity match. Use actual authored public exporter YAML and independent typed pre-export source metadata, not a claim about active Unity variant or runtime global/local scope. Add V3-pass/V4-reject controls (valid/invalid bucket swap, added/removed keyword, disabled pass drift). Keep previous A2 360 pixels and original runtime route evidence separate; do not repeat raster without new purpose. A3 remains blocked pending verified authorized original source. No original acquisition, phone or XAPK."
+      },
       "candidate_commit": "9e19c17c188860b991385eeec1633f7d8959420d",
       "initial_failure": {
         "status": "FAIL_AUTHORED_MATERIAL_DICTIONARY_LINQ_INFERENCE",
@@ -2726,6 +2730,113 @@
             "bytes": 1259,
             "sha256": "4fa1e34501cc7873993fcc2fc567b180527cc1ff3a5442f97cdd224b1a32258a"
           }
+        }
+      },
+      "success": {
+        "status": "PASS_AUTHORED_ACTUAL_EXPORT_MATERIAL_VALUE_ROUTE_GATE",
+        "run_id": 45948761058,
+        "job_id": 140339454503,
+        "head": "b849a677830c036dc3ef7bca128285da8b407cf7",
+        "conclusion": "success",
+        "guard_run_id": 45948761021,
+        "guard_conclusion": "success",
+        "artifact_id": 15175214768,
+        "archive": "clients/GT/sessions/20261127-material-value-route-binding/actual-run-45948761058.zip",
+        "archive_bytes": 5910,
+        "archive_sha256": "ae57f401ce1760b513c593b61bbe83bcb31034112dd034a290b54e1e54c37e3e",
+        "archive_git_blob": "787b983fe83a6bf3ee6545f94bcf836c8e5b0430",
+        "archive_crc_sha_size_verified_locally": true,
+        "public_tool_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+        "actual_public_export_collections": 9,
+        "actual_exported_documents": 13,
+        "actual_native_scene_files": 2,
+        "complete_value_bound_renderers": 2,
+        "complete_value_bound_submeshes": 4,
+        "complete_vertex_byte_bound_renderers": 2,
+        "complete_vertex_byte_bound_submeshes": 4,
+        "material_value_slots_per_route": {
+          "color": 8,
+          "float": 8,
+          "int": 8
+        },
+        "unique_materials": 2,
+        "unique_saved_value_slots": {
+          "color": 4,
+          "float": 4,
+          "int": 4
+        },
+        "total_regression_tests": 82,
+        "new_material_value_tests": 22,
+        "counterfactual_count": 16,
+        "V2_pass_V3_reject_controls": 5,
+        "controls": [
+          "actual_YAML_tint_RGB_value_drift",
+          "actual_YAML_tint_alpha_value_drift",
+          "actual_YAML_float_value_drift",
+          "actual_YAML_int_value_drift",
+          "actual_YAML_missing_color_property"
+        ],
+        "same_route_material_values_verified": true,
+        "same_route_vertex_bytes_verified": true,
+        "shader_property_runtime_semantics_verified": false,
+        "original_assets_read": false,
+        "original_serialized_source_verified": false,
+        "production_auto_exporter_selection": false,
+        "production_renderer_parity_verified": false,
+        "Unity_render_executed": false,
+        "Android_device": false,
+        "XAPK": false,
+        "members": {
+          "build.json": {
+            "bytes": 576,
+            "sha256": "7963e2fa3fb3dd8ec803187c7f810b40e867ae294596aca2737b9ce9fbaadf3b"
+          },
+          "report.json": {
+            "bytes": 1185,
+            "sha256": "9ce13356abce9b17da9a66b9b1e0edddf680b0840707a64ffe657e1274351d51"
+          },
+          "route-join.json": {
+            "bytes": 5072,
+            "sha256": "8caa4c46ec7461675d7cf247b31e42502043b2a2a585069b1cfde0aef502b825"
+          },
+          "test_b03_verify_renderer_material_links.py.log": {
+            "bytes": 2556,
+            "sha256": "e0a5436472be1ee6cbba1c9791fbd8a5fc0814ed63bd1ce3880fe795fb775bdf",
+            "tests": 17
+          },
+          "test_gt_material_route_values.py.log": {
+            "bytes": 2725,
+            "sha256": "1d1f3959cbb430542556f165b0b9e47cf0b80b4360520251aae5005dbb0ad9e0",
+            "tests": 22
+          },
+          "test_gt_mesh_vertex_payload.py.log": {
+            "bytes": 1881,
+            "sha256": "e9a5777db7ea2cc634a1cfa1334071c235dfb2d6ea709d25edcd4ee6db88bab5",
+            "tests": 15
+          },
+          "test_gt_renderer_submesh_routes.py.log": {
+            "bytes": 3004,
+            "sha256": "b1e73272be484a81e86fb0a64e9b65ac36f2cd34564573d705515afb05dd6d6a",
+            "tests": 21
+          },
+          "test_gt_verify_original_mesh_export.py.log": {
+            "bytes": 1259,
+            "sha256": "e4e32f166684577109ad71511f51b0ee14b6d918b6a7ea0f56edfc5d0186931c",
+            "tests": 7
+          },
+          "tool-smoke.log": {
+            "bytes": 63,
+            "sha256": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+          },
+          "witness.log": {
+            "bytes": 41,
+            "sha256": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
+          }
+        },
+        "compiled_files": {
+          "AssetRipper.Export.UnityProjects.dll": "324824503daba8fc7b715d32a4b89a0969273ea1c040bfa32c8675469201f6a5",
+          "RaftAuthoredSceneRouteWitness.cs": "66509645b85c99ca0e75776d15ec328b6a4a3346f9fcb301ca818edb80307b80",
+          "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
         }
       }
     }
