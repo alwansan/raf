@@ -134,17 +134,22 @@ def verify(project,out,run_id,decoder,exit_code):
         result.update(observed_editor_graphics_api=raw.get("editor_graphics_api"),observed_editor_checkpoint=raw.get("checkpoint"),observed_editor_error=raw.get("error"),observed_editor_bundle_bytes=raw.get("bundle_bytes"))
         need(exit_code==0 and raw.get("status")=="OBSERVED_CANDIDATE_ANDROID_VULKAN_BUNDLE","actual_Unity_job_not_success")
         bundle=bounded(out/"gt-keyword-candidate.bundle")
-        report=gate.check_receipt(c,raw,shader,contract_bytes,bundle,run_id)
+        need(raw.get("bundle_sha256")==p.sha(bundle) and type(raw.get("bundle_bytes")) is int and raw["bundle_bytes"]==len(bundle),"Unity_bundle_byte_commitment")
         expected_keys=gate.checked_keys(c["passes"][0])
         need({keyword_set(k["keywords"]) for k in raw["material_routes"]}==expected_keys and len(raw["material_routes"])==len(expected_keys) and raw["material_restored_empty"] is True,"actual_material_keyword_API_state")
         trees=[x.read_typetree() for x in UnityPy.load(bundle).objects if x.type.name=="Shader"]
         need(len(trees)==1 and list(trees[0]["platforms"])==[18],"actual_single_Android_Vulkan_shader")
         [(platform,segments)]=list(decoded_platforms(trees[0]));need(platform==18,"Vulkan_only_platform")
         parsed=trees[0]["m_ParsedForm"];entries=records(segments)
+        def table_rows(rows):
+            return [dict(blob=r.get("m_BlobIndex"),indices=r.get("m_KeywordIndices"),tier=r.get("m_ShaderHardwareTier"),global_indices=r.get("m_GlobalKeywordIndices"),local_indices=r.get("m_LocalKeywordIndices")) for r in rows]
+        (out/"authored-serialized-topology.json").write_bytes(dump(dict(keyword_names=parsed.get("m_KeywordNames"),keyword_flags=list(parsed.get("m_KeywordFlags",[])),passes=[dict(name=q.get("m_State",{}).get("m_Name"),type=q.get("m_Type"),tags=q.get("m_State",{}).get("m_Tags"),tables={k:dict(legacy=table_rows(v.get("m_SubPrograms",[])),player=[table_rows(bucket) for bucket in v.get("m_PlayerSubPrograms",[])]) for k,v in q.items() if k.startswith("prog")}) for sub in parsed["m_SubShaders"] for q in sub["m_Passes"]],record_count=len(entries))))
         with tempfile.TemporaryDirectory(prefix="gt-keyword-modules-") as t:
             decode=decode_factory(decoder,Path(t),out)
             detail=gate.verify_parsed(c,parsed,entries,decode,authored_marker_mode=True)
+            (out/"authored-decoded-detail.json").write_bytes(dump(detail))
             verify_marker_rows(detail["rows"])
+            report=gate.check_receipt(c,raw,shader,contract_bytes,bundle,run_id,decoded=detail)
             # Real bundle counterfactuals: corrupt only private copied table
             # references/keys, never regenerate or mutate the actual bundle.
             from copy import deepcopy
@@ -168,6 +173,20 @@ def verify(project,out,run_id,decoder,exit_code):
                 try:gate.verify_parsed(c,q,entries,decode,authored_marker_mode=True)
                 except ValueError as e:controls[name]=str(e)
                 else:raise ValueError("actual_bundle_control_accepted:"+name)
+            if report["combined_vertex_only_callback_passes"]:
+                for label,mut in (
+                    ("missing_decoded_fragment",lambda d:d["rows"].remove(next(r for r in d["rows"] if r["stage"]=="Fragment"))),
+                    ("different_combined_blob",lambda d:next(r for r in d["rows"] if r["stage"]=="Fragment").update(serialized_blob_indices=[99999])),
+                    ("separate_fragment_table",lambda d:next(r for r in d["rows"] if r["stage"]=="Fragment").update(combined_table=False)),
+                ):
+                    bad=deepcopy(detail);mut(bad)
+                    try:gate.check_receipt(c,raw,shader,contract_bytes,bundle,run_id,decoded=bad)
+                    except ValueError as e:controls[label]=str(e)
+                    else:raise ValueError("actual_combined_control_accepted:"+label)
+                bad=deepcopy(raw);v=deepcopy(next(r for r in raw["observations"] if r["stage"]=="Vertex"));v["stage"]="Fragment";bad["observations"].append(v)
+                try:gate.check_receipt(c,bad,shader,contract_bytes,bundle,run_id,decoded=detail)
+                except ValueError as e:controls["partial_fragment_callback"]=str(e)
+                else:raise ValueError("actual_partial_callback_accepted")
             swapped=deepcopy(detail["rows"]);swapped[0]["module"],swapped[2]["module"]=swapped[2]["module"],swapped[0]["module"]
             try:verify_marker_rows(swapped)
             except ValueError as e:controls["wrong_stage_program_marker"]=str(e)

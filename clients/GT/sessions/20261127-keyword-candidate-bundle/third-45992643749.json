@@ -1,0 +1,72 @@
+{
+  "status": "ACTUAL_UNITY_AUTHORED_BUNDLE_BUILT_INDEPENDENT_ACCEPTANCE_BLOCKED",
+  "run": 45992643749,
+  "job": 140484089089,
+  "head": "de0ac1de51e06cbb8fd60426ee3478d13eb2d093",
+  "conclusion": "failure",
+  "guard": 45992643947,
+  "source_regressions": 42,
+  "editor_success": true,
+  "editor_api": "Vulkan",
+  "editor_device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+  "actual_pass_count": 1,
+  "actual_registered_routes": 4,
+  "actual_material_routes": 4,
+  "material_restored_empty": true,
+  "actual_scope_observations": {
+    "global_overridable": true,
+    "local_overridable": false
+  },
+  "observed_callback_rows": 12,
+  "observed_vertex_callback_routes": 4,
+  "observed_fragment_callback_routes": 0,
+  "callback_pass_type": "Normal",
+  "callback_platform": "Vulkan",
+  "reason": "unity_compiler_route_coverage",
+  "actual_decoded_modules_verified": 0,
+  "candidate_sha256": "d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537",
+  "contract_sha256": "a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f",
+  "bundle": {
+    "bytes": 6534,
+    "sha256": "6f0777213ac238677d51b97c3bc975e38347bf2fdcf94d85f92e7bb42d93a034",
+    "git_blob": "f1d9ab1480261b6c811b169ffaeff9d9b2364d3f"
+  },
+  "raw": {
+    "bytes": 4361,
+    "sha256": "3d0ae8c9519e73c1a6c0c19302cc883e48b52416118742b4cd9c5a4d407d27ca",
+    "git_blob": "1fae2eb993543e7a9d42ebf5ac46bf136b62c4a7"
+  },
+  "original_verified": {
+    "bytes": 384,
+    "sha256": "22ab7361f7337641b9628b548381fcb062160507f4df535be9810fcbaf88955f",
+    "git_blob": "ba093c03ffca4e619122ff32f6605d3bc576df63"
+  },
+  "archive": {
+    "id": 15194078170,
+    "bytes": 18747,
+    "sha256": "e5124c5670e76d537a8b1a36568f38a5f7a074adf720dc2e480bde030bd84f1a",
+    "crc_verified": true,
+    "member_count": 15,
+    "member_hashes": {
+      "candidate-contract.json": "a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f",
+      "candidate.shader": "d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537",
+      "docker-image-id.txt": "0c0e0f0d2e36e2be9753eb07e831c89fcd50a677b19685a8e85a701d6fcb75f9",
+      "docker-build.log": "f6bdbb44aca253db4b95cbf96a705cf98529e5c21c7d636ada65997c69809780",
+      "gt-keyword-candidate.bundle": "6f0777213ac238677d51b97c3bc975e38347bf2fdcf94d85f92e7bb42d93a034",
+      "route-packet.json": "8eeefc73d3d8fd2c64812c63bdfd287fe50fbcaf86bef788628f03ef9c5a8722",
+      "source-manifest.json": "14a7b9b1e3843edc51a13db0413c0ff58a1a73519e777eb1b988a21cea17b331",
+      "source-proof.json": "e485af51e75906c504f392612e9528509b78709dbd39961e734c2a77f028b6d2",
+      "tool-versions.txt": "02391550e0b0e25498a2a045b37fd512f2bd49485036f31c8ca1b700380d1a3e",
+      "unity-raw.json": "3d0ae8c9519e73c1a6c0c19302cc883e48b52416118742b4cd9c5a4d407d27ca",
+      "verified.json": "22ab7361f7337641b9628b548381fcb062160507f4df535be9810fcbaf88955f",
+      "test_gt_keyword_candidate_bundle_contract.py.log": "22356fe0eeb6f16aea63582d60b57b0cff8ac06d7f01cc9c0de4b1a5dd17d298",
+      "test_gt_keyword_candidate_plan.py.log": "7f115de6427f2852339f50b1368c9f229aa0c4f2c57354be7f240f2f8c7a1cef",
+      "test_gt_runtime_keyword_contract.py.log": "b2f7558b5b4fd28eb6833058c9d88b9277b5d1d4f134388604e96fdaa6d50244",
+      "test_gt_runtime_keyword_integration.py.log": "32dd4d948ffed1be54683f373650b0cecf96c5c8afa169d071834e29e598ed8f"
+    }
+  },
+  "original_assets_read": false,
+  "original_runtime_verified": false,
+  "production_activation": false,
+  "installation_allowed": false
+}
