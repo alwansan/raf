@@ -1,0 +1,35 @@
+{
+  "run": 45961831652,
+  "job": 140381208160,
+  "head": "ec6f6a8dc080d24d21c6680cc9ea8388ab92b8e7",
+  "conclusion": "failure",
+  "regression_tests": 242,
+  "new_tests": 8,
+  "public_build": "success",
+  "reason": "System.OverflowException in AuthoredBC3: checked narrowing conversion of selector bytes/565 endpoints; no actual PNG proof ran",
+  "artifact": 15181236191,
+  "archive": {
+    "bytes": 8390,
+    "sha256": "90352767518827fa94bd933c16ab8c4e2c1566b9b71c29c0c8ccd9b1a605f343",
+    "git_blob": "b2135655c3be7c8e75a68357fa0b5b2a2ba2ec9e",
+    "crc_verified": true,
+    "member_count": 15,
+    "member_sha256": {
+      "bc3-witness.log": "b8d92b1fe04c6852533736adee79a364b37c8736118320f41388b133f509ebce",
+      "build.json": "738269d17553e2d3a2b506f67288066b0e9ae3c312579d1fab09beef39816887",
+      "test_b03_verify_renderer_material_links.py.log": "63748bc69ae4637ba63f38c90ad735fcc0ccc466dced78c535016db0e3fc8dcb",
+      "test_gt_imported_bc3_route_pixels.py.log": "99d0ea51a5f95a3274a3cb4c0821d92bb44930849e93a2c8ac04b15dfbfea007",
+      "test_gt_imported_png_route_importer.py.log": "ff22c782f5ade85e5f24658557bcd64d8d9e3177b1d972000eeaee97657e7704",
+      "test_gt_imported_png_route_pixels.py.log": "560eb866f17160d3e4289d2bc61b2060c67e2490b999826536a9e94e7eac2d72",
+      "test_gt_material_route_keyword_state.py.log": "c22e6eb3c314c559f11f518eaf38ab9e308d4fe58393dd4e49f70deb0d3fd56a",
+      "test_gt_material_route_values.py.log": "9c2dd171476b80758f486944a588fe1add0df4734cc3ccf895e638f134fa9215",
+      "test_gt_mesh_vertex_payload.py.log": "0e5bdd5b4bdc1b38279c43f5cf5c67df4f529f42d0b700110df796f255a263be",
+      "test_gt_native_texture_route_sampler.py.log": "764e0074ed834b83a5fbd879602b4a4beafdb3d57361e0c9f74e745e53619666",
+      "test_gt_renderer_submesh_routes.py.log": "bd6729bb65aa1a54919e1819988a0d2ca6fcee47a47d76d12d4ab0eae3d7a1d5",
+      "test_gt_streamed_texture_route_payload.py.log": "b8082884799acf92334c9822e8238cb63adbf30ff089c4669d63a760cafa9a2a",
+      "test_gt_texture_route_payload.py.log": "5147f95e165b329039aeb0eed7efac6d8ba33acdf0e37707763098103b8f439a",
+      "test_gt_verify_original_mesh_export.py.log": "12111dbf9c901c6a936e86ae43bc60e815fee8d9d82d2553bad25e9cea93e723",
+      "tool-smoke.log": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+    }
+  }
+}

@@ -138,12 +138,12 @@ public static class RaftAuthoredSceneRouteWitness
                 alpha|=(ulong)((x+2*y+b+texture)%8)<<(3*p);
                 color|=(uint)((x+y+b+2*texture)%4)<<(2*p);
             }
-            for(int j=0;j<6;j++)bytes[off+2+j]=(byte)(alpha>>(8*j));
+            for(int j=0;j<6;j++)bytes[off+2+j]=(byte)((alpha>>(8*j))&0xffUL);
             ushort c0=(ushort)(six?0x07e0:0xf800);
             ushort c1=(ushort)(six?0xffff:0x001f);
-            bytes[off+8]=(byte)c0;bytes[off+9]=(byte)(c0>>8);
-            bytes[off+10]=(byte)c1;bytes[off+11]=(byte)(c1>>8);
-            for(int j=0;j<4;j++)bytes[off+12+j]=(byte)(color>>(8*j));
+            bytes[off+8]=(byte)(c0&0xff);bytes[off+9]=(byte)(c0>>8);
+            bytes[off+10]=(byte)(c1&0xff);bytes[off+11]=(byte)(c1>>8);
+            for(int j=0;j<4;j++)bytes[off+12+j]=(byte)((color>>(8*j))&0xffU);
         }
         return bytes;
     }
