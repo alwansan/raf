@@ -1,0 +1,158 @@
+{
+    "schema": 1,
+    "errors": 0,
+    "pass_count": 1,
+    "status": "OBSERVED_CANDIDATE_ANDROID_VULKAN_BUNDLE",
+    "run_id": "45992643749-1-de0ac1de51e06cbb8fd60426ee3478d13eb2d093",
+    "unity_version": "2021.3.45f2",
+    "shader_name": "GT/AuthoredKeywordCandidate",
+    "candidate_sha256": "d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537",
+    "contract_sha256": "a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f",
+    "bundle_sha256": "6f0777213ac238677d51b97c3bc975e38347bf2fdcf94d85f92e7bb42d93a034",
+    "error": "",
+    "checkpoint": "verified",
+    "editor_graphics_api": "Vulkan",
+    "editor_graphics_device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+    "bundle_bytes": 6534,
+    "android_vulkan_only": true,
+    "original_assets_read": false,
+    "material_restored_empty": true,
+    "scopes": [
+        {
+            "name": "GT_AUTHORED_GLOBAL",
+            "overridable": true
+        },
+        {
+            "name": "GT_AUTHORED_LOCAL",
+            "overridable": false
+        }
+    ],
+    "observations": [
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": []
+        },
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": []
+        },
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": []
+        },
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": [
+                "GT_AUTHORED_LOCAL"
+            ]
+        },
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": [
+                "GT_AUTHORED_LOCAL"
+            ]
+        },
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": [
+                "GT_AUTHORED_LOCAL"
+            ]
+        },
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": [
+                "GT_AUTHORED_GLOBAL"
+            ]
+        },
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": [
+                "GT_AUTHORED_GLOBAL"
+            ]
+        },
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": [
+                "GT_AUTHORED_GLOBAL"
+            ]
+        },
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": [
+                "GT_AUTHORED_GLOBAL",
+                "GT_AUTHORED_LOCAL"
+            ]
+        },
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": [
+                "GT_AUTHORED_GLOBAL",
+                "GT_AUTHORED_LOCAL"
+            ]
+        },
+        {
+            "pass_name": "GT_CANDIDATE_PASS",
+            "pass_type": "Normal",
+            "stage": "Vertex",
+            "platform": "Vulkan",
+            "keywords": [
+                "GT_AUTHORED_GLOBAL",
+                "GT_AUTHORED_LOCAL"
+            ]
+        }
+    ],
+    "material_routes": [
+        {
+            "keywords": [
+                "GT_AUTHORED_GLOBAL"
+            ]
+        },
+        {
+            "keywords": []
+        },
+        {
+            "keywords": [
+                "GT_AUTHORED_GLOBAL",
+                "GT_AUTHORED_LOCAL"
+            ]
+        },
+        {
+            "keywords": [
+                "GT_AUTHORED_LOCAL"
+            ]
+        }
+    ]
+}

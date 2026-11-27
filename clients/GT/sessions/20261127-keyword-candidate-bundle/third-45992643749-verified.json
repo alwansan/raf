@@ -1,0 +1,13 @@
+{
+  "Android_device": false,
+  "XAPK": false,
+  "observed_editor_bundle_bytes": 6534,
+  "observed_editor_checkpoint": "verified",
+  "observed_editor_error": "",
+  "observed_editor_graphics_api": "Vulkan",
+  "original_assets_read": false,
+  "original_runtime_verified": false,
+  "production_activation": false,
+  "reason": "unity_compiler_route_coverage",
+  "status": "INCONCLUSIVE"
+}

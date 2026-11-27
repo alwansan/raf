@@ -8,14 +8,14 @@ class CandidateBundleContract(unittest.TestCase):
     def setUp(self):
         self.manifest,self.packet,self.proof,self.shader,self.c=w.payload()
         self.contract=w.dump(self.c);self.bundle=b"authored fake bundle only"
-        self.r=dict(schema=1,status="OBSERVED_CANDIDATE_ANDROID_VULKAN_BUNDLE",run_id="fixture",unity_version="2021.3.45f2",errors=0,shader_name=self.c["shader_name"],android_vulkan_only=True,editor_graphics_api="Vulkan",candidate_sha256=g.p.sha(self.shader),contract_sha256=g.p.sha(self.contract),bundle_sha256=g.p.sha(self.bundle),bundle_bytes=len(self.bundle),original_assets_read=False,pass_count=1,error="",scopes=[dict(name=x["name"],overridable=x["scope"]=="global") for x in self.c["scopes"]],observations=[dict(pass_name=w.PASS,pass_type="Normal",stage=s,platform="Vulkan",keywords=v["keywords"]) for v in self.c["passes"][0]["variants"] for s in ("Vertex","Fragment")])
+        self.r=dict(schema=1,status="OBSERVED_CANDIDATE_ANDROID_VULKAN_BUNDLE",run_id="fixture",unity_version="2021.3.45f2",errors=0,checkpoint="verified",shader_name=self.c["shader_name"],android_vulkan_only=True,editor_graphics_api="Vulkan",candidate_sha256=g.p.sha(self.shader),contract_sha256=g.p.sha(self.contract),bundle_sha256=g.p.sha(self.bundle),bundle_bytes=len(self.bundle),original_assets_read=False,pass_count=1,error="",scopes=[dict(name=x["name"],overridable=x["scope"]=="global") for x in self.c["scopes"]],observations=[dict(pass_name=w.PASS,pass_type="Normal",stage=s,platform="Vulkan",keywords=v["keywords"]) for v in self.c["passes"][0]["variants"] for s in ("Vertex","Fragment")])
         names=[x["name"] for x in self.c["scopes"]];flags=[x["source_flag"] for x in self.c["scopes"]]
         table=[dict(m_KeywordIndices=[names.index(n) for n in v["keywords"]],m_BlobIndex=i) for i,v in enumerate(self.c["passes"][0]["variants"])]
         state={"m_Name":w.PASS,"m_Tags":{"tags":[["LightMode","Always"]]}}
         self.parsed={"m_Name":w.SHADER,"m_KeywordNames":names,"m_KeywordFlags":flags,"m_SubShaders":[{"m_Passes":[{"m_Type":0,"m_State":state,"progVertex":{"m_SubPrograms":table},"progFragment":{"m_SubPrograms":[]}}]}]}
         self.entries=[(0,bytes([i])) for i in range(4)]
         self.decode=lambda b:[dict(sha256=g.p.sha(b+bytes([model])),model=model,marker_constants=[(11 if model==0 else 21)+b[0]],spirv_val_exit=0) for model in (0,4)]
-    def check(self,r=None):return g.check_receipt(self.c,self.r if r is None else r,self.shader,self.contract,self.bundle,"fixture")
+    def check(self,r=None,**kw):return g.check_receipt(self.c,self.r if r is None else r,self.shader,self.contract,self.bundle,"fixture",**kw)
     def decoded(self,q=None,**kw):return g.verify_parsed(self.c,self.parsed if q is None else q,self.entries,self.decode,**kw)
     def test_exact_callback_receipt(self):
         self.assertEqual(self.check()["observed_callback_route_stage_count"],8)
@@ -67,6 +67,40 @@ class CandidateBundleContract(unittest.TestCase):
             if value is None:r.pop("editor_graphics_api")
             else:r["editor_graphics_api"]=value
             with self.assertRaisesRegex(ValueError,"receipt_or_bytes_mismatch"):self.check(r)
+    def vertex_only(self):
+        r=deepcopy(self.r);r["observations"]=[x for x in r["observations"] if x["stage"]=="Vertex"]
+        return r
+    def test_vertex_only_callback_requires_decoded_same_blob_join(self):
+        r=self.vertex_only()
+        with self.assertRaisesRegex(ValueError,"unity_compiler_route_coverage"):self.check(r)
+        d=self.decoded(authored_marker_mode=True)
+        got=self.check(r,decoded=d)
+        self.assertEqual(got["observed_callback_route_stage_count"],4)
+        self.assertEqual(got["observed_fragment_callback_routes"],0)
+        self.assertEqual(got["fragment_routes_verified_by_combined_bundle_join"],4)
+        self.assertEqual(got["combined_vertex_only_callback_passes"],[0])
+    def test_partial_fragment_or_vertex_callback_rejected_even_with_both_modules(self):
+        d=self.decoded(authored_marker_mode=True)
+        for stage in ("Vertex","Fragment"):
+            r=self.vertex_only()
+            if stage=="Vertex":r["observations"].pop()
+            else:r["observations"].append(deepcopy(self.r["observations"][1]))
+            with self.assertRaisesRegex(ValueError,"unity_compiler_route_coverage"):self.check(r,decoded=d)
+    def test_combined_join_rejects_missing_wrong_stage_and_blob_identity(self):
+        r=self.vertex_only()
+        for mut in (lambda d:d["rows"].pop(),lambda d:d["rows"][1].update(combined_table=False),
+                    lambda d:d["rows"][1].update(serialized_blob_indices=[999]),
+                    lambda d:d["rows"][1].update(source_ref="program-999"),
+                    lambda d:d["rows"][1]["module"].update(model=0),
+                    lambda d:d["rows"][1]["module"].update(spirv_val_exit=1),
+                    lambda d:d["rows"][1]["module"].update(sha256=d["rows"][0]["module"]["sha256"])):
+            d=self.decoded(authored_marker_mode=True);mut(d)
+            with self.assertRaisesRegex(ValueError,"combined_decoded_"):self.check(r,decoded=d)
+    def test_separate_stage_table_cannot_explain_vertex_only_callbacks(self):
+        q=deepcopy(self.parsed);p=q["m_SubShaders"][0]["m_Passes"][0]
+        p["progFragment"]=deepcopy(p["progVertex"])
+        d=self.decoded(q,authored_marker_mode=True)
+        with self.assertRaisesRegex(ValueError,"combined_decoded_stage_identity"):self.check(self.vertex_only(),decoded=d)
     def test_receipt_cannot_authorize(self):
         self.assertFalse(self.decoded(authored_marker_mode=True)["installation_allowed"])
 if __name__=="__main__":unittest.main()
