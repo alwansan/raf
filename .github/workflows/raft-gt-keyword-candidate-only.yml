@@ -1,0 +1,86 @@
+name: GT candidate-only original keyword router authored compiler gate (NO ASSETS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-keyword-candidate-only.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gt-keyword-candidate-only-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  authored-candidate:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only candidate planner and authored test code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/gt_keyword_candidate_plan.py
+            /scripts/gt_keyword_candidate_compiler_probe.py
+            /scripts/gt_runtime_keyword_contract.py
+            /scripts/gt_original_921_shaderlab.py
+            /scripts/gt_verify_921_shader_bundle.py
+            /tests/test_gt_keyword_candidate_plan.py
+            /tests/test_gt_runtime_keyword_contract.py
+            /tests/test_gt_runtime_keyword_integration.py
+            /.github/workflows/raft-gt-keyword-candidate-only.yml
+      - name: Prepare real Vulkan source compilers
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          mkdir gt-keyword-candidate-results
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq glslang-tools spirv-tools
+          { glslangValidator --version; spirv-val --version; cpp --version; } > gt-keyword-candidate-results/tool-versions.txt
+      - name: Run exact source-join candidate and legacy route regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in test_gt_keyword_candidate_plan.py test_gt_runtime_keyword_contract.py test_gt_runtime_keyword_integration.py; do
+            python3 -B -m unittest discover -s tests -p "$f" -v 2>&1 | tee "gt-keyword-candidate-results/$f.log"
+          done
+      - name: Compile and validate all eight actual authored Vulkan stage markers and reject unmapped control
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B -m scripts.gt_keyword_candidate_compiler_probe --out gt-keyword-candidate-results/compiler.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          import re
+          d=Path('gt-keyword-candidate-results')
+          r=json.loads((d/'compiler.json').read_text())
+          assert r['status']=='PASS_AUTHORED_CANDIDATE_ROUTER_COMPILER_ONLY'
+          assert r['actual_compiled_and_validated_stages']==8 and r['actual_unmapped_compiler_rejections']==1
+          assert all(r[k] is False for k in ('original_assets_read','original_runtime_verified','production_activation','Unity_executed','Android_device','XAPK'))
+          counts={}
+          for f in d.glob('test_*.log'):
+              t=f.read_text()
+              n=re.search(r'^Ran (\d+) tests? in ',t,re.M)
+              assert n and re.search(r'^OK$',t,re.M)
+              counts[f.name]=int(n[1])
+          assert counts=={'test_gt_keyword_candidate_plan.py.log':15,'test_gt_runtime_keyword_contract.py.log':9,'test_gt_runtime_keyword_integration.py.log':5},counts
+          (d/'summary.json').write_text(json.dumps(dict(status=r['status'],head='${{ github.sha }}',run='${{ github.run_id }}',tests=counts,cpp_authored_routes=1156,actual_compiled_and_validated_stages=8,original_assets_read=False,production_activation=False,original_runtime_verified=False),sort_keys=True,indent=2)+'\n')
+          PY
+      - name: Retain bounded authored compiler and regression receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-keyword-candidate-only-${{ github.run_id }}
+          path: gt-keyword-candidate-results/
+          retention-days: 14
+          if-no-files-found: warn

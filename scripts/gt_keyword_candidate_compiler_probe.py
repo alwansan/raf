@@ -11,7 +11,9 @@ import subprocess
 import tempfile
 
 from scripts import gt_keyword_candidate_plan as m
-from tests.test_gt_keyword_candidate_plan import make,A,B
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"tests"))
+from test_gt_keyword_candidate_plan import make,A,B
 
 def run(args,**kw):
     return subprocess.run(args,check=True,text=True,capture_output=True,timeout=30,**kw).stdout
