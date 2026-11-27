@@ -1,0 +1,59 @@
+{
+  "status": "FAILED_ACTUAL_UNITY_ROUTE_PRECONDITION",
+  "run": 45969407039,
+  "job": 140405860104,
+  "tested_head": "d2385ff469cd64ecf5ddd648af23c9b4fe36468e",
+  "source_regressions": 271,
+  "V11_V12_controls": 37,
+  "unique_authored_pixels_exact": 70,
+  "editor": "2021.3.45f2",
+  "backend": "Vulkan",
+  "active_color_space": "Linear",
+  "raw": {
+    "status": "INCONCLUSIVE",
+    "run_id": "45969407039-1-d2385ff469cd64ecf5ddd648af23c9b4fe36468e",
+    "editor": "2021.3.45f2",
+    "backend": "Vulkan",
+    "active_color_space": "Linear",
+    "manifest_sha256": "27fac6ddd62eac50b16107f6dc01a592a43b5fc87ac5a705d0ef5235fcfcc9a3",
+    "error": "InvalidOperationException:actual_material_MainTex_missing",
+    "textures": [],
+    "routes": [],
+    "original_assets_read": false,
+    "shader_adapter": true,
+    "scene_route_replay": true
+  },
+  "verified": {
+    "Android_device": false,
+    "XAPK": false,
+    "actual_Unity_import_verified": false,
+    "reason": "actual_Unity_probe_required:InvalidOperationException:actual_material_MainTex_missing",
+    "status": "INCONCLUSIVE"
+  },
+  "log_evidence": [
+    "2026-11-27T08:58:56.7075502Z Start importing Assets/GTExport/aa70389144cbcf042b642ba537339861.mat using Guid(aa70389144cbcf042b642ba537339861) Importer(-1,00000000000000000000000000000000) Failed to load '/github/workspace/gt-normal-project/Assets/GTAdapters/Adapter1.shader'. File may be corrupted or was serialized with a newer version of Unity.",
+    "2026-11-27T08:58:56.7092490Z Start importing Assets/GTExport/9c71b9b12dc556143840d01c8973d87b.mat using Guid(9c71b9b12dc556143840d01c8973d87b) Importer(-1,00000000000000000000000000000000) Failed to load '/github/workspace/gt-normal-project/Assets/GTAdapters/Adapter0.shader'. File may be corrupted or was serialized with a newer version of Unity.",
+    "2026-11-27T08:58:57.8594895Z InvalidOperationException:actual_material_MainTex_missing",
+    "2026-11-27T08:59:02.9432512Z ##[error]Build failed with exit code 2"
+  ],
+  "archive": {
+    "id": 15184716175,
+    "bytes": 26392,
+    "sha256": "600861b43df1baec2f1b54cb3a81ed8ea9245d90ae4bbeb3d496c176a65955ce",
+    "git_blob_sha1": "c433a18068480d9fd7a54c0e04ca11658f289926",
+    "zip_crc_verified": true,
+    "member_count": 31,
+    "member_sha256": {
+      "normalmap-importer-report.json": "7c73a07dc313cca500e3eeb75865bb1b546e763cf48465c43cf7938fde143299",
+      "normalmap-unity-manifest.json": "27fac6ddd62eac50b16107f6dc01a592a43b5fc87ac5a705d0ef5235fcfcc9a3",
+      "normalmap-unity-raw.json": "efd6a9d1fe92f86d4b6e037caa6a6b90371e0460e666e150b584a507510bbe1e",
+      "normalmap-unity-verified.json": "2fda8893116e8b9926c79ccd76847476862400fbe574e3491b119230acf783e9"
+    },
+    "actual_png_rgba_verified": true
+  },
+  "diagnosis": "Actual material importer attempted to load the ShaderLab adapter as a native serialized asset. Original native YAML shader reference type=2 is not an imported shader type=3. Retry changes only that PPtr type byte in two authored staged materials, records before/after SHA, verifies actual shader identity; causal diagnosis remains to be tested.",
+  "original_assets_read": false,
+  "Unity_import_verified": false,
+  "Android_device": false,
+  "XAPK": false
+}

@@ -11,7 +11,7 @@ using UnityEngine.Experimental.Rendering;
 public static class SyntheticNormalRouteValidation
 {
     [Serializable] public class Id { public string path,guid; public long file_id; public string sha256,meta_sha256; }
-    [Serializable] public class Route { public string key; public Id mesh; public Id[] materials,textures; public int vertex_count; public int[] index_counts,base_vertices; public float[] uv; }
+    [Serializable] public class Route { public string key; public Id mesh; public Id[] materials,textures,shaders; public int vertex_count; public int[] index_counts,base_vertices; public float[] uv; }
     [Serializable] public class Manifest { public Id[] textures; public Route[] routes; public string run_id; }
     [Serializable] public class Mip { public int width,height,level; public float[] packed,normal; }
     [Serializable] public class Imported {
@@ -25,7 +25,7 @@ public static class SyntheticNormalRouteValidation
         public string format,graphics_format,readback_status,cpu_top_rgba_hex;
         public Mip[] mips;
     }
-    [Serializable] public class SeenRoute { public string key; public Id mesh; public Id[] materials,textures; public int vertex_count; public int[] index_counts,base_vertices; public float[] uv; }
+    [Serializable] public class SeenRoute { public string key; public Id mesh; public Id[] materials,textures,shaders; public int vertex_count; public int[] index_counts,base_vertices; public float[] uv; }
     [Serializable] public class Receipt {
         public string status,run_id,editor,backend,active_color_space,manifest_sha256,error;
         public Imported[] textures; public SeenRoute[] routes; public bool original_assets_read,shader_adapter,scene_route_replay;
@@ -123,9 +123,14 @@ public static class SyntheticNormalRouteValidation
                 var renderer=go.AddComponent<MeshRenderer>();renderer.sharedMaterials=materials;
                 var actual=renderer.sharedMaterials;
                 Need(actual.Length==mesh.subMeshCount && actual.Length==2,"submesh_material_count");
-                var ids=new List<Id>();var texIds=new List<Id>();var uv=new List<float>();
+                var ids=new List<Id>();var texIds=new List<Id>();var shaderIds=new List<Id>();var uv=new List<float>();
                 for(int i=0;i<actual.Length;i++) {
-                    Need(actual[i]!=null && actual[i].HasProperty("_MainTex"),"actual_material_MainTex_missing");
+                    Need(actual[i]!=null,"actual_material_missing");
+                    var sh=actual[i].shader;Need(sh!=null && !ShaderUtil.ShaderHasError(sh),"actual_material_shader_missing_or_error");
+                    var sid=Identity(sh);var expectedShader=route.shaders[i];
+                    Need(sid.guid==expectedShader.guid && sid.file_id==expectedShader.file_id && sid.path==expectedShader.path,"actual_adapted_shader_identity_drift");
+                    shaderIds.Add(sid);
+                    Need(actual[i].HasProperty("_MainTex"),"actual_material_MainTex_missing");
                     var tex=actual[i].GetTexture("_MainTex") as Texture2D;
                     var tid=Identity(tex);ids.Add(Identity(actual[i]));texIds.Add(tid);
                     Need(tid.guid==route.textures[i].guid && tid.file_id==route.textures[i].file_id,"material_texture_route_drift");
@@ -133,7 +138,7 @@ public static class SyntheticNormalRouteValidation
                     var scale=actual[i].GetTextureScale("_MainTex");var offset=actual[i].GetTextureOffset("_MainTex");
                     uv.AddRange(new[]{scale.x,scale.y,offset.x,offset.y});
                 }
-                observed.Add(new SeenRoute{key=route.key,mesh=Identity(filter.sharedMesh),materials=ids.ToArray(),textures=texIds.ToArray(),
+                observed.Add(new SeenRoute{key=route.key,mesh=Identity(filter.sharedMesh),materials=ids.ToArray(),textures=texIds.ToArray(),shaders=shaderIds.ToArray(),
                     vertex_count=mesh.vertexCount,index_counts=Enumerable.Range(0,mesh.subMeshCount).Select(i=>(int)mesh.GetIndexCount(i)).ToArray(),
                     base_vertices=Enumerable.Range(0,mesh.subMeshCount).Select(i=>(int)mesh.GetBaseVertex(i)).ToArray(),uv=uv.ToArray()});
             }

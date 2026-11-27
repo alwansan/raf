@@ -1,9 +1,11 @@
 """V13: stage fresh, V12-verified public export and verify actual Unity observations.
 
 Scene hierarchy is a trace-driven replay, not an import of the incomplete
-authored scene YAML. Exact exported mesh/material/PNG/meta files are staged.
+authored scene YAML. Exact exported mesh/PNG and material meta are staged.
 Native placeholder shader documents are replaced only in the isolated project
-by a declared authored adapter with the same GUID/local ID. No shader parity.
+by a declared authored adapter with the same GUID/local ID. The material shader
+PPtr changes type 2 (native YAML) to type 3 (imported ShaderLab); all other
+material bytes remain unchanged. No shader parity.
 """
 import argparse
 from copy import deepcopy
@@ -34,6 +36,29 @@ def write(path,value):
 def binary32(value):return struct.unpack("<I",struct.pack("<f",value))[0]
 def as_float(bits):return struct.unpack("<f",struct.pack("<I",bits))[0]
 
+def adapt_material_shader_pointer(raw,shader_ptr):
+    """One bounded authored-only byte edit, not a production material repair."""
+    guid,fid,kind=shader_ptr
+    need(type(guid) is str and re.fullmatch("[0-9a-f]{32}",guid)
+         and fid==4800000 and kind==2,"native_shader_adapter_pointer_required")
+    text=raw.decode("utf-8-sig")
+    heads=list(gate.HEADER.finditer(text))
+    need(len(heads)==1 and int(heads[0][1])==21,"single_authored_material_document_required")
+    before=gate.yaml_tree(text[heads[0].end():],21)
+    need(gate.actual_pointer(before["m_Shader"],"0"*32)==shader_ptr,"material_shader_pointer_drift")
+    prefix=rb"(?m)^([ \t]+m_Shader:[ \t]*\{fileID:[ \t]*4800000,[ \t]*guid:[ \t]*"+guid.encode()+rb",[ \t]*type:[ \t]*)"
+    matches=list(re.finditer(prefix+rb"2(\}[ \t]*\r?$)",raw))
+    need(len(matches)==1,"exact_native_shader_pointer_anchor_required")
+    m=matches[0];pos=m.end(1)
+    patched=raw[:pos]+b"3"+raw[pos+1:]
+    need(len(patched)==len(raw) and patched[:pos]+b"2"+patched[pos+1:]==raw,"material_non_shader_bytes_changed")
+    expected=deepcopy(before);expected["m_Shader"]["type"]=3
+    newtext=patched.decode("utf-8-sig")
+    need(gate.yaml_tree(newtext[heads[0].end():],21)==expected,"material_non_shader_tree_changed")
+    return patched,dict(source_sha256=digest(raw),staged_sha256=digest(patched),
+        shader_guid=guid,shader_file_id=fid,before_type=2,after_type=3,
+        changed_byte_offset=pos,all_other_bytes_exact=True)
+
 def stage(root,project,run_id,receipt,out):
     root,project,out=map(regular_path,(root,project,out))
     need(not project.exists() and project.parent.is_dir() and not out.exists(),"fresh_stage_required")
@@ -45,7 +70,7 @@ def stage(root,project,run_id,receipt,out):
     files,docs=gate.actual_index(root/"project",mapping)
     baseline=gate.compare(objects,externals,mapping,files,docs,vertex_payloads=vertices,material_values=True,material_keywords=True,png_top_mips=proofs,png_normalmap=True,png_importer_states=states)
     need(baseline==actual["baseline"] and baseline[FIELD],"fresh_V12_same_route_recheck")
-    staged={};identities={};adapters=[];scene_sources={}
+    staged={};identities={};adapters=[];material_adapters=[];scene_sources={}
     def put(path,raw):
         need(path.startswith(("Assets/","Packages/","ProjectSettings/")) and ".." not in Path(path).parts and path not in staged,"unique_safe_stage_path")
         staged[path]=raw
@@ -72,6 +97,12 @@ def stage(root,project,run_id,receipt,out):
         else:
             need(cls in (21,28,43) and suffix in (".mat",".png",".asset",".mesh"),"unsupported_staged_asset_class")
             dest="Assets/GTExport/"+guid+suffix
+            if cls==21:
+                source_shader=gate.src_target(key[0],objects[key][1]["m_Shader"],externals)
+                shader_ptr=mapping[source_shader][1]
+                need(source_shader in identities,"staged_shader_adapter_required")
+                raw,patch=adapt_material_shader_pointer(raw,shader_ptr)
+                material_adapters.append(dict(patch,material_guid=guid,material_file_id=fid,meta_sha256=digest(md)))
         put(dest,raw);put(dest+".meta",md)
         result=dict(path=dest,guid=guid,file_id=fid,sha256=digest(raw),meta_sha256=digest(md))
         identities[key]=result
@@ -91,19 +122,19 @@ def stage(root,project,run_id,receipt,out):
         filters=[(k,t) for k,(cl,t) in objects.items() if cl==33 and gate.src_target(k[0],t["m_GameObject"],externals)==go]
         need(len(filters)==1,"exact_source_filter")
         fk,ft=filters[0];mk=gate.src_target(fk[0],ft["m_Mesh"],externals)
-        layout=objects[mk][1];mesh=asset(mk);mats=[];texs=[];uv=[]
+        layout=objects[mk][1];mesh=asset(mk);mats=[];texs=[];shaders=[];uv=[]
         for raw in tree["m_Materials"]:
             mat=gate.src_target(key[0],raw,externals)
             ms=objects[mat][1];shader=gate.src_target(mat[0],ms["m_Shader"],externals)
-            asset(shader);mats.append(asset(mat))
+            shaders.append(asset(shader));mats.append(asset(mat))
             env=gate.normalize_texenvs(ms["m_SavedProperties"]["m_TexEnvs"])
             need(set(env)=={"_MainTex"},"exact_authored_texenv_scope")
             ptr,transform=env["_MainTex"]
             tex=gate.src_target(mat[0],{"m_FileID":ptr[0],"m_PathID":ptr[1]},externals)
             texs.append(asset(tex));uv.extend(transform)
-        routes.append(dict(key=key[0],mesh=mesh,materials=mats,textures=texs,uv=uv,
+        routes.append(dict(key=key[0],mesh=mesh,materials=mats,textures=texs,shaders=shaders,uv=uv,
             vertex_count=layout[0],index_counts=[s[1] for s in layout[-1]],base_vertices=[s[3] for s in layout[-1]]))
-    need(len(routes)==len(adapters)==len(textures)==2 and len(identities)==7 and routes[0]["materials"]==routes[1]["materials"][::-1],"authored_route_population")
+    need(len(routes)==len(adapters)==len(material_adapters)==len(textures)==2 and len(identities)==7 and routes[0]["materials"]==routes[1]["materials"][::-1],"authored_route_population")
     put("Assets/GTNormalProbe/NormalRouteProbe.shader",(TOOLS/"SyntheticNormalRouteProbe.shader").read_bytes())
     put("Assets/Editor/SyntheticNormalRouteValidation.cs",(TOOLS/"SyntheticNormalRouteValidation.cs").read_bytes())
     put("Packages/manifest.json",b'{"dependencies":{}}\n')
@@ -111,7 +142,7 @@ def stage(root,project,run_id,receipt,out):
     put("ProjectSettings/ProjectSettings.asset",SETTINGS.encode())
     manifest=dict(schema_version=13,run_id=run_id,synthetic_only=True,source_V12_verified=True,shader_adapter=True,scene_route_replay=True,
         original_assets_read=False,shader_program_parity_verified=False,scene_import_verified=False,
-        textures=textures,routes=routes,scene_sources=scene_sources,shader_adapters=adapters,
+        textures=textures,routes=routes,scene_sources=scene_sources,shader_adapters=adapters,material_shader_pointer_adapters=material_adapters,
         staged_files={p:digest(v) for p,v in sorted(staged.items())})
     for p,raw in staged.items():
         target=project/p;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
@@ -139,13 +170,14 @@ def verify(manifest,receipt,run_id,exit_code):
     need(manifest["run_id"]==receipt["run_id"]==run_id and receipt["editor"]==EDITOR_VERSION and receipt["backend"]=="Vulkan" and receipt["active_color_space"]=="Linear","exact_editor_run_environment")
     need(receipt["shader_adapter"] is True and receipt["scene_route_replay"] is True and receipt["original_assets_read"] is False,"scope_flags")
     need(len(receipt["routes"])==2 and len(receipt["textures"])==2,"Unity_route_population")
-    matched=0;meta_rewrites=0;routes=[]
+    matched=0;shader_matches=0;meta_rewrites=0;routes=[]
+    need(len(manifest["material_shader_pointer_adapters"])==2 and all(a["before_type"]==2 and a["after_type"]==3 and a["all_other_bytes_exact"] for a in manifest["material_shader_pointer_adapters"]),"explicit_adapter_boundary")
     for exp,obs in zip(manifest["routes"],receipt["routes"],strict=True):
         need(obs["key"]==exp["key"] and obs["vertex_count"]==exp["vertex_count"] and obs["index_counts"]==exp["index_counts"] and obs["base_vertices"]==exp["base_vertices"],"Unity_submesh_layout_drift")
         need(len(obs["uv"])==len(exp["uv"]) and all(abs(a-b)<1e-6 for a,b in zip(obs["uv"],exp["uv"],strict=True)),"Unity_material_UV_drift")
         meta_rewrites+=not identity(obs["mesh"],exp["mesh"])
-        for a,b,c,d in zip(obs["materials"],exp["materials"],obs["textures"],exp["textures"],strict=True):
-            meta_rewrites+=not identity(a,b);meta_rewrites+=not identity(c,d);matched+=1
+        for a,b,c,d,e,f in zip(obs["materials"],exp["materials"],obs["textures"],exp["textures"],obs["shaders"],exp["shaders"],strict=True):
+            meta_rewrites+=not identity(a,b);meta_rewrites+=not identity(c,d);meta_rewrites+=not identity(e,f);matched+=1;shader_matches+=1
         routes.append(obs["key"])
     need(matched==4,"Unity_four_routes_required")
     rows=[];total=0;maximum=0.;all_diffs=[]
@@ -199,7 +231,7 @@ def verify(manifest,receipt,run_id,exit_code):
             maximum_unpack_error=max(errors),source_XY_diagnostic=source_errors))
     need(total>0 and maximum<=TOL,"actual_normal_unpack_population")
     return dict(status="PASS_ACTUAL_AUTHORED_UNITY_DXT5NM_ROUTE_OBSERVATION" if not all_diffs else "OBSERVED_AUTHORED_UNITY_DXT5NM_ROUTE_WITH_IMPORTER_API_DRIFT",
-        renderer_route_replay_matches=2,submesh_material_texture_matches=matched,actual_Unity_import_verified=True,
+        renderer_route_replay_matches=2,submesh_material_texture_matches=matched,adapted_shader_identity_matches=shader_matches,material_shader_pointer_type_adapted=True,actual_Unity_import_verified=True,
         all_supported_importer_API_fields_match=not all_diffs,normal_unpack_readback_pixels=total,maximum_unpack_error=maximum,
         rows=rows,meta_rewrite_observations_per_route=meta_rewrites,scene_import_verified=False,shader_program_parity_verified=False,
         original_assets_read=False,source_lower_mip_parity_verified=False,source_normal_GPU_parity_verified=False,
@@ -217,6 +249,7 @@ def controls(m,r,run_id):
     reject("wrong_editor",lambda d:d.update(editor="not_the_pinned_editor"))
     reject("texture_slot_swap",lambda d:d["routes"][0]["textures"].reverse())
     reject("material_slot_swap",lambda d:d["routes"][0]["materials"].reverse())
+    reject("adapter_shader_slot_swap",lambda d:d["routes"][0]["shaders"].reverse())
     reject("mesh_base_vertex_drift",lambda d:d["routes"][0]["base_vertices"].__setitem__(0,999))
     reject("mip_dimension_drift",lambda d:d["textures"][0]["mips"][0].update(width=99))
     reject("wrong_normal_readback",lambda d:d["textures"][0]["mips"][0]["normal"].__setitem__(0,9.0))

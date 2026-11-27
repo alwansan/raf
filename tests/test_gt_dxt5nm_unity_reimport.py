@@ -3,6 +3,19 @@ import unittest
 from scripts import gt_dxt5nm_unity_reimport as v13
 
 class OracleTests(unittest.TestCase):
+    def test_exact_single_material_pointer_type_byte(self):
+        g="a"*32
+        raw=("%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!21 &2100000\nMaterial:\n"
+             "  m_Shader: {fileID: 4800000, guid: "+g+", type: 2}\n"
+             "  m_SavedProperties:\n    m_TexEnvs: []\n").encode()
+        actual,receipt=v13.adapt_material_shader_pointer(raw,(g,4800000,2))
+        self.assertEqual(actual,raw.replace(b"type: 2",b"type: 3"))
+        self.assertTrue(receipt["all_other_bytes_exact"])
+        self.assertEqual(receipt["before_type"],2)
+        self.assertEqual(receipt["after_type"],3)
+        for changed,ptr in ((raw,(g,4800000,3)),(raw,("b"*32,4800000,2)),(actual,(g,4800000,2))):
+            with self.assertRaises(ValueError):v13.adapt_material_shader_pointer(changed,ptr)
+
     def test_dxt5nm(self):
         self.assertEqual(v13.normal_oracle((1,.5,.2,.5),0),(0,0,1))
     def test_RG_or_DXT5nm_packing(self):
