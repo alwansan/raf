@@ -26,7 +26,8 @@ def need(ok,reason):
 def load(root,*,states=None,bc3_mode=False,normalmap=False):
     from scripts import gt_imported_dxt5nm_route_pixels as normal
     need(not normalmap or bc3_mode,"normalmap_requires_BC3_layout")
-    need(not bc3_mode or states is None,"bc3_separate_from_V9_scope")
+    need(not bc3_mode or states is None or normalmap,"bc3_separate_from_V9_scope")
+    from scripts import gt_imported_dxt5nm_route_importer as normal_importer
     decoder=normal if normalmap else bc3 if bc3_mode else png
     source=gate.strict_json(gate.bounded_snapshot(root/"source.json",1024*1024))
     producer=gate.strict_json(gate.bounded_snapshot(root/"producer.json",256*1024))
@@ -51,7 +52,7 @@ def load(root,*,states=None,bc3_mode=False,normalmap=False):
             tree=gate.mesh_layout(tree)
         elif cls==28:
             requests[key]=decoder.source_request(tree)
-            if states is not None:states[key]=importer_state.source_proof(tree)
+            if states is not None:states[key]=(normal_importer if normalmap else importer_state).source_proof(tree)
             need(isinstance(requests[key],normal.Request if normalmap else bc3.Request if bc3_mode else stream.Request) and
                  requests[key].mip_lengths==((64,16) if bc3_mode else (16,4)),
                  "authored_png_two_mips_stream_source")

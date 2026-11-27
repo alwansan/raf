@@ -43,10 +43,13 @@ def boolean(value):
     return int(value)
 
 def source_proof(tree):
+    return _source_proof(tree)
+
+def _source_proof(tree,*,descriptor=payload.descriptor,usage_mode=0,proof_type=Proof):
     need(type(tree) is dict and all(k in tree for k in SOURCE_FIELDS),
          "missing_png_source_importer_state")
     try:
-        desc,_=payload.descriptor(tree)
+        desc,_=descriptor(tree)
         sampler=native.proof(tree).values
     except (payload.Unproven,native.Unproven) as exc:
         raise Unproven(str(exc)) from None
@@ -54,12 +57,12 @@ def source_proof(tree):
     color=tree["m_ColorSpace"]
     need(type(color) is int and color in (0,1),"unknown_png_source_color_space")
     usage=tree["m_LightmapFormat"]
-    need(type(usage) is int and usage==0,"unsupported_png_source_texture_usage")
+    need(type(usage) is int and usage==usage_mode,"unsupported_png_source_texture_usage")
     priority=tree["m_StreamingMipmapsPriority"]
     need(type(priority) is int and -(2**31)<=priority<2**31,"invalid_png_source_streaming_priority")
     # Factory uses explicit count OR historical m_MipMap if present.
     old_mip=boolean(tree["m_MipMap"]) if "m_MipMap" in tree else 0
-    return Proof(sampler,color,mips,int(mips>1 or old_mip),boolean(tree["m_IsReadable"]),
+    return proof_type(sampler,color,mips,int(mips>1 or old_mip),boolean(tree["m_IsReadable"]),
                  boolean(tree["m_StreamingMipmaps"]),priority,fmt,(w,h),
                  max(2048,1<<(max(w,h)-1).bit_length()))
 
@@ -75,8 +78,11 @@ def field(obj,key,expected,scope):
     if value!=expected:raise Mismatch("same_route_png_"+scope+"_"+key+"_drift")
 
 def compare(source,meta,ptr):
-    need(isinstance(source,Proof),source if type(source) is str else "missing_png_source_importer_proof")
-    try:imp=png.importer_document(meta,ptr)
+    return _compare(source,meta,ptr)
+
+def _compare(source,meta,ptr,*,texture_type=0,proof_type=Proof):
+    need(type(source) is proof_type,source if type(source) is str else "missing_png_source_importer_proof")
+    try:imp=png.importer_document(meta,ptr,texture_type=texture_type)
     except png.Unproven as exc:raise Unproven(str(exc)) from None
     settings=imp.get("textureSettings")
     need(type(settings) is dict and set(settings)==set(SAMPLER_FIELDS)|{"serializedVersion"} and
@@ -96,7 +102,7 @@ def compare(source,meta,ptr):
         field(imp.get("mipmaps"),name,expected,"source_mapping")
     for name,expected in (("isReadable",source.readable),("streamingMipmaps",source.streaming),
                           ("streamingMipmapsPriority",source.priority),("textureFormat",source.format),
-                          ("textureShape",1),("textureType",0),("maxTextureSize",source.max_size)):
+                          ("textureShape",1),("textureType",texture_type),("maxTextureSize",source.max_size)):
         field(imp,name,expected,"source_mapping")
     # Exporter decisions, not recovered original runtime properties.
     for name,expected in (("nPOTScale",0),("alphaUsage",1),("alphaIsTransparency",1),
