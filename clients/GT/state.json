@@ -1,4 +1,182 @@
 {
+  "latest_authored_external_pptr_route": {
+    "status": "PASS_ACTUAL_AUTHORED_EXTERNAL_PPTR_ROUTE",
+    "starting_head": "b92d6d540daae64c09f5abfbcc808fd4de9255a5",
+    "preparation_commit": "4ebaea81fea3151859588fd123beccc5afc074be",
+    "tested_head": "5411ca1cd84622de42d573f9dae59cfbfe971a09",
+    "run_id": 46018334469,
+    "job_id": 140571152339,
+    "guard_run_id": 46018334600,
+    "guard_job_id": 140571153889,
+    "conclusion": "success",
+    "artifact_id": 15208080378,
+    "artifact_bytes": 74131,
+    "artifact_sha256": "8041ae26c3c83c78a8f5f5848373d37dff133687cbe7ac3b91db89ff970b361c",
+    "artifact_members": 52,
+    "permanent_archive": "clients/GT/sessions/20261127-authored-external-pptr-route/actual-evidence-46018334469.zip",
+    "permanent_archive_bytes": 39284,
+    "permanent_archive_sha256": "7a09666cddddb6ede58ab32bbd616fa6a2df248bb52627d4310a6b2f86e2a7e4",
+    "permanent_archive_git_blob": "c17efb4e8d4bf85947291590bc78fada87a0f85e",
+    "permanent_archive_members": 50,
+    "local_size_sha_crc_inner_member_bytes_verified": true,
+    "local_owner_object_payload_hashes_verified": 16,
+    "local_export_file_hashes_verified": 20,
+    "public_exporter_pin": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "unitypy": "1.23.0",
+    "unity_version": "2021.3.0f1",
+    "serialized_file_version": 22,
+    "owners": [
+      {
+        "name": "sharedassets30.assets",
+        "bytes": 704,
+        "sha256": "97a7a19e6808e1f1eaf79637407236b9c884dfd55ccfa64e844df95272f3b477",
+        "externals": [
+          "sharedassets32.assets",
+          "sharedassets33.assets"
+        ]
+      },
+      {
+        "name": "sharedassets31.assets",
+        "bytes": 704,
+        "sha256": "5cd2ad70a54faa974764c387eb7c02c90841e61464b2b6c16818179cb90742d0",
+        "externals": [
+          "sharedassets33.assets",
+          "sharedassets32.assets"
+        ]
+      },
+      {
+        "name": "sharedassets32.assets",
+        "bytes": 1372,
+        "sha256": "63ac03f27745427da2830fa046cee1e7798af684c548ad23830daba0268b621e",
+        "externals": [
+          "sharedassets33.assets"
+        ]
+      },
+      {
+        "name": "sharedassets33.assets",
+        "bytes": 1372,
+        "sha256": "e879f7fb8b1fb6ab6b1a6d36e73c598b63eda4f2aab566bc553c18ddac20ae93",
+        "externals": [
+          "sharedassets32.assets"
+        ]
+      }
+    ],
+    "synthetic_owner_names_use_native_allowlist": true,
+    "owner_bytes_total": 4152,
+    "raw_parser_objects": 16,
+    "typed_serialized_objects": 16,
+    "external_table_entries": 6,
+    "typed_nonnull_external_pptrs": 10,
+    "equal_pathid_pairs": 8,
+    "loaded_reference_trace_matches": 14,
+    "actual_export_assets": 10,
+    "actual_export_asset_meta_files": 20,
+    "actual_prefabs": 2,
+    "unique_renderers": 2,
+    "unique_meshes": 2,
+    "unique_materials": 2,
+    "unique_shaders": 2,
+    "unique_textures": 2,
+    "unique_submesh_material_routes": 4,
+    "geometry_fields_per_mesh": 10,
+    "vertex_payload_bytes_per_mesh": 120,
+    "index_bytes_per_mesh": 12,
+    "decoder_backends": [
+      "compiled",
+      "python"
+    ],
+    "full_mesh_matches_across_decoders": 4,
+    "renderer_route_matches_across_decoders": 4,
+    "submesh_route_matches_across_decoders": 8,
+    "material_shader_links_per_backend": 4,
+    "material_texenv_slots_per_backend": 4,
+    "nonnull_texture_slots_per_backend": 4,
+    "null_texture_slots_per_backend": 0,
+    "material_color_slots_per_backend": 4,
+    "material_float_slots_per_backend": 4,
+    "material_int_slots_per_backend": 4,
+    "material_value_gate_v3_pass_both": true,
+    "geometry_drift": 0,
+    "negative_controls_rejected": 8,
+    "negative_controls": [
+      {
+        "name": "binary_external_table_order_only",
+        "reason_counts": {
+          "ordered_pointer_target_mismatch": 1
+        }
+      },
+      {
+        "name": "binary_material_file_index_only",
+        "reason_counts": {
+          "ordered_pointer_target_mismatch": 1
+        }
+      },
+      {
+        "name": "binary_mesh_file_index_only",
+        "reason_counts": {
+          "ordered_pointer_target_mismatch": 1
+        }
+      },
+      {
+        "name": "binary_wrong_external_provider_index",
+        "reason_counts": {
+          "source_external_index_out_of_bounds": 1
+        }
+      },
+      {
+        "name": "binary_material_shader_file_index_only",
+        "reason_counts": {
+          "ordered_pointer_target_mismatch": 2
+        }
+      },
+      {
+        "name": "binary_material_texture_file_index_only",
+        "reason_counts": {
+          "ordered_pointer_target_mismatch": 2
+        }
+      },
+      {
+        "name": "actual_export_equal_fileid_wrong_owner_guid",
+        "reason_counts": {
+          "ordered_pointer_target_mismatch": 1
+        }
+      },
+      {
+        "name": "wrong_trace_mesh_fileid",
+        "reason_counts": {
+          "missing_actual_serialized_target": 1
+        }
+      }
+    ],
+    "consistent_external_table_and_pptr_remap_positive_controls": 1,
+    "prior_regressions_pass": 95,
+    "regression_counts": {
+      "original_mesh_source_storage": 9,
+      "mesh_document_stream_identity": 8,
+      "mesh_yaml_unique_mapping": 7,
+      "compare_exported_mesh_geometry": 6,
+      "verify_original_mesh_export": 7,
+      "mesh_vertex_payload": 15,
+      "renderer_submesh_routes": 21,
+      "material_route_values": 22
+    },
+    "shader_scope": "two identity-only authored empty programs, public ShaderExportMode.Yaml; no shader execution",
+    "texture_scope": "two actual PNG and GUID/fileID identities, all four route texture slots nonnull; no pixel or sampler parity gate",
+    "pointer_scope": "actual v22 external tables and nonnull cross-owner PPtrs, equal PathIDs, reversed dependency ordering, path-based type 0; no original owner authorization or parity",
+    "authored_yaml_used_as_export": false,
+    "original_assets_read": false,
+    "original_renderer_routes_verified": false,
+    "unity_import_verified": false,
+    "device_verified": false,
+    "XAPK_requested": false,
+    "production_consumer_changed": false,
+    "gate_closures": [],
+    "historical_non_dummy": 688,
+    "historical_total": 786,
+    "historical_dummy": 98,
+    "historical_dummy_guids": 37,
+    "next_action": "G1-G2-authored-serialized-external-pptr-actual-PNG-top-mip-and-keyword-state: build on the retained four-owner actual binary/export evidence, not another repetition of V2/V3. First inspect the retained two real PNGs and Texture2D source bytes against the native V8 RGBA32 top-mip decoder and V4 serialized Material keyword/pass-state contract; use existing archive offline where possible, authenticate source and same-instance export GUID/fileID. If the retained schema is unsupported or empty keyword lanes are vacuous, preserve that limit and add a bounded independently authored binary fixture with nonempty distinct keyword/pass lanes and/or texture pixels, real pinned AssetRipper Load->Process->Export, and same-route positive/negative controls. No generated YAML substitute, no claims about lower mips, GPU, shader execution or original runtime variants. Prefer the least expensive decisive new evidence and prioritize a source-free actionable original shader/Particle108/FFT blocker if this route cannot advance. A3 and third Particle108 same-export alpha comparison remain blocked; original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. No unauthorized original acquisition, secrets, LFS, CL/lab writes, BLACK, animation, production, Unity/device/APK/XAPK/native request/installer until owner gates met. Preserve Ali pinned reference."
+  },
   "latest_authored_serialized_renderer_route": {
     "status": "PASS_ACTUAL_AUTHORED_SERIALIZED_RENDERER_ROUTE",
     "starting_head": "5a26ec2269f80125d0cb3947a367c552bcc3bdfc",
@@ -563,8 +741,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-authored-serialized-renderer-route/README_AR.md",
-  "next_action": "G1-G2-authored-serialized-renderer-actual-export-route: use the retained actual authored Mesh export witness rather than repeat its six matches. Review the native same-instance renderer/material/mesh route consumer and historical V12 and source PPtr controls. If a supported isolated fixture can be independently authored with the public serialized schema, connect actual GameObject/Transform/MeshFilter/MeshRenderer and Material PPtrs to the existing authored Mesh (or a physically consistent variant), require real public AssetRipper Load->Process->Export and same-instance emitted route/mesh identity, and exercise rejection of wrong mesh/material PPtr or fileID. Keep a narrow honest failure if unsupported; no invented original GUIDs, no game source or unapproved acquisition, no production changes, no expensive repeated builds without a distinct new witness. Prioritize a source-free actionable original shader/Particle108/FFT blocker instead if no useful route witness exists; A3 and third Particle108 comparison blocked, original FFT/kernel6, NEXT23b and ten runtime groups open, G0-G6 open, CL/lab read-only, BLACK/animation out of scope, no Unity/device/APK/XAPK/native request/installer until the owner gates are met. Preserve Ali pinned reference.",
+  "latest_session": "clients/GT/sessions/20261127-authored-external-pptr-route/README_AR.md",
+  "next_action": "G1-G2-authored-serialized-external-pptr-actual-PNG-top-mip-and-keyword-state: build on the retained four-owner actual binary/export evidence, not another repetition of V2/V3. First inspect the retained two real PNGs and Texture2D source bytes against the native V8 RGBA32 top-mip decoder and V4 serialized Material keyword/pass-state contract; use existing archive offline where possible, authenticate source and same-instance export GUID/fileID. If the retained schema is unsupported or empty keyword lanes are vacuous, preserve that limit and add a bounded independently authored binary fixture with nonempty distinct keyword/pass lanes and/or texture pixels, real pinned AssetRipper Load->Process->Export, and same-route positive/negative controls. No generated YAML substitute, no claims about lower mips, GPU, shader execution or original runtime variants. Prefer the least expensive decisive new evidence and prioritize a source-free actionable original shader/Particle108/FFT blocker if this route cannot advance. A3 and third Particle108 same-export alpha comparison remain blocked; original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. No unauthorized original acquisition, secrets, LFS, CL/lab writes, BLACK, animation, production, Unity/device/APK/XAPK/native request/installer until owner gates met. Preserve Ali pinned reference.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
