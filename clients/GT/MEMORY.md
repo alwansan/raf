@@ -1,3 +1,9 @@
+# GT V9 — scoped actual retry checkpoint | 27 نوفمبر 2026
+
+[90de0c3](https://github.com/alwansan/raf/commit/90de0c3cd6e0ffe70ddaf23db1153d2a8cacdce7) corrected one indentation character; [cd127da](https://github.com/alwansan/raf/commit/cd127dafa6ea47c0fcdefdeb65098bcbfc9dfb9c) activates exact authored-only job. [45960313046](https://github.com/alwansan/raf/actions/runs/45960313046) job 140376327371 in_progress; guard 45960313097. Plan consistency runs 45960160650 and 45960256644 both successful. Previous actual V7/V8 independent passes, actual V9 omitted Swizzle, strict complete false. No scoped actual V9 pass yet. Next: inspect exact run, verify archive and results, or diagnose failure. No new source acquisition, Unity reimport, Android or XAPK; A3 blocked and G0–G6 open. CL/lab read-only, BLACK excluded, animation deferred.
+
+---
+
 # GT V9 — scoped CI syntax failure retained | 27 نوفمبر 2026
 
 [45960160652](https://github.com/alwansan/raf/actions/runs/45960160652) stopped in source regression import: extra indentation line 483, no exporter run. Fix one space only, retain full-state false for omitted Swizzle. No V9 pass claimed.

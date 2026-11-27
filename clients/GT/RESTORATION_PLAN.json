@@ -1306,7 +1306,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "87ab96cbdc65103fff763f45191f3dd156b4771d",
+    "reviewed_remote_head": "cd127dafa6ea47c0fcdefdeb65098bcbfc9dfb9c",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -1563,8 +1563,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-imported-PNG-importer-state-same-route-binding",
-      "status": "V9_SCOPED_RETRY_INDENT_FIXED_PENDING",
-      "next": "Run scoped actual V9: retain full V9=false when swizzle absent, verify supported serialized fields and explicit bad-swizzle injection, retain full strict CLI exit 2 for absence; no Unity/Android claim."
+      "status": "V9_SCOPED_ACTUAL_RETRY_PENDING",
+      "next": "Inspect exact 45960313046 result; validate supported serialized comparisons with four unknown Swizzle slots and complete-state false; retain receipts or diagnose failure. Do not rerun without new goal. A3 remains blocked."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -3769,7 +3769,7 @@
       }
     },
     "latest_imported_png_importer_state_binding": {
-      "status": "V9_SCOPED_RETRY_INDENT_FIXED_PENDING",
+      "status": "V9_SCOPED_ACTUAL_RETRY_PENDING",
       "starting_head": "d477529faffbf82c8758d2e466943944a98757ba",
       "source_gate_commit": "e81dde6404b59a433c81d0568f7818f87d83126c",
       "authored_witness_commit": "080bb3ec339c0fb5930e1ac156f41942adb9e5fd",
@@ -3794,7 +3794,7 @@
       "unity_import_verified": false,
       "xapk": false,
       "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-      "next": "Run scoped actual V9: retain full V9=false when swizzle absent, verify supported serialized fields and explicit bad-swizzle injection, retain full strict CLI exit 2 for absence; no Unity/Android claim.",
+      "next": "Inspect exact 45960313046 result; validate supported serialized comparisons with four unknown Swizzle slots and complete-state false; retain receipts or diagnose failure. Do not rerun without new goal. A3 remains blocked.",
       "initial_failure": {
         "run": 45959587458,
         "head": "f26030acf76d972d10181af52380c935e0a7201a",
@@ -3991,12 +3991,105 @@
           }
         ],
         "fix": "remove one extra space; no proof semantics changed"
+      },
+      "scoped_retry": {
+        "head": "cd127dafa6ea47c0fcdefdeb65098bcbfc9dfb9c",
+        "run": 45960313046,
+        "job": 140376327371,
+        "guard": 45960313097,
+        "status": "in_progress",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Checkout authored witness and exact private hook composer only",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run source-only route gate regressions before public build",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run actions/setup-dotnet@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Checkout public pinned exporter source only",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Compile exact public exporter and authored witness",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 6
+          },
+          {
+            "name": "Execute actual streamed Texture2D export and native sampler proof after witness compile fix",
+            "status": "pending",
+            "conclusion": null,
+            "number": 7
+          },
+          {
+            "name": "Execute separate actual PNG top-mip and importer route proof",
+            "status": "pending",
+            "conclusion": null,
+            "number": 8
+          },
+          {
+            "name": "Bind actual importer serialized state on the same PNG routes",
+            "status": "pending",
+            "conclusion": null,
+            "number": 9
+          },
+          {
+            "name": "Retain only public-tool build and aggregate route evidence",
+            "status": "pending",
+            "conclusion": null,
+            "number": 10
+          },
+          {
+            "name": "Remove only authored fixture tree",
+            "status": "pending",
+            "conclusion": null,
+            "number": 11
+          },
+          {
+            "name": "Post Checkout public pinned exporter source only",
+            "status": "pending",
+            "conclusion": null,
+            "number": 20
+          },
+          {
+            "name": "Post Run actions/setup-dotnet@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 21
+          },
+          {
+            "name": "Post Checkout authored witness and exact private hook composer only",
+            "status": "pending",
+            "conclusion": null,
+            "number": 22
+          }
+        ]
       }
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date.",
   "v9_importer_state_checkpoint": {
-    "status": "V9_SCOPED_RETRY_INDENT_FIXED_PENDING",
+    "status": "V9_SCOPED_ACTUAL_RETRY_PENDING",
     "starting_head": "d477529faffbf82c8758d2e466943944a98757ba",
     "source_gate_commit": "e81dde6404b59a433c81d0568f7818f87d83126c",
     "authored_witness_commit": "080bb3ec339c0fb5930e1ac156f41942adb9e5fd",
@@ -4021,7 +4114,7 @@
     "unity_import_verified": false,
     "xapk": false,
     "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-    "next": "Run scoped actual V9: retain full V9=false when swizzle absent, verify supported serialized fields and explicit bad-swizzle injection, retain full strict CLI exit 2 for absence; no Unity/Android claim.",
+    "next": "Inspect exact 45960313046 result; validate supported serialized comparisons with four unknown Swizzle slots and complete-state false; retain receipts or diagnose failure. Do not rerun without new goal. A3 remains blocked.",
     "initial_failure": {
       "run": 45959587458,
       "head": "f26030acf76d972d10181af52380c935e0a7201a",
@@ -4218,6 +4311,99 @@
         }
       ],
       "fix": "remove one extra space; no proof semantics changed"
+    },
+    "scoped_retry": {
+      "head": "cd127dafa6ea47c0fcdefdeb65098bcbfc9dfb9c",
+      "run": 45960313046,
+      "job": 140376327371,
+      "guard": 45960313097,
+      "status": "in_progress",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Checkout authored witness and exact private hook composer only",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run source-only route gate regressions before public build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run actions/setup-dotnet@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Checkout public pinned exporter source only",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Compile exact public exporter and authored witness",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 6
+        },
+        {
+          "name": "Execute actual streamed Texture2D export and native sampler proof after witness compile fix",
+          "status": "pending",
+          "conclusion": null,
+          "number": 7
+        },
+        {
+          "name": "Execute separate actual PNG top-mip and importer route proof",
+          "status": "pending",
+          "conclusion": null,
+          "number": 8
+        },
+        {
+          "name": "Bind actual importer serialized state on the same PNG routes",
+          "status": "pending",
+          "conclusion": null,
+          "number": 9
+        },
+        {
+          "name": "Retain only public-tool build and aggregate route evidence",
+          "status": "pending",
+          "conclusion": null,
+          "number": 10
+        },
+        {
+          "name": "Remove only authored fixture tree",
+          "status": "pending",
+          "conclusion": null,
+          "number": 11
+        },
+        {
+          "name": "Post Checkout public pinned exporter source only",
+          "status": "pending",
+          "conclusion": null,
+          "number": 20
+        },
+        {
+          "name": "Post Run actions/setup-dotnet@v4",
+          "status": "pending",
+          "conclusion": null,
+          "number": 21
+        },
+        {
+          "name": "Post Checkout authored witness and exact private hook composer only",
+          "status": "pending",
+          "conclusion": null,
+          "number": 22
+        }
+      ]
     }
   }
 }
