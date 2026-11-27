@@ -1,0 +1,111 @@
+name: GT water GUID Assets namespace regression (NO original assets)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-water-guid-namespace.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  water-guid-namespace:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only source and authored fixtures
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/verify_water_render_contract.py
+            /scripts/b49_shaderlab_pass_contract.py
+            /scripts/b47_compute_kernel_contract.py
+            /scripts/record_documented_water_limitation.py
+            /tests/test_gt_water_guid_namespace.py
+            /tests/test_verify_water_render_contract.py
+            /tests/test_b47_compute_kernel_contract.py
+            /tests/test_record_documented_water_limitation.py
+            /.github/workflows/raft-gt-water-guid-namespace.yml
+      - name: Checkout immutable pre-fix source only, in a separate directory
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: d1cb6cec320eccf649a416e6340d9cd868562e44
+          path: baseline-source
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/verify_water_render_contract.py
+            /scripts/b49_shaderlab_pass_contract.py
+            /scripts/b47_compute_kernel_contract.py
+            /scripts/record_documented_water_limitation.py
+      - name: Reproduce the exact old guard failures
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft && test ! -e .gt-zip2
+          test ! -e baseline-source/Raft && test ! -e baseline-source/.gt-zip2
+          mkdir water-guid-evidence baseline-source/tests
+          cp tests/test_gt_water_guid_namespace.py baseline-source/tests/
+          test "$(git -C baseline-source rev-parse HEAD)" = d1cb6cec320eccf649a416e6340d9cd868562e44
+          test "$(git hash-object baseline-source/scripts/verify_water_render_contract.py)" = 65c96c8a2059e73bff48fcbc1d81ee2bb0eddd81
+          cd baseline-source
+          python3 -B - <<'PY' 2>&1 | tee ../water-guid-evidence/baseline.log
+          import json
+          import unittest
+          from pathlib import Path
+          suite=unittest.defaultTestLoader.discover("tests",pattern="test_gt_water_guid_namespace.py")
+          result=unittest.TextTestRunner(verbosity=2).run(suite)
+          failures={getattr(t,"test_case",t)._testMethodName for t,_ in result.failures}
+          expected=set(["test_texture_collision_case_insensitive","test_model_collision","test_unselected_shader_collision","test_unselected_compute_collision","test_folder_collision","test_orphan_meta_collision","test_reserved_selected_identities","test_ambiguous_unrelated_meta","test_malformed_unrelated_meta","test_oversized_unrelated_meta","test_linked_directory_hiding_collision","test_linked_meta_hiding_collision","test_redirected_project_ancestor","test_acknowledged_limits_cannot_bypass_collision"])
+          assert result.testsRun==16 and not result.errors and not result.skipped
+          assert failures==expected and len(result.failures)==21
+          assert all("ValueError not raised" in trace for _,trace in result.failures)
+          print("GT_BASELINE_EXPECTED_FAILURES test_methods=14 negative_cases=21 positive_methods=2")
+          Path("../water-guid-evidence/baseline.json").write_text(json.dumps({
+              "tests":result.testsRun,"failed_methods":sorted(failures),"negative_cases_accepted":len(result.failures),
+              "positive_methods_passed":2,"base":"d1cb6cec320eccf649a416e6340d9cd868562e44",
+              "old_blob":"65c96c8a2059e73bff48fcbc1d81ee2bb0eddd81"},indent=2)+"\n")
+          PY
+      - name: Run fixed namespace and existing water regressions
+        run: |
+          set -euo pipefail
+          for f in test_gt_water_guid_namespace.py test_verify_water_render_contract.py test_b47_compute_kernel_contract.py test_record_documented_water_limitation.py; do
+            python3 -B -m unittest discover -s tests -p "$f" -v 2>&1 | tee "water-guid-evidence/$f.log"
+          done
+          python3 -B - <<'PY'
+          import json,re,hashlib
+          from pathlib import Path
+          root=Path("water-guid-evidence")
+          tests={}
+          for f in ("test_gt_water_guid_namespace.py","test_verify_water_render_contract.py","test_b47_compute_kernel_contract.py","test_record_documented_water_limitation.py"):
+              log=(root/(f+".log")).read_text()
+              count=re.search(r"^Ran (\d+) tests? in ",log,re.M)
+              assert count and re.search(r"^OK$",log,re.M), f
+              tests[f]=int(count[1])
+          assert tests["test_gt_water_guid_namespace.py"]==16
+          report={"status":"PASS_AUTHORED_WATER_GUID_ASSETS_NAMESPACE","tests":tests,
+              "total_tests":sum(tests.values()),"baseline_negative_cases_accepted":21,
+              "fixed_negative_cases_rejected":21,"scope":"selected water GUIDs against physical Assets sidecars",
+              "original_assets_read":False,"original_identity_verified":False,"unity_or_device_tested":False,
+              "XAPK_requested":False,"source_sha256":hashlib.sha256(Path("scripts/verify_water_render_contract.py").read_bytes()).hexdigest(),
+              "new_test_sha256":hashlib.sha256(Path("tests/test_gt_water_guid_namespace.py").read_bytes()).hexdigest()}
+          (root/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - name: Retain exact baseline and fixed logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-water-guid-namespace-${{ github.run_id }}
+          path: water-guid-evidence/
+          if-no-files-found: warn
+          retention-days: 14

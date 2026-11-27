@@ -8,11 +8,24 @@ an expensive Unity native build when the owner eventually authorizes one.
 """
 import argparse
 import json
+import os
 from pathlib import Path
 import re
 
 from scripts.b49_shaderlab_pass_contract import pass_coverage, remove_comments
 from scripts.b47_compute_kernel_contract import kernel_entrypoint_profile
+
+# Match the repository's known null, built-in and AssetRipper placeholder
+# GUIDs. None can be the identity of a restored physical water asset.
+RESERVED_WATER_GUIDS = frozenset({
+    "0" * 32,
+    "0000000000000000e000000000000000",
+    "0000000000000000f000000000000000",
+    "0000000deadbeef15deadf00d0000000",
+})
+MAX_WATER_META_BYTES = 65536
+MAX_NAMESPACE_META_BYTES = 4 * 1024 * 1024
+MAX_NAMESPACE_ENTRIES = 250000
 
 # Unity logs show requests for these maximum pass indices. Valid index N
 # requires a restored ShaderLab source with at least N+1 authored passes.
@@ -54,37 +67,87 @@ def _regular_unlinked_asset(path: Path, assets: Path) -> bool:
     return path.is_file()
 
 
-def _verified_water_meta(path: Path, assets: Path, seen_guids: set[str]) -> bool:
-    """Structurally validate an original water .meta identity without publishing it.
-
-    Physical existence is not enough: malformed, missing, ambiguous or duplicate
-    Unity GUIDs cannot establish reliable Shader/Compute asset binding. This
-    verifies syntax and uniqueness only, NOT original export provenance.
-    """
+def _meta_identity(path: Path, assets: Path, limit: int, label: str) -> str:
+    """Read one bounded canonical root GUID, never an importer-local reference."""
     if not _regular_unlinked_asset(path, assets):
-        return False
-    if path.stat().st_size > 65536:
-        raise ValueError("Oversized water shader/compute GUID metadata")
-    lines = path.read_bytes().splitlines()
-    guid_lines = [line for line in lines if line.startswith(b"guid:")]
+        raise ValueError("Missing or unsafe " + label + " metadata")
+    with path.open("rb") as stream:
+        data = stream.read(limit + 1)
+    if not 0 < len(data) <= limit:
+        raise ValueError("Empty or oversized " + label + " GUID metadata")
+    lines = data.removeprefix(b"\xef\xbb\xbf").splitlines()
+    guid_lines = [line for line in lines if re.match(rb"guid[ \t]*:", line)]
     if len(guid_lines) != 1:
-        raise ValueError("Missing or ambiguous water shader/compute GUID metadata")
+        raise ValueError("Missing or ambiguous " + label + " GUID metadata")
     match = re.fullmatch(rb"guid:[ \t]*([0-9a-fA-F]{32})[ \t]*", guid_lines[0])
     if match is None:
-        raise ValueError("Malformed water shader/compute GUID metadata")
-    identity = match.group(1).decode("ascii").lower()
+        raise ValueError("Malformed " + label + " GUID metadata")
+    return match.group(1).decode("ascii").lower()
+
+
+def _verified_water_meta(path: Path, assets: Path, seen_guids: dict[str, Path]) -> bool:
+    """Validate selected physical water metadata, not original provenance."""
+    if not _regular_unlinked_asset(path, assets):
+        return False
+    identity = _meta_identity(path, assets, MAX_WATER_META_BYTES, "water shader/compute")
+    if identity in RESERVED_WATER_GUIDS:
+        raise ValueError("Reserved water shader/compute GUID metadata")
     if identity in seen_guids:
         raise ValueError("Duplicate water shader/compute GUID metadata")
-    seen_guids.add(identity)
+    seen_guids[identity] = path
     return True
 
 
+def _verify_water_guid_namespace(assets: Path, selected: dict[str, Path]) -> int:
+    """Check selected water identities against ALL physical Assets sidecars.
+
+    Include folder, unrelated asset, and orphan metadata: none may shadow a
+    selected identity. Refuse incomplete enumeration, linked paths, oversized
+    or ambiguous metadata rather than claiming uniqueness. Unrelated duplicate
+    identities are not this gate's acceptance target. Package namespaces,
+    original owner/PathID and runtime binding are outside this static check.
+    """
+    if not selected:
+        return 0
+
+    def incomplete(_error):
+        raise ValueError("Incomplete Assets GUID namespace enumeration")
+
+    scanned = entries = 0
+    matched = set()
+    for directory, dirs, files in os.walk(assets, followlinks=False, onerror=incomplete):
+        root = Path(directory)
+        entries += len(dirs) + len(files)
+        if entries > MAX_NAMESPACE_ENTRIES:
+            raise ValueError("Oversized Assets GUID namespace")
+        for name in (*dirs, *files):
+            if (root / name).is_symlink():
+                raise ValueError("Unsafe linked path in Assets GUID namespace")
+        if any(name.lower().endswith(".meta") for name in dirs):
+            raise ValueError("Non-file metadata in Assets GUID namespace")
+        for name in files:
+            if not name.lower().endswith(".meta"):
+                continue
+            path = root / name
+            identity = _meta_identity(path, assets, MAX_NAMESPACE_META_BYTES, "Assets namespace")
+            scanned += 1
+            if identity in selected:
+                if selected[identity] != path or identity in matched:
+                    raise ValueError("Duplicate or reassigned selected water GUID in Assets namespace")
+                matched.add(identity)
+    if matched != set(selected):
+        raise ValueError("Selected water GUID metadata changed or missing during namespace scan")
+    return scanned
+
+
 def inspect(project: Path) -> dict:
+    project = project.absolute()
     assets = project / "Assets"
-    if project.is_symlink() or assets.is_symlink() or not assets.is_dir():
+    if (any(p.is_symlink() for p in (project, *project.parents))
+            or assets.is_symlink() or not assets.is_dir()):
         raise ValueError("Unity exported Assets folder missing or redirected")
     found = {}
-    seen_water_guids = set()
+    seen_water_guids = {}
     for path in assets.rglob("*.shader"):
         if not _regular_unlinked_asset(path, assets):
             raise ValueError("Unsafe source shader path")
@@ -142,6 +205,7 @@ def inspect(project: Path) -> dict:
         if row["is_water_or_fft_named"] and row["all_kernel_entrypoints_structural"]
         and row["original_meta_present"]
     ]
+    namespace_meta_count = _verify_water_guid_namespace(assets, seen_water_guids)
     # This is a structural source check, not proof of authentic ownership,
     # original GUID matching, GPU compilation, or correct FFT output.
     return {
@@ -153,6 +217,10 @@ def inspect(project: Path) -> dict:
         "compute_files_with_structural_entrypoints": sum(x["all_kernel_entrypoints_structural"] for x in computes),
         "water_named_compute_sources_with_kernels": len(water_compute),
         "water_compute_source_candidate_present": bool(water_compute),
+        "selected_water_guids_unique_in_assets_namespace": bool(seen_water_guids),
+        "selected_water_guid_count": len(seen_water_guids),
+        "assets_meta_files_scanned_for_water_guids": namespace_meta_count,
+        "external_package_guid_namespace_verified": False,
         "authentic_water_kernel_identity_verified": False,
         "device_execution_verified": False,
         "modified_source": False,
