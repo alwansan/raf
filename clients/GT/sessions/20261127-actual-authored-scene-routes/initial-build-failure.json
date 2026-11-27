@@ -1,0 +1,37 @@
+{
+  "status": "FAIL_AUTHORED_WITNESS_GENERIC_POINTER_COMPILATION",
+  "run_id": 45946688897,
+  "job_id": 140332885448,
+  "head": "793e1f0f8f6e80d05f7a9e79a63d1cdd3201ebef",
+  "conclusion": "failure",
+  "guard_run_id": 45946688780,
+  "artifact_id": 15175335329,
+  "archive": "clients/GT/sessions/20261127-actual-authored-scene-routes/failed-build-45946688897.zip",
+  "archive_bytes": 3431,
+  "archive_sha256": "3307811851bcce07faa76406610ecce02f106f95f424b31d75e83dcc3c5ab8ab",
+  "archive_git_blob": "42db56a11e5bbdfc18a9bf7c9b05f5c70baf8382",
+  "archive_crc_sha_size_verified_locally": true,
+  "members": {
+    "build-failure.log": {
+      "bytes": 12840,
+      "sha256": "a031102dfd9370c8980cb21424749e975b9d987dedb34cab748f5f507f4e06e2"
+    },
+    "test_gt_renderer_submesh_routes.py.log": {
+      "bytes": 3004,
+      "sha256": "1c76a432b127059606e6deb11cae87de5eea3ee66d7c8e24ac6ed3fa78745362",
+      "tests": 21
+    },
+    "test_b03_verify_renderer_material_links.py.log": {
+      "bytes": 2556,
+      "sha256": "bff0c89bbd927c2a0bca3660dee364fd629fb1f4248c357ef771bc344eafdebc",
+      "tests": 17
+    }
+  },
+  "regression_tests_passed": 38,
+  "actual_export_executed": false,
+  "reason": "C# LINQ inferred object rather than IPPtr for Distinct(ReferenceEqualityComparer.Instance), causing CS1061 and CS0266. Explicit Distinct<IPPtr> corrects the compile error, actual export not yet confirmed.",
+  "fix_commit": "0caf15f6a892549bdcc09d055b349a96be1ec65f",
+  "retry_run_id": 45946854653,
+  "original_assets_read": false,
+  "XAPK": false
+}
