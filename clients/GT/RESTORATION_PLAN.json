@@ -5259,7 +5259,7 @@
     "evidence": "clients/GT/sessions/20261127-dxt5nm-route-v11/actual-pass-45966950183.json"
   },
   "v12_dxt5nm_importer_checkpoint": {
-    "status": "PENDING_SOURCE_AND_AUTHORED_WITNESS_NOT_EXECUTED",
+    "status": "CI_RUNNING_SOURCE_REGRESSION_STEP_SUCCESS_ACTUAL_EXPORT_PENDING",
     "starting_head": "488be3532bbd7eb55f6dc895aef2311eec796139",
     "source_commit": "db1be938f6e7a84076a7c1832cba1d0520d5d813",
     "witness_commit": "bb08e7e113aa588240d8f6ce1d495fa95fcad921",
@@ -5273,6 +5273,20 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-importer-v12/README_AR.md",
-    "next": "Activate dedicated authored-only workflow; inspect exact receipt."
+    "next": "Inspect exact run 45967942717; preserve scoped result and archive evidence.",
+    "activation_head": "0180ba92d3ff846f25f157eff9d51748675f9a0b",
+    "run": {
+      "id": 45967942717,
+      "job": 140401058059,
+      "head": "0180ba92d3ff846f25f157eff9d51748675f9a0b",
+      "status": "in_progress",
+      "source_regressions_step": "success",
+      "actual_export_verified": false,
+      "compatibility_guard": {
+        "id": 45967942518,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    }
   }
 }
