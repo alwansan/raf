@@ -34,6 +34,7 @@ jobs:
             /clients/GT/sessions/20261127-authored-external-pptr-route/actual-evidence-46018334469.zip
             /tests/test_gt_material_route_keyword_state.py
             /tests/test_gt_imported_png_route_pixels.py
+            /tests/test_gt_texture_route_payload.py
             /android-port/Experiments/ExportLineage/
             /tests/test_gt_original_mesh_source_storage.py
             /tests/test_gt_mesh_document_stream_identity.py

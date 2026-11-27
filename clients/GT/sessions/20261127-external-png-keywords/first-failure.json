@@ -1,0 +1,21 @@
+{
+  "status": "FAILED_PRE_BUILD_SPARSE_TEST_DEPENDENCY",
+  "run_id": 46027481849,
+  "job_id": 140602506858,
+  "head": "04c9f329a476067a57672adc1a5a45149dd64196",
+  "guard_run_id": 46027481806,
+  "guard_conclusion": "success",
+  "retained_replay_v4_v8_both_decoders": true,
+  "retained_nonempty_keywords": false,
+  "actual_new_binary_preflight_pass": true,
+  "prior_tests_passed_before_missing_module": 120,
+  "new_actual_export_performed": false,
+  "error": "ModuleNotFoundError: No module named 'test_gt_texture_route_payload'",
+  "artifact_id": 15212319874,
+  "artifact_bytes": 23435,
+  "artifact_sha256": "a2a17ba68b542c3236a4919297a74024aaf8cf54f622ba1b110723d0e50b5ccd",
+  "permanent_archive_bytes": 12496,
+  "permanent_archive_sha256": "ab2fd9f0afb5cfbe0cb6e1d08c7ca4da4c2f3c352195f8f5db825ae722df726a",
+  "permanent_git_blob": "48d04578d0011edbd0c95f39ac71dc4f3ff96735",
+  "fix": "include the exact existing test helper in sparse checkout; do not change or skip tests"
+}

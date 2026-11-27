@@ -1,0 +1,17 @@
+2026-11-27T15:44:10.0755391Z ERROR: test_gt_imported_png_route_pixels (unittest.loader._FailedTest.test_gt_imported_png_route_pixels)
+2026-11-27T15:44:10.0756011Z ----------------------------------------------------------------------
+2026-11-27T15:44:10.0756547Z ImportError: Failed to import test module: test_gt_imported_png_route_pixels
+2026-11-27T15:44:10.0757212Z Traceback (most recent call last):
+2026-11-27T15:44:10.0757633Z   File "/usr/lib/python3.12/unittest/loader.py", line 394, in _find_test_path
+2026-11-27T15:44:10.0758088Z     module = self._get_module_from_name(name)
+2026-11-27T15:44:10.0758390Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-27T15:44:10.0758816Z   File "/usr/lib/python3.12/unittest/loader.py", line 337, in _get_module_from_name
+2026-11-27T15:44:10.0759256Z     __import__(name)
+2026-11-27T15:44:10.0759725Z   File "/home/runner/work/raf/raf/tests/test_gt_imported_png_route_pixels.py", line 12, in <module>
+2026-11-27T15:44:10.0760290Z     import test_gt_texture_route_payload as tf
+2026-11-27T15:44:10.0760743Z ModuleNotFoundError: No module named 'test_gt_texture_route_payload'
+2026-11-27T15:44:10.0761066Z 
+2026-11-27T15:44:10.0761070Z 
+2026-11-27T15:44:10.0761236Z ----------------------------------------------------------------------
+2026-11-27T15:44:10.0761593Z Ran 1 test in 0.000s
+2026-11-27T15:44:10.0761738Z 
