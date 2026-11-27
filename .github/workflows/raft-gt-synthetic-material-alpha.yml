@@ -19,6 +19,7 @@ on:
           - imported-alpha-pixels
           - b05-local-documents
           - particle-pixel-parity
+          - particle-local-net-loss
   push:
     branches: [feature/android-native-port]
     paths:
@@ -37,7 +38,7 @@ concurrency:
 
 jobs:
   synthetic-pixels:
-    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]') && !contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]') && !contains(github.event.head_commit.message, '[gt-imported-alpha-pixels]') && !contains(github.event.head_commit.message, '[gt-b05-local-documents]') && !contains(github.event.head_commit.message, '[gt-particle-pixel-parity]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]') && !contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]') && !contains(github.event.head_commit.message, '[gt-imported-alpha-pixels]') && !contains(github.event.head_commit.message, '[gt-b05-local-documents]') && !contains(github.event.head_commit.message, '[gt-particle-pixel-parity]') && !contains(github.event.head_commit.message, '[gt-particle-local-net-loss]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 30
@@ -1256,5 +1257,79 @@ jobs:
         with:
           name: gt-particle-pixel-parity-${{ github.run_id }}
           path: particle-pixel-results/*
+          if-no-files-found: warn
+          retention-days: 14
+
+
+  particle-local-net-loss:
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-particle-local-net-loss]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'particle-local-net-loss'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout source-only diagnostics and authored local document controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tests/test_gt_particle108_source_pixel_parity.py
+            /tests/test_gt_particle108_alpha_provenance.py
+            /tests/test_gt_particle108_export_alpha_diagnostic.py
+            /.github/workflows/raft-gt-synthetic-material-alpha.yml
+      - name: Install public pinned Texture2D and image decoders
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          python3 -m venv "$RUNNER_TEMP/gt-particle-local-net-loss"
+          "$RUNNER_TEMP/gt-particle-local-net-loss/bin/python" -m pip install --disable-pip-version-check UnityPy==1.23.0 Pillow==11.3.0 PyYAML==6.0.3
+      - name: Run byte-bound source and actual decoder regression controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-particle-local-net-loss/bin/python"
+          mkdir particle-local-results
+          for test_file in test_gt_particle108_source_pixel_parity.py test_gt_particle108_alpha_provenance.py test_gt_particle108_export_alpha_diagnostic.py; do
+            "$py" -B -m unittest discover -s tests -p "$test_file" -v 2>&1 | tee "particle-local-results/$test_file.log"
+          done
+          "$py" -B - <<'PY'
+          import json,os,re
+          from importlib.metadata import version
+          from pathlib import Path
+          root=Path('particle-local-results')
+          counts={}
+          for p in sorted(root.glob('*.log')):
+              data=p.read_text()
+              m=re.search(r'^Ran (\d+) tests? in ',data,re.M)
+              assert m and int(m[1])>0 and re.search(r'^OK$',data,re.M)
+              counts[p.name]=int(m[1])
+          assert len(counts)==3
+          result=dict(status="PASS_AUTHORED_LOCAL_DOCUMENT_AND_NET_ALPHA_LOSS",
+              run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
+              test_counts=counts,total_tests=sum(counts.values()),UnityPy_version=version("UnityPy"),
+              actual_UnityPy_payload_decoder=True,serialized_owner_parser_injected_authored_metadata=True,
+              actual_PNG_decoder=True,document_scoped_local_target_controls=True,
+              net_alpha_loss_separate_from_coordinate_rearrangement=True,
+              prior_Unity_receipt_replayed=False,
+              original_assets_read=False,new_Unity_render_executed=False,
+              original_alpha_loss_proven=False,Android_device=False,XAPK=False)
+          (root/'report.json').write_text(json.dumps(result,sort_keys=True,indent=2)+'\n')
+          print(json.dumps(result,sort_keys=True))
+          PY
+      - name: Retain only authored test logs and aggregate replay evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-particle-local-net-loss-${{ github.run_id }}
+          path: particle-local-results/*
           if-no-files-found: warn
           retention-days: 14
