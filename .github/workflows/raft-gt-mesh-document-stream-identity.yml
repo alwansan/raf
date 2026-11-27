@@ -1,3 +1,4 @@
+# Activate isolated authored full-document and stream identity comparisons only.
 name: GT full Mesh document and inline stream identity (NO original assets)
 on:
   push:
