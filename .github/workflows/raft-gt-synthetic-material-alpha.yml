@@ -774,6 +774,7 @@ jobs:
             /scripts/gt_decode_smolv.cpp
             /tools/synthetic_material_alpha/fft_coordinate_probe.py
             /tools/synthetic_material_alpha/fft_coordinate_artifact_replay.py
+            /tools/synthetic_material_alpha/fft_bundle_gate_probe.py
             /clients/GT/sessions/20261127-fft-coordinate-diagnostic/review_coordinate_artifacts.py
             /clients/GT/sessions/20261127-fft-coordinate-diagnostic/artifact-review.json
       - name: Fetch only two pinned authored Actions archives
@@ -819,6 +820,7 @@ jobs:
           curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
           c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
       - name: Validate every referenced module and inspect actual keyword table without changing original gate
+        if: github.event_name != 'push' || !contains(github.event.head_commit.message, '[gt-fft-bundle-gate]')
         shell: bash
         run: |
           set -euo pipefail
@@ -828,6 +830,15 @@ jobs:
             --dxc authored-fft-inputs/dxc.zip --dxc-sha256 eedccb8afa34ca208604c111b232ea42bb7f91c0cab01d409253d7a4e8ee5972 --dxc-job-success 0 \
             --hlslcc authored-fft-inputs/hlslcc.zip --hlslcc-sha256 95afbce3a5afb5073023caae625aabeda5b2fa7ed74c4c08aa025fc180558d6c --hlslcc-job-success 0 \
             --out authored-fft-replay-results/diagnostic.json
+      - name: Execute strict authored-only G4 gate and actual binary negative controls
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-fft-bundle-gate]')
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/gt-fft-replay-venv/bin/python" -B tools/synthetic_material_alpha/fft_bundle_gate_probe.py \
+            --decoder "$RUNNER_TEMP/gt-fft-replay-smolv/decode" \
+            --dxc authored-fft-inputs/dxc.zip --hlslcc authored-fft-inputs/hlslcc.zip \
+            --out authored-fft-replay-results/gate.json
       - name: Retain authored diagnostic report only
         if: always()
         uses: actions/upload-artifact@v4
