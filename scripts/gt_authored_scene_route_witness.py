@@ -11,6 +11,7 @@ import tempfile
 from scripts import gt_renderer_submesh_routes as gate
 from scripts import gt_mesh_vertex_payload as payload
 import struct
+import yaml
 
 
 def need(test,reason):
@@ -25,7 +26,7 @@ def load(root):
          producer.get("actual_public_export_collections")==9 and
          producer.get("actual_scene_collections")==2 and producer.get("original_assets_read") is False,
          "authored_producer_contract")
-    need(source.get("authored_generated_objects") is True and source.get("schema_version")==2,
+    need(source.get("authored_generated_objects") is True and source.get("schema_version")==3,
          "authored_source_contract")
     objects={};proofs={}
     for row in source["objects"]:
@@ -69,15 +70,20 @@ def audit(root,out):
     # Native exporter produced all classes, so no imported-image fallback.
     need(sum(cls==28 for cls,_ in docs.values())==2 and sum(cls==48 for cls,_ in docs.values())==2,
          "actual_native_shader_texture_documents_required")
-    baseline=gate.compare(objects,externals,mapping,files,docs,vertex_payloads=proofs)
+    baseline=gate.compare(objects,externals,mapping,files,docs,vertex_payloads=proofs,material_values=True)
     need(baseline["selected_renderer_routes_preserved"],"baseline_not_preserved:"+json.dumps(baseline["reason_counts"],sort_keys=True))
     need(baseline["selected_same_route_vertex_and_UV_bytes_verified"],"authored_payload_not_bound")
+    need(baseline["selected_same_route_material_values_verified"],"authored_material_values_not_bound")
     counts=baseline["counts"]
     for k,v in {"source_renderers":2,"complete_renderer_routes":2,
                 "complete_submesh_material_identity_routes":4,"renderer_mesh_layouts_matched":2,
                 "ordered_material_slots_matched":4,"material_shader_links_matched":4,
                 "material_texenv_slots_matched":4,"complete_vertex_byte_bound_renderer_routes":2,
-                "complete_vertex_byte_bound_submesh_routes":4}.items():need(counts.get(k)==v,"baseline_count:"+k)
+                "complete_vertex_byte_bound_submesh_routes":4,
+                "complete_material_value_bound_renderer_routes":2,
+                "complete_material_value_bound_submesh_routes":4,
+                "material_color_slots_matched":8,"material_float_slots_matched":8,
+                "material_int_slots_matched":8}.items():need(counts.get(k)==v,"baseline_count:"+k)
     rp=mapping[renderers[0]][1];other=mapping[renderers[1]][1]
     need(rp[0]!=other[0],"separate_scene_documents_required")
     scene_path=files[rp[0]][0]
@@ -87,7 +93,7 @@ def audit(root,out):
              "counterfactual_not_rejected:"+name+":"+str(report["reason_counts"]))
         controls[name]={"reason":reason,"mismatched":report["counts"].get("mismatched_renderer_routes",0),
                          "unproven":report["counts"].get("unproven_renderer_routes",0)}
-    def disk_control(name,mutator,reason,asset_path=scene_path):
+    def disk_control(name,mutator,reason,asset_path=scene_path,old_value_gate_passes=False):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/"project";shutil.copytree(root/"project",p)
             dest=p/asset_path.relative_to(root/"project")
@@ -95,7 +101,11 @@ def audit(root,out):
             changed=mutator(text);need(changed!=text,"no_counterfactual_mutation")
             dest.write_text(changed)
             f,d=gate.actual_index(p,mapping)
-            record(name,gate.compare(objects,externals,mapping,f,d,vertex_payloads=proofs),reason)
+            if old_value_gate_passes:
+                old=gate.compare(objects,externals,mapping,f,d,vertex_payloads=proofs)
+                need(old["selected_same_route_vertex_and_UV_bytes_verified"],"old_identity_gate_did_not_pass:"+name)
+            record(name,gate.compare(objects,externals,mapping,f,d,vertex_payloads=proofs,material_values=True),reason)
+            if old_value_gate_passes:controls[name]["V2_vertex_identity_gate_passed"]=True
     def swap(body):
         hit=re.search(r"(?m)^  m_Materials:\s*\n((?:  - \{[^\r\n]+\}\r?\n){2})",body)
         need(hit is not None,"actual_material_array_shape_unavailable")
@@ -135,32 +145,71 @@ def audit(root,out):
                         ("actual_YAML_same_size_position_bytes_drift",0)):
         disk_control(name,lambda text:scene_row(text,mp[1],43,lambda body:change_vertex(body,offset)),
                      "same_route_vertex_or_UV_bytes_drift",files[mp[0]][0])
+    # Change only actual saved-value YAML tokens; preserve all PPtrs,
+    # document identity, vertex bytes, and other properties. Verify V2
+    # passes each control before requiring V3 to reject it.
+    matp=mapping[materials[0]][1]
+    def change_property(body,name,replacement,channel=None,rename=False):
+        head,sep,yaml_body=body.partition("\n")
+        need(bool(sep),"actual_material_document_header_missing")
+        node=yaml.compose(yaml_body)
+        def pairs(n):
+            if isinstance(n,yaml.MappingNode):
+                for k,v in n.value:
+                    yield k,v
+                    yield from pairs(v)
+            elif isinstance(n,yaml.SequenceNode):
+                for x in n.value:yield from pairs(x)
+        found=[(k,v) for k,v in pairs(node) if isinstance(k,yaml.ScalarNode) and k.value==name]
+        need(len(found)==1,"actual_material_property_not_unique")
+        key,value=found[0]
+        target=key if rename else value
+        if channel is not None:
+            need(isinstance(value,yaml.MappingNode),"actual_material_RGBA_shape")
+            hits=[v for k,v in value.value if k.value==channel]
+            need(len(hits)==1,"actual_material_RGBA_channel")
+            target=hits[0]
+        need(isinstance(target,yaml.ScalarNode),"actual_material_value_not_scalar")
+        lo,hi=target.start_mark.index,target.end_mark.index
+        need(yaml_body[lo:hi]!=replacement,"actual_material_control_no_mutation")
+        return head+sep+yaml_body[:lo]+replacement+yaml_body[hi:]
+    for name,prop,value,channel,rename,reason in (
+        ("actual_YAML_tint_RGB_value_drift","_AuthoredTint","0.875","r",False,"material_color_value_drift"),
+        ("actual_YAML_tint_alpha_value_drift","_AuthoredTint","0.125","a",False,"material_color_value_drift"),
+        ("actual_YAML_float_value_drift","_AuthoredFloat","0.875",None,False,"material_float_value_drift"),
+        ("actual_YAML_int_value_drift","_AuthoredInteger","16777216",None,False,"material_int_value_drift"),
+        ("actual_YAML_missing_color_property","_AuthoredTint","_AuthoredUnexpected",None,True,"missing_material_color_slot"),
+    ):
+        disk_control(name,lambda text:scene_row(text,matp[1],21,
+                         lambda body:change_property(body,prop,value,channel,rename)),
+                     reason,files[matp[0]][0],old_value_gate_passes=True)
     # Actual trace identity with source and export owner confusion.
     table=deepcopy(externals);table[renderers[0][0]]=list(reversed(table[renderers[0][0]]))
     # Change only the two dependency entries for the two valid Materials,
     # preserving the mesh provider and every local component reference.
     table=deepcopy(externals);ls=table[renderers[0][0]]
     i,j=ls.index(materials[0][0]),ls.index(materials[1][0]);ls[i],ls[j]=ls[j],ls[i]
-    record("source_external_table_swapped_same_PathIDs",gate.compare(objects,table,mapping,files,docs,vertex_payloads=proofs),"ordered_pointer_target_mismatch")
+    record("source_external_table_swapped_same_PathIDs",gate.compare(objects,table,mapping,files,docs,vertex_payloads=proofs,material_values=True),"ordered_pointer_target_mismatch")
     altered=deepcopy(mapping);cls,p,exp=altered[renderers[0]];altered[renderers[0]]=(cls,(p[0],p[1],0),exp)
-    record("unscoped_type0_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs),"unproven_exportable_global_target")
+    record("unscoped_type0_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True),"unproven_exportable_global_target")
     altered=deepcopy(mapping);cls,p,exp=altered[renderers[0]];altered[renderers[0]]=(cls,(p[0],p[1],3),exp)
-    record("wrong_global_serialized_type",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs),"serialized_document_trace_type_mismatch")
+    record("wrong_global_serialized_type",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True),"serialized_document_trace_type_mismatch")
     altered=deepcopy(mapping);cls,p,exp=altered[renderers[0]];altered[renderers[0]]=(cls,p,False)
-    record("nonexportable_component_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs),"unproven_exportable_global_target")
+    record("nonexportable_component_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True),"unproven_exportable_global_target")
     # Hidden components must have no actual YAML document/trace. Since they
     # are intentionally excluded from this authored baseline, add them to
     # the source census and show that it cannot falsely claim full closure.
     augmented=dict(objects)
     for key in hidden:augmented[key]=(23,{})
-    record("hidden_source_renderers_not_promoted",gate.compare(augmented,externals,mapping,files,docs,vertex_payloads=proofs),"missing_source_export_trace")
-    result=dict(status="PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_YAML_ROUTE_JOIN",producer=producer,
+    record("hidden_source_renderers_not_promoted",gate.compare(augmented,externals,mapping,files,docs,vertex_payloads=proofs,material_values=True),"missing_source_export_trace")
+    result=dict(status="PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_MATERIAL_VALUE_ROUTE_JOIN",producer=producer,
                 actual_exported_documents=len(docs),actual_native_scene_files=2,source_generated_object_count=len(objects),
                 baseline=baseline,counterfactuals=controls,counterfactual_count=len(controls),
                 same_PathID_distinct_owners=True,actual_cross_owner_dependency_order=True,
                 source_contract_captured_before_export=True,hidden_source_renderers_excluded_from_baseline_but_not_promoted=True,
                 original_assets_read=False,original_serialized_source_verified=False,production_renderer_parity_verified=False,
-                vertex_payload_bytes_verified=True,UV_decoded_values_or_GPU_verified=False,XAPK=False)
+                vertex_payload_bytes_verified=True,serialized_material_values_verified=True,
+                UV_decoded_values_or_GPU_verified=False,shader_property_runtime_semantics_verified=False,XAPK=False)
     out.write_text(json.dumps(result,sort_keys=True,indent=2)+"\n")
     return result
 

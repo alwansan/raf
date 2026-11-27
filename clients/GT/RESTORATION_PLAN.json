@@ -1306,7 +1306,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "79114bac8f3569742508852ea1f6964b599856ff",
+    "reviewed_remote_head": "37b2aa410615288c09b443946fedbd0eb4a05d16",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2667,6 +2667,19 @@
         "RaftAuthoredSceneRouteWitness.cs": "8abb1366d1f5e7d4f87f882d2d1a799a5696214f98e35f0307cefd514688fb0e",
         "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
       }
+    },
+    "latest_material_value_route_binding": {
+      "status": "CANDIDATE_NOT_EXECUTED",
+      "base": "37b2aa410615288c09b443946fedbd0eb4a05d16",
+      "gate": "G1-G2-material-scalar-color-same-route-value-binding",
+      "session": "clients/GT/sessions/20261127-material-value-route-binding/README_AR.md",
+      "new_test": "tests/test_gt_material_route_values.py",
+      "original_assets_read": false,
+      "production_renderer_parity_verified": false,
+      "white_or_fire_fixed": false,
+      "unity_render_executed": false,
+      "XAPK": false,
+      "next": "Run authored-scene-route-join only; retain actual results and fix any failed control."
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."

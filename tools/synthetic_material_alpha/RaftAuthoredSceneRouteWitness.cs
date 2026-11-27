@@ -146,12 +146,34 @@ public static class RaftAuthoredSceneRouteWitness
             env.Texture.SetAsset(mat.Collection,tex);
             env.Scale.X=1+i;env.Scale.Y=.75f;
             env.Offset.X=.125f*(i+1);env.Offset.Y=.25f;
+            // Non-identical finite saved values, including HDR/negative color
+            // components and int32 values beyond exact float32 precision.
+            Require(props.Has_Colors_AssetDictionary_Utf8String_ColorRGBAf() &&
+                props.Has_Floats_AssetDictionary_Utf8String_Single() && props.Has_Ints(),
+                "unexpected_authored_material_value_layout");
+            var tint=props.Colors_AssetDictionary_Utf8String_ColorRGBAf.AddNew();
+            tint.Key="_AuthoredTint";
+            tint.Value.R=.125f+i*.25f;tint.Value.G=.5f;tint.Value.B=1.5f+i;tint.Value.A=.625f-i*.25f;
+            var vector=props.Colors_AssetDictionary_Utf8String_ColorRGBAf.AddNew();
+            vector.Key="_AuthoredVector";
+            vector.Value.R=-.375f;vector.Value.G=2.25f+i;vector.Value.B=.0625f;vector.Value.A=0;
+            var scalar=props.Floats_AssetDictionary_Utf8String_Single.AddNew();
+            scalar.Key="_AuthoredFloat";scalar.Value=.375f+i*.125f;
+            var scalar2=props.Floats_AssetDictionary_Utf8String_Single.AddNew();
+            scalar2.Key="_AuthoredNegative";scalar2.Value=-2.5f-i;
+            var integer=props.Ints.AddNew();integer.Key="_AuthoredInteger";integer.Value=16777217+i;
+            var integer2=props.Ints.AddNew();integer2.Key="_AuthoredSigned";integer2.Value=-17-i;
             Require(mat.Shader_C21P==shader,"authored_shader_binding_failed");
             mats.Add(mat);
             collections.Add(new AssetExportCollection<IUnityObjectBase>(native,mat));
             collections.Add(new YamlShaderExportCollection(new YamlShaderExporter(),shader));
             collections.Add(new AssetExportCollection<IUnityObjectBase>(native,tex));
             rows.Add(Row(mat,new {m_Shader=Ref(mat,shader),m_SavedProperties=new {
+                m_Colors=props.Colors_AssetDictionary_Utf8String_ColorRGBAf.Select(p=>new object[]{
+                    p.Key.String,new {r=p.Value.R,g=p.Value.G,b=p.Value.B,a=p.Value.A}}).ToArray(),
+                m_Floats=props.Floats_AssetDictionary_Utf8String_Single.Select(p=>new object[]{
+                    p.Key.String,p.Value}).ToArray(),
+                m_Ints=props.Ints.Select(p=>new object[]{p.Key.String,p.Value}).ToArray(),
                 m_TexEnvs=new object[]{new object[]{"_MainTex",new {m_Texture=Ptr(env.Texture),
                     m_Scale=new {x=env.Scale.X,y=env.Scale.Y},m_Offset=new {x=env.Offset.X,y=env.Offset.Y}}}}
             }}));
@@ -198,7 +220,7 @@ public static class RaftAuthoredSceneRouteWitness
         var externals=owners.ToDictionary(o=>o.Name,o=>o.Dependencies.Skip(1).Select(d=>d?.Name).ToArray());
         // The source contract is captured from generated objects before any
         // export or trace. It is not reconstructed from exported YAML.
-        var source=new {schema_version=2,authored_generated_objects=true,objects=rows,externals,
+        var source=new {schema_version=3,authored_generated_objects=true,objects=rows,externals,
             hidden=hidden.Select(o=>new {owner=o.Collection.Name,path_id=o.PathID,class_id=o.ClassID}).ToArray()};
         File.WriteAllText(Path.Combine(root,"source.json"),JsonSerializer.Serialize(source));
         LibraryConfiguration settings=new();settings.SetProjectSettings(version);

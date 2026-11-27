@@ -1,3 +1,11 @@
+# GT — G1/G2 same-route material scalar/color binding | 27 نوفمبر 2026
+
+رأس البدء 37b2aa410615288c09b443946fedbd0eb4a05d16 مطابق؛ Actions 45947525967/45947525970 ناجحة وأرشيف vertex محفوظ. لا checkout محلي أو فرق محلي متاح؛ GitHub connector فقط. مرشح V3 يربط B22.normalize وB44.normalize_colors مع نفس Mesh/Renderer/SubMesh/Material/Shader/TexEnv وV2 bytes، exact finite binary32 RGBA/float وsigned int32، يرفض missing/extra/value/type/duplicate/nonfinite، يحفظ -0 في YAML (int literal -0 محافظ غير مثبت). V1/V2 API تاريخيان دون material claim؛ CLI V3. لا تغيير المصدر الأصلي أو shader semantics/GPU. 22 unit tests جديدة؛ public C# typed properties مرشح لتصدير actual YAML مع HDR/negative RGBA، float/int values beyond 2^24، 5 mutations of actual YAML where V2 passes and V3 rejects، مع 11 controls السابقة. لم يُنفذ CI بعد.
+
+**التالي:** شغّل فقط authored-scene-route-join مع الاختبارات الجديدة؛ تحقق من النتيجة الخام واحفظها. A3 blocked حتى مصدر أصلي مأذون مثبت؛ G0–G6 open؛ census historical 688/786 non-dummy و98 dummy/37 GUID، لا إثبات إصلاح الأبيض/النار في اللعبة. لا Unity raster، لا أصل/LFS أو هاتف جزئي أو XAPK. CL/المختبر قراءة فقط، BLACK خارج النطاق، animation مؤجل؛ branch feature/android-native-port فقط بلا force push.
+
+---
+
 # GT — PASS G1/G2 same-route vertex/UV byte binding | 27 نوفمبر 2026
 
 رأس البدء de21c5ef6f9cc4bcc4dda3a4c0eb4cc1d2f59335 مطابق، لا checkout محلي أو فرق متاح؛ لا وصول DNS محلي إلى GitHub، استخدم connector وActions. [23fe335](https://github.com/alwansan/raf/commit/23fe335acaf8b557cafaf2eb095d8311d299262f) أضاف scripts/gt_mesh_vertex_payload.py وربط V2 CLI بالـMesh owner/PathID ثم actual GUID/anchor في نفس Renderer/MeshFilter/SubMesh/Material/Shader/TexEnv route. provider full SHA/size وrange digest في نفس sequential read، once per provider للمجموعة، block memory فقط. legacy source_geometry يلغي cached verification ويقرأ owner bytes المثبتة نفسها؛ rehash لكل stream call في legacy، أداء production لم يختبر، لم نغيّر compressed/bindpose comparison. V2 يرفض compressed أو layout غير مثبت، يدعم contiguous single interleaved stream مع float32 XYZ وUV0؛ لا decoded values أو GPU. V1 API يبقى identity-only ولا يدعي bytes.

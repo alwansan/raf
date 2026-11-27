@@ -1,0 +1,13 @@
+{
+  "status": "CANDIDATE_NOT_EXECUTED",
+  "base": "37b2aa410615288c09b443946fedbd0eb4a05d16",
+  "gate": "G1-G2-material-scalar-color-same-route-value-binding",
+  "session": "clients/GT/sessions/20261127-material-value-route-binding/README_AR.md",
+  "new_test": "tests/test_gt_material_route_values.py",
+  "original_assets_read": false,
+  "production_renderer_parity_verified": false,
+  "white_or_fire_fixed": false,
+  "unity_render_executed": false,
+  "XAPK": false,
+  "next": "Run authored-scene-route-join only; retain actual results and fix any failed control."
+}

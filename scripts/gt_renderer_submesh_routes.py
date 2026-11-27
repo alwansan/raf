@@ -2,8 +2,8 @@
 
 Strict bounded candidate: triangle-list submeshes with inline indices and
 UV0 descriptors. Unsupported topology/renderer/material scope is UNKNOWN,
-never auto-repaired. V1 identity-only is historical; the CLI requires V2
-byte binding. Neither proves shader programs or GPU behavior.
+never auto-repaired. V1 identity and V2 byte-binding APIs remain available;
+CLI requires V3 same-route material values and vertex bytes. No GPU claim.
 Private original source and three traces are never published.
 """
 from __future__ import annotations
@@ -22,6 +22,7 @@ from scripts.gt_original_material_link_graph import pointer as source_pointer, d
 from scripts.gt_particle108_source_pixel_parity import verified_range, bounded_snapshot
 from scripts.gt_next23b_unity_receipt import strict_json
 from scripts import gt_mesh_vertex_payload as vertex_payload
+from scripts import gt_material_route_values as material_value
 from scripts.b05_verify_material_texenv_bindings import normalize_texenvs
 from scripts.verify_exported_material_texture_links import is_texture, BUILTIN, ZERO, IMAGES
 from scripts.b03_verify_renderer_material_links import GUID
@@ -155,6 +156,11 @@ def yaml_tree(body,cls):
                 if key in out:raise Drift("duplicate_yaml_mapping_key")
                 if key in {"guid","m_IndexBuffer","_typelessdata"} and isinstance(v,yaml.ScalarNode):
                     v.tag="tag:yaml.org,2002:str"
+                elif cls==21 and isinstance(v,yaml.ScalarNode) and v.tag=="tag:yaml.org,2002:int" and v.value=="-0":
+                    # Unity may emit binary32 negative zero as -0. Do not
+                    # silently erase its sign; an int with this spelling is
+                    # conservatively outside the strict material value gate.
+                    v.tag="tag:yaml.org,2002:float"
                 out[key]=self.construct_object(v,deep=deep)
             return out
     data=yaml.load(body,Loader=Loader)
@@ -261,7 +267,8 @@ def source_records(root,records,owners,*,loader=None,vertex_payloads=None):
     return objects,externals
 
 
-def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None):
+def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material_values=False):
+    require(not material_values or vertex_payloads is not None,"material_value_gate_requires_vertex_binding",Unknown)
     counts=Counter();reasons=Counter()
     filters=defaultdict(list)
     for key,(cls,tree) in objects.items():
@@ -398,7 +405,16 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None):
                     counts["material_texenv_slots_matched"]+=1
                     counts["material_null_texture_slots_preserved"]+=int(tex is None)
                 counts["complete_submesh_material_identity_routes"]+=1
+                if material_values:
+                    try: value_counts=material_value.compare(ms,ma)
+                    except material_value.Unproven as exc:raise Unknown(str(exc)) from None
+                    except material_value.Mismatch as exc:raise Drift(str(exc)) from None
+                    for kind,total in value_counts.items():
+                        counts["material_"+kind+"_slots_matched"]+=total
+                    counts["complete_material_value_bound_submesh_routes"]+=1
             counts["complete_renderer_routes"]+=1
+            if material_values:
+                counts["complete_material_value_bound_renderer_routes"]+=1
             if vertex_payloads is not None:
                 counts["complete_vertex_byte_bound_renderer_routes"]+=1
                 counts["complete_vertex_byte_bound_submesh_routes"]+=len(before)
@@ -414,12 +430,15 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None):
     complete=bool(counts["source_renderers"]) and counts["complete_renderer_routes"]==counts["source_renderers"]
     byte_bound=vertex_payloads is not None and complete and (
         counts["complete_vertex_byte_bound_renderer_routes"]==counts["source_renderers"])
-    return {"schema_version":2 if vertex_payloads is not None else 1,
+    value_bound=material_values and byte_bound and (
+        counts["complete_material_value_bound_renderer_routes"]==counts["source_renderers"])
+    return {"schema_version":3 if material_values else 2 if vertex_payloads is not None else 1,
             "counts":dict(sorted(counts.items())),"reason_counts":dict(sorted(reasons.items())),
             "selected_renderer_routes_preserved":complete,
             "full_game_renderers_verified":False,
             "vertex_payload_or_UV_samples_verified":byte_bound,
             "selected_same_route_vertex_and_UV_bytes_verified":byte_bound,
+            "selected_same_route_material_values_verified":value_bound,
             "UV_decoded_values_or_GPU_verified":False,
             "shader_program_color_scalar_or_GPU_parity_verified":False,"private_identifiers_published":False}
 
@@ -431,7 +450,7 @@ def audit(source,zip2,project,material_trace,mesh_trace,renderer_trace,owners):
     objects,externals=source_records(source,pins,owners,vertex_payloads=payloads)
     mapping=traces(*(strict_json(bounded_snapshot(p,MAX_DOC)) for p in (material_trace,mesh_trace,renderer_trace)))
     files,docs=actual_index(project,mapping)
-    report=compare(objects,externals,mapping,files,docs,vertex_payloads=payloads)
+    report=compare(objects,externals,mapping,files,docs,vertex_payloads=payloads,material_values=True)
     report["authenticated_selected_source_owners"]=len(owners)
     return report
 
@@ -447,7 +466,7 @@ def main():
     try:
         report=audit(a.source,a.zip2,a.project,a.material_trace,a.mesh_trace,a.renderer_trace,a.owner)
     except Exception as exc:
-        report={"schema_version":2,"status":"INCONCLUSIVE","error_type":type(exc).__name__,
+        report={"schema_version":3,"status":"INCONCLUSIVE","error_type":type(exc).__name__,
                 "selected_renderer_routes_preserved":False,"private_identifiers_published":False}
     with a.out.open("x") as f:json.dump(report,f,sort_keys=True,indent=2);f.write("\n")
     return 0 if report["selected_renderer_routes_preserved"] else 2

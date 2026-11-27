@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-vertex-payload-route-binding/README_AR.md",
-  "next_action": "G1-G2-material-scalar-color-same-route-value-binding: reuse B22.normalize and B44.normalize_colors, compare binary32 RGBA/float plus int values with explicit missing/extra/wrong type or value controls and preserve V2 byte binding. Actual authored YAML only; separate property bytes from GPU/Unity color-space. No repeat of successful raster or vertex export without new proof purpose. A3 blocked pending authorized original source; no XAPK.",
+  "latest_session": "clients/GT/sessions/20261127-material-value-route-binding/README_AR.md",
+  "next_action": "Run authored-scene-route-join only; retain actual results and fix any failed control.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "79114bac8f3569742508852ea1f6964b599856ff",
+    "reviewed_remote_head": "37b2aa410615288c09b443946fedbd0eb4a05d16",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -3325,6 +3325,19 @@
         "RaftAuthoredSceneRouteWitness.cs": "8abb1366d1f5e7d4f87f882d2d1a799a5696214f98e35f0307cefd514688fb0e",
         "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
       }
+    },
+    "latest_material_value_route_binding": {
+      "status": "CANDIDATE_NOT_EXECUTED",
+      "base": "37b2aa410615288c09b443946fedbd0eb4a05d16",
+      "gate": "G1-G2-material-scalar-color-same-route-value-binding",
+      "session": "clients/GT/sessions/20261127-material-value-route-binding/README_AR.md",
+      "new_test": "tests/test_gt_material_route_values.py",
+      "original_assets_read": false,
+      "production_renderer_parity_verified": false,
+      "white_or_fire_fixed": false,
+      "unity_render_executed": false,
+      "XAPK": false,
+      "next": "Run authored-scene-route-join only; retain actual results and fix any failed control."
     }
   }
 }
