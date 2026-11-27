@@ -97,9 +97,9 @@ def audit(root,out):
                 "imported_png_top_mip_slots_matched":4,"imported_png_pixels_matched_per_route":16,
                 "imported_png_RGBA_channels_matched_per_route":64,"imported_png_stream_source_slots_matched":4}.items():
         need(baseline["counts"].get(k)==v,"actual_png_baseline_count:"+k)
-    # Independent T3 per-channel oracle on same authenticated source range;
-    # no additional resource read: reconstruct authored fixed source from
-    # pre-export captured provider data only after exact full-file pin.
+    # Independent T3 per-channel oracle on the same source range.
+    # Reauthenticate the entire small authored provider for this second
+    # oracle; never perform an unauthenticated read after a prior hash.
     # Compare exact decoded source bytes and actual public PNG independently.
     provider=next(iter(requests.values())).provider
     raw=gate.verified_range(root/"providers"/provider,(pins["Raft_Data/"+provider][1],pins["Raft_Data/"+provider][2]),0,61)

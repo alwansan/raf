@@ -1,0 +1,13 @@
+{
+  "APK": false,
+  "files": {
+    "AssetRipper.Export.UnityProjects.dll": "e3139c1816b0c8ecc937016800f15bd76784681a2c904fdb9b98320922f9e8d4",
+    "RaftAuthoredSceneRouteWitness.cs": "50c4204a02350a11eceeecb83d63ac12e83cdb765b53cef1602fe9ad93a70cd5",
+    "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
+  },
+  "head": "0912ba8f6b541271b5dfb8f794327117c344e3ca",
+  "original_assets_read": false,
+  "public_tool_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+  "run_id": "45957439789",
+  "status": "COMPILED_PUBLIC_EXPORTER"
+}

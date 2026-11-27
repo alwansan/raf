@@ -1,0 +1,105 @@
+{
+  "authored_only": true,
+  "textures": [
+    {
+      "alphaIsTransparency": 1,
+      "image_mode": "RGBA",
+      "mipmaps": {
+        "alphaTestReferenceValue": 0.5,
+        "borderMipMap": 0,
+        "enableMipMap": 1,
+        "fadeOut": 0,
+        "linearTexture": 0,
+        "mipMapFadeDistanceEnd": 3,
+        "mipMapFadeDistanceStart": 1,
+        "mipMapMode": 0,
+        "mipMapsPreserveCoverage": 0,
+        "sRGBTexture": 0
+      },
+      "platformSettings": [
+        {
+          "allowsAlphaSplitting": 0,
+          "androidETC2FallbackOverride": 0,
+          "buildTarget": "DefaultTexturePlatform",
+          "compressionQuality": 50,
+          "crunchedCompression": 0,
+          "forceMaximumCompressionQuality_BC6H_BC7": 0,
+          "maxTextureSize": 2048,
+          "overridden": 0,
+          "resizeAlgorithm": 0,
+          "serializedVersion": 3,
+          "textureCompression": 2,
+          "textureFormat": -1
+        }
+      ],
+      "size": [
+        2,
+        2
+      ],
+      "suffix": ".png",
+      "textureSettings": {
+        "aniso": 2,
+        "filterMode": 1,
+        "mipBias": -0.625,
+        "serializedVersion": 2,
+        "wrapU": 0,
+        "wrapV": 2,
+        "wrapW": 3
+      },
+      "textureShape": 1,
+      "textureType": 0,
+      "trace_fileID": 2800000,
+      "trace_type": 3
+    },
+    {
+      "alphaIsTransparency": 1,
+      "image_mode": "RGBA",
+      "mipmaps": {
+        "alphaTestReferenceValue": 0.5,
+        "borderMipMap": 0,
+        "enableMipMap": 1,
+        "fadeOut": 0,
+        "linearTexture": 0,
+        "mipMapFadeDistanceEnd": 3,
+        "mipMapFadeDistanceStart": 1,
+        "mipMapMode": 0,
+        "mipMapsPreserveCoverage": 0,
+        "sRGBTexture": 0
+      },
+      "platformSettings": [
+        {
+          "allowsAlphaSplitting": 0,
+          "androidETC2FallbackOverride": 0,
+          "buildTarget": "DefaultTexturePlatform",
+          "compressionQuality": 50,
+          "crunchedCompression": 0,
+          "forceMaximumCompressionQuality_BC6H_BC7": 0,
+          "maxTextureSize": 2048,
+          "overridden": 0,
+          "resizeAlgorithm": 0,
+          "serializedVersion": 3,
+          "textureCompression": 2,
+          "textureFormat": -1
+        }
+      ],
+      "size": [
+        2,
+        2
+      ],
+      "suffix": ".png",
+      "textureSettings": {
+        "aniso": 8,
+        "filterMode": 2,
+        "mipBias": 0.375,
+        "serializedVersion": 2,
+        "wrapU": 1,
+        "wrapV": 1,
+        "wrapW": 2
+      },
+      "textureShape": 1,
+      "textureType": 0,
+      "trace_fileID": 2800000,
+      "trace_type": 3
+    }
+  ]
+}

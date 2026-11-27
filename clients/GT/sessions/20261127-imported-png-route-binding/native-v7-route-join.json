@@ -1,0 +1,351 @@
+{
+  "UV_decoded_values_or_GPU_verified": false,
+  "XAPK": false,
+  "active_shader_variant_or_runtime_keyword_scope_verified": false,
+  "actual_cross_owner_dependency_order": true,
+  "actual_exported_documents": 13,
+  "actual_native_scene_files": 2,
+  "authored_provider_bytes": 61,
+  "authored_provider_count": 1,
+  "authored_stream_offsets": [
+    7,
+    34
+  ],
+  "baseline": {
+    "UV_decoded_values_or_GPU_verified": false,
+    "active_shader_variant_or_runtime_keyword_scope_verified": false,
+    "counts": {
+      "complete_material_keyword_bound_renderer_routes": 2,
+      "complete_material_keyword_bound_submesh_routes": 4,
+      "complete_material_value_bound_renderer_routes": 2,
+      "complete_material_value_bound_submesh_routes": 4,
+      "complete_native_sampler_bound_renderer_routes": 2,
+      "complete_native_sampler_bound_submesh_routes": 4,
+      "complete_renderer_routes": 2,
+      "complete_submesh_material_identity_routes": 4,
+      "complete_texture_payload_bound_renderer_routes": 2,
+      "complete_texture_payload_bound_submesh_routes": 4,
+      "complete_vertex_byte_bound_renderer_routes": 2,
+      "complete_vertex_byte_bound_submesh_routes": 4,
+      "material_color_slots_matched": 8,
+      "material_disabled_pass_entries_matched": 4,
+      "material_float_slots_matched": 8,
+      "material_int_slots_matched": 8,
+      "material_invalid_keyword_entries_matched": 4,
+      "material_null_texture_slots_preserved": 0,
+      "material_shader_links_matched": 4,
+      "material_texenv_slots_matched": 4,
+      "material_valid_keyword_entries_matched": 8,
+      "native_texture_sampler_fields_matched_per_route": 24,
+      "native_texture_sampler_slots_matched": 4,
+      "ordered_material_slots_matched": 4,
+      "renderer_mesh_layouts_matched": 2,
+      "renderer_vertex_payloads_matched": 2,
+      "source_renderers": 2,
+      "streamed_texture_mip_levels_matched_per_route": 8,
+      "streamed_texture_payload_bytes_matched_per_route": 80,
+      "streamed_texture_payload_slots_matched": 4,
+      "texture_mip_levels_matched_per_route": 8,
+      "texture_payload_bytes_matched_per_route": 80,
+      "texture_payload_slots_matched": 4
+    },
+    "full_game_renderers_verified": false,
+    "imported_png_lower_mip_or_Unity_import_verified": false,
+    "private_identifiers_published": false,
+    "reason_counts": {},
+    "schema_version": 7,
+    "selected_nonnull_same_route_texture_payloads_verified": true,
+    "selected_renderer_routes_preserved": true,
+    "selected_same_route_imported_png_top_mip_verified": false,
+    "selected_same_route_material_keyword_pass_state_verified": true,
+    "selected_same_route_material_values_verified": true,
+    "selected_same_route_native_texture_sampler_verified": true,
+    "selected_same_route_streamed_texture_payloads_verified": true,
+    "selected_same_route_vertex_and_UV_bytes_verified": true,
+    "shader_program_color_scalar_or_GPU_parity_verified": false,
+    "texture_sampler_import_colorspace_or_GPU_verified": false,
+    "vertex_payload_or_UV_samples_verified": true
+  },
+  "counterfactual_count": 43,
+  "counterfactuals": {
+    "actual_YAML_disabled_pass_drift": {
+      "V3_material_value_gate_passed": true,
+      "mismatched": 2,
+      "reason": "missing_material_disabled_pass",
+      "unproven": 0
+    },
+    "actual_YAML_float_value_drift": {
+      "V2_vertex_identity_gate_passed": true,
+      "mismatched": 2,
+      "reason": "material_float_value_drift",
+      "unproven": 0
+    },
+    "actual_YAML_int_value_drift": {
+      "V2_vertex_identity_gate_passed": true,
+      "mismatched": 2,
+      "reason": "material_int_value_drift",
+      "unproven": 0
+    },
+    "actual_YAML_invalid_keyword_field_missing": {
+      "V3_material_value_gate_passed": true,
+      "mismatched": 0,
+      "reason": "missing_material_keyword_pass_container",
+      "unproven": 2
+    },
+    "actual_YAML_missing_color_property": {
+      "V2_vertex_identity_gate_passed": true,
+      "mismatched": 2,
+      "reason": "missing_material_color_slot",
+      "unproven": 0
+    },
+    "actual_YAML_private_selector_injected": {
+      "V3_material_value_gate_passed": true,
+      "mismatched": 0,
+      "reason": "invalid_material_keyword_set",
+      "unproven": 2
+    },
+    "actual_YAML_same_size_UV_bytes_drift": {
+      "mismatched": 2,
+      "reason": "same_route_vertex_or_UV_bytes_drift",
+      "unproven": 0
+    },
+    "actual_YAML_same_size_position_bytes_drift": {
+      "mismatched": 2,
+      "reason": "same_route_vertex_or_UV_bytes_drift",
+      "unproven": 0
+    },
+    "actual_YAML_sampler_Aniso_drift": {
+      "V6_texture_payload_gate_passed": true,
+      "mismatched": 2,
+      "reason": "same_route_texture_sampler_Aniso_drift",
+      "unproven": 0
+    },
+    "actual_YAML_sampler_FilterMode_drift": {
+      "V6_texture_payload_gate_passed": true,
+      "mismatched": 2,
+      "reason": "same_route_texture_sampler_FilterMode_drift",
+      "unproven": 0
+    },
+    "actual_YAML_sampler_MipBias_drift": {
+      "V6_texture_payload_gate_passed": true,
+      "mismatched": 2,
+      "reason": "same_route_texture_sampler_MipBias_drift",
+      "unproven": 0
+    },
+    "actual_YAML_sampler_WrapU_drift": {
+      "V6_texture_payload_gate_passed": true,
+      "mismatched": 2,
+      "reason": "same_route_texture_sampler_WrapU_drift",
+      "unproven": 0
+    },
+    "actual_YAML_sampler_WrapV_drift": {
+      "V6_texture_payload_gate_passed": true,
+      "mismatched": 2,
+      "reason": "same_route_texture_sampler_WrapV_drift",
+      "unproven": 0
+    },
+    "actual_YAML_sampler_WrapW_drift": {
+      "V6_texture_payload_gate_passed": true,
+      "mismatched": 2,
+      "reason": "same_route_texture_sampler_WrapW_drift",
+      "unproven": 0
+    },
+    "actual_YAML_sampler_importer_unset_mip_bias": {
+      "V6_texture_payload_gate_passed": true,
+      "mismatched": 0,
+      "reason": "invalid_native_texture_sampler_value",
+      "unproven": 2
+    },
+    "actual_YAML_sampler_invalid_filter": {
+      "V6_texture_payload_gate_passed": true,
+      "mismatched": 0,
+      "reason": "invalid_native_texture_sampler_value",
+      "unproven": 2
+    },
+    "actual_YAML_sampler_legacy_wrap_alias": {
+      "V6_texture_payload_gate_passed": true,
+      "mismatched": 0,
+      "reason": "missing_native_texture_sampler_field",
+      "unproven": 2
+    },
+    "actual_YAML_sampler_missing_axis": {
+      "V6_texture_payload_gate_passed": true,
+      "mismatched": 0,
+      "reason": "missing_native_texture_sampler_field",
+      "unproven": 2
+    },
+    "actual_YAML_texture_RGB_drift": {
+      "V4_material_keyword_gate_passed": true,
+      "mismatched": 2,
+      "reason": "same_route_texture_payload_bytes_drift",
+      "unproven": 0
+    },
+    "actual_YAML_texture_alpha_drift": {
+      "V4_material_keyword_gate_passed": true,
+      "mismatched": 2,
+      "reason": "same_route_texture_payload_bytes_drift",
+      "unproven": 0
+    },
+    "actual_YAML_texture_lower_mip_drift": {
+      "V4_material_keyword_gate_passed": true,
+      "mismatched": 2,
+      "reason": "same_route_texture_payload_bytes_drift",
+      "unproven": 0
+    },
+    "actual_YAML_texture_mip_count_drift": {
+      "V4_material_keyword_gate_passed": true,
+      "mismatched": 0,
+      "reason": "texture_mip_size_mismatch",
+      "unproven": 2
+    },
+    "actual_YAML_texture_missing_bytes": {
+      "V4_material_keyword_gate_passed": true,
+      "mismatched": 0,
+      "reason": "texture_payload_hex_or_length_mismatch",
+      "unproven": 2
+    },
+    "actual_YAML_texture_same_size_payload_swap": {
+      "V4_material_keyword_gate_passed": true,
+      "mismatched": 2,
+      "reason": "same_route_texture_payload_bytes_drift",
+      "unproven": 0
+    },
+    "actual_YAML_texture_unsupported_format": {
+      "V4_material_keyword_gate_passed": true,
+      "mismatched": 0,
+      "reason": "unsupported_native_RGBA32_texture_layout",
+      "unproven": 2
+    },
+    "actual_YAML_tint_RGB_value_drift": {
+      "V2_vertex_identity_gate_passed": true,
+      "mismatched": 2,
+      "reason": "material_color_value_drift",
+      "unproven": 0
+    },
+    "actual_YAML_tint_alpha_value_drift": {
+      "V2_vertex_identity_gate_passed": true,
+      "mismatched": 2,
+      "reason": "material_color_value_drift",
+      "unproven": 0
+    },
+    "actual_YAML_valid_invalid_bucket_swap": {
+      "V3_material_value_gate_passed": true,
+      "mismatched": 2,
+      "reason": "material_keyword_bucket_drift",
+      "unproven": 0
+    },
+    "actual_YAML_valid_keyword_added": {
+      "V3_material_value_gate_passed": true,
+      "mismatched": 2,
+      "reason": "unexpected_material_valid_keyword",
+      "unproven": 0
+    },
+    "actual_YAML_valid_keyword_removed": {
+      "V3_material_value_gate_passed": true,
+      "mismatched": 2,
+      "reason": "missing_material_valid_keyword",
+      "unproven": 0
+    },
+    "actual_source_out_of_bounds_stream_extent": {
+      "V4_material_keyword_gate_passed": true,
+      "mismatched": 0,
+      "reason": "texture_stream_extent_out_of_bounds",
+      "unproven": 2
+    },
+    "actual_source_same_size_provider_padding_mutation": {
+      "V4_material_keyword_gate_passed": true,
+      "mismatched": 0,
+      "reason": "texture_stream_provider_SHA_mismatch",
+      "unproven": 2
+    },
+    "actual_source_same_size_stream_extent_swap": {
+      "V4_material_keyword_gate_passed": true,
+      "mismatched": 2,
+      "reason": "same_route_texture_payload_bytes_drift",
+      "unproven": 0
+    },
+    "actual_source_unpinned_stream_provider": {
+      "V4_material_keyword_gate_passed": true,
+      "mismatched": 0,
+      "reason": "texture_stream_provider_not_pinned",
+      "unproven": 2
+    },
+    "foreign_scene_gameobject_in_real_YAML": {
+      "mismatched": 1,
+      "reason": "ordered_pointer_target_mismatch",
+      "unproven": 0
+    },
+    "hidden_source_renderers_not_promoted": {
+      "mismatched": 0,
+      "reason": "missing_source_export_trace",
+      "unproven": 2
+    },
+    "nonexportable_component_trace": {
+      "mismatched": 0,
+      "reason": "unproven_exportable_global_target",
+      "unproven": 1
+    },
+    "same_document_but_nonlocal_gameobject_reference": {
+      "mismatched": 1,
+      "reason": "renderer_gameobject_not_local",
+      "unproven": 0
+    },
+    "source_external_table_swapped_same_PathIDs": {
+      "mismatched": 1,
+      "reason": "ordered_pointer_target_mismatch",
+      "unproven": 0
+    },
+    "stripped_renderer_is_not_complete": {
+      "mismatched": 0,
+      "reason": "missing_actual_serialized_target",
+      "unproven": 1
+    },
+    "swap_existing_materials_in_real_YAML": {
+      "mismatched": 1,
+      "reason": "ordered_pointer_target_mismatch",
+      "unproven": 0
+    },
+    "unscoped_type0_trace": {
+      "mismatched": 0,
+      "reason": "unproven_exportable_global_target",
+      "unproven": 1
+    },
+    "wrong_global_serialized_type": {
+      "mismatched": 1,
+      "reason": "serialized_document_trace_type_mismatch",
+      "unproven": 0
+    }
+  },
+  "hidden_source_renderers_excluded_from_baseline_but_not_promoted": true,
+  "native_exported_RGBA32_texture_payload_bytes_verified": true,
+  "original_assets_read": false,
+  "original_serialized_source_verified": false,
+  "producer": {
+    "Android_device": false,
+    "XAPK": false,
+    "actual_imported_png_texture_collections": 0,
+    "actual_public_export_collections": 9,
+    "actual_scene_collections": 2,
+    "authored_file_backed_streamed_texture_collections": 2,
+    "authored_native_shader_programs_verified": false,
+    "hidden_components": 2,
+    "original_assets_read": false,
+    "original_serialized_source": false,
+    "production_auto_exporter_selection": false,
+    "public_tool_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "source_objects": 13,
+    "status": "OBSERVED_AUTHORED_PUBLIC_YAML_EXPORT"
+  },
+  "production_renderer_parity_verified": false,
+  "same_PathID_distinct_owners": true,
+  "serialized_material_keyword_pass_state_verified": true,
+  "serialized_material_values_verified": true,
+  "serialized_native_texture_sampler_verified": true,
+  "shader_property_runtime_semantics_verified": false,
+  "source_contract_captured_before_export": true,
+  "source_generated_object_count": 13,
+  "source_pinned_streamed_RGBA32_texture_payload_bytes_verified": true,
+  "status": "PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_NATIVE_TEXTURE_SAMPLER_ROUTE_JOIN",
+  "texture_sampler_import_colorspace_or_GPU_verified": false,
+  "vertex_payload_bytes_verified": true
+}

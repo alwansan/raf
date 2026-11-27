@@ -1,0 +1,130 @@
+{
+  "Android_device": false,
+  "Unity_render_executed": false,
+  "XAPK": false,
+  "actual_native_documents": 11,
+  "actual_native_scene_files": 2,
+  "actual_png_textures": 2,
+  "actual_public_export_collections": 9,
+  "authored_provider_bytes": 61,
+  "authored_stream_offsets": [
+    7,
+    34
+  ],
+  "baseline": {
+    "UV_decoded_values_or_GPU_verified": false,
+    "active_shader_variant_or_runtime_keyword_scope_verified": false,
+    "counts": {
+      "complete_imported_png_bound_renderer_routes": 2,
+      "complete_imported_png_bound_submesh_routes": 4,
+      "complete_material_keyword_bound_renderer_routes": 2,
+      "complete_material_keyword_bound_submesh_routes": 4,
+      "complete_material_value_bound_renderer_routes": 2,
+      "complete_material_value_bound_submesh_routes": 4,
+      "complete_renderer_routes": 2,
+      "complete_submesh_material_identity_routes": 4,
+      "complete_vertex_byte_bound_renderer_routes": 2,
+      "complete_vertex_byte_bound_submesh_routes": 4,
+      "imported_png_RGBA_channels_matched_per_route": 64,
+      "imported_png_importer_mip_bias_unset_slots": 0,
+      "imported_png_pixels_matched_per_route": 16,
+      "imported_png_stream_source_slots_matched": 4,
+      "imported_png_top_mip_slots_matched": 4,
+      "material_color_slots_matched": 8,
+      "material_disabled_pass_entries_matched": 4,
+      "material_float_slots_matched": 8,
+      "material_int_slots_matched": 8,
+      "material_invalid_keyword_entries_matched": 4,
+      "material_null_texture_slots_preserved": 0,
+      "material_shader_links_matched": 4,
+      "material_texenv_slots_matched": 4,
+      "material_valid_keyword_entries_matched": 8,
+      "ordered_material_slots_matched": 4,
+      "renderer_mesh_layouts_matched": 2,
+      "renderer_vertex_payloads_matched": 2,
+      "source_renderers": 2
+    },
+    "full_game_renderers_verified": false,
+    "imported_png_lower_mip_or_Unity_import_verified": false,
+    "private_identifiers_published": false,
+    "reason_counts": {},
+    "schema_version": 8,
+    "selected_nonnull_same_route_texture_payloads_verified": false,
+    "selected_renderer_routes_preserved": true,
+    "selected_same_route_imported_png_top_mip_verified": true,
+    "selected_same_route_material_keyword_pass_state_verified": true,
+    "selected_same_route_material_values_verified": true,
+    "selected_same_route_native_texture_sampler_verified": false,
+    "selected_same_route_streamed_texture_payloads_verified": false,
+    "selected_same_route_vertex_and_UV_bytes_verified": true,
+    "shader_program_color_scalar_or_GPU_parity_verified": false,
+    "texture_sampler_import_colorspace_or_GPU_verified": false,
+    "vertex_payload_or_UV_samples_verified": true
+  },
+  "counterfactual_count": 13,
+  "counterfactuals": {
+    "actual_PNG_RGB_drift": {
+      "V4_pass": true,
+      "reason": "same_route_png_RGB_DRIFT"
+    },
+    "actual_PNG_RGB_mode": {
+      "V4_pass": true,
+      "reason": "unsupported_png_RGBA8_image"
+    },
+    "actual_PNG_alpha_drift": {
+      "V4_pass": true,
+      "reason": "same_route_png_ALPHA_ONLY_DRIFT"
+    },
+    "actual_PNG_horizontal_flip": {
+      "V4_pass": true,
+      "reason": "same_route_png_HORIZONTAL_FLIP"
+    },
+    "actual_PNG_importer_invalid_filter": {
+      "V4_pass": true,
+      "reason": "invalid_png_importer_sampler_schema"
+    },
+    "actual_PNG_importer_wrong_type": {
+      "V4_pass": true,
+      "reason": "unsupported_png_importer_shape_or_type"
+    },
+    "actual_PNG_provider_padding_mutation": {
+      "V4_pass": true,
+      "reason": "png_stream_provider_SHA_mismatch"
+    },
+    "actual_PNG_same_size_texture_swap": {
+      "V4_pass": true,
+      "reason": "same_route_png_RGB_DRIFT"
+    },
+    "actual_PNG_source_extent_swap": {
+      "V4_pass": true,
+      "reason": "same_route_png_RGB_DRIFT"
+    },
+    "actual_PNG_transparent_RGB_drift": {
+      "V4_pass": true,
+      "reason": "same_route_png_RGB_DRIFT"
+    },
+    "actual_PNG_vertical_flip": {
+      "V4_pass": true,
+      "reason": "same_route_png_VERTICAL_FLIP"
+    },
+    "actual_PNG_wrong_dimensions": {
+      "V4_pass": true,
+      "reason": "same_route_png_DIMENSION_MISMATCH"
+    },
+    "actual_PNG_wrong_guid": {
+      "V4_pass": false,
+      "reason": "missing_actual_export_target"
+    }
+  },
+  "importer_unset_bias_schema_only": true,
+  "independent_T3_per_channel_checks": 2,
+  "native_full_mip_parity_from_png": false,
+  "native_sampler_parity_from_png": false,
+  "original_assets_read": false,
+  "original_serialized_source_verified": false,
+  "production_auto_exporter_selection": false,
+  "production_renderer_parity_verified": false,
+  "repinned_lower_mip_change_intentionally_outside_scope": true,
+  "source_contract_captured_before_export": true,
+  "status": "PASS_ACTUAL_AUTHORED_PUBLIC_IMPORTED_PNG_TOP_MIP_ROUTE_JOIN"
+}

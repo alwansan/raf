@@ -1306,7 +1306,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "0912ba8f6b541271b5dfb8f794327117c344e3ca",
+    "reviewed_remote_head": "bbb537395e2bb4ece711ccefc657b18d49409cc1",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -1562,9 +1562,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G1-G2-imported-PNG-top-mip-same-route-binding",
-      "status": "PYTHON_PASS_ACTUAL_PNG_EXPORT_PENDING",
-      "next": "Inspect run 45957439789 actual native and PNG results; retain actual schema/receipts or fix witness without weakening original pin/route/top mip oracle."
+      "id": "G1-G2-imported-PNG-importer-state-same-route-binding",
+      "status": "NEXT_PRODUCTIVE",
+      "next": "Extend opt-in imported V8 to V9, independently capture original source m_TextureSettings six modern fields and explicit source texture metadata (m_ColorSpace, m_MipCount, m_IsReadable, m_StreamingMipmaps, m_StreamingMipmapsPriority, m_LightmapFormat, format, dimensions) from same authenticated owner snapshot. Compare same trace GUID/fileID 2800000/type3 PNG's strict TextureImporter.textureSettings six fields with B15 normalization and exact finite float32 bits; distinguish -100 unset/-1 defaults as UNKNOWN rather than equality, reject missing/ambiguous/legacy fields. Compare only source-defined importer semantics whose mapping is verified from pinned public ImporterFactory.TextureImporterData: enableMipMap, sRGBTexture (explicit enum mapping verify ColorSpace before asserting), isReadable, streamingMipmaps/priority, textureShape/type, NPOT scaling policy and dimension budget; no implicit color transform proof. Record exporter-policy fields independently (alphaIsTransparency=1, alpha source, default platform textureCompression=2/Automatic -1, overridden=0,maxTextureSize=2048 on 2x2, swizzle, platform overrides). Their mere match to exporter policy does not establish original runtime preservation or Android import fidelity, and do not silently change them or claim original lower mips. Build actual authored source sets with distinct sampler/color/readable/streaming properties, strict independent pre-export capture and PNG/meta, V8-pass/V9-reject metadata changes (sRGB, mip enable, alpha policy, compression/platform override, wrap, bias unset). Preserve native V7 separate witness, V8 top-mip-only API and all 217 tests + 56 controls. Only if authorized, actual Unity import/GPU proof is separate and must not be inferred. A3 blocked until verified authorized original source; no new original assets/LFS, partial phone or XAPK."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -3588,14 +3588,18 @@
       "retry_activation_commit": "956ff560d50b89ecb7b897d5a381e2d790b231b1"
     },
     "latest_imported_png_route_binding": {
-      "status": "PYTHON_PASS_ACTUAL_PNG_EXPORT_PENDING",
+      "status": "PASS_AUTHORED_ACTUAL_EXPORT_IMPORTED_PNG_TOP_MIP_ROUTE_GATE",
       "gate": "G1-G2-imported-PNG-top-mip-same-route-binding",
       "base": "adbfe7c2d50bbf81b3c765d509abe1fe20e5121c",
       "session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
       "original_assets_read": false,
       "original_serialized_source_verified": false,
       "production_renderer_parity_verified": false,
-      "next": "Inspect run 45957439789 actual native and PNG results; retain actual schema/receipts or fix witness without weakening original pin/route/top mip oracle.",
+      "next": {
+        "id": "G1-G2-imported-PNG-importer-state-same-route-binding",
+        "status": "NEXT_PRODUCTIVE",
+        "next": "Extend opt-in imported V8 to V9, independently capture original source m_TextureSettings six modern fields and explicit source texture metadata (m_ColorSpace, m_MipCount, m_IsReadable, m_StreamingMipmaps, m_StreamingMipmapsPriority, m_LightmapFormat, format, dimensions) from same authenticated owner snapshot. Compare same trace GUID/fileID 2800000/type3 PNG's strict TextureImporter.textureSettings six fields with B15 normalization and exact finite float32 bits; distinguish -100 unset/-1 defaults as UNKNOWN rather than equality, reject missing/ambiguous/legacy fields. Compare only source-defined importer semantics whose mapping is verified from pinned public ImporterFactory.TextureImporterData: enableMipMap, sRGBTexture (explicit enum mapping verify ColorSpace before asserting), isReadable, streamingMipmaps/priority, textureShape/type, NPOT scaling policy and dimension budget; no implicit color transform proof. Record exporter-policy fields independently (alphaIsTransparency=1, alpha source, default platform textureCompression=2/Automatic -1, overridden=0,maxTextureSize=2048 on 2x2, swizzle, platform overrides). Their mere match to exporter policy does not establish original runtime preservation or Android import fidelity, and do not silently change them or claim original lower mips. Build actual authored source sets with distinct sampler/color/readable/streaming properties, strict independent pre-export capture and PNG/meta, V8-pass/V9-reject metadata changes (sRGB, mip enable, alpha policy, compression/platform override, wrap, bias unset). Preserve native V7 separate witness, V8 top-mip-only API and all 217 tests + 56 controls. Only if authorized, actual Unity import/GPU proof is separate and must not be inferred. A3 blocked until verified authorized original source; no new original assets/LFS, partial phone or XAPK."
+      },
       "oracle_commit": "0b1caab65536a993628979df34210c978f26ad5f",
       "candidate_commit": "c43693c15472b4f7494cab879e2fe0a4e6b0e7ec",
       "activation_commit": "0912ba8f6b541271b5dfb8f794327117c344e3ca",
@@ -3604,7 +3608,165 @@
       "guard_run_id": 45957440880,
       "guard_conclusion": "success",
       "regression_step": "success",
-      "observed_run_status": "in_progress"
+      "observed_run_status": "completed",
+      "success": {
+        "Unity_import_or_GPU_verified": false,
+        "XAPK": false,
+        "actual_png_submesh_routes": 4,
+        "actual_png_textures": 2,
+        "head": "0912ba8f6b541271b5dfb8f794327117c344e3ca",
+        "imported_png_RGBA_channels_per_route": 64,
+        "imported_png_counterfactuals": 13,
+        "imported_png_pixels_per_route": 16,
+        "imported_png_slots": 4,
+        "importer_unset_bias_schema_only": true,
+        "independent_T3_per_channel_checks": 2,
+        "native_V7_counterfactuals": 43,
+        "native_V7_separate_witness_verified": true,
+        "native_full_mip_parity_from_png": false,
+        "native_sampler_parity_from_png": false,
+        "original_assets_read": false,
+        "original_serialized_source_verified": false,
+        "repinned_lower_mip_change_intentionally_outside_scope": true,
+        "run_id": "45957439789",
+        "status": "PASS_AUTHORED_ACTUAL_EXPORT_IMPORTED_PNG_TOP_MIP_ROUTE_GATE",
+        "test_counts": {
+          "test_b03_verify_renderer_material_links.py.log": 17,
+          "test_gt_imported_png_route_pixels.py.log": 34,
+          "test_gt_material_route_keyword_state.py.log": 25,
+          "test_gt_material_route_values.py.log": 22,
+          "test_gt_mesh_vertex_payload.py.log": 15,
+          "test_gt_native_texture_route_sampler.py.log": 28,
+          "test_gt_renderer_submesh_routes.py.log": 21,
+          "test_gt_streamed_texture_route_payload.py.log": 23,
+          "test_gt_texture_route_payload.py.log": 25,
+          "test_gt_verify_original_mesh_export.py.log": 7
+        },
+        "total_regression_tests": 217,
+        "conclusion": "success",
+        "job_id": 140367073873,
+        "guard_run_id": 45957440880,
+        "guard_conclusion": "success",
+        "artifact_id": 15179790908,
+        "archive_bytes": 13784,
+        "archive_sha256": "f867a4eea6f521717e83cda62b28b61cb879d6a9fc1e13d47f2a67f692207c73",
+        "archive_expected_git_blob": "0e5d050c95fb0de484ce1e87a2cdbc465d82ee44",
+        "archive_crc_sha_size_verified_locally": true,
+        "archive_committed": false,
+        "archive_transfer_limitation": "Raw ZIP transfer through text-only connector did not complete; immutable actual JSON receipts, actual authored schema, test counts and all 20 member hashes committed instead. Reproduce by same pinned workflow. Raw archive remains in Actions artifact 15179790908 and current conversation attachment.",
+        "members": {
+          "build.json": {
+            "bytes": 576,
+            "sha256": "b8c9210dd795c39ce4ab9041862029ba2231a3bb34e7f292c6cf905b7b2842a9"
+          },
+          "png-report.json": {
+            "bytes": 1407,
+            "sha256": "147e0b8ff7e0c19abcba30728e9948e94d23ed103104b149c8a4781dbcac509e"
+          },
+          "png-route-join.json": {
+            "bytes": 4815,
+            "sha256": "4373a77f278da4263cbf8efae227efbcc43cf3f879fa98deffd9b5fb7243ccf4"
+          },
+          "png-schema.json": {
+            "bytes": 2621,
+            "sha256": "f7fe35a86d5b1b0eae192aaaf5936252b6e5fd33f32f59207069d7d6e8ad19a0"
+          },
+          "png-witness.log": {
+            "bytes": 40,
+            "sha256": "44f7a0069cee04484827fcaa1eee568f905fc54b27aab99b252dd63c9391e0ae"
+          },
+          "report.json": {
+            "bytes": 2726,
+            "sha256": "982cdf0d6cb826749f1724ec69b834bc1c187082fa3db82db3d2405f4079141e"
+          },
+          "route-join.json": {
+            "bytes": 12481,
+            "sha256": "09776d8023ebe4e0d434cf7f8e685090e28d3c6a5701f9fb31ff6ec29195b4bd"
+          },
+          "test_b03_verify_renderer_material_links.py.log": {
+            "bytes": 2556,
+            "sha256": "c28e4d716a01ac768cf6d55e50d36f32ec6422e9561960fb35485eb759985a6b",
+            "tests": 17
+          },
+          "test_gt_imported_png_route_pixels.py.log": {
+            "bytes": 3493,
+            "sha256": "85369c3816d4f9af6d0ac593715b2126173a71b576e36f5d1d8e6cd5bf4b3f32",
+            "tests": 34
+          },
+          "test_gt_material_route_keyword_state.py.log": {
+            "bytes": 2905,
+            "sha256": "2a50a48d211783824e3b6937736ba00f8542432b0db5cb2806d5614cc6795d25",
+            "tests": 25
+          },
+          "test_gt_material_route_values.py.log": {
+            "bytes": 2725,
+            "sha256": "17d5f1e01f5e9471d1e11bae9c37b94b4a3c2b8101632eb604383a3b883cc075",
+            "tests": 22
+          },
+          "test_gt_mesh_vertex_payload.py.log": {
+            "bytes": 1881,
+            "sha256": "d4fd27c6ddb5bedeaeb54da1d9c1e25f66e797855a4600fa9f851a5a5067d708",
+            "tests": 15
+          },
+          "test_gt_native_texture_route_sampler.py.log": {
+            "bytes": 3191,
+            "sha256": "fbb8b85a2141544ec5d0f3d19ebe39b95ab571cbb35c846d826d1c8e4d9a5199",
+            "tests": 28
+          },
+          "test_gt_renderer_submesh_routes.py.log": {
+            "bytes": 3004,
+            "sha256": "7af2e74e4ea5f2c16cb7cb53ab5aa28ed76607fb8c35f0a1a2c041c1ba243c76",
+            "tests": 21
+          },
+          "test_gt_streamed_texture_route_payload.py.log": {
+            "bytes": 2830,
+            "sha256": "e9b86c91c2db07684a264e60a15a3bdd4f7d281af59bbf95f8d4e822b17711a9",
+            "tests": 23
+          },
+          "test_gt_texture_route_payload.py.log": {
+            "bytes": 2818,
+            "sha256": "92aa0bc43eb21c26376d11e87f64936135a488bb5912a1bef5fada363909ee05",
+            "tests": 25
+          },
+          "test_gt_verify_original_mesh_export.py.log": {
+            "bytes": 1259,
+            "sha256": "4fa1e34501cc7873993fcc2fc567b180527cc1ff3a5442f97cdd224b1a32258a",
+            "tests": 7
+          },
+          "texture-schema.json": {
+            "bytes": 981,
+            "sha256": "0d67d316aa3d7b979786c6a6bbf926061d60f13d76bb1eb7981a968842b96133"
+          },
+          "tool-smoke.log": {
+            "bytes": 63,
+            "sha256": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+          },
+          "witness.log": {
+            "bytes": 41,
+            "sha256": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
+          }
+        },
+        "compiled_files": {
+          "AssetRipper.Export.UnityProjects.dll": "e3139c1816b0c8ecc937016800f15bd76784681a2c904fdb9b98320922f9e8d4",
+          "RaftAuthoredSceneRouteWitness.cs": "50c4204a02350a11eceeecb83d63ac12e83cdb765b53cef1602fe9ad93a70cd5",
+          "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
+        },
+        "public_tool_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+        "actual_native_documents_in_png_mode": 11,
+        "actual_public_export_collections_per_mode": 9,
+        "complete_png_bound_renderers": 2,
+        "unique_png_pixels": 8,
+        "unique_png_RGBA_channels": 32,
+        "actual_importer_schema": "RGBA 8-bit PNG, fileID 2800000/type 3; shape 1/type 0, explicit six sampler fields, both mip bias non-sentinel; alphaIsTransparency=1; enableMipMap=1, sRGBTexture=0; DefaultTexturePlatform CompressedHQ(2)/Automatic(-1), maxTextureSize 2048, overridden 0",
+        "new_png_tests": 34,
+        "new_png_controls": 13,
+        "native_V7_controls": 43,
+        "total_controls_across_independent_modes": 56,
+        "source_scope": "RGBA32, explicit usage 0, no nonempty platform blob, single unstripped complete declared mip chain, 16 MiB max top mip, bounded 64 MiB grouped capture per provider; decoded top-left RGBA8 PNG only; not lower mips or Unity import",
+        "production_auto_exporter_selection": false,
+        "production_renderer_parity_verified": false,
+        "Android_device": false
+      }
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."
