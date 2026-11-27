@@ -1776,6 +1776,7 @@ jobs:
             /tests/test_gt_streamed_texture_route_payload.py
             /tests/test_gt_native_texture_route_sampler.py
             /tests/test_gt_imported_png_route_pixels.py
+            /tests/test_gt_imported_png_route_importer.py
             /android-port/Experiments/ExportLineage/
             /tools/synthetic_material_alpha/RaftAuthoredSceneRouteWitness.cs
             /.github/workflows/raft-gt-synthetic-material-alpha.yml
@@ -1787,7 +1788,7 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/gt-authored-scene-python"
           py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
           "$py" -m pip install --disable-pip-version-check Pillow==11.3.0 PyYAML==6.0.3
-          for test_file in test_gt_imported_png_route_pixels.py test_gt_native_texture_route_sampler.py test_gt_streamed_texture_route_payload.py test_gt_texture_route_payload.py test_gt_material_route_keyword_state.py test_gt_material_route_values.py test_gt_mesh_vertex_payload.py test_gt_verify_original_mesh_export.py test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
+          for test_file in test_gt_imported_png_route_importer.py test_gt_imported_png_route_pixels.py test_gt_native_texture_route_sampler.py test_gt_streamed_texture_route_payload.py test_gt_texture_route_payload.py test_gt_material_route_keyword_state.py test_gt_material_route_values.py test_gt_mesh_vertex_payload.py test_gt_verify_original_mesh_export.py test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
             "$py" -B -m unittest discover -s tests -p "$test_file" -v 2>&1 | tee "authored-scene-results/$test_file.log"
           done
       - uses: actions/setup-dotnet@v4
@@ -1913,7 +1914,8 @@ jobs:
               m=re.search(r"^Ran (\d+) tests? in ",s,re.M)
               assert m and int(m[1])>0 and re.search(r"^OK$",s,re.M)
               tests[p.name]=int(m[1])
-          assert len(tests)==10
+          assert len(tests)==11
+          assert sum(tests.values())-tests['test_gt_imported_png_route_importer.py']==217
           report=dict(status="PASS_AUTHORED_ACTUAL_EXPORT_NATIVE_TEXTURE_SAMPLER_ROUTE_GATE",
               run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
               test_counts=tests,total_regression_tests=sum(tests.values()),
@@ -1996,6 +1998,34 @@ jobs:
               native_sampler_parity_from_png=False,Unity_import_or_GPU_verified=False,
               original_assets_read=False,original_serialized_source_verified=False,XAPK=False)
           (root/"png-report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - name: Bind actual importer serialized state on the same PNG routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/gt-authored-png-fixture"
+          py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
+          "$py" -B -m scripts.gt_authored_imported_png_route_witness --importer-state \
+            --root "$root" --out authored-scene-results/importer-route-join.json
+          "$py" -B - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path("authored-scene-results")
+          v8=json.loads((root/"png-report.json").read_text())
+          v9=json.loads((root/"importer-route-join.json").read_text())
+          assert v9["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_PNG_SERIALIZED_IMPORTER_ROUTE_JOIN"
+          assert v9["counterfactual_count"]==13
+          assert v9["source_states"]==2
+          assert v9["baseline"]["selected_same_route_imported_png_serialized_importer_state_verified"]
+          assert not v9["baseline"]["original_runtime_importer_or_Android_platform_fidelity_verified"]
+          assert all(c["V8_pass"] and c["V9_reject"] for c in v9["counterfactuals"].values())
+          report=dict(status=v9["status"],run_id=v8["run_id"],head=v8["head"],
+              total_regression_tests=v8["total_regression_tests"],test_counts=v8["test_counts"],
+              native_V7_counterfactuals=v8["native_V7_counterfactuals"],imported_V8_counterfactuals=v8["imported_png_counterfactuals"],
+              V8_pass_V9_reject_counterfactuals=v9["counterfactual_count"],counts=v9["baseline"]["counts"],
+              original_assets_read=False,Unity_import_verified=False,Android_device=False,XAPK=False)
+          (root/"importer-report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
           print(json.dumps(report,sort_keys=True))
           PY
       - name: Retain only public-tool build and aggregate route evidence
