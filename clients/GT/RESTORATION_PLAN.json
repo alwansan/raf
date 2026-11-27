@@ -1306,11 +1306,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "ee8c0cc55ab83cc888bbe452bc0f39bd04ecfccd",
-    "purpose": "G5 actual authored Unity TextureImporter Vulkan raster and B05 document-scope source-only validation; originals remain unaccepted",
+    "reviewed_remote_head": "ff72bf62344db3426aacd056c8d5b59d67374efc",
+    "purpose": "G5 actual authored byte-bound decoder, source/export pixel parity and local document regressions; original acceptance still blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-imported-alpha-vulkan/README_AR.md",
+    "index": "clients/GT/sessions/20261127-particle108-local-net-loss/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -1562,9 +1562,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G5-Particle108-source-alpha-pixel-parity",
+      "id": "G1-G2-white-renderer-submesh-material-provenance",
       "status": "NEXT_PRODUCTIVE",
-      "next": "First replay the retained Unity receipt with corrected success reason using source-only verifier (do not rerender). Then strengthen original Particle108 top-mip decoding: bind per-target owner and streamed provider size/SHA/ranges to the actual bytes used by decoder, avoid a manifest-only unstaged stream being called decoded proof, and compare the two independently traced external source/export images on authored fixtures (exact dimension, orientation, alpha samples and RGB policy; reject wrong but equal histograms). Distinguish alpha import and material blend from source/export pixel equivalence. Extend document-scoped route proof to Particle108 only where same document anchor/class is genuinely proven. No private identifiers/images or original acquisition. A3 remains blocked on authorized original provenance, all G0–G6 open, no phone/XAPK."
+      "next": "Shift the next authored fallback batch to white-object provenance. Review gt_original_mesh_texture_graph.py, gt_verify_original_mesh_export.py, gt_mesh_restoration_priority.py, b03_verify_renderer_material_links.py, b22/b44 scalar/color fidelity, and current historical evidence. Identify one actual gap linking Mesh submesh index ranges/UV vertex layout, ordered Renderer.m_Materials slots and Shader/Material/TexEnv target identity from same-instance trace; implement a fail-closed fix with asymmetric authored geometry/material routing negative controls. Do not claim a white-object repair from isolated mesh or texture counts. Use a source-only test unless a new actual raster experiment is necessary. Particle108 byte-bound source/PNG parity is now diagnostic code, not original acceptance: only bounded decoded RGBA8 mip0 and PNG8; serialized owner parser mocked on authored metadata, source-specific compressed formats, orientation, actual stream manifests and original Unity/GPU parity not verified. A3 still blocked until authorized source provenance verified. All G0-G6 open; no original acquisition, phone or XAPK."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -1995,6 +1995,120 @@
       "original_game_fire_repaired": false,
       "white_mesh_repaired": false,
       "XAPK_requested": false
+    },
+    "latest_particle108_byte_pixel_parity": {
+      "status": "PASS_AUTHORED_BYTE_BOUND_SOURCE_PIXEL_PARITY",
+      "run_id": 45942540652,
+      "job_id": 140319862869,
+      "head": "ec5b54df974c12071f901bfda753f82f79531494",
+      "conclusion": "success",
+      "guard_run_id": 45942540566,
+      "artifact_id": 15173317945,
+      "archive": "clients/GT/sessions/20261127-particle108-byte-pixel-parity/actual-run-45942540652.zip",
+      "archive_bytes": 4270,
+      "archive_sha256": "af2d1953c6e73236a0df424eb07eac2c42aa873c3c12b3376c5dd00a12a2881d",
+      "archive_git_blob": "e5b901f08387373e65b90b4690cd165269baa09c",
+      "archive_crc_sha_size_verified_locally": true,
+      "members": {
+        "replayed-unity.json": {
+          "bytes": 2983,
+          "sha256": "a39de405d5df4cbd9142b4bf24b9a264b46b6b0ea62cd01a52ad89d0b85a971c"
+        },
+        "test_gt_imported_alpha_pixels.py.log": {
+          "bytes": 1484,
+          "sha256": "304b50c4bb4ef92dad0d6bcba533e068f600d6134f5ea7eee4fbdea44ca7cda0",
+          "tests": 13
+        },
+        "report.json": {
+          "bytes": 862,
+          "sha256": "6ade4142393cb8812022da20fc5d5321426722e9e3c08519381b56a0bc934356"
+        },
+        "test_gt_particle108_alpha_provenance.py.log": {
+          "bytes": 2021,
+          "sha256": "254416114d69112e9e4a4926e34c31e92a8d89e708e80e357f74b6b9a125c632",
+          "tests": 11
+        },
+        "test_gt_particle108_export_alpha_diagnostic.py.log": {
+          "bytes": 2381,
+          "sha256": "deca6eb6affafaf4e6c246f920ba0a8a1e3a27c6e8517d5ff6b4d7f4e5500b40",
+          "tests": 10
+        },
+        "test_gt_particle108_source_pixel_parity.py.log": {
+          "bytes": 3021,
+          "sha256": "beb9a57efe784fc52b641acbf52db8cf8871492a606f6e6f071ceb54722c011b",
+          "tests": 19
+        }
+      },
+      "total_tests": 53,
+      "new_byte_pixel_tests": 19,
+      "UnityPy_version": "1.23.0",
+      "actual_UnityPy_payload_decoder": true,
+      "actual_PNG_decoder": true,
+      "serialized_owner_parser_injected_authored_metadata": true,
+      "prior_Unity_receipt_replayed": true,
+      "prior_Unity_run": 45941449651,
+      "prior_Unity_receipt_sha256": "129568c67297c0792f4c02360903a171f5efa5017c4547a97ffa285d143b5a9a",
+      "corrected_reason": "independent_imported_and_rendered_RGBA_validation_passed",
+      "prior_Unity_raster_pixels_replayed": 192,
+      "prior_Unity_imported_pixels_replayed": 192,
+      "max_RGBA8_error": 0,
+      "max_rendered_error": 0.0006205881014575976,
+      "original_assets_read": false,
+      "new_Unity_render_executed": false,
+      "original_alpha_loss_proven": false,
+      "Android_device": false,
+      "XAPK": false
+    },
+    "latest_particle108_local_net_loss": {
+      "status": "PASS_AUTHORED_LOCAL_DOCUMENT_AND_NET_ALPHA_LOSS",
+      "run_id": 45942715208,
+      "job_id": 140320396919,
+      "head": "ff72bf62344db3426aacd056c8d5b59d67374efc",
+      "conclusion": "success",
+      "guard_run_id": 45942715270,
+      "artifact_id": 15172464295,
+      "archive": "clients/GT/sessions/20261127-particle108-local-net-loss/actual-run-45942715208.zip",
+      "archive_bytes": 2775,
+      "archive_sha256": "5d7386415688c93d8195cecd5fa06fcbb401be956ac8d2e7f9457197a72f70c4",
+      "archive_git_blob": "2d0ea85f0082c5edefd4453ccfce6cc6bbf895f2",
+      "archive_crc_sha_size_verified_locally": true,
+      "members": {
+        "report.json": {
+          "bytes": 840,
+          "sha256": "7114242b8920464bf4672d2449e9ecb2f89c57f969cc0a0d6e090b1a0533a511"
+        },
+        "test_gt_particle108_alpha_provenance.py.log": {
+          "bytes": 2901,
+          "sha256": "75c0722cc6e97a00995f3cc3a1ff985f44708887ff1bb6a4269a849abcc6200e",
+          "tests": 16
+        },
+        "test_gt_particle108_export_alpha_diagnostic.py.log": {
+          "bytes": 2381,
+          "sha256": "78bf24d703e29d0f9c145a3aacd055970ecaeff72ed472cb6269d870ff365b93",
+          "tests": 10
+        },
+        "test_gt_particle108_source_pixel_parity.py.log": {
+          "bytes": 3213,
+          "sha256": "eff678d98dd1a29e864b5ba46c0f911ddf96c5ecf56ea00849aa10d0f26490b0",
+          "tests": 20
+        }
+      },
+      "total_tests": 46,
+      "additional_tests": 6,
+      "UnityPy_version": "1.23.0",
+      "actual_UnityPy_payload_decoder": true,
+      "actual_PNG_decoder": true,
+      "serialized_owner_parser_injected_authored_metadata": true,
+      "two_external_images_actual_payload_decoder_test": true,
+      "net_alpha_loss_separate_from_coordinate_rearrangement": true,
+      "document_scoped_local_target_controls": true,
+      "local_texture_image_proof": false,
+      "original_assets_read": false,
+      "new_Unity_render_executed": false,
+      "prior_Unity_receipt_replayed": false,
+      "original_alpha_loss_proven": false,
+      "Android_device": false,
+      "XAPK": false
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."

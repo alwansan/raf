@@ -1,0 +1,51 @@
+{
+  "status": "PASS_AUTHORED_LOCAL_DOCUMENT_AND_NET_ALPHA_LOSS",
+  "run_id": 45942715208,
+  "job_id": 140320396919,
+  "head": "ff72bf62344db3426aacd056c8d5b59d67374efc",
+  "conclusion": "success",
+  "guard_run_id": 45942715270,
+  "artifact_id": 15172464295,
+  "archive": "clients/GT/sessions/20261127-particle108-local-net-loss/actual-run-45942715208.zip",
+  "archive_bytes": 2775,
+  "archive_sha256": "5d7386415688c93d8195cecd5fa06fcbb401be956ac8d2e7f9457197a72f70c4",
+  "archive_git_blob": "2d0ea85f0082c5edefd4453ccfce6cc6bbf895f2",
+  "archive_crc_sha_size_verified_locally": true,
+  "members": {
+    "report.json": {
+      "bytes": 840,
+      "sha256": "7114242b8920464bf4672d2449e9ecb2f89c57f969cc0a0d6e090b1a0533a511"
+    },
+    "test_gt_particle108_alpha_provenance.py.log": {
+      "bytes": 2901,
+      "sha256": "75c0722cc6e97a00995f3cc3a1ff985f44708887ff1bb6a4269a849abcc6200e",
+      "tests": 16
+    },
+    "test_gt_particle108_export_alpha_diagnostic.py.log": {
+      "bytes": 2381,
+      "sha256": "78bf24d703e29d0f9c145a3aacd055970ecaeff72ed472cb6269d870ff365b93",
+      "tests": 10
+    },
+    "test_gt_particle108_source_pixel_parity.py.log": {
+      "bytes": 3213,
+      "sha256": "eff678d98dd1a29e864b5ba46c0f911ddf96c5ecf56ea00849aa10d0f26490b0",
+      "tests": 20
+    }
+  },
+  "total_tests": 46,
+  "additional_tests": 6,
+  "UnityPy_version": "1.23.0",
+  "actual_UnityPy_payload_decoder": true,
+  "actual_PNG_decoder": true,
+  "serialized_owner_parser_injected_authored_metadata": true,
+  "two_external_images_actual_payload_decoder_test": true,
+  "net_alpha_loss_separate_from_coordinate_rearrangement": true,
+  "document_scoped_local_target_controls": true,
+  "local_texture_image_proof": false,
+  "original_assets_read": false,
+  "new_Unity_render_executed": false,
+  "prior_Unity_receipt_replayed": false,
+  "original_alpha_loss_proven": false,
+  "Android_device": false,
+  "XAPK": false
+}

@@ -1,0 +1,63 @@
+{
+  "status": "PASS_AUTHORED_BYTE_BOUND_SOURCE_PIXEL_PARITY",
+  "run_id": 45942540652,
+  "job_id": 140319862869,
+  "head": "ec5b54df974c12071f901bfda753f82f79531494",
+  "conclusion": "success",
+  "guard_run_id": 45942540566,
+  "artifact_id": 15173317945,
+  "archive": "clients/GT/sessions/20261127-particle108-byte-pixel-parity/actual-run-45942540652.zip",
+  "archive_bytes": 4270,
+  "archive_sha256": "af2d1953c6e73236a0df424eb07eac2c42aa873c3c12b3376c5dd00a12a2881d",
+  "archive_git_blob": "e5b901f08387373e65b90b4690cd165269baa09c",
+  "archive_crc_sha_size_verified_locally": true,
+  "members": {
+    "replayed-unity.json": {
+      "bytes": 2983,
+      "sha256": "a39de405d5df4cbd9142b4bf24b9a264b46b6b0ea62cd01a52ad89d0b85a971c"
+    },
+    "test_gt_imported_alpha_pixels.py.log": {
+      "bytes": 1484,
+      "sha256": "304b50c4bb4ef92dad0d6bcba533e068f600d6134f5ea7eee4fbdea44ca7cda0",
+      "tests": 13
+    },
+    "report.json": {
+      "bytes": 862,
+      "sha256": "6ade4142393cb8812022da20fc5d5321426722e9e3c08519381b56a0bc934356"
+    },
+    "test_gt_particle108_alpha_provenance.py.log": {
+      "bytes": 2021,
+      "sha256": "254416114d69112e9e4a4926e34c31e92a8d89e708e80e357f74b6b9a125c632",
+      "tests": 11
+    },
+    "test_gt_particle108_export_alpha_diagnostic.py.log": {
+      "bytes": 2381,
+      "sha256": "deca6eb6affafaf4e6c246f920ba0a8a1e3a27c6e8517d5ff6b4d7f4e5500b40",
+      "tests": 10
+    },
+    "test_gt_particle108_source_pixel_parity.py.log": {
+      "bytes": 3021,
+      "sha256": "beb9a57efe784fc52b641acbf52db8cf8871492a606f6e6f071ceb54722c011b",
+      "tests": 19
+    }
+  },
+  "total_tests": 53,
+  "new_byte_pixel_tests": 19,
+  "UnityPy_version": "1.23.0",
+  "actual_UnityPy_payload_decoder": true,
+  "actual_PNG_decoder": true,
+  "serialized_owner_parser_injected_authored_metadata": true,
+  "prior_Unity_receipt_replayed": true,
+  "prior_Unity_run": 45941449651,
+  "prior_Unity_receipt_sha256": "129568c67297c0792f4c02360903a171f5efa5017c4547a97ffa285d143b5a9a",
+  "corrected_reason": "independent_imported_and_rendered_RGBA_validation_passed",
+  "prior_Unity_raster_pixels_replayed": 192,
+  "prior_Unity_imported_pixels_replayed": 192,
+  "max_RGBA8_error": 0,
+  "max_rendered_error": 0.0006205881014575976,
+  "original_assets_read": false,
+  "new_Unity_render_executed": false,
+  "original_alpha_loss_proven": false,
+  "Android_device": false,
+  "XAPK": false
+}
