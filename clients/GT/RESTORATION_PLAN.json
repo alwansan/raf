@@ -5257,5 +5257,22 @@
       "actual_PNG_RGBA_verified_against_independent_expected": true
     },
     "evidence": "clients/GT/sessions/20261127-dxt5nm-route-v11/actual-pass-45966950183.json"
+  },
+  "v12_dxt5nm_importer_checkpoint": {
+    "status": "PENDING_SOURCE_AND_AUTHORED_WITNESS_NOT_EXECUTED",
+    "starting_head": "488be3532bbd7eb55f6dc895aef2311eec796139",
+    "source_commit": "db1be938f6e7a84076a7c1832cba1d0520d5d813",
+    "witness_commit": "bb08e7e113aa588240d8f6ce1d495fa95fcad921",
+    "planned_regressions": 263,
+    "planned_v11_controls": 12,
+    "planned_v12_controls": 25,
+    "actual_export_verified": false,
+    "actual_swizzle_verified": false,
+    "original_assets_read": false,
+    "Unity_import_verified": false,
+    "Android_device": false,
+    "XAPK": false,
+    "session": "clients/GT/sessions/20261127-dxt5nm-importer-v12/README_AR.md",
+    "next": "Activate dedicated authored-only workflow; inspect exact receipt."
   }
 }
