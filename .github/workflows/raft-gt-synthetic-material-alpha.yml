@@ -1771,6 +1771,7 @@ jobs:
             /tests/test_gt_mesh_vertex_payload.py
             /tests/test_gt_verify_original_mesh_export.py
             /tests/test_gt_material_route_values.py
+            /tests/test_gt_material_route_keyword_state.py
             /android-port/Experiments/ExportLineage/
             /tools/synthetic_material_alpha/RaftAuthoredSceneRouteWitness.cs
             /.github/workflows/raft-gt-synthetic-material-alpha.yml
@@ -1782,7 +1783,7 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/gt-authored-scene-python"
           py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
           "$py" -m pip install --disable-pip-version-check Pillow==11.3.0 PyYAML==6.0.3
-          for test_file in test_gt_material_route_values.py test_gt_mesh_vertex_payload.py test_gt_verify_original_mesh_export.py test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
+          for test_file in test_gt_material_route_keyword_state.py test_gt_material_route_values.py test_gt_mesh_vertex_payload.py test_gt_verify_original_mesh_export.py test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
             "$py" -B -m unittest discover -s tests -p "$test_file" -v 2>&1 | tee "authored-scene-results/$test_file.log"
           done
       - uses: actions/setup-dotnet@v4
@@ -1844,7 +1845,7 @@ jobs:
               original_assets_read=False,APK=False)
           Path("authored-scene-results/build.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
           PY
-      - name: Execute indexed typed authored export and verify same-route material values and vertex bytes
+      - name: Execute authored export and verify same-route material keyword/pass state
         shell: bash
         run: |
           set -euo pipefail
@@ -1859,9 +1860,16 @@ jobs:
           from pathlib import Path
           root=Path("authored-scene-results")
           j=json.loads((root/"route-join.json").read_text())
-          assert j["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_MATERIAL_VALUE_ROUTE_JOIN"
+          assert j["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_MATERIAL_KEYWORD_ROUTE_JOIN"
           assert j["baseline"]["selected_renderer_routes_preserved"] is True
-          assert j["counterfactual_count"]==16
+          assert j["counterfactual_count"]==22
+          assert j["baseline"]["selected_same_route_material_keyword_pass_state_verified"] is True
+          assert j["baseline"]["counts"]["complete_material_keyword_bound_renderer_routes"]==2
+          assert j["baseline"]["counts"]["complete_material_keyword_bound_submesh_routes"]==4
+          assert j["baseline"]["counts"]["material_valid_keyword_entries_matched"]==8
+          assert j["baseline"]["counts"]["material_invalid_keyword_entries_matched"]==4
+          assert j["baseline"]["counts"]["material_disabled_pass_entries_matched"]==4
+          assert sum(c.get("V3_material_value_gate_passed",False) for c in j["counterfactuals"].values())==6
           assert j["baseline"]["selected_same_route_material_values_verified"] is True
           assert j["baseline"]["counts"]["complete_material_value_bound_renderer_routes"]==2
           assert j["baseline"]["counts"]["complete_material_value_bound_submesh_routes"]==4
@@ -1877,8 +1885,8 @@ jobs:
               m=re.search(r"^Ran (\d+) tests? in ",s,re.M)
               assert m and int(m[1])>0 and re.search(r"^OK$",s,re.M)
               tests[p.name]=int(m[1])
-          assert len(tests)==5
-          report=dict(status="PASS_AUTHORED_ACTUAL_EXPORT_MATERIAL_VALUE_ROUTE_GATE",
+          assert len(tests)==6
+          report=dict(status="PASS_AUTHORED_ACTUAL_EXPORT_MATERIAL_KEYWORD_PASS_ROUTE_GATE",
               run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
               test_counts=tests,total_regression_tests=sum(tests.values()),
               actual_exported_documents=j["actual_exported_documents"],
@@ -1887,6 +1895,11 @@ jobs:
               counterfactual_count=j["counterfactual_count"],
               same_route_vertex_bytes_verified=True,UV_decoded_values_or_GPU_verified=False,
               same_route_material_values_verified=True,shader_property_runtime_semantics_verified=False,
+              same_route_material_keyword_pass_state_verified=True,active_shader_variant_or_runtime_keyword_scope_verified=False,
+              complete_keyword_bound_renderers=j["baseline"]["counts"]["complete_material_keyword_bound_renderer_routes"],
+              complete_keyword_bound_submeshes=j["baseline"]["counts"]["complete_material_keyword_bound_submesh_routes"],
+              keyword_pass_entries={kind:j["baseline"]["counts"]["material_"+kind+"_entries_matched"] for kind in ("valid_keyword","invalid_keyword","disabled_pass")},
+              V3_pass_V4_reject_controls=6,
               complete_value_bound_renderers=j["baseline"]["counts"]["complete_material_value_bound_renderer_routes"],
               complete_value_bound_submeshes=j["baseline"]["counts"]["complete_material_value_bound_submesh_routes"],
               material_value_slots={kind:j["baseline"]["counts"]["material_"+kind+"_slots_matched"] for kind in ("color","float","int")},
@@ -1902,7 +1915,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gt-authored-material-value-route-join-${{ github.run_id }}
+          name: gt-authored-material-keyword-route-join-${{ github.run_id }}
           path: authored-scene-results/*
           if-no-files-found: warn
           retention-days: 14
