@@ -1306,8 +1306,8 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "a6b97f5ab6ab2640f5fce24cfc368346d986f6e6",
-    "purpose": "G4 strict authored FFT bundle gate candidate; actual CI pending; original gate unchanged.",
+    "reviewed_remote_head": "d7a692d682c7e94510cbca5b9a46c2b771d233a8",
+    "purpose": "G4 authored FFT bundle gate passed on real pinned bundles; advance original receipt provenance without accepting original.",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
     "index": "clients/GT/sessions/20261127-fft-bundle-gate/README_AR.md",
@@ -1562,10 +1562,10 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G4-FFT-bundle-gate",
-      "status": "CANDIDATE_PENDING_ACTUAL_CI",
-      "previous_diagnostic": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/actual-replay-45936590347.zip",
-      "next": "Run isolated CPU-only gate on pinned authored bundles, retain receipt and controls. No original gate change; A3 blocked. Then next productive G4/G5 repair."
+      "id": "G4-FFT-original-receipt-provenance",
+      "status": "NEXT_PRODUCTIVE",
+      "previous_gate": "PASS_AUTHORED_FFT_EMPTY_ROUTE_BUNDLE_GATE",
+      "next": "G4-FFT-original-receipt-provenance: harden the original receipt producer/verifier/install contract with actual bundle SHA-256 and size, source/receipt/bundle byte binding and independent validation of all referenced SPIR-V; keep original acceptance fail-closed, do not reuse authored sample/fetch profile as original evidence. A3 remains blocked without verified authorized source. If original evidence cannot be obtained, advance G5 particle/fire or white-material diagnostics without acquiring assets."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -1655,13 +1655,59 @@
     },
     "latest_fft_bundle_gate_candidate": {
       "base": "a6b97f5ab6ab2640f5fce24cfc368346d986f6e6",
-      "status": "PENDING_ACTUAL_CI",
+      "status": "PASS_AUTHORED_FFT_EMPTY_ROUTE_BUNDLE_GATE",
       "source": "scripts/gt_fft_bundle_gate.py",
       "probe": "tools/synthetic_material_alpha/fft_bundle_gate_probe.py",
       "session": "clients/GT/sessions/20261127-fft-bundle-gate/README_AR.md",
       "original_gate_changed": false,
       "original_assets_read": false,
-      "XAPK_requested": false
+      "XAPK_requested": false,
+      "actual_run": {
+        "status": "PASS_AUTHORED_FFT_EMPTY_ROUTE_BUNDLE_GATE",
+        "run_id": 45937731362,
+        "job_id": 140304710592,
+        "head": "d7a692d682c7e94510cbca5b9a46c2b771d233a8",
+        "conclusion": "success",
+        "guard_run_id": 45937731347,
+        "artifact_id": 15171148471,
+        "archive": "clients/GT/sessions/20261127-fft-bundle-gate/actual-run-45937731362.zip",
+        "archive_bytes": 3929,
+        "archive_sha256": "eaed24f33f8f862a233a5612510aabaac0d9de17c77bbdaae948f4e5af7cde0b",
+        "archive_git_blob": "549755cb4bfbcbafbc3de02e6c1b6c0c69e89d14",
+        "report_member": "gate.json",
+        "report_bytes": 44100,
+        "report_sha256": "91e32402fa41ee6c9c259b66a6b49085db810c95f1ae3aa0be89fe36cee9caff",
+        "modes": [
+          "dxc",
+          "hlslcc"
+        ],
+        "passes_per_mode": 7,
+        "blobs_per_mode": 7,
+        "unique_validated_modules_per_mode": 14,
+        "stage_references_per_mode": {
+          "vertex": 21,
+          "fragment": 21
+        },
+        "validator_target": "vulkan1.1",
+        "total_negative_controls": 24,
+        "actual_wrong_coordinate_mutations_rejected": 4,
+        "known_inactive_stereo_names": [
+          "STEREO_INSTANCING_ON",
+          "UNITY_SINGLE_PASS_STEREO",
+          "STEREO_MULTIVIEW_ON",
+          "STEREO_CUBEMAP_RENDER_ON"
+        ],
+        "active_keyword_indices": 0,
+        "archive_crc_sha_size_verified_locally": true,
+        "report_module_and_stage_references_match_prior_replay_45936590347": true,
+        "local_compiler_or_Unity_rerun": false,
+        "original_gate_changed": false,
+        "original_coordinate_root_cause_resolved": false,
+        "original_assets_read": false,
+        "original_game_or_device_pixels_verified": false,
+        "XAPK_requested": false,
+        "scope": "Pinned authored Android Vulkan bundles only; compiler mode labels are not independent internal compiler attestation."
+      }
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."
