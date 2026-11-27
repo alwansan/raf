@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
-  "next_action": "Fix workflow dictionary key to use actual .py.log filename; rerun focused authored V9, no change to proof conditions.",
+  "next_action": "Read 45959834665 actual result, verify receipt ZIP and all schema/ABI fields and V8-pass/V9-reject controls; retain actual results before selecting next productive authorized step.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "a6f722dbe1cc7abf6bd080add6d1f2afd13741cc",
+    "reviewed_remote_head": "c0ff25c6a08c5c4bcd0d5402f650c0aebec8351b",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-imported-PNG-importer-state-same-route-binding",
-      "status": "RETRY_REQUIRED",
-      "next": "Fix workflow dictionary key to use actual .py.log filename; rerun focused authored V9, no change to proof conditions."
+      "status": "CI_RETRY_PENDING",
+      "next": "Read 45959834665 actual result, verify receipt ZIP and all schema/ABI fields and V8-pass/V9-reject controls; retain actual results before selecting next productive authorized step."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -4427,7 +4427,7 @@
       }
     },
     "latest_imported_png_importer_state_binding": {
-      "status": "INITIAL_REPORT_AGGREGATION_FAILURE",
+      "status": "V9_RETRY_ACTUAL_PENDING",
       "starting_head": "d477529faffbf82c8758d2e466943944a98757ba",
       "source_gate_commit": "e81dde6404b59a433c81d0568f7818f87d83126c",
       "authored_witness_commit": "080bb3ec339c0fb5930e1ac156f41942adb9e5fd",
@@ -4452,7 +4452,7 @@
       "unity_import_verified": false,
       "xapk": false,
       "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-      "next": "Fix workflow dictionary key to use actual .py.log filename; rerun focused authored V9, no change to proof conditions.",
+      "next": "Read 45959834665 actual result, verify receipt ZIP and all schema/ABI fields and V8-pass/V9-reject controls; retain actual results before selecting next productive authorized step.",
       "initial_failure": {
         "run": 45959587458,
         "head": "f26030acf76d972d10181af52380c935e0a7201a",
@@ -4496,11 +4496,106 @@
         "original_assets_read": false,
         "unity_import_verified": false,
         "xapk": false
+      },
+      "retry": {
+        "head": "c0ff25c6a08c5c4bcd0d5402f650c0aebec8351b",
+        "run": 45959834665,
+        "guard": 45959834608,
+        "guard_conclusion": "success",
+        "job": 140374777770,
+        "job_status": "in_progress",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Checkout authored witness and exact private hook composer only",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run source-only route gate regressions before public build",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run actions/setup-dotnet@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Checkout public pinned exporter source only",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Compile exact public exporter and authored witness",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Execute actual streamed Texture2D export and native sampler proof after witness compile fix",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 7
+          },
+          {
+            "name": "Execute separate actual PNG top-mip and importer route proof",
+            "status": "pending",
+            "conclusion": null,
+            "number": 8
+          },
+          {
+            "name": "Bind actual importer serialized state on the same PNG routes",
+            "status": "pending",
+            "conclusion": null,
+            "number": 9
+          },
+          {
+            "name": "Retain only public-tool build and aggregate route evidence",
+            "status": "pending",
+            "conclusion": null,
+            "number": 10
+          },
+          {
+            "name": "Remove only authored fixture tree",
+            "status": "pending",
+            "conclusion": null,
+            "number": 11
+          },
+          {
+            "name": "Post Checkout public pinned exporter source only",
+            "status": "pending",
+            "conclusion": null,
+            "number": 20
+          },
+          {
+            "name": "Post Run actions/setup-dotnet@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 21
+          },
+          {
+            "name": "Post Checkout authored witness and exact private hook composer only",
+            "status": "pending",
+            "conclusion": null,
+            "number": 22
+          }
+        ],
+        "fix": "aggregation dictionary lookup uses .py.log; no proof conditions changed"
       }
     }
   },
   "v9_importer_state_checkpoint": {
-    "status": "INITIAL_REPORT_AGGREGATION_FAILURE",
+    "status": "V9_RETRY_ACTUAL_PENDING",
     "starting_head": "d477529faffbf82c8758d2e466943944a98757ba",
     "source_gate_commit": "e81dde6404b59a433c81d0568f7818f87d83126c",
     "authored_witness_commit": "080bb3ec339c0fb5930e1ac156f41942adb9e5fd",
@@ -4525,7 +4620,7 @@
     "unity_import_verified": false,
     "xapk": false,
     "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-    "next": "Fix workflow dictionary key to use actual .py.log filename; rerun focused authored V9, no change to proof conditions.",
+    "next": "Read 45959834665 actual result, verify receipt ZIP and all schema/ABI fields and V8-pass/V9-reject controls; retain actual results before selecting next productive authorized step.",
     "initial_failure": {
       "run": 45959587458,
       "head": "f26030acf76d972d10181af52380c935e0a7201a",
@@ -4569,6 +4664,101 @@
       "original_assets_read": false,
       "unity_import_verified": false,
       "xapk": false
+    },
+    "retry": {
+      "head": "c0ff25c6a08c5c4bcd0d5402f650c0aebec8351b",
+      "run": 45959834665,
+      "guard": 45959834608,
+      "guard_conclusion": "success",
+      "job": 140374777770,
+      "job_status": "in_progress",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Checkout authored witness and exact private hook composer only",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run source-only route gate regressions before public build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run actions/setup-dotnet@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Checkout public pinned exporter source only",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Compile exact public exporter and authored witness",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Execute actual streamed Texture2D export and native sampler proof after witness compile fix",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 7
+        },
+        {
+          "name": "Execute separate actual PNG top-mip and importer route proof",
+          "status": "pending",
+          "conclusion": null,
+          "number": 8
+        },
+        {
+          "name": "Bind actual importer serialized state on the same PNG routes",
+          "status": "pending",
+          "conclusion": null,
+          "number": 9
+        },
+        {
+          "name": "Retain only public-tool build and aggregate route evidence",
+          "status": "pending",
+          "conclusion": null,
+          "number": 10
+        },
+        {
+          "name": "Remove only authored fixture tree",
+          "status": "pending",
+          "conclusion": null,
+          "number": 11
+        },
+        {
+          "name": "Post Checkout public pinned exporter source only",
+          "status": "pending",
+          "conclusion": null,
+          "number": 20
+        },
+        {
+          "name": "Post Run actions/setup-dotnet@v4",
+          "status": "pending",
+          "conclusion": null,
+          "number": 21
+        },
+        {
+          "name": "Post Checkout authored witness and exact private hook composer only",
+          "status": "pending",
+          "conclusion": null,
+          "number": 22
+        }
+      ],
+      "fix": "aggregation dictionary lookup uses .py.log; no proof conditions changed"
     }
   }
 }

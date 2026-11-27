@@ -1,3 +1,9 @@
+# GT V9 — focused retry in progress | 27 نوفمبر 2026
+
+[c0ff25c](https://github.com/alwansan/raf/commit/c0ff25c6a08c5c4bcd0d5402f650c0aebec8351b) fixes only report log key suffix (.py.log), not gate conditions. [45959834665](https://github.com/alwansan/raf/actions/runs/45959834665) job 140374777770 in_progress; source regression step successful, guard [45959834608](https://github.com/alwansan/raf/actions/runs/45959834608) successful. Native and PNG actual proof not yet accepted for this retry. Preserve initial failure and its receipt hashes. Next: read exact retry result, verify ZIP, field schema/enum ABI and controls; no Unity reimport claim. A3 blocked; G0–G6 open; white/black fire not proven fixed; no XAPK. Only authorized branch, CL/lab read-only, BLACK out of scope.
+
+---
+
 # GT V9 — first CI failure retained | 27 نوفمبر 2026
 
 [45959587458](https://github.com/alwansan/raf/actions/runs/45959587458) completed FAILURE, 233/233 tests (217 historical +16 V9) passed, exact public exporter compiled, actual native V7 route and 43 controls passed (route-join.json SHA256 identical to prior V7 receipt). Aggregation then failed KeyError test_gt_imported_png_route_importer.py: dictionary uses *.py.log filenames. V8 and V9 actual PNG steps skipped. No V9 actual PASS. Artifact 15179907603 ZIP downloaded/verified 10298 bytes, SHA256 c2813b61def79447dfbd71473f7f1ac8b95b03292aba105c36fcc04899371ae7, Git blob 7c0d9af0ccdd742f474bd9b0638b5513f488b81b, CRC and all 16 members verified; raw ZIP stays in Actions, exact member hashes and result in initial-failure-45959587458.json. Fix only log-key suffix; preserve all conditions. A3 blocked, no original assets or XAPK.
