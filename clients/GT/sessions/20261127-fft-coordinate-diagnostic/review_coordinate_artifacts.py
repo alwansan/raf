@@ -102,7 +102,7 @@ def review(path, expected_sha, run_id, mode, job_success):
                 'source_receipt_sha256':digest(raw['stage.json']),'unity_receipt_sha256':digest(raw['unity.json']),
                 'bundle_sha256':digest(bundle),'bundle_bytes':len(bundle),
                 'unity_receipt_byte_commitments_verified':True,'cryptographic_attestation_verified':False})
-            require(len(v['receipt_negative_controls'])==6 and all(c['rejected'] is True for c in v['receipt_negative_controls']),
+            require(len(v['receipt_negative_controls'])==7 and all(c['rejected'] is True for c in v['receipt_negative_controls']),
                     'receipt_negative_controls_missing')
         result['verified']=v
         result['bundle_acceptance']=job_success

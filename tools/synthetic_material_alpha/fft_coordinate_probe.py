@@ -172,12 +172,9 @@ def stage(project, results, mode, run_id):
 
 
 def verify(project, results, decoder, mode, run_id, exit_code):
-    import UnityPy
     sys.path.insert(0,str(ROOT))
-    from scripts.gt_verify_921_shader_bundle import decode_fft_empty_routes, unity_vulkan_modules, spirv_execution_models
-    from scripts.gt_fft_receipt_contract import verify_commitments, require_same_decoded_receipt
-    from scripts.w1_recover_graphics_programs import decoded_platforms, records
-    from scripts.w1_recover_depth_passes import stage_variants
+    from scripts.gt_verify_921_shader_bundle import _decode_fft_empty_routes
+    from scripts.gt_fft_receipt_contract import verify_commitments, verify_original_commitments, require_same_decoded_receipt
     source=(results/'authored.shader').read_bytes(); cpu=(results/'cpu.json').read_bytes()
     stage_info=json.loads((results/'stage.json').read_text())
     require(source==shaders()[mode] and source==(project/'Assets/GTFFTUtilities.shader').read_bytes(), 'source_changed')
@@ -188,68 +185,58 @@ def verify(project, results, decoder, mode, run_id, exit_code):
     require(type(exit_code) is int and exit_code==0,'Unity_exit_failure')
     for k,v in expected.items():require(type(u.get(k)) is type(v) and u[k]==v,'Unity_receipt_mismatch:'+k)
     bundle=(project/'ProbeResults/Private/gt-fft-utilities').read_bytes();require(0<len(bundle)<8*1024*1024,'bundle_size')
-    trees=[o.read_typetree() for o in UnityPy.load(bundle).objects if o.type.name=='Shader']
-    require(len(trees)==1 and trees[0]['m_ParsedForm']['m_Name']==NAME and list(trees[0]['platforms'])==[18],'authored_shader_platform_identity')
-    tree=trees[0];[(platform,segments)]=list(decoded_platforms(tree));require(platform==18,'platform')
-    entries=records(segments); parsed=tree['m_ParsedForm']
     stage_raw=(results/'stage.json').read_bytes()
     require(stage_raw==(project/'SourceReceipt.json').read_bytes(), 'source_receipt_changed')
     _,_,commitments=verify_commitments(source,stage_raw,receipt,bundle)
-    routes=decode_fft_empty_routes(bundle,NAME,decoder,authored_coordinate_profile=True)
+    routes,detail=_decode_fft_empty_routes(bundle,NAME,decoder,authored_coordinate_profile=True)
     controls=[]
-    def must_reject(name, candidate, source_raw, unity_raw, compiled):
+    def must_reject(name, expected_reason, operation):
         try:
-            verify_commitments(candidate,source_raw,unity_raw,compiled)
+            operation()
         except ValueError as exc:
+            require(str(exc)==expected_reason, 'wrong_receipt_control_reason:'+name+':'+str(exc))
             controls.append({'name':name,'reason':str(exc),'rejected':True})
         else:
             raise ValueError('receipt_control_accepted:'+name)
     def mutate(data):
         i=len(data)//2
         return data[:i]+bytes([data[i]^1])+data[i+1:]
-    must_reject('same_size_candidate',mutate(source),stage_raw,receipt,bundle)
-    must_reject('same_size_source_receipt',source,stage_raw+b' ',receipt,bundle)
-    must_reject('same_size_bundle',source,stage_raw,receipt,mutate(bundle))
+    def whitespace_mutation(data):
+        changed=data.replace(b'\n',b' ',1)
+        require(len(changed)==len(data) and changed!=data and json.loads(changed)==json.loads(data),
+                'valid_same_size_JSON_mutation_required')
+        return changed
+    must_reject('same_size_candidate','fft_unity_receipt:candidateSha256',
+                lambda: verify_commitments(mutate(source),stage_raw,receipt,bundle))
+    must_reject('same_size_source_receipt','fft_unity_receipt:sourceReceiptSha256',
+                lambda: verify_commitments(source,whitespace_mutation(stage_raw),receipt,bundle))
+    must_reject('same_size_bundle','fft_unity_receipt:bundleSha256',
+                lambda: verify_commitments(source,stage_raw,receipt,mutate(bundle)))
     legacy=dict(u);legacy.pop('receiptSchemaVersion')
-    must_reject('legacy_receipt',source,stage_raw,json.dumps(legacy).encode(),bundle)
+    must_reject('legacy_receipt','fft_unity_receipt:receiptSchemaVersion',
+                lambda: verify_commitments(source,stage_raw,json.dumps(legacy).encode(),bundle))
     stale=dict(u);stale['bundleBytes']=len(bundle)+1
-    must_reject('wrong_bundle_size',source,stage_raw,json.dumps(stale).encode(),bundle)
-    # Raw Unity receipt bytes also bind the independently decoded receipt.
-    changed_receipt=receipt+b' '
+    must_reject('wrong_bundle_size','fft_unity_receipt:bundleBytes',
+                lambda: verify_commitments(source,stage_raw,json.dumps(stale).encode(),bundle))
+    changed_receipt=whitespace_mutation(receipt)
     _,_,changed_commitments=verify_commitments(source,stage_raw,changed_receipt,bundle)
-    try:
-        require_same_decoded_receipt(commitments,changed_commitments)
-    except ValueError as exc:
-        controls.append({'name':'changed_unity_receipt_bytes','reason':str(exc),'rejected':True})
-    else:
-        raise ValueError('unity_receipt_byte_commitment_not_checked')
-    cache={};passes=[]
-    with tempfile.TemporaryDirectory(prefix='gt-fft-compiled-') as d:
-        for i,p in enumerate(parsed['m_SubShaders'][0]['m_Passes']):
-            rows=stage_variants(p['progFragment']) or stage_variants(p['progVertex'])
-            found=[]
-            for _,_,row in rows:
-                idx=row['m_BlobIndex'];require(type(idx) is int and 0<=idx<len(entries),'blob_index')
-                if idx not in cache:
-                    modules=[]
-                    for raw in unity_vulkan_modules(entries[idx][1]):
-                        binary=raw
-                        # SMOL-V decoder accepts the module bytes through stdin.
-                        if raw[:4]==b'LOMS':
-                            proc=subprocess.run([str(decoder)],input=raw,capture_output=True,timeout=15,check=True);binary=proc.stdout
-                        models=spirv_execution_models(binary)
-                        path=Path(d)/(digest(binary)+'.spv');path.write_bytes(binary)
-                        command(['spirv-val','--target-env','vulkan1.1',path])
-                        ops=[op for op,_ in sample_ops(command(['spirv-dis','--raw-id',path]).stdout.decode())]
-                        modules.append({'models':sorted(models),'sha256':digest(binary),'image_ops':ops})
-                    cache[idx]=modules
-                found.extend(m for m in cache[idx] if 4 in m['models'])
-            require(bool(found) and all(len(m['image_ops'])==1 and ((m['image_ops'][0]=='OpImageFetch')==(i==6)) for m in found),'compiled_fragment_coordinate_family:'+str(i))
-            passes.append({'pass':i,'fragment_modules':found})
+    must_reject('changed_unity_receipt_bytes','fft_decoded_receipt_does_not_match_actual_bundle',
+                lambda: require_same_decoded_receipt(commitments,changed_commitments))
+    must_reject('authored_not_original','fft_source_receipt:status',
+                lambda: verify_original_commitments(source,stage_raw,receipt,bundle))
+    modules={m['sha256']:m for m in detail['modules']}
+    passes=[]
+    fragment_blobs=set()
+    for p in detail['passes']:
+        rows=p['stages']['progFragment']['rows']
+        fragment_blobs.update(row['blob_index'] for row in rows)
+        found=[modules[h] for row in rows for h in row['module_sha256']]
+        require(bool(found),'missing_fragment_proof')
+        passes.append({'pass':p['pass'],'fragment_modules':found})
     (results/'authored.bundle').write_bytes(bundle)
     write_json(results/'verified.json',{'status':'PASS_AUTHORED_UNITY_ANDROID_VULKAN_COORDINATES','mode':mode,'run_id':run_id,
         'source_sha256':digest(source),'unity_receipt_sha256':digest(receipt),'bundle_sha256':digest(bundle),'bundle_bytes':len(bundle),
-        'routes':routes,'passes':passes,'validated_fragment_referenced_blobs':len(cache),'actual_android_bundle':True,
+        'routes':routes,'passes':passes,'validated_fragment_referenced_blobs':len(fragment_blobs),'actual_android_bundle':True,
         'receipt_v2_commitments':commitments,'receipt_negative_controls':controls,'original_game_or_device_pixels_verified':False,'XAPK_requested':False})
 
 

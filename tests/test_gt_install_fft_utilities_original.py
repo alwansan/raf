@@ -19,7 +19,7 @@ class FFTInstallation(unittest.TestCase):
         self.decode=patch("scripts.gt_verify_921_shader_bundle.decode_fft_empty_routes",
                           return_value={"all_referenced_spirv_validated":True,
                                         "vertex_routes_by_pass":[1]*7,"fragment_routes_by_pass":[1]*7})
-        self.decode.start()
+        self.decoder_mock=self.decode.start()
         self.addCleanup(self.decode.stop)
 
     @staticmethod
@@ -102,6 +102,24 @@ class FFTInstallation(unittest.TestCase):
                 with self.assertRaises(ValueError):self.run_install(project,trace,key,candidate,source,unity,bundle,backup)
                 self.assertEqual(target.read_bytes(),original)
                 self.assertFalse(backup.exists())
+
+    def test_decoder_failure_and_same_size_bundle_mutation_do_not_install(self):
+        for kind in ("decoder", "bundle"):
+            with self.subTest(kind=kind),tempfile.TemporaryDirectory() as tmp:
+                root=Path(tmp);project,target,meta,key,trace,candidate,source,unity,bundle=self.fixture(root)
+                original=target.read_bytes()
+                original_bundle=self.raw_bundle
+                self.decoder_mock.side_effect=ValueError("invalid_actual_spirv") if kind=="decoder" else None
+                if kind=="bundle":
+                    self.raw_bundle=bytes([original_bundle[0]^1])+original_bundle[1:]
+                try:
+                    with self.assertRaisesRegex(ValueError,"invalid_actual_spirv" if kind=="decoder" else "bundleSha256"):
+                        self.run_install(project,trace,key,candidate,source,unity,bundle,root/"backup")
+                finally:
+                    self.decoder_mock.side_effect=None
+                    self.raw_bundle=original_bundle
+                self.assertEqual(target.read_bytes(),original)
+                self.assertFalse((root/"backup").exists())
 
     def test_failed_postwrite_verification_rolls_shader_back(self):
         from unittest.mock import patch

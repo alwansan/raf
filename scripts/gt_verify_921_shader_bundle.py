@@ -93,7 +93,7 @@ def vulkan_execution_models(blob, decoder):
 
 
 
-def decode_fft_empty_routes(bundle_bytes, expected_name, decoder, *, authored_coordinate_profile=False):
+def _decode_fft_empty_routes(bundle_bytes, expected_name, decoder, *, authored_coordinate_profile=False):
     """Actual immutable bundle validation; no source or install attestation."""
     import tempfile
     import UnityPy
@@ -126,7 +126,7 @@ def decode_fft_empty_routes(bundle_bytes, expected_name, decoder, *, authored_co
             stage_variants, unity_vulkan_modules, spirv_execution_models,
             sample_ops, authored_coordinate_profile=authored_coordinate_profile)
     # Retain only counts and a commitment to private detailed evidence.
-    return {
+    summary = {
         "vulkan_platform_only": True, "compiled_program_table_verified": True,
         "vertex_and_fragment_entrypoints_verified": True,
         "engine_keywords_verified": False,
@@ -139,6 +139,12 @@ def decode_fft_empty_routes(bundle_bytes, expected_name, decoder, *, authored_co
         "decoded_private_evidence_sha256": digest(json.dumps(
             proof, sort_keys=True, separators=(",", ":")).encode()),
     }
+    return summary, proof
+
+
+def decode_fft_empty_routes(bundle_bytes, expected_name, decoder):
+    """Safe summary only; detailed decoded evidence stays private."""
+    return _decode_fft_empty_routes(bundle_bytes, expected_name, decoder)[0]
 
 
 def inspect_fft_original_bytes(candidate, source_receipt, unity_receipt, bundle, decoder):
@@ -173,20 +179,15 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
         raise ValueError("fft_source_receipt_only_for_fft")
     shader = read_snapshot(source, MAX_SOURCE_BYTES) if next23b else source.read_bytes()
     expected_name = exported_shader_identity(shader.decode("utf-8"))
-    if sum(bool(value) for value in (next30, next17, next7p11, fft_utilities, next23b)) > 1:
+    if sum(bool(value) for value in (next30, next17, next7p11, next23b)) > 1:
         raise ValueError("mutually_exclusive_original_shader_source_route_profiles")
     # This profile only validates serialized private candidate routes; never
     # interpret a matching source Shader48 name as an exported GUID.
     counts = ((512, 4, 128, 512) if next23b else
-              (1,) * 7 if fft_utilities else
               NEXT_SEVEN_7P11_ORIGINAL_ROUTES if next7p11 else
               SKIN_ROUTES if next17 else
               NEXT_30_MATERIAL_ROUTES if next30 else
               expected_routes_for_shader(expected_name))
-    if fft_utilities and expected_name != "UltimateWater/Utilities/FFT Utilities":
-        raise ValueError("fft_utilities_exact_original_lookup_name_required")
-    if fft_utilities and (smolv_decoder is None or engine_route_manifest is not None):
-        raise ValueError("fft_utilities_requires_decoded_empty_keyword_routes")
     if next23b and (engine_route_manifest is None or smolv_decoder is None):
         raise ValueError("next23b_requires_actual_engine_routes_and_decoded_entrypoints")
     if next23b and source_variant_manifest is None:
@@ -209,12 +210,9 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
     if next23b and (unity.get("unityVersion") != "2021.3.45f2" or
                     unity.get("passCount") != 4 or unity.get("errors") != 0):
         raise ValueError("next23b_exact_unity_four_pass_compilation_required")
-    if fft_utilities and (unity.get("passCount") != 7 or unity.get("errors") != 0):
-        raise ValueError("fft_utilities_unity_seven_pass_compilation_unverified")
     if (unity.get("privateBundleCompiled") is not True
             or unity.get("androidVulkanOnly") is not True
-            or (unity.get("registeredKeywordVariants") != 1 if fft_utilities
-                else unity.get("registeredRoutes") != sum(counts))
+            or unity.get("registeredRoutes") != sum(counts)
             or unity.get("candidateSha256") != sha256(shader).hexdigest()):
         raise ValueError("original_921_unity_bundle_unverified")
     trees = [obj.read_typetree() for obj in UnityPy.load(bundle_input).objects
@@ -236,7 +234,7 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
                          for item in packet["passes"]]
         if tuple(map(len, engine_routes)) != counts:
             raise ValueError("original_921_engine_route_contract_mismatch")
-    result = verify_routes(tree["m_ParsedForm"], records(segments), engine_routes, smolv_decoder, counts, zero_keywords=fft_utilities, strict_engine=next23b)
+    result = verify_routes(tree["m_ParsedForm"], records(segments), engine_routes, smolv_decoder, counts, strict_engine=next23b)
     return dict(result, **provenance, candidate_sha256=unity["candidateSha256"],
                 engine_keywords_verified=engine_routes is not None,
                 vertex_and_fragment_entrypoints_verified=smolv_decoder is not None)
