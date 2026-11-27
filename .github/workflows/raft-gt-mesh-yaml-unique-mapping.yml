@@ -1,0 +1,129 @@
+name: GT exported Mesh YAML unique mapping (NO original assets)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-mesh-yaml-unique-mapping.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mesh-yaml:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout authored source only and previous route fixtures
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tests/test_gt_mesh_yaml_unique_mapping.py
+            /tests/test_compare_exported_mesh_geometry.py
+            /tests/test_gt_verify_original_mesh_export.py
+            /tests/test_gt_mesh_vertex_payload.py
+            /tests/test_gt_renderer_submesh_routes.py
+            /android-port/Experiments/ExportLineage/
+            /.github/workflows/raft-gt-mesh-yaml-unique-mapping.yml
+      - name: Checkout immutable pre-fix Mesh parser separately
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 4afb43de969b377aae7451ee4108f68f0e80b821
+          path: baseline-source
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tests/test_gt_verify_original_mesh_export.py
+      - name: Install pinned public Python dependency only
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test ! -e baseline-source/Raft
+          test ! -e baseline-source/.gt-zip2
+          mkdir mesh-yaml-evidence
+          python3 -m venv "$RUNNER_TEMP/gt-mesh-yaml-python"
+          py="$RUNNER_TEMP/gt-mesh-yaml-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check PyYAML==6.0.3 Pillow==11.3.0
+          "$py" -c 'import yaml,sys; assert yaml.__version__=="6.0.3" and yaml.__with_libyaml__; print(sys.version); print("PyYAML",yaml.__version__,"libyaml",yaml.__with_libyaml__)' | tee mesh-yaml-evidence/tools.log
+      - name: Prove old geometry consumer equates all conflicting documents to clean ones
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-mesh-yaml-python/bin/python"
+          cp tests/test_gt_mesh_yaml_unique_mapping.py baseline-source/tests/
+          test "$(git -C baseline-source rev-parse HEAD)" = 4afb43de969b377aae7451ee4108f68f0e80b821
+          test "$(git hash-object baseline-source/scripts/compare_exported_mesh_geometry.py)" = c85732b2b553a4e030e8bd6d945a2355af991123
+          cd baseline-source
+          "$py" -B - <<'PY' 2>&1 | tee ../mesh-yaml-evidence/baseline.log
+          import json,sys,tempfile
+          from pathlib import Path
+          from unittest.mock import patch
+          import yaml
+          sys.path.insert(0,"tests")
+          from test_gt_mesh_yaml_unique_mapping import cases,backends,FID,export_geometry
+          results=[]
+          variants=cases()
+          assert len(variants)==29 and len({r[0] for r in variants})==29
+          with tempfile.TemporaryDirectory() as tmp:
+              path=Path(tmp)/"authored.asset"
+              for label,loader in backends():
+                  with patch.object(yaml,"CSafeLoader",loader):
+                      for name,clean,conflicting,reason in variants:
+                          path.write_text(clean)
+                          expected=export_geometry(path,FID)
+                          path.write_text(conflicting)
+                          actual=export_geometry(path,FID)
+                          assert actual==expected,(label,name)
+                          results.append({"backend":label,"case":name,"old_geometry_equal_clean":True,"fixed_reason":reason})
+                          print("GT_OLD_FALSE_ACCEPT",label,name)
+          assert len(results)==58
+          Path("../mesh-yaml-evidence/baseline.json").write_text(json.dumps({"base":"4afb43de969b377aae7451ee4108f68f0e80b821",
+              "old_blob":"c85732b2b553a4e030e8bd6d945a2355af991123","distinct_counterfactuals":29,
+              "backends":2,"old_false_acceptances":len(results),"cases":results},indent=2,sort_keys=True)+"\n")
+          PY
+      - name: Test fixed parser and earlier same-route geometry controls
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-mesh-yaml-python/bin/python"
+          for f in test_gt_mesh_yaml_unique_mapping.py test_compare_exported_mesh_geometry.py test_gt_verify_original_mesh_export.py test_gt_mesh_vertex_payload.py test_gt_renderer_submesh_routes.py; do
+            "$py" -B -W error -m unittest discover -s tests -p "$f" -v 2>&1 | tee "mesh-yaml-evidence/$f.log"
+          done
+          "$py" -B - <<'PY'
+          import json,re,hashlib
+          from pathlib import Path
+          root=Path("mesh-yaml-evidence")
+          tests={}
+          for f in ("test_gt_mesh_yaml_unique_mapping.py","test_compare_exported_mesh_geometry.py","test_gt_verify_original_mesh_export.py","test_gt_mesh_vertex_payload.py","test_gt_renderer_submesh_routes.py"):
+              log=(root/(f+".log")).read_text()
+              count=re.search(r"^Ran (\d+) tests? in ",log,re.M)
+              assert count and re.search(r"^OK$",log,re.M), f
+              tests[f]=int(count[1])
+          assert tests["test_gt_mesh_yaml_unique_mapping.py"]==7
+          report={"status":"PASS_AUTHORED_MESH_YAML_UNIQUE_MAPPING","tests":tests,"total_tests":sum(tests.values()),
+              "distinct_counterfactuals":29,"yaml_backends":2,"old_false_acceptances":58,"fixed_rejections":58,
+              "scope":"actual Mesh YAML loader and export_geometry on authored fixtures, not original mesh parity",
+              "original_assets_read":False,"original_geometry_verified":False,"unity_or_device_tested":False,
+              "XAPK_requested":False,"source_sha256":hashlib.sha256(Path("scripts/compare_exported_mesh_geometry.py").read_bytes()).hexdigest(),
+              "new_test_sha256":hashlib.sha256(Path("tests/test_gt_mesh_yaml_unique_mapping.py").read_bytes()).hexdigest()}
+          (root/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - name: Retain exact baseline and regression receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-mesh-yaml-unique-mapping-${{ github.run_id }}
+          path: mesh-yaml-evidence/
+          if-no-files-found: warn
+          retention-days: 14

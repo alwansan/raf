@@ -16,14 +16,30 @@ def load_mesh_yaml(text):
 
     class MeshLoader(getattr(yaml, "CSafeLoader", yaml.SafeLoader)):
         def construct_mapping(self, node, deep=False):
-            for key, value in node.value:
-                if key.value in ('_typelessdata', 'm_IndexBuffer', 'm_Data', 'm_BoneNameHashes') and isinstance(value, yaml.ScalarNode):
+            # SafeLoader and CSafeLoader normally overwrite a repeated mapping
+            # key. A later valid value must not hide conflicting exported
+            # vertex/index bytes, channel layout, stream or bind-pose data.
+            # Unity's canonical Mesh serialization does not need YAML merges;
+            # refuse them rather than permit an implicit override.
+            mapping = {}
+            for key_node, value in node.value:
+                if key_node.tag == 'tag:yaml.org,2002:merge':
+                    raise ValueError('mesh_yaml_merge_key_unsupported')
+                key = self.construct_object(key_node, deep=deep)
+                try:
+                    repeated = key in mapping
+                except TypeError:
+                    raise ValueError('mesh_yaml_unhashable_mapping_key') from None
+                if repeated:
+                    raise ValueError('mesh_yaml_duplicate_mapping_key')
+                if key in ('_typelessdata', 'm_IndexBuffer', 'm_Data', 'm_BoneNameHashes') and isinstance(value, yaml.ScalarNode):
                     value.tag = 'tag:yaml.org,2002:str'
-                elif key.value in matrix_fields and isinstance(value, yaml.ScalarNode) and value.value == "-0":
+                elif key in matrix_fields and isinstance(value, yaml.ScalarNode) and value.value == "-0":
                     # Unity emits float32 negative zero as "-0". PyYAML treats
                     # that spelling as an integer and would discard its sign.
                     value.tag = 'tag:yaml.org,2002:float'
-            return super().construct_mapping(node, deep=deep)
+                mapping[key] = self.construct_object(value, deep=deep)
+            return mapping
     text = re.sub(r'(?m)^%[^\n]*\n', '', text)
     text = re.sub(r'(?m)^--- !u!43 &[^\n]*', '---', text)
     return yaml.load(text, Loader=MeshLoader)['Mesh']
