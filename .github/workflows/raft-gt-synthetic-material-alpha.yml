@@ -1773,6 +1773,7 @@ jobs:
             /tests/test_gt_material_route_values.py
             /tests/test_gt_material_route_keyword_state.py
             /tests/test_gt_texture_route_payload.py
+            /tests/test_gt_streamed_texture_route_payload.py
             /android-port/Experiments/ExportLineage/
             /tools/synthetic_material_alpha/RaftAuthoredSceneRouteWitness.cs
             /.github/workflows/raft-gt-synthetic-material-alpha.yml
@@ -1784,7 +1785,7 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/gt-authored-scene-python"
           py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
           "$py" -m pip install --disable-pip-version-check Pillow==11.3.0 PyYAML==6.0.3
-          for test_file in test_gt_texture_route_payload.py test_gt_material_route_keyword_state.py test_gt_material_route_values.py test_gt_mesh_vertex_payload.py test_gt_verify_original_mesh_export.py test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
+          for test_file in test_gt_streamed_texture_route_payload.py test_gt_texture_route_payload.py test_gt_material_route_keyword_state.py test_gt_material_route_values.py test_gt_mesh_vertex_payload.py test_gt_verify_original_mesh_export.py test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
             "$py" -B -m unittest discover -s tests -p "$test_file" -v 2>&1 | tee "authored-scene-results/$test_file.log"
           done
       - uses: actions/setup-dotnet@v4
@@ -1846,7 +1847,7 @@ jobs:
               original_assets_read=False,APK=False)
           Path("authored-scene-results/build.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
           PY
-      - name: Execute authored export and retain native Texture2D stream schema and full mip proof
+      - name: Execute actual file-backed streamed Texture2D export and SHA range proof
         shell: bash
         run: |
           set -euo pipefail
@@ -1861,16 +1862,22 @@ jobs:
           from pathlib import Path
           root=Path("authored-scene-results")
           j=json.loads((root/"route-join.json").read_text())
-          assert j["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_TEXTURE_PAYLOAD_ROUTE_JOIN"
+          assert j["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_STREAMED_TEXTURE_ROUTE_JOIN"
           assert j["baseline"]["selected_renderer_routes_preserved"] is True
-          assert j["counterfactual_count"]==29
+          assert j["counterfactual_count"]==33
+          assert j["baseline"]["selected_same_route_streamed_texture_payloads_verified"] is True
+          assert j["baseline"]["counts"]["streamed_texture_payload_slots_matched"]==4
+          assert j["baseline"]["counts"]["streamed_texture_payload_bytes_matched_per_route"]==80
+          assert j["baseline"]["counts"]["streamed_texture_mip_levels_matched_per_route"]==8
+          assert j["authored_stream_offsets"]==[7,34]
+          assert j["authored_provider_bytes"]==61
           assert j["baseline"]["selected_nonnull_same_route_texture_payloads_verified"] is True
           assert j["baseline"]["counts"]["complete_texture_payload_bound_renderer_routes"]==2
           assert j["baseline"]["counts"]["complete_texture_payload_bound_submesh_routes"]==4
           assert j["baseline"]["counts"]["texture_payload_slots_matched"]==4
           assert j["baseline"]["counts"]["texture_payload_bytes_matched_per_route"]==80
           assert j["baseline"]["counts"]["texture_mip_levels_matched_per_route"]==8
-          assert sum(c.get("V4_material_keyword_gate_passed",False) for c in j["counterfactuals"].values())==7
+          assert sum(c.get("V4_material_keyword_gate_passed",False) for c in j["counterfactuals"].values())==11
           assert j["baseline"]["selected_same_route_material_keyword_pass_state_verified"] is True
           assert j["baseline"]["counts"]["complete_material_keyword_bound_renderer_routes"]==2
           assert j["baseline"]["counts"]["complete_material_keyword_bound_submesh_routes"]==4
@@ -1893,8 +1900,8 @@ jobs:
               m=re.search(r"^Ran (\d+) tests? in ",s,re.M)
               assert m and int(m[1])>0 and re.search(r"^OK$",s,re.M)
               tests[p.name]=int(m[1])
-          assert len(tests)==7
-          report=dict(status="PASS_AUTHORED_ACTUAL_EXPORT_TEXTURE_PAYLOAD_ROUTE_GATE",
+          assert len(tests)==8
+          report=dict(status="PASS_AUTHORED_ACTUAL_EXPORT_STREAMED_TEXTURE_ROUTE_GATE",
               run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
               test_counts=tests,total_regression_tests=sum(tests.values()),
               actual_exported_documents=j["actual_exported_documents"],
@@ -1904,13 +1911,18 @@ jobs:
               same_route_vertex_bytes_verified=True,UV_decoded_values_or_GPU_verified=False,
               same_route_material_values_verified=True,shader_property_runtime_semantics_verified=False,
               same_route_material_keyword_pass_state_verified=True,active_shader_variant_or_runtime_keyword_scope_verified=False,
-              native_inline_RGBA32_texture_payload_bytes_verified=True,texture_sampler_import_colorspace_or_GPU_verified=False,
+              native_exported_RGBA32_texture_payload_bytes_verified=True,texture_sampler_import_colorspace_or_GPU_verified=False,
+              source_pinned_streamed_RGBA32_texture_payload_bytes_verified=True,
+              streamed_texture_payload_slots=j["baseline"]["counts"]["streamed_texture_payload_slots_matched"],
+              streamed_texture_payload_bytes_per_route=j["baseline"]["counts"]["streamed_texture_payload_bytes_matched_per_route"],
+              streamed_texture_mip_levels_per_route=j["baseline"]["counts"]["streamed_texture_mip_levels_matched_per_route"],
+              authored_provider_bytes=j["authored_provider_bytes"],authored_stream_offsets=j["authored_stream_offsets"],
               complete_texture_bound_renderers=j["baseline"]["counts"]["complete_texture_payload_bound_renderer_routes"],
               complete_texture_bound_submeshes=j["baseline"]["counts"]["complete_texture_payload_bound_submesh_routes"],
               texture_payload_slots=j["baseline"]["counts"]["texture_payload_slots_matched"],
               texture_payload_bytes_per_route=j["baseline"]["counts"]["texture_payload_bytes_matched_per_route"],
               texture_mip_levels_per_route=j["baseline"]["counts"]["texture_mip_levels_matched_per_route"],
-              V4_pass_V5_reject_controls=7,
+              V4_pass_V6_reject_controls=11,
               complete_keyword_bound_renderers=j["baseline"]["counts"]["complete_material_keyword_bound_renderer_routes"],
               complete_keyword_bound_submeshes=j["baseline"]["counts"]["complete_material_keyword_bound_submesh_routes"],
               keyword_pass_entries={kind:j["baseline"]["counts"]["material_"+kind+"_entries_matched"] for kind in ("valid_keyword","invalid_keyword","disabled_pass")},
@@ -1930,7 +1942,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gt-authored-texture-payload-route-join-${{ github.run_id }}
+          name: gt-authored-streamed-texture-route-join-${{ github.run_id }}
           path: authored-scene-results/*
           if-no-files-found: warn
           retention-days: 14
