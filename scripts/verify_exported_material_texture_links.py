@@ -16,7 +16,13 @@ SLOT_MAPPING=re.compile(r"(?m)^      [^:\r\n{}]+:[ \t]*$")
 TEX=re.compile(r"(?m)^        m_Texture:[ \t]*(\{[^\r\n{}]*\})[ \t]*$")
 NEXT=re.compile(r"(?m)^    m_[A-Za-z][A-Za-z0-9_]*:")
 IMAGES={".png",".jpg",".jpeg",".tga",".psd",".tif",".tiff",".bmp",".exr",".hdr",".dds",".ktx",".pvr",".webp"}
-CLASSES={28,84,86,89,117,187,188,205}
+# Unity 2021.3 YAML ClassIDReference: 205 is LODGroup, NOT Texture.
+# https://docs.unity3d.com/2021.3/Documentation/Manual/ClassIDReference.html
+TEXTURE_ROOTS={28:"Texture2D",84:"RenderTexture",86:"CustomRenderTexture",
+               89:"Cubemap",117:"Texture3D",187:"Texture2DArray",188:"CubemapArray"}
+CLASSES=set(TEXTURE_ROOTS)
+SERIALIZED_MARKER=re.compile(r"(?m)^---[^\n]*$")
+SERIALIZED_HEADER=re.compile(r"---[ \t]+!u!([0-9]{1,10})[ \t]+&(-?[0-9]{1,19})(?:[ \t]+(stripped))?[ \t]*")
 BUILTIN={"0000000000000000e000000000000000","0000000000000000f000000000000000"}
 ZERO="0"*32
 PLACEHOLDER="0000000deadbeef15deadf00d0000000"
@@ -100,6 +106,42 @@ def texenv(doc):
     if len(TEX.findall(region))!=len(result): fail("orphan_texture_pointer")
     return result
 
+def serialized_texture_document(source,fid):
+    """Resolve one unambiguous physical Unity YAML document, not its pixels.
+
+    Every root document marker in the referenced container must be canonical.
+    Numeric fileIDs are scoped to that container (including nontexture docs).
+    Do not infer identity from a partial header, stripped reference, or a
+    different root mapping. This is deliberately not a general YAML parser.
+    """
+    markers=list(SERIALIZED_MARKER.finditer(source))
+    if not markers: fail("missing_serialized_texture_headers")
+    identities={}
+    selected=None
+    for i,marker in enumerate(markers):
+        header=SERIALIZED_HEADER.fullmatch(marker.group())
+        if header is None: fail("malformed_serialized_texture_header")
+        cls,anchor=int(header[1]),int(header[2])
+        if cls>=2**31 or anchor==0 or not -(2**63)<=anchor<2**63:
+            fail("invalid_serialized_texture_object_id")
+        if anchor in identities: fail("duplicate_serialized_texture_object_id")
+        identities[anchor]=cls
+        if anchor==fid:
+            selected=(i,cls,header[3])
+    if selected is None: return False
+    i,cls,stripped=selected
+    if stripped or cls not in TEXTURE_ROOTS: return False
+    body=source[markers[i].end():markers[i+1].start() if i+1<len(markers) else len(source)]
+    # Canonical Unity YAML has one unindented root mapping for its class.
+    # Ignore comments, blank lines, nested fields and a document end marker.
+    # Never parse, emit or authenticate the texture payload here.
+    roots=[line for line in body.splitlines()
+           if line.strip() and not line[0].isspace()
+           and not line.startswith("#") and line.strip()!="..."]
+    return (len(roots)==1 and re.fullmatch(re.escape(TEXTURE_ROOTS[cls])
+            +r":[ \t]*(?:\{\}[ \t]*)?",roots[0]) is not None)
+
+
 def is_texture(path,meta,fid):
     # Real Unity importer subobjects have distinct native fileIDs.
     # Original Texture2DArray (ClassID 187) can be an imported PNG flipbook,
@@ -145,8 +187,7 @@ def is_texture(path,meta,fid):
                     and width//cols>0 and height//rows>0)
         return False
     if path.suffix.lower() in {".asset",".cubemap",".rendertexture"}:
-        return any(int(h[2])==fid and int(h[1]) in CLASSES
-                   for h in HEADER.finditer(read(path)))
+        return serialized_texture_document(read(path),fid)
     return False
 
 def physical_entries(assets):

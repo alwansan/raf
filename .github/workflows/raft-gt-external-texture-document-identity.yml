@@ -1,0 +1,110 @@
+name: GT external Texture unique serialized document (NO original assets)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-external-texture-document-identity.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  texture-documents:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only code, tests and workflow contract text
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/verify_exported_material_texture_links.py
+            /tests/__init__.py
+            /tests/test_verify_exported_material_texture_links.py
+            /tests/test_gt_folder_meta_texture_registry.py
+            /tests/test_gt_external_texture_document_identity.py
+            /tests/test_t5_native_material_texture_integration.py
+            /.github/workflows/raft-unity-editor-android-import.yml
+            /.github/workflows/raft-b46-render-texture-links.yml
+            /.github/workflows/raft-gt-external-texture-document-identity.yml
+      - name: Checkout immutable pre-fix source only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 0d193cd922e94faea6ee231c94aaa08c2d89019f
+          path: baseline-source
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/verify_exported_material_texture_links.py
+      - name: Reproduce exact pre-fix false acceptance cases
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test ! -e baseline-source/Raft
+          test ! -e baseline-source/.gt-zip2
+          mkdir texture-document-evidence baseline-source/tests
+          cp tests/test_gt_external_texture_document_identity.py baseline-source/tests/
+          test "$(git -C baseline-source rev-parse HEAD)" = 0d193cd922e94faea6ee231c94aaa08c2d89019f
+          test "$(git hash-object baseline-source/scripts/verify_exported_material_texture_links.py)" = fcf67a457755f483242206e4db25d5d6fea83567
+          cd baseline-source
+          python3 -B - <<'PY' 2>&1 | tee ../texture-document-evidence/baseline.log
+          import json,sys,unittest
+          from pathlib import Path
+          sys.path.insert(0,"tests")
+          from test_gt_external_texture_document_identity import ExternalTextureDocuments
+          names=["test_duplicate_same_class_target","test_duplicate_other_class_after_target","test_duplicate_other_class_before_target","test_duplicate_unreferenced_object_ids","test_numeric_alias_anchor_is_duplicate","test_zero_unreferenced_anchor","test_out_of_range_unreferenced_anchor","test_malformed_marker_cannot_hide_duplicate","test_bare_document_marker_rejected","test_oversized_decimal_header_rejected","test_stripped_texture_not_full_document","test_class_header_wrong_root","test_header_without_root","test_two_root_mappings_rejected","test_lodgroup_external_not_texture","test_lodgroup_local_not_texture"]
+          result=unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(ExternalTextureDocuments(n) for n in names))
+          failures={getattr(t,"test_case",t)._testMethodName for t,_ in result.failures}
+          assert result.testsRun==16 and not result.errors and not result.skipped
+          assert failures==set(names) and len(result.failures)==17
+          assert all("GuardError not raised" in trace for _,trace in result.failures)
+          report={"base":"0d193cd922e94faea6ee231c94aaa08c2d89019f","old_blob":"fcf67a457755f483242206e4db25d5d6fea83567",
+              "negative_methods":16,"negative_cases_incorrectly_accepted":17,"failed_methods":sorted(failures)}
+          Path("../texture-document-evidence/baseline.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print("GT_BASELINE_REPRODUCED false_acceptances=17")
+          PY
+      - name: Run repaired and prior source-only suites including T5 CLI wiring
+        run: |
+          set -euo pipefail
+          for f in test_gt_external_texture_document_identity.py test_gt_folder_meta_texture_registry.py test_verify_exported_material_texture_links.py test_t5_native_material_texture_integration.py; do
+            python3 -B -W error -m unittest discover -s tests -p "$f" -v 2>&1 | tee "texture-document-evidence/$f.log"
+          done
+          python3 -B - <<'PY'
+          import json,re,hashlib
+          from pathlib import Path
+          root=Path("texture-document-evidence")
+          tests={}
+          for f in ("test_gt_external_texture_document_identity.py","test_gt_folder_meta_texture_registry.py","test_verify_exported_material_texture_links.py","test_t5_native_material_texture_integration.py"):
+              log=(root/(f+".log")).read_text()
+              count=re.search(r"^Ran (\d+) tests? in ",log,re.M)
+              assert count and re.search(r"^OK$",log,re.M), f
+              tests[f]=int(count[1])
+          assert tests["test_gt_external_texture_document_identity.py"]==25
+          assert tests["test_t5_native_material_texture_integration.py"]==4
+          report={"status":"PASS_AUTHORED_EXTERNAL_TEXTURE_DOCUMENT_IDENTITY","tests":tests,
+              "total_tests":sum(tests.values()),"baseline_false_acceptances_repaired":17,
+              "scope":"unique canonical header and matching root in referenced physical serialized Texture container",
+              "original_assets_read":False,"source_export_equivalence_verified":False,"unity_or_device_tested":False,
+              "XAPK_requested":False,"source_sha256":hashlib.sha256(Path("scripts/verify_exported_material_texture_links.py").read_bytes()).hexdigest(),
+              "new_test_sha256":hashlib.sha256(Path("tests/test_gt_external_texture_document_identity.py").read_bytes()).hexdigest()}
+          (root/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - name: Retain exact source-only before and after logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-external-texture-document-${{ github.run_id }}
+          path: texture-document-evidence/
+          if-no-files-found: warn
+          retention-days: 14
