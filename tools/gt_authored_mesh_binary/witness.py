@@ -15,7 +15,14 @@ import struct
 import tempfile
 from unittest.mock import patch
 
-import UnityPy
+import warnings
+
+# UnityPy 1.23.0 uses importlib.resources.open_binary at TPK initialization.
+# Suppress only that known third-party import deprecation on Python 3.12.
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", message=r"open_binary is deprecated.*",
+                            category=DeprecationWarning, module=r"UnityPy\.helpers\.Tpk")
+    import UnityPy
 from UnityPy.helpers import TypeTreeHelper
 from UnityPy.helpers.Tpk import get_typetree_node
 from UnityPy.helpers.UnityVersion import UnityVersion
@@ -283,6 +290,7 @@ def run(out):
                 seen=set()
                 got=mesh.source_geometry(tree,source,records,seen)
                 require_equal(got,expected)
+                need(len(got)==10 and got==expected,"wrong_geometry_field_population")
                 need(seen==({PROVIDER} if label!="inline" else set()),"wrong_stream_accounting")
                 # Exercise the entire native inspect path, including pinned owner
                 # hash, ObjectReader, GUID/fileID join and comparison.
@@ -295,7 +303,7 @@ def run(out):
                      report["counts"]["matched_mesh_geometry"]==1 and
                      not report["renderer_bindings_or_unity_import_verified"],"full_native_consumer_mismatch")
                 rows.append({"storage":label,"decoder":decoder,"owner":commit(raw),"object":commit(payload),
-                             "full_native_inspect":report,"all_11_geometry_fields_equal":len(got)==11,
+                             "full_native_inspect":report,"geometry_fields":len(got),"all_geometry_fields_equal":got==expected,
                              "types":{"vertex":type(tree["m_VertexData"]["m_DataSize"]).__name__,
                                       "index":type(tree["m_IndexBuffer"]).__name__,
                                       "packed":type(tree["m_CompressedMesh"]["m_UV"]["m_Data"]).__name__,
