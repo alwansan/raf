@@ -1,0 +1,10 @@
+test_case_scope_truth_table (__main__.ContractTests.test_case_scope_truth_table) ... ok
+test_exact_oracle_fixture (__main__.ContractTests.test_exact_oracle_fixture) ... ok
+test_process_failure_rejected (__main__.ContractTests.test_process_failure_rejected) ... ok
+test_source_router (__main__.ContractTests.test_source_router) ... ok
+test_tampered_receipts_rejected (__main__.ContractTests.test_tampered_receipts_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.003s
+
+OK

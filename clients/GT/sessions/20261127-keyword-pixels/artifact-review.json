@@ -1,0 +1,141 @@
+{
+  "archive_bytes": 3191,
+  "archive_sha256": "e302694238bf4a5f95d904904ae169adbd840894124c1b6eda245811a8f2867b",
+  "execution_attestation_requires_matching_github_run_and_job": true,
+  "first_observed_pixel_per_case": {
+    "both_A": [
+      0.125,
+      0.0625,
+      0.25,
+      1.0
+    ],
+    "empty_A": [
+      0.5,
+      0.25,
+      0.25,
+      1.0
+    ],
+    "global_B": [
+      0.25,
+      0.125,
+      0.75,
+      1.0
+    ],
+    "global_impostor_B": [
+      0.5,
+      0.25,
+      0.75,
+      1.0
+    ],
+    "global_off_A": [
+      0.5,
+      0.25,
+      0.25,
+      1.0
+    ],
+    "global_off_local_A": [
+      0.375,
+      0.1875,
+      0.25,
+      1.0
+    ],
+    "global_on_A": [
+      0.25,
+      0.125,
+      0.25,
+      1.0
+    ],
+    "isolated_A": [
+      0.5,
+      0.25,
+      0.25,
+      1.0
+    ],
+    "isolated_B": [
+      0.5,
+      0.25,
+      0.75,
+      1.0
+    ],
+    "local_off_A": [
+      0.5,
+      0.25,
+      0.25,
+      1.0
+    ],
+    "local_on_A": [
+      0.375,
+      0.1875,
+      0.25,
+      1.0
+    ],
+    "local_on_B": [
+      0.375,
+      0.1875,
+      0.75,
+      1.0
+    ],
+    "material_global_A": [
+      0.25,
+      0.125,
+      0.25,
+      1.0
+    ],
+    "material_global_isolation_B": [
+      0.5,
+      0.25,
+      0.75,
+      1.0
+    ],
+    "material_global_off_A": [
+      0.5,
+      0.25,
+      0.25,
+      1.0
+    ]
+  },
+  "local_numeric_replay": {
+    "XAPK_requested": false,
+    "case_count": 15,
+    "checked_pixels": 360,
+    "checked_rgba_components": 1440,
+    "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+    "empty_route": 3,
+    "global_local_scope_tested_on_authored_shader": true,
+    "input_sha256": {
+      "Assets/Editor/SyntheticKeywordPixelValidation.cs": "858152a305859d2d286f7b3a477ab84da7cfd49ec731d9b16652d6ef9b47355b",
+      "Assets/SyntheticKeywordPixels.shader": "1b8294ec4c3fd71947db3116f5be64c05c5dcd92c043f8b8d47d0b0aa524fe73",
+      "Packages/manifest.json": "6121fb9da71e3430413f00e63e2748c5ee8d2e69049c3963bc448cac6880a404",
+      "ProjectSettings/ProjectSettings.asset": "4b90ac40a10387205b5d9b3eb444a72ca678f8671291d1bbd3bac0920fdcdde4",
+      "ProjectSettings/ProjectVersion.txt": "6fe6923646e719ee264b3a4a8c94f8627acfe67a868572ef77dad182b9d2930c"
+    },
+    "max_error": 0.0,
+    "minimum_wrong_route_separation": 0.125,
+    "negative_controls": 5,
+    "original_runtime_or_Android_pixels_verified": false,
+    "routes_observed": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "run_id": "45931001072-1-50332d816ac2bc5a8f92e84a0991f9bffde6a0a8",
+    "status": "PASS_AUTHORED_UNITY_VULKAN_KEYWORD_PIXELS"
+  },
+  "members": {
+    "raw.unity.json": {
+      "bytes": 80337,
+      "sha256": "38bd20d1275f1e5de29a7eea973a2185661adb400b3741ae76f3f490a3506322"
+    },
+    "stage.json": {
+      "bytes": 813,
+      "sha256": "d7edadfbc544c1cfe87ed63a59703af45d516df0295f9723d92db4e51826b54b"
+    },
+    "verified.json": {
+      "bytes": 1142,
+      "sha256": "a9bee31debcf40268ba2ce89b736e72336e819e4f787f75a285ca1b710f88351"
+    }
+  },
+  "original_game_pixels_verified": false,
+  "run_id": "45931001072-1-50332d816ac2bc5a8f92e84a0991f9bffde6a0a8"
+}

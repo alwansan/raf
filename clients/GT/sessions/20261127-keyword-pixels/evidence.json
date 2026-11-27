@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-27",
+  "base_before_implementation": "23f999062acf3c891fa4e87466844b38ea9ff822",
+  "tested_head": "50332d816ac2bc5a8f92e84a0991f9bffde6a0a8",
+  "read_only_lab_head": "f933c4429803583d1ed5fa26e46bb0d3227f2027",
+  "authorized_actions": true,
+  "acceptance": {
+    "run_id": 45931001072,
+    "run_attempt": 1,
+    "job_id": 140283349151,
+    "head": "50332d816ac2bc5a8f92e84a0991f9bffde6a0a8",
+    "conclusion": "success",
+    "status": "PASS_AUTHORED_UNITY_VULKAN_KEYWORD_PIXELS",
+    "Unity_version": "2021.3.45f2",
+    "backend": "Vulkan",
+    "active_color_space": "Linear",
+    "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+    "host": "Linux software Vulkan; not Android device",
+    "cases": 15,
+    "observed_pixels": 360,
+    "observed_rgba_components": 1440,
+    "observed_routes": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "empty_route": 3,
+    "route0_contains_both_keywords": true,
+    "global_overridable": true,
+    "local_overridable": false,
+    "wrong_route_comparison_controls": 5,
+    "minimum_wrong_route_separation": 0.125,
+    "max_error": 0,
+    "artifact_id": 15168682623,
+    "artifact_sha256": "e302694238bf4a5f95d904904ae169adbd840894124c1b6eda245811a8f2867b",
+    "artifact_bytes": 3191,
+    "archive": "clients/GT/sessions/20261127-keyword-pixels/actual-run-45931001072.zip",
+    "artifact_review": "clients/GT/sessions/20261127-keyword-pixels/artifact-review.json",
+    "local_replay_matches_runner_report": true,
+    "actual_original_runtime_or_Android_pixels_verified": false
+  },
+  "run": {
+    "id": 45931001072,
+    "head": "50332d816ac2bc5a8f92e84a0991f9bffde6a0a8",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-27T02:53:53Z",
+    "updated_at": "2026-11-27T02:56:38Z",
+    "jobs": [
+      {
+        "id": 140283349151,
+        "name": "keyword-pixels",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checkout only authored keyword probe and router",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify oracle and stage a new authored keyword project",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require existing activation inputs and disk budget",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Prepare an ephemeral Unity image with software Vulkan",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Render actual authored material keyword transitions in Unity Vulkan",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Independently verify all readback pixels and wrong-route controls",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain only authored numeric receipts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Remove only the authored keyword test project and image",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Checkout only authored keyword probe and router",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 140283349203,
+        "name": "synthetic-pixels",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 140283374584,
+        "name": "next23b-receipt",
+        "status": "completed",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "artifact_expiration": "2026-12-11T02:56:34Z",
+  "log_review": {
+    "line_count": 2425,
+    "targeted_error_counts": {
+      "csharp": 0,
+      "shader": 0,
+      "wrong_route": 0
+    },
+    "status_line": "GT_KEYWORD_PIXEL_STATUS PASS cases=15 reason=all_authored_keyword_readbacks_matched",
+    "all_errors_excluded": false
+  },
+  "source_tests": {
+    "local_passed": 5,
+    "ci_stage_success": true,
+    "receipt_mutations_rejected": 9,
+    "failed_exit_rejected": true,
+    "cpp_marker_routes": 4,
+    "archive_review_test_double_and_two_negative_controls_passed": true
+  },
+  "publication_scope": {
+    "no_original_assets_read": true,
+    "no_game_or_package_build": true,
+    "full_clone_verified": false,
+    "direct_github_dns_available": false,
+    "previous_local_files_not_modified": true,
+    "lab_or_CL_written": false,
+    "BLACK_touched": false,
+    "workflow_changed_only_existing_isolated_synthetic_mode": true
+  },
+  "files": [
+    {
+      "path": "tools/synthetic_material_alpha/SyntheticKeywordPixelValidation.cs",
+      "git_blob_sha": "3fc5739dc7965d3e542adbe37f735cf61565392a",
+      "sha256": "858152a305859d2d286f7b3a477ab84da7cfd49ec731d9b16652d6ef9b47355b"
+    },
+    {
+      "path": "tools/synthetic_material_alpha/keyword_pixels.py",
+      "git_blob_sha": "0dd6c295b87051d30452962710f44306b4cc5bbc",
+      "sha256": "cd606fedbce6ec08ebf55eb8c57ed09b44d51259c97c3730d414f6c6c273b5dd"
+    },
+    {
+      "path": "scripts/gt_runtime_keyword_contract.py",
+      "git_blob_sha": "617a4ca349281a8e2ad99bf4f04364a028fb7c16",
+      "sha256": "b92c83c304fa2c401f218b6ce19b6397de737c7f3fd8981ec17e3bec7a4c417f"
+    },
+    {
+      "path": ".github/workflows/raft-gt-synthetic-material-alpha.yml",
+      "git_blob_sha": "9b3885914c2969650ba84540fdc86ad7e4c539e9"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-keyword-pixels/review_artifact.py",
+      "git_blob_sha": "2acfcc050967abfecf9cd1b92d8c3a3ff8f13bbc",
+      "sha256": "f889108311a46e37b67851a9fca9f9193dea63adeb682a860e5e931e35bf434b"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-keyword-pixels/artifact-review.json",
+      "git_blob_sha": "c2c3ded8af052da663eaa83c256486c2b2d60eed",
+      "sha256": "bfaebcdaf724d0a825e45c12ab6328afc2a5010eac80b2ea9e5ed11390fdf187"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-keyword-pixels/actual-run-45931001072.zip",
+      "git_blob_sha": "818e71feef7e521a6b5e08d009a84a0c6c23a282",
+      "sha256": "e302694238bf4a5f95d904904ae169adbd840894124c1b6eda245811a8f2867b"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-keyword-pixels/cpp-source.json",
+      "git_blob_sha": "759950b5f5cc4d633b57b289ffc0a00e77585089",
+      "sha256": "fecf1ed05e21dbc605709185ca355faf467f47c8bd0c433b242e2cbe14b1261b"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-keyword-pixels/selftest.log",
+      "git_blob_sha": "f5fabb2129556b2c6ad19ea6a0abc3dd2c0be84c",
+      "sha256": "a5d34d2fbc237b1414092ff81d63ee34e9a4240fb02da18e5e1d4e60e9b99d57"
+    }
+  ]
+}

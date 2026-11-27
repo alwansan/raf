@@ -1964,11 +1964,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "1fd0565f8f7cb926a5d9143f3216e88ba31c70b5",
-    "purpose": "active RAFT restoration under owner authorization; use Actions for necessary permitted experiments",
+    "reviewed_remote_head": "50332d816ac2bc5a8f92e84a0991f9bffde6a0a8",
+    "purpose": "active RAFT restoration; A1 authored Android Vulkan bundle and A2 authored Linux Vulkan runtime pixels proven; original restoration still open",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-actions-execution-plan/README_AR.md",
+    "index": "clients/GT/sessions/20261127-keyword-pixels/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -2132,13 +2132,13 @@
       },
       {
         "id": "A2",
-        "status": "ACTIVE_NEXT",
-        "action": "Implement and run isolated authored Unity Vulkan material/global/local keyword pixel readback, with empty set selecting its own nonzero-index marker, on/off/on or off/on/off, negative controls, and a distinct marker per selected route. Reuse safe synthetic workflow/activation; no game data or APK. Check exact receipt and run identity. Then move to authorized original metadata or another productive G0-G6 step."
+        "status": "COMPLETE_AUTHORED_LINUX_VULKAN_PIXELS_ONLY",
+        "action": "Run 45931001072 actual Unity 2021.3.45f2 Linux Vulkan rendered 15 material/keyword transitions, 360 pixels, all four routes with empty route 3. Five wrong-route controls distinguishable, exact independent archive replay. Does not prove original scopes or Android."
       },
       {
         "id": "A3",
-        "status": "BLOCKED_ON_AUTHORIZED_SOURCE",
-        "action": "Use only explicitly authorized source metadata to establish actual NEXT23b keywords, flags/scope, PassType, route lattice and VS/FS binding; reject uncertainty. Then prove Unity material/runtime and same-export GUID integration without counting Dummy or changing original meta by guess."
+        "status": "ACTIVE_NEXT_SOURCE_AUTHORIZATION_GATE",
+        "action": "Check live authorized-source availability and independent scope/PassType/route metadata for NEXT23b, use existing owner-authorized Actions only within verified asset scope. Do not infer original local/global flags from synthetic behavior. If actual authorized source metadata unavailable, record specific blocker and perform nearest authorized G0-G6 repair instead of further repetitive synthetic gates. Prove original runtime and same-export GUID integration before acceptance."
       },
       {
         "id": "A4",
@@ -2155,6 +2155,42 @@
         "status": "BLOCKED_UNTIL_G0_G6",
         "action": "Run authorized final XAPK pipeline only after documented G0-G6 and integration closure, validate actual package and share download for final device test."
       }
-    ]
+    ],
+    "latest_authored_runtime_keyword_pixel_run": {
+      "run_id": 45931001072,
+      "run_attempt": 1,
+      "job_id": 140283349151,
+      "head": "50332d816ac2bc5a8f92e84a0991f9bffde6a0a8",
+      "conclusion": "success",
+      "status": "PASS_AUTHORED_UNITY_VULKAN_KEYWORD_PIXELS",
+      "Unity_version": "2021.3.45f2",
+      "backend": "Vulkan",
+      "active_color_space": "Linear",
+      "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+      "host": "Linux software Vulkan; not Android device",
+      "cases": 15,
+      "observed_pixels": 360,
+      "observed_rgba_components": 1440,
+      "observed_routes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "empty_route": 3,
+      "route0_contains_both_keywords": true,
+      "global_overridable": true,
+      "local_overridable": false,
+      "wrong_route_comparison_controls": 5,
+      "minimum_wrong_route_separation": 0.125,
+      "max_error": 0,
+      "artifact_id": 15168682623,
+      "artifact_sha256": "e302694238bf4a5f95d904904ae169adbd840894124c1b6eda245811a8f2867b",
+      "artifact_bytes": 3191,
+      "archive": "clients/GT/sessions/20261127-keyword-pixels/actual-run-45931001072.zip",
+      "artifact_review": "clients/GT/sessions/20261127-keyword-pixels/artifact-review.json",
+      "local_replay_matches_runner_report": true,
+      "actual_original_runtime_or_Android_pixels_verified": false
+    }
   }
 }

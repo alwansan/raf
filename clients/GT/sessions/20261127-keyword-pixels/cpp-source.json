@@ -1,0 +1,38 @@
+{
+  "Unity_render_executed": false,
+  "routes": [
+    {
+      "fragment_marker": 1,
+      "keywords": [
+        "GT_A2_GLOBAL",
+        "GT_A2_LOCAL"
+      ],
+      "route": 0,
+      "vertex_marker": 1
+    },
+    {
+      "fragment_marker": 2,
+      "keywords": [
+        "GT_A2_GLOBAL"
+      ],
+      "route": 1,
+      "vertex_marker": 2
+    },
+    {
+      "fragment_marker": 3,
+      "keywords": [
+        "GT_A2_LOCAL"
+      ],
+      "route": 2,
+      "vertex_marker": 3
+    },
+    {
+      "fragment_marker": 4,
+      "keywords": [],
+      "route": 3,
+      "vertex_marker": 4
+    }
+  ],
+  "shader_sha256": "1b8294ec4c3fd71947db3116f5be64c05c5dcd92c043f8b8d47d0b0aa524fe73",
+  "status": "AUTHORED_CPP_SOURCE_CHECK_ONLY"
+}
