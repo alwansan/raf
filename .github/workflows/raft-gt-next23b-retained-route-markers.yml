@@ -1,0 +1,105 @@
+name: GT retained authored NEXT23b compiled output markers
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-next23b-retained-route-markers.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  retained-authored-markers:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /scripts/gt_decode_smolv.cpp
+            /tools/gt_next23b_retained_route_markers/
+            /clients/GT/sessions/20261127-actions-execution-plan/artifact-review.json
+      - name: Verify exact source-only checkout and test the output oracle
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git hash-object tools/gt_next23b_retained_route_markers/trace.py)" = 9013f6cbf54a5b3cec0295e9a800984f7479e6f0
+          test "$(git hash-object tools/gt_next23b_retained_route_markers/witness.py)" = 5050f3ee0d4ac3d8fa5ebedacad17221f19abf91
+          test "$(git hash-object tools/gt_next23b_retained_route_markers/test_trace.py)" = 3c190706d9577257953279fae5b61ba71da020ac
+          test "$(git hash-object scripts/gt_verify_921_shader_bundle.py)" = 1ca7907a7d0614acf733d9711a6eb68659e7eee1
+          test "$(git hash-object scripts/gt_decode_smolv.cpp)" = 4d6abc4ebab4b721f2e823895e15702535844256
+          test "$(git hash-object scripts/gt_next23b_route_provenance.py)" = fd32bcbfab7c08fcd6fe06c32b803c702ea9da5e
+          test "$(git hash-object scripts/gt_next23b_unity_receipt.py)" = 68120ab8528f83cf65c919968b4a177aa945c212
+          test "$(git hash-object scripts/w1_recover_graphics_programs.py)" = fce7fe2ac6635f9e67e03ea4aa8ec7b462603352
+          test "$(git hash-object scripts/w1_recover_depth_passes.py)" = 087d655e618abb9a8a8e773968af877dd413a0fb
+          test "$(git hash-object clients/GT/sessions/20261127-actions-execution-plan/artifact-review.json)" = 15b035e4b2a34d1c1de5d792241e274b1ecd745e
+          mkdir -p marker-evidence
+          git rev-parse HEAD > marker-evidence/tested-head.txt
+          sha256sum tools/gt_next23b_retained_route_markers/*.py > marker-evidence/source-sha256.txt
+          python3 -B -m unittest -v tools.gt_next23b_retained_route_markers.test_trace 2>&1 | tee marker-evidence/tests.log
+      - name: Download only exact prior AUTHORED fixture and bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: gt-synthetic-next23b-receipt-45929964298
+          run-id: 45929964298
+          github-token: ${{ github.token }}
+          path: retained-authored
+      - name: Install independent public decoders
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/gt-markers-venv"
+          "$RUNNER_TEMP/gt-markers-venv/bin/python" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          "$RUNNER_TEMP/gt-markers-venv/bin/python" -m pip freeze > marker-evidence/python-tools.txt
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends spirv-tools
+          spirv-val --version > marker-evidence/spirv-tools.txt
+          smolv="$RUNNER_TEMP/gt-marker-smolv"
+          mkdir "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          sha256sum "$smolv/smolv.cpp" "$smolv/smolv.h" > marker-evidence/smolv-sha256.txt
+      - name: Decode retained actual bundle, verify output marker dataflow and old-gate controls
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/gt-markers-venv/bin/python" -B -m tools.gt_next23b_retained_route_markers.witness --input retained-authored --out marker-evidence --decoder "$RUNNER_TEMP/gt-marker-smolv/decode"
+      - name: Preserve bounded authored evidence including the retained actual bundle
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import base64,hashlib,zipfile
+          from pathlib import Path
+          root=Path("marker-evidence");root.mkdir(exist_ok=True)
+          files=[p for p in sorted(root.iterdir()) if p.is_file()]
+          assert len(files)<=32 and sum(p.stat().st_size for p in files)<=2*1024*1024
+          dest=root/"permanent-authored-evidence.zip"
+          with zipfile.ZipFile(dest,"w",compression=zipfile.ZIP_DEFLATED) as z:
+              for p in files:
+                  assert not p.is_symlink()
+                  z.write(p,p.name)
+          data=dest.read_bytes()
+          assert len(data)<=256*1024
+          print("GT_PERMANENT_EVIDENCE_SHA",len(data),hashlib.sha256(data).hexdigest())
+          enc=base64.b64encode(data).decode("ascii")
+          for i in range(0,len(enc),2048):print("GT_PERMANENT_EVIDENCE_B64",i//2048,enc[i:i+2048])
+          PY
+      - name: Upload authored results only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-retained-next23b-output-markers
+          path: marker-evidence/
+          retention-days: 14
+          if-no-files-found: warn
