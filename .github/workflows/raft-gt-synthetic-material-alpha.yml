@@ -2020,6 +2020,7 @@ jobs:
           assert v9["baseline"]["selected_same_route_imported_png_supported_serialized_importer_state_verified"]
           assert not v9["baseline"]["selected_same_route_imported_png_serialized_importer_state_verified"]
           assert not v9["baseline"]["selected_same_route_imported_png_swizzle_verified"]
+          # Omitted fields are counted as unknown, never as successful equality.
           assert v9["baseline"]["counts"]["imported_png_importer_swizzle_unknown_slots"]==4
           assert not v9["baseline"]["original_runtime_importer_or_Android_platform_fidelity_verified"]
           assert all(c["V8_pass"] and c["V9_reject"] for c in v9["counterfactuals"].values())
