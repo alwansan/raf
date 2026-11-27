@@ -5992,7 +5992,7 @@
     "evidence": "clients/GT/sessions/20261127-dxt5nm-importer-v12/actual-pass-45967942717.json"
   },
   "v13_dxt5nm_unity_checkpoint": {
-    "status": "V12_REPLAY_AND_V13_STAGE_SUCCESS_UNITY_PENDING",
+    "status": "FIRST_UNITY_ATTEMPT_FAILED_ADAPTER_RETRY_PREPARED",
     "starting_head": "9e45cc7cbb5d2f4195fe9ee4c54d20855e54a7c7",
     "activation_head": "d2385ff469cd64ecf5ddd648af23c9b4fe36468e",
     "run": {
@@ -6009,9 +6009,9 @@
         "conclusion": "success"
       }
     },
-    "planned_regressions": 271,
+    "planned_regressions": 272,
     "planned_v11_v12_controls": 37,
-    "planned_v13_controls": 8,
+    "planned_v13_controls": 9,
     "scene_route_replay": true,
     "shader_adapter": true,
     "actual_Unity_import_verified": false,
@@ -6022,9 +6022,20 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-unity-v13/README_AR.md",
-    "next": "Inspect V13 actual Unity result and archive; check nondegenerate readback and retain importer discrepancies.",
+    "next": "Activate dedicated V13 retry and require exact shader identity plus four routes and actual per-mip readback.",
     "source_regressions": 271,
     "actual_v11_v12_controls": 37,
-    "unique_authored_pixels_exact": 70
+    "unique_authored_pixels_exact": 70,
+    "first_failed_run": {
+      "id": 45969407039,
+      "job": 140405860104,
+      "head": "d2385ff469cd64ecf5ddd648af23c9b4fe36468e",
+      "conclusion": "failure",
+      "reason": "actual_material_MainTex_missing",
+      "actual_Unity_import_verified": false,
+      "evidence": "clients/GT/sessions/20261127-dxt5nm-unity-v13/failed-run-45969407039.json"
+    },
+    "retry_patch": "7e143fb00f99ea9d1fa235d62424cc66ae9da49d",
+    "material_shader_pointer_adapter": true
   }
 }
