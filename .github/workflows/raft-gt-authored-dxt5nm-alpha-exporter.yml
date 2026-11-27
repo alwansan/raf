@@ -1,0 +1,212 @@
+name: GT authored selective DXT5nm PNG alpha exporter policy (NO Unity or APK)
+on:
+  # Dedicated authored-only V15 preparation; no original game acquisition.
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-authored-dxt5nm-alpha-exporter.yml
+permissions:
+  contents: read
+concurrency:
+  group: gt-authored-dxt5nm-alpha-exporter-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  authored-dxt5nm-alpha-exporter:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      DOTNET_PROCESSOR_COUNT: '2'
+    steps:
+      - name: Checkout authored witness and exact private hook composer only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tools/gt_dxt5nm_unity/
+            /tests/test_gt_patch_dxt5nm_png_alpha_policy.py
+            /clients/GT/sessions/20261127-dxt5nm-texel-policy-v14/actual-pass-45972362899.json
+            /tests/test_gt_dxt5nm_texel_policy.py
+            /clients/GT/sessions/20261127-dxt5nm-unity-v13/actual-pass-45970415390.json
+            /tests/test_gt_dxt5nm_unity_reimport.py
+            /clients/GT/sessions/20261127-dxt5nm-importer-v12/actual-pass-45967942717.json
+            /tests/test_gt_renderer_submesh_routes.py
+            /tests/test_b03_verify_renderer_material_links.py
+            /tests/test_gt_mesh_vertex_payload.py
+            /tests/test_gt_verify_original_mesh_export.py
+            /tests/test_gt_material_route_values.py
+            /tests/test_gt_material_route_keyword_state.py
+            /tests/test_gt_texture_route_payload.py
+            /tests/test_gt_streamed_texture_route_payload.py
+            /tests/test_gt_native_texture_route_sampler.py
+            /tests/test_gt_imported_png_route_pixels.py
+            /tests/test_gt_imported_png_route_importer.py
+            /tests/test_gt_imported_bc3_route_pixels.py
+            /tests/test_gt_patch_bc3_export_decoder.py
+            /tests/test_gt_imported_dxt5nm_route_pixels.py
+            /tests/test_gt_imported_dxt5nm_route_importer.py
+            /android-port/Experiments/ExportLineage/
+            /tools/synthetic_material_alpha/RaftAuthoredSceneRouteWitness.cs
+            /.github/workflows/raft-gt-authored-dxt5nm-alpha-exporter.yml
+      - name: Run source-only route gate regressions before public build
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir authored-scene-results
+          python3 -m venv "$RUNNER_TEMP/gt-authored-scene-python"
+          py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check Pillow==11.3.0 PyYAML==6.0.3
+          for test_file in test_gt_patch_dxt5nm_png_alpha_policy.py test_gt_dxt5nm_texel_policy.py test_gt_dxt5nm_unity_reimport.py test_gt_imported_dxt5nm_route_importer.py test_gt_imported_dxt5nm_route_pixels.py test_gt_patch_bc3_export_decoder.py test_gt_imported_bc3_route_pixels.py test_gt_imported_png_route_importer.py test_gt_imported_png_route_pixels.py test_gt_native_texture_route_sampler.py test_gt_streamed_texture_route_payload.py test_gt_texture_route_payload.py test_gt_material_route_keyword_state.py test_gt_material_route_values.py test_gt_mesh_vertex_payload.py test_gt_verify_original_mesh_export.py test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
+            "$py" -B -m unittest discover -s tests -p "$test_file" -v 2>&1 | tee "authored-scene-results/$test_file.log"
+          done
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Checkout public pinned exporter source only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: Source
+      - name: Compile exact public exporter and authored witness
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git -C ar-host rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          test -d authored-scene-results
+          python3 -m scripts.patch_export_lineage --tool-source ar-host \
+            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --renderer-lineage --native-texture-arrays --compute-lineage
+          python3 -m scripts.gt_patch_bc3_export_decoder --tool-source ar-host | tee authored-scene-results/bc3-patch.json
+          python3 -m scripts.gt_patch_dxt5nm_png_alpha_policy --tool-source ar-host | tee authored-scene-results/alpha-policy-patch.json
+          cp tools/synthetic_material_alpha/RaftAuthoredSceneRouteWitness.cs ar-host/Source/AssetRipper.Export.UnityProjects/
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("android-port/Experiments/ExportLineage/Program.cs")
+          text=p.read_text()
+          mark='if (args.Length == 1 && args[0] == "--probe-tool")'
+          assert text.count(mark)==1
+          p.write_text(text.replace(mark,'''if (args.Length == 2 && args[0] == "--probe-authored-scene-routes")
+          {
+              RaftAuthoredSceneRouteWitness.Run(args[1]);
+              return;
+          }
+          if (args.Length == 2 && args[0] == "--probe-authored-png-routes")
+          {
+              RaftAuthoredSceneRouteWitness.Run(args[1],true);
+              return;
+          }
+          if (args.Length == 2 && args[0] == "--probe-authored-bc3-routes")
+          {
+              RaftAuthoredSceneRouteWitness.Run(args[1],true,true);
+              return;
+          }
+          if (args.Length == 2 && args[0] == "--probe-authored-dxt5nm-routes")
+          {
+              RaftAuthoredSceneRouteWitness.Run(args[1],true,true,true,true);
+              return;
+          }
+          if (args.Length == 2 && args[0] == "--probe-authored-bc3-extended")
+          {
+              RaftAuthoredSceneRouteWitness.Run(args[1],true,true,true);
+              return;
+          }
+          '''+mark))
+          PY
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/gt-authored-scene-tool" \
+            > "$RUNNER_TEMP/gt-authored-scene-build.log" 2>&1 || {
+              tail -60 "$RUNNER_TEMP/gt-authored-scene-build.log" | tee authored-scene-results/build-failure.log
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/gt-authored-scene-tool/ExportLineage.dll" --probe-tool | tee authored-scene-results/tool-smoke.log
+          test -s "$RUNNER_TEMP/gt-authored-scene-tool/AssetRipper.Export.UnityProjects.dll"
+          python3 - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json,os
+          root=Path("ar-host/Source/AssetRipper.Export.UnityProjects")
+          result=dict(status="COMPILED_PUBLIC_EXPORTER",run_id=os.environ["GITHUB_RUN_ID"],
+              head=os.environ["GITHUB_SHA"],public_tool_revision="036098ab525a3f9f693dc101edeb21faad4d32d8",
+              files={p.name:sha256(p.read_bytes()).hexdigest() for p in
+                  (root/"RaftExportLineage.cs",root/"RaftAuthoredSceneRouteWitness.cs",
+                   Path(os.environ["RUNNER_TEMP"])/"gt-authored-scene-tool/AssetRipper.Export.UnityProjects.dll")},
+              original_assets_read=False,APK=False)
+          Path("authored-scene-results/build.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          PY
+      - name: Export authored DXT5nm textures through actual public collections
+        shell: bash
+        run: |
+          set -euo pipefail
+          unset RAFT_GT_DXT5NM_PNG_ALPHA_POLICY
+          fixture="$RUNNER_TEMP/gt-authored-dxt5nm-alpha-fixtures/normal-off"
+          mkdir -p "$(dirname "$fixture")"
+          dotnet "$RUNNER_TEMP/gt-authored-scene-tool/ExportLineage.dll" --probe-authored-dxt5nm-routes "$fixture" | tee authored-scene-results/normalmap-witness.log
+          "$RUNNER_TEMP/gt-authored-scene-python/bin/python" -m scripts.gt_authored_dxt5nm_png_route_witness --root "$fixture" --out authored-scene-results/normalmap-route-join.json
+          "$RUNNER_TEMP/gt-authored-scene-python/bin/python" -m scripts.gt_authored_dxt5nm_importer_route_witness --root "$fixture" --out authored-scene-results/normalmap-importer-route-join.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,re
+          root=Path("authored-scene-results")
+          tests={}
+          for p in root.glob("test_*.log"):
+              s=p.read_text()
+              m=re.search(r"^Ran (\d+) tests? in ",s,re.M)
+              assert m and re.search(r"^OK$",s,re.M)
+              tests[p.name]=int(m[1])
+          assert len(tests)==18 and sum(tests.values())==283 and tests['test_gt_patch_dxt5nm_png_alpha_policy.py.log']==5 and tests['test_gt_dxt5nm_texel_policy.py.log']==6 and tests['test_gt_dxt5nm_unity_reimport.py.log']==9 and tests['test_gt_imported_dxt5nm_route_importer.py.log']==12
+          j=json.loads((root/"normalmap-route-join.json").read_text())
+          assert j["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_DXT5NM_PNG_ROUTE_JOIN"
+          assert j["counterfactual_count"]==12 and j["unique_authored_pixels_exact"]==70
+          assert json.loads((root/"bc3-patch.json").read_text())["patched_sha256"]=="186108e478686524b4703dc7280015bd8eb58cd0939b4e270c4114c69c8d755a"
+          v12=json.loads((root/"normalmap-importer-route-join.json").read_text())
+          assert v12["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_DXT5NM_SUPPORTED_IMPORTER_STATE_ROUTE_JOIN"
+          assert v12["counterfactual_count"]==25 and not v12["actual_full_supported_schema_verified"] and not v12["actual_swizzle_verified"]
+          assert [t["source_top_sha256"] for t in j["textures"]]==["e79e413016a7ded68a4002843ac77a2dc76e53b667f48edb6a81d040922cddbf","25313dc74091ce31f2c6dd0423450ea7db7d980c1e615c58653a38fab5ac298b"]
+          assert [t["actual_rgba_sha256"] for t in j["textures"]]==["c4613e57a409b503b1b7c354b38ff2c8656a48a842159ca8c1765b2826c1f895","e284bacc769e1e86fcb71099a4c7473a84c143c540edee397b67c769e466dc1e"]
+          report=dict(status=v12["status"],tests=tests,total_regression_tests=sum(tests.values()),counterfactual_count=37,V11_controls=12,V12_controls=25,unique_authored_pixels_exact=70,actual_swizzle_verified=False,actual_full_supported_schema_verified=False,original_assets_read=False,Unity_import_verified=False,Android_device=False,XAPK=False)
+          (root/"normalmap-importer-report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - name: Execute compiled selective policy and ordinary image controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/gt-authored-dxt5nm-alpha-fixtures"
+          tool="$RUNNER_TEMP/gt-authored-scene-tool/ExportLineage.dll"
+          py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
+          test ! -e Raft
+          test ! -e .gt-zip2
+          RAFT_GT_DXT5NM_PNG_ALPHA_POLICY=1 dotnet "$tool" --probe-authored-dxt5nm-routes "$root/normal-on" | tee authored-scene-results/normal-on.log
+          env -u RAFT_GT_DXT5NM_PNG_ALPHA_POLICY dotnet "$tool" --probe-authored-bc3-extended "$root/bc3-off" | tee authored-scene-results/bc3-off.log
+          RAFT_GT_DXT5NM_PNG_ALPHA_POLICY=1 dotnet "$tool" --probe-authored-bc3-extended "$root/bc3-on" | tee authored-scene-results/bc3-on.log
+          env -u RAFT_GT_DXT5NM_PNG_ALPHA_POLICY dotnet "$tool" --probe-authored-png-routes "$root/rgba-off" | tee authored-scene-results/rgba-off.log
+          RAFT_GT_DXT5NM_PNG_ALPHA_POLICY=1 dotnet "$tool" --probe-authored-png-routes "$root/rgba-on" | tee authored-scene-results/rgba-on.log
+          "$py" -B -m scripts.gt_authored_dxt5nm_alpha_exporter_witness --root "$root" --out authored-scene-results/alpha-exporter-actual.json
+      - name: Retain only authored evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-authored-dxt5nm-alpha-exporter-${{ github.run_id }}
+          path: authored-scene-results/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove authored fixtures
+        if: always()
+        shell: bash
+        run: rm -rf "$RUNNER_TEMP/gt-authored-dxt5nm-alpha-fixtures"
