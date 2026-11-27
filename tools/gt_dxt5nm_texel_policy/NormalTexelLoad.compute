@@ -1,0 +1,16 @@
+#pragma kernel ReadTexels
+Texture2D<float4> InputTexture;
+RWStructuredBuffer<float4> OutputTexels;
+int Width, Height, Mip;
+[numthreads(8,8,1)]
+void ReadTexels(uint3 id : SV_DispatchThreadID) {
+    if (id.x >= (uint)Width || id.y >= (uint)Height) return;
+    uint w,h,levels;
+    InputTexture.GetDimensions((uint)Mip,w,h,levels);
+    uint index=id.y*(uint)Width+id.x;
+    if (w!=(uint)Width || h!=(uint)Height || (uint)Mip>=levels) {
+        OutputTexels[index]=float4(-2,-2,-2,-2);
+        return;
+    }
+    OutputTexels[index]=InputTexture.Load(int3(id.xy,Mip));
+}
