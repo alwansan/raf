@@ -121,6 +121,7 @@ jobs:
               original_assets_read=False,APK=False)
           Path("authored-scene-results/build.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
           PY
+      # Packed fixture selectors use explicit masked byte extraction in checked C#.
       - name: Execute distinct authored DXT5 PNG exporter and same-route proof
         shell: bash
         run: |
