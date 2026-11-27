@@ -1,7 +1,8 @@
 """Build private HLSL texture and sampler declarations from the source slot map."""
 import re
 
-from scripts.w1_rebind_depth_resources import IDENT, RESOURCE
+from scripts.w1_rebind_depth_resources import IDENT
+from scripts.gt_resource_register_contract import registered_resources
 
 
 def rebind_resources(source, bindings):
@@ -11,7 +12,7 @@ def rebind_resources(source, bindings):
         raise ValueError("duplicate_original_resource_slot")
 
     replacements = {}
-    for match in RESOURCE.finditer(source):
+    for match in registered_resources(source):
         symbol, kind = match[2], match[3]
         slot = re.fullmatch(kind + r"(\d+)", symbol)
         key = (kind, int(slot[1])) if slot else None

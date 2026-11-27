@@ -8,6 +8,7 @@ from pathlib import Path
 from scripts.b49_shaderlab_pass_contract import pass_coverage
 from scripts.gt_original_921_keyword_routes import routed_stage
 from scripts.gt_runtime_keyword_contract import strict_engine_router
+from scripts.gt_resource_register_contract import strip_registered_resources
 from scripts.gt_original_921_cb_layout import constant_buffer_lanes
 from scripts.gt_original_921_cb_hlsl import rebind_constant_buffers
 from scripts.gt_original_921_semantics import pin_varying_locations, restore_vertex_inputs
@@ -52,7 +53,7 @@ def unity_resource_bindings(source, stage):
     # The translated descriptor ordinals share one Vulkan namespace, whereas
     # Unity's graphics compiler has separate, smaller HLSL sampler slots.
     # Bind textures and samplers by their recovered Unity property names.
-    source = re.sub(r" : register\([ts][0-9]+\)(?=;)", "", source)
+    source = strip_registered_resources(source)
     for name in re.findall(r"(?m)^cbuffer ((?!gt_|raft921_cb)[A-Za-z_]\w*) ", source):
         pattern = re.compile(r"cbuffer " + name + r" : register\(b[0-9]+\) \{[^{}]*\};")
         block = pattern.search(source)

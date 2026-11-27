@@ -298,8 +298,7 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
     from scripts.gt_original_921_semantics import (
         verify_varyings, verify_vertex_inputs, verify_vulkan_varying_pair,
     )
-    from scripts.w1_rebind_depth_resources import RESOURCE
-    import re
+    from scripts.gt_resource_register_contract import texture_sampler_bindings
 
     by_pass = {(row["subshader"], row["pass"]): row for row in passes}
     rows = [(pair, stage, pair[field]) for pair in pairs
@@ -321,25 +320,10 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
             decoded[index] = parse_parameter_blob(raw, private_layout=layouts[index])
         common = program["m_CommonParameters"]
         names = original_name_registry(shader_pass["original_name_indices"])
-        textures = {item["m_Index"]: (names[item["m_NameIndex"]], item["m_SamplerIndex"])
-                    for item in common["m_TextureParams"]}
-        textures.update({item["index"]: (item["name"], item["extra_value"])
-                         for item in layouts[index]["resources"] if item["kind"] == 0})
         program_dir = private / program_dirs[row["program_ref"]]
         source = (program_dir / "private.hlsl").read_text()
-        bindings = []
-        for resource in RESOURCE.finditer(source):
-            variable, kind = resource[2], resource[3]
-            slot_match = re.fullmatch(kind + r"(\d+)", variable)
-            if not slot_match:
-                raise ValueError("original_texture_or_sampler_slot_missing")
-            slot = int(slot_match[1])
-            candidates = ([textures[slot][0]] if slot in textures else []) if kind == "t" else [
-                name for name, sampler in textures.values() if sampler == slot]
-            if len(candidates) != 1:
-                raise ValueError("original_texture_or_sampler_binding_ambiguous")
-            bindings.append({"kind": kind, "slot": slot, "source_texture_name": candidates[0]})
-            texture_counts[kind] += 1
+        bindings = texture_sampler_bindings(source, common, names, layouts[index]["resources"])
+        texture_counts.update(entry["kind"] for entry in bindings)
         bound_stage = private / f"bound-stage-{len(records):03d}"
         verify_rebound_resources(program_dir, stage, bindings, bound_stage)
         buffers = bind_constant_buffers(source, common, names, layouts[index])

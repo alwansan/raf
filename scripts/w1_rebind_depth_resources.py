@@ -8,7 +8,7 @@ import re
 import struct
 
 IDENT = re.compile(r'[A-Za-z_]\w*\Z')
-RESOURCE = re.compile(r'\b(Texture\w*(?:\s*<[^;{}>]+>)?|SamplerState|SamplerComparisonState)\s+([A-Za-z_]\w*)\s*:\s*register\(\s*([ts])(\d+)\s*\)\s*;')
+from scripts.gt_resource_register_contract import RESOURCE, registered_resources
 
 
 def signature_inputs(dxbc):
@@ -74,7 +74,7 @@ def rebind(source, program, name_indices, *, original_inputs=None):
                 raise ValueError('Shared original sampler needs explicit binding recovery')
             samplers[sampler_index] = 'sampler' + name
     mapping, used = {}, {'t': set(), 's': set()}
-    for match in RESOURCE.finditer(source):
+    for match in registered_resources(source):
         kind, variable, register_class = match[1], match[2], match[3]
         # vkd3d records original DXBC registers in its symbolic names, whereas
         # SPIRV-Cross HLSL register numbers may be renumbered descriptor bindings.
