@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-white-renderer-submesh-routes/README_AR.md",
-  "next_action": "First verify the opt-in renderer-lineage C# composition against the exact pinned public AssetRipper tool source/build (no game inputs, no original/export/package acquisition). Inspect actual scene collection CreateExportPointer semantics and whether component identities are global exportable or unscoped type0; keep latter unresolved and do not modify shared pinned helper. If public tool compile is available, use one source-only compile job, no proprietary inputs. Then add an actual authored Unity Vulkan mesh/submesh raster witness using asymmetric two/three submeshes, persistent imported textures, distinct Material shader/tint/UV0/UV transform and explicit expected draw order; compare swapped material, valid-but-wrong mesh/index route, missing or white texture, UV drift using independent pixel oracle. New Python route gate only verifies selected triangle-list inline index ranges/index bytes and UV descriptors/ordered source-export pointers; it has no original trace, raw vertex/UV samples, color/scalar equivalence or real GPU proof. Source metadata parser is injected in authored tests. If compile unavailable, preserve explicit blocker and pursue authored raster or cross-owner trace scope tests. Historical 4708 geometry matches do not prove renderer identity. A3 remains blocked until verified authorized original source, G0-G6 remain open, no phone or XAPK.",
+  "latest_session": "clients/GT/sessions/20261127-public-renderer-pointer-witness/README_AR.md",
+  "next_action": "Inspect existing run 45944786101; no duplicate rerun. Authored Unity Vulkan raster test has 10 cases, 16 imported RGBA8 and 320 expected raster pixels; stage and activation check passed, image preparation in progress at last check. Verify actual artifact on completion; if failure preserve exact reason, make one targeted correction only when supported. No original content or APK. Public exporter compiled and actual capture passed; no new public-tool compile needed.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,11 +1964,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "d99a05446e2ee33c0165863b1e985b00e898e982",
-    "purpose": "G1/G2 ordered renderer/submesh material identity gate authored regression passed; original renderer and GPU parity unverified",
+    "reviewed_remote_head": "4e1b28de9c9caa0ef81dad5e5967a9487516604d",
+    "purpose": "Actual public exporter component witness passed; targeted authored Unity raster running",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-white-renderer-submesh-routes/README_AR.md",
+    "index": "clients/GT/sessions/20261127-public-renderer-pointer-witness/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -2220,9 +2220,12 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G1-G2-white-renderer-submesh-runtime-witness",
-      "status": "NEXT_PRODUCTIVE",
-      "next": "First verify the opt-in renderer-lineage C# composition against the exact pinned public AssetRipper tool source/build (no game inputs, no original/export/package acquisition). Inspect actual scene collection CreateExportPointer semantics and whether component identities are global exportable or unscoped type0; keep latter unresolved and do not modify shared pinned helper. If public tool compile is available, use one source-only compile job, no proprietary inputs. Then add an actual authored Unity Vulkan mesh/submesh raster witness using asymmetric two/three submeshes, persistent imported textures, distinct Material shader/tint/UV0/UV transform and explicit expected draw order; compare swapped material, valid-but-wrong mesh/index route, missing or white texture, UV drift using independent pixel oracle. New Python route gate only verifies selected triangle-list inline index ranges/index bytes and UV descriptors/ordered source-export pointers; it has no original trace, raw vertex/UV samples, color/scalar equivalence or real GPU proof. Source metadata parser is injected in authored tests. If compile unavailable, preserve explicit blocker and pursue authored raster or cross-owner trace scope tests. Historical 4708 geometry matches do not prove renderer identity. A3 remains blocked until verified authorized original source, G0-G6 remain open, no phone or XAPK."
+      "id": "G1-G2-authored-submesh-vulkan",
+      "status": "ACTION_IN_PROGRESS",
+      "run_id": 45944786101,
+      "job_id": 140326878133,
+      "head": "4e1b28de9c9caa0ef81dad5e5967a9487516604d",
+      "next": "Inspect existing run 45944786101; no duplicate rerun. Authored Unity Vulkan raster test has 10 cases, 16 imported RGBA8 and 320 expected raster pixels; stage and activation check passed, image preparation in progress at last check. Verify actual artifact on completion; if failure preserve exact reason, make one targeted correction only when supported. No original content or APK. Public exporter compiled and actual capture passed; no new public-tool compile needed."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -2847,6 +2850,61 @@
       "passed": 13,
       "failed": 1,
       "reason": "Authored source and export TexEnv UV nested dict were aliased, so mutation changed both. Corrected by deepcopy plus explicit source invariant; failure retained."
+    },
+    "latest_public_renderer_pointer_witness": {
+      "status": "PASS_PUBLIC_EXPORTER_AUTHORED_COMPONENT_POINTERS",
+      "run_id": 45944521571,
+      "job_id": 140326056156,
+      "head": "3c1c97c43f7a3101027c23bd0310a3421fc4b4dd",
+      "conclusion": "success",
+      "guard_run_id": 45944521622,
+      "artifact_id": 15174475850,
+      "archive": "clients/GT/sessions/20261127-public-renderer-pointer-witness/actual-run-45944521571.zip",
+      "archive_bytes": 1398,
+      "archive_sha256": "a46a9ae25a67e0d72025ae447fdcf1970324c3f3c765431e5ab8acd7f81c59fd",
+      "archive_git_blob": "6e2be73b7afd80f85b2c9aea26fad1922178b0c6",
+      "archive_crc_sha_size_verified_locally": true,
+      "members": {
+        "build.json": {
+          "bytes": 574,
+          "sha256": "5f2723e0dba34b2b657e8c7f47b46a45216d22d021f09fc8cfdbcb10cf162734"
+        },
+        "tool-smoke.log": {
+          "bytes": 63,
+          "sha256": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+        },
+        "witness.json": {
+          "bytes": 729,
+          "sha256": "b4392628ef006bc63e7e822cc5d707fd896396fb14895d6c7ef64a80f1ffe257"
+        },
+        "witness.log": {
+          "bytes": 44,
+          "sha256": "782427b769864b3acccc84ab964e7899d2b0c1b3a2840e54406cd4a3ce63e5b9"
+        }
+      },
+      "public_tool_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+      "public_repo": "nowl-it/AssetRipperCLI",
+      "compiled_files": {
+        "AssetRipper.Export.UnityProjects.dll": "298852a93f4199089ec8b2f73e31b228c044205c1d877334eb3b32db08c5ea13",
+        "RaftAuthoredRendererWitness.cs": "92c39b41acde6da856c68fb17e4aa12167887487a3abb1c43674973a34c6c9a4",
+        "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
+      },
+      "actual_compiled_capture_executed": true,
+      "actual_SceneExportCollection_count": 2,
+      "component_rows_verified": 8,
+      "hidden_components_excluded": 2,
+      "global_component_pointers_verified": 8,
+      "local_pointer_serialized_type2_zero_guid_verified": 8,
+      "cross_scene_global_pointers_verified": 8,
+      "same_source_pathID_different_owner_control": true,
+      "same_instance_material_mesh_component_traces": true,
+      "missing_mesh_trace_rejected": true,
+      "original_assets_read": false,
+      "serialized_original_source": false,
+      "Unity_render_executed": false,
+      "actual_scene_YAML_export_executed": false,
+      "production_renderer_parity_verified": false,
+      "XAPK": false
     }
   }
 }

@@ -1,0 +1,55 @@
+{
+  "status": "PASS_PUBLIC_EXPORTER_AUTHORED_COMPONENT_POINTERS",
+  "run_id": 45944521571,
+  "job_id": 140326056156,
+  "head": "3c1c97c43f7a3101027c23bd0310a3421fc4b4dd",
+  "conclusion": "success",
+  "guard_run_id": 45944521622,
+  "artifact_id": 15174475850,
+  "archive": "clients/GT/sessions/20261127-public-renderer-pointer-witness/actual-run-45944521571.zip",
+  "archive_bytes": 1398,
+  "archive_sha256": "a46a9ae25a67e0d72025ae447fdcf1970324c3f3c765431e5ab8acd7f81c59fd",
+  "archive_git_blob": "6e2be73b7afd80f85b2c9aea26fad1922178b0c6",
+  "archive_crc_sha_size_verified_locally": true,
+  "members": {
+    "build.json": {
+      "bytes": 574,
+      "sha256": "5f2723e0dba34b2b657e8c7f47b46a45216d22d021f09fc8cfdbcb10cf162734"
+    },
+    "tool-smoke.log": {
+      "bytes": 63,
+      "sha256": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+    },
+    "witness.json": {
+      "bytes": 729,
+      "sha256": "b4392628ef006bc63e7e822cc5d707fd896396fb14895d6c7ef64a80f1ffe257"
+    },
+    "witness.log": {
+      "bytes": 44,
+      "sha256": "782427b769864b3acccc84ab964e7899d2b0c1b3a2840e54406cd4a3ce63e5b9"
+    }
+  },
+  "public_tool_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+  "public_repo": "nowl-it/AssetRipperCLI",
+  "compiled_files": {
+    "AssetRipper.Export.UnityProjects.dll": "298852a93f4199089ec8b2f73e31b228c044205c1d877334eb3b32db08c5ea13",
+    "RaftAuthoredRendererWitness.cs": "92c39b41acde6da856c68fb17e4aa12167887487a3abb1c43674973a34c6c9a4",
+    "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
+  },
+  "actual_compiled_capture_executed": true,
+  "actual_SceneExportCollection_count": 2,
+  "component_rows_verified": 8,
+  "hidden_components_excluded": 2,
+  "global_component_pointers_verified": 8,
+  "local_pointer_serialized_type2_zero_guid_verified": 8,
+  "cross_scene_global_pointers_verified": 8,
+  "same_source_pathID_different_owner_control": true,
+  "same_instance_material_mesh_component_traces": true,
+  "missing_mesh_trace_rejected": true,
+  "original_assets_read": false,
+  "serialized_original_source": false,
+  "Unity_render_executed": false,
+  "actual_scene_YAML_export_executed": false,
+  "production_renderer_parity_verified": false,
+  "XAPK": false
+}
