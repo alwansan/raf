@@ -1,0 +1,135 @@
+{
+  "status": "PASS_AUTHORED_EXTERNAL_TEXTURE_DOCUMENT_IDENTITY",
+  "reviewed_base": "0d193cd922e94faea6ee231c94aaa08c2d89019f",
+  "preparation_commit": "8d9b57133be39423afbf004356d2dd198e8e7ec3",
+  "head": "7904501aca6d18c908cfb11d652bf8256b8b2966",
+  "run_id": 46002301665,
+  "job_id": 140516761656,
+  "conclusion": "success",
+  "guard_run_id": 46002301557,
+  "guard_job_id": 140516761327,
+  "guard_conclusion": "success",
+  "session": "clients/GT/sessions/20261127-external-texture-document/README_AR.md",
+  "evidence": "clients/GT/sessions/20261127-external-texture-document/evidence.json",
+  "archive": "clients/GT/sessions/20261127-external-texture-document/actual-run-46002301665.zip",
+  "artifact_id": 15198357664,
+  "archive_bytes": 4875,
+  "archive_sha256": "39b1b8c6cf19ad62de46020c9f23dba0a460ce892f04a389b4668907498b2176",
+  "archive_git_blob": "ca17a6edf80ad8319e79a791cc3f91f1f7abf464",
+  "archive_crc_sha_size_verified_locally": true,
+  "old_gate_git_blob": "fcf67a457755f483242206e4db25d5d6fea83567",
+  "new_gate_git_blob": "c9d222cfa65b96f0ff096d8c74a3ddd6e7e810a3",
+  "new_tests_git_blob": "3ae8f8c17565ef7377528a534923e7ca996dfd18",
+  "baseline_negative_methods": 16,
+  "baseline_false_acceptances_repaired": 17,
+  "ci_total_tests": 79,
+  "ci_new_test_methods": 25,
+  "ci_folder_tests": 21,
+  "ci_existing_B46_tests": 29,
+  "ci_T5_CLI_static_workflow_tests": 4,
+  "scope": "Unique canonical headers and selected matching root in referenced serialized Texture container; reject LODGroup 205 from local/external texture classes. Not general YAML/pixel/import/runtime proof.",
+  "original_assets_read": false,
+  "source_export_equivalence_verified": false,
+  "unity_or_device_tested": false,
+  "XAPK_requested": false,
+  "next": "G1-G2-exported-mesh-yaml-unique-mapping: examine compare_exported_mesh_geometry.load_mesh_yaml and its direct use by gt_verify_original_mesh_export.export_geometry. The current PyYAML MeshLoader adjusts hex and negative-zero scalar tags then delegates to default construct_mapping, which may silently overwrite duplicate keys; check against the previous same-route mesh vertex payload contract and existing strict B05 mapping loader. Reproduce and repair only real remaining duplicate-key acceptance (root Mesh, m_VertexData, _typelessdata, m_IndexBuffer, channel/stream fields, bind-pose fields) on source-free fixtures, preserving hex strings, signed-zero, valid geometry and exact same-instance/header identity. Do not conflate this parser proof with original geometry, material or device acceptance. If already covered by the actual integrated gate, select another distinct G1/G2 or G4 gap. External Texture unique-document, folder registry, water namespace and prior G3/FFT authored witnesses are complete only in tested scope; do not repeat. A3, Particle108 third-export alpha comparison, original FFT/kernel6 cause, NEXT23b and all ten runtime groups remain blocked/open; G0–G6 open. No original acquisition without independently proven authorized source, no native request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali pinned reference.",
+  "source_sha256": "6412ae90fc069dce42e306ab11d181f62aea2702d1d7bcbb92230bd55e4ac937",
+  "test_sha256": "8c79f44d03c21c4cc551edad7ab21507ba7bd84402f56625369da41c048494cc",
+  "baseline_failed_methods": [
+    "test_bare_document_marker_rejected",
+    "test_class_header_wrong_root",
+    "test_duplicate_other_class_after_target",
+    "test_duplicate_other_class_before_target",
+    "test_duplicate_same_class_target",
+    "test_duplicate_unreferenced_object_ids",
+    "test_header_without_root",
+    "test_lodgroup_external_not_texture",
+    "test_lodgroup_local_not_texture",
+    "test_malformed_marker_cannot_hide_duplicate",
+    "test_numeric_alias_anchor_is_duplicate",
+    "test_out_of_range_unreferenced_anchor",
+    "test_oversized_decimal_header_rejected",
+    "test_stripped_texture_not_full_document",
+    "test_two_root_mappings_rejected",
+    "test_zero_unreferenced_anchor"
+  ],
+  "tests": {
+    "test_gt_external_texture_document_identity.py": 25,
+    "test_gt_folder_meta_texture_registry.py": 21,
+    "test_t5_native_material_texture_integration.py": 4,
+    "test_verify_exported_material_texture_links.py": 29
+  },
+  "members": {
+    "baseline.json": {
+      "bytes": 895,
+      "sha256": "758e22c8ea5cb49e39d695c35000b706644a430834fba8725d8f8bff3701963d"
+    },
+    "baseline.log": {
+      "bytes": 15608,
+      "sha256": "f5da42f56dd9c503ac283dd4162875d599dc77195bc6b4b78dd7f701a8d3ea2c"
+    },
+    "report.json": {
+      "bytes": 799,
+      "sha256": "199e18b0520c782c5163b4a071b6cdab066c482b7aa5d09f363ab8aed59e5f3b"
+    },
+    "test_gt_external_texture_document_identity.py.log": {
+      "bytes": 3892,
+      "sha256": "1ff00b87e0008a509201ad629071d234e8cb6231543a36e5c8307e20134f7589"
+    },
+    "test_gt_folder_meta_texture_registry.py.log": {
+      "bytes": 3014,
+      "sha256": "ea9cc56e21e67193dc6b4a79bf30631b059786227d000a4e118dda5de5cfa74a"
+    },
+    "test_t5_native_material_texture_integration.py.log": {
+      "bytes": 822,
+      "sha256": "790a987ad048dd6007547055edd4bbdc6a150388bd30ccce46e61c093aa6f860"
+    },
+    "test_verify_exported_material_texture_links.py.log": {
+      "bytes": 4399,
+      "sha256": "21ff3bda7898acf030b741a9f24c5dcd78eb68ed37540a8195668b07581a740c"
+    }
+  },
+  "unity_class_reference": "https://docs.unity3d.com/2021.3/Documentation/Manual/ClassIDReference.html",
+  "removed_nontexture_class": {
+    "205": "LODGroup"
+  },
+  "existing_texture_classes": [
+    28,
+    84,
+    86,
+    89,
+    117,
+    187,
+    188
+  ],
+  "integration_review": {
+    "B05": "private matching class/anchor root checks in Material-containing documents only",
+    "T3": "aggregate/suffix diagnostic",
+    "native_workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+    "material_texture_audit_continue_on_error": true,
+    "native_workflow_modified": false,
+    "native_execution_performed": false,
+    "T5_CLI_static_workflow_tests_executed": true
+  },
+  "local_archive_recheck": {
+    "crc": true,
+    "sha256": true,
+    "all_7_member_hashes_calculated": true,
+    "baseline_17_failure_headers_and_result_count_verified": true,
+    "fixed_4_suite_log_counts_verified": true,
+    "local_code_execution": false
+  },
+  "original_particle108_third_export_comparison_proven": false,
+  "original_source_authorization_proven": false,
+  "original_fft_coordinate_or_kernel6_root_cause_resolved": false,
+  "original_runtime_keywords_or_install_proven": false,
+  "original_same_export_inventory": {
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "shader_guids": 37,
+    "historical": true
+  },
+  "G0_G6_closed": false,
+  "other_branches_written": false
+}
