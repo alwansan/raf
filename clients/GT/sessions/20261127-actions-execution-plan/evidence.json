@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "owner_authorization": {
+    "date": "2026-11-27",
+    "owner_instruction_ar": "يمكنك استعمال github اكشن لتجرب عليه اي شيء تحتاجه ضع ذالك في ذاكرتك ايضا واكمل العمل وحدث الخطة وسر على الخطة باستمرار Continue",
+    "github_actions_authorized_for_needed_raft_tests": true,
+    "write_branch": "feature/android-native-port",
+    "other_branches_and_CL_read_only": true,
+    "BLACK_out_of_scope": true,
+    "original_assets_require_explicit_verified_authorization": true,
+    "no_unlicensed_assets_or_secrets_publication": true,
+    "no_LFS_acquisition": true,
+    "no_full_build_before_G0_G6": true,
+    "no_partial_phone_test": true,
+    "animation_deferred": true,
+    "use_existing_approved_CI_activation_without_exposing_credentials": true,
+    "avoid_duplicate_or_conflicting_active_jobs": true,
+    "continue_at_each_resume_from_live_run_and_plan": true
+  },
+  "base_head": "1fd0565f8f7cb926a5d9143f3216e88ba31c70b5",
+  "previous_receipt_head": "65db965f45387245ab8f88de90501f677606598d",
+  "ahead_commits": 2,
+  "read_only_lab_head": "f933c4429803583d1ed5fa26e46bb0d3227f2027",
+  "run": {
+    "id": 45929964298,
+    "head": "1fd0565f8f7cb926a5d9143f3216e88ba31c70b5",
+    "attempt": 1,
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-27T02:43:03Z",
+    "updated_at": "2026-11-27T02:46:04Z",
+    "jobs": [
+      {
+        "id": 140280068547,
+        "name": "next23b-receipt",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checkout source tools and authored fixture only",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Generate 1156 authored routes in a new empty project",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require existing activation inputs and disk budget",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run the published receipt producer in Unity Android Vulkan (AssetBundle only)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify actual receipt commitments and decode the authored Android Vulkan bundle",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require actual compiled VS and FS route coverage using the published full gate",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain only authored fixture, bundle and bounded receipts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Remove only the authored test project",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Checkout source tools and authored fixture only",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 140280069663,
+        "name": "synthetic-pixels",
+        "status": "completed",
+        "conclusion": "skipped",
+        "steps": []
+      }
+    ]
+  },
+  "workflow": {
+    "path": ".github/workflows/raft-gt-synthetic-material-alpha.yml",
+    "git_blob_sha": "7f480e5349679330f64bcd8e0ce41beb5221970d",
+    "reviewed_authored_mode_only": true,
+    "authorized_existing_activation_inputs_used": true,
+    "original_asset_acquisition_steps_present_in_authored_mode": false,
+    "XAPK_requested": false
+  },
+  "local": {
+    "source_blobs_verified": [
+      {
+        "path": "scripts/gt_next23b_route_provenance.py",
+        "sha": "fd32bcbfab7c08fcd6fe06c32b803c702ea9da5e"
+      },
+      {
+        "path": "scripts/gt_next23b_unity_receipt.py",
+        "sha": "68120ab8528f83cf65c919968b4a177aa945c212"
+      },
+      {
+        "path": "scripts/gt_runtime_keyword_contract.py",
+        "sha": "617a4ca349281a8e2ad99bf4f04364a028fb7c16"
+      },
+      {
+        "path": "tests/test_gt_next23b_route_provenance.py",
+        "sha": "129041ab5dbe176946a669857c4eb08a4d7c9ab2"
+      },
+      {
+        "path": "tools/synthetic_material_alpha/next23b_receipt_probe.py",
+        "sha": "a56c5b3219b9e5dc0529400176ea21c90dea3be3"
+      },
+      {
+        "path": "android-port/Experiments/GT/Editor/Next23bShaderValidation.cs",
+        "sha": "c9b87ce25b51c1bc45d8a83f560843749f29b8ee"
+      }
+    ],
+    "direct_github_dns_available": false,
+    "full_clone_available": false,
+    "prior_archive_sha256": "a7b0a80c25c753f6e081f9307c804575399d833e5deec5ff338ef4ceee5222a6",
+    "old_local_inputs_unmodified": true,
+    "marker_audit_tool_sha256": "bfb848e68ea814edc3744335ea8cda34b57d1925753d090ac9a7fbc2212ff497",
+    "marker_proof_sha256": "068f70a771d7a82b984120b19b76694ec5c19ddb298ca535733abc1fd1d28d43",
+    "marker_routes": 1156,
+    "stage_markers": 2312
+  },
+  "limits": {
+    "new_Unity_run_started_before_this_turn": true,
+    "duplicate_run_requested": false,
+    "Unity_acceptance_verified": true,
+    "compiled_bundle_read_in_this_turn": true,
+    "actual_game_render_verified": false,
+    "documentation_commit_skip_ci_to_avoid_duplicate": true,
+    "Unity_acceptance_scope": "authored isolated actual Android Vulkan AssetBundle only",
+    "local_UnityPy_or_spirv_decoder_executed": false
+  },
+  "actual_run_acceptance": {
+    "run_id": 45929964298,
+    "job_id": 140280068547,
+    "head": "1fd0565f8f7cb926a5d9143f3216e88ba31c70b5",
+    "attempt": 1,
+    "status": "completed",
+    "conclusion": "success",
+    "unity_version": "2021.3.45f2",
+    "receipt_schema": 2,
+    "checkpoint": "verified",
+    "pass_count": 4,
+    "registered_routes": 1156,
+    "shader_error_count": 0,
+    "android_vulkan_bundle_bytes": 48712,
+    "unitypy_version": "1.23.0",
+    "vertex_routes_by_pass": [
+      512,
+      4,
+      128,
+      512
+    ],
+    "fragment_routes_by_pass": [
+      512,
+      4,
+      128,
+      512
+    ],
+    "vertex_and_fragment_entrypoints_verified": true,
+    "used_flag_bytes_matched": 27,
+    "serialized_pass_tags_matched": 4,
+    "negative_byte_controls_rejected": 2,
+    "artifact_id": 15168725743,
+    "archive_bytes": 117766,
+    "archive_sha256": "8014480263c86c25f589950052a0abce81a0a473165e9633a73dce6b9575ee1c",
+    "artifact_review": "clients/GT/sessions/20261127-actions-execution-plan/artifact-review.json",
+    "local_exact_receipt_and_source_contract_replayed": true,
+    "compiled_route_identity_or_pixel_or_original_scope_verified": false
+  },
+  "finalized_job_log_scan": {
+    "job_id": 140280068547,
+    "total_lines": 2166,
+    "pattern_counts": {
+      "GLSL_link": 0,
+      "internal_variant": 0,
+      "shader_compile": 0,
+      "csharp_compile": 0,
+      "exception": 0
+    },
+    "boundary": "targeted patterns only; not blanket absence of all possible warnings/errors"
+  },
+  "raw_receipt_blobs": [
+    {
+      "path": "clients/GT/sessions/20261127-actions-execution-plan/stage.json",
+      "git_blob_sha": "ff0a39e93b6a9e5348c9db3499e5c2f4774b16ff"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-actions-execution-plan/gt-next23b-unity-safe.json",
+      "git_blob_sha": "8cba25dc687ec5e041ed13d2a1652c6a1b04d81c"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-actions-execution-plan/receipt-verified.json",
+      "git_blob_sha": "f09aee66ab55192ae72026284345e0b883f1d951"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-actions-execution-plan/full-verified.json",
+      "git_blob_sha": "0f80491c121545276cb15872d10d6f7fddb8e7b5"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-actions-execution-plan/artifact-review.json",
+      "git_blob_sha": "15b035e4b2a34d1c1de5d792241e274b1ecd745e"
+    }
+  ]
+}

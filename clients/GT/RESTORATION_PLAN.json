@@ -20,7 +20,7 @@
   "agent": "GT",
   "repository": "alwansan/raf",
   "write_branch": "feature/android-native-port",
-  "updated_date": "2026-11-26",
+  "updated_date": "2026-11-27",
   "original_source": {
     "ref": "zip2",
     "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -1305,13 +1305,16 @@
     "no_GT_XAPK_created": true
   },
   "current_handoff": {
-    "date": "2026-11-26",
-    "reviewed_remote_head": "f3c8a2cdacf04fdbfbced5f87a1407da223e3a15",
-    "purpose": "preserve all available work; restoration goal remains paused until resume",
+    "date": "2026-11-27",
+    "reviewed_remote_head": "1fd0565f8f7cb926a5d9143f3216e88ba31c70b5",
+    "purpose": "active RAFT restoration under owner authorization; use Actions for necessary permitted experiments",
+    "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261126-complete-handoff/README_AR.md",
+    "index": "clients/GT/sessions/20261127-actions-execution-plan/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
+    "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
+    "historical_missing_notice": "Batch5 archive recovered in ef558e8d; batches3/4 remain unavailable unless recovered later.",
     "restoration_complete": false,
     "historical_same_export_materials": {
       "non_dummy": 688,
@@ -1328,7 +1331,173 @@
     "synthetic_pixels": 120,
     "production_pixels_proven": false,
     "new_XAPK_requested": false,
-    "CI_suppressed_for_preservation_commit": true
+    "owner_actions_authorization": {
+      "date": "2026-11-27",
+      "owner_instruction_ar": "يمكنك استعمال github اكشن لتجرب عليه اي شيء تحتاجه ضع ذالك في ذاكرتك ايضا واكمل العمل وحدث الخطة وسر على الخطة باستمرار Continue",
+      "github_actions_authorized_for_needed_raft_tests": true,
+      "write_branch": "feature/android-native-port",
+      "other_branches_and_CL_read_only": true,
+      "BLACK_out_of_scope": true,
+      "original_assets_require_explicit_verified_authorization": true,
+      "no_unlicensed_assets_or_secrets_publication": true,
+      "no_LFS_acquisition": true,
+      "no_full_build_before_G0_G6": true,
+      "no_partial_phone_test": true,
+      "animation_deferred": true,
+      "use_existing_approved_CI_activation_without_exposing_credentials": true,
+      "avoid_duplicate_or_conflicting_active_jobs": true,
+      "continue_at_each_resume_from_live_run_and_plan": true
+    },
+    "active_synthetic_next23b_run": {
+      "id": 45929964298,
+      "head": "1fd0565f8f7cb926a5d9143f3216e88ba31c70b5",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/alwansan/raf/actions/runs/45929964298",
+      "job_id": 140280068547,
+      "scope": "authored-only Unity 2021.3.45f2 Android Vulkan AssetBundle (NO APK)",
+      "acceptance": "PASS_AUTHORED_UNITY_BUNDLE_RECEIPT_METADATA_AND_STAGE_ROUTE_COVERAGE_ONLY",
+      "runner_job_snapshot": [
+        {
+          "id": 140280068547,
+          "name": "next23b-receipt",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Checkout source tools and authored fixture only",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Generate 1156 authored routes in a new empty project",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Require existing activation inputs and disk budget",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run the published receipt producer in Unity Android Vulkan (AssetBundle only)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify actual receipt commitments and decode the authored Android Vulkan bundle",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Require actual compiled VS and FS route coverage using the published full gate",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Retain only authored fixture, bundle and bounded receipts",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Remove only the authored test project",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Checkout source tools and authored fixture only",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 140280069663,
+          "name": "synthetic-pixels",
+          "status": "completed",
+          "conclusion": "skipped",
+          "steps": []
+        }
+      ],
+      "artifact_id": 15168725743,
+      "artifact_sha256": "8014480263c86c25f589950052a0abce81a0a473165e9633a73dce6b9575ee1c",
+      "artifact_expires_at": "2026-12-11T02:45:59Z",
+      "artifact_review": "clients/GT/sessions/20261127-actions-execution-plan/artifact-review.json",
+      "raw_receipt": "clients/GT/sessions/20261127-actions-execution-plan/gt-next23b-unity-safe.json",
+      "full_verified": "clients/GT/sessions/20261127-actions-execution-plan/full-verified.json",
+      "bundle_bytes": 48712,
+      "vertex_routes_by_pass": [
+        512,
+        4,
+        128,
+        512
+      ],
+      "fragment_routes_by_pass": [
+        512,
+        4,
+        128,
+        512
+      ],
+      "matched_serialized_pass_tags": 4,
+      "matched_used_flag_bytes": 27,
+      "actual_runtime_pixel_selection_verified": false,
+      "original_game_scope_verified": false
+    },
+    "authored_source_marker_audit": {
+      "proof": "clients/GT/sessions/20261127-actions-execution-plan/marker-proof.json",
+      "routes": 1156,
+      "stage_markers": 2312,
+      "empty_route_indices": [
+        511,
+        3,
+        127,
+        511
+      ],
+      "Unity_or_device_proof": false
+    },
+    "next_session_sequence": [
+      {
+        "id": "A1",
+        "status": "COMPLETE_AUTHORED_BUNDLE_ONLY",
+        "action": "Run 45929964298 completed; actual Unity 2021.3.45f2 Android Vulkan AssetBundle, receipt v2 and 1156 routes per stage accepted. Downloaded ZIP verified and receipts replayed. Keep exact scope; no original runtime acceptance."
+      },
+      {
+        "id": "A2",
+        "status": "ACTIVE_NEXT",
+        "action": "Implement and run isolated authored Unity Vulkan material/global/local keyword pixel readback, with empty set selecting its own nonzero-index marker, on/off/on or off/on/off, negative controls, and a distinct marker per selected route. Reuse safe synthetic workflow/activation; no game data or APK. Check exact receipt and run identity. Then move to authorized original metadata or another productive G0-G6 step."
+      },
+      {
+        "id": "A3",
+        "status": "BLOCKED_ON_AUTHORIZED_SOURCE",
+        "action": "Use only explicitly authorized source metadata to establish actual NEXT23b keywords, flags/scope, PassType, route lattice and VS/FS binding; reject uncertainty. Then prove Unity material/runtime and same-export GUID integration without counting Dummy or changing original meta by guess."
+      },
+      {
+        "id": "A4",
+        "status": "PENDING",
+        "action": "Apply proven keyword route contract to ten material groups, then re-audit actual remaining material census and prioritize white meshes and black-square fire."
+      },
+      {
+        "id": "A5",
+        "status": "PENDING",
+        "action": "Complete G0-G6 for meshes, textures/mips/arrays, materials, colors, all shader families, FFT/kernel6, Foam/Depth/Water, lighting/sky/shadows/particles/fire/postFX, and integration. Animation deferred. No new full package before documented closure."
+      },
+      {
+        "id": "A6",
+        "status": "BLOCKED_UNTIL_G0_G6",
+        "action": "Run authorized final XAPK pipeline only after documented G0-G6 and integration closure, validate actual package and share download for final device test."
+      }
+    ]
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."
 }

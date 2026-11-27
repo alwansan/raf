@@ -1,0 +1,20 @@
+{
+  "UnityPy_version": "1.23.0",
+  "XAPK_requested": false,
+  "actual_bundle_decoded": true,
+  "android_vulkan_serialized_platform": 18,
+  "bundle_serialized_pass_tags_matched": 4,
+  "bundle_sha256": "98e0ff35c8f994be794f81037645348a92b078750ab1dd5395be2894cf79c7ac",
+  "bundle_used_keyword_flag_bytes_matched": 27,
+  "ci_run_id": "45929964298-1-1fd0565f8f7cb926a5d9143f3216e88ba31c70b5",
+  "game_pixels_verified": false,
+  "original_assets_read": false,
+  "original_keyword_scope_verified": false,
+  "original_runtime_keyword_selection_verified": false,
+  "same_size_bundle_and_manifest_negative_controls": 2,
+  "status": "SYNTHETIC_EDITOR_RECEIPT_BUNDLE_AND_METADATA_VERIFIED",
+  "synthetic_only": true,
+  "unity_receipt_bundle_bytes": 48712,
+  "unity_receipt_byte_commitments_verified": true,
+  "unity_receipt_cryptographic_attestation_verified": false
+}

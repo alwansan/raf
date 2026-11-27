@@ -1,0 +1,21 @@
+{
+  "Unity_run_executed": false,
+  "XAPK_requested": false,
+  "input_sha256": {
+    "Assets/Editor/Next23bShaderValidation.cs": "bc3ba575eb47e7a082768fce9286d165f9a2b540eeed7ce66a069e538565c8e1",
+    "Assets/GTNext23b.shader": "e431f55d764c93b7345215e80778ce1ff914a8bb307d25d09bf8661d4f447b60",
+    "Next23bEngineRoutes.json": "1ff393eda64dc7b05d5d467f12318cd0d7b80798bb3bffb18398cd821554eb67",
+    "Packages/manifest.json": "6121fb9da71e3430413f00e63e2748c5ee8d2e69049c3963bc448cac6880a404",
+    "ProjectSettings/ProjectVersion.txt": "6fe6923646e719ee264b3a4a8c94f8627acfe67a868572ef77dad182b9d2930c",
+    "SyntheticSourceManifest.json": "c66e09d05460453c06017f5ad291d1eda9ddf86f60cb766421e125e7fbdf35e1"
+  },
+  "original_assets_read": false,
+  "route_counts": [
+    512,
+    4,
+    128,
+    512
+  ],
+  "status": "AUTHORED_PROJECT_PREPARED",
+  "synthetic_only": true
+}

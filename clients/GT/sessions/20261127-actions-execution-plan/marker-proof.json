@@ -1,0 +1,49 @@
+{
+  "Unity_compilation_verified": false,
+  "compiled_bundle_route_identity_verified": false,
+  "cpp_version": "cpp (Debian 14.2.0-19) 14.2.0",
+  "engine_manifest_sha256": "1ff393eda64dc7b05d5d467f12318cd0d7b80798bb3bffb18398cd821554eb67",
+  "original_game_or_device_pixels_verified": false,
+  "passes": [
+    {
+      "empty_route_index": 511,
+      "pass_index": 0,
+      "pass_type": "ForwardBase",
+      "route_zero_nonempty": true,
+      "routes_checked": 512,
+      "unique_fragment_markers": 512,
+      "unique_vertex_markers": 512
+    },
+    {
+      "empty_route_index": 3,
+      "pass_index": 1,
+      "pass_type": "ForwardAdd",
+      "route_zero_nonempty": true,
+      "routes_checked": 4,
+      "unique_fragment_markers": 4,
+      "unique_vertex_markers": 4
+    },
+    {
+      "empty_route_index": 127,
+      "pass_index": 2,
+      "pass_type": "Deferred",
+      "route_zero_nonempty": true,
+      "routes_checked": 128,
+      "unique_fragment_markers": 128,
+      "unique_vertex_markers": 128
+    },
+    {
+      "empty_route_index": 511,
+      "pass_index": 3,
+      "pass_type": "ShadowCaster",
+      "route_zero_nonempty": true,
+      "routes_checked": 512,
+      "unique_fragment_markers": 512,
+      "unique_vertex_markers": 512
+    }
+  ],
+  "route_checks": 1156,
+  "shader_sha256": "e431f55d764c93b7345215e80778ce1ff914a8bb307d25d09bf8661d4f447b60",
+  "stage_marker_checks": 2312,
+  "status": "AUTHORED_STAGED_HLSL_MARKERS_MATCHED_BY_CPP"
+}

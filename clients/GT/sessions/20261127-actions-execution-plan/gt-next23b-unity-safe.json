@@ -1,0 +1,17 @@
+{
+    "unityVersion": "2021.3.45f2",
+    "failureType": "",
+    "checkpoint": "verified",
+    "passCount": 4,
+    "registeredRoutes": 1156,
+    "errors": 0,
+    "compilerErrorGroups": [],
+    "androidVulkanOnly": true,
+    "privateBundleCompiled": true,
+    "receiptSchemaVersion": 2,
+    "candidateSha256": "e431f55d764c93b7345215e80778ce1ff914a8bb307d25d09bf8661d4f447b60",
+    "engineRouteManifestSha256": "1ff393eda64dc7b05d5d467f12318cd0d7b80798bb3bffb18398cd821554eb67",
+    "sourceManifestSha256": "c66e09d05460453c06017f5ad291d1eda9ddf86f60cb766421e125e7fbdf35e1",
+    "bundleSha256": "98e0ff35c8f994be794f81037645348a92b078750ab1dd5395be2894cf79c7ac",
+    "bundleBytes": 48712
+}
