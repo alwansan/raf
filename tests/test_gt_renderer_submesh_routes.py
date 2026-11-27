@@ -16,7 +16,14 @@ from scripts.b03_verify_renderer_material_links import audit as old_audit
 def src(pid):return {"m_FileID":0,"m_PathID":pid}
 def loc(fid):return {"fileID":fid}
 def ext(fid,guid):return {"fileID":fid,"guid":guid,"type":2}
-def guid(n):return f"{n:032x}"
+def guid(n):return f"ab{n:030x}"
+
+
+class FixtureDumper(yaml.SafeDumper):
+    def represent_mapping(self,tag,mapping,flow_style=None):
+        if isinstance(mapping,dict) and set(mapping) in ({"fileID"},{"fileID","guid","type"}):
+            flow_style=True
+        return super().represent_mapping(tag,mapping,flow_style)
 
 
 class OrderedRoutes(unittest.TestCase):
@@ -72,7 +79,7 @@ class OrderedRoutes(unittest.TestCase):
             path=self.assets/(g+(".mat" if rows[0][1]==21 else ".asset"))
             text="%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n"
             for fid,cls,tree in rows:
-                text+=f"--- !u!{cls} &{fid}\n"+yaml.safe_dump({routes.CLASSES[cls]:tree},sort_keys=False,default_flow_style=False)
+                text+=f"--- !u!{cls} &{fid}\n"+yaml.dump({routes.CLASSES[cls]:tree},Dumper=FixtureDumper,sort_keys=False,default_flow_style=False)
             path.write_text(text);self.meta(path,g)
     def run_audit(self):
         self.write()
@@ -95,6 +102,9 @@ class OrderedRoutes(unittest.TestCase):
         result=self.run_audit()
         self.assertFalse(result["selected_renderer_routes_preserved"])
         self.assertEqual(result["reason_counts"]["ordered_pointer_target_mismatch"],1)
+        old=old_audit(self.project)
+        self.assertTrue(old["local_reference_structure_valid"])
+        self.assertTrue(old["all_material_slots_authenticated"])
     def test_uv_descriptor_drift(self):
         self.docs[(self.mesh,4300000)][1]["m_VertexData"]["m_Channels"][4]["offset"]=16
         self.assertIn("mesh_index_submesh_or_UV_layout_drift",self.run_audit()["reason_counts"])
