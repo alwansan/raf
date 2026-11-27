@@ -31,7 +31,7 @@ def cases():
     # layout untouched. Old default YAML loaders silently retain the latter.
     base=YAML
     fields=[
-        ("duplicate_Mesh_root","Mesh:\n","Mesh: {}\nMesh:\n"),
+        ("duplicate_Mesh_root","\nMesh:\n","\nMesh: {}\nMesh:\n"),
         ("duplicate_vertex_mapping","  m_VertexData:\n","  m_VertexData: {}\n  m_VertexData:\n"),
         ("duplicate_vertex_count","    m_VertexCount: 1","    m_VertexCount: 2\n    m_VertexCount: 1"),
         ("duplicate_vertex_size","    m_DataSize: 12","    m_DataSize: 11\n    m_DataSize: 12"),
