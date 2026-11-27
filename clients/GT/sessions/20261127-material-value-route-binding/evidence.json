@@ -1,5 +1,5 @@
 {
-  "status": "CANDIDATE_NOT_EXECUTED",
+  "status": "PYTHON_PASS_PUBLIC_BUILD_FAILED_FIX_PENDING",
   "base": "37b2aa410615288c09b443946fedbd0eb4a05d16",
   "gate": "G1-G2-material-scalar-color-same-route-value-binding",
   "session": "clients/GT/sessions/20261127-material-value-route-binding/README_AR.md",
@@ -9,5 +9,53 @@
   "white_or_fire_fixed": false,
   "unity_render_executed": false,
   "XAPK": false,
-  "next": "Run authored-scene-route-join only; retain actual results and fix any failed control."
+  "next": "Run focused authored public build with typed indexed capture fix; retain success/failure. Do not rerun Unity raster.",
+  "candidate_commit": "9e19c17c188860b991385eeec1633f7d8959420d",
+  "initial_failure": {
+    "status": "FAIL_AUTHORED_MATERIAL_DICTIONARY_LINQ_INFERENCE",
+    "run_id": 45948397997,
+    "job_id": 140338299033,
+    "head": "d4b1299af0450f0928f0ba0fd7f10843174ef903",
+    "guard_run_id": 45948398027,
+    "guard_conclusion": "success",
+    "artifact_id": 15175323509,
+    "archive": "clients/GT/sessions/20261127-material-value-route-binding/failed-build-45948397997.zip",
+    "archive_bytes": 5041,
+    "archive_sha256": "703b8ce523ed7229dc20e7a5a28431ced7564d661e5469ca4ef399517956825c",
+    "archive_git_blob": "12e741f13d3ba47316daf68c305af3183e8399cb",
+    "archive_crc_sha_size_verified_locally": true,
+    "python_tests_passed": 82,
+    "new_material_tests_passed": 22,
+    "actual_export_executed": false,
+    "reason": "CS0411 from three ambiguous LINQ Select calls on AssetDictionary; exact public source AssetDictionary.GetKey/GetValue and Count verified. Fix uses indexed capture of generated values.",
+    "fix_commit": "e0fdd5c1737cee1cf38973372684855cf15a5063",
+    "original_assets_read": false,
+    "XAPK": false,
+    "members": {
+      "test_b03_verify_renderer_material_links.py.log": {
+        "bytes": 2556,
+        "sha256": "c28e4d716a01ac768cf6d55e50d36f32ec6422e9561960fb35485eb759985a6b"
+      },
+      "test_gt_material_route_values.py.log": {
+        "bytes": 2725,
+        "sha256": "82cfa673233f412cd53ef5ee41b663c2ba41263db4c0d93469defb79bd84017b"
+      },
+      "build-failure.log": {
+        "bytes": 13483,
+        "sha256": "aeaf61d779321f85ae29d4c0a3b3e4326a6f71157bbdd019450ca624116576cf"
+      },
+      "test_gt_mesh_vertex_payload.py.log": {
+        "bytes": 1881,
+        "sha256": "d4fd27c6ddb5bedeaeb54da1d9c1e25f66e797855a4600fa9f851a5a5067d708"
+      },
+      "test_gt_renderer_submesh_routes.py.log": {
+        "bytes": 3004,
+        "sha256": "1c76a432b127059606e6deb11cae87de5eea3ee66d7c8e24ac6ed3fa78745362"
+      },
+      "test_gt_verify_original_mesh_export.py.log": {
+        "bytes": 1259,
+        "sha256": "4fa1e34501cc7873993fcc2fc567b180527cc1ff3a5442f97cdd224b1a32258a"
+      }
+    }
+  }
 }
