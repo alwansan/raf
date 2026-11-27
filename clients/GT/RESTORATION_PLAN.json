@@ -1306,7 +1306,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "00e969dbf71412f0ad8cf10f5acb38491a35b63a",
+    "reviewed_remote_head": "79114bac8f3569742508852ea1f6964b599856ff",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2497,7 +2497,7 @@
       "XAPK": false
     },
     "latest_vertex_payload_route_binding": {
-      "status": "CI_COMPLETED_RECEIPT_NOT_YET_VERIFIED",
+      "status": "PASS_AUTHORED_ACTUAL_EXPORT_VERTEX_BYTE_ROUTE_GATE",
       "base": "de21c5ef6f9cc4bcc4dda3a4c0eb4cc1d2f59335",
       "gate": "G1-G2-mesh-vertex-payload-same-route-byte-binding",
       "session": "clients/GT/sessions/20261127-vertex-payload-route-binding/README_AR.md",
@@ -2516,7 +2516,7 @@
       "white_or_fire_fixed": false,
       "unity_render_executed": false,
       "XAPK": false,
-      "next": "Check run 45947525967/job 140335539245, retain artifact and logs with SHA/CRC and exact counts; do not repeat the Unity raster or the public build if success. Then G1-G2 same-route material scalar/color proof using B22.normalize and B44.normalize_colors, binary32 values, explicit missing/extra slots, and valid-but-wrong tint/int/float controls. A3 remains blocked; no package.",
+      "next": "G1-G2-material-scalar-color-same-route-value-binding: reuse B22.normalize and B44.normalize_colors, compare binary32 RGBA/float plus int values with explicit missing/extra/wrong type or value controls and preserve V2 byte binding. Actual authored YAML only; separate property bytes from GPU/Unity color-space. No repeat of successful raster or vertex export without new proof purpose. A3 blocked pending authorized original source; no XAPK.",
       "candidate_commit": "23fe335acaf8b557cafaf2eb095d8311d299262f",
       "activation_commit": "00e969dbf71412f0ad8cf10f5acb38491a35b63a",
       "actual_run": {
@@ -2597,7 +2597,76 @@
         "guard_run_id": 45947525970,
         "guard_conclusion": "success"
       },
-      "python_regression_step_passed": true
+      "python_regression_step_passed": true,
+      "artifact_id": 15175331956,
+      "archive": "clients/GT/sessions/20261127-vertex-payload-route-binding/actual-run-45947525967.zip",
+      "archive_bytes": 5016,
+      "archive_sha256": "8b601146b3ab01bfe6826720a713b5d571c5c60cb267c262e21a45b8fba042bc",
+      "archive_git_blob": "ed58915b47865897d6648e5ebd7b3749c32955c2",
+      "archive_crc_sha_size_verified_locally": true,
+      "public_tool_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+      "actual_public_export_collections": 9,
+      "actual_exported_documents": 13,
+      "actual_native_scene_files": 2,
+      "complete_byte_bound_renderers": 2,
+      "complete_byte_bound_submeshes": 4,
+      "unique_authored_inline_meshes": 1,
+      "authored_vertex_payload_bytes": 120,
+      "counterfactual_count": 11,
+      "new_byte_tests_passed": 15,
+      "total_regression_tests": 60,
+      "actual_same_size_UV_control_mismatched_renderers": 2,
+      "actual_same_size_position_control_mismatched_renderers": 2,
+      "same_route_vertex_bytes_verified": true,
+      "UV_decoded_values_or_GPU_verified": false,
+      "original_serialized_source_verified": false,
+      "members": {
+        "build.json": {
+          "bytes": 576,
+          "sha256": "de7b1693fece47f46e9056386933d73b314d414fb628146dc7f22c254f5801d9"
+        },
+        "report.json": {
+          "bytes": 841,
+          "sha256": "7acf8efe195aa342decc5465287acf5415269d3957a2247b80f06d4dabda8593"
+        },
+        "route-join.json": {
+          "bytes": 3751,
+          "sha256": "9f8e9e728530affae1bd18b6349381ddbf2630b9dc73e1c699d81414fd2a15b2"
+        },
+        "test_b03_verify_renderer_material_links.py.log": {
+          "bytes": 2556,
+          "sha256": "c28e4d716a01ac768cf6d55e50d36f32ec6422e9561960fb35485eb759985a6b",
+          "tests": 17
+        },
+        "test_gt_mesh_vertex_payload.py.log": {
+          "bytes": 1881,
+          "sha256": "90bc2782f21c7b575d99a00d4c4de5c0a2c40bdfb0d5ec741071876ea13b6068",
+          "tests": 15
+        },
+        "test_gt_renderer_submesh_routes.py.log": {
+          "bytes": 3004,
+          "sha256": "7af2e74e4ea5f2c16cb7cb53ab5aa28ed76607fb8c35f0a1a2c041c1ba243c76",
+          "tests": 21
+        },
+        "test_gt_verify_original_mesh_export.py.log": {
+          "bytes": 1259,
+          "sha256": "4fa1e34501cc7873993fcc2fc567b180527cc1ff3a5442f97cdd224b1a32258a",
+          "tests": 7
+        },
+        "tool-smoke.log": {
+          "bytes": 63,
+          "sha256": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+        },
+        "witness.log": {
+          "bytes": 41,
+          "sha256": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
+        }
+      },
+      "compiled_files": {
+        "AssetRipper.Export.UnityProjects.dll": "a3e7e6bb4f21aba530833fe317741ca4f486aa0eb50b88b5e26eeb15414e9f2e",
+        "RaftAuthoredSceneRouteWitness.cs": "8abb1366d1f5e7d4f87f882d2d1a799a5696214f98e35f0307cefd514688fb0e",
+        "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
+      }
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."
