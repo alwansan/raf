@@ -1,10 +1,11 @@
 {
-  "status": "SOURCE_ORACLE_CANDIDATE_NOT_EXECUTED",
+  "status": "CANDIDATE_NOT_EXECUTED",
   "gate": "G1-G2-imported-PNG-top-mip-same-route-binding",
   "base": "adbfe7c2d50bbf81b3c765d509abe1fe20e5121c",
   "session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
   "original_assets_read": false,
   "original_serialized_source_verified": false,
   "production_renderer_parity_verified": false,
-  "next": "Add actual public exporter PNG mode and independent unit/actual controls, run focused CI."
+  "next": "Execute focused actual native V7 and separate imported PNG V8 export witnesses; preserve receipts and fix any strict schema discrepancy.",
+  "oracle_commit": "0b1caab65536a993628979df34210c978f26ad5f"
 }

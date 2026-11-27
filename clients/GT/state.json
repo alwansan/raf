@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
-  "next_action": "Add actual public exporter PNG mode and independent unit/actual controls, run focused CI.",
+  "next_action": "Execute focused actual native V7 and separate imported PNG V8 export witnesses; preserve receipts and fix any strict schema discrepancy.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "adbfe7c2d50bbf81b3c765d509abe1fe20e5121c",
+    "reviewed_remote_head": "0b1caab65536a993628979df34210c978f26ad5f",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-imported-PNG-top-mip-same-route-binding",
-      "status": "SOURCE_ORACLE_CANDIDATE_NOT_EXECUTED",
-      "next": "Add actual public exporter PNG mode and independent unit/actual controls, run focused CI."
+      "status": "CANDIDATE_NOT_EXECUTED",
+      "next": "Execute focused actual native V7 and separate imported PNG V8 export witnesses; preserve receipts and fix any strict schema discrepancy."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -4246,14 +4246,15 @@
       "retry_activation_commit": "956ff560d50b89ecb7b897d5a381e2d790b231b1"
     },
     "latest_imported_png_route_binding": {
-      "status": "SOURCE_ORACLE_CANDIDATE_NOT_EXECUTED",
+      "status": "CANDIDATE_NOT_EXECUTED",
       "gate": "G1-G2-imported-PNG-top-mip-same-route-binding",
       "base": "adbfe7c2d50bbf81b3c765d509abe1fe20e5121c",
       "session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
       "original_assets_read": false,
       "original_serialized_source_verified": false,
       "production_renderer_parity_verified": false,
-      "next": "Add actual public exporter PNG mode and independent unit/actual controls, run focused CI."
+      "next": "Execute focused actual native V7 and separate imported PNG V8 export witnesses; preserve receipts and fix any strict schema discrepancy.",
+      "oracle_commit": "0b1caab65536a993628979df34210c978f26ad5f"
     }
   }
 }

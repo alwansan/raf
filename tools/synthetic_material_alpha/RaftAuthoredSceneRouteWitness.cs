@@ -14,6 +14,9 @@ using AssetRipper.IO.Files.ResourceFiles;
 using System.Security.Cryptography;
 using AssetRipper.Primitives;
 using AssetRipper.Processing.Prefabs;
+using AssetRipper.Processing.Textures;
+using AssetRipper.Export.UnityProjects.Textures;
+using AssetRipper.Export.Modules.Textures;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
@@ -116,7 +119,7 @@ public static class RaftAuthoredSceneRouteWitness
         owner=obj.Collection.Name,path_id=obj.PathID,class_id=obj.ClassID,tree
     };
 
-    public static void Run(string root)
+    public static void Run(string root,bool importedPng=false)
     {
         Require(!Directory.Exists(root),"fresh_authored_route_root_required");
         Directory.CreateDirectory(root);
@@ -133,6 +136,9 @@ public static class RaftAuthoredSceneRouteWitness
         var collections=new List<IExportCollection>();
         var rows=new List<object>();
         var native=new DefaultYamlExporter();
+        LibraryConfiguration settings=new();settings.SetProjectSettings(version);
+        settings.ExportSettings.ImageExportFormat=ImageExportFormat.Png;
+        var pngExporter=new TextureAssetExporter(settings);
 
         var mesh=(IMesh)Add(meshOwner,43,"AuthoredMesh");
         mesh.SetIndexFormat(AssetRipper.SourceGenerated.Enums.IndexFormat.UInt16);
@@ -254,7 +260,16 @@ public static class RaftAuthoredSceneRouteWitness
             mats.Add(mat);
             collections.Add(new AssetExportCollection<IUnityObjectBase>(native,mat));
             collections.Add(new YamlShaderExportCollection(new YamlShaderExporter(),shader));
-            collections.Add(new YamlStreamedAssetExportCollection(new YamlStreamedAssetExporter(),tex));
+            if(importedPng)
+            {
+                // Use the same public collection factory as SpriteProcessor.
+                var group=generated.CreateAsset(-1,info=>new SpriteInformationObject(info,tex));
+                group.SetMainAsset();
+                Require(pngExporter.TryCreateCollection(tex,out var pngCollection) &&
+                    pngCollection is TextureExportCollection,"actual_png_collection_factory_failed");
+                collections.Add(pngCollection!);
+            }
+            else collections.Add(new YamlStreamedAssetExportCollection(new YamlStreamedAssetExporter(),tex));
             // AssetDictionary exposes multiple enumerable interfaces; use
             // explicit indexed reads of the generated objects, not LINQ
             // inference or reconstructed literals from exported YAML.
@@ -285,6 +300,7 @@ public static class RaftAuthoredSceneRouteWitness
             rows.Add(Row(tex,new Dictionary<string,object>{
                 ["m_Width"]=tex.Width_C28,["m_Height"]=tex.Height_C28,
                 ["m_TextureFormat"]=(int)tex.Format_C28E,["m_MipCount"]=tex.MipCount_C28,
+                ["m_LightmapFormat"]=(int)tex.LightmapFormat_C28E,
                 ["m_TextureSettings"]=new {m_FilterMode=sampler.FilterMode,m_Aniso=sampler.Aniso,
                     m_MipBias=sampler.MipBias,m_WrapU=sampler.WrapU,m_WrapV=sampler.WrapV,m_WrapW=sampler.WrapW},
                 ["m_ImageCount"]=tex.ImageCount_C28,["m_TextureDimension"]=dimension,
@@ -340,11 +356,10 @@ public static class RaftAuthoredSceneRouteWitness
         var externals=owners.ToDictionary(o=>o.Name,o=>o.Dependencies.Skip(1).Select(d=>d?.Name).ToArray());
         // The source contract is captured from generated objects before any
         // export or trace. It is not reconstructed from exported YAML.
-        var source=new {schema_version=7,authored_generated_objects=true,objects=rows,externals,
+        var source=new {schema_version=importedPng?8:7,authored_generated_objects=true,objects=rows,externals,
             providers=new[]{new {name=providerName,bytes=providerData.Length,sha256=providerSHA}},
             hidden=hidden.Select(o=>new {owner=o.Collection.Name,path_id=o.PathID,class_id=o.ClassID}).ToArray()};
         File.WriteAllText(Path.Combine(root,"source.json"),JsonSerializer.Serialize(source));
-        LibraryConfiguration settings=new();settings.SetProjectSettings(version);
         var exporter=new ProjectExporter(settings,new MonoManager(_=>throw new InvalidOperationException("unexpected_assembly_request")));
         var container=new ProjectAssetContainer(exporter,settings,collections.SelectMany(c=>c.Assets),collections);
         var envs=new Dictionary<string,string>{
@@ -368,13 +383,14 @@ public static class RaftAuthoredSceneRouteWitness
         }
         Require(exported==9,"unexpected_authored_export_collection_count");
         File.WriteAllText(Path.Combine(root,"producer.json"),JsonSerializer.Serialize(new {
-            status="OBSERVED_AUTHORED_PUBLIC_YAML_EXPORT",actual_public_export_collections=exported,
+            status=importedPng?"OBSERVED_AUTHORED_PUBLIC_PNG_EXPORT":"OBSERVED_AUTHORED_PUBLIC_YAML_EXPORT",actual_public_export_collections=exported,
             actual_scene_collections=scenes.Count,source_objects=rows.Count,hidden_components=hidden.Count,
             public_tool_revision="036098ab525a3f9f693dc101edeb21faad4d32d8",
             original_assets_read=false,original_serialized_source=false,production_auto_exporter_selection=false,
             authored_native_shader_programs_verified=false,authored_file_backed_streamed_texture_collections=2,
+            actual_imported_png_texture_collections=importedPng?2:0,
             Android_device=false,XAPK=false
         }));
-        Console.WriteLine("RAFT_AUTHORED_SCENE_YAML_EXPORT_OBSERVED");
+        Console.WriteLine(importedPng?"RAFT_AUTHORED_SCENE_PNG_EXPORT_OBSERVED":"RAFT_AUTHORED_SCENE_YAML_EXPORT_OBSERVED");
     }
 }
