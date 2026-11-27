@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/README_AR.md",
-  "next_action": "Inspect actual retry 45985908037 at immutable b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b. It retains byte-identical authored candidate d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537 and contract a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f, changes only Editor Vulkan environment and strengthens receipts. Verify observed editor Vulkan, actual registration, callback exact active sets/PassType/stage, material routes, actual bundle and decoded eight markers, plus counterfactual controls. If failure, retain exact receipts/log category, distinguish backend hypothesis from actual cause; no weakening/projection. Original A3 remains blocked; no acquisition, production, legacy installer change or APK/XAPK. Preserve white meshes, black fire, water, G0–G6 priorities; no endless authored repetitions once this gate is bounded.",
+  "next_action": "Inspect bounded actual retry 45992643749 at immutable de0ac1de51e06cbb8fd60426ee3478d13eb2d093. Retains byte-identical candidate/contract, mandatory actual Unity Vulkan and shader support, exact scope/PassType/callback/decoded module evidence. Distinguish image build timeout, Editor startup/backend failure, actual registration failure, and real serialized stage failure; retain exact artifacts and final log. If this bounded retry is blocked, do not launch the same expensive job repeatedly; classify blocker and switch to the next independent productive G3/G4/Particle108 work permitted by verified source authorization, or request the precise missing source/runner prerequisite. A3 original authorization/provenance remains blocked. No original acquisition, production, legacy installer changes or APK/XAPK. Preserve Ali's pinned reference, white meshes/black fire, water and remaining G0–G6 priorities.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,13 +1964,13 @@
   },
   "current_handoff": {
     "latest_keyword_candidate_bundle_run": {
-      "id": 45985908037,
-      "job": 140461344674,
-      "head": "b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b",
+      "id": 45992643749,
+      "job": 140484089089,
+      "head": "de0ac1de51e06cbb8fd60426ee3478d13eb2d093",
       "status": "in_progress",
       "conclusion": null,
       "compatibility_guard": {
-        "id": 45985907788,
+        "id": 45992643947,
         "conclusion": "success"
       }
     },
@@ -2019,8 +2019,8 @@
       }
     },
     "date": "2026-11-27",
-    "reviewed_remote_head": "b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b",
-    "purpose": "G3 first actual registration failed before bundle; byte-identical candidate retry forced Vulkan Editor; original blocked",
+    "reviewed_remote_head": "de0ac1de51e06cbb8fd60426ee3478d13eb2d093",
+    "purpose": "G3 second run cancelled before actual Unity; bounded identical candidate Editor Vulkan retry; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
     "index": "clients/GT/sessions/20261127-keyword-candidate-bundle/README_AR.md",
@@ -2276,8 +2276,8 @@
     },
     "active_fallback_workstream": {
       "id": "G3-original-runtime-keyword-migration",
-      "status": "CANDIDATE_ONLY_AUTHORED_VULKAN_EDITOR_RETRY_IN_PROGRESS_ORIGINAL_ACCEPTANCE_BLOCKED",
-      "next": "Inspect actual retry 45985908037 at immutable b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b. It retains byte-identical authored candidate d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537 and contract a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f, changes only Editor Vulkan environment and strengthens receipts. Verify observed editor Vulkan, actual registration, callback exact active sets/PassType/stage, material routes, actual bundle and decoded eight markers, plus counterfactual controls. If failure, retain exact receipts/log category, distinguish backend hypothesis from actual cause; no weakening/projection. Original A3 remains blocked; no acquisition, production, legacy installer change or APK/XAPK. Preserve white meshes, black fire, water, G0–G6 priorities; no endless authored repetitions once this gate is bounded.",
+      "status": "CANDIDATE_ONLY_AUTHORED_BOUNDED_VULKAN_EDITOR_RETRY_IN_PROGRESS_ORIGINAL_ACCEPTANCE_BLOCKED",
+      "next": "Inspect bounded actual retry 45992643749 at immutable de0ac1de51e06cbb8fd60426ee3478d13eb2d093. Retains byte-identical candidate/contract, mandatory actual Unity Vulkan and shader support, exact scope/PassType/callback/decoded module evidence. Distinguish image build timeout, Editor startup/backend failure, actual registration failure, and real serialized stage failure; retain exact artifacts and final log. If this bounded retry is blocked, do not launch the same expensive job repeatedly; classify blocker and switch to the next independent productive G3/G4/Particle108 work permitted by verified source authorization, or request the precise missing source/runner prerequisite. A3 original authorization/provenance remains blocked. No original acquisition, production, legacy installer changes or APK/XAPK. Preserve Ali's pinned reference, white meshes/black fire, water and remaining G0–G6 priorities.",
       "previous_V11_V17_authored_witnesses_preserved": true
     },
     "latest_resource_binding_pixel_run": {
@@ -6619,19 +6619,19 @@
     "next": "G3 candidate-only next: add a separate strict Unity bundle/receipt join for the prepared candidate (source pass mode versus observed Unity PassType, exact active keyword sets including local/global scope and actual stage program identities, candidate/input SHA and no projection). Reuse existing authored Unity evidence where its scope is exact; no automatic scope/flag mapping or proof from source hashes alone. Sparse lattices, unmatched stages and instancing remain explicit blocked cases until source-specific semantics. A3 remains blocked on independently verified authorization and original provenance; no original assets acquisition, production activation, installer changes or XAPK. Then actual NEXT23b and ten-group migration with authorized private packets, same-export protected hashes and real runtime evidence; Particle108 local export alpha and water/other G0–G6 open."
   },
   "keyword_candidate_bundle_checkpoint": {
-    "status": "IN_PROGRESS_AUTHORED_CANDIDATE_UNITY_BUNDLE_VULKAN_EDITOR_RETRY",
+    "status": "IN_PROGRESS_AUTHORED_CANDIDATE_UNITY_BUNDLE_BOUNDED_RETRY",
     "starting_head": "d7d9fe9113a528fc6671abdb30d7548425dff42a",
     "contract_head": "f75492503be745cb1f740cde7c7ce6938cb4fbde",
     "probe_head": "4849e0c725355b87ffdef84790d7fd93f29f4070",
     "activation_head": "b4cb8a5b56d8ae93197ba7e1f36b0a87d58ce0e7",
     "run": {
-      "id": 45985908037,
-      "job": 140461344674,
-      "head": "b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b",
+      "id": 45992643749,
+      "job": 140484089089,
+      "head": "de0ac1de51e06cbb8fd60426ee3478d13eb2d093",
       "status": "in_progress",
       "conclusion": null,
       "compatibility_guard": {
-        "id": 45985907788,
+        "id": 45992643947,
         "conclusion": "success"
       }
     },
@@ -6655,7 +6655,7 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-keyword-candidate-bundle/README_AR.md",
-    "next": "Inspect actual retry 45985908037 at immutable b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b. It retains byte-identical authored candidate d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537 and contract a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f, changes only Editor Vulkan environment and strengthens receipts. Verify observed editor Vulkan, actual registration, callback exact active sets/PassType/stage, material routes, actual bundle and decoded eight markers, plus counterfactual controls. If failure, retain exact receipts/log category, distinguish backend hypothesis from actual cause; no weakening/projection. Original A3 remains blocked; no acquisition, production, legacy installer change or APK/XAPK. Preserve white meshes, black fire, water, G0–G6 priorities; no endless authored repetitions once this gate is bounded.",
+    "next": "Inspect bounded actual retry 45992643749 at immutable de0ac1de51e06cbb8fd60426ee3478d13eb2d093. Retains byte-identical candidate/contract, mandatory actual Unity Vulkan and shader support, exact scope/PassType/callback/decoded module evidence. Distinguish image build timeout, Editor startup/backend failure, actual registration failure, and real serialized stage failure; retain exact artifacts and final log. If this bounded retry is blocked, do not launch the same expensive job repeatedly; classify blocker and switch to the next independent productive G3/G4/Particle108 work permitted by verified source authorization, or request the precise missing source/runner prerequisite. A3 original authorization/provenance remains blocked. No original acquisition, production, legacy installer changes or APK/XAPK. Preserve Ali's pinned reference, white meshes/black fire, water and remaining G0–G6 priorities.",
     "first_run": {
       "id": 45984849786,
       "job": 140457707101,
@@ -6680,6 +6680,27 @@
     "retry_activation_head": "b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b",
     "first_run_authored_scope_API_observed": true,
     "exact_retry_candidate_sha256": "d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537",
-    "exact_retry_contract_sha256": "a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f"
+    "exact_retry_contract_sha256": "a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f",
+    "second_run": {
+      "id": 45985908037,
+      "job": 140461344674,
+      "head": "b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "compatibility_guard": {
+        "id": 45985907788,
+        "conclusion": "success"
+      },
+      "actual_editor_executed": false,
+      "actual_bundle_present": false,
+      "prepare_image_build_completed": true,
+      "standalone_graphics_preflight_returned": false,
+      "standalone_vulkaninfo_summary_bytes": 0,
+      "receipt": "clients/GT/sessions/20261127-keyword-candidate-bundle/second-cancelled-45985908037.json",
+      "archive_id": 15194366448,
+      "archive_sha256": "052dbf31dd8fa443d2cdcf7c2e225de3ec0f3698497b0432f9b4d7f852db40c9"
+    },
+    "bounded_retry_source_head": "6821263e73a07969ffda48ffc32c9f13f61403c8",
+    "bounded_retry_activation_head": "de0ac1de51e06cbb8fd60426ee3478d13eb2d093"
   }
 }
