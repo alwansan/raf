@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
-  "next_action": "Inspect exact 45960313046 result; validate supported serialized comparisons with four unknown Swizzle slots and complete-state false; retain receipts or diagnose failure. Do not rerun without new goal. A3 remains blocked.",
+  "next_action": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding (V10): separate BC3/DXT5 format 12, ordinary usage only; authenticated complete inline/direct-stream layout with block-rounded mip sizes and exact provider extent, independent Pillow DDS decode and pinned public converter FlipY; actual authored nonuniform multiblock PNG with alpha selector modes, same trace/material route, no V8/V9/native promotion or Unity/Android claim. Preserve V9 unknown Swizzle. A3 blocked pending verified authorized original source.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "cd127dafa6ea47c0fcdefdeb65098bcbfc9dfb9c",
+    "reviewed_remote_head": "902174e3cd2d266a66748f7c41ed16a51fb531c5",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2220,9 +2220,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G1-G2-imported-PNG-importer-state-same-route-binding",
-      "status": "V9_SCOPED_ACTUAL_RETRY_PENDING",
-      "next": "Inspect exact 45960313046 result; validate supported serialized comparisons with four unknown Swizzle slots and complete-state false; retain receipts or diagnose failure. Do not rerun without new goal. A3 remains blocked."
+      "id": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding",
+      "status": "NEXT_PRODUCTIVE",
+      "next": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding (V10): separate BC3/DXT5 format 12, ordinary usage only; authenticated complete inline/direct-stream layout with block-rounded mip sizes and exact provider extent, independent Pillow DDS decode and pinned public converter FlipY; actual authored nonuniform multiblock PNG with alpha selector modes, same trace/material route, no V8/V9/native promotion or Unity/Android claim. Preserve V9 unknown Swizzle. A3 blocked pending verified authorized original source."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -4427,7 +4427,7 @@
       }
     },
     "latest_imported_png_importer_state_binding": {
-      "status": "V9_SCOPED_ACTUAL_RETRY_PENDING",
+      "status": "PASS_SCOPED_ACTUAL_AUTHORED_PNG_IMPORTER_STATE_SWIZZLE_UNKNOWN",
       "starting_head": "d477529faffbf82c8758d2e466943944a98757ba",
       "source_gate_commit": "e81dde6404b59a433c81d0568f7818f87d83126c",
       "authored_witness_commit": "080bb3ec339c0fb5930e1ac156f41942adb9e5fd",
@@ -4452,7 +4452,7 @@
       "unity_import_verified": false,
       "xapk": false,
       "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-      "next": "Inspect exact 45960313046 result; validate supported serialized comparisons with four unknown Swizzle slots and complete-state false; retain receipts or diagnose failure. Do not rerun without new goal. A3 remains blocked.",
+      "next": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding (V10): separate BC3/DXT5 format 12, ordinary usage only; authenticated complete inline/direct-stream layout with block-rounded mip sizes and exact provider extent, independent Pillow DDS decode and pinned public converter FlipY; actual authored nonuniform multiblock PNG with alpha selector modes, same trace/material route, no V8/V9/native promotion or Unity/Android claim. Preserve V9 unknown Swizzle. A3 blocked pending verified authorized original source.",
       "initial_failure": {
         "run": 45959587458,
         "head": "f26030acf76d972d10181af52380c935e0a7201a",
@@ -4655,7 +4655,7 @@
         "run": 45960313046,
         "job": 140376327371,
         "guard": 45960313097,
-        "status": "in_progress",
+        "status": "completed",
         "steps": [
           {
             "name": "Set up job",
@@ -4741,12 +4741,114 @@
             "conclusion": null,
             "number": 22
           }
-        ]
+        ],
+        "conclusion": "success",
+        "guard_conclusion": "success",
+        "archive": {
+          "artifact_id": 15180771759,
+          "run": 45960313046,
+          "bytes": 17368,
+          "sha256": "4e4093ea6179a71143b9a6684839c9e9615b093850fdbd9c1d5d1da5caf5f134",
+          "git_blob": "6faabd1ebcd6dca0f4d0331a0d30847cadfe0a93",
+          "crc_verified": true,
+          "member_count": 24,
+          "raw_zip_in_git": false,
+          "member_sha256": {
+            "build.json": "17c0b604accdb8037aeced83f926f7bcb06d7e30c057bb082ce4375104b178c2",
+            "importer-route-join.json": "eac71e5ba497cdc9bc20e76311bd815169109b125a4d365a6652b44fc2b7c342",
+            "importer-report.json": "faab974ecc7f41395a8a443a563a5a273e3865ece835602d7d626a1954c3152e",
+            "importer-state-schema.json": "786d9cbe8a2904391ecec30fcd90ad16de22393ea04b0763dc3d720e3a299c6c",
+            "png-report.json": "e0122804f9f2086620753b2c6cdcd6e9fe0bc2b481381a94de8c7bf8fb970c43",
+            "png-route-join.json": "4373a77f278da4263cbf8efae227efbcc43cf3f879fa98deffd9b5fb7243ccf4",
+            "png-schema.json": "521ad41eba8baec977dbcb02b57fe3ab794b73581f10453a7ed0d5731e704f4f",
+            "png-witness.log": "44f7a0069cee04484827fcaa1eee568f905fc54b27aab99b252dd63c9391e0ae",
+            "report.json": "a3d31ecbb476e97e3e2115e1efcc2eeb5bbf847fc6fca4c228127cc83642f6ec",
+            "route-join.json": "09776d8023ebe4e0d434cf7f8e685090e28d3c6a5701f9fb31ff6ec29195b4bd",
+            "test_b03_verify_renderer_material_links.py.log": "7d5ecfecffaa23d67f4c118da3c3ee64eeea75c5828279e684951db9286eccca",
+            "test_gt_imported_png_route_importer.py.log": "e4e981147d5d5dd8e5bcbbe1a48784fa30010ece787e47d98bf87695362b9240",
+            "test_gt_imported_png_route_pixels.py.log": "1fa5e5c8ed2b0e466d8087be829be2744c3f5a8202e59a21e046490030a6c7ed",
+            "test_gt_material_route_keyword_state.py.log": "d77502154147f8511d4fb1dc86eaac59d59963d0a491107253e4e16cd9e6d60d",
+            "test_gt_material_route_values.py.log": "1f89afef381c3312d0b089f6cb61b0db28381f56ff0df27099314cbb542ac510",
+            "test_gt_native_texture_route_sampler.py.log": "73c41e941e8c6038445533f11cf2c4ef44614891b5aaf64b3e7c36b0aa96a707",
+            "test_gt_mesh_vertex_payload.py.log": "b77bd871098f501131b8c0e23c0796515a65d49c5ad8ad01e3bfc2f84b408007",
+            "test_gt_renderer_submesh_routes.py.log": "431410f24271870d1abd6a3d69a4c96b41e5fe05e543cf2ddf6609426243ea28",
+            "test_gt_streamed_texture_route_payload.py.log": "5db839c1fceedd6db2aeb92d9a6ef530031ed1ecfdb986ccf08ad1885a81a5ab",
+            "test_gt_verify_original_mesh_export.py.log": "d4f25f9bab53fd0a2e1b4a0db0a816d4cdf3ec25b9c19c7abdd6177c565146d2",
+            "texture-schema.json": "0d67d316aa3d7b979786c6a6bbf926061d60f13d76bb1eb7981a968842b96133",
+            "tool-smoke.log": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e",
+            "test_gt_texture_route_payload.py.log": "447376d57d5d7a18436ebbb80a2f5f24f1ddce907e600983b8dcd27fcad1ca00",
+            "witness.log": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
+          }
+        }
+      },
+      "scoped_result": {
+        "Android_device": false,
+        "Unity_import_verified": false,
+        "V8_pass_V9_reject_counterfactuals": 13,
+        "XAPK": false,
+        "complete_serialized_state_verified": false,
+        "counts": {
+          "complete_imported_png_bound_renderer_routes": 2,
+          "complete_imported_png_bound_submesh_routes": 4,
+          "complete_material_keyword_bound_renderer_routes": 2,
+          "complete_material_keyword_bound_submesh_routes": 4,
+          "complete_material_value_bound_renderer_routes": 2,
+          "complete_material_value_bound_submesh_routes": 4,
+          "complete_renderer_routes": 2,
+          "complete_submesh_material_identity_routes": 4,
+          "complete_vertex_byte_bound_renderer_routes": 2,
+          "complete_vertex_byte_bound_submesh_routes": 4,
+          "imported_png_RGBA_channels_matched_per_route": 64,
+          "imported_png_importer_exporter_policy_fields_matched_per_route": 64,
+          "imported_png_importer_mip_bias_unset_slots": 0,
+          "imported_png_importer_sampler_fields_matched_per_route": 24,
+          "imported_png_importer_source_mapping_fields_matched_per_route": 36,
+          "imported_png_importer_state_slots_matched": 4,
+          "imported_png_importer_swizzle_unknown_slots": 4,
+          "imported_png_pixels_matched_per_route": 16,
+          "imported_png_stream_source_slots_matched": 4,
+          "imported_png_top_mip_slots_matched": 4,
+          "material_color_slots_matched": 8,
+          "material_disabled_pass_entries_matched": 4,
+          "material_float_slots_matched": 8,
+          "material_int_slots_matched": 8,
+          "material_invalid_keyword_entries_matched": 4,
+          "material_null_texture_slots_preserved": 0,
+          "material_shader_links_matched": 4,
+          "material_texenv_slots_matched": 4,
+          "material_valid_keyword_entries_matched": 8,
+          "ordered_material_slots_matched": 4,
+          "renderer_mesh_layouts_matched": 2,
+          "renderer_vertex_payloads_matched": 2,
+          "source_renderers": 2
+        },
+        "head": "cd127dafa6ea47c0fcdefdeb65098bcbfc9dfb9c",
+        "imported_V8_counterfactuals": 13,
+        "native_V7_counterfactuals": 43,
+        "original_assets_read": false,
+        "run_id": "45960313046",
+        "status": "PASS_SCOPED_ACTUAL_AUTHORED_PNG_IMPORTER_STATE_SWIZZLE_UNKNOWN",
+        "supported_serialized_state_verified": true,
+        "swizzle_verified": false,
+        "test_counts": {
+          "test_b03_verify_renderer_material_links.py.log": 17,
+          "test_gt_imported_png_route_importer.py.log": 17,
+          "test_gt_imported_png_route_pixels.py.log": 34,
+          "test_gt_material_route_keyword_state.py.log": 25,
+          "test_gt_material_route_values.py.log": 22,
+          "test_gt_mesh_vertex_payload.py.log": 15,
+          "test_gt_native_texture_route_sampler.py.log": 28,
+          "test_gt_renderer_submesh_routes.py.log": 21,
+          "test_gt_streamed_texture_route_payload.py.log": 23,
+          "test_gt_texture_route_payload.py.log": 25,
+          "test_gt_verify_original_mesh_export.py.log": 7
+        },
+        "total_regression_tests": 234
       }
     }
   },
   "v9_importer_state_checkpoint": {
-    "status": "V9_SCOPED_ACTUAL_RETRY_PENDING",
+    "status": "PASS_SCOPED_ACTUAL_AUTHORED_PNG_IMPORTER_STATE_SWIZZLE_UNKNOWN",
     "starting_head": "d477529faffbf82c8758d2e466943944a98757ba",
     "source_gate_commit": "e81dde6404b59a433c81d0568f7818f87d83126c",
     "authored_witness_commit": "080bb3ec339c0fb5930e1ac156f41942adb9e5fd",
@@ -4771,7 +4873,7 @@
     "unity_import_verified": false,
     "xapk": false,
     "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-    "next": "Inspect exact 45960313046 result; validate supported serialized comparisons with four unknown Swizzle slots and complete-state false; retain receipts or diagnose failure. Do not rerun without new goal. A3 remains blocked.",
+    "next": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding (V10): separate BC3/DXT5 format 12, ordinary usage only; authenticated complete inline/direct-stream layout with block-rounded mip sizes and exact provider extent, independent Pillow DDS decode and pinned public converter FlipY; actual authored nonuniform multiblock PNG with alpha selector modes, same trace/material route, no V8/V9/native promotion or Unity/Android claim. Preserve V9 unknown Swizzle. A3 blocked pending verified authorized original source.",
     "initial_failure": {
       "run": 45959587458,
       "head": "f26030acf76d972d10181af52380c935e0a7201a",
@@ -4974,7 +5076,7 @@
       "run": 45960313046,
       "job": 140376327371,
       "guard": 45960313097,
-      "status": "in_progress",
+      "status": "completed",
       "steps": [
         {
           "name": "Set up job",
@@ -5060,7 +5162,109 @@
           "conclusion": null,
           "number": 22
         }
-      ]
+      ],
+      "conclusion": "success",
+      "guard_conclusion": "success",
+      "archive": {
+        "artifact_id": 15180771759,
+        "run": 45960313046,
+        "bytes": 17368,
+        "sha256": "4e4093ea6179a71143b9a6684839c9e9615b093850fdbd9c1d5d1da5caf5f134",
+        "git_blob": "6faabd1ebcd6dca0f4d0331a0d30847cadfe0a93",
+        "crc_verified": true,
+        "member_count": 24,
+        "raw_zip_in_git": false,
+        "member_sha256": {
+          "build.json": "17c0b604accdb8037aeced83f926f7bcb06d7e30c057bb082ce4375104b178c2",
+          "importer-route-join.json": "eac71e5ba497cdc9bc20e76311bd815169109b125a4d365a6652b44fc2b7c342",
+          "importer-report.json": "faab974ecc7f41395a8a443a563a5a273e3865ece835602d7d626a1954c3152e",
+          "importer-state-schema.json": "786d9cbe8a2904391ecec30fcd90ad16de22393ea04b0763dc3d720e3a299c6c",
+          "png-report.json": "e0122804f9f2086620753b2c6cdcd6e9fe0bc2b481381a94de8c7bf8fb970c43",
+          "png-route-join.json": "4373a77f278da4263cbf8efae227efbcc43cf3f879fa98deffd9b5fb7243ccf4",
+          "png-schema.json": "521ad41eba8baec977dbcb02b57fe3ab794b73581f10453a7ed0d5731e704f4f",
+          "png-witness.log": "44f7a0069cee04484827fcaa1eee568f905fc54b27aab99b252dd63c9391e0ae",
+          "report.json": "a3d31ecbb476e97e3e2115e1efcc2eeb5bbf847fc6fca4c228127cc83642f6ec",
+          "route-join.json": "09776d8023ebe4e0d434cf7f8e685090e28d3c6a5701f9fb31ff6ec29195b4bd",
+          "test_b03_verify_renderer_material_links.py.log": "7d5ecfecffaa23d67f4c118da3c3ee64eeea75c5828279e684951db9286eccca",
+          "test_gt_imported_png_route_importer.py.log": "e4e981147d5d5dd8e5bcbbe1a48784fa30010ece787e47d98bf87695362b9240",
+          "test_gt_imported_png_route_pixels.py.log": "1fa5e5c8ed2b0e466d8087be829be2744c3f5a8202e59a21e046490030a6c7ed",
+          "test_gt_material_route_keyword_state.py.log": "d77502154147f8511d4fb1dc86eaac59d59963d0a491107253e4e16cd9e6d60d",
+          "test_gt_material_route_values.py.log": "1f89afef381c3312d0b089f6cb61b0db28381f56ff0df27099314cbb542ac510",
+          "test_gt_native_texture_route_sampler.py.log": "73c41e941e8c6038445533f11cf2c4ef44614891b5aaf64b3e7c36b0aa96a707",
+          "test_gt_mesh_vertex_payload.py.log": "b77bd871098f501131b8c0e23c0796515a65d49c5ad8ad01e3bfc2f84b408007",
+          "test_gt_renderer_submesh_routes.py.log": "431410f24271870d1abd6a3d69a4c96b41e5fe05e543cf2ddf6609426243ea28",
+          "test_gt_streamed_texture_route_payload.py.log": "5db839c1fceedd6db2aeb92d9a6ef530031ed1ecfdb986ccf08ad1885a81a5ab",
+          "test_gt_verify_original_mesh_export.py.log": "d4f25f9bab53fd0a2e1b4a0db0a816d4cdf3ec25b9c19c7abdd6177c565146d2",
+          "texture-schema.json": "0d67d316aa3d7b979786c6a6bbf926061d60f13d76bb1eb7981a968842b96133",
+          "tool-smoke.log": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e",
+          "test_gt_texture_route_payload.py.log": "447376d57d5d7a18436ebbb80a2f5f24f1ddce907e600983b8dcd27fcad1ca00",
+          "witness.log": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
+        }
+      }
+    },
+    "scoped_result": {
+      "Android_device": false,
+      "Unity_import_verified": false,
+      "V8_pass_V9_reject_counterfactuals": 13,
+      "XAPK": false,
+      "complete_serialized_state_verified": false,
+      "counts": {
+        "complete_imported_png_bound_renderer_routes": 2,
+        "complete_imported_png_bound_submesh_routes": 4,
+        "complete_material_keyword_bound_renderer_routes": 2,
+        "complete_material_keyword_bound_submesh_routes": 4,
+        "complete_material_value_bound_renderer_routes": 2,
+        "complete_material_value_bound_submesh_routes": 4,
+        "complete_renderer_routes": 2,
+        "complete_submesh_material_identity_routes": 4,
+        "complete_vertex_byte_bound_renderer_routes": 2,
+        "complete_vertex_byte_bound_submesh_routes": 4,
+        "imported_png_RGBA_channels_matched_per_route": 64,
+        "imported_png_importer_exporter_policy_fields_matched_per_route": 64,
+        "imported_png_importer_mip_bias_unset_slots": 0,
+        "imported_png_importer_sampler_fields_matched_per_route": 24,
+        "imported_png_importer_source_mapping_fields_matched_per_route": 36,
+        "imported_png_importer_state_slots_matched": 4,
+        "imported_png_importer_swizzle_unknown_slots": 4,
+        "imported_png_pixels_matched_per_route": 16,
+        "imported_png_stream_source_slots_matched": 4,
+        "imported_png_top_mip_slots_matched": 4,
+        "material_color_slots_matched": 8,
+        "material_disabled_pass_entries_matched": 4,
+        "material_float_slots_matched": 8,
+        "material_int_slots_matched": 8,
+        "material_invalid_keyword_entries_matched": 4,
+        "material_null_texture_slots_preserved": 0,
+        "material_shader_links_matched": 4,
+        "material_texenv_slots_matched": 4,
+        "material_valid_keyword_entries_matched": 8,
+        "ordered_material_slots_matched": 4,
+        "renderer_mesh_layouts_matched": 2,
+        "renderer_vertex_payloads_matched": 2,
+        "source_renderers": 2
+      },
+      "head": "cd127dafa6ea47c0fcdefdeb65098bcbfc9dfb9c",
+      "imported_V8_counterfactuals": 13,
+      "native_V7_counterfactuals": 43,
+      "original_assets_read": false,
+      "run_id": "45960313046",
+      "status": "PASS_SCOPED_ACTUAL_AUTHORED_PNG_IMPORTER_STATE_SWIZZLE_UNKNOWN",
+      "supported_serialized_state_verified": true,
+      "swizzle_verified": false,
+      "test_counts": {
+        "test_b03_verify_renderer_material_links.py.log": 17,
+        "test_gt_imported_png_route_importer.py.log": 17,
+        "test_gt_imported_png_route_pixels.py.log": 34,
+        "test_gt_material_route_keyword_state.py.log": 25,
+        "test_gt_material_route_values.py.log": 22,
+        "test_gt_mesh_vertex_payload.py.log": 15,
+        "test_gt_native_texture_route_sampler.py.log": 28,
+        "test_gt_renderer_submesh_routes.py.log": 21,
+        "test_gt_streamed_texture_route_payload.py.log": 23,
+        "test_gt_texture_route_payload.py.log": 25,
+        "test_gt_verify_original_mesh_export.py.log": 7
+      },
+      "total_regression_tests": 234
     }
   }
 }
