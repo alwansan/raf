@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-native-texture-sampler-route-binding/README_AR.md",
-  "next_action": "Prove separate imported PNG decoded top-mip scope on same authenticated Renderer/SubMesh/Material/TexEnv texture identity; keep native V7 unchanged. Inspect pinned public TextureAssetExporter, TextureExportCollection, SpriteInformationObject and ImporterFactory (TextureExportCollection requires Asset.MainAsset SpriteInformationObject and actual exporter-generated importer). Use strictly bounded RGBA32 source inline or SHA-pinned direct stream, explicit documented decoder orientation/row ordering verified with asymmetric nonuniform RGBA incl RGB at alpha=0, top-mip SHA only after independent source decode; reuse t3_decoded_texture_pixel_parity and gt_particle108_source_pixel_parity for authenticated per-channel exact comparison, do not silently normalize flips, ignore transparent RGB, or assume color space. Bind actual .png and .meta to unique same trace GUID/fileID/class and TextureImporter (not filename); native lower mip bytes, importer behavior and GPU remain unproved. Keep native full-mip proof and imported top-mip proof as distinct flags/counts; do not let PNG promote native full-mip or V7 native sampler completeness. Test actual public pinned exporter PNG and generated importer on authored asymmetric source; compare wrong equal-size texture, RGB/alpha drift, flip, GUID/meta and importer schema controls. Review B15 importer sentinel -100 independently, no invented native equivalence. Preserve 183 historical regression tests and 43 controls; if public exporter API not practical, document exact gap and keep scoped authored PNG tests separate from actual exporter. A3 blocked on verified authorized original source; no source acquisition, new Unity raster, phone or XAPK.",
+  "latest_session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
+  "next_action": "Add actual public exporter PNG mode and independent unit/actual controls, run focused CI.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "956ff560d50b89ecb7b897d5a381e2d790b231b1",
+    "reviewed_remote_head": "adbfe7c2d50bbf81b3c765d509abe1fe20e5121c",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-imported-PNG-top-mip-same-route-binding",
-      "status": "NEXT_PRODUCTIVE",
-      "next": "Prove separate imported PNG decoded top-mip scope on same authenticated Renderer/SubMesh/Material/TexEnv texture identity; keep native V7 unchanged. Inspect pinned public TextureAssetExporter, TextureExportCollection, SpriteInformationObject and ImporterFactory (TextureExportCollection requires Asset.MainAsset SpriteInformationObject and actual exporter-generated importer). Use strictly bounded RGBA32 source inline or SHA-pinned direct stream, explicit documented decoder orientation/row ordering verified with asymmetric nonuniform RGBA incl RGB at alpha=0, top-mip SHA only after independent source decode; reuse t3_decoded_texture_pixel_parity and gt_particle108_source_pixel_parity for authenticated per-channel exact comparison, do not silently normalize flips, ignore transparent RGB, or assume color space. Bind actual .png and .meta to unique same trace GUID/fileID/class and TextureImporter (not filename); native lower mip bytes, importer behavior and GPU remain unproved. Keep native full-mip proof and imported top-mip proof as distinct flags/counts; do not let PNG promote native full-mip or V7 native sampler completeness. Test actual public pinned exporter PNG and generated importer on authored asymmetric source; compare wrong equal-size texture, RGB/alpha drift, flip, GUID/meta and importer schema controls. Review B15 importer sentinel -100 independently, no invented native equivalence. Preserve 183 historical regression tests and 43 controls; if public exporter API not practical, document exact gap and keep scoped authored PNG tests separate from actual exporter. A3 blocked on verified authorized original source; no source acquisition, new Unity raster, phone or XAPK."
+      "status": "SOURCE_ORACLE_CANDIDATE_NOT_EXECUTED",
+      "next": "Add actual public exporter PNG mode and independent unit/actual controls, run focused CI."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -4244,6 +4244,16 @@
       },
       "compile_fix_commit": "c32c92d59938c668692d011eda83c0b5207b0cc5",
       "retry_activation_commit": "956ff560d50b89ecb7b897d5a381e2d790b231b1"
+    },
+    "latest_imported_png_route_binding": {
+      "status": "SOURCE_ORACLE_CANDIDATE_NOT_EXECUTED",
+      "gate": "G1-G2-imported-PNG-top-mip-same-route-binding",
+      "base": "adbfe7c2d50bbf81b3c765d509abe1fe20e5121c",
+      "session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
+      "original_assets_read": false,
+      "original_serialized_source_verified": false,
+      "production_renderer_parity_verified": false,
+      "next": "Add actual public exporter PNG mode and independent unit/actual controls, run focused CI."
     }
   }
 }

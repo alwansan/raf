@@ -115,7 +115,7 @@ def exported_proof(tree):
     return Proof(size,sha256(bytes.fromhex(encoded)).hexdigest(),"exported_inline")
 
 
-def verified_range_digests(path,pin,ranges):
+def verified_range_digests(path,pin,ranges,*,captures=None):
     """Hash any number of declared ranges during one authenticated read.
 
     Memory is bounded by one block and per-range digest state. Nothing is
@@ -132,6 +132,10 @@ def verified_range_digests(path,pin,ranges):
              and 0 < length <= MAX_PAYLOAD and offset+length <= size,
              "invalid_vertex_provider_range")
     need(sum(length for _,length in ranges) <= 4*size, "vertex_range_work_budget_exceeded")
+    # Optional bounded capture, published only after full provider authentication.
+    need(captures is None or (type(captures) is dict and not captures and
+         sum(length for _,length in ranges)<=64*1024*1024),"invalid_range_capture_budget")
+    captured=None if captures is None else {r:bytearray() for r in ranges}
     full = sha256()
     states = {r:[sha256(),0] for r in ranges}
     active = []
@@ -151,13 +155,16 @@ def verified_range_digests(path,pin,ranges):
                 off,length = r
                 lo,hi = max(pos,off),min(end,off+length)
                 if lo < hi:
-                    states[r][0].update(memoryview(block)[lo-pos:hi-pos])
+                    piece=memoryview(block)[lo-pos:hi-pos]
+                    states[r][0].update(piece)
+                    if captured is not None:captured[r].extend(piece)
                     states[r][1] += hi-lo
             active = [r for r in active if r[0]+r[1] > end]
             pos = end
         need(not handle.read(1) and pos == size and full.hexdigest() == expected,
              "vertex_provider_SHA_mismatch")
     need(all(states[r][1] == r[1] for r in ranges),"vertex_range_capture_mismatch")
+    if captured is not None:captures.update((r,bytes(data)) for r,data in captured.items())
     return {r:states[r][0].hexdigest() for r in ranges}
 
 
