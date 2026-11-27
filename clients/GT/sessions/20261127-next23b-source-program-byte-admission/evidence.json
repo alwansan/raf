@@ -1,0 +1,79 @@
+{
+  "status": "PASS_AUTHORED_STRUCTURAL_PARSER_SOURCE_SLOT_TO_DXBC_BYTE_EDGE",
+  "starting_head": "588d70fdc0d333f5326bf5fdf280755476f93a2a",
+  "preparation_commit": "691cb859b5fc497836eb5de0904373f113563f5e",
+  "execution_head": "cefa285eee6988e10b61384ed6166190c80054f8",
+  "run": 46038739224,
+  "job": 140640713930,
+  "conclusion": "success",
+  "lint_run": 46038739160,
+  "lint_job": 140640714170,
+  "lint_conclusion": "success",
+  "unit_tests_passed": 8,
+  "source_blobs": {
+    "tools/gt_next23b_source_program_admission/audit.py": "aa221fa2b64bb6ab0ff97df474f7fb2384b01253",
+    "tools/gt_next23b_source_program_admission/test_admission.py": "042434fd80430924be07d37e8f9d6bb8bd2130b5",
+    "scripts/gt_next23b_route_provenance.py": "fd32bcbfab7c08fcd6fe06c32b803c702ea9da5e",
+    "tests/test_gt_next23b_route_provenance.py": "129041ab5dbe176946a669857c4eb08a4d7c9ab2",
+    "scripts/probe_original_compute_containers.py": "a80f85582732efe479981ea2efb8f634fa0a1bd3",
+    "scripts/run_original_dxbc_translation_probe.py": "8640f32ab2835b542f70fc7e583096db499ec127",
+    "scripts/probe_directx_shader_bridge.py": "558e3316ebcb0f80ac2151c0ff76cafdc3ab0d69",
+    "scripts/gt_runtime_keyword_contract.py": "617a4ca349281a8e2ad99bf4f04364a028fb7c16"
+  },
+  "source_only_checkout": true,
+  "artifact": {
+    "id": 15219717177,
+    "bytes": 1010,
+    "github_reported_sha256": "fa662ffb571f640c3b9a242807a72333daee51fd929f6b59f11a97e79c0c31f0",
+    "archive_independently_downloaded_or_rehashed": false,
+    "permanent_selected_raw_test_log": "clients/GT/sessions/20261127-next23b-source-program-byte-admission/actual-tests-46038739224.log"
+  },
+  "proof": {
+    "input": "Authored structural DXBC records, not executable shader code or original assets; exact earlier metadata fixture and original verifier executed unchanged",
+    "routes_by_pass": [
+      512,
+      4,
+      128,
+      512
+    ],
+    "stage_slots": 2312,
+    "distinct_programs": 134,
+    "distinct_blob_stage_links": 134,
+    "old_gate_accepts_same_stage_ref_swap": true,
+    "new_gate_rejects_same_stage_ref_swap": true,
+    "old_gate_accepts_forged_original_D3D11_link": true,
+    "new_gate_rejects_forged_original_D3D11_link": true,
+    "additional_controls": [
+      "same-length source.dxbc substitution rejected",
+      "changed entry prefix with unchanged DXBC rejected",
+      "independent PathID/ParsedForm mismatch rejected",
+      "out-of-range table entry rejected",
+      "consistent bijective relabel with bytes accepted"
+    ]
+  },
+  "historical_original_runs_rechecked": [
+    44001193147,
+    44783011957,
+    43929698985
+  ],
+  "historical_material_census": {
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "dummy_shader_guid": 37,
+    "new_census": false
+  },
+  "original_assets_read_or_acquired": false,
+  "independent_source_authorization_established": false,
+  "original_owner_object_authenticated_this_session": false,
+  "translated_stage_identity_or_equivalence_proven": false,
+  "compiled_route_program_identity_proven": false,
+  "original_scope_or_runtime_selection_proven": false,
+  "same_export_install_proven": false,
+  "original_white_mesh_or_fire_repair_proven": false,
+  "production_install_allowed": false,
+  "unity_or_device_run": false,
+  "xapk_started": false,
+  "next_action": "G3-NEXT23b-validated-translation-identity-admission: source-slot -> m_BlobIndex -> actual D3D11 record range -> DXBC -> program_ref/source.dxbc byte edge now has a separate read-only verifier and 8 passing authored structural parser controls (46038739224). Do not repeat these or prior output-marker controls. Original access remains blocked: independently verify lawful rights/ownership and immutable source commit/manifest, owner bytes SHA/length, unique typed Shader48 class48 owner/PathID/raw-object SHA and exact same-object ParsedForm/platform4 segments; independently snapshot 134 private source.dxbc files and run byte verifier only after authorized handoff. Next distinct edge: pin actual translator tools/options, independently replay DXBC -> SPIR-V -> HLSL -> roundtrip and validate the stage bytes; prove exact pass/keyword route actually uses the validated stage and decoded compiled Unity module has independently established route identity, not self-declared hashes/counts or authored marks. Require scope/pass semantics, same-export typed Shader48 -> GUID -> Material/Renderer trace and protected census. If authorization remains unavailable, only address a genuinely new productive defect, no repeat authored batches or claim original repair. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged; A3, third Particle108, original FFT/kernel6, NEXT23b, ten groups and G0-G6 open. CL/lab read-only; BLACK/animation excluded. No original acquisition without independent verification; no production/native/device/APK/XAPK until integrated G0-G6 closure.",
+  "session": "clients/GT/sessions/20261127-next23b-source-program-byte-admission/README_AR.md"
+}

@@ -1,0 +1,13 @@
+GitHub Actions selected actual result lines (not the complete log)
+Run 46038739224 / job 140640713930 / HEAD cefa285eee6988e10b61384ed6166190c80054f8
+2026-11-27T17:03:41.7828061Z test_byte_edge_complete_and_private (tools.gt_next23b_source_program_admission.test_admission.SourceByteAdmission.test_byte_edge_complete_and_private) ... ok
+2026-11-27T17:03:41.8383941Z test_changed_entry_even_with_unchanged_dxbc (tools.gt_next23b_source_program_admission.test_admission.SourceByteAdmission.test_changed_entry_even_with_unchanged_dxbc) ... ok
+2026-11-27T17:03:41.8817389Z test_independent_identity_and_parsed_form_not_copied_from_packet (tools.gt_next23b_source_program_admission.test_admission.SourceByteAdmission.test_independent_identity_and_parsed_form_not_copied_from_packet) ... ok
+2026-11-27T17:03:41.9745297Z test_labels_can_change_when_actual_program_bytes_follow (tools.gt_next23b_source_program_admission.test_admission.SourceByteAdmission.test_labels_can_change_when_actual_program_bytes_follow) ... ok
+2026-11-27T17:03:42.0501538Z test_old_gate_accepts_forged_original_link_new_rejects (tools.gt_next23b_source_program_admission.test_admission.SourceByteAdmission.test_old_gate_accepts_forged_original_link_new_rejects) ... ok
+2026-11-27T17:03:42.1199664Z test_old_gate_accepts_same_stage_reference_swap_new_rejects (tools.gt_next23b_source_program_admission.test_admission.SourceByteAdmission.test_old_gate_accepts_same_stage_reference_swap_new_rejects) ... ok
+2026-11-27T17:03:42.1762659Z test_out_of_range_entry_rejects (tools.gt_next23b_source_program_admission.test_admission.SourceByteAdmission.test_out_of_range_entry_rejects) ... ok
+2026-11-27T17:03:42.2291029Z test_same_length_file_replacement (tools.gt_next23b_source_program_admission.test_admission.SourceByteAdmission.test_same_length_file_replacement) ... ok
+2026-11-27T17:03:42.2302918Z Ran 8 tests in 0.540s
+2026-11-27T17:03:42.2303190Z OK
+2026-11-27T17:03:43.7230520Z Artifact gt-next23b-source-program-byte-admission has been successfully uploaded! Final size is 1010 bytes. Artifact ID is 15219717177
