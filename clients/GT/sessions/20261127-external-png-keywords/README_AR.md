@@ -1,0 +1,3 @@
+# GT actual external PPtr PNG + nonempty keyword state | PENDING
+
+Starting HEAD 33f720372354482f6fbd2919edd640ce6c16a466. Replay retained permanent 46018334469 archive with unchanged V4/V8 and authenticated bytes before any new build. Old material keyword/pass lanes are empty; new four-owner authored fixture has distinct nonempty valid/invalid/disabled lanes, two asymmetric RGBA32 3x2 top mips and lower mip payloads, exact same actual public AssetRipper loader/export instrumentation. Seven negative controls and lower-mip-only scope acceptance. No Unity import, original assets or shader execution. No PASS until actual evidence.
