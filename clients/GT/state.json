@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
-  "next_action": "Activate a dedicated source-only/public-exporter CI for V10. Verify 5x7 partial-block DXT5, actual PNG/meta, 10 negative controls, both alpha modes, no V8/V9/native promotion. Diagnose any decoder rounding/edge difference rather than adjusting the oracle to force parity.",
+  "next_action": "Inspect exact actual public exporter result from run 45961831652. Verify independent BC3 top-mip same-route pixels, controls, archive, and no scope promotion; if fail, retain and diagnose actual NPOT/decoder behavior. No repeated historical actual V7–V9 runs.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "21514d088819182daf02ccd8890bf6deafa3936e",
+    "reviewed_remote_head": "ec6f6a8dc080d24d21c6680cc9ea8388ab92b8e7",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding",
-      "status": "AUTHORED_WITNESS_UNEXECUTED",
-      "next": "Activate a dedicated source-only/public-exporter CI for V10. Verify 5x7 partial-block DXT5, actual PNG/meta, 10 negative controls, both alpha modes, no V8/V9/native promotion. Diagnose any decoder rounding/edge difference rather than adjusting the oracle to force parity."
+      "status": "ACTUAL_PUBLIC_EXPORTER_CI_PENDING",
+      "next": "Inspect exact actual public exporter result from run 45961831652. Verify independent BC3 top-mip same-route pixels, controls, archive, and no scope promotion; if fail, retain and diagnose actual NPOT/decoder behavior. No repeated historical actual V7–V9 runs."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -5268,14 +5268,95 @@
     }
   },
   "v10_bc3_checkpoint": {
-    "status": "AUTHORED_WITNESS_UNEXECUTED",
+    "status": "ACTUAL_PUBLIC_EXPORTER_CI_PENDING",
     "starting_head": "7f80870e611c616ab7d3cf75a6bd4457e3ddad18",
     "prior_v9_run": 45960313046,
     "prior_v9_artifact": 15180771759,
     "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-    "next": "Activate a dedicated source-only/public-exporter CI for V10. Verify 5x7 partial-block DXT5, actual PNG/meta, 10 negative controls, both alpha modes, no V8/V9/native promotion. Diagnose any decoder rounding/edge difference rather than adjusting the oracle to force parity.",
+    "next": "Inspect exact actual public exporter result from run 45961831652. Verify independent BC3 top-mip same-route pixels, controls, archive, and no scope promotion; if fail, retain and diagnose actual NPOT/decoder behavior. No repeated historical actual V7–V9 runs.",
     "original_assets_read": false,
     "Unity_import_verified": false,
-    "XAPK": false
+    "XAPK": false,
+    "source_gate_commit": "21514d088819182daf02ccd8890bf6deafa3936e",
+    "witness_commit": "d6f63f0451940caf53fb1fa04a0349feacf3d037",
+    "activation_head": "ec6f6a8dc080d24d21c6680cc9ea8388ab92b8e7",
+    "run": 45961831652,
+    "job": 140381208160,
+    "guard": 45961831613,
+    "guard_conclusion": "success",
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 1
+      },
+      {
+        "name": "Checkout authored witness and exact private hook composer only",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 2
+      },
+      {
+        "name": "Run source-only route gate regressions before public build",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 3
+      },
+      {
+        "name": "Run actions/setup-dotnet@v4",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 4
+      },
+      {
+        "name": "Checkout public pinned exporter source only",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 5
+      },
+      {
+        "name": "Compile exact public exporter and authored witness",
+        "status": "in_progress",
+        "conclusion": null,
+        "number": 6
+      },
+      {
+        "name": "Execute distinct authored DXT5 PNG exporter and same-route proof",
+        "status": "pending",
+        "conclusion": null,
+        "number": 7
+      },
+      {
+        "name": "Retain only authored aggregate proof and public build receipts",
+        "status": "pending",
+        "conclusion": null,
+        "number": 8
+      },
+      {
+        "name": "Remove only authored fixture",
+        "status": "pending",
+        "conclusion": null,
+        "number": 9
+      },
+      {
+        "name": "Post Checkout public pinned exporter source only",
+        "status": "pending",
+        "conclusion": null,
+        "number": 16
+      },
+      {
+        "name": "Post Run actions/setup-dotnet@v4",
+        "status": "pending",
+        "conclusion": null,
+        "number": 17
+      },
+      {
+        "name": "Post Checkout authored witness and exact private hook composer only",
+        "status": "pending",
+        "conclusion": null,
+        "number": 18
+      }
+    ]
   }
 }
