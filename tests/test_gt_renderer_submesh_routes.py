@@ -54,7 +54,7 @@ class OrderedRoutes(unittest.TestCase):
             self.add(28,n+20,guid(n+20),2800000,None,None)
             uv={"m_Scale":{"x":1.0,"y":2.0},"m_Offset":{"x":0.125,"y":0.25}}
             old={"m_Texture":src(n+20),**uv}
-            new={"m_Texture":ext(2800000,guid(n+20)),**uv}
+            new={"m_Texture":ext(2800000,guid(n+20)),**deepcopy(uv)}
             self.add(21,n,guid(n),2100000,
                 {"m_Shader":src(n+10),"m_SavedProperties":{"m_TexEnvs":[["_MainTex",old]]}},
                 {"m_Shader":ext(4800000,guid(n+10)),"m_SavedProperties":{"m_TexEnvs":[{"_MainTex":new}]}})
@@ -122,6 +122,7 @@ class OrderedRoutes(unittest.TestCase):
         self.assertIn("ordered_pointer_target_mismatch",self.run_audit()["reason_counts"])
     def test_uv_transform_drift(self):
         self.docs[(guid(5),2100000)][1]["m_SavedProperties"]["m_TexEnvs"][0]["_MainTex"]["m_Offset"]["x"]=0.5
+        self.assertEqual(self.objects[(self.owner,5)][1]["m_SavedProperties"]["m_TexEnvs"][0][1]["m_Offset"]["x"],0.125)
         self.assertIn("material_texenv_UV_drift",self.run_audit()["reason_counts"])
     def test_missing_mesh_filter_membership(self):
         self.docs[(self.scene,100)][1]["m_Component"].pop(0)
