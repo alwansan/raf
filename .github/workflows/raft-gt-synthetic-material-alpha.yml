@@ -18,6 +18,7 @@ on:
           - particle-alpha-provenance
           - imported-alpha-pixels
           - b05-local-documents
+          - particle-pixel-parity
   push:
     branches: [feature/android-native-port]
     paths:
@@ -36,7 +37,7 @@ concurrency:
 
 jobs:
   synthetic-pixels:
-    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]') && !contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]') && !contains(github.event.head_commit.message, '[gt-imported-alpha-pixels]') && !contains(github.event.head_commit.message, '[gt-b05-local-documents]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]') && !contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]') && !contains(github.event.head_commit.message, '[gt-imported-alpha-pixels]') && !contains(github.event.head_commit.message, '[gt-b05-local-documents]') && !contains(github.event.head_commit.message, '[gt-particle-pixel-parity]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 30
@@ -1143,5 +1144,117 @@ jobs:
         with:
           name: gt-b05-local-documents-${{ github.run_id }}
           path: b05-local-results/*
+          if-no-files-found: warn
+          retention-days: 14
+
+
+  particle-pixel-parity:
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-particle-pixel-parity]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'particle-pixel-parity'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout source-only diagnostics, authored tests and retained authored Unity receipt
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tools/synthetic_material_alpha/SyntheticImportedAlphaValidation.cs
+            /tools/synthetic_material_alpha/SyntheticMaterialAlpha.shader
+            /tests/test_gt_imported_alpha_pixels.py
+            /tests/test_gt_particle108_source_pixel_parity.py
+            /tests/test_gt_particle108_alpha_provenance.py
+            /tests/test_gt_particle108_export_alpha_diagnostic.py
+            /clients/GT/sessions/20261127-imported-alpha-vulkan/actual-run-45941449651.zip
+            /.github/workflows/raft-gt-synthetic-material-alpha.yml
+      - name: Install public pinned Texture2D and image decoders
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          python3 -m venv "$RUNNER_TEMP/gt-particle-pixel-parity"
+          "$RUNNER_TEMP/gt-particle-pixel-parity/bin/python" -m pip install --disable-pip-version-check UnityPy==1.23.0 Pillow==11.3.0 PyYAML==6.0.3
+      - name: Replay exact retained Unity pixels without launching Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir particle-pixel-results
+          py="$RUNNER_TEMP/gt-particle-pixel-parity/bin/python"
+          "$py" -B - <<'PY'
+          from hashlib import sha256
+          import json,zipfile
+          from pathlib import Path
+          from scripts import gt_imported_alpha_pixels as gate
+          p=Path("clients/GT/sessions/20261127-imported-alpha-vulkan/actual-run-45941449651.zip")
+          raw=p.read_bytes()
+          assert len(raw)==4985 and sha256(raw).hexdigest()=="9711df98d2dee6a28fb4d943027377059106f0c16f408391855df32edf8c431e"
+          with zipfile.ZipFile(p) as z:
+              assert z.testzip() is None
+              assert sorted(z.namelist())==["oracle-tests.log","raw.unity.json","verified.json"]
+              data=z.read("raw.unity.json")
+              assert sha256(data).hexdigest()=="129568c67297c0792f4c02360903a171f5efa5017c4547a97ffa285d143b5a9a"
+              prior=json.loads(z.read("verified.json"))
+          report=gate.strict_json(data)
+          run_id="45941449651-1-265f639ccb4136c020ac262e7f799e803418ab76"
+          assert report["run_id"]==run_id
+          assert prior["status"]=="PASS_AUTHORED_IMPORTED_ALPHA_VULKAN" and prior["reason"]=="Unity_receipt_missing"
+          path=Path("particle-pixel-results/replay-input.private.json")
+          path.write_bytes(data)
+          result=gate.verify_file(path,Path("particle-pixel-results/replayed-unity.json"),run_id,0)
+          path.unlink()
+          assert result["status"]=="PASS_AUTHORED_IMPORTED_ALPHA_VULKAN"
+          assert result["reason"]=="independent_imported_and_rendered_RGBA_validation_passed"
+          for key in ("actual_imported_RGBA8_pixels_verified","actual_Vulkan_RGBA_pixels_verified","max_RGBA8_error","max_rendered_error","case_rendered_errors","first_row_observed_alpha8","receipt_sha256"):
+              assert result[key]==prior[key]
+          print("REPLAY_EXACT_192_PLUS_192_PIXELS_NO_NEW_UNITY",result["reason"])
+          PY
+      - name: Run byte-bound source and actual decoder regression controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-particle-pixel-parity/bin/python"
+          for test_file in test_gt_imported_alpha_pixels.py test_gt_particle108_source_pixel_parity.py test_gt_particle108_alpha_provenance.py test_gt_particle108_export_alpha_diagnostic.py; do
+            "$py" -B -m unittest discover -s tests -p "$test_file" -v 2>&1 | tee "particle-pixel-results/$test_file.log"
+          done
+          "$py" -B - <<'PY'
+          import json,os,re
+          from importlib.metadata import version
+          from pathlib import Path
+          root=Path('particle-pixel-results')
+          counts={}
+          for p in sorted(root.glob('*.log')):
+              data=p.read_text()
+              m=re.search(r'^Ran (\d+) tests? in ',data,re.M)
+              assert m and int(m[1])>0 and re.search(r'^OK$',data,re.M)
+              counts[p.name]=int(m[1])
+          assert len(counts)==4
+          replay=json.loads((root/'replayed-unity.json').read_text())
+          result=dict(status="PASS_AUTHORED_BYTE_BOUND_SOURCE_PIXEL_PARITY",
+              run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
+              test_counts=counts,total_tests=sum(counts.values()),UnityPy_version=version("UnityPy"),
+              actual_UnityPy_payload_decoder=True,serialized_owner_parser_injected_authored_metadata=True,
+              actual_PNG_decoder=True,prior_Unity_receipt_replayed=True,
+              prior_Unity_raster_pixels_replayed=replay["actual_Vulkan_RGBA_pixels_verified"],
+              prior_Unity_imported_pixels_replayed=replay["actual_imported_RGBA8_pixels_verified"],
+              original_assets_read=False,new_Unity_render_executed=False,
+              original_alpha_loss_proven=False,Android_device=False,XAPK=False)
+          (root/'report.json').write_text(json.dumps(result,sort_keys=True,indent=2)+'\n')
+          print(json.dumps(result,sort_keys=True))
+          PY
+      - name: Retain only authored test logs and aggregate replay evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-particle-pixel-parity-${{ github.run_id }}
+          path: particle-pixel-results/*
           if-no-files-found: warn
           retention-days: 14
