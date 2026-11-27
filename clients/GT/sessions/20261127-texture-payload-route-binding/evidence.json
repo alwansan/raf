@@ -1,5 +1,5 @@
 {
-  "status": "RETRY_PYTHON_PASS_AUTHORED_EXPORT_PENDING",
+  "status": "PASS_AUTHORED_ACTUAL_EXPORT_TEXTURE_PAYLOAD_ROUTE_GATE",
   "base": "7d476f8b5e0862509ab992b3cb5f82a9659be1d6",
   "gate": "G1-G2-texture-payload-same-route-binding",
   "session": "clients/GT/sessions/20261127-texture-payload-route-binding/README_AR.md",
@@ -11,7 +11,11 @@
   "white_or_fire_fixed": false,
   "Unity_render_executed": false,
   "XAPK": false,
-  "next": "Inspect retry 45951913485 completion and actual texture-schema.json; retain receipt or correct actual observed schema without assuming missing fields. No new Unity raster.",
+  "next": {
+    "id": "G1-G2-streamed-texture-full-mip-same-route-binding",
+    "status": "NEXT_PRODUCTIVE",
+    "next": "Extend V5 only to explicit SHA-pinned streamed RGBA32 Texture2D source payloads, still comparing exact all declared mip ranges to the SAME native YAML GUID/anchor and V4 route. Reuse gt_mesh_vertex_payload.verified_range_digests (one authenticated sequential read) with per-texture whole range and per-mip subranges, bounded grouped requests; strict Raft_Data provider identity/path parsing from gt_particle108_source_pixel_parity, reject ambiguous inline+stream, wrong provider, traversal, missing manifest pin, out-of-bounds, same-size provider mutation and swapped equal-length ranges. Do not use UnityPy implicit stream loading or re-read after verification. Preserve inline V5 and compare original exported byte/descriptor scope, no claimed sampler/import/GPU parity. Inspect public pinned YamlStreamedAssetExportCollection.ExportTexture and resource APIs; if feasible actual authored provider (no original data) export via actual streamed collection, with nonzero offset and two distinct textures/mips in shared resource, capture provider bytes/pins before export and verify real YAML stream cleared, full mip bytes retained. If actual exporter stream creation unsupported, document gap and distinguish injected parser tests from actual export. After stream proof, separately bind native sampler (B15) and imported PNG decoded top-mip scope; no assumption PNG retains full mip chain. A3 remains blocked on verified authorized source; G0-G6 open, no unauthorized original assets, no unnecessary Unity raster, phone or XAPK."
+  },
   "candidate_commit": "5dbe28cb4c87c476eeeb03a5f936e4e94abfdc9e",
   "activation_commit": "22b32a3c8f7da45dd6062d4ec8c451d01273c3bc",
   "run_id": 45951495247,
@@ -55,6 +59,161 @@
     "guard_run_id": 45951913486,
     "guard_conclusion": "success",
     "regression_step": "success",
-    "observed_run_status": "in_progress"
+    "observed_run_status": "completed",
+    "conclusion": "success"
+  },
+  "success": {
+    "status": "PASS_AUTHORED_ACTUAL_EXPORT_TEXTURE_PAYLOAD_ROUTE_GATE",
+    "run_id": 45951913485,
+    "job_id": 140349492451,
+    "head": "2b2d20067ac1380fde76ea9500147397fcbca571",
+    "conclusion": "success",
+    "guard_run_id": 45951913486,
+    "guard_conclusion": "success",
+    "artifact_id": 15177526560,
+    "archive": "clients/GT/sessions/20261127-texture-payload-route-binding/actual-run-45951913485.zip",
+    "archive_bytes": 8087,
+    "archive_sha256": "d93308838904908fa5bccdcea6078568ec581b9b56cae4ba78f05ae4ff24bd64",
+    "archive_git_blob": "c9d4d0751545ef5ba03bd3d3ddfac965cae043e8",
+    "archive_crc_sha_size_verified_locally": true,
+    "public_tool_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "actual_public_export_collections": 9,
+    "actual_exported_documents": 13,
+    "actual_native_scene_files": 2,
+    "complete_texture_bound_renderers": 2,
+    "complete_texture_bound_submeshes": 4,
+    "complete_keyword_bound_renderers": 2,
+    "complete_keyword_bound_submeshes": 4,
+    "complete_value_bound_renderers": 2,
+    "complete_value_bound_submeshes": 4,
+    "complete_vertex_byte_bound_renderers": 2,
+    "complete_vertex_byte_bound_submeshes": 4,
+    "texture_payload_slots": 4,
+    "texture_payload_bytes_per_route": 80,
+    "texture_mip_levels_per_route": 8,
+    "unique_textures": 2,
+    "unique_texture_bytes": 40,
+    "unique_mip_levels": 4,
+    "dimensions": [
+      2,
+      2
+    ],
+    "mips_per_texture": 2,
+    "mip_lengths": [
+      16,
+      4
+    ],
+    "observed_native_stream_schema": {
+      "serializedVersion": 2,
+      "offset": 0,
+      "size": 0,
+      "path": null
+    },
+    "actual_schema_receipt": "texture-schema.json",
+    "source_scope": "native inline RGBA32 Texture2D, one image and unstripped declared mip chain; no streamed source",
+    "keyword_pass_entries_per_route": {
+      "valid_keyword": 8,
+      "invalid_keyword": 4,
+      "disabled_pass": 4
+    },
+    "material_value_slots_per_route": {
+      "color": 8,
+      "float": 8,
+      "int": 8
+    },
+    "total_regression_tests": 132,
+    "new_texture_tests": 25,
+    "counterfactual_count": 29,
+    "V4_pass_V5_reject_controls": 7,
+    "V3_pass_V4_reject_controls": 6,
+    "V2_pass_V3_reject_controls": 5,
+    "controls": [
+      "actual_YAML_texture_RGB_drift",
+      "actual_YAML_texture_alpha_drift",
+      "actual_YAML_texture_lower_mip_drift",
+      "actual_YAML_texture_same_size_payload_swap",
+      "actual_YAML_texture_mip_count_drift",
+      "actual_YAML_texture_unsupported_format",
+      "actual_YAML_texture_missing_bytes"
+    ],
+    "native_inline_RGBA32_texture_payload_bytes_verified": true,
+    "same_route_material_keyword_pass_state_verified": true,
+    "same_route_material_values_verified": true,
+    "same_route_vertex_bytes_verified": true,
+    "active_shader_variant_or_runtime_keyword_scope_verified": false,
+    "texture_sampler_import_colorspace_or_GPU_verified": false,
+    "original_assets_read": false,
+    "original_serialized_source_verified": false,
+    "production_auto_exporter_selection": false,
+    "production_renderer_parity_verified": false,
+    "Unity_render_executed": false,
+    "Android_device": false,
+    "XAPK": false,
+    "members": {
+      "build.json": {
+        "bytes": 576,
+        "sha256": "e37f37e2e01ee4ca578b15304905564ea1fbe297eab7b774f554dacf62d84ac5"
+      },
+      "report.json": {
+        "bytes": 1990,
+        "sha256": "cb1131464569985b2346ce8c5f6c66b29e559e6d516e90bd1d0a5cde4f27742f"
+      },
+      "route-join.json": {
+        "bytes": 8667,
+        "sha256": "7b9f25f720d8deafe62b6b054a553650f9eee999224b167ecd25fa95dcf939de"
+      },
+      "test_b03_verify_renderer_material_links.py.log": {
+        "bytes": 2556,
+        "sha256": "c28e4d716a01ac768cf6d55e50d36f32ec6422e9561960fb35485eb759985a6b",
+        "tests": 17
+      },
+      "test_gt_material_route_values.py.log": {
+        "bytes": 2725,
+        "sha256": "e4512ebafe5776d5a96dbe505461f57b4a2c3ac65416832ef6371eeeabba0507",
+        "tests": 22
+      },
+      "test_gt_material_route_keyword_state.py.log": {
+        "bytes": 2905,
+        "sha256": "b281eeca9263f8e8981df7c2c0bdfbcde1f0dbf791516d29380c730acc4a2a55",
+        "tests": 25
+      },
+      "test_gt_mesh_vertex_payload.py.log": {
+        "bytes": 1881,
+        "sha256": "d4fd27c6ddb5bedeaeb54da1d9c1e25f66e797855a4600fa9f851a5a5067d708",
+        "tests": 15
+      },
+      "test_gt_renderer_submesh_routes.py.log": {
+        "bytes": 3004,
+        "sha256": "7af2e74e4ea5f2c16cb7cb53ab5aa28ed76607fb8c35f0a1a2c041c1ba243c76",
+        "tests": 21
+      },
+      "test_gt_texture_route_payload.py.log": {
+        "bytes": 2818,
+        "sha256": "3a4b061ea078094e5de3656039224c143b1ba20fff82cf239e36cb0fb43c4d3c",
+        "tests": 25
+      },
+      "test_gt_verify_original_mesh_export.py.log": {
+        "bytes": 1259,
+        "sha256": "4fa1e34501cc7873993fcc2fc567b180527cc1ff3a5442f97cdd224b1a32258a",
+        "tests": 7
+      },
+      "texture-schema.json": {
+        "bytes": 562,
+        "sha256": "589af0386850cd94c42a1c059b3e0eed62f80e86de00d25dee8aa5001977b862"
+      },
+      "tool-smoke.log": {
+        "bytes": 63,
+        "sha256": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+      },
+      "witness.log": {
+        "bytes": 41,
+        "sha256": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
+      }
+    },
+    "compiled_files": {
+      "AssetRipper.Export.UnityProjects.dll": "b288fc23518d0db51b251429b622c2c0f322b3ac7a58bed6336f5eddff6c1a58",
+      "RaftAuthoredSceneRouteWitness.cs": "71500cfd14d1498c0d4ecd11723680c77dfab18f23cd1df75329dea137eba40b",
+      "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
+    }
   }
 }
