@@ -5184,5 +5184,24 @@
         "XAPK": false
       }
     }
+  },
+  "v11_dxt5nm_checkpoint": {
+    "status": "PENDING_SOURCE_AND_AUTHORED_WITNESS_NOT_EXECUTED",
+    "starting_head": "5973d0fc26d86736779b869273d504d43a43d444",
+    "source_commit": "bc18e5414b88b2b8288af22df076c0166a43a41f",
+    "witness_commit": "bce1467a2d38c96961e71f19cf2498fcdd34c5cd",
+    "source_format": 12,
+    "source_usage": 3,
+    "source_color_space": 0,
+    "planned_tests": 251,
+    "planned_counterfactuals": 12,
+    "planned_authored_unique_pixels": 70,
+    "actual_export_verified": false,
+    "original_assets_read": false,
+    "Unity_import_verified": false,
+    "Android_device": false,
+    "XAPK": false,
+    "session": "clients/GT/sessions/20261127-dxt5nm-route-v11/README_AR.md",
+    "next": "Activate only dedicated authored DXT5nm workflow and inspect exact receipt; no original acquisition."
   }
 }
