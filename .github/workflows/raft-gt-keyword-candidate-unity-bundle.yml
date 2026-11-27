@@ -15,7 +15,7 @@ jobs:
     if: github.ref == 'refs/heads/feature/android-native-port'
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
-    timeout-minutes: 45
+    timeout-minutes: 35
     env:
       GIT_LFS_SKIP_SMUDGE: '1'
       PYTHONDONTWRITEBYTECODE: '1'
@@ -87,7 +87,8 @@ jobs:
             exit 1
           fi
           test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
-      - name: Prepare identical Android editor with explicit Mesa software Vulkan
+      - name: Prepare bounded Android editor image with static Vulkan driver checks (no standalone Xvfb)
+        timeout-minutes: 12
         shell: bash
         run: |
           set -euo pipefail
@@ -100,14 +101,22 @@ jobs:
                 libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb xauth && \
               rm -rf /var/lib/apt/lists/*
           ENV VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+          RUN test -s "$VK_ICD_FILENAMES" && \
+              test -s /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so && \
+              ldconfig -p | grep 'libvulkan.so.1' && \
+              printf 'GT_VULKAN_DRIVER_FILES_PRESENT (not a device execution proof)\n'
           DOCKERFILE
-          docker build --quiet --tag gt-keyword-android-vulkan:local "$RUNNER_TEMP/gt-keyword-bundle-docker"
-          docker run --rm --entrypoint /bin/bash gt-keyword-android-vulkan:local -lc \
-            'test -f "$VK_ICD_FILENAMES" && xvfb-run -a vulkaninfo --summary' \
-            > gt-keyword-bundle-results/vulkaninfo-summary.txt 2>&1
-          grep -q 'llvmpipe' gt-keyword-bundle-results/vulkaninfo-summary.txt
+          # Avoid the previous unbounded standalone Xvfb/vulkaninfo process.
+          # The actual Editor must independently report Vulkan in its receipt.
+          timeout --signal=TERM --kill-after=20s 650s docker build --progress=plain \
+            --tag gt-keyword-android-vulkan:local "$RUNNER_TEMP/gt-keyword-bundle-docker" \
+            2>&1 | tee gt-keyword-bundle-results/docker-build.log
+          timeout --kill-after=5s 20s docker image inspect --format '{{.Id}}' \
+            gt-keyword-android-vulkan:local > gt-keyword-bundle-results/docker-image-id.txt
+          test -s gt-keyword-bundle-results/docker-image-id.txt
       - name: Compile actual authored mixed-scope Android Vulkan AssetBundle and observe compiler routes
         id: unity
+        timeout-minutes: 16
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
         env:
@@ -130,6 +139,7 @@ jobs:
           customParameters: >-
             -force-vulkan -force-device-index 0 -job-worker-count 2 -gtCandidateRunId ${{ env.GT_CANDIDATE_RUN_ID }}
       - name: Independently decode actual bundle and check exact stage markers and negative controls
+        timeout-minutes: 4
         if: always() && steps.stage.outcome == 'success'
         env:
           UNITY_OUTCOME: ${{ steps.unity.outcome }}
