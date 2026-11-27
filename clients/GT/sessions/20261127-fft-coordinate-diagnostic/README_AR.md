@@ -1,0 +1,9 @@
+# GT G4 — تشخيص نوع إحداثيات FFT Utilities (عينات مؤلفة فقط)
+
+رأس البدء 38458644d1399d008cee87c9def05a67d6768f76. الأدلة التاريخية: 44781701884 / Unity2021.3.45f2 DXC أخفق في gt_fs_main، Expected Coordinate to be float scalar or vector؛ تقرير gt-fft-coordinate-types-safe.json السابق يحصي 6 إحداثيات Sample float في الأصل وroundtrip، و0 integer. إيصال HLSLcc المحلي السابق ترجمة مصدر فقط وليس Unity. لا اقتناء ZIP2 أو برامج/خامات أصلية؛ لا تغيير للأصل أو GUID. لا تحويل نوع شامل.
+
+أداة fft_coordinate_probe.py تختار 7 برامج HLSL مؤلفة من الصفر، 6 Sample/SampleLevel (float2، float4 swizzle، bitcast غير تافه، signed/unsigned numeric conversions) وLoad واحد بإحداثيات int3. تستخدم attach_programs وcompiler_control الفعليين من gt_fft_utilities_restore.py عبر AST المحدود. الفرق بين مرشحي DXC/HLSLcc إزالة سبع pragma فقط. 3/3 اختبارات محلية لأداة الاختبار، والبصمة SHA256 72a29611d92211dc31a206daf10efbe4f535b78ef890ec0fbe4e9942356d3870. 131 ملفاً محلياً سابقاً جُردت بصماتها قبل العمل. لا مترجم أو Unity أو clone كامل محلياً.
+
+هدف التنفيذ: compile/validate لكل VS/FS مؤلف، تبديل نوع operand عمداً في Sample وFetch للتحقق من رسالتي رفض spirv-val؛ ثم تشغيل مصفوفة مؤلفة Android Vulkan AssetBundle فقط (DXC/HLSLcc، كل منهما مستقل) باستخدام محرر FFTUtilitiesShaderValidation.cs المنشور دون تغييره. فك الحزمة الفعلية عبر UnityPy وSMOL-V، تحقق من 7 مسارات لكل مرحلة وspirv-val للموديولات المشار إليها من Fragment، وتصنيف OpImageSample/OpImageFetch. لا تعتبر الاسم أو pragma وحدهما إثباتاً لمسار compiler داخلي. لا قبول إلا بعد الإيصال ونتيجة التشغيل. هذا مرشح ينتظر CI. لا APK أو هاتف أو XAPK. A3 معلق، G0–G6 مفتوحة.
+
+إذا نجحت الطريقتان، فهذا عدم إعادة إنتاج في العينة المحدودة لا إصلاح الأصل. إذا اختلفتا، احفظ الدليل وحدد نطاق السبب دون افتراض تكافؤ برامج اللعبة. إذا تعذر، سجل العائق وانتقل إلى أقرب عمل منتج في G4/G5.

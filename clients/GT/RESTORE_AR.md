@@ -1,3 +1,9 @@
+## GT — G4: مرشح تشخيص FFT coordinate | 27 نوفمبر 2026
+
+[جلسة التشخيص](sessions/20261127-fft-coordinate-diagnostic/README_AR.md). بدأت من 38458644d1399d008cee87c9def05a67d6768f76، وراجعت خطأ DXC التاريخي وإيصالات HLSLcc وfloat coordinates. أداة مؤلفة تقارن 7 ممرات في Unity Android Vulkan (DXC/HLSLcc) وتفصل Sample عن Load، مع ضوابط SPIR-V خاطئة عمداً. 3 اختبارات محلية ناجحة؛ **لا نتيجة مترجم/Unity جديدة بعد**. هذا المرشح [skip ci]، ثم إطلاق CI مؤلف معزول فقط. لا مصادر لعبة أو تغيير GUID. تحقق من HEAD وActions واحفظ نتيجة كل mode قبل تحديث قبول المرحلة.
+
+---
+
 ## GT — G2: نجاح مسار metadata إلى Unity/Vulkan بالبكسلات المؤلفة | 27 نوفمبر 2026
 
 [Run45934006734 SUCCESS](https://github.com/alwansan/raf/actions/runs/45934006734) على الرأس المثبت `e867b31791ca00c58108ce2d3ea3933aee5234a2`، job140292902788. تحقق جديد فعلي: أُعيد فك ParameterBlob مؤلف واستخدام stage_parameter_records وrebind وتطبيع التسجيلات ودمج VS/FS؛ 14 glslang compile و14 spirv-val Vulkan1.1 و10 spirv-opt، أربع مقارنات قبل/بعد إعادة الربط. **ناتج combined.hlsl الفعلي (596B)**، نفسه من bare وspace0، غُلّف في ShaderLab بدون تغيير جسمه. SHA256 الشيدر 1087B: `bbac74071676cec0867db4d3dfab35c9107475f36e6de8babab129c0c093c473`. 18/18 اختبارات CI (10 موارد +3 depth +5 oracle). لا مصادر لعبة، فحوص CB/mesh/varying غير المتعلقة بالموارد بقيت ببدائل معلنة. تعديل resource_register_probe.py أضاف source_factory وcombined_out اختياريين، بقي المسار الافتراضي السابق.
