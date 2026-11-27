@@ -1306,7 +1306,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "01ccb8f171511e6069a335b4ed969fd070699d23",
+    "reviewed_remote_head": "71948d34824acb1be4115932c413e52060cab0bd",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -1563,8 +1563,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding",
-      "status": "ACTUAL_BC3_RGB_DRIFT_DIAGNOSTIC_RUNNING",
-      "next": "Read exact run 45962397906; download/verify artifact and inspect per-channel histograms, stored block indices and actual PNG pixels. Derive a justified correction only from evidence; strict V10 remains false. Separately fix authored fixture alpha-zero visibility. A3 remains blocked."
+      "status": "BC3_DECODER_REPAIR_IMPLEMENTED_NOT_EXECUTED",
+      "next": "Compile pinned exporter with scratch-only DXT5 normalization; rerun exact previous authored bytes and independent extended equal-endpoint/alpha-visible fixture; require strict V10 parity and negative controls. No production integration until actual proof."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -4611,12 +4611,12 @@
     }
   },
   "v10_bc3_checkpoint": {
-    "status": "ACTUAL_BC3_RGB_DRIFT_DIAGNOSTIC_RUNNING",
+    "status": "BC3_DECODER_REPAIR_IMPLEMENTED_NOT_EXECUTED",
     "starting_head": "7f80870e611c616ab7d3cf75a6bd4457e3ddad18",
     "prior_v9_run": 45960313046,
     "prior_v9_artifact": 15180771759,
     "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-    "next": "Read exact run 45962397906; download/verify artifact and inspect per-channel histograms, stored block indices and actual PNG pixels. Derive a justified correction only from evidence; strict V10 remains false. Separately fix authored fixture alpha-zero visibility. A3 remains blocked.",
+    "next": "Compile pinned exporter with scratch-only DXT5 normalization; rerun exact previous authored bytes and independent extended equal-endpoint/alpha-visible fixture; require strict V10 parity and negative controls. No production integration until actual proof.",
     "original_assets_read": false,
     "Unity_import_verified": false,
     "XAPK": false,
@@ -4782,8 +4782,8 @@
       "head": "01ccb8f171511e6069a335b4ed969fd070699d23",
       "job": 140383056608,
       "guard": 45962397871,
-      "guard_conclusion": null,
-      "status": "in_progress",
+      "guard_conclusion": "success",
+      "status": "completed",
       "steps": [
         {
           "name": "Set up job",
@@ -4845,7 +4845,52 @@
           "conclusion": null,
           "number": 18
         }
-      ]
+      ],
+      "conclusion": "failure",
+      "archive": {
+        "artifact_id": 15181805246,
+        "run": 45962397906,
+        "head": "01ccb8f171511e6069a335b4ed969fd070699d23",
+        "job": 140383056608,
+        "bytes": 11690,
+        "sha256": "5f790d361a1bddfa0ff523942a76f8b646e8d26488c32b161720aa0cdcbec65c",
+        "git_blob": "da4b8d8b6686be9f4f8097b141f20b90561181fd",
+        "crc_verified": true,
+        "member_count": 19,
+        "member_sha256": {
+          "bc3-authored-0.png": "8e2670010178236cda40b2fa4a70e165c4de50a331989c06d87ccadf5858427f",
+          "bc3-baseline.json": "9bf4160035b7877362d2782347d712b71938ff5b0389c8442c800a3ae2aa2b89",
+          "bc3-authored-1.png": "5dbee24319726f678e9b636afb7cd766b97ac9c59171a9f09d395d55982c8adc",
+          "bc3-diagnostic.json": "4a4a9ab72758ea583389e1c05cbcf3a5a258dd1e7e7b78bc7cdff6305277e0b1",
+          "bc3-witness.log": "44f7a0069cee04484827fcaa1eee568f905fc54b27aab99b252dd63c9391e0ae",
+          "build.json": "488db95b4ac774eb6d4548ffd8dfba3f8dbd2d2219d817e01ae0b1289e01964f",
+          "test_b03_verify_renderer_material_links.py.log": "c28e4d716a01ac768cf6d55e50d36f32ec6422e9561960fb35485eb759985a6b",
+          "test_gt_imported_bc3_route_pixels.py.log": "1c3a1efd044f71308f82a76751a9af58492aa717d3a8c9c7b858e2ab7e0863d1",
+          "test_gt_imported_png_route_pixels.py.log": "0b7962f4396c9decccbb92f872a9e57f02d1069759693242f807295fe191319d",
+          "test_gt_material_route_keyword_state.py.log": "6b613643a9df48899a098481e6f0110fd8e77187aaed41f6df6fa79791caee65",
+          "test_gt_imported_png_route_importer.py.log": "34d0c95606ffc4ad018d89d13d00bfd3da6275a8187a16bd50427fb253b2462d",
+          "test_gt_material_route_values.py.log": "17d5f1e01f5e9471d1e11bae9c37b94b4a3c2b8101632eb604383a3b883cc075",
+          "test_gt_mesh_vertex_payload.py.log": "d4fd27c6ddb5bedeaeb54da1d9c1e25f66e797855a4600fa9f851a5a5067d708",
+          "test_gt_native_texture_route_sampler.py.log": "fbb8b85a2141544ec5d0f3d19ebe39b95ab571cbb35c846d826d1c8e4d9a5199",
+          "test_gt_renderer_submesh_routes.py.log": "1c76a432b127059606e6deb11cae87de5eea3ee66d7c8e24ac6ed3fa78745362",
+          "test_gt_streamed_texture_route_payload.py.log": "e2f7626b1b9bcab6792a263cf11fca0ad36bc0226fbd0e76d0adfc7c0f869def",
+          "test_gt_texture_route_payload.py.log": "b4bb05104a9ec179ad2fba1551fc7b372b3c775010935c212e117b181d522bce",
+          "test_gt_verify_original_mesh_export.py.log": "12111dbf9c901c6a936e86ae43bc60e815fee8d9d82d2553bad25e9cea93e723",
+          "tool-smoke.log": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+        }
+      },
+      "root_cause": {
+        "all_actual_RGBA_hex_matches_downloaded_PNG": true,
+        "all_expected_and_actual_sha256_verified": true,
+        "all_17_mismatches_in_RGB565_c0_lt_c1_blocks_with_rgb_selector_2_or_3": true,
+        "alpha_exact_pixels": 70,
+        "rgba_exact_pixels": 53,
+        "rgba_different_pixels": 17,
+        "source_pin": "AssetRipperCLI@036098ab525a3f9f693dc101edeb21faad4d32d8",
+        "texture_converter_blob": "f8cec77003d86fa3d6ad1a04002927733a1986a6",
+        "decoder_package": "AssetRipper.TextureDecoder 2.3.0",
+        "original_assets_read": false
+      }
     }
   }
 }
