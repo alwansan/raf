@@ -1,0 +1,109 @@
+{
+  "status": "PASS_AUTHORED_FOLDER_META_TEXTURE_REGISTRY",
+  "reviewed_base": "41fc4f8ea76017d500b8f0302a2195bd303707f7",
+  "preparation_commit": "0aa404149340281a5f98a5f572d828174c041669",
+  "head": "09a3677928e232461f2399d8d6586e7b5a969033",
+  "run_id": 46001009902,
+  "job_id": 140512340424,
+  "conclusion": "success",
+  "guard_run_id": 46001009787,
+  "guard_job_id": 140512340084,
+  "guard_conclusion": "success",
+  "session": "clients/GT/sessions/20261127-folder-meta-texture-registry/README_AR.md",
+  "evidence": "clients/GT/sessions/20261127-folder-meta-texture-registry/evidence.json",
+  "archive": "clients/GT/sessions/20261127-folder-meta-texture-registry/actual-run-46001009902.zip",
+  "artifact_id": 15198930066,
+  "archive_bytes": 3376,
+  "archive_sha256": "4805fa538d1dd21a6a721f7623d5df316a8816a9b8e8283c89d8777b524ef4d8",
+  "archive_git_blob": "6512495e528b097279f4a4d578ea3b7d55a08e7d",
+  "archive_crc_sha_size_verified_locally": true,
+  "old_gate_git_blob": "0f357e74543645d0570871c159cc55c016dff428",
+  "new_gate_git_blob": "fcf67a457755f483242206e4db25d5d6fea83567",
+  "new_tests_git_blob": "c89cd378d0e87952e4b42da96e074ccb173d354c",
+  "baseline_targeted_test_methods": 6,
+  "baseline_false_rejections_repaired": 3,
+  "baseline_false_acceptances_repaired": 3,
+  "ci_total_tests": 50,
+  "ci_new_test_methods": 21,
+  "ci_existing_B46_tests": 29,
+  "scope": "Physical Assets GUID namespace and file/folder target type; not external packages or original source equivalence.",
+  "original_assets_read": false,
+  "source_export_equivalence_verified": false,
+  "unity_or_device_tested": false,
+  "XAPK_requested": false,
+  "next": "G1-G2-external-texture-fileid-unique-document: audit the actual B46 is_texture branch for serialized .asset/.cubemap/.rendertexture (currently any matching class and fileID header), compare existing document-scoped source/export checks, and reproduce any actual ambiguity acceptance on source-free fixtures with duplicate fileID in same container (same or different class), malformed/zero identity, and valid distinct subobjects. Ensure exactly one unambiguous external texture document is resolved without weakening existing local PPtr/Texture2DArray rules. This is a structural identity check only; no pixel equivalence or real original visual repair. If already covered by integrated exact check, select another distinct G1/G2 or G4 gap. Water namespace and folder registry tested scope completed, prior G3/FFT authored replay complete in exact scope; do not repeat. A3 and Particle108 third-export comparison remain blocked; original FFT/kernel6 cause, NEXT23b and all ten runtime groups open. G0–G6 open; no acquisition without authorized source, no native build request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference.",
+  "source_sha256": "cac90e5fd460dcd796c691717fc021195b436673345bd0739922a450bde899e5",
+  "test_sha256": "18ec75c81870f484d4e044584735376f01484043c414621b02c56b32ce44b22f",
+  "baseline": {
+    "valid_folders_incorrectly_rejected": [
+      "test_folder_bom_crlf_metadata",
+      "test_valid_folder_with_texture_suffix_not_referenced",
+      "test_valid_nested_folders_preserve_real_texture_target"
+    ],
+    "invalid_file_meta_incorrectly_accepted": [
+      "test_duplicate_malformed_root_guid_on_file",
+      "test_folder_marker_on_regular_texture_file",
+      "test_placeholder_identity_on_file_rejected"
+    ]
+  },
+  "tests": {
+    "test_gt_folder_meta_texture_registry.py": 21,
+    "test_verify_exported_material_texture_links.py": 29
+  },
+  "members": {
+    "baseline.json": {
+      "bytes": 534,
+      "sha256": "143e4278ab3b35693ec4396054a494a6835de4b4f13323e318c9efd00004366d"
+    },
+    "baseline.log": {
+      "bytes": 6329,
+      "sha256": "c036dfc5740db12c92719b4c4aaa3bbabaa338d9d057743bbb36bf029a6e81fb"
+    },
+    "report.json": {
+      "bytes": 686,
+      "sha256": "76b76bf82922ee42f19439faced227612c2904b79981129994841e00f050a532"
+    },
+    "test_gt_folder_meta_texture_registry.py.log": {
+      "bytes": 3014,
+      "sha256": "8bced0859db199c3206a53e38bafc5c3f3985ff6a3d0eacf0533a3f864c69143"
+    },
+    "test_verify_exported_material_texture_links.py.log": {
+      "bytes": 4399,
+      "sha256": "477185fc134f64feb901b347a2eb6f947ac5250022b724fc59406220077560aa"
+    }
+  },
+  "namespace_bounds": {
+    "max_file_bytes": 4194304,
+    "max_entries": 250000,
+    "bounds_fail_closed": true
+  },
+  "integration_review": {
+    "native_workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+    "material_texture_audit_lines": "3848-3859",
+    "material_texture_audit_continue_on_error": true,
+    "native_workflow_modified": false,
+    "native_execution_performed": false,
+    "existing_t5_native_material_texture_integration_suite_not_rerun": true
+  },
+  "local_archive_recheck": {
+    "crc": true,
+    "sha256": true,
+    "all_5_member_hashes_calculated": true,
+    "baseline_3_errors_and_3_failures_verified": true,
+    "both_fixed_suite_counts_verified": true,
+    "local_code_execution": false
+  },
+  "original_particle108_third_export_comparison_proven": false,
+  "original_source_authorization_proven": false,
+  "original_fft_coordinate_or_kernel6_root_cause_resolved": false,
+  "original_runtime_keywords_or_install_proven": false,
+  "original_same_export_inventory": {
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "shader_guids": 37,
+    "historical": true
+  },
+  "G0_G6_closed": false,
+  "other_branches_written": false
+}

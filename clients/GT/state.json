@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-water-guid-namespace/README_AR.md",
-  "next_action": "G0-G2-folder-meta-aware-material-texture-registry: inspect and reproduce the distinct existing verify_exported_material_texture_links.py audit gap (lines 151–160: files-only targets reject ordinary Unity directory .meta as orphan_asset_meta). Source-free fixtures must prove a legitimate physical folder with canonical folderAsset metadata can be registered for GUID collision detection without becoming a resolvable Texture2D target; preserve duplicate/reserved rejection, reject missing/non-directory folder targets and folder-vs-file mismatch, preserve all strict PPtr/texture checks. Compare existing provenance tools and do not weaken audit or activate native build. This supports white-mesh material/texture integrity; does not prove original visual repair. If already covered by a separate exact integrated gate, move to another distinct G1/G2 or G4 source-free gap. Water GUID namespace repair and prior G3/FFT authored replay are complete only in tested scope, do not repeat. A3, Particle108 third source/export alpha comparison, original FFT/kernel6 cause, NEXT23b and ten runtime groups remain blocked/open; no acquisition without proven authorized source. G0–G6 open; no installer or production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference.",
+  "latest_session": "clients/GT/sessions/20261127-folder-meta-texture-registry/README_AR.md",
+  "next_action": "G1-G2-external-texture-fileid-unique-document: audit the actual B46 is_texture branch for serialized .asset/.cubemap/.rendertexture (currently any matching class and fileID header), compare existing document-scoped source/export checks, and reproduce any actual ambiguity acceptance on source-free fixtures with duplicate fileID in same container (same or different class), malformed/zero identity, and valid distinct subobjects. Ensure exactly one unambiguous external texture document is resolved without weakening existing local PPtr/Texture2DArray rules. This is a structural identity check only; no pixel equivalence or real original visual repair. If already covered by integrated exact check, select another distinct G1/G2 or G4 gap. Water namespace and folder registry tested scope completed, prior G3/FFT authored replay complete in exact scope; do not repeat. A3 and Particle108 third-export comparison remain blocked; original FFT/kernel6 cause, NEXT23b and all ten runtime groups open. G0–G6 open; no acquisition without authorized source, no native build request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1963,6 +1963,41 @@
     "new_XAPK_requested": false
   },
   "current_handoff": {
+    "latest_folder_meta_texture_registry": {
+      "status": "PASS_AUTHORED_FOLDER_META_TEXTURE_REGISTRY",
+      "reviewed_base": "41fc4f8ea76017d500b8f0302a2195bd303707f7",
+      "preparation_commit": "0aa404149340281a5f98a5f572d828174c041669",
+      "head": "09a3677928e232461f2399d8d6586e7b5a969033",
+      "run_id": 46001009902,
+      "job_id": 140512340424,
+      "conclusion": "success",
+      "guard_run_id": 46001009787,
+      "guard_job_id": 140512340084,
+      "guard_conclusion": "success",
+      "session": "clients/GT/sessions/20261127-folder-meta-texture-registry/README_AR.md",
+      "evidence": "clients/GT/sessions/20261127-folder-meta-texture-registry/evidence.json",
+      "archive": "clients/GT/sessions/20261127-folder-meta-texture-registry/actual-run-46001009902.zip",
+      "artifact_id": 15198930066,
+      "archive_bytes": 3376,
+      "archive_sha256": "4805fa538d1dd21a6a721f7623d5df316a8816a9b8e8283c89d8777b524ef4d8",
+      "archive_git_blob": "6512495e528b097279f4a4d578ea3b7d55a08e7d",
+      "archive_crc_sha_size_verified_locally": true,
+      "old_gate_git_blob": "0f357e74543645d0570871c159cc55c016dff428",
+      "new_gate_git_blob": "fcf67a457755f483242206e4db25d5d6fea83567",
+      "new_tests_git_blob": "c89cd378d0e87952e4b42da96e074ccb173d354c",
+      "baseline_targeted_test_methods": 6,
+      "baseline_false_rejections_repaired": 3,
+      "baseline_false_acceptances_repaired": 3,
+      "ci_total_tests": 50,
+      "ci_new_test_methods": 21,
+      "ci_existing_B46_tests": 29,
+      "scope": "Physical Assets GUID namespace and file/folder target type; not external packages or original source equivalence.",
+      "original_assets_read": false,
+      "source_export_equivalence_verified": false,
+      "unity_or_device_tested": false,
+      "XAPK_requested": false,
+      "next": "G1-G2-external-texture-fileid-unique-document: audit the actual B46 is_texture branch for serialized .asset/.cubemap/.rendertexture (currently any matching class and fileID header), compare existing document-scoped source/export checks, and reproduce any actual ambiguity acceptance on source-free fixtures with duplicate fileID in same container (same or different class), malformed/zero identity, and valid distinct subobjects. Ensure exactly one unambiguous external texture document is resolved without weakening existing local PPtr/Texture2DArray rules. This is a structural identity check only; no pixel equivalence or real original visual repair. If already covered by integrated exact check, select another distinct G1/G2 or G4 gap. Water namespace and folder registry tested scope completed, prior G3/FFT authored replay complete in exact scope; do not repeat. A3 and Particle108 third-export comparison remain blocked; original FFT/kernel6 cause, NEXT23b and all ten runtime groups open. G0–G6 open; no acquisition without authorized source, no native build request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference."
+    },
     "latest_water_guid_namespace_repair": {
       "status": "PASS_AUTHORED_WATER_GUID_ASSETS_NAMESPACE",
       "reviewed_base": "d1cb6cec320eccf649a416e6340d9cd868562e44",
@@ -2370,9 +2405,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G0-G2-folder-meta-aware-material-texture-registry",
-      "status": "NEXT_SOURCE_FREE_AFTER_WATER_GUID_NAMESPACE_PASS",
-      "next": "G0-G2-folder-meta-aware-material-texture-registry: inspect and reproduce the distinct existing verify_exported_material_texture_links.py audit gap (lines 151–160: files-only targets reject ordinary Unity directory .meta as orphan_asset_meta). Source-free fixtures must prove a legitimate physical folder with canonical folderAsset metadata can be registered for GUID collision detection without becoming a resolvable Texture2D target; preserve duplicate/reserved rejection, reject missing/non-directory folder targets and folder-vs-file mismatch, preserve all strict PPtr/texture checks. Compare existing provenance tools and do not weaken audit or activate native build. This supports white-mesh material/texture integrity; does not prove original visual repair. If already covered by a separate exact integrated gate, move to another distinct G1/G2 or G4 source-free gap. Water GUID namespace repair and prior G3/FFT authored replay are complete only in tested scope, do not repeat. A3, Particle108 third source/export alpha comparison, original FFT/kernel6 cause, NEXT23b and ten runtime groups remain blocked/open; no acquisition without proven authorized source. G0–G6 open; no installer or production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference.",
+      "id": "G1-G2-external-texture-fileid-unique-document",
+      "status": "NEXT_SOURCE_FREE_AFTER_FOLDER_META_TEXTURE_REGISTRY_PASS",
+      "next": "G1-G2-external-texture-fileid-unique-document: audit the actual B46 is_texture branch for serialized .asset/.cubemap/.rendertexture (currently any matching class and fileID header), compare existing document-scoped source/export checks, and reproduce any actual ambiguity acceptance on source-free fixtures with duplicate fileID in same container (same or different class), malformed/zero identity, and valid distinct subobjects. Ensure exactly one unambiguous external texture document is resolved without weakening existing local PPtr/Texture2DArray rules. This is a structural identity check only; no pixel equivalence or real original visual repair. If already covered by integrated exact check, select another distinct G1/G2 or G4 gap. Water namespace and folder registry tested scope completed, prior G3/FFT authored replay complete in exact scope; do not repeat. A3 and Particle108 third-export comparison remain blocked; original FFT/kernel6 cause, NEXT23b and all ten runtime groups open. G0–G6 open; no acquisition without authorized source, no native build request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference.",
       "previous_G3_and_G4_authored_witnesses_preserved": true,
       "original_acceptance_blocked": true
     },
