@@ -1,3 +1,15 @@
+# GT — نجاح G5 alpha/Texture2D provenance | 27 نوفمبر 2026
+
+رأس البدء fb9bb71d2bb3e6e8c8784ae6f0548bafffe01aaf مطابق للرأس الحي؛ G4 وG5 السابقان ناجحان ولا تشغيل متعارض. دفعة a5eff59cd7c651ff32f0f59dc88b3ff0e291e541 [skip ci] أصلحت مسار gt_particle108_export_alpha_diagnostic.py، ثم f1f69e21cb2b867e014121e3c45ee4bb3145f3b3 شغّل الفحص المؤلف فقط. [45940660052](https://github.com/alwansan/raf/actions/runs/45940660052) success، job 140313961151؛ الحارس [45940660054](https://github.com/alwansan/raf/actions/runs/45940660054) success، بقية jobs skipped. 70 اختباراً ناجحاً (11 اختبار تكامل جديد لملفات Material YAML/PNG حقيقية مؤلفة، 10 Particle108 legacy، 20 B05، 29 B46 texture integrity). فقط قراء المصدر محاكَون؛ الفاحص والـYAML والـPIL فعليون. لا Unity/Android أو أصل.
+
+أصبح الفاحص يحفظ كل صف Texture2D28 من trace بدلاً من إسقاط المطابقة كلها عند Type0 أو غياب صف؛ يرفض تناقض fileID/GUID/type ويقيد external Texture2D image بـ2800000 وGUID صالح غير محجوز، ويرفض importer array. لا يحسب PPtr inferred كـexact ولا يثبت Type0 محلياً ولو تطابق الثلاثي غير المقيد بالوثيقة. يفصل status الكامل عن missing trace وعن local partial، ويحفظ عدادات UV والـalphaSource none/input/grayscale كمؤشرات خطر للصور غير المعتمة لا نتائج Unity. يرفض trace JSON duplicate keys وMaterial document collision وتباين PPtr؛ لا تعديل Material أو texture. لا ادعاء إصلاح النار أو الأبيض في اللعبة.
+
+الأرشيف الخام clients/GT/sessions/20261127-particle108-alpha-provenance/actual-run-45940660052.zip (3399 bytes، SHA256 f22a640b1e8fa23cffa73da984d846887a4717af7c7dd598be0eed055c999f64)؛ blob 8262c39fca5d0a0c0c91864bc2c72b9c5fc0fe93. تحقق محلي CRC والحجم والبصمة وكل سجلات الاختبار وreport.json؛ manifest clients/GT/sessions/20261127-particle108-alpha-provenance/evidence.json. لا إعادة اختبار Unity محلياً، لا checkout سابق؛ أرشيفات الدفعات القديمة موجودة. لا اقتناء أصول أو LFS، ولا APK/XAPK.
+
+**التالي G5-imported-alpha-vulkan-pixels:** الاختبار السابق SyntheticMaterialAlphaValidation.cs يستعمل Texture2D.SetPixels لا TextureImporter من PNG. نفّذ تجربة Unity Vulkan Linux مؤلفة واحدة على alphaSource None/FromInput/FromGrayScale مع نفس PNG وMaterial، وافصل قناة alpha المستوردة عن tint وblend وsRGB/mips. سجل readback RGBA وضوابط wrong blend/white/fallback؛ oracle مستقل. لا تعتبره إثبات Android أو أصل Particle108. إذا تعذرت Unity انتقل إلى B05 document-local pointer scope ومقارنة source/export على مؤلفات. لا تعد الدفعات الناجحة بلا سبب. A3 معلق لمصدر مأذون مثبت؛ G0–G6 مفتوحة. أولوية الأبيض والنار مستمرة، census التاريخي 688/786 non-dummy، 98 dummy، 37 GUID دون تحديث بلا census جديد. CL/المختبر قراءة فقط، BLACK خارج النطاق، الأنيميشن مؤجل، لا هاتف جزئي أو XAPK قبل G0–G6. تحقق HEAD وActions عند Continue.
+
+---
+
 # GT — نقطة الاستئناف الأحدث | 27 نوفمبر 2026
 
 ## GT — نتيجة G4 FFT receipt v2 | 27 نوفمبر 2026

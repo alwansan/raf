@@ -1306,11 +1306,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "7a42c79f4fdad26e1231ccd7b01e8c8c6005ad43",
-    "purpose": "G4 FFT receipt v2 authored actual pass; G5 Particle108 census authored compiler pass; original acceptance remains open",
+    "reviewed_remote_head": "f1f69e21cb2b867e014121e3c45ee4bb3145f3b3",
+    "purpose": "G5 Particle108 authored PNG/YAML alpha pointer provenance regression passes; original acceptance remains open",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-particle108-resource-census/README_AR.md",
+    "index": "clients/GT/sessions/20261127-particle108-alpha-provenance/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -1562,9 +1562,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G5-Particle108-material-alpha-provenance",
-      "status": "NEXT_SOURCE_AUDIT",
-      "next": "Review existing Particle108/fire material alpha, texture pointer and blend provenance, especially local type-0 texture references and white-mesh material/resource parity. Choose a concrete source defect and authored falsification test; do not repeat passed G4/G5 probes without a new reason. A3 remains blocked on verified authorized original source; G0-G6 remain open. Recheck live HEAD and Actions before changes."
+      "id": "G5-imported-alpha-vulkan-pixels",
+      "status": "NEXT_PRODUCTIVE",
+      "next": "Create one new authored-only Linux Vulkan Unity 2021.3.45f2 pixel test for actual AssetDatabase TextureImporter PNG alphaSource None vs FromInput vs FromGrayScale and source-alpha blending, using identical authored PNG bytes and stable Material binding. Prior SyntheticMaterialAlphaValidation uses runtime Texture2D.SetPixels and does not prove importer alphaSource. Record actual importer settings, imported channel values, rendered RGBA, and distinguish wrong blend/white texture/fallback controls. Independent oracle must separate alpha import, material tint, sRGB/mips and blend. Do not infer original Particle108 settings or Android device parity. If activation unavailable, advance B05 document-local pointer scope and source-vs-export pixel evidence on authored fixtures. A3 remains blocked; no original acquisition, phone or XAPK."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -1800,6 +1800,60 @@
       "original_assets_read": false,
       "original_fire_or_white_mesh_repaired": false,
       "Unity_or_Android_pixels_verified": false,
+      "XAPK_requested": false
+    },
+    "latest_particle108_alpha_provenance": {
+      "status": "PASS_AUTHORED_PARTICLE108_ALPHA_POINTER_PROVENANCE",
+      "run_id": 45940660052,
+      "job_id": 140313961151,
+      "head": "f1f69e21cb2b867e014121e3c45ee4bb3145f3b3",
+      "conclusion": "success",
+      "guard_run_id": 45940660054,
+      "artifact_id": 15172333242,
+      "archive": "clients/GT/sessions/20261127-particle108-alpha-provenance/actual-run-45940660052.zip",
+      "archive_bytes": 3399,
+      "archive_sha256": "f22a640b1e8fa23cffa73da984d846887a4717af7c7dd598be0eed055c999f64",
+      "archive_git_blob": "8262c39fca5d0a0c0c91864bc2c72b9c5fc0fe93",
+      "archive_crc_sha_size_verified_locally": true,
+      "members": {
+        "report.json": {
+          "bytes": 736,
+          "sha256": "76bfc4d43a3d3fdaa34711053656f382d66e65d870f97fc069146748a0a3e747"
+        },
+        "test_gt_particle108_alpha_provenance.py.log": {
+          "bytes": 2021,
+          "sha256": "eaa42a353cfde0729da11bf9a3eb555867120e3b116e01074bb572cf3abde3b2",
+          "tests": 11
+        },
+        "test_b05_verify_material_texenv_bindings.py.log": {
+          "bytes": 3155,
+          "sha256": "2d4cf86bd2ea636295ccb8175aa030a7840f7737621c63d5f153b9bbaee07467",
+          "tests": 20
+        },
+        "test_gt_particle108_export_alpha_diagnostic.py.log": {
+          "bytes": 2381,
+          "sha256": "6aa24b61b7a1533969623d34924dcefb6fdf17aa7eb13c8d90a32ad8788db840",
+          "tests": 10
+        },
+        "test_verify_exported_material_texture_links.py.log": {
+          "bytes": 4399,
+          "sha256": "892b607c92d42db7f13ffe73d608f0ec601e73aea741c3b08749658339f12400",
+          "tests": 29
+        }
+      },
+      "total_tests": 70,
+      "new_integration_tests": 11,
+      "actual_authored_Material_YAML_and_PNG_decoded": true,
+      "original_source_readers_mocked_in_integration_tests": true,
+      "original_assets_read": false,
+      "all_three_texture_route_acceptance_requires_independent_full_pointer_match": true,
+      "partial_missing_trace_not_promoted": true,
+      "local_type0_target_identity_proven": false,
+      "texture_importer_metadata_hazards_are_not_runtime_proof": true,
+      "original_alpha_loss_proven": false,
+      "Unity_or_Android_pixels_verified": false,
+      "original_game_fire_repaired": false,
+      "white_mesh_repaired": false,
       "XAPK_requested": false
     }
   },
