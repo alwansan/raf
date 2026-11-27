@@ -1,4 +1,172 @@
 {
+  "latest_particle108_verified_texture_preservation": {
+    "status": "PASS_ACTUAL_AUTHORED_VERIFIED_TEXTURE_PRESERVATION",
+    "starting_head": "964528228595d55226c1d08b80aa774096d9d89a",
+    "preparation_commit": "78db9e05f9b59baef39a07af32c1c8507e579696",
+    "first_execution_head": "8d0bdc9c75065b0e5e114785cad23d55423eeb63",
+    "correction_commit": "8f8eb48b91bdcf639f3c0808f3c64bdb444d3bda",
+    "execution_head": "cf6a275c550d2feedae42d9f94bace4f8b159b41",
+    "run": 46044376618,
+    "job": 140659822400,
+    "conclusion": "success",
+    "lint_run": 46044376582,
+    "lint_job": 140659822225,
+    "lint_conclusion": "success",
+    "first_attempt": {
+      "status": "FAILED_COMPILE_ONLY",
+      "head": "8d0bdc9c75065b0e5e114785cad23d55423eeb63",
+      "run": 46044158963,
+      "job": 140659102887,
+      "lint": 46044158765,
+      "lint_conclusion": "success",
+      "retained_input_verified": true,
+      "owner_bytes": 1920,
+      "owner_sha256": "a9849829dc7c6bb261d73fca5467066cddf2cf5645d91818f0bd69d8f0af409c",
+      "failure": "CS0019 int vs ClassIDType in new wrapper comparison; actual export and RGBA comparison not reached",
+      "archive": {
+        "bytes": 3967,
+        "sha256": "161de28118efb53616072aa64c2f93282f819444c75697323ca5f0410ad01821",
+        "blob": "9025d18ce9c11617fa10bd41bfb1f9ce9a0bb738",
+        "log_chunks": 3,
+        "independently_verified_size_sha256_and_exact_git_bytes_equal_actual_log_chunks": true,
+        "all_member_crc_independently_verified": false
+      },
+      "actual_original_assets_read": false,
+      "artifacts": [
+        {
+          "id": 15220224520,
+          "name": "gt-verified-texture-preservation",
+          "bytes": 9363,
+          "github_reported_digest": "sha256:4a6511c6e06bbfa6c846b3e3dfee5fdd3c10bc0df372a5b18b61505c9c67a615"
+        }
+      ]
+    },
+    "source_blobs": {
+      "tools/gt_particle108_verified_texture_preservation/VerifiedTexturePreservationExporter.cs": "43455805d931eeba18a093b3b67091e315c60ee0",
+      "tools/gt_particle108_verified_texture_preservation/RaftGTCollectionWitness.cs": "e21a6fc62132c2a0733ac9ecceb5f19cfc7115fe",
+      "tools/gt_particle108_verified_texture_preservation/witness.py": "7dc7ce8370f91c9b2a2d1ad08ce822bb812bef16",
+      "tools/gt_authored_particle108_collection_cause/witness.py": "7c5e19c0c8b55a54a05d8196258c8c171a4047bb",
+      "tools/gt_authored_particle108_collection_cause/RaftGTCollectionWitness.cs": "0f637d58b8b89de518ecb0360e93762e3b241f26",
+      "tools/gt_authored_mesh_binary/witness.py": "18c23415a29cf537f7341517729e2ccb7de8bad3",
+      "tools/gt_authored_serialized_renderer_route/witness.py": "24835f05575b40eb91fbb5bd635e1fcf0bb028db",
+      "tools/gt_authored_external_pptr_route/witness.py": "83b463886c052376f9d439707447c3c1991ad8be",
+      "tools/gt_authored_mesh_actual_export/witness.py": "49a45fdc73a1846cab1556ab39c4ce2d73d3a374",
+      "android-port/Experiments/ExportLineage/ExportLineage.csproj": "7e3fd92ce4f1b093780266c619c46b7871513f66",
+      "scripts/b05_verify_material_texenv_bindings.py": "730550c9851e3ce974ee97037c489eba1e7347d5"
+    },
+    "public_exporter": {
+      "repository": "nowl-it/AssetRipperCLI",
+      "commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+      "license": "GPL-3.0",
+      "engine_exporter_blob": "74181029996848ae223cc5f8019b6675d1d23170",
+      "texture_exporter_blob": "eb8ebe66d42b328dd751244f6e58e20680dd5401",
+      "project_exporter_blob": "820a6123480ac7a98c40ac19e7e9d6f2568ddfa6",
+      "public_repo_written": false
+    },
+    "retained_input": {
+      "path": "clients/GT/sessions/20261127-particle108-nonexportable-cause/actual-evidence-46033714513.zip",
+      "sha256": "ea58cf0db6543ebce8bc989562b3e93f6c666f0aa9324258005e98e108048a8a",
+      "blob": "c3b303eada60ab9fcadf825a2933bc503686650b",
+      "bytes": 11504,
+      "entries": 22,
+      "previous_run": 46033714513,
+      "owner_bytes": 1920,
+      "owner_sha256": "a9849829dc7c6bb261d73fca5467066cddf2cf5645d91818f0bd69d8f0af409c",
+      "new_source_fixtures": 0
+    },
+    "actual_report": {
+      "after_actual_pngs": 4,
+      "after_nonexportable_redirects": 0,
+      "before_actual_pngs": 2,
+      "before_nonexportable_redirects": 2,
+      "distinct_alpha_pixels_preserved": 3,
+      "engine_catalogue_target_verified": false,
+      "exact_material_pointers": 4,
+      "exact_rgba_pixels": 14,
+      "explicit_preservation_ids": [
+        821,
+        822
+      ],
+      "new_source_fixtures": 0,
+      "no_custom_GUID_or_fileID": true,
+      "original_assets_read": false,
+      "original_particle108_cause_proven": false,
+      "original_recovery_proven": false,
+      "production_changed": false,
+      "reused_prior_actual_archive_sha256": "ea58cf0db6543ebce8bc989562b3e93f6c666f0aa9324258005e98e108048a8a",
+      "status": "PASS_ACTUAL_AUTHORED_VERIFIED_TEXTURE_PRESERVATION",
+      "unity_import_or_gpu_verified": false,
+      "unselected_name_size_controls_pass": 2
+    },
+    "artifacts": [
+      {
+        "id": 15220344678,
+        "name": "gt-verified-texture-preservation",
+        "bytes": 31544,
+        "github_reported_digest": "sha256:8d501296138fab82192f11e8d03ec7a12d65737e8f6f52f154201e48fa57bc9d"
+      }
+    ],
+    "permanent_archive": {
+      "path": "clients/GT/sessions/20261127-particle108-verified-texture-preservation/actual-preserved-texture-evidence.zip",
+      "blob": "921df2881a5322a946d9b4a217437bf96afee806",
+      "bytes": 16667,
+      "sha256": "ae5000e1dd1466dc7531e44a91b1c1274b0939579d4de1524270aa297c92707c",
+      "entries": 31,
+      "uncompressed_bytes": 27380,
+      "log_chunks": 11,
+      "independent_size_sha256_all_member_crc_verified": true,
+      "actual_report_matches_log": true,
+      "source_owner_hash_verified": true,
+      "independent_png_pixels": 14,
+      "exact_material_pointers": 4,
+      "distinct_alpha_pixels": 3,
+      "outer_artifact_independently_downloaded": false
+    },
+    "historical_runs": [
+      {
+        "run": 42132262184,
+        "metadata_conclusion_rechecked": "success",
+        "new_original_execution": false
+      },
+      {
+        "run": 42134436841,
+        "metadata_conclusion_rechecked": "success",
+        "new_original_execution": false
+      },
+      {
+        "run": 43777398215,
+        "metadata_conclusion_rechecked": "success",
+        "new_original_execution": false
+      },
+      {
+        "run": 43778717548,
+        "metadata_conclusion_rechecked": "success",
+        "new_original_execution": false
+      },
+      {
+        "run": 43929698985,
+        "metadata_conclusion_rechecked": "success",
+        "new_original_execution": false
+      }
+    ],
+    "historical_material_census": {
+      "non_dummy": 688,
+      "total": 786,
+      "dummy": 98,
+      "dummy_shader_guid": 37,
+      "new_census": false
+    },
+    "original_source_authorization_verified": false,
+    "original_assets_read_or_acquired": false,
+    "original_particle108_cause_proven": false,
+    "original_recovery_proven": false,
+    "actual_original_shader_fanout_proven": false,
+    "production_install_allowed": false,
+    "unity_or_device_run": false,
+    "xapk_started": false,
+    "next_action": "G1-G2-G5-authorized-original-PARTICLE108-A3-and-Dummy-fanout: actual scoped native preservation of two approved authored ordinary textures now corrects the demonstrated metadata-cache collision (46044376618; prior causal 46033714513), no new fixtures. Do not repeat that experiment, invent substitute assets, apply the override to real originals just because of name/size or absent image, or activate it globally. The third original Particle108 was nonexportable with exact same-export tenth pointer (42132262184/42134436841), two external image targets plus third source alpha (43777398215/43778717548); these do NOT establish cache collision or actual target pixels. Obtain independently verified rights-holder permission/ownership, scope for storage/CI/port and immutable approved original source manifest/owner/provider lengths/SHA, actual typed class28 owner/PathID/raw object hash, source format/usage/mips and exact provider extent, same invocation collection class/selection reason (reserved engine file vs cache vs sprite vs deleted/other), actual tenth Material PPtr, independently authorized runtime/catalogue target identity/bytes or readback. If and only if actual erroneous metadata-only redirect and supported ordinary RGBA32 single-mip zero-sprite object are proven, admit exact processed instance for private selective native export; otherwise determine original format/usage/appropriate mechanism first, never force an engine or sprite target. Require same-export exact original Material/PPtr/UV/source and recovered RGBA/alpha, preserve unrelated targets, actual importer/render-state/shader and later integrated device proof. In parallel highest priority white meshes: authorized immutable post23 export and typed source Shader48/GUID/Renderer/Material trace, use gt_shader_fanout exact ranking (46036067471), verify source mesh/material/texture/program and protected census before installing. No further repetitive authored batches; if authorized inputs unavailable, record blocker and only make genuinely distinct productive remediation if supported. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. NEXT23b admitted diagnostics only; original 134-program/2312-stage and independent Unity compiler/route join remain open. A3, third Particle108, original FFT/kernel6, ten runtime groups and G0-G6 open. CL/lab read-only, BLACK/animation excluded. No original acquisition without independent authorization, production/native/device/APK/XAPK before integrated closure.",
+    "session": "clients/GT/sessions/20261127-particle108-verified-texture-preservation/README_AR.md"
+  },
   "latest_next23b_final_route_admission": {
     "status": "PASS_ACTUAL_FINAL_ROUTE_MODULE_ADMISSION_AUTHORED",
     "starting_head": "ce45b0b47360b99987dcc86d1937e90aa3d05808",
@@ -2610,8 +2778,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-next23b-final-route-admission/README_AR.md",
-  "next_action": "G1-G2-G5-original-white-mesh-black-fire-priority-admission: NEXT23b source-slot DXBC, actual translation replay, bound-stage resource identity and same-toolchain final route module admission now have separate verifiers and actual authored evidence (46038739224,46040018978,46041454326,46042755531; retained Unity markers 46037428567). Do not repeat these or other completed authored route/pixel/mesh batches. Prioritize independently authorized original source-backed white mesh / black fire and highest-impact Dummy GUID fanout. Read the latest A3/Particle108/mesh/renderer/material fanout evidence and exact authorized handoff blockers; review actual source-only code for a materially new demonstrated integration defect only if it directly advances restoration, not a new synthetic ladder. Original access requires independently verifiable rights-holder authorization/ownership and storage/CI/port scope, immutable source commit/manifest, source owner length/SHA, typed owner/PathID/raw object SHA, protected same-instance export and exact resource/Material/Renderer trace. If absent, record the exact blocked resource and evidence needed; do not acquire originals or represent authored tests as restoration. NEXT23b remains open: after lawful handoff, run the admitted full 134-program/2312-stage chain, prove source-derived keyword scope/pass semantics and actual final same-toolchain modules. glslang hashes are NOT Unity DXC expectations; require separate independently authenticated same-version Unity Android Vulkan compiler inputs/options, actual module capture and independent serialized same-export route/module decode and byte join, actual GUID/consumer and protected census. Original semantic equivalence and visual recovery unproved. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. A3, third Particle108, original FFT/kernel6, NEXT23b, ten runtime groups, G0-G6 open. CL/lab read-only, BLACK/animation excluded. No production/native/device/APK/XAPK before integrated closure.",
+  "latest_session": "clients/GT/sessions/20261127-particle108-verified-texture-preservation/README_AR.md",
+  "next_action": "G1-G2-G5-authorized-original-PARTICLE108-A3-and-Dummy-fanout: actual scoped native preservation of two approved authored ordinary textures now corrects the demonstrated metadata-cache collision (46044376618; prior causal 46033714513), no new fixtures. Do not repeat that experiment, invent substitute assets, apply the override to real originals just because of name/size or absent image, or activate it globally. The third original Particle108 was nonexportable with exact same-export tenth pointer (42132262184/42134436841), two external image targets plus third source alpha (43777398215/43778717548); these do NOT establish cache collision or actual target pixels. Obtain independently verified rights-holder permission/ownership, scope for storage/CI/port and immutable approved original source manifest/owner/provider lengths/SHA, actual typed class28 owner/PathID/raw object hash, source format/usage/mips and exact provider extent, same invocation collection class/selection reason (reserved engine file vs cache vs sprite vs deleted/other), actual tenth Material PPtr, independently authorized runtime/catalogue target identity/bytes or readback. If and only if actual erroneous metadata-only redirect and supported ordinary RGBA32 single-mip zero-sprite object are proven, admit exact processed instance for private selective native export; otherwise determine original format/usage/appropriate mechanism first, never force an engine or sprite target. Require same-export exact original Material/PPtr/UV/source and recovered RGBA/alpha, preserve unrelated targets, actual importer/render-state/shader and later integrated device proof. In parallel highest priority white meshes: authorized immutable post23 export and typed source Shader48/GUID/Renderer/Material trace, use gt_shader_fanout exact ranking (46036067471), verify source mesh/material/texture/program and protected census before installing. No further repetitive authored batches; if authorized inputs unavailable, record blocker and only make genuinely distinct productive remediation if supported. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. NEXT23b admitted diagnostics only; original 134-program/2312-stage and independent Unity compiler/route join remain open. A3, third Particle108, original FFT/kernel6, ten runtime groups and G0-G6 open. CL/lab read-only, BLACK/animation excluded. No original acquisition without independent authorization, production/native/device/APK/XAPK before integrated closure.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -4207,6 +4375,12 @@
     "new_XAPK_requested": false
   },
   "current_handoff": {
+    "latest_particle108_verified_texture_preservation": {
+      "execution_head": "cf6a275c550d2feedae42d9f94bace4f8b159b41",
+      "run": 46044376618,
+      "evidence": "clients/GT/sessions/20261127-particle108-verified-texture-preservation/evidence.json",
+      "next_action": "G1-G2-G5-authorized-original-PARTICLE108-A3-and-Dummy-fanout: actual scoped native preservation of two approved authored ordinary textures now corrects the demonstrated metadata-cache collision (46044376618; prior causal 46033714513), no new fixtures. Do not repeat that experiment, invent substitute assets, apply the override to real originals just because of name/size or absent image, or activate it globally. The third original Particle108 was nonexportable with exact same-export tenth pointer (42132262184/42134436841), two external image targets plus third source alpha (43777398215/43778717548); these do NOT establish cache collision or actual target pixels. Obtain independently verified rights-holder permission/ownership, scope for storage/CI/port and immutable approved original source manifest/owner/provider lengths/SHA, actual typed class28 owner/PathID/raw object hash, source format/usage/mips and exact provider extent, same invocation collection class/selection reason (reserved engine file vs cache vs sprite vs deleted/other), actual tenth Material PPtr, independently authorized runtime/catalogue target identity/bytes or readback. If and only if actual erroneous metadata-only redirect and supported ordinary RGBA32 single-mip zero-sprite object are proven, admit exact processed instance for private selective native export; otherwise determine original format/usage/appropriate mechanism first, never force an engine or sprite target. Require same-export exact original Material/PPtr/UV/source and recovered RGBA/alpha, preserve unrelated targets, actual importer/render-state/shader and later integrated device proof. In parallel highest priority white meshes: authorized immutable post23 export and typed source Shader48/GUID/Renderer/Material trace, use gt_shader_fanout exact ranking (46036067471), verify source mesh/material/texture/program and protected census before installing. No further repetitive authored batches; if authorized inputs unavailable, record blocker and only make genuinely distinct productive remediation if supported. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. NEXT23b admitted diagnostics only; original 134-program/2312-stage and independent Unity compiler/route join remain open. A3, third Particle108, original FFT/kernel6, ten runtime groups and G0-G6 open. CL/lab read-only, BLACK/animation excluded. No original acquisition without independent authorization, production/native/device/APK/XAPK before integrated closure."
+    },
     "latest_next23b_final_route_admission": {
       "execution_head": "2c3933ef1c00d5a4c064226608668a180fa7b761",
       "run": 46042755531,

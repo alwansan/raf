@@ -14,7 +14,16 @@
     "sha256": "161de28118efb53616072aa64c2f93282f819444c75697323ca5f0410ad01821",
     "blob": "9025d18ce9c11617fa10bd41bfb1f9ce9a0bb738",
     "log_chunks": 3,
-    "independent_rehash_pending": true
+    "independently_verified_size_sha256_and_exact_git_bytes_equal_actual_log_chunks": true,
+    "all_member_crc_independently_verified": false
   },
-  "actual_original_assets_read": false
+  "actual_original_assets_read": false,
+  "artifacts": [
+    {
+      "id": 15220224520,
+      "name": "gt-verified-texture-preservation",
+      "bytes": 9363,
+      "github_reported_digest": "sha256:4a6511c6e06bbfa6c846b3e3dfee5fdd3c10bc0df372a5b18b61505c9c67a615"
+    }
+  ]
 }
