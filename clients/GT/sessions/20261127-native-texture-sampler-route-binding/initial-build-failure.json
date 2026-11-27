@@ -1,0 +1,18 @@
+{
+  "run_id": 45954775949,
+  "job_id": 140358606965,
+  "head": "2ebdbb8365169c5128fe57917443914dea15609f",
+  "conclusion": "failure",
+  "total_regression_tests": 183,
+  "new_sampler_tests": 28,
+  "reason": "CS0136 local settings collides with LibraryConfiguration settings in enclosing scope; actual native export not executed",
+  "artifact_id": 15177938237,
+  "archive_bytes": 7635,
+  "archive_sha256": "07fea82c1b7779a6e5c76a39a14c07585adc07ce82344f448652b6b96261a246",
+  "guard_run_id": 45954775966,
+  "guard_conclusion": "success",
+  "archive": "clients/GT/sessions/20261127-native-texture-sampler-route-binding/failed-build-45954775949.zip",
+  "archive_git_blob": "edbeffad91a65df9380f9a4b0f4365cb60265d50",
+  "archive_crc_sha_size_verified_locally": true,
+  "actual_export_executed": false
+}
