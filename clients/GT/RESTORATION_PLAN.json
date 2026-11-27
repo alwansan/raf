@@ -1306,11 +1306,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "e79e09151def7abe680b03dc230cdff9ff41b27e",
-    "purpose": "G4 authored FFT coordinate diagnosis complete: both Unity compiler controls build, independent replay validates image operations, strict keyword-table condition exposed. Original FFT/other G0-G6 unresolved.",
+    "reviewed_remote_head": "a6b97f5ab6ab2640f5fce24cfc368346d986f6e6",
+    "purpose": "G4 strict authored FFT bundle gate candidate; actual CI pending; original gate unchanged.",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/README_AR.md",
+    "index": "clients/GT/sessions/20261127-fft-bundle-gate/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -1563,9 +1563,9 @@
     },
     "active_fallback_workstream": {
       "id": "G4-FFT-bundle-gate",
-      "status": "ACTIVE_NEXT",
+      "status": "CANDIDATE_PENDING_ACTUAL_CI",
       "previous_diagnostic": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/actual-replay-45936590347.zip",
-      "next": "Implement a narrowly scoped fail-closed FFT acceptance gate that distinguishes the four observed inert engine Stereo names from any actually used local/global/legacy keyword indices. Require exact independently authorized source topology, no active route variants, correct name/flag evidence and full decoded SPIR-V validation plus source/receipt/bundle byte commitments. Test with the existing authored bundles and negative controls, including unknown/active keyword, missing stage, same-size bundle mutation and wrong-coordinate program. Do not weaken original acceptance or assert historical FFT coordinate bug fixed. No original acquisition until authorization verified. Then proceed to next G4/G5 repair, keep G0-G6 open."
+      "next": "Run isolated CPU-only gate on pinned authored bundles, retain receipt and controls. No original gate change; A3 blocked. Then next productive G4/G5 repair."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -1652,6 +1652,16 @@
       "original_assets_read": false,
       "original_game_or_device_pixels_verified": false,
       "new_XAPK": false
+    },
+    "latest_fft_bundle_gate_candidate": {
+      "base": "a6b97f5ab6ab2640f5fce24cfc368346d986f6e6",
+      "status": "PENDING_ACTUAL_CI",
+      "source": "scripts/gt_fft_bundle_gate.py",
+      "probe": "tools/synthetic_material_alpha/fft_bundle_gate_probe.py",
+      "session": "clients/GT/sessions/20261127-fft-bundle-gate/README_AR.md",
+      "original_gate_changed": false,
+      "original_assets_read": false,
+      "XAPK_requested": false
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."
