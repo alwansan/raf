@@ -1,0 +1,115 @@
+name: GT Particle108 authored engine collection cause (NO original assets)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-particle108-collection-cause-authored.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authored-collection-cause:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      DOTNET_PROCESSOR_COUNT: '2'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tools/gt_authored_mesh_binary/witness.py
+            /tools/gt_authored_mesh_actual_export/witness.py
+            /tools/gt_authored_serialized_renderer_route/witness.py
+            /tools/gt_authored_external_pptr_route/witness.py
+            /tools/gt_authored_particle108_collection_cause/
+            /android-port/Experiments/ExportLineage/
+            /.github/workflows/raft-gt-particle108-collection-cause-authored.yml
+      - name: Prepare independently authored binary
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          python3 -m venv "$RUNNER_TEMP/gt-collection-python"
+          py="$RUNNER_TEMP/gt-collection-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3 Pillow==11.3.0
+          PYTHONPATH="$PWD" "$py" -B tools/gt_authored_particle108_collection_cause/witness.py prepare --out collection-evidence
+          "$py" -m pip freeze > collection-evidence/python-tools.txt
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Checkout pinned public exporter source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: Source
+      - name: Compile disposable read-only same-export capture
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git -C ar-host rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          git -C ar-host rev-parse HEAD > collection-evidence/public-exporter-head.txt
+          py="$RUNNER_TEMP/gt-collection-python/bin/python"
+          PYTHONPATH="$PWD" "$py" -B tools/gt_authored_particle108_collection_cause/witness.py stage --root "$PWD"
+          sha256sum ar-host/Source/AssetRipper.Export.UnityProjects/{RaftGTCollectionWitness,ProjectExporter}.cs > collection-evidence/host-sha256.txt
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/gt-collection-host" > collection-evidence/build.log 2>&1 || { tail -100 collection-evidence/build.log; exit 1; }
+      - name: Actual typed load, Process and ProjectExporter
+        run: |
+          set -euo pipefail
+          timeout 120s dotnet "$RUNNER_TEMP/gt-collection-host/ExportLineage.dll" "$PWD/collection-evidence/source" "$RUNNER_TEMP/gt-collection-output" "$PWD/collection-evidence" 2>&1 | tee collection-evidence/export.log
+      - name: Independently verify same export material pointers and PNG controls
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-collection-python/bin/python"
+          PYTHONPATH="$PWD" "$py" -B tools/gt_authored_particle108_collection_cause/witness.py verify --out collection-evidence --project "$RUNNER_TEMP/gt-collection-output/ExportedProject"
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil
+          source=Path(__import__("os").environ["RUNNER_TEMP"])/"gt-collection-output/ExportedProject/Assets"
+          target=Path("collection-evidence/actual-assets")
+          for p in source.rglob("*"):
+              if p.is_file() and p.suffix in {".mat",".png",".meta"}:
+                  dst=target/p.relative_to(source);dst.parent.mkdir(parents=True,exist_ok=True)
+                  shutil.copyfile(p,dst)
+          PY
+      - name: Preserve bounded authored evidence
+        if: always()
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, zipfile
+          root=Path("collection-evidence");root.mkdir(exist_ok=True)
+          files=[p for p in root.rglob("*") if p.is_file() and p.name!="build.log"]
+          assert len(files)<=100 and sum(p.stat().st_size for p in files)<=1024*1024
+          dest=root/"permanent-authored-evidence.zip"
+          with zipfile.ZipFile(dest,"w",compression=zipfile.ZIP_DEFLATED) as z:
+              for p in sorted(files):
+                  assert not p.is_symlink()
+                  z.write(p,p.relative_to(root).as_posix())
+          data=dest.read_bytes()
+          assert len(data)<=128*1024
+          print("GT_PERMANENT_EVIDENCE_SHA",len(data),hashlib.sha256(data).hexdigest())
+          enc=base64.b64encode(data).decode("ascii")
+          for i in range(0,len(enc),2048):print("GT_PERMANENT_EVIDENCE_B64",i//2048,enc[i:i+2048])
+          PY
+      - name: Upload authored receipts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-collection-cause
+          path: collection-evidence/
+          retention-days: 14
+          if-no-files-found: warn
