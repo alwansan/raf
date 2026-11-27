@@ -1305,6 +1305,44 @@
     "no_GT_XAPK_created": true
   },
   "current_handoff": {
+    "latest_fft_row_coverage_replay": {
+      "status": "PASS_AUTHORED_FFT_COMPLETE_ROW_COVERAGE",
+      "reviewed_base": "aefdad8771546cfedd57823472f31b535f39f701",
+      "preparation_commit": "81e14df310bd93de604519f02c500148652ef464",
+      "head": "5ee48a381f5e88827245b832270ab59c7c9b2733",
+      "run_id": 45998225026,
+      "job_id": 140502930355,
+      "conclusion": "success",
+      "guard_run_id": 45998224978,
+      "guard_job_id": 140502929350,
+      "guard_conclusion": "success",
+      "session": "clients/GT/sessions/20261127-fft-row-replay/README_AR.md",
+      "evidence": "clients/GT/sessions/20261127-fft-row-replay/evidence.json",
+      "archive": "clients/GT/sessions/20261127-fft-row-replay/actual-run-45998225026.zip",
+      "artifact_id": 15196682527,
+      "archive_bytes": 4525,
+      "archive_sha256": "63f31a73c54309eeb230fe207f11a564612a95d464542203fd4d8a2469f490de",
+      "archive_git_blob": "09929018d2c52074872a78de4931ec5e7a400630",
+      "archive_crc_sha_size_verified_locally": true,
+      "ci_tests": 15,
+      "bundles": 2,
+      "passes_per_bundle": 7,
+      "unique_validated_modules_per_bundle": 14,
+      "unique_module_count_sum": 28,
+      "vs_rows_per_bundle": 21,
+      "fs_rows_per_bundle": 21,
+      "total_stage_references": 84,
+      "negative_controls_per_bundle": 9,
+      "negative_controls_rejected": 18,
+      "proof_equal_prior_gate_run": 45937731362,
+      "original_bundle_replay_completed": false,
+      "actual_authored_bundle_replay_completed": true,
+      "actual_unity_reexecution": false,
+      "original_assets_read": false,
+      "original_game_visuals_verified": false,
+      "XAPK_requested": false,
+      "next": "G4 complete-row replay is accepted only for the exact two authored FFT bundles; do not repeat it or the authored G3 bundle run. A3 and the third Particle108 export-alpha comparison remain blocked without independently authorized original bytes and same-export document-scoped payload. Next independent G0/G4 task: audit global same-export GUID identity for water shader/compute resources; verify whether verify_water_render_contract.py's selected-water-only GUID set can overlook collisions with non-water assets or reserved/zero GUIDs, compare existing project-wide provenance tools, reproduce and fix only a real remaining gap with source-free fixtures. If already covered by the integrated gate, choose the next distinct G1/G2 white-mesh or G4 resource-binding repair. No original acquisition or original parity claims; original FFT coordinate cause, NEXT23b and all ten runtime groups remain open. No installer/native request or APK/XAPK before G0-G6 closure; CL/lab read-only, BLACK out of scope, animation deferred. Preserve Ali's pinned reference."
+    },
     "latest_fft_row_coverage_repair": {
       "status": "PASS_LOCAL_SOURCE_FREE_FFT_ROW_COVERAGE_REGRESSION",
       "reviewed_base": "cbfbb0a69cb168cc9aa294981f00290f618a8783",
@@ -1638,10 +1676,11 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G3-original-runtime-keyword-migration",
-      "status": "PASS_ACTUAL_AUTHORED_UNITY_BUNDLE_COMBINED_JOIN_ORIGINAL_ACCEPTANCE_BLOCKED",
-      "next": "G3 candidate-only actual authored mixed-scope Android Vulkan bundle acceptance is complete in its exact one named Always/Normal pass scope. Do not repeat this authored Unity job merely to generate another receipt. Original runtime migration still requires independently verified authorization/provenance (A3), source-specific pass/scope/fixed macro/instancing or sparse lattice semantics, independently established original-to-candidate stage identities, original material runtime selection, same-export protected hashes, actual NEXT23b and ten-group integration evidence. Next productive independent work: inspect Particle108 original local export-alpha binding historical evidence and the existing exporter/census/receipt tools, then complete the missing third exported top-mip comparison only with already authorized private bytes; if those bytes or authorization are absent, preserve the precise blocker and work on a genuinely independent G4/G0–G6 source-independent repair that does not assert original equivalence. Prioritize white meshes, black fire and water; no original acquisition, production activation, installer changes, APK/XAPK, phone, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference.",
-      "previous_V11_V17_authored_witnesses_preserved": true
+      "id": "G0-G4-water-guid-namespace-audit",
+      "status": "NEXT_SOURCE_FREE_AFTER_AUTHORED_FFT_ROW_REPLAY_PASS",
+      "next": "G4 complete-row replay is accepted only for the exact two authored FFT bundles; do not repeat it or the authored G3 bundle run. A3 and the third Particle108 export-alpha comparison remain blocked without independently authorized original bytes and same-export document-scoped payload. Next independent G0/G4 task: audit global same-export GUID identity for water shader/compute resources; verify whether verify_water_render_contract.py's selected-water-only GUID set can overlook collisions with non-water assets or reserved/zero GUIDs, compare existing project-wide provenance tools, reproduce and fix only a real remaining gap with source-free fixtures. If already covered by the integrated gate, choose the next distinct G1/G2 white-mesh or G4 resource-binding repair. No original acquisition or original parity claims; original FFT coordinate cause, NEXT23b and all ten runtime groups remain open. No installer/native request or APK/XAPK before G0-G6 closure; CL/lab read-only, BLACK out of scope, animation deferred. Preserve Ali's pinned reference.",
+      "previous_G3_and_G4_authored_witnesses_preserved": true,
+      "original_acceptance_blocked": true
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",

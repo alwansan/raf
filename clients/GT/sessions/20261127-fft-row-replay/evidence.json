@@ -1,0 +1,158 @@
+{
+  "status": "PASS_AUTHORED_FFT_COMPLETE_ROW_COVERAGE",
+  "reviewed_base": "aefdad8771546cfedd57823472f31b535f39f701",
+  "preparation_commit": "81e14df310bd93de604519f02c500148652ef464",
+  "head": "5ee48a381f5e88827245b832270ab59c7c9b2733",
+  "run_id": 45998225026,
+  "job_id": 140502930355,
+  "conclusion": "success",
+  "guard_run_id": 45998224978,
+  "guard_job_id": 140502929350,
+  "guard_conclusion": "success",
+  "session": "clients/GT/sessions/20261127-fft-row-replay/README_AR.md",
+  "evidence": "clients/GT/sessions/20261127-fft-row-replay/evidence.json",
+  "archive": "clients/GT/sessions/20261127-fft-row-replay/actual-run-45998225026.zip",
+  "artifact_id": 15196682527,
+  "archive_bytes": 4525,
+  "archive_sha256": "63f31a73c54309eeb230fe207f11a564612a95d464542203fd4d8a2469f490de",
+  "archive_git_blob": "09929018d2c52074872a78de4931ec5e7a400630",
+  "archive_crc_sha_size_verified_locally": true,
+  "ci_tests": 15,
+  "bundles": 2,
+  "passes_per_bundle": 7,
+  "unique_validated_modules_per_bundle": 14,
+  "unique_module_count_sum": 28,
+  "vs_rows_per_bundle": 21,
+  "fs_rows_per_bundle": 21,
+  "total_stage_references": 84,
+  "negative_controls_per_bundle": 9,
+  "negative_controls_rejected": 18,
+  "proof_equal_prior_gate_run": 45937731362,
+  "original_bundle_replay_completed": false,
+  "actual_authored_bundle_replay_completed": true,
+  "actual_unity_reexecution": false,
+  "original_assets_read": false,
+  "original_game_visuals_verified": false,
+  "XAPK_requested": false,
+  "next": "G4 complete-row replay is accepted only for the exact two authored FFT bundles; do not repeat it or the authored G3 bundle run. A3 and the third Particle108 export-alpha comparison remain blocked without independently authorized original bytes and same-export document-scoped payload. Next independent G0/G4 task: audit global same-export GUID identity for water shader/compute resources; verify whether verify_water_render_contract.py's selected-water-only GUID set can overlook collisions with non-water assets or reserved/zero GUIDs, compare existing project-wide provenance tools, reproduce and fix only a real remaining gap with source-free fixtures. If already covered by the integrated gate, choose the next distinct G1/G2 white-mesh or G4 resource-binding repair. No original acquisition or original parity claims; original FFT coordinate cause, NEXT23b and all ten runtime groups remain open. No installer/native request or APK/XAPK before G0-G6 closure; CL/lab read-only, BLACK out of scope, animation deferred. Preserve Ali's pinned reference.",
+  "scope": "Actual authored Unity Android Vulkan bundles only. Counterfactuals modify individual decoded serialized-table rows in memory using real stage bytes, not replacement Unity bundles or real original game shaders.",
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "SPIRV_Tools": "v2025.1 unknown hash, 2026-05-13T06:03:38+00:00",
+    "validation_target": "vulkan1.1",
+    "smolv_source_commit": "6303e979b59153ee7007fd14e06d3fed8687b64c"
+  },
+  "members": {
+    "row-proof.json": {
+      "bytes": 45499,
+      "sha256": "7bbd08b523d2e4f477bf64cc10ae5892c128cb81cf841a7458feeb96a9fb0d6d"
+    },
+    "tool-versions.txt": {
+      "bytes": 560,
+      "sha256": "02391550e0b0e25498a2a045b37fd512f2bd49485036f31c8ca1b700380d1a3e"
+    },
+    "unit.log": {
+      "bytes": 2020,
+      "sha256": "6f89732c21806b27db808d362fae08a3ef081efc9b504eb689b474f8f862eb35"
+    }
+  },
+  "input_run": 45935871773,
+  "input_run_conclusion": "failure (original verifier, actual authored Unity bundles built)",
+  "input_run_sha": "5b6f8f21627269d946aa549cd7055384914cdf82",
+  "inputs": {
+    "dxc": {
+      "artifact_id": 15171100631,
+      "archive_bytes": 11197,
+      "archive_sha256": "eedccb8afa34ca208604c111b232ea42bb7f91c0cab01d409253d7a4e8ee5972",
+      "bundle_bytes": 8342,
+      "bundle_sha256": "f570f7d7e045c9750d3b65858819c5c1bc36c5f29f7dec9b48c1ab859d642ffa",
+      "expires_at": "2026-12-11T03:46:52Z"
+    },
+    "hlslcc": {
+      "artifact_id": 15170637402,
+      "archive_bytes": 11512,
+      "archive_sha256": "95afbce3a5afb5073023caae625aabeda5b2fa7ed74c4c08aa025fc180558d6c",
+      "bundle_bytes": 8665,
+      "bundle_sha256": "da266f22b82d37c19a090f2d2d4776c33afe9b5a0cbeda48f1a3cce5b94b64e8",
+      "expires_at": "2026-12-11T03:50:00Z"
+    }
+  },
+  "input_archives_locally_crc_and_all_member_SHA_verified": true,
+  "input_archives_retained_in_Git": false,
+  "input_source_and_receipts_committed_in_prior_session": true,
+  "exact_input_bytes_required_for_same_archive_replay_after_expiry": true,
+  "prior_gate_archive": {
+    "artifact_id": 15171148471,
+    "bytes": 3929,
+    "sha256": "eaed24f33f8f862a233a5612510aabaac0d9de17c77bbdaae948f4e5af7cde0b",
+    "member_sha256": "91e32402fa41ee6c9c259b66a6b49085db810c95f1ae3aa0be89fe36cee9caff"
+  },
+  "local_independent_recheck": {
+    "archive_crc_and_all_member_sha": true,
+    "full_proof_equality_to_prior": true,
+    "input_member_commitments_match": true,
+    "all_18_control_rows_verified": true,
+    "local_unitypy_spirv_tools_executed": false,
+    "local_tests_from_prior_retained": true
+  },
+  "controls_each_mode": [
+    {
+      "name": "partial_combined_fs_missing",
+      "reason": "missing_execution_stage:0:progFragment",
+      "rejected": true
+    },
+    {
+      "name": "partial_combined_vs_missing",
+      "reason": "missing_execution_stage:0:progVertex",
+      "rejected": true
+    },
+    {
+      "name": "duplicate_combined_fs_module",
+      "reason": "ambiguous_execution_stage:0:progFragment",
+      "rejected": true
+    },
+    {
+      "name": "duplicate_combined_vs_module",
+      "reason": "ambiguous_execution_stage:0:progVertex",
+      "rejected": true
+    },
+    {
+      "name": "duplicate_empty_bucket_row",
+      "reason": "duplicate_empty_route_bucket:0:progVertex",
+      "rejected": true
+    },
+    {
+      "name": "separate_bucket_population_mismatch",
+      "reason": "stage_bucket_mismatch:0",
+      "rejected": true
+    },
+    {
+      "name": "partial_separate_fs_missing",
+      "reason": "missing_execution_stage:0:progFragment",
+      "rejected": true
+    },
+    {
+      "name": "partial_separate_vs_missing",
+      "reason": "missing_execution_stage:0:progVertex",
+      "rejected": true
+    },
+    {
+      "name": "last_pass_partial_fs_missing",
+      "reason": "missing_execution_stage:6:progFragment",
+      "rejected": true
+    }
+  ],
+  "original_particle108_third_export_comparison_proven": false,
+  "original_source_authorization_proven": false,
+  "original_fft_coordinate_root_cause_resolved": false,
+  "original_runtime_keywords_or_install_proven": false,
+  "original_same_export_inventory": {
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "shader_guids": 37,
+    "historical": true
+  },
+  "G0_G6_closed": false,
+  "other_branches_written": false
+}
