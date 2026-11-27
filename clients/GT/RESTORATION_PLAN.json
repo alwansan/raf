@@ -5335,16 +5335,21 @@
     "evidence": "clients/GT/sessions/20261127-dxt5nm-importer-v12/actual-pass-45967942717.json"
   },
   "v13_dxt5nm_unity_checkpoint": {
-    "status": "CI_QUEUED_NOT_EXECUTED",
+    "status": "V12_REPLAY_AND_V13_STAGE_SUCCESS_UNITY_PENDING",
     "starting_head": "9e45cc7cbb5d2f4195fe9ee4c54d20855e54a7c7",
     "activation_head": "d2385ff469cd64ecf5ddd648af23c9b4fe36468e",
     "run": {
       "id": 45969407039,
+      "job": 140405860104,
       "head": "d2385ff469cd64ecf5ddd648af23c9b4fe36468e",
-      "status": "queued",
+      "status": "in_progress",
+      "regression_step": "success",
+      "actual_export_step": "success",
+      "stage_step": "success",
+      "unity_activation_preflight": "success",
       "compatibility_guard": {
         "id": 45969406837,
-        "status": "queued"
+        "conclusion": "success"
       }
     },
     "planned_regressions": 271,
@@ -5360,6 +5365,9 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-unity-v13/README_AR.md",
-    "next": "Inspect exact V13 run 45969407039; retain actual or failure evidence."
+    "next": "Inspect V13 actual Unity result and archive; check nondegenerate readback and retain importer discrepancies.",
+    "source_regressions": 271,
+    "actual_v11_v12_controls": 37,
+    "unique_authored_pixels_exact": 70
   }
 }
