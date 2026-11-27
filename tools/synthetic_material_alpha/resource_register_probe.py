@@ -91,8 +91,10 @@ def tool_version(tool):
     return lines[0]
 
 
-def run_probe(out, run_id):
+def run_probe(out, run_id, *, source_factory=stage_source, combined_out=None):
     require(not out.exists() and not out.is_symlink() and bool(run_id), 'fresh_output_and_run_id_required')
+    if combined_out is not None:
+        require(combined_out.resolve() != out.resolve() and not combined_out.exists() and not combined_out.is_symlink(), 'fresh_combined_output_required')
     for tool in TOOLS:
         require(shutil.which(tool) is not None, 'required_compiler_missing:' + tool)
     commands = Counter()
@@ -135,7 +137,7 @@ def run_probe(out, run_id):
             pair = {'subshader':0,'pass':0}
             for key,stage in (('vs','vert'),('fs','frag')):
                 program_dir=folder/key; program_dir.mkdir()
-                source=program_dir/'private.hlsl'; source.write_text(stage_source(stage,explicit),encoding='utf-8')
+                source=program_dir/'private.hlsl'; source.write_text(source_factory(stage,explicit),encoding='utf-8')
                 (program_dir/'source.dxbc').write_bytes(b'authored-non-DXBC-placeholder-for-stubbed-varying-check')
                 compile_stage(source,program_dir/'roundtrip.spv',stage)
                 pair[key]={'program_ref':key,'player_bucket':0,'bucket_ordinal':0}
@@ -202,6 +204,10 @@ def run_probe(out, run_id):
             'versions':{tool:tool_version(tool) for tool in TOOLS},
             'Unity_compilation_or_render_verified':False,'original_game_assets_read':False,
             'Android_device_pixels_verified':False,'XAPK_requested':False}
+    if combined_out is not None:
+        combined_out.parent.mkdir(parents=True,exist_ok=True)
+        with combined_out.open('xb') as stream:
+            stream.write(combined_bytes[1])
     out.parent.mkdir(parents=True,exist_ok=True)
     out.write_text(json.dumps(result,indent=2,sort_keys=True)+'\n',encoding='utf-8')
     print(json.dumps(result,sort_keys=True))
