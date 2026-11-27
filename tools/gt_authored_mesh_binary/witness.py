@@ -24,8 +24,7 @@ with warnings.catch_warnings():
                             category=DeprecationWarning, module=r"UnityPy\.helpers\.Tpk")
     import UnityPy
 from UnityPy.helpers import TypeTreeHelper
-from UnityPy.helpers.Tpk import get_typetree_node
-from UnityPy.helpers.UnityVersion import UnityVersion
+from UnityPy.helpers.Tpk import get_typetree_node, UnityVersion
 
 from scripts import gt_verify_original_mesh_export as mesh
 
