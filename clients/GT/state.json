@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-vertex-payload-route-binding/README_AR.md",
-  "next_action": "Run only the authored public export and new CPU regression suite; retain actual result; then same-route material scalar/color.",
+  "next_action": "Check run 45947525967/job 140335539245, retain artifact and logs with SHA/CRC and exact counts; do not repeat the Unity raster or the public build if success. Then G1-G2 same-route material scalar/color proof using B22.normalize and B44.normalize_colors, binary32 values, explicit missing/extra slots, and valid-but-wrong tint/int/float controls. A3 remains blocked; no package.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "de21c5ef6f9cc4bcc4dda3a4c0eb4cc1d2f59335",
+    "reviewed_remote_head": "00e969dbf71412f0ad8cf10f5acb38491a35b63a",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -3155,7 +3155,7 @@
       "XAPK": false
     },
     "latest_vertex_payload_route_binding": {
-      "status": "CANDIDATE_NOT_EXECUTED",
+      "status": "CI_COMPLETED_RECEIPT_NOT_YET_VERIFIED",
       "base": "de21c5ef6f9cc4bcc4dda3a4c0eb4cc1d2f59335",
       "gate": "G1-G2-mesh-vertex-payload-same-route-byte-binding",
       "session": "clients/GT/sessions/20261127-vertex-payload-route-binding/README_AR.md",
@@ -3166,7 +3166,7 @@
         "scripts/gt_authored_scene_route_witness.py"
       ],
       "test": "tests/test_gt_mesh_vertex_payload.py",
-      "actual_public_export_pending": true,
+      "actual_public_export_pending": false,
       "original_assets_read": false,
       "original_source_authorized": false,
       "G0_G6_closed": false,
@@ -3174,7 +3174,88 @@
       "white_or_fire_fixed": false,
       "unity_render_executed": false,
       "XAPK": false,
-      "next": "Run only the authored public export and new CPU regression suite; retain actual result; then same-route material scalar/color."
+      "next": "Check run 45947525967/job 140335539245, retain artifact and logs with SHA/CRC and exact counts; do not repeat the Unity raster or the public build if success. Then G1-G2 same-route material scalar/color proof using B22.normalize and B44.normalize_colors, binary32 values, explicit missing/extra slots, and valid-but-wrong tint/int/float controls. A3 remains blocked; no package.",
+      "candidate_commit": "23fe335acaf8b557cafaf2eb095d8311d299262f",
+      "activation_commit": "00e969dbf71412f0ad8cf10f5acb38491a35b63a",
+      "actual_run": {
+        "run_id": 45947525967,
+        "run_url": "https://github.com/alwansan/raf/actions/runs/45947525967",
+        "head": "00e969dbf71412f0ad8cf10f5acb38491a35b63a",
+        "run_status": "completed",
+        "conclusion": "success",
+        "job_id": 140335539245,
+        "job_status": "completed",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checkout authored witness and exact private hook composer only",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run source-only route gate regressions before public build",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-dotnet@v4",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checkout public pinned exporter source only",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Compile exact public exporter and authored witness",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Execute typed authored export and verify same-route vertex and UV bytes",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain only public-tool build and aggregate route evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Remove only authored fixture tree",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Checkout public pinned exporter source only",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-dotnet@v4",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Checkout authored witness and exact private hook composer only",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "guard_run_id": 45947525970,
+        "guard_conclusion": "success"
+      },
+      "python_regression_step_passed": true
     }
   }
 }
