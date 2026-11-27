@@ -1,4 +1,123 @@
 {
+  "latest_next23b_retained_output_markers": {
+    "status": "PASS_RETAINED_ACTUAL_AUTHORED_2312_STAGE_OUTPUT_MARKERS",
+    "starting_head": "67bd9cd82b3abfd082de6f0acffdd24e57c0c285",
+    "preparation_commit": "09b6ce8488d6dc641cfc3604350c538a4fd9e183",
+    "execution_head": "3a27d8437a17de9219c3a3417c43756b1caf559b",
+    "run": 46037428567,
+    "job": 140636272933,
+    "conclusion": "success",
+    "lint_run": 46037428454,
+    "lint_conclusion": "success",
+    "unit_tests_passed": 8,
+    "source_blobs": {
+      "tools/gt_next23b_retained_route_markers/trace.py": "9013f6cbf54a5b3cec0295e9a800984f7479e6f0",
+      "tools/gt_next23b_retained_route_markers/witness.py": "5050f3ee0d4ac3d8fa5ebedacad17221f19abf91",
+      "tools/gt_next23b_retained_route_markers/test_trace.py": "3c190706d9577257953279fae5b61ba71da020ac",
+      "scripts/gt_verify_921_shader_bundle.py": "1ca7907a7d0614acf733d9711a6eb68659e7eee1",
+      "scripts/gt_decode_smolv.cpp": "4d6abc4ebab4b721f2e823895e15702535844256",
+      "scripts/gt_next23b_route_provenance.py": "fd32bcbfab7c08fcd6fe06c32b803c702ea9da5e",
+      "scripts/gt_next23b_unity_receipt.py": "68120ab8528f83cf65c919968b4a177aa945c212",
+      "scripts/w1_recover_graphics_programs.py": "fce7fe2ac6635f9e67e03ea4aa8ec7b462603352",
+      "scripts/w1_recover_depth_passes.py": "087d655e618abb9a8a8e773968af877dd413a0fb",
+      "clients/GT/sessions/20261127-actions-execution-plan/artifact-review.json": "15b035e4b2a34d1c1de5d792241e274b1ecd745e"
+    },
+    "source_run": {
+      "run": 45929964298,
+      "job": 140280068547,
+      "conclusion": "success",
+      "artifact_id": 15168725743,
+      "archive_bytes": 117766,
+      "archive_sha256": "8014480263c86c25f589950052a0abce81a0a473165e9633a73dce6b9575ee1c",
+      "members": 8,
+      "member_hashes_all_verified": true,
+      "source_archive_locally_crc_verified": true,
+      "actual_bundle_bytes": 48712,
+      "bundle_sha256": "98e0ff35c8f994be794f81037645348a92b078750ab1dd5395be2894cf79c7ac",
+      "source_manifest_sha256": "c66e09d05460453c06017f5ad291d1eda9ddf86f60cb766421e125e7fbdf35e1",
+      "candidate_sha256": "e431f55d764c93b7345215e80778ce1ff914a8bb307d25d09bf8661d4f447b60",
+      "route_manifest_sha256": "1ff393eda64dc7b05d5d467f12318cd0d7b80798bb3bffb18398cd821554eb67"
+    },
+    "actual_retained_marker_proof": {
+      "routes_by_pass": [
+        512,
+        4,
+        128,
+        512
+      ],
+      "unique_routes": 1156,
+      "stage_output_markers": 2312,
+      "combined_tables": 4,
+      "serialized_rows_each_stage_by_pass": [
+        1536,
+        12,
+        384,
+        1536
+      ],
+      "empty_route_indices": [
+        511,
+        3,
+        127,
+        511
+      ],
+      "decoded_unique_modules": 1668,
+      "decoded_unique_vertex_modules": 512,
+      "decoded_unique_fragment_modules": 1156,
+      "serialized_blob_records": 1157,
+      "referenced_blob_records": 1156,
+      "all_route_vs_fs_same_blob": true,
+      "validation": "SPIRV-Tools Vulkan1.1 + exact restricted single-block symbolic output dataflow; vertex Position.x = input Location0.x + route/4096; fragment Location0 float4(route/1024,pass/4,.25,1); route is one-based marker value; not whole shader equivalence or execution",
+      "actual_bundle_controls": {
+        "swap_empty_and_nonempty": {
+          "old_gate_accepted": true,
+          "new_marker_gate_rejected": true
+        },
+        "collapse_to_first": {
+          "old_gate_accepted": true,
+          "new_marker_gate_rejected": true
+        }
+      }
+    },
+    "artifact": {
+      "id": 15219635748,
+      "outer_bytes": 343000,
+      "outer_sha256": "65fd39b7f9794173a50221c941fdf1d2d223da84b00e9867f415acd1f2d0287a",
+      "outer_members": 15,
+      "inner_bytes": 176908,
+      "inner_sha256": "fbe1d46c30d4c31f82f3a6877a3d4da47b4aa4223d8f1009befda91ed63641f0",
+      "inner_members": 14,
+      "git_blob": "9d9994422af597acdb58147eb115465c27683e59",
+      "path": "clients/GT/sessions/20261127-next23b-retained-output-markers/actual-evidence-46037428567.zip",
+      "verified_locally": "both SHA256 and CRC, all 14 inner members byte-identical to outer, all 2312 route marker bit patterns independently recomputed, 1668 distinct module hashes, 1156 combined blob identity joins, bundle exactly matches prior artifact member, test logs and two controls, no-proof flags, exact Git blob matched 116 log chunks"
+    },
+    "historical_original_runs_rechecked": [
+      {
+        "run": 44001193147,
+        "conclusion": "success",
+        "scope": "source topology"
+      },
+      {
+        "run": 44783011957,
+        "conclusion": "success",
+        "scope": "source composition; not original Unity runtime"
+      },
+      {
+        "run": 43929698985,
+        "conclusion": "success",
+        "scope": "historical post23 census"
+      }
+    ],
+    "new_original_census": false,
+    "original_assets_fetched": false,
+    "original_runtime_program_mapping_proven": false,
+    "actual_shader_gpu_execution_proven": false,
+    "original_white_mesh_repair_proven": false,
+    "production_install_allowed": false,
+    "new_unity_execution": false,
+    "xapk_started": false,
+    "next_action": "G3-NEXT23b-source-program-byte-identity-admission: retained actual authored 1156-route bundle output-dataflow proof is complete (2312 stage markers, 1668 unique modules, both actual old-gate route-swap/collapse controls rejected by new authored oracle); DO NOT repeat. Historical original topology/source composition and actual post23 census were rechecked, but original source authorization, exact typed source owner/PathID and same-export project/trace are not established in the current environment. To progress original NEXT23b require documented independently authorized immutable source access and SHA, exact source stage slot -> original program blob bytes/digest -> independently validated translated stage -> compiled route-specific module identity; authenticate keyword scope/pass semantics, same-export GUID and protected reference census, do not substitute authored markers or count-only route proof for original program equivalence. Review whether current private source packet's program_ref-to-m_BlobIndex/byte linkage is independently established, and only address a demonstrated distinct defect if authorization remains blocked; no further repetitive synthetic route/pixel batches. If original input remains unavailable, identify exact authorized input/handoff gap and proceed to a materially useful distinct restoration task rather than claim original visual progress. A3, third Particle108, original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 remain open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. No unauthorized acquisition, production/native request, game/device/APK/XAPK until integrated G0-G6 closure; CL/lab read only, BLACK/animation excluded.",
+    "session": "clients/GT/sessions/20261127-next23b-retained-output-markers/README_AR.md"
+  },
   "latest_exact_shader_guid_fanout": {
     "status": "PASS_AUTHORED_EXACT_GUID_FANOUT_AND_RETAINED_ACTUAL_EXPORT_ONLY",
     "starting_head": "0e97394883f98c05531c73e8a585fbe6fdd63ab4",
@@ -1945,8 +2064,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-exact-shader-guid-fanout/README_AR.md",
-  "next_action": "G3-G1-G2-NEXT23b-authorized-original-admission: exact GUID fanout and authored snapshot comparison, G4 native API boundary audit and G5 authored collision are complete only in tested scopes; do not repeat them. Prioritize a genuine original source-backed same-export Shader48/Material/Renderer restoration or authorized NEXT23b route evidence. Required inputs: documented authorization for the immutable original source owner and source SHA, typed Shader48 owner/PathID, same-instance exporter trace and actual post23 project, complete source/export GUID linkage and Unity serialized program/pass/keyword route evidence. Use tools/gt_shader_fanout/audit.py in read-only mode on that authorized immutable project to rank exact residual GUIDs by serialized renderer slots, distinct renderer documents and material documents; never use name digest alone or anonymous ranking as install identity. If these inputs remain unavailable, explicitly record the blocker and investigate a genuinely new source-free gap with direct old/new proof only if materially useful, not a repeat of prior authored route/pixel tests. Historical 688/786 non-Dummy, 98 Dummy/37 GUID, A3, third Particle108, original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 remain open. No original acquisition, production/native request, Unity game/device/APK/XAPK until integrated G0-G6 closure; CL/lab read only, BLACK/animation excluded.",
+  "latest_session": "clients/GT/sessions/20261127-next23b-retained-output-markers/README_AR.md",
+  "next_action": "G3-NEXT23b-source-program-byte-identity-admission: retained actual authored 1156-route bundle output-dataflow proof is complete (2312 stage markers, 1668 unique modules, both actual old-gate route-swap/collapse controls rejected by new authored oracle); DO NOT repeat. Historical original topology/source composition and actual post23 census were rechecked, but original source authorization, exact typed source owner/PathID and same-export project/trace are not established in the current environment. To progress original NEXT23b require documented independently authorized immutable source access and SHA, exact source stage slot -> original program blob bytes/digest -> independently validated translated stage -> compiled route-specific module identity; authenticate keyword scope/pass semantics, same-export GUID and protected reference census, do not substitute authored markers or count-only route proof for original program equivalence. Review whether current private source packet's program_ref-to-m_BlobIndex/byte linkage is independently established, and only address a demonstrated distinct defect if authorization remains blocked; no further repetitive synthetic route/pixel batches. If original input remains unavailable, identify exact authorized input/handoff gap and proceed to a materially useful distinct restoration task rather than claim original visual progress. A3, third Particle108, original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 remain open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. No unauthorized acquisition, production/native request, game/device/APK/XAPK until integrated G0-G6 closure; CL/lab read only, BLACK/animation excluded.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
