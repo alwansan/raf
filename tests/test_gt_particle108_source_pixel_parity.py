@@ -140,6 +140,10 @@ class PixelParityTests(unittest.TestCase):
         self.assertFalse(result["alpha_samples_equal"])
         self.assertTrue(result["alpha_vertical_flip_only_match"])
         self.assertEqual(result["alpha_mismatch_pixels"],4)
+        self.assertGreater(result["nonopaque_to_opaque_coordinates"],0)
+        self.assertEqual(result["alpha_loss_pixels"],0)
+        self.assertFalse(result["net_nonopaque_population_decreased"])
+        self.assertFalse(result["all_source_transparency_lost"])
 
     def test_rgb_mutation_does_not_claim_RGBA_equivalence(self):
         image,_=self.decode()
@@ -155,6 +159,8 @@ class PixelParityTests(unittest.TestCase):
         opaque=self.expected.convert("RGB")
         result=parity.compare_pixels(image,opaque)
         self.assertEqual(result["alpha_loss_pixels"],3)
+        self.assertTrue(result["all_source_transparency_lost"])
+        self.assertEqual(result["nonopaque_to_opaque_coordinates"],3)
         self.assertEqual(result["alpha_increased_pixels"],3)
         self.assertTrue(result["rgb_samples_equal"])
 
@@ -183,6 +189,37 @@ class PixelParityTests(unittest.TestCase):
         self.assertEqual(r["independently_traced_external_targets"],1)
         self.assertEqual(r["exact_rgba8_targets"],1)
         self.assertFalse(r["Unity_import_or_GPU_parity_proven"])
+
+    def test_two_independent_external_pngs_actual_decoder_and_net_loss(self):
+        other=(self.owner,29)
+        second=NS(**vars(self.texture))
+        second.image_data=self.payload
+        second.m_StreamData=NS(path="",offset=0,size=0)
+        obj2=NS(path_id=29,type=NS(name="Texture2D"),read=lambda:second)
+        def load(raw):
+            env=self.load(raw)
+            env.file.objects[29]=obj2
+            return env
+        first_path=self.root/"exact.png";self.expected.save(first_path)
+        second_path=self.root/"reordered.png"
+        self.expected.transpose(Image.Transpose.FLIP_TOP_BOTTOM).save(second_path)
+        a,b=(2800000,"a"*32,3),(2800000,"b"*32,3)
+        selected={self.key:a,other:b}
+        routes={self.key:{"pointer":a},other:{"pointer":b}}
+        real_decode=parity.decode_original_texture
+        with patch.object(parity,"SHADER_OWNERS",{self.owner:pin(self.owner_bytes)}), \
+             patch.object(parity,"MANIFEST_BLOB",self.blob), \
+             patch.object(parity,"decode_original_texture",
+                side_effect=lambda root,manifest,key:real_decode(root,manifest,key,loader=load)):
+            result=parity.external_parity(self.root,self.manifest,selected,routes,
+                                          {"a"*32:(first_path,{},True),"b"*32:(second_path,{},True)})
+        self.assertEqual(result["targets_decoded"],2)
+        self.assertEqual(result["source_stream_targets"],1)
+        self.assertEqual(result["source_inline_targets"],1)
+        self.assertEqual(result["exact_rgba8_targets"],1)
+        self.assertEqual(result["targets_with_alpha_flip_only"],1)
+        self.assertEqual(result["targets_with_alpha_loss"],0)
+        self.assertFalse(result["all_independently_traced_external_alpha_samples_equal"])
 
     def test_missing_source_not_equivalence(self):
         p=self.root/"authored.png";self.expected.save(p)

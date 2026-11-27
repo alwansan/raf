@@ -71,7 +71,7 @@ def external_image_pointer(value):
     return value[0], value[1].lower(), value[2]
 
 
-def selected_texture_trace(trace, originals, *, metrics=None):
+def selected_texture_trace(trace, originals, *, metrics=None, private_exportability=None):
     """Retain every selected trace row, including local and missing ones.
 
     A missing/unsupported row cannot erase independent valid rows or authorize
@@ -87,6 +87,7 @@ def selected_texture_trace(trace, originals, *, metrics=None):
         "distinct_exported_GUIDs_for_matched_original": 0,
         "selected_trace_local_type0_rows": 0,
         "selected_trace_external_image_rows": 0,
+        "selected_trace_global_nonimage_anchor_rows": 0,
         "selected_trace_missing_targets": EXPECTED_TARGETS,
     }
     if metrics is not None:
@@ -94,6 +95,8 @@ def selected_texture_trace(trace, originals, *, metrics=None):
             raise ValueError("invalid_export_trace_numeric_diagnostic")
         metrics.update(counts)
         counts = metrics
+    if private_exportability is not None and (type(private_exportability) is not dict or private_exportability):
+        raise ValueError("invalid_private_texture_exportability_outparam")
     selected, external_guids = {}, set()
     for row in trace["objects"]:
         if type(row) is not dict or row.get("class_id") != 28:
@@ -110,37 +113,60 @@ def selected_texture_trace(trace, originals, *, metrics=None):
         actual = (fid, guid, int(kind))
         if fid <= 0 or actual[2] not in (0, 2, 3):
             raise ValueError("invalid_same_export_Texture2D_pointer")
+        exportable=row.get("exportable")
+        if exportable is not None and type(exportable) is not bool:
+            raise ValueError("invalid_local_Texture2D_exportability")
         if actual[2] != 0:
-            actual = external_image_pointer(actual)
+            if guid in {ZERO,*BUILTIN} or exportable is False:
+                raise ValueError("invalid_same_export_Texture2D_pointer")
+            # A serialized embedded Texture2D can have an arbitrary anchor.
+            # Strict image fileID=2800000 validation still applies to actual
+            # external image routes, not document-local references.
             if guid in external_guids:
                 raise ValueError("original_particle_Texture2D_Guid_not_unique")
             external_guids.add(guid)
-            counts["selected_trace_external_image_rows"] += 1
+            if fid==2800000:
+                counts["selected_trace_external_image_rows"] += 1
+            else:
+                counts["selected_trace_global_nonimage_anchor_rows"] += 1
         else:
             counts["selected_trace_local_type0_rows"] += 1
         selected[key] = actual
+        if private_exportability is not None:
+            private_exportability[key]=exportable
         counts["matched_original_selected_unique_targets"] = len(selected)
         counts["distinct_exported_GUIDs_for_matched_original"] = len(external_guids)
         counts["selected_trace_missing_targets"] = EXPECTED_TARGETS - len(selected)
     return selected
 
 
-def compare_texture_trace_routes(selected, routes):
+def compare_texture_trace_routes(selected, routes, *, local_documents=None, exportability=None):
     """Classify independently traced references vs inferred Material routes."""
     if type(selected) is not dict or type(routes) is not dict or not set(selected) <= set(routes):
         raise ValueError("untrusted_particle_texture_trace_scope")
+    documents,exportability=local_documents or {},exportability or {}
     counts = dict(independently_traced_external_targets=0, inferred_external_targets=0,
                   local_type0_rows_equal_unscoped=0, local_type0_targets_unresolved=0,
+                  document_scoped_local_targets_proven=0,document_scoped_local_slots_proven=0,
                   independently_traced_external_slots=0, inferred_external_slots=0)
     for key, route in routes.items():
         actual, slots = route["pointer"], route["slots"]
         expected = selected.get(key)
         if actual[2] == 0:
-            # Type-0 references are not global document identities. Even equal
-            # triples do not establish a target in the Material's local file.
+            # A local reference may be proven ONLY by a global, exportable
+            # Texture2D trace plus its actual same-file nonstripped anchor.
+            # Equal unscoped triples or nonzero GUID hints remain unresolved.
             if expected == actual:
                 counts["local_type0_rows_equal_unscoped"] += 1
-            counts["local_type0_targets_unresolved"] += 1
+            doc_guids=route.get("document_guids",set())
+            if (actual[1]==ZERO and len(doc_guids)==1 and expected is not None
+                    and expected[2] in (2,3) and exportability.get(key) is True
+                    and expected[:2]==(actual[0],next(iter(doc_guids)))
+                    and documents.get(expected[:2])==28):
+                counts["document_scoped_local_targets_proven"] += 1
+                counts["document_scoped_local_slots_proven"] += slots
+            else:
+                counts["local_type0_targets_unresolved"] += 1
         elif expected is None:
             counts["inferred_external_targets"] += 1
             counts["inferred_external_slots"] += slots
@@ -163,7 +189,7 @@ def source_texture_export_map(trace, originals, *, metrics=None):
         raise ValueError("invalid_same_export_Texture2D_pointer")
     if set(selected) != set(originals):
         raise ValueError("original_particle_Texture2D_Guid_not_unique")
-    return {key: value[1] for key, value in selected.items()}
+    return {key: external_image_pointer(value)[1] for key, value in selected.items()}
 
 
 def source_material_to_exported_texture_guids(trace, source_materials, originals, exported, *, metrics=None, private_local_pointers=None, private_texture_routes=None):
@@ -511,17 +537,23 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
     mark("read_private_export_trace")
     trace = strict_json(read_snapshot(trace_path, TRACE_LIMIT))
     mark("join_same_export_Texture2D28_GUID")
-    selected = selected_texture_trace(trace, original_targets, metrics=trace_metrics)
+    trace_exportability={}
+    selected = selected_texture_trace(trace, original_targets, metrics=trace_metrics,
+                                      private_exportability=trace_exportability)
     mark("parse_exported_Material_TexEnv_YAML")
     from scripts.b05_verify_material_texenv_bindings import exported_texenvs
-    exported_materials = exported_texenvs(project)
+    local_documents={}
+    exported_materials = exported_texenvs(project,private_texture_documents=local_documents)
     mark("join_original_Material_TexEnv_to_exported_Texture2D_GUID")
     local_pointers, routes = {}, {}
     mapping = source_material_to_exported_texture_guids(
         trace, original_material_texenvs, original_targets, exported_materials,
         metrics=material_metrics, private_local_pointers=local_pointers,
         private_texture_routes=routes)
-    provenance = compare_texture_trace_routes(selected, routes)
+    if any(routes[key]["slots"]!=count for key,count in original_targets.items()):
+        raise ValueError("particle_original_target_slot_count_mismatch")
+    provenance = compare_texture_trace_routes(selected, routes, local_documents=local_documents,
+                                               exportability=trace_exportability)
     mark("classify_same_export_local_Texture2D28_type0_pointer")
     local_proof=(classify_original_local_texture_trace(trace,local_pointers)
                  if local_pointers else {
@@ -531,6 +563,9 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
                      "original_local_Type0_collection_exportable":None,
                      "original_local_Type0_nonexportable_collection_proven":False,
                      "original_local_Type0_external_GUID_inferred":False})
+    local_identity_proven=bool(provenance["document_scoped_local_targets_proven"])
+    if local_identity_proven:
+        local_proof["original_local_Type0_Texture2D_export_status"]="ORIGINAL_LOCAL_DOCUMENT_SCOPED_TARGET_IDENTITY_PROVEN"
     local_document_count = sum(len(route["document_guids"]) for route in routes.values()
                                if route["pointer"][2] == 0)
     mark("decode_original_local_type0_Texture2D28_top_mip")
@@ -565,32 +600,35 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
     parity = external_parity(original,manifest,selected,routes,exported)
     mark("completed")
     all_proven = provenance["all_selected_texture_targets_independently_traced"]
+    all_image_routes_proven = not local_count and all_proven
     return {
-        "schema_version": 3,
+        "schema_version": 4,
         "status": PARTIAL_STATUS if local_count else STATUS if all_proven else UNPROVEN_STATUS,
         "source_original_texture2d_sha_verified": True,
         "source_particle_material_to_texture_references": 10,
         "source_original_texture2d_objects": EXPECTED_TARGETS,
         "same_export_source_texture_guids_joined": len(mapping),
         "same_export_original_Material_TexEnv_slots_compared": 10,
-        "same_export_original_Material_TexEnv_PPtr_slots_exact": provenance["independently_traced_external_slots"],
+        "same_export_original_Material_TexEnv_PPtr_slots_exact": (provenance["independently_traced_external_slots"]
+                                                                  +provenance["document_scoped_local_slots_proven"]),
         "local_type0_Material_document_count": local_document_count,
-        "local_type0_exported_target_identity_proven": False,
+        "local_type0_exported_target_identity_proven": local_identity_proven,
         **provenance,
         "source_SHA_original_Texture2D28_local_type0_pointer_targets": local_count,
         "same_export_original_external_TextureImporter_images_confirmed": len(mapping),
-        "source_original_all_three_Texture2D_as_exported_images_verified": all_proven,
+        "source_original_all_three_Texture2D_as_exported_images_verified": all_image_routes_proven,
         **local_proof,
         **source_local_alpha,
         "original_local_Type0_texture_pixel_alpha_verified": False,
-        "original_texture_direct_export_trace_guid_usable": all_proven,
-        "original_material_same_export_GUID_and_UV_linkage_verified": all_proven,
+        "original_texture_direct_export_trace_guid_usable": all_image_routes_proven,
+        "original_material_same_export_GUID_and_UV_linkage_verified": all_image_routes_proven,
         "original_material_exact_texture_PPtr_and_UV_routes_checked": all_proven,
         "source_to_export_UV_slots_compared": 10,
         "actual_exported_alpha_image_counts": dict(sorted(counts.items())),
         "exported_importer_metadata_numeric_counts": importers,
         "original_source_texture_pixels_compared": parity["coordinate_compared_targets"] > 0,
-        "texture_alpha_loss_from_original_proven": parity["alpha_loss_pixels"] > 0,
+        "texture_alpha_loss_from_original_proven": parity["targets_with_alpha_loss"] > 0,
+        "texture_all_source_transparency_lost_in_export_targets": parity["targets_with_all_transparency_lost"],
         "source_export_byte_bound_top_mip_parity": parity,
         "all_three_source_export_RGBA8_samples_equal": all_proven and parity["exact_rgba8_targets"] == EXPECTED_TARGETS,
         "correct_runtime_particle_shader_blend_proven": False,
@@ -639,7 +677,7 @@ def main():
             "schema_version": 1,
             "status": "INCONCLUSIVE",
             "error_type": type(error).__name__,
-            "failure_code": (str(error) if str(error) in ["untrusted_particle_source_export_linkage","duplicated_original_particle_Texture2D_export","invalid_same_export_Texture2D_pointer","invalid_same_export_Texture2D_image_pointer","original_texture_trace_and_Material_YAML_PPtr_mismatch","selected_particle_Material_export_document_collision","one_original_particle_Texture2D_has_conflicting_exported_PPtrs","one_original_local_Texture2D_has_conflicting_exported_PPtrs","particle_image_multiframe_unproven","original_particle_Texture2D_Guid_not_unique","untrusted_source_export_particle_Material_mapping","duplicate_particle_source_Material_trace","invalid_traced_particle_Material21_export","missing_original_particle_Material_same_export_trace","missing_same_export_particle_Material_YAML","changed_same_export_particle_Material_TexEnv_schema","unverified_source_particle_texture_PPtr","particle_Material_source_Texture2D_not_in_3_authentic_targets","broken_same_export_particle_texture_Material_ref","missing_same_export_particle_texture_UV","changed_same_export_particle_texture_UV","one_original_particle_Texture2D_maps_to_two_export_GUIDs","incomplete_original_particle_Material_TexEnv_10_to_3_join","original_texture_trace_and_Material_YAML_GUID_mismatch","untrusted_original_local_Texture2D_nonzero_GUID","one_original_particle_Texture2D_mixed_local_external_export","incomplete_original_particle_two_external_texture_alpha_scope","original_local_texture_pointer_metrics_drift","original_full_source_to_export_texenv_UV_drift","selected_particle_Texture2D_not_exported_as_image","selected_particle_texture_image_importer_missing","particle_image_or_importer_unusable","missing_exported_particle_alpha_classification","Missing/redirected Unity Assets root","Linked export path is unsafe","Missing or linked Material metadata","Invalid exported Material GUID","Malformed private Material YAML","Duplicate exported Material YAML mapping key","Material texture data absent in export","Duplicated exported Material pointer","No exported Material texture documents"]
+            "failure_code": (str(error) if str(error) in ["untrusted_particle_source_export_linkage","duplicated_original_particle_Texture2D_export","invalid_same_export_Texture2D_pointer","invalid_same_export_Texture2D_image_pointer","particle_original_target_slot_count_mismatch","invalid_local_Texture2D_exportability","original_texture_trace_and_Material_YAML_PPtr_mismatch","selected_particle_Material_export_document_collision","one_original_particle_Texture2D_has_conflicting_exported_PPtrs","one_original_local_Texture2D_has_conflicting_exported_PPtrs","particle_image_multiframe_unproven","original_particle_Texture2D_Guid_not_unique","untrusted_source_export_particle_Material_mapping","duplicate_particle_source_Material_trace","invalid_traced_particle_Material21_export","missing_original_particle_Material_same_export_trace","missing_same_export_particle_Material_YAML","changed_same_export_particle_Material_TexEnv_schema","unverified_source_particle_texture_PPtr","particle_Material_source_Texture2D_not_in_3_authentic_targets","broken_same_export_particle_texture_Material_ref","missing_same_export_particle_texture_UV","changed_same_export_particle_texture_UV","one_original_particle_Texture2D_maps_to_two_export_GUIDs","incomplete_original_particle_Material_TexEnv_10_to_3_join","original_texture_trace_and_Material_YAML_GUID_mismatch","untrusted_original_local_Texture2D_nonzero_GUID","one_original_particle_Texture2D_mixed_local_external_export","incomplete_original_particle_two_external_texture_alpha_scope","original_local_texture_pointer_metrics_drift","original_full_source_to_export_texenv_UV_drift","selected_particle_Texture2D_not_exported_as_image","selected_particle_texture_image_importer_missing","particle_image_or_importer_unusable","missing_exported_particle_alpha_classification","Missing/redirected Unity Assets root","Linked export path is unsafe","Missing or linked Material metadata","Invalid exported Material GUID","Malformed private Material YAML","Duplicate exported Material YAML mapping key","Material texture data absent in export","Duplicated exported Material pointer","No exported Material texture documents"]
                              else "UNCLASSIFIED_SAFE_ERROR"),
             "failure_stage": progress["stage"],
             "trace_source_export_match_counts": numeric_trace_metrics,

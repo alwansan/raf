@@ -33,6 +33,10 @@ class AlphaProvenance(unittest.TestCase):
         self.mat_slots = [1,2,3,1,2,3,1,2,3,1]
         self.local = set()
         self.overrides = {}
+        self.embed_local = False
+        self.embed_class = 28
+        self.embed_exportable = True
+        self.embed_cross_document = False
         for i in range(5):
             key=(self.owner,100+i)
             self.source[key]={f"_Texture{j}":((0,self.mat_slots[i*2+j]),self.uv) for j in range(2)}
@@ -63,6 +67,28 @@ class AlphaProvenance(unittest.TestCase):
                 text+="        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n"
             p.write_text(text)
             (p.with_suffix(".mat.meta")).write_text(f"fileFormatVersion: 2\nguid: {100+i:032x}\n")
+        if self.embed_local:
+            # Consolidate actual selected Material documents into one YAML
+            # file; local Texture2D has a non-2800000 anchor in that file.
+            guid="d"*32
+            merged="%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n"
+            mats=[i for i in range(5) if any(t in self.local for t in self.mat_slots[2*i:2*i+2])]
+            if self.embed_cross_document:
+                mats=mats[:-1]
+            for i in mats:
+                p=self.assets/f"mat{i}.mat"
+                anchor=2100000+i
+                merged+=p.read_text()[p.read_text().index("--- !u!21"):].replace("&2100000\n",f"&{anchor}\n",1)
+                p.unlink();p.with_suffix(".mat.meta").unlink()
+                row=next(r for r in self.trace["objects"] if r["class_id"]==21 and r["source"]["path_id"]==100+i)
+                row["export"]={"file_id":anchor,"guid":guid,"type":2}
+            merged+=f"--- !u!{self.embed_class} &123\n"+("Texture2D" if self.embed_class==28 else "Texture3D")+":\n  m_Width: 2\n  m_Height: 1\n"
+            path=self.assets/"embedded.asset"
+            path.write_text(merged)
+            path.with_suffix(".asset.meta").write_text(f"guid: {guid}\n")
+            row=next(r for r in self.trace["objects"] if r["class_id"]==28 and r["source"]["path_id"]==3)
+            row["export"]={"file_id":123,"guid":guid,"type":2}
+            row["exportable"]=self.embed_exportable
         self.trace_path.write_text(json.dumps(self.trace))
 
     def audit(self):
@@ -132,6 +158,46 @@ class AlphaProvenance(unittest.TestCase):
         self.assertEqual(result["local_type0_Material_document_count"],3)
         self.assertFalse(result["local_type0_exported_target_identity_proven"])
         self.assertFalse(result["original_material_exact_texture_PPtr_and_UV_routes_checked"])
+
+    def test_actual_embedded_document_resolves_local_identity_not_image(self):
+        self.local.add(3)
+        self.embed_local=True
+        result=self.audit()
+        self.assertEqual(result["status"],alpha.PARTIAL_STATUS)
+        self.assertEqual(result["same_export_original_Material_TexEnv_PPtr_slots_exact"],10)
+        self.assertEqual(result["document_scoped_local_slots_proven"],3)
+        self.assertTrue(result["local_type0_exported_target_identity_proven"])
+        self.assertTrue(result["original_material_exact_texture_PPtr_and_UV_routes_checked"])
+        self.assertFalse(result["source_original_all_three_Texture2D_as_exported_images_verified"])
+        self.assertFalse(result["original_local_Type0_texture_has_exported_image_proof"])
+
+    def test_same_anchor_different_material_document_remains_unresolved(self):
+        self.local.add(3)
+        self.embed_local=True
+        self.embed_cross_document=True
+        result=self.audit()
+        self.assertFalse(result["local_type0_exported_target_identity_proven"])
+        self.assertEqual(result["same_export_original_Material_TexEnv_PPtr_slots_exact"],7)
+
+    def test_wrong_local_document_texture_class_remains_unresolved(self):
+        self.local.add(3)
+        self.embed_local=True
+        self.embed_class=117
+        result=self.audit()
+        self.assertFalse(result["local_type0_exported_target_identity_proven"])
+
+    def test_local_exportability_unknown_remains_unresolved(self):
+        self.local.add(3)
+        self.embed_local=True
+        self.embed_exportable=None
+        result=self.audit()
+        self.assertFalse(result["local_type0_exported_target_identity_proven"])
+
+    def test_target_census_must_equal_material_routes(self):
+        self.targets[(self.owner,1)]=3
+        self.targets[(self.owner,2)]=4
+        with self.assertRaisesRegex(ValueError,"target_slot_count_mismatch"):
+            self.audit()
 
     def test_local_row_before_conflicting_external_does_not_hide_conflict(self):
         self.local.add(3)

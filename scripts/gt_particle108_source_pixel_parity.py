@@ -248,6 +248,9 @@ def compare_pixels(source, exported):
     if source.size!=exported.size:
         return {"dimensions_match":False,"alpha_samples_equal":False,"rgb_samples_equal":False,
                 "rgba8_samples_equal":False,"alpha_loss_pixels":0,
+                "source_nonopaque_pixels":0,"export_nonopaque_pixels":0,
+                "nonopaque_to_opaque_coordinates":0,"net_nonopaque_population_decreased":False,
+                "all_source_transparency_lost":False,
                 "pixel_coordinates_compared":0,"alpha_mismatch_pixels":0,"rgb_mismatch_pixels":0,
                 "alpha_increased_pixels":0,"alpha_decreased_pixels":0,
                 "alpha_vertical_flip_only_match":False}
@@ -261,14 +264,21 @@ def compare_pixels(source, exported):
     rgb_mismatch=n-rgb_diff.histogram()[0]
     increase=n-ImageChops.subtract(ba,aa).histogram()[0]
     decrease=n-ImageChops.subtract(aa,ba).histogram()[0]
-    # Strict evidence: a formerly nonopaque source pixel became fully opaque.
+    # Coordinate differences and net population loss are different facts.
+    # Rearranging an identical alpha histogram is not discarded transparency.
+    source_nonopaque=n-aa.histogram()[255]
+    export_nonopaque=n-ba.histogram()[255]
     lost=ImageChops.multiply(aa.point([255]*255+[0]),ba.point([0]*255+[255]))
     return {"dimensions_match":True,"pixel_coordinates_compared":n,
             "alpha_samples_equal":alpha_mismatch==0,"rgb_samples_equal":rgb_mismatch==0,
             "rgba8_samples_equal":alpha_mismatch==0 and rgb_mismatch==0,
             "alpha_mismatch_pixels":alpha_mismatch,"rgb_mismatch_pixels":rgb_mismatch,
             "alpha_increased_pixels":increase,"alpha_decreased_pixels":decrease,
-            "alpha_loss_pixels":lost.histogram()[255],
+            "alpha_loss_pixels":max(0,source_nonopaque-export_nonopaque),
+            "source_nonopaque_pixels":source_nonopaque,"export_nonopaque_pixels":export_nonopaque,
+            "nonopaque_to_opaque_coordinates":lost.histogram()[255],
+            "net_nonopaque_population_decreased":source_nonopaque>export_nonopaque,
+            "all_source_transparency_lost":source_nonopaque>0 and export_nonopaque==0,
             "alpha_vertical_flip_only_match":bool(alpha_mismatch and
                 not ImageChops.difference(aa,ba.transpose(Image.Transpose.FLIP_TOP_BOTTOM)).getbbox())}
 
@@ -280,7 +290,8 @@ def external_parity(original,manifest,selected,routes,index):
     counters=dict(independently_traced_external_targets=len(keys),targets_decoded=0,
                   source_inline_targets=0,source_stream_targets=0,dimension_mismatch_targets=0,
                   coordinate_compared_targets=0,exact_alpha_targets=0,exact_rgb_targets=0,
-                  exact_rgba8_targets=0,targets_with_alpha_loss=0,targets_with_alpha_flip_only=0,
+                  exact_rgba8_targets=0,targets_with_alpha_loss=0,targets_with_all_transparency_lost=0,
+                  targets_with_alpha_flip_only=0,nonopaque_to_opaque_coordinates=0,
                   coordinates_compared=0,alpha_mismatch_pixels=0,rgb_mismatch_pixels=0,
                   alpha_increased_pixels=0,alpha_decreased_pixels=0,alpha_loss_pixels=0,
                   targets_unavailable=0)
@@ -300,7 +311,9 @@ def external_parity(original,manifest,selected,routes,index):
         for result,field in (("exact_alpha_targets","alpha_samples_equal"),("exact_rgb_targets","rgb_samples_equal"),
                              ("exact_rgba8_targets","rgba8_samples_equal"),("targets_with_alpha_flip_only","alpha_vertical_flip_only_match")):
             counters[result]+=int(row[field])
-        counters["targets_with_alpha_loss"]+=int(row["alpha_loss_pixels"]>0)
+        counters["targets_with_alpha_loss"]+=int(row["net_nonopaque_population_decreased"])
+        counters["targets_with_all_transparency_lost"]+=int(row["all_source_transparency_lost"])
+        counters["nonopaque_to_opaque_coordinates"]+=row["nonopaque_to_opaque_coordinates"]
         counters["coordinates_compared"]+=row["pixel_coordinates_compared"]
         for field in ("alpha_mismatch_pixels","rgb_mismatch_pixels","alpha_increased_pixels",
                       "alpha_decreased_pixels","alpha_loss_pixels"):
@@ -308,4 +321,5 @@ def external_parity(original,manifest,selected,routes,index):
     return {**counters,"all_independently_traced_external_alpha_samples_equal":bool(keys and counters["exact_alpha_targets"]==len(keys)),
             "all_independently_traced_external_RGBA8_samples_equal":bool(keys and counters["exact_rgba8_targets"]==len(keys)),
             "sample_policy":"decoded_RGBA8_top_left_exact_coordinates_no_color_transform",
+            "alpha_loss_count_policy":"net_nonopaque_population_decrease_not_coordinate_rearrangement",
             "original_or_exported_pixels_published":False,"Unity_import_or_GPU_parity_proven":False}
