@@ -36,6 +36,27 @@ jobs:
           python3 -m py_compile scripts/gt_zip2_export_resources.py
           python3 -m unittest discover -s tests -p test_gt_zip2_export_resources.py -v
           python3 -m unittest discover -s tests -p test_gt_native_zip2_integration.py -v
+      - name: Checkout exact public TextureConverter source only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-bc3-guard
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Source/AssetRipper.Export.Modules.Textures/TextureConverter.cs
+      - name: Prove native BC3 patch produces the exact converter from authored replay PASS
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C ar-bc3-guard rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          python3 -m scripts.gt_patch_bc3_export_decoder --tool-source ar-bc3-guard | tee "$RUNNER_TEMP/gt-bc3-exporter-patch.json"
+          expected=$(sed -nE 's/.*echo "([0-9a-f]{64})  ar-host\/Source\/AssetRipper.Export.Modules.Textures\/TextureConverter.cs".*/\1/p' .github/workflows/raft-unity-editor-android-import.yml)
+          test "$expected" = 186108e478686524b4703dc7280015bd8eb58cd0939b4e270c4114c69c8d755a
+          echo "$expected  ar-bc3-guard/Source/AssetRipper.Export.Modules.Textures/TextureConverter.cs" | sha256sum -c -
       - name: Checkout only pinned ZIP2 manifest; do not fetch game assets or LFS
         uses: actions/checkout@v4
         with:
@@ -77,6 +98,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gt-native-resource-manifest-${{ github.run_id }}
-          path: ${{ runner.temp }}/gt-native-resource-plan.json
+          path: |
+            ${{ runner.temp }}/gt-native-resource-plan.json
+            ${{ runner.temp }}/gt-bc3-exporter-patch.json
           if-no-files-found: ignore
           retention-days: 14
