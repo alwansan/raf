@@ -2,6 +2,14 @@ name: GT synthetic Unity Vulkan material and alpha pixels (NO APK)
 
 on:
   workflow_dispatch:
+    inputs:
+      probe:
+        description: Authored-only Unity validation to execute
+        type: choice
+        default: material-alpha
+        options:
+          - material-alpha
+          - next23b-receipt
   push:
     branches: [feature/android-native-port]
     paths:
@@ -20,7 +28,7 @@ concurrency:
 
 jobs:
   synthetic-pixels:
-    if: github.ref == 'refs/heads/feature/android-native-port'
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 30
@@ -144,3 +152,125 @@ jobs:
           fi
           docker image rm "$RAFT_ALPHA_IMAGE" >/dev/null 2>&1 || true
           rm -rf "$RUNNER_TEMP/raft-alpha-docker"
+
+  next23b-receipt:
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-next23b-receipt]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'next23b-receipt'))
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 60
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+      queue: max
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      GT_NEXT23B_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}
+    steps:
+      - name: Checkout source tools and authored fixture only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /scripts/gt_decode_smolv.cpp
+            /tests/test_gt_next23b_route_provenance.py
+            /tools/synthetic_material_alpha/next23b_receipt_probe.py
+            /android-port/Experiments/GT/Editor/Next23bShaderValidation.cs
+            /.github/workflows/raft-gt-synthetic-material-alpha.yml
+      - name: Generate 1156 authored routes in a new empty project
+        id: stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          python3 -B -m unittest discover -s tests -p test_gt_next23b_route_provenance.py -v
+          python3 -B tools/synthetic_material_alpha/next23b_receipt_probe.py stage \
+            --project synthetic-next23b-project --out synthetic-next23b-results/stage.json
+      - name: Require existing activation inputs and disk budget
+        shell: bash
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && { [ -z "${UNITY_SERIAL:-}" ] || [ -z "${UNITY_EMAIL:-}" ] || [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo 'SYNTHETIC_NEXT23B activation_inputs_missing=true editor_not_run=true'
+            exit 1
+          fi
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+      - name: Run the published receipt producer in Unity Android Vulkan (AssetBundle only)
+        id: compile
+        uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: synthetic-next23b-project
+          targetPlatform: Android
+          buildMethod: RaftGT.Next23bShaderValidation.Validate
+          manualExit: true
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 10g
+          dockerCpuLimit: 2
+          customParameters: -job-worker-count 2
+      - name: Verify actual receipt commitments and decode the authored Android Vulkan bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo chown -R "$(id -u):$(id -g)" synthetic-next23b-project/ProbeResults
+          python3 -m venv "$RUNNER_TEMP/gt-receipt-venv"
+          "$RUNNER_TEMP/gt-receipt-venv/bin/python" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          "$RUNNER_TEMP/gt-receipt-venv/bin/python" -B tools/synthetic_material_alpha/next23b_receipt_probe.py verify \
+            --project synthetic-next23b-project --out synthetic-next23b-results/receipt-verified.json \
+            --run-id "$GT_NEXT23B_RUN_ID"
+      - name: Require actual compiled VS and FS route coverage using the published full gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          smolv="$RUNNER_TEMP/gt-synthetic-next23b-smolv"
+          mkdir "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          project=synthetic-next23b-project
+          "$RUNNER_TEMP/gt-receipt-venv/bin/python" -B -m scripts.gt_verify_921_shader_bundle \
+            --bundle "$project/ProbeResults/Private/gt-next23b" \
+            --source "$project/Assets/GTNext23b.shader" \
+            --receipt "$project/ProbeResults/gt-next23b-unity-safe.json" \
+            --smolv-decoder "$smolv/decode" --next23b \
+            --engine-route-manifest "$project/Next23bEngineRoutes.json" \
+            --source-variant-manifest "$project/SyntheticSourceManifest.json" \
+            --out synthetic-next23b-results/full-verified.json
+      - name: Retain only authored fixture, bundle and bounded receipts
+        if: always() && steps.stage.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-synthetic-next23b-receipt-${{ github.run_id }}
+          path: |
+            synthetic-next23b-results/*.json
+            synthetic-next23b-project/Assets/GTNext23b.shader
+            synthetic-next23b-project/Next23bEngineRoutes.json
+            synthetic-next23b-project/SyntheticSourceManifest.json
+            synthetic-next23b-project/ProbeResults/gt-next23b-unity-safe.json
+            synthetic-next23b-project/ProbeResults/Private/gt-next23b
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove only the authored test project
+        if: always() && steps.stage.outcome == 'success'
+        shell: bash
+        run: |
+          test -f synthetic-next23b-project/SyntheticSourceManifest.json
+          sudo rm -rf synthetic-next23b-project
