@@ -7,3 +7,7 @@ V16 stages fresh actual V15 opt-in public exporter PNG and metadata directly (re
 Eight source regression controls and ten actual-receipt falsifiers planned; actual Unity not run/verified yet. Default off; no original assets, source lower-mip claim, Android/device, production activation, CL/lab, BLACK, animation or APK/XAPK. A3 blocked, G0–G6 open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. Ali pinned restore: https://github.com/alwansan/raf/blob/1a78eb2764d39550f59e2948ae5ed89033c8ab73/clients/GT/RESTORE_AR.md.
 
 Next: activate only authored V16 workflow after review; inspect exact run and retain raw/verified archive. No PASS until actual evidence.
+
+## Activation and live status
+
+Source 4a206be8844aa0e455079208a301dcddf0c0e1bb; activation 97666cc835f929053aa7621a058ce9bdfbfe633f; [45976163790](https://github.com/alwansan/raf/actions/runs/45976163790), job 140428299621, IN PROGRESS. [Guard 45976163752](https://github.com/alwansan/raf/actions/runs/45976163752) SUCCESS. At check, checkout underway; no actual Unity result. Workflow expected 291 regressions and 37+6+10 controls; no new game build. Next inspect exact run and archive, not a new activation.

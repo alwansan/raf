@@ -1305,12 +1305,23 @@
     "no_GT_XAPK_created": true
   },
   "current_handoff": {
+    "latest_v16_run": {
+      "id": 45976163790,
+      "job": 140428299621,
+      "head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
+      "status": "in_progress",
+      "conclusion": null,
+      "compatibility_guard": {
+        "id": 45976163752,
+        "conclusion": "success"
+      }
+    },
     "date": "2026-11-27",
-    "reviewed_remote_head": "e3e3ca06b604aa07b90a1934aa695207be2e46a6",
-    "purpose": "Actual authored V15 selective exporter policy proved; V16 exact unmodified candidate Unity reimport next; original acceptance blocked",
+    "reviewed_remote_head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
+    "purpose": "V16 authored direct V15 candidate Unity reimport in progress; compatibility guard success; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/README_AR.md",
+    "index": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -5523,5 +5534,39 @@
     "actual_ordinary_policy_unchanged": 4,
     "source_bytes_unchanged": true,
     "evidence": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/actual-pass-45975084812.json"
+  },
+  "v16_dxt5nm_exporter_reimport_checkpoint": {
+    "status": "IN_PROGRESS_ACTUAL_AUTHORED_V15_EXPORTER_DIRECT_UNITY_REIMPORT",
+    "starting_head": "2d3adcabfa60198072c9f70da4206c5e0e62b02f",
+    "source_head": "4a206be8844aa0e455079208a301dcddf0c0e1bb",
+    "activation_head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
+    "run": {
+      "id": 45976163790,
+      "job": 140428299621,
+      "head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
+      "status": "in_progress",
+      "conclusion": null,
+      "compatibility_guard": {
+        "id": 45976163752,
+        "conclusion": "success"
+      }
+    },
+    "planned_regressions": 291,
+    "planned_historical_V11_V12_controls": 37,
+    "planned_V15_controls": 6,
+    "planned_V16_receipt_controls": 10,
+    "planned_actual_unfiltered_texels": 84,
+    "planned_top_mip_exact_pixels": 70,
+    "planned_V14_alpha_off_mip_hash_matches": 6,
+    "planned_same_route_slots": 4,
+    "actual_Unity_reimport_verified": false,
+    "manual_alpha_edit": false,
+    "production_activation": false,
+    "original_assets_read": false,
+    "source_lower_mip_parity_verified": false,
+    "Android_device": false,
+    "XAPK": false,
+    "session": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/README_AR.md",
+    "next": "Inspect actual V16 run 45976163790 (guard success); retain raw/verified archive with exact candidate PNG/meta and independently compare every observed mip to V14 alpha_off. If fail retain evidence, fix precise cause; no original-source or production activation."
   }
 }
