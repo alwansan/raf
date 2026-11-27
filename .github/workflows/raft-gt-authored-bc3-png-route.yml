@@ -43,6 +43,7 @@ jobs:
             /tests/test_gt_imported_png_route_pixels.py
             /tests/test_gt_imported_png_route_importer.py
             /tests/test_gt_imported_bc3_route_pixels.py
+            /tests/test_gt_patch_bc3_export_decoder.py
             /android-port/Experiments/ExportLineage/
             /tools/synthetic_material_alpha/RaftAuthoredSceneRouteWitness.cs
             /.github/workflows/raft-gt-authored-bc3-png-route.yml
@@ -54,7 +55,7 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/gt-authored-scene-python"
           py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
           "$py" -m pip install --disable-pip-version-check Pillow==11.3.0 PyYAML==6.0.3
-          for test_file in test_gt_imported_bc3_route_pixels.py test_gt_imported_png_route_importer.py test_gt_imported_png_route_pixels.py test_gt_native_texture_route_sampler.py test_gt_streamed_texture_route_payload.py test_gt_texture_route_payload.py test_gt_material_route_keyword_state.py test_gt_material_route_values.py test_gt_mesh_vertex_payload.py test_gt_verify_original_mesh_export.py test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
+          for test_file in test_gt_patch_bc3_export_decoder.py test_gt_imported_bc3_route_pixels.py test_gt_imported_png_route_importer.py test_gt_imported_png_route_pixels.py test_gt_native_texture_route_sampler.py test_gt_streamed_texture_route_payload.py test_gt_texture_route_payload.py test_gt_material_route_keyword_state.py test_gt_material_route_values.py test_gt_mesh_vertex_payload.py test_gt_verify_original_mesh_export.py test_gt_renderer_submesh_routes.py test_b03_verify_renderer_material_links.py; do
             "$py" -B -m unittest discover -s tests -p "$test_file" -v 2>&1 | tee "authored-scene-results/$test_file.log"
           done
       - uses: actions/setup-dotnet@v4
@@ -79,6 +80,7 @@ jobs:
           test -d authored-scene-results
           python3 -m scripts.patch_export_lineage --tool-source ar-host \
             --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --renderer-lineage --native-texture-arrays --compute-lineage
+          python3 -m scripts.gt_patch_bc3_export_decoder --tool-source ar-host | tee authored-scene-results/bc3-patch.json
           cp tools/synthetic_material_alpha/RaftAuthoredSceneRouteWitness.cs ar-host/Source/AssetRipper.Export.UnityProjects/
           python3 - <<'PY'
           from pathlib import Path
@@ -94,6 +96,11 @@ jobs:
           if (args.Length == 2 && args[0] == "--probe-authored-bc3-routes")
           {
               RaftAuthoredSceneRouteWitness.Run(args[1],true,true);
+              return;
+          }
+          if (args.Length == 2 && args[0] == "--probe-authored-bc3-extended")
+          {
+              RaftAuthoredSceneRouteWitness.Run(args[1],true,true,true);
               return;
           }
           '''+mark))
@@ -121,15 +128,19 @@ jobs:
               original_assets_read=False,APK=False)
           Path("authored-scene-results/build.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
           PY
-      # Packed fixture selectors use explicit masked byte extraction in checked C#.
-      - name: Diagnose exact authored DXT5 pixel deltas and enforce same-route proof
+      - name: Replay exact historical BC3 bytes and extended equal-endpoint fixtures with repaired converter
         shell: bash
         run: |
           set -euo pipefail
           root="$RUNNER_TEMP/gt-authored-bc3-fixture"
           py="$RUNNER_TEMP/gt-authored-scene-python/bin/python"
-          dotnet "$RUNNER_TEMP/gt-authored-scene-tool/ExportLineage.dll" --probe-authored-bc3-routes "$root" 2>&1 | tee authored-scene-results/bc3-witness.log
-          "$py" -B -m scripts.gt_authored_bc3_png_route_witness --root "$root" --out authored-scene-results/bc3-route-join.json
+          mkdir -p authored-scene-results/historical authored-scene-results/extended
+          dotnet "$RUNNER_TEMP/gt-authored-scene-tool/ExportLineage.dll" --probe-authored-bc3-routes "$root" 2>&1 | tee authored-scene-results/historical/bc3-witness.log
+          dotnet "$RUNNER_TEMP/gt-authored-scene-tool/ExportLineage.dll" --probe-authored-bc3-extended "$root-extended" 2>&1 | tee authored-scene-results/extended/bc3-witness.log
+          status=0
+          "$py" -B -m scripts.gt_authored_bc3_png_route_witness --root "$root" --out authored-scene-results/historical/bc3-route-join.json || status=1
+          "$py" -B -m scripts.gt_authored_bc3_png_route_witness --root "$root-extended" --extended --out authored-scene-results/extended/bc3-route-join.json || status=1
+          test "$status" = 0
           "$py" -B - <<'PY'
           from pathlib import Path
           import json,os,re
@@ -140,17 +151,29 @@ jobs:
               m=re.search(r"^Ran (\d+) tests? in ",s,re.M)
               assert m and int(m[1])>0 and re.search(r"^OK$",s,re.M)
               tests[p.name]=int(m[1])
-          assert len(tests)==12
-          assert sum(tests.values())-tests["test_gt_imported_bc3_route_pixels.py.log"]==234
-          j=json.loads((root/"bc3-route-join.json").read_text())
-          assert j["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_BC3_PNG_TOP_MIP_ROUTE_JOIN"
-          assert j["counterfactual_count"]==10 and j["independent_per_channel_checks"]==2
-          assert j["baseline"]["selected_same_route_imported_bc3_png_top_mip_verified"]
-          assert not j["baseline"]["selected_same_route_imported_png_top_mip_verified"]
-          assert not j["baseline"]["bc3_compressed_payload_or_lower_mip_parity_verified"]
-          report=dict(status=j["status"],run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
-                      test_counts=tests,total_regression_tests=sum(tests.values()),counterfactual_count=j["counterfactual_count"],
-                      counts=j["baseline"]["counts"],original_assets_read=False,Unity_import_verified=False,Android_device=False,XAPK=False)
+          assert len(tests)==13
+          assert tests["test_gt_patch_bc3_export_decoder.py.log"]==5
+          assert sum(tests.values())==247
+          patch=json.loads((root/"bc3-patch.json").read_text())
+          assert patch["status"]=="PATCHED_PINNED_DXT5_DECODER_ONLY"
+          receipts={}
+          for variant in ("historical","extended"):
+              j=json.loads((root/variant/"bc3-route-join.json").read_text())
+              assert j["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_BC3_PNG_TOP_MIP_ROUTE_JOIN"
+              assert j["counterfactual_count"]==10 and j["independent_per_channel_checks"]==2
+              assert j["baseline"]["selected_same_route_imported_bc3_png_top_mip_verified"]
+              assert not j["baseline"]["selected_same_route_imported_png_top_mip_verified"]
+              assert not j["baseline"]["bc3_compressed_payload_or_lower_mip_parity_verified"]
+              assert j["historical_source_hashes_verified"]==(variant=="historical")
+              assert j["visible_transparent_RGB_texture_count"]==(1 if variant=="historical" else 2)
+              d=json.loads((root/variant/"bc3-diagnostic.json").read_text())
+              assert all(t["orientation_exact_pixel_matches"]["identity"]==35 and t["max_abs_delta_per_channel"]==[0,0,0,0] for t in d["textures"])
+              receipts[variant]={"counts":j["baseline"]["counts"],"counterfactual_count":10,
+                  "schemas":j["schemas"],"historical_source_hashes_verified":j["historical_source_hashes_verified"]}
+          report=dict(status="PASS_ACTUAL_AUTHORED_PATCHED_BC3_FOUR_COLOR_REPLAY_AND_EXTENDED",run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
+                      test_counts=tests,total_regression_tests=sum(tests.values()),counterfactual_count=20,
+                      receipts=receipts,patch=patch,unique_authored_pixels_exact=140,original_assets_read=False,
+                      production_pipeline_integrated=False,Unity_import_verified=False,Android_device=False,XAPK=False)
           (root/"bc3-report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
           print(json.dumps(report,sort_keys=True))
           PY
@@ -159,10 +182,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gt-authored-bc3-png-route-${{ github.run_id }}
-          path: authored-scene-results/*
+          path: authored-scene-results/
           if-no-files-found: warn
           retention-days: 14
       - name: Remove only authored fixture
         if: always()
         shell: bash
-        run: rm -rf "$RUNNER_TEMP/gt-authored-bc3-fixture"
+        run: rm -rf "$RUNNER_TEMP/gt-authored-bc3-fixture" "$RUNNER_TEMP/gt-authored-bc3-fixture-extended"
