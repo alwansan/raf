@@ -16,6 +16,11 @@ from scripts.gt_next23b_route_provenance import (
     verify_bundle_metadata,
 )
 from test_gt_next23b_route_provenance import fixture, encoded
+from test_gt_next23b_receipt_provenance import receipt_for
+from scripts.gt_next23b_unity_receipt import (
+    MAX_SOURCE_BYTES, MAX_RECEIPT_BYTES, MAX_MANIFEST_BYTES, MAX_BUNDLE_BYTES,
+    read_snapshot, strict_json, verify_unity_receipt,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -80,7 +85,7 @@ class Next23bProvenanceWiring(unittest.TestCase):
         self.assertEqual(report["status"], "INCONCLUSIVE_NEXT23B_PRIVATE_COMPOSITION")
         self.assertEqual(report["composition_safe_checkpoint"], "independent_source_keyword_route_provenance")
 
-    def inspect_with(self, *, mutate=None, missing_source=False, stale=False):
+    def inspect_with(self, *, mutate=None, missing_source=False, stale=False, change=None):
         parsed = copy.deepcopy(self.source["original_shader_ParsedForm_full_private"])
         parsed["m_Name"] = "Authored/Fixture"
         if mutate:
@@ -94,7 +99,10 @@ class Next23bProvenanceWiring(unittest.TestCase):
                            exported_shader_identity=lambda _: "Authored/Fixture", decoded_platforms=lambda _: [(18, [])],
                            records=lambda _: [], validate_next23b_engine_manifest=lambda _: None,
                            verify_candidate_route_manifest=verify_candidate_route_manifest,
-                           verify_bundle_metadata=verify_bundle_metadata, verify_routes=route_check)
+                           verify_bundle_metadata=verify_bundle_metadata, verify_routes=route_check,
+                           MAX_SOURCE_BYTES=MAX_SOURCE_BYTES, MAX_RECEIPT_BYTES=MAX_RECEIPT_BYTES,
+                           MAX_MANIFEST_BYTES=MAX_MANIFEST_BYTES, MAX_BUNDLE_BYTES=MAX_BUNDLE_BYTES,
+                           read_snapshot=read_snapshot, strict_json=strict_json, verify_unity_receipt=verify_unity_receipt)
         with tempfile.TemporaryDirectory() as d, patch.dict(sys.modules, {"UnityPy": unity}):
             root = Path(d)
             source = root / "shader"
@@ -102,20 +110,32 @@ class Next23bProvenanceWiring(unittest.TestCase):
             original = root / "source-metadata.json"
             original.write_bytes(self.source_bytes + (b"\n" if stale else b""))
             receipt = root / "receipt.json"
-            receipt.write_text(json.dumps({"unityVersion": "2021.3.45f2", "passCount": 4, "errors": 0,
-                "registeredRoutes": 1156, "privateBundleCompiled": True, "androidVulkanOnly": True,
-                "candidateSha256": sha256(self.shader).hexdigest()}))
             manifest = root / "engine.json"
             manifest.write_text(json.dumps(bind_candidate_route_manifest(self.source_bytes, self.shader, self.routes)[0]))
+            bundle = root / "not-a-real-bundle"
+            bundle.write_bytes(b"authored fixture bundle")
+            receipt.write_text(json.dumps(receipt_for(self.shader, manifest.read_bytes(),
+                                                       self.source_bytes, bundle.read_bytes())))
+            if change == "bundle":
+                bundle.write_bytes(b"Authored fixture bundle")
+            elif change == "route":
+                manifest.write_bytes(manifest.read_bytes() + b"\n")
+            elif change == "candidate":
+                source.write_bytes(self.shader + b"!")
+            elif change == "old_receipt":
+                old = json.loads(receipt.read_text())
+                old.pop("engineRouteManifestSha256")
+                receipt.write_text(json.dumps(old))
             try:
                 result = inspect(root / "not-a-real-bundle", source, receipt, manifest, "mock-decoder",
                                  next23b=True, source_variant_manifest=None if missing_source else original)
             except ValueError as exc:
                 route_check.assert_not_called()
-                if missing_source:
+                if missing_source or stale or change:
                     unity.load.assert_not_called()
                 return str(exc)
             route_check.assert_called_once()
+            unity.load.assert_called_once_with(bundle.read_bytes())
             return result
 
     def test_bundle_verifier_requires_source_commitment_and_metadata(self):
@@ -125,9 +145,20 @@ class Next23bProvenanceWiring(unittest.TestCase):
         self.assertFalse(result["original_keyword_scope_verified"])
         self.assertFalse(result["original_runtime_keyword_selection_verified"])
         self.assertIn("independent_source_variant_manifest", self.inspect_with(missing_source=True))
-        self.assertIn("commitment_mismatch", self.inspect_with(stale=True))
+        self.assertIn("sourceManifestSha256_mismatch", self.inspect_with(stale=True))
         self.assertIn("bundle_keyword_flag_byte_mismatch", self.inspect_with(mutate=lambda p: p["m_KeywordFlags"].__setitem__(0, 99)))
         self.assertIn("bundle_pass_lightmode_mismatch", self.inspect_with(mutate=lambda p: p["m_SubShaders"][0]["m_Passes"][0]["m_State"]["m_Tags"]["tags"][0].__setitem__(1, "Deferred")))
+
+    def test_byte_binding_rejects_stale_or_swapped_inputs_before_unity_decoder(self):
+        for change, reason in (("bundle", "bundleSha256_mismatch"),
+                               ("route", "engineRouteManifestSha256_mismatch"),
+                               ("candidate", "candidateSha256_mismatch"),
+                               ("old_receipt", "engineRouteManifestSha256_mismatch")):
+            with self.subTest(change=change):
+                self.assertIn(reason, self.inspect_with(change=change))
+        result = self.inspect_with()
+        self.assertTrue(result["unity_receipt_byte_commitments_verified"])
+        self.assertFalse(result["unity_receipt_cryptographic_attestation_verified"])
 
 
 if __name__ == "__main__":

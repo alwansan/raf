@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-27",
+  "base_commit": "bcfe1051876c77b40c82658de647206a4a58203b",
+  "base_tree": "012be9e1ee92e8865a758cee0fde6f47c7c2401f",
+  "branch": "feature/android-native-port",
+  "lab_read_only_head": "f933c4429803583d1ed5fa26e46bb0d3227f2027",
+  "active_runs_at_prepublication_check": 0,
+  "scope": "NEXT23b source-free receipt byte consistency and isolated verifier wiring; C# producer is a source draft checked statically, not compiled in Unity.",
+  "local": {
+    "prior_full_checkout_present": false,
+    "direct_github_dns_available": false,
+    "python": "3.13.5",
+    "git": "2.47.3",
+    "old_source_snapshot_files_unchanged": 34,
+    "old_non_pyc_snapshot_files_checked": 34,
+    "prior_batch5_archive_sha256": "a7b0a80c25c753f6e081f9307c804575399d833e5deec5ff338ef4ceee5222a6",
+    "clean_full_checkout_verified": false,
+    "clean_isolated_source_snapshot_replay": true,
+    "unity_present": false,
+    "csharp_compiler_present": false,
+    "UnityPy_installed": false
+  },
+  "tests": {
+    "provenance_receipt_suite_passed": 31,
+    "prior_suite_size": 19,
+    "new_tests_added": 12,
+    "failed": 0,
+    "skipped": 0,
+    "static_editor_source_tests": 1,
+    "new_suite_clean_replay_passed": 31,
+    "previous_runtime_keyword_clean_regression_passed": 14,
+    "clean_total": 45,
+    "initial_seconds": 2.34,
+    "clean_receipt_seconds": 2.138,
+    "clean_runtime_seconds": 3.963,
+    "python_ast_syntax_passed": true,
+    "commands": [
+      "python3 -B -m unittest discover -s tests -p 'test_gt_next23b*provenance*.py' -v",
+      "python3 -B -m unittest discover -s tests -p 'test_gt_runtime_keyword_*.py' -v"
+    ],
+    "actual_UnityPy_and_shader_compiler_executed": false,
+    "authored_fixture_bundle_is_not_real_assetbundle": true
+  },
+  "verified_slices": {
+    "base_inspect_sha256": "f3cfafff3290a37ff61072e245d7c641dd7e7cb8c36d905633f57612b20c50df",
+    "tested_inspect_sha256": "fe358ddf81444e12d59b42919599a1922c14274d23744e50e38e4c7745227458",
+    "exact_base_and_patched_slices_matched": true,
+    "editor_base_git_blob": "da7f17afff7c886796f29a1a8572bde477f1c4e3",
+    "editor_static_tested_git_blob": "c9b87ce25b51c1bc45d8a83f560843749f29b8ee"
+  },
+  "contract": {
+    "receipt_schema": 2,
+    "required_final_checkpoint": "verified",
+    "sha256_inputs": [
+      "candidate shader",
+      "engine route manifest bytes consumed by editor",
+      "source metadata manifest commitment carried in route manifest",
+      "output bundle bytes"
+    ],
+    "bundle_size_checked": true,
+    "compare_before_asset_decoder": true,
+    "decoder_receives_same_hashed_byte_snapshot_in_mocked_test": true,
+    "duplicate_json_keys_and_nonfinite_constants_rejected_in_receipt_and_route_manifest": true,
+    "legacy_receipt_rejected_for_next23b": true,
+    "legacy_non_next23b_branch_unchanged": true,
+    "scope_limits_bytes": {
+      "receipt": 1048576,
+      "engine_manifest": 16777216,
+      "candidate_or_source_manifest": 134217728,
+      "bundle": 536870912
+    },
+    "editor_draft_rejects_existing_receipt_or_bundle_directory": true,
+    "editor_draft_hashes_consumed_route_bytes": true,
+    "editor_draft_rehashes_inputs_before_success": true,
+    "editor_draft_hashes_bundle_after_build": true,
+    "editor_draft_failure_resets_success": true
+  },
+  "limits": {
+    "editor_draft_failure_reset_statically_checked": true,
+    "editor_compilation_verified": false,
+    "actual_UnityPy_1_23_0_byte_load_verified": false,
+    "source_packet_authentication_verified": false,
+    "scope_semantics_verified": false,
+    "original_runtime_material_selection_verified": false,
+    "actual_bundle_or_SPIRV_decoded": false,
+    "actual_original_assets_read": false,
+    "cryptographically_signed_receipt_or_independent_run_attestation": false,
+    "byte_identical_replay_not_distinguishable_by_hashes_alone": true,
+    "private_input_snapshot_not_adversarial_filesystem_security_boundary": true,
+    "full_test_suite_run": false,
+    "workflow_changed": false,
+    "workflow_dispatched": false,
+    "skip_ci_intentional": true,
+    "G0_G6": "OPEN",
+    "XAPK": "NOT_REQUESTED",
+    "latest_same_export_historical": {
+      "run": 43929698985,
+      "non_dummy": 688,
+      "total": 786,
+      "dummy": 98,
+      "dummy_guids": 37
+    }
+  },
+  "files": [
+    {
+      "path": "scripts/gt_next23b_unity_receipt.py",
+      "git_blob_sha": "68120ab8528f83cf65c919968b4a177aa945c212",
+      "sha256": "89a3d2cbacd45ad1ac7af4e3605ffdf70c192d73cff92446d1c92e0b2863b774"
+    },
+    {
+      "path": "scripts/gt_verify_921_shader_bundle.py",
+      "git_blob_sha": "c19d1847654541dba105cbfb419be2d57e5fca70",
+      "sha256": "ab87f87aeaef13b0a1c52a880517527cab625297127158f53e6cca5cfb2f705e"
+    },
+    {
+      "path": "android-port/Experiments/GT/Editor/Next23bShaderValidation.cs",
+      "git_blob_sha": "c9b87ce25b51c1bc45d8a83f560843749f29b8ee",
+      "sha256": "bc3ba575eb47e7a082768fce9286d165f9a2b540eeed7ce66a069e538565c8e1"
+    },
+    {
+      "path": "tests/test_gt_next23b_receipt_provenance.py",
+      "git_blob_sha": "1a916a5ee61f5fb55381f157a7d76c4700f782ba",
+      "sha256": "a08ec63b56cfe5bcb01c09d2b835b54e529458a6abd06d2a4c4a99788375f58e"
+    },
+    {
+      "path": "tests/test_gt_next23b_provenance_wiring.py",
+      "git_blob_sha": "3e88243db090923f6e6d799be5652aae12bdd236",
+      "sha256": "67539071394d95fcf04e3a14a419e4ad63b1defcda870cc5f77f40fe887d0917"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-next23b-receipt-binding/tests.log",
+      "git_blob_sha": "3233f414b91209772c8452439a639a7cab4d13fa",
+      "sha256": "4351d45e20e45b5b4175271c0fddb80056cbacdad7a6711b81fe2e2dc69a7fbb"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-next23b-receipt-binding/clean-replay.log",
+      "git_blob_sha": "3c0decb52bcd624876c156185ee842b1fabe9a82",
+      "sha256": "647b52f37786ca23fbc5586670d6e24f53d75e2a7bc5cbe12b909205e708d44c"
+    }
+  ]
+}

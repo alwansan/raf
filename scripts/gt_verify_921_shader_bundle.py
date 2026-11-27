@@ -10,6 +10,10 @@ from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, NEXT_30_MATERIAL_
 from scripts.restore_builtin_shaders import exported_shader_identity
 from scripts.gt_runtime_keyword_contract import exact_independent_toggle_plan, strict_bundle_route_key
 from scripts.gt_next23b_route_provenance import verify_candidate_route_manifest, verify_bundle_metadata
+from scripts.gt_next23b_unity_receipt import (
+    MAX_SOURCE_BYTES, MAX_RECEIPT_BYTES, MAX_MANIFEST_BYTES, MAX_BUNDLE_BYTES,
+    read_snapshot, strict_json, verify_unity_receipt,
+)
 from scripts.w1_recover_depth_passes import stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
 
@@ -91,7 +95,7 @@ def vulkan_execution_models(blob, decoder):
 def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None, *, next30=False, next17=False, next7p11=False, fft_utilities=False, next23b=False, source_variant_manifest=None):
     import UnityPy
 
-    shader = source.read_bytes()
+    shader = read_snapshot(source, MAX_SOURCE_BYTES) if next23b else source.read_bytes()
     expected_name = exported_shader_identity(shader.decode("utf-8"))
     if sum(bool(value) for value in (next30, next17, next7p11, fft_utilities, next23b)) > 1:
         raise ValueError("mutually_exclusive_original_shader_source_route_profiles")
@@ -113,7 +117,19 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
         raise ValueError("next23b_requires_independent_source_variant_manifest")
     if not next23b and source_variant_manifest is not None:
         raise ValueError("source_variant_manifest_only_supported_for_next23b")
-    unity = json.loads(receipt.read_text(encoding="utf-8"))
+    provenance = {}
+    bundle_input = str(bundle)
+    if next23b:
+        unity = strict_json(read_snapshot(receipt, MAX_RECEIPT_BYTES))
+        route_bytes = read_snapshot(engine_route_manifest, MAX_MANIFEST_BYTES)
+        source_bytes = read_snapshot(source_variant_manifest, MAX_SOURCE_BYTES)
+        bundle_input = read_snapshot(bundle, MAX_BUNDLE_BYTES)
+        provenance = verify_unity_receipt(unity, shader, route_bytes, source_bytes, bundle_input)
+        packet = strict_json(route_bytes)
+        validate_next23b_engine_manifest(packet)
+        provenance.update(verify_candidate_route_manifest(source_bytes, shader, packet))
+    else:
+        unity = json.loads(receipt.read_text(encoding="utf-8"))
     if next23b and (unity.get("unityVersion") != "2021.3.45f2" or
                     unity.get("passCount") != 4 or unity.get("errors") != 0):
         raise ValueError("next23b_exact_unity_four_pass_compilation_required")
@@ -125,7 +141,7 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
                 else unity.get("registeredRoutes") != sum(counts))
             or unity.get("candidateSha256") != sha256(shader).hexdigest()):
         raise ValueError("original_921_unity_bundle_unverified")
-    trees = [obj.read_typetree() for obj in UnityPy.load(str(bundle)).objects
+    trees = [obj.read_typetree() for obj in UnityPy.load(bundle_input).objects
              if obj.type.name == "Shader"]
     matches = [tree for tree in trees if tree["m_ParsedForm"]["m_Name"] == expected_name]
     if len(matches) != 1 or list(matches[0]["platforms"]) != [18]:
@@ -135,14 +151,11 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
     if platform != 18:
         raise ValueError("original_921_bundle_platform_table_mismatch")
     engine_routes = None
-    provenance = {}
     if engine_route_manifest is not None:
-        packet = json.loads(engine_route_manifest.read_text(encoding="utf-8"))
         if next23b:
-            validate_next23b_engine_manifest(packet)
-            source_bytes = source_variant_manifest.read_bytes()
-            provenance = verify_candidate_route_manifest(source_bytes, shader, packet)
             provenance.update(verify_bundle_metadata(source_bytes, tree["m_ParsedForm"], packet))
+        else:
+            packet = json.loads(engine_route_manifest.read_text(encoding="utf-8"))
         engine_routes = [{frozenset(row["keywords"]) for row in item["variants"]}
                          for item in packet["passes"]]
         if tuple(map(len, engine_routes)) != counts:
