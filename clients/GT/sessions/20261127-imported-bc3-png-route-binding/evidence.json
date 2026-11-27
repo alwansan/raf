@@ -1,10 +1,10 @@
 {
-  "status": "BC3_DECODER_REPAIR_IMPLEMENTED_NOT_EXECUTED",
+  "status": "BC3_REPAIR_AND_TWO_FIXTURE_WITNESS_READY",
   "starting_head": "7f80870e611c616ab7d3cf75a6bd4457e3ddad18",
   "prior_v9_run": 45960313046,
   "prior_v9_artifact": 15180771759,
   "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-  "next": "Compile pinned exporter with scratch-only DXT5 normalization; rerun exact previous authored bytes and independent extended equal-endpoint/alpha-visible fixture; require strict V10 parity and negative controls. No production integration until actual proof.",
+  "next": "Dedicated public-only CI: pinned patch, 5 new patch tests (256 blocks), historical 242 regressions, exact old fixture replay, extended equal-endpoint fixture. Require strict RGBA match and 10 negative controls each. Historical transparent RGB control selects texture that actually has alpha-zero pixels; extended requires both. No production install yet.",
   "original_assets_read": false,
   "Unity_import_verified": false,
   "XAPK": false,

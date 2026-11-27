@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
-  "next_action": "Compile pinned exporter with scratch-only DXT5 normalization; rerun exact previous authored bytes and independent extended equal-endpoint/alpha-visible fixture; require strict V10 parity and negative controls. No production integration until actual proof.",
+  "next_action": "Dedicated public-only CI: pinned patch, 5 new patch tests (256 blocks), historical 242 regressions, exact old fixture replay, extended equal-endpoint fixture. Require strict RGBA match and 10 negative controls each. Historical transparent RGB control selects texture that actually has alpha-zero pixels; extended requires both. No production install yet.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "71948d34824acb1be4115932c413e52060cab0bd",
+    "reviewed_remote_head": "c33427181e06ad25548f861da50ced908f556805",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding",
-      "status": "BC3_DECODER_REPAIR_IMPLEMENTED_NOT_EXECUTED",
-      "next": "Compile pinned exporter with scratch-only DXT5 normalization; rerun exact previous authored bytes and independent extended equal-endpoint/alpha-visible fixture; require strict V10 parity and negative controls. No production integration until actual proof."
+      "status": "BC3_REPAIR_AND_TWO_FIXTURE_WITNESS_READY",
+      "next": "Dedicated public-only CI: pinned patch, 5 new patch tests (256 blocks), historical 242 regressions, exact old fixture replay, extended equal-endpoint fixture. Require strict RGBA match and 10 negative controls each. Historical transparent RGB control selects texture that actually has alpha-zero pixels; extended requires both. No production install yet."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -5268,12 +5268,12 @@
     }
   },
   "v10_bc3_checkpoint": {
-    "status": "BC3_DECODER_REPAIR_IMPLEMENTED_NOT_EXECUTED",
+    "status": "BC3_REPAIR_AND_TWO_FIXTURE_WITNESS_READY",
     "starting_head": "7f80870e611c616ab7d3cf75a6bd4457e3ddad18",
     "prior_v9_run": 45960313046,
     "prior_v9_artifact": 15180771759,
     "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-    "next": "Compile pinned exporter with scratch-only DXT5 normalization; rerun exact previous authored bytes and independent extended equal-endpoint/alpha-visible fixture; require strict V10 parity and negative controls. No production integration until actual proof.",
+    "next": "Dedicated public-only CI: pinned patch, 5 new patch tests (256 blocks), historical 242 regressions, exact old fixture replay, extended equal-endpoint fixture. Require strict RGBA match and 10 negative controls each. Historical transparent RGB control selects texture that actually has alpha-zero pixels; extended requires both. No production install yet.",
     "original_assets_read": false,
     "Unity_import_verified": false,
     "XAPK": false,

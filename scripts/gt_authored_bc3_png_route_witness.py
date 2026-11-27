@@ -84,10 +84,12 @@ def diagnose(root,out,files,requests,mapping,pins):
         "strict_parity_waived":False,"textures":[{k:v for k,v in row.items() if k!="pixels"} for row in rows]},sort_keys=True))
 
 
-def audit(root,out):
+def audit(root,out,*,extended=False):
     root=Path(root);out=Path(out)
     need(not out.exists() and out.parent.is_dir(),"fresh_bc3_receipt_required")
     objects,externals,mapping,vertices,proofs,requests,pins,producer=load(root,bc3_mode=True)
+    variant="extended_equal_endpoints" if extended else "historical_replay"
+    need(producer.get("bc3_fixture_variant")==variant,"actual_BC3_fixture_variant")
     files,docs=gate.actual_index(root/"project",mapping)
     need(len(files)==9 and len(docs)==11,"actual_bc3_document_population")
     keys=sorted(requests);ptrs=[mapping[k][1] for k in keys]
@@ -108,29 +110,44 @@ def audit(root,out):
     provider=requests[keys[0]].provider;pin=pins["Raft_Data/"+provider]
     raw=gate.verified_range(root/"providers"/provider,(pin[1],pin[2]),0,187)
     # Exact whole-provider authentication independent of the grouped digest.
-    schemas=[]
+    schemas=[];transparent_targets=[];source_top_hashes=[]
     for k,ptr in zip(keys,ptrs,strict=True):
-        req=requests[k];source=bc3.decode_top(req.descriptor[:2],raw[req.offset:req.offset+64])
+        req=requests[k];top=raw[req.offset:req.offset+64]
+        source=bc3.decode_top(req.descriptor[:2],top);source_top_hashes.append(sha256(top).hexdigest())
+        blocks=[top[i:i+16] for i in range(0,64,16)]
+        need({b[0]>b[1] for b in blocks}=={True,False},"BC3_both_alpha_endpoint_modes")
+        orders=[(int.from_bytes(b[8:10],"little"),int.from_bytes(b[10:12],"little")) for b in blocks]
+        need(any(x<y for x,y in orders) and any(x>y for x,y in orders),"BC3_both_RGB_endpoint_orders")
+        need(any(x==y for x,y in orders)==extended,"BC3_equal_endpoint_fixture_scope")
         path,meta=files[ptr[0]]
         with Image.open(path) as im:
             need(compare_pair(source,im,original_id="same-trace",exported_id="same-trace",authenticated=True)=="EXACT",
                  "independent_BC3_per_channel")
             colors=list(source.getdata())
-            need(any(a==0 and (r or g or b) for r,g,b,a in colors) and any(a==255 for _,_,_,a in colors)
-                 and any(0<a<255 for _,_,_,a in colors),"BC3_alpha_selector_coverage")
+            transparent=any(a==0 and (r or g or b) for r,g,b,a in colors)
+            if transparent:transparent_targets.append(path)
+            need(any(a==255 for _,_,_,a in colors) and any(0<a<255 for _,_,_,a in colors),"BC3_alpha_selector_coverage")
+            if extended:need(transparent,"BC3_extended_visible_transparent_RGB")
             schemas.append({"dimensions":list(im.size),"source_format":req.descriptor[2],"mip_lengths":list(req.mip_lengths),
                             "rgba_mode":im.mode,"unique_alpha_values":len({p[3] for p in colors}),
+                            "visible_transparent_nonzero_RGB":transparent,"equal_RGB_endpoint_blocks":sum(x==y for x,y in orders),
+                            "source_top_sha256":source_top_hashes[-1],
                             "importer_textureFormat":png.importer_document(meta,ptr).get("textureFormat")})
+    need(transparent_targets,"BC3_population_visible_transparent_RGB")
+    if not extended:need(source_top_hashes==[
+        "b3445c245238ae44a9ad831c5f62f5abe9da8082197beec8a8ac1269d8ae16ae",
+        "3e285fed5f82a7de5571e1c8b9ca2bff65e44249fe76f0fdad83386025eacede"],
+        "BC3_historical_replay_source_drift")
     need(proofs[keys[0]].rgba_sha256!=proofs[keys[1]].rgba_sha256,"BC3_distinct_pixels")
     controls={}
     def record(name,r,reason,old=True):
         need(not r[FIELD] and r["reason_counts"].get(reason,0)>0,"BC3_control_not_rejected:"+name+":"+str(r["reason_counts"]))
         controls[name]={"reason":reason,"V4_pass":old}
     target=files[ptrs[0][0]][0];other=files[ptrs[1][0]][0]
-    def disk(name,change,reason):
+    def disk(name,change,reason,texture_path=target):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/"project";shutil.copytree(root/"project",p)
-            change(p/target.relative_to(root/"project"));f,d=gate.actual_index(p,mapping)
+            change(p/texture_path.relative_to(root/"project"));f,d=gate.actual_index(p,mapping)
             need(run(f,d,strict=False)["selected_same_route_material_keyword_pass_state_verified"],"V4_not_pass:"+name)
             record(name,run(f,d),reason)
     def edit(path,fn):
@@ -141,7 +158,7 @@ def audit(root,out):
                  if (im.getpixel((x,y))[3]==0 if transparent else im.getpixel((x,y))[3]!=0))
         value=list(im.getpixel(pos));value[ch]^=1;im.putpixel(pos,tuple(value));return im
     disk("RGB",lambda p:edit(p,lambda im:channel(im,0)),"same_route_png_RGB_DRIFT")
-    disk("transparent_RGB",lambda p:edit(p,lambda im:channel(im,1,True)),"same_route_png_RGB_DRIFT")
+    disk("transparent_RGB",lambda p:edit(p,lambda im:channel(im,1,True)),"same_route_png_RGB_DRIFT",transparent_targets[0])
     disk("alpha",lambda p:edit(p,lambda im:channel(im,3)),"same_route_png_ALPHA_ONLY_DRIFT")
     disk("vertical_flip",lambda p:edit(p,lambda im:im.transpose(Image.Transpose.FLIP_TOP_BOTTOM)),"same_route_png_VERTICAL_FLIP")
     disk("horizontal_flip",lambda p:edit(p,lambda im:im.transpose(Image.Transpose.FLIP_LEFT_RIGHT)),"same_route_png_HORIZONTAL_FLIP")
@@ -164,13 +181,16 @@ def audit(root,out):
     record("wrong_source_format_scope",run(files,docs,old),"png_source_format_scope_mismatch")
     result=dict(status="PASS_ACTUAL_AUTHORED_PUBLIC_BC3_PNG_TOP_MIP_ROUTE_JOIN",baseline=baseline,
         counterfactuals=controls,counterfactual_count=len(controls),source_states=2,actual_png_textures=2,
-        schemas=schemas,independent_per_channel_checks=2,repinned_lower_mip_intentionally_outside_scope=True,
+        schemas=schemas,fixture_variant=variant,independent_per_channel_checks=2,
+        historical_source_hashes_verified=not extended,visible_transparent_RGB_texture_count=len(transparent_targets),
+        repinned_lower_mip_intentionally_outside_scope=True,
         V8_scope_rejects_BC3=True,original_assets_read=False,original_serialized_source_verified=False,
         Unity_import_verified=False,Android_device=False,XAPK=False)
     out.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n");print(json.dumps(result,sort_keys=True))
 
 def main():
     p=argparse.ArgumentParser();p.add_argument("--root",type=Path,required=True);p.add_argument("--out",type=Path,required=True)
-    a=p.parse_args();audit(a.root,a.out)
+    p.add_argument("--extended",action="store_true")
+    a=p.parse_args();audit(a.root,a.out,extended=a.extended)
 
 if __name__=="__main__":main()

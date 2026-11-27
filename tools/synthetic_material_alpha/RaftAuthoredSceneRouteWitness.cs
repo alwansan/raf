@@ -122,7 +122,7 @@ public static class RaftAuthoredSceneRouteWitness
     // Two NPOT 5x7 DXT5 textures with a 2x3 lower mip: 4+1 blocks.
     // Distinct blocks and both alpha endpoint modes; selector order is
     // authored directly, not derived from the public decoder or its PNG.
-    private static byte[] AuthoredBC3(int texture)
+    private static byte[] AuthoredBC3(int texture,bool extended)
     {
         byte[] bytes=new byte[80];
         for(int b=0;b<5;b++)
@@ -135,12 +135,17 @@ public static class RaftAuthoredSceneRouteWitness
             for(int x=0;x<4;x++)
             {
                 int p=4*y+x;
-                alpha|=(ulong)((x+2*y+b+texture)%8)<<(3*p);
+                int alphaIndex=(x+2*y+b+texture)%8;
+                // Additional fixture: visible 0 and 255 on both textures,
+                // including cropped right-edge blocks of the NPOT image.
+                if(extended && six && x==0 && y<2)alphaIndex=6+y;
+                alpha|=(ulong)alphaIndex<<(3*p);
                 color|=(uint)((x+y+b+2*texture)%4)<<(2*p);
             }
             for(int j=0;j<6;j++)bytes[off+2+j]=(byte)((alpha>>(8*j))&0xffUL);
             ushort c0=(ushort)(six?0x07e0:0xf800);
             ushort c1=(ushort)(six?0xffff:0x001f);
+            if(extended && b==0)c1=c0; // equal RGB565 endpoints, all four selectors exercised
             bytes[off+8]=(byte)(c0&0xff);bytes[off+9]=(byte)(c0>>8);
             bytes[off+10]=(byte)(c1&0xff);bytes[off+11]=(byte)(c1>>8);
             for(int j=0;j<4;j++)bytes[off+12+j]=(byte)((color>>(8*j))&0xffU);
@@ -148,9 +153,10 @@ public static class RaftAuthoredSceneRouteWitness
         return bytes;
     }
 
-    public static void Run(string root,bool importedPng=false,bool importedBc3=false)
+    public static void Run(string root,bool importedPng=false,bool importedBc3=false,bool bc3Extended=false)
     {
         Require(!importedBc3 || importedPng,"bc3_requires_actual_png_export");
+        Require(!bc3Extended || importedBc3,"extended_requires_bc3");
         Require(!Directory.Exists(root),"fresh_authored_route_root_required");
         Directory.CreateDirectory(root);
         string project=Path.Combine(root,"project");
@@ -263,7 +269,7 @@ public static class RaftAuthoredSceneRouteWitness
             Require(sampler.FilterMode==1+i && sampler.Aniso==2+i*6 &&
                 sampler.MipBias==(i==0?-.625f:.375f) && sampler.WrapU==i &&
                 sampler.WrapV==2-i && sampler.WrapW==3-i,"authored_sampler_capture_drift");
-            var mipBytes=importedBc3?AuthoredBC3(i):new byte[]{(byte)(32+64*i),64,192,0,
+            var mipBytes=importedBc3?AuthoredBC3(i,bc3Extended):new byte[]{(byte)(32+64*i),64,192,0,
                 128,(byte)(96+32*i),32,255,18,172,93,127,207,9,55,64,
                 (byte)(90+32*i),66,33,171};
             int extent=7+(importedBc3?93:27)*i;
@@ -447,6 +453,7 @@ public static class RaftAuthoredSceneRouteWitness
             original_assets_read=false,original_serialized_source=false,production_auto_exporter_selection=false,
             authored_native_shader_programs_verified=false,authored_file_backed_streamed_texture_collections=2,
             actual_imported_png_texture_collections=importedPng?2:0,
+            bc3_fixture_variant=importedBc3?(bc3Extended?"extended_equal_endpoints":"historical_replay"):"not_bc3",
             Android_device=false,XAPK=false
         }));
         Console.WriteLine(importedPng?"RAFT_AUTHORED_SCENE_PNG_EXPORT_OBSERVED":"RAFT_AUTHORED_SCENE_YAML_EXPORT_OBSERVED");
