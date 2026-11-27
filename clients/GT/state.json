@@ -5843,7 +5843,7 @@
     }
   },
   "v11_dxt5nm_checkpoint": {
-    "status": "PENDING_SOURCE_AND_AUTHORED_WITNESS_NOT_EXECUTED",
+    "status": "CI_RUNNING_SOURCE_REGRESSION_STEP_SUCCESS_ACTUAL_EXPORT_PENDING",
     "starting_head": "5973d0fc26d86736779b869273d504d43a43d444",
     "source_commit": "bc18e5414b88b2b8288af22df076c0166a43a41f",
     "witness_commit": "bce1467a2d38c96961e71f19cf2498fcdd34c5cd",
@@ -5859,6 +5859,22 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-route-v11/README_AR.md",
-    "next": "Activate only dedicated authored DXT5nm workflow and inspect exact receipt; no original acquisition."
+    "next": "Inspect actual run 45966950183, archive, controls and exact receipt; no original acquisition.",
+    "activation_head": "448fb0c77b116fbceeed856a617ba33046f01826",
+    "run": {
+      "id": 45966950183,
+      "job": 140397789957,
+      "head": "448fb0c77b116fbceeed856a617ba33046f01826",
+      "status": "in_progress",
+      "source_regressions_step": "success",
+      "public_build": "in_progress",
+      "actual_export_verified": false,
+      "compatibility_guard": {
+        "id": 45966949749,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    },
+    "local_fixture_check": "clients/GT/sessions/20261127-dxt5nm-route-v11/local-fixture-check.json"
   }
 }

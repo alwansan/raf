@@ -1,0 +1,54 @@
+{
+  "status": "PASS_LOCAL_INDEPENDENT_AUTHORED_FIXTURE_NONDEGENERACY_ONLY",
+  "source_head": "448fb0c77b116fbceeed856a617ba33046f01826",
+  "run": {
+    "id": 45966950183,
+    "job": 140397789957,
+    "head": "448fb0c77b116fbceeed856a617ba33046f01826",
+    "status": "in_progress",
+    "source_regressions_step": "success",
+    "public_build": "in_progress",
+    "actual_export_verified": false,
+    "compatibility_guard": {
+      "id": 45966949749,
+      "status": "completed",
+      "conclusion": "success"
+    }
+  },
+  "authored_only": true,
+  "textures": [
+    {
+      "index": 0,
+      "top_sha256": "e79e413016a7ded68a4002843ac77a2dc76e53b667f48edb6a81d040922cddbf",
+      "normal_rgba_sha256": "c4613e57a409b503b1b7c354b38ff2c8656a48a842159ca8c1765b2826c1f895",
+      "interior_z": 27,
+      "clamped_z": 8,
+      "counterfactual_pixel_differences": {
+        "packed": 35,
+        "swap_xy": 34,
+        "invert_y": 35,
+        "vertical": 30,
+        "horizontal": 28
+      }
+    },
+    {
+      "index": 1,
+      "top_sha256": "25313dc74091ce31f2c6dd0423450ea7db7d980c1e615c58653a38fab5ac298b",
+      "normal_rgba_sha256": "e284bacc769e1e86fcb71099a4c7473a84c143c540edee397b67c769e466dc1e",
+      "interior_z": 16,
+      "clamped_z": 19,
+      "counterfactual_pixel_differences": {
+        "packed": 35,
+        "swap_xy": 34,
+        "invert_y": 35,
+        "vertical": 28,
+        "horizontal": 26
+      }
+    }
+  ],
+  "original_assets_read": false,
+  "actual_public_export_verified": false,
+  "Unity_import_verified": false,
+  "Android_device": false,
+  "XAPK": false
+}
