@@ -1,3 +1,4 @@
+# Isolated source-only original Mesh storage contract; authored data and public dependencies only.
 name: GT original Mesh storage byte type identity (NO original assets)
 on:
   push:
