@@ -1,4 +1,132 @@
 {
+  "latest_next23b_translation_replay": {
+    "status": "PASS_ACTUAL_AUTHORED_TRANSLATION_BYTE_REPLAY",
+    "starting_head": "1e76c7f6907595c4ba7f458faefad5e10d9c0ca5",
+    "preparation_commit": "f0b9a11daef9ebf80dbb71c483ea81253a77ffef",
+    "execution_head": "1f3bdaca9ea12816739bf6464a156a3b97987330",
+    "run": 46040018978,
+    "windows_job": 140645072571,
+    "linux_job": 140645216580,
+    "conclusion": "success",
+    "lint_run": 46040019048,
+    "lint_job": 140645074139,
+    "lint_conclusion": "success",
+    "source_blobs": {
+      "tools/gt_next23b_translation_replay/audit.py": "c790f11ff1c822c2859e72fe7c6919db358757cf",
+      "tools/gt_next23b_translation_replay/author_windows.py": "1e48b87bc52281f306c57cebac5713c40ec92517",
+      "tools/gt_next23b_translation_replay/witness.py": "4608a6ecd5294f193d9cbee72a95dcca10fdc285",
+      "scripts/w1_recover_graphics_programs.py": "fce7fe2ac6635f9e67e03ea4aa8ec7b462603352",
+      "scripts/gt_original_921_keyword_routes.py": "1672c7e9ad6698c2703d57dc30c760f4bd4a41af",
+      "scripts/probe_directx_shader_bridge.py": "558e3316ebcb0f80ac2151c0ff76cafdc3ab0d69",
+      "scripts/run_original_dxbc_translation_probe.py": "8640f32ab2835b542f70fc7e583096db499ec127"
+    },
+    "actual_report": {
+      "compiled_dxbc_programs": 3,
+      "independently_replayed_programs": 3,
+      "legacy_route_gate_after_valid_swap": 4,
+      "legacy_route_gate_before": 4,
+      "negative_controls": {
+        "original.spv": "original_spv_mismatch",
+        "paired_valid_hlsl_roundtrip_swap": "hlsl_mismatch",
+        "roundtrip.spv": "roundtrip_spv_mismatch",
+        "tool_pin": "tool_digest"
+      },
+      "new_replay_rejects_swap": true,
+      "original_assets_read": false,
+      "original_spirv_validations": 3,
+      "production_install_allowed": false,
+      "proof": {
+        "fragment_a": {
+          "hlsl_sha256": "43f2f507d0f0bf37936d8471114f1df214f111f4126c73d8b2d6943e7c4a49c2",
+          "original_spv_sha256": "efac616a7c8aa68992cea7779465e18a3beeb643cdda19d9ff4c9e84e4065f74",
+          "roundtrip_spv_sha256": "827c0bc513678852b28bb6d4c82d06d28d7d5c84e5465477aa2e102f1945cdaf",
+          "source_dxbc_sha256": "3192dfdcebfe61df0552406d61fccb8dac5516c2aac54e6c40136e3bd7f6eda2",
+          "stage": 0
+        },
+        "fragment_b": {
+          "hlsl_sha256": "dc22c7c343d185869b25e9df8622210995033cb9c12eeaf7881eec3735cc3176",
+          "original_spv_sha256": "18dc2a11feabcf2aea6086c9ebb8112d8f9808467c0e6bb05e9e5cbd716aaced",
+          "roundtrip_spv_sha256": "2a817a1b70e6cb953a5c4f521a05de6e1107d2ed14e2d808d06681f207ca2df4",
+          "source_dxbc_sha256": "57305a1c6f561519498bfba1a1e0b4df4f8ef444456c79c48597330a343d3eb6",
+          "stage": 0
+        },
+        "vertex": {
+          "hlsl_sha256": "df8bb00c690456a9de0c38e410f17ada1d37785d3515a54d1bb03146a78ad708",
+          "original_spv_sha256": "ef188cd3394683a26fc6379740bc173d13c969f0fc3478586aed3edf2fc30f9a",
+          "roundtrip_spv_sha256": "b981fd2c61bbcb636aa1f9b07dddd1c163ed4f670990f4559ab935f29121d831",
+          "source_dxbc_sha256": "bd8e509b25872667b7af3ca53e6af93fc536dbcd3554ced43bab9376406f4296",
+          "stage": 1
+        }
+      },
+      "roundtrip_spirv_validations": 3,
+      "semantic_equivalence_proven": false,
+      "source_authorization_proven": false,
+      "status": "PASS_ACTUAL_AUTHORED_TRANSLATION_BYTE_REPLAY",
+      "unity_bundle_or_gpu_proven": false
+    },
+    "artifacts": [
+      {
+        "id": 15219783063,
+        "name": "gt-next23b-newly-authored-dxbc",
+        "bytes": 2393,
+        "github_reported_digest": "sha256:1b812e2c15e739b91f54b4ab5503f59913b8473248665680c0262e0b10b48263"
+      },
+      {
+        "id": 15218878944,
+        "name": "gt-next23b-translation-replay",
+        "bytes": 16769,
+        "github_reported_digest": "sha256:0126f1d2b46f700fa8d9ad030497cd742219b39c07c3ac7c23ce88d34d588449"
+      }
+    ],
+    "permanent_archive": {
+      "path": "clients/GT/sessions/20261127-next23b-translation-replay/actual-authored-translation-evidence.zip",
+      "blob": "9a4847362b325e46fa4dab317bfa7f0f99f5df5d",
+      "bytes": 9544,
+      "sha256": "f42ebd54ff9d44e90e414198421ecf3d7a969c9a0cdda9853f3a7efabb779f8f",
+      "entries": 26,
+      "uncompressed_bytes": 13449,
+      "log_chunks": 7,
+      "independent_size_sha256_all_member_crc_verified": true,
+      "actual_report_matches_log": true,
+      "program_file_hashes_verified": 12,
+      "fixture_hashes_verified": 6,
+      "outer_artifact_independently_downloaded": false
+    },
+    "toolchain": {
+      "windows_d3dcompiler_version": "10.0.20348.5773",
+      "windows_dll_sha256": "e37a92636c21318c95894fa24d779db124f8923f4e77b2f35714275cf81a32f7",
+      "vkd3d_compiler": "1.2-15build1",
+      "libvkd3d_shader": "1.2-15build1",
+      "spirv_cross": "2021.01.15+1.3.239.0-1build1",
+      "spirv_tools": "2025.1~rc1-1~ubuntu0.24.04.2",
+      "glslang_tools": "15.1.0-2~ubuntu0.24.04.2",
+      "binary_sha256": {
+        "vkd3d_compiler": "982b4c3f058ab07f85fa707b680f43ca8e5db16711a24d01264ae607dee130fe",
+        "spirv_val": "20c5998a46f02310f56bf11be238c34d374bb50104b7ccf85bb909f9da883ff9",
+        "spirv_cross": "8502b4e9e13b43f2e7dc782a71c4bdb216db4e22dee30dbcc0c4429b5b3e5e43",
+        "glslangValidator": "96ea85d4228d7065507cd58454628e0d3c9ec8bbd29a0cd20ee0f3cefaf6d026"
+      },
+      "library_paths_retained": true,
+      "independent_preapproved_package_and_library_hashes": false
+    },
+    "historical_material_census": {
+      "non_dummy": 688,
+      "total": 786,
+      "dummy": 98,
+      "dummy_shader_guid": 37,
+      "new_census": false
+    },
+    "original_source_authorization_verified": false,
+    "original_assets_read_or_acquired": false,
+    "original_134_program_replay_executed": false,
+    "original_semantic_equivalence_proven": false,
+    "original_compiled_unity_route_identity_proven": false,
+    "production_install_allowed": false,
+    "unity_or_device_run": false,
+    "xapk_started": false,
+    "next_action": "G3-NEXT23b-route-specific-bound-stage-identity-admission: exact source-slot -> DXBC bytes admission (46038739224) and distinct actual authored compiler byte replay (46040018978: 3 real D3DCompile programs, 6 independent SPIR-V validations, old routed gate accepts valid HLSL+roundtrip pair swap, replay rejects) complete in their stated scopes. Do not repeat these, output markers, or generic synthetic route/pixel batches. Original source still blocked: independently verify rights-holder authorization/ownership and immutable manifest/owner/object SHA, class48 owner/PathID, same-object ParsedForm/platform4 segments, private snapshots and trusted compiler toolchain/library environment. Only after authorization run the full 134-program replay consuming the trusted previous byte witness. Next genuine edge: per-route source slot -> independently admitted program -> exact parameter/CB/resource binding records and resource-bound.hlsl, not positional bound-stage folder/record order or self-declared commitments; review actual compose/stage_parameter_records joins and address a demonstrated defect only if productive. Then prove exact normalized keyword/pass stage transformed code and independently established decoded Unity compiled module identity plus same-export typed Shader48 GUID/material/renderer trace and protected census. No assumption that replay implies DXBC semantic equivalence, original Unity keyword scope/selection or visuals. If original authorization unavailable, prioritize genuinely distinct productive gaps on white mesh/black fire or other open workstreams; record blocker without claiming repair. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged; A3, third Particle108, original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 open. No original acquisition, production/native/device/APK/XAPK until authorized integrated G0-G6 closure; CL/lab read-only, BLACK/animation excluded.",
+    "session": "clients/GT/sessions/20261127-next23b-translation-replay/README_AR.md"
+  },
   "latest_next23b_source_program_byte_admission": {
     "status": "PASS_AUTHORED_STRUCTURAL_PARSER_SOURCE_SLOT_TO_DXBC_BYTE_EDGE",
     "starting_head": "588d70fdc0d333f5326bf5fdf280755476f93a2a",
@@ -2404,7 +2532,7 @@
   ],
   "next_session_sequence": [
     "OWNER DIRECTIVE OVERRIDES OLDER XAPK/BUILD-FIRST ORDER: READ clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md FIRST. Restore ALL original resources and merge to feature/android-native-port before FIRST comprehensive Android XAPK compatibility test; no new full native/XAPK requests now.",
-    "CURRENT NEXT: G3-NEXT23b-validated-translation-identity-admission: source-slot -> m_BlobIndex -> actual D3D11 record range -> DXBC -> program_ref/source.dxbc byte edge now has a separate read-only verifier and 8 passing authored structural parser controls (46038739224). Do not repeat these or prior output-marker controls. Original access remains blocked: independently verify lawful rights/ownership and immutable source commit/manifest, owner bytes SHA/length, unique typed Shader48 class48 owner/PathID/raw-object SHA and exact same-object ParsedForm/platform4 segments; independently snapshot 134 private source.dxbc files and run byte verifier only after authorized handoff. Next distinct edge: pin actual translator tools/options, independently replay DXBC -> SPIR-V -> HLSL -> roundtrip and validate the stage bytes; prove exact pass/keyword route actually uses the validated stage and decoded compiled Unity module has independently established route identity, not self-declared hashes/counts or authored marks. Require scope/pass semantics, same-export typed Shader48 -> GUID -> Material/Renderer trace and protected census. If authorization remains unavailable, only address a genuinely new productive defect, no repeat authored batches or claim original repair. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged; A3, third Particle108, original FFT/kernel6, NEXT23b, ten groups and G0-G6 open. CL/lab read-only; BLACK/animation excluded. No original acquisition without independent verification; no production/native/device/APK/XAPK until integrated G0-G6 closure.",
+    "CURRENT NEXT: G3-NEXT23b-route-specific-bound-stage-identity-admission: exact source-slot -> DXBC bytes admission (46038739224) and distinct actual authored compiler byte replay (46040018978: 3 real D3DCompile programs, 6 independent SPIR-V validations, old routed gate accepts valid HLSL+roundtrip pair swap, replay rejects) complete in their stated scopes. Do not repeat these, output markers, or generic synthetic route/pixel batches. Original source still blocked: independently verify rights-holder authorization/ownership and immutable manifest/owner/object SHA, class48 owner/PathID, same-object ParsedForm/platform4 segments, private snapshots and trusted compiler toolchain/library environment. Only after authorization run the full 134-program replay consuming the trusted previous byte witness. Next genuine edge: per-route source slot -> independently admitted program -> exact parameter/CB/resource binding records and resource-bound.hlsl, not positional bound-stage folder/record order or self-declared commitments; review actual compose/stage_parameter_records joins and address a demonstrated defect only if productive. Then prove exact normalized keyword/pass stage transformed code and independently established decoded Unity compiled module identity plus same-export typed Shader48 GUID/material/renderer trace and protected census. No assumption that replay implies DXBC semantic equivalence, original Unity keyword scope/selection or visuals. If original authorization unavailable, prioritize genuinely distinct productive gaps on white mesh/black fire or other open workstreams; record blocker without claiming repair. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged; A3, third Particle108, original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 open. No original acquisition, production/native/device/APK/XAPK until authorized integrated G0-G6 closure; CL/lab read-only, BLACK/animation excluded.",
     "CURRENT NEXT: G3-G1-G2-NEXT23b-authorized-original-admission: exact GUID fanout and authored snapshot comparison, G4 native API boundary audit and G5 authored collision are complete only in tested scopes; do not repeat them. Prioritize a genuine original source-backed same-export Shader48/Material/Renderer restoration or authorized NEXT23b route evidence. Required inputs: documented authorization for the immutable original source owner and source SHA, typed Shader48 owner/PathID, same-instance exporter trace and actual post23 project, complete source/export GUID linkage and Unity serialized program/pass/keyword route evidence. Use tools/gt_shader_fanout/audit.py in read-only mode on that authorized immutable project to rank exact residual GUIDs by serialized renderer slots, distinct renderer documents and material documents; never use name digest alone or anonymous ranking as install identity. If these inputs remain unavailable, explicitly record the blocker and investigate a genuinely new source-free gap with direct old/new proof only if materially useful, not a repeat of prior authored route/pixel tests. Historical 688/786 non-Dummy, 98 Dummy/37 GUID, A3, third Particle108, original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 remain open. No original acquisition, production/native request, Unity game/device/APK/XAPK until integrated G0-G6 closure; CL/lab read only, BLACK/animation excluded.",
     "CURRENT NEXT: G1-G2-original-renderer-material-fanout-authorized-admission: G4 native API boundary source-only audit and G5 authored collection collision are complete in their limited scopes. Do not repeat these synthetic checks or prior seven-pass/mesh/PNG/keyword route proofs. Review P04/P05 highest-impact original Shader48 / renderer fanout and material GUID/keyword/variant evidence for a distinct integration gap, prioritizing authorized original source-backed restoration when independently established. If source access/authorization is unavailable, document the precise blocker and only implement a demonstrable new non-original gate defect; do not claim recovery or generate substitutes. Original FFT Kernel6 still requires independently authorized source+typed shader owner, managed caller and same-instance actual importer/dispatch evidence (invocation token, exact bound resources, compiled route identity, actual first Unity API/error, runtime bank/size and output). Prior numeric 6/source slot 6 and authored logs are not original runtime proof. A3, original Particle108, NEXT23b, G0-G6, ten runtime groups remain open; no original acquisition, production/native request, Unity game/device/APK/XAPK until integrated G0-G6 closure; CL/lab read only, BLACK/animation excluded.",
     "CURRENT NEXT: G4-FFT-kernel6-authorized-runtime-identity: do not repeat G5 authored cache collision or prior FFT authored seven-pass row replay. Read B08_FFT_KERNEL_REGISTRY_2026-11-04, T1_FFT_ORIGINAL_KERNEL6_SOURCE_CASE_2026-11-08, T1_ORIGINAL_FFT_EVENT_CORRELATION_2026-11-09 and current indexed-FFT/receipt gates. Distinguish the original single distinct name / 20 compiled entries, direct numeric Dx11FFT calls (zero FindKernel), conditional index 6 at size256 bank0 pass0, and actual runtime kernel identity. Only address a distinct source/receipt/route gap with bounded authored controls, or require independently authorized original shader+managed source and same-instance importer/dispatch evidence. Do not infer runtime index from serialized slot or install guessed kernels. Particle108 original cause and recovery remain blocked pending exact authorized source and redirect target evidence described in latest session. A3, NEXT23b, ten runtime groups, G0-G6 remain open. No original acquisition, production, native request, Unity game/device/APK/XAPK until integrated G0-G6 closure; CL/lab read only, BLACK/animation excluded.",
@@ -3086,6 +3214,12 @@
     "no_GT_XAPK_created": true
   },
   "current_handoff": {
+    "latest_next23b_translation_replay": {
+      "execution_head": "1f3bdaca9ea12816739bf6464a156a3b97987330",
+      "run": 46040018978,
+      "evidence": "clients/GT/sessions/20261127-next23b-translation-replay/evidence.json",
+      "next_action": "G3-NEXT23b-route-specific-bound-stage-identity-admission: exact source-slot -> DXBC bytes admission (46038739224) and distinct actual authored compiler byte replay (46040018978: 3 real D3DCompile programs, 6 independent SPIR-V validations, old routed gate accepts valid HLSL+roundtrip pair swap, replay rejects) complete in their stated scopes. Do not repeat these, output markers, or generic synthetic route/pixel batches. Original source still blocked: independently verify rights-holder authorization/ownership and immutable manifest/owner/object SHA, class48 owner/PathID, same-object ParsedForm/platform4 segments, private snapshots and trusted compiler toolchain/library environment. Only after authorization run the full 134-program replay consuming the trusted previous byte witness. Next genuine edge: per-route source slot -> independently admitted program -> exact parameter/CB/resource binding records and resource-bound.hlsl, not positional bound-stage folder/record order or self-declared commitments; review actual compose/stage_parameter_records joins and address a demonstrated defect only if productive. Then prove exact normalized keyword/pass stage transformed code and independently established decoded Unity compiled module identity plus same-export typed Shader48 GUID/material/renderer trace and protected census. No assumption that replay implies DXBC semantic equivalence, original Unity keyword scope/selection or visuals. If original authorization unavailable, prioritize genuinely distinct productive gaps on white mesh/black fire or other open workstreams; record blocker without claiming repair. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged; A3, third Particle108, original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 open. No original acquisition, production/native/device/APK/XAPK until authorized integrated G0-G6 closure; CL/lab read-only, BLACK/animation excluded."
+    },
     "latest_next23b_source_program_byte_admission": {
       "execution_head": "cefa285eee6988e10b61384ed6166190c80054f8",
       "run": 46038739224,
