@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-public-renderer-pointer-witness/README_AR.md",
-  "next_action": "Inspect existing run 45944786101; no duplicate rerun. Authored Unity Vulkan raster test has 10 cases, 16 imported RGBA8 and 320 expected raster pixels; stage and activation check passed, image preparation in progress at last check. Verify actual artifact on completion; if failure preserve exact reason, make one targeted correction only when supported. No original content or APK. Public exporter compiled and actual capture passed; no new public-tool compile needed.",
+  "latest_session": "clients/GT/sessions/20261127-authored-submesh-vulkan/README_AR.md",
+  "next_action": "Connect the now-tested public component capture to actual authored SceneExportCollection YAML export and the Python ordered-route gate. Use pinned public tool build, actual generated GameObject/MeshFilter/MeshRenderer/material references and exact trace; ensure same source PathID in two owners, correct global type2 pointer and local YAML anchors, hidden/stripped and non-exportable components unproven. Generate a complete authored mesh/material/shader/texture route with asymmetric ordered indices/UV, cross-owner external table or explicit typed source fixtures; verify actual serialized export against source metadata, rejecting swapped existing materials and wrong scene scope. No original acquisition; do not call source reader mocked metadata original acceptance. Reuse successful public compile and raster receipts, no repeat without new purpose. If full authored export path not feasible, strengthen cross-owner and collection semantics in Python using exact public witness contract, and document the blocker. Future integration into original workflow requires explicit authorized source proof (A3 blocked). Continue prioritizing white objects and black fire, then other G0-G6; all remain OPEN, no phone/XAPK.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,11 +1964,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "4e1b28de9c9caa0ef81dad5e5967a9487516604d",
-    "purpose": "Actual public exporter component witness passed; targeted authored Unity raster running",
+    "reviewed_remote_head": "0bade38ed8d4d68271571add9d4396f06b64d111",
+    "purpose": "Public exporter component capture executed and actual authored Unity Vulkan submesh routing proven via corrected independent receipt replay; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-public-renderer-pointer-witness/README_AR.md",
+    "index": "clients/GT/sessions/20261127-authored-submesh-vulkan/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -2220,12 +2220,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G1-G2-authored-submesh-vulkan",
-      "status": "ACTION_IN_PROGRESS",
-      "run_id": 45944786101,
-      "job_id": 140326878133,
-      "head": "4e1b28de9c9caa0ef81dad5e5967a9487516604d",
-      "next": "Inspect existing run 45944786101; no duplicate rerun. Authored Unity Vulkan raster test has 10 cases, 16 imported RGBA8 and 320 expected raster pixels; stage and activation check passed, image preparation in progress at last check. Verify actual artifact on completion; if failure preserve exact reason, make one targeted correction only when supported. No original content or APK. Public exporter compiled and actual capture passed; no new public-tool compile needed."
+      "id": "G1-G2-actual-exported-scene-route-join",
+      "status": "NEXT_PRODUCTIVE",
+      "next": "Connect the now-tested public component capture to actual authored SceneExportCollection YAML export and the Python ordered-route gate. Use pinned public tool build, actual generated GameObject/MeshFilter/MeshRenderer/material references and exact trace; ensure same source PathID in two owners, correct global type2 pointer and local YAML anchors, hidden/stripped and non-exportable components unproven. Generate a complete authored mesh/material/shader/texture route with asymmetric ordered indices/UV, cross-owner external table or explicit typed source fixtures; verify actual serialized export against source metadata, rejecting swapped existing materials and wrong scene scope. No original acquisition; do not call source reader mocked metadata original acceptance. Reuse successful public compile and raster receipts, no repeat without new purpose. If full authored export path not feasible, strengthen cross-owner and collection semantics in Python using exact public witness contract, and document the blocker. Future integration into original workflow requires explicit authorized source proof (A3 blocked). Continue prioritizing white objects and black fire, then other G0-G6; all remain OPEN, no phone/XAPK."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -2904,6 +2901,135 @@
       "Unity_render_executed": false,
       "actual_scene_YAML_export_executed": false,
       "production_renderer_parity_verified": false,
+      "XAPK": false
+    },
+    "latest_submesh_vulkan_initial_verifier_failure": {
+      "status": "FAIL_INDEPENDENT_ORACLE_COLOR_PROPERTY_CONVERSION",
+      "run_id": 45944786101,
+      "job_id": 140326878133,
+      "head": "4e1b28de9c9caa0ef81dad5e5967a9487516604d",
+      "conclusion": "failure",
+      "guard_run_id": 45944786181,
+      "artifact_id": 15173699568,
+      "archive": "clients/GT/sessions/20261127-authored-submesh-vulkan/actual-raster-run-45944786101.zip",
+      "archive_bytes": 6410,
+      "archive_sha256": "b5d7400fa34948d2fe472945aa6331e1bc47b659f1d3990e5d2d5b044e44d391",
+      "archive_git_blob": "614b6b194daaea67e98b33ac2f8f1f844f0c4fab",
+      "archive_crc_sha_size_verified_locally": true,
+      "oracle_tests": 13,
+      "Unity_render_step_conclusion": "success",
+      "raw_receipt_status": "OBSERVED",
+      "raw_receipt_reason": "ten_cases_captured_independent_oracle_required",
+      "raw_cases": 10,
+      "raw_imported_textures": 2,
+      "raw_raster_samples": 320,
+      "verified_status": "FAIL",
+      "verified_reason": "numeric_vector_mismatch",
+      "root_cause": "Original Python oracle treated ShaderLab Color values as linear constants; Unity Linear project converts sRGB Color properties to linear before shader upload. Texture import is non-sRGB. Independent documented equation agrees with raw; formal CPU replay pending.",
+      "unity_manual": "https://docs.unity3d.com/2021.3/Documentation/Manual/SL-PropertiesInPrograms.html",
+      "members": {
+        "oracle-tests.log": {
+          "bytes": 1412,
+          "sha256": "c9adfdca24cd0984560f712383f1970c03b450fa1da3ae183f1aaf404409ba8d"
+        },
+        "raw.unity.json": {
+          "bytes": 138740,
+          "sha256": "74076d174a9b9e9c41316dcf00688fed29cd5bb32a76ee05ea96eccc80b227b1"
+        },
+        "verified.json": {
+          "bytes": 334,
+          "sha256": "7893c6f5d4d19716fecd393801198617ab70655a1fbf4b4b8581f00f9e338418"
+        }
+      },
+      "original_assets_read": false,
+      "production_pixels": false,
+      "Android_device": false,
+      "XAPK": false
+    },
+    "latest_submesh_vulkan_replay": {
+      "status": "PASS_AUTHORED_SUBMESH_ROUTE_VULKAN",
+      "replay_status": "PASS_EXACT_SUBMESH_RECEIPT_COLOR_ORACLE_REPLAY",
+      "run_id": 45945368677,
+      "job_id": 140328724542,
+      "head": "0bade38ed8d4d68271571add9d4396f06b64d111",
+      "conclusion": "success",
+      "guard_run_id": 45945368595,
+      "artifact_id": 15174382970,
+      "archive": "clients/GT/sessions/20261127-authored-submesh-vulkan/actual-replay-run-45945368677.zip",
+      "archive_bytes": 2280,
+      "archive_sha256": "9625cfebaae29f0bb3f8c24bd657e27f731725f9685e71f8aed528ae22580254",
+      "archive_git_blob": "911aa48bd3881f05e00131df75192c9dd0502303",
+      "archive_crc_sha_size_verified_locally": true,
+      "members": {
+        "oracle-tests.log": {
+          "bytes": 1702,
+          "sha256": "19da6ab7ae3bb1c435929521ef37705b74ce9c08868efc766fd4bba454e742c5"
+        },
+        "report.json": {
+          "bytes": 611,
+          "sha256": "4def70cb5397dbf11a3f48c30d2b49719839fbcf6ddf15b8e1abef00304834df"
+        },
+        "replayed-unity.json": {
+          "bytes": 2653,
+          "sha256": "91a2444223f934bfcc559e23a465d1721947095320cdec1ef2f718833da2ddf2"
+        }
+      },
+      "original_Unity_run": 45944786101,
+      "original_Unity_render_step_succeeded": true,
+      "original_verifier_failed": true,
+      "raw_receipt_sha256": "74076d174a9b9e9c41316dcf00688fed29cd5bb32a76ee05ea96eccc80b227b1",
+      "raw_receipt_unchanged": true,
+      "shader_and_probe_inputs_unchanged": true,
+      "new_Unity_render_executed": false,
+      "source_hashes": {
+        "Assets/AuthoredRouteA.png": "fa47a148260738916b23aaa18390e18a2d08841729786c1c5e2da1a6868d72fd",
+        "Assets/AuthoredRouteA.shader": "3a198464ccc8712d8f61d592a62126160b28648aa75e65aa7eed437c4f16a159",
+        "Assets/AuthoredRouteB.png": "61c8a66691d6c5d579ff538386293a7fa253d560187bbfad4ed80d992cd906d7",
+        "Assets/AuthoredRouteB.shader": "fe79166c5b541a2cb2c94e0cf22cb5302e23210f7e871d433eeb93e0e22fe629",
+        "Assets/Editor/SyntheticSubmeshRouteValidation.cs": "1ac5d032394ea82a8f08d7b88b1d57d4531216e206b4e2c93c6c08f40399a279"
+      },
+      "Unity_version": "2021.3.45f2",
+      "backend": "Vulkan",
+      "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+      "software_rasterizer": true,
+      "oracle_tests": 15,
+      "actual_Vulkan_RGBA_pixels_verified": 320,
+      "actual_imported_RGBA8_pixels_verified": 16,
+      "cases_verified": 10,
+      "counterfactual_cases_distinguished_from_baseline": 8,
+      "persistent_mesh_material_texture_assets": 6,
+      "restored_baseline_verified": true,
+      "swapped_materials_and_reversed_mesh_same_pixels_distinct_observed_bindings": true,
+      "max_rendered_error": 7.804148227652519e-8,
+      "tint_policy": "ShaderLab_Color_sRGB_to_linear_RGB_only_texture_import_linear",
+      "case_difference_from_baseline": {
+        "UV_transform_drift": 0.21311559300754626,
+        "baseline": 6.308534933330279e-8,
+        "missing_texture": 0.5280530057463463,
+        "restored_baseline": 6.308534933330279e-8,
+        "reversed_mesh_routes": 0.4188188159313049,
+        "swapped_materials": 0.4188188159313049,
+        "tint_drift": 0.5547945066021431,
+        "white_texture": 0.5280530057463463,
+        "wrong_valid_shader": 0.1468129800349377,
+        "wrong_valid_texture": 0.3765041730913933
+      },
+      "case_rendered_errors": {
+        "UV_transform_drift": 6.698130333715469e-8,
+        "baseline": 6.308534933330279e-8,
+        "missing_texture": 7.804148227652519e-8,
+        "restored_baseline": 6.308534933330279e-8,
+        "reversed_mesh_routes": 6.308534933330279e-8,
+        "swapped_materials": 6.308534933330279e-8,
+        "tint_drift": 6.308534933330279e-8,
+        "white_texture": 7.804148227652519e-8,
+        "wrong_valid_shader": 6.737255325850455e-8,
+        "wrong_valid_texture": 7.168592081052694e-8
+      },
+      "original_assets_read": false,
+      "white_mesh_repaired": false,
+      "production_pixels": false,
+      "Android_device": false,
       "XAPK": false
     }
   }
