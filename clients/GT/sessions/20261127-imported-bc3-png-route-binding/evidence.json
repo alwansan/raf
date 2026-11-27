@@ -1,10 +1,10 @@
 {
-  "status": "PASS_ACTUAL_AUTHORED_BC3_REPAIR_NATIVE_SOURCE_WIRED_GUARD_PENDING",
+  "status": "PASS_AUTHORED_BC3_DECODER_REPAIR_AND_NATIVE_SOURCE_WIRING",
   "starting_head": "7f80870e611c616ab7d3cf75a6bd4457e3ddad18",
   "prior_v9_run": 45960313046,
   "prior_v9_artifact": 15180771759,
   "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-  "next": "Verify native source-only wiring guard (manifest only, no original payloads), preserve evidence. Then continue next high-value authorized source-only G1/G2 gap; actual original DXT5 and production runtime require A3/source authorization. No full build before all G0-G6 closed.",
+  "next": "G1-G2-imported-DXT5nm-normal-map-same-route-binding (V11): newly corrected shared BC3 decoder may affect NormalmapDXT5nm. Use authenticated format=12/usage=3/Gamma=0, independent Pillow four-color decoding plus pinned T3 UnpackNormal semantics, actual authored public exporter and actual importer type/metadata, distinct same-route proof; do not change ordinary V10 or claim normalmap GPU/runtime fidelity. A3 blocked pending authorized original sources; no partial APK/XAPK.",
   "original_assets_read": false,
   "Unity_import_verified": false,
   "XAPK": false,
@@ -508,11 +508,61 @@
     }
   },
   "production_wiring": {
-    "status": "WIRED_NOT_EXECUTED",
+    "status": "PASS_NATIVE_BC3_SOURCE_WIRING_ONLY",
     "workflow": ".github/workflows/raft-unity-editor-android-import.yml",
     "tested_patched_converter_sha256": "186108e478686524b4703dc7280015bd8eb58cd0939b4e270c4114c69c8d755a",
-    "source_only_guard_pending": true,
+    "source_only_guard_pending": false,
     "production_original_export_executed": false,
-    "production_Unity_or_XAPK_executed": false
+    "production_Unity_or_XAPK_executed": false,
+    "commit": "74c46aaa85362c0c7dce99faf0fb5c0399c812d7",
+    "guard": {
+      "status": "PASS_NATIVE_BC3_SOURCE_WIRING_ONLY",
+      "run": 45964869783,
+      "job": 140391049966,
+      "head": "2e5c203a3d2b315dfa0140fb9feeb80403fe7968",
+      "compatibility_guard": 45964869785,
+      "compatibility_guard_conclusion": "success",
+      "source_tests": {
+        "resource": 11,
+        "structural": 6,
+        "total": 17
+      },
+      "patch": {
+        "DXT1_DXT3_Crunched_changed": false,
+        "original_git_blob": "f8cec77003d86fa3d6ad1a04002927733a1986a6",
+        "original_sha256": "ea6de3e6734b71577b62640a5d7da4ed7122ffd2f6c3f5823f7b648a47d11318",
+        "patch_script_sha256": "86ef0479bbc6ca4008fe97b10b94fa5a0183f2e48d3550e3bfda7dcb0ac9d354",
+        "patched_sha256": "186108e478686524b4703dc7280015bd8eb58cd0939b4e270c4114c69c8d755a",
+        "source_asset_bytes_modified": false,
+        "status": "PATCHED_PINNED_DXT5_DECODER_ONLY"
+      },
+      "resource": {
+        "android_gpu_verified": false,
+        "baseline_original_bytes": 656558804,
+        "baseline_resource_files_proven": 5,
+        "full_asset_ripper_import_proven": false,
+        "full_source_payloads_acquired_in_this_guard": false,
+        "git_lfs_used": false,
+        "original_files_required": 134,
+        "original_total_bytes": 7532909297,
+        "profile": "full",
+        "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "source_manifest_pinned": true
+      },
+      "archive": {
+        "artifact_id": 15181664328,
+        "bytes": 867,
+        "sha256": "77d70db9d125cf86f0d6d805b73bdc1a94c1048d5dfc46b055b044e78c81bdfa",
+        "git_blob": "12615085280369717f275d151de0a56946420d22",
+        "crc_verified": true,
+        "member_sha256": {
+          "gt-native-resource-plan.json": "98d22a4c38cd239dfc358d5ded8e0b153d3efcb9d4acedb16d30380ebb093cb8",
+          "gt-bc3-exporter-patch.json": "083270cb86eab100edb52e235d6e6ef43a019075cc72f08abec7654b4d7f3162"
+        }
+      },
+      "production_export_executed": false,
+      "Android_device": false,
+      "XAPK": false
+    }
   }
 }
