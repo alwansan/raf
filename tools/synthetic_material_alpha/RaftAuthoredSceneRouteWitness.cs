@@ -122,7 +122,7 @@ public static class RaftAuthoredSceneRouteWitness
     // Two NPOT 5x7 DXT5 textures with a 2x3 lower mip: 4+1 blocks.
     // Distinct blocks and both alpha endpoint modes; selector order is
     // authored directly, not derived from the public decoder or its PNG.
-    private static byte[] AuthoredBC3(int texture,bool extended)
+    private static byte[] AuthoredBC3(int texture,bool extended,bool normalmap=false)
     {
         byte[] bytes=new byte[80];
         for(int b=0;b<5;b++)
@@ -145,6 +145,12 @@ public static class RaftAuthoredSceneRouteWitness
             for(int j=0;j<6;j++)bytes[off+2+j]=(byte)((alpha>>(8*j))&0xffUL);
             ushort c0=(ushort)(six?0x07e0:0xf800);
             ushort c1=(ushort)(six?0xffff:0x001f);
+            if(normalmap)
+            {
+                // Interior and extreme green values independently exercise Z reconstruction and clamp.
+                c0=(ushort)(six?0x43e0:0xfc10);
+                c1=(ushort)(six?0xbff0:0x079f);
+            }
             if(extended && b==0)c1=c0; // equal RGB565 endpoints, all four selectors exercised
             bytes[off+8]=(byte)(c0&0xff);bytes[off+9]=(byte)(c0>>8);
             bytes[off+10]=(byte)(c1&0xff);bytes[off+11]=(byte)(c1>>8);
@@ -276,7 +282,7 @@ public static class RaftAuthoredSceneRouteWitness
             Require(sampler.FilterMode==1+i && sampler.Aniso==2+i*6 &&
                 sampler.MipBias==(i==0?-.625f:.375f) && sampler.WrapU==i &&
                 sampler.WrapV==2-i && sampler.WrapW==3-i,"authored_sampler_capture_drift");
-            var mipBytes=importedBc3?AuthoredBC3(i,bc3Extended):new byte[]{(byte)(32+64*i),64,192,0,
+            var mipBytes=importedBc3?AuthoredBC3(i,bc3Extended,normalmap):new byte[]{(byte)(32+64*i),64,192,0,
                 128,(byte)(96+32*i),32,255,18,172,93,127,207,9,55,64,
                 (byte)(90+32*i),66,33,171};
             int extent=7+(importedBc3?93:27)*i;
