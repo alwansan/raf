@@ -1309,16 +1309,16 @@
       "id": 45977510081,
       "job": 140432842108,
       "head": "09a1e80246ecaa96caebdd289f4044658a3ece50",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "compatibility_guard": {
         "id": 45977510178,
         "conclusion": "success"
       }
     },
     "date": "2026-11-27",
-    "reviewed_remote_head": "09a1e80246ecaa96caebdd289f4044658a3ece50",
-    "purpose": "V16 second pre-Unity failure; exact V15 published hash transcription erratum independently proven from three actual archives; third attempt in progress; original acceptance blocked",
+    "reviewed_remote_head": "0c198aa16784aa0c5a956b491328827ad6da50cc",
+    "purpose": "Actual authored V16 direct exporter Unity reimport PASS; independent raw three-archive comparison; original restoration still blocked; V17 raster route next",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
     "index": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/README_AR.md",
@@ -5536,7 +5536,7 @@
     "evidence": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/actual-pass-45975084812.json"
   },
   "v16_dxt5nm_exporter_reimport_checkpoint": {
-    "status": "IN_PROGRESS_V16_THIRD_ATTEMPT_AFTER_PROVEN_V15_RECEIPT_TRANSCRIPTION_ERRATUM",
+    "status": "PASS_ACTUAL_AUTHORED_V15_EXPORTER_DIRECT_UNITY_REIMPORT",
     "starting_head": "2d3adcabfa60198072c9f70da4206c5e0e62b02f",
     "source_head": "4a206be8844aa0e455079208a301dcddf0c0e1bb",
     "activation_head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
@@ -5544,8 +5544,8 @@
       "id": 45977510081,
       "job": 140432842108,
       "head": "09a1e80246ecaa96caebdd289f4044658a3ece50",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "compatibility_guard": {
         "id": 45977510178,
         "conclusion": "success"
@@ -5559,7 +5559,7 @@
     "planned_top_mip_exact_pixels": 70,
     "planned_V14_alpha_off_mip_hash_matches": 6,
     "planned_same_route_slots": 4,
-    "actual_Unity_reimport_verified": false,
+    "actual_Unity_reimport_verified": true,
     "manual_alpha_edit": false,
     "production_activation": false,
     "original_assets_read": false,
@@ -5567,7 +5567,7 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/README_AR.md",
-    "next": "Inspect actual V16 third attempt 45977510081 on immutable 09a1e80246ecaa96caebdd289f4044658a3ece50; require stage and actual Unity evidence plus six V14 alpha_off mip byte/hash matches, then retain raw/verified archive with candidate PNG/meta. Both prior failed attempts and V15 transcription erratum preserved. No original source or production activation.",
+    "next": "V17: close authored raster route gap with actual exported candidate mesh/submesh, material, UV transform, texture GUID/fileID and explicit diagnostic ShaderLab adapter. Read fragment packed texels and normal decode through actual draw; compare independently to V16 observed mip bytes with deliberate slot/UV/shader controls. No original source, source lower-mip, sampler or production claim. Then return to blocked original white-mesh/black-fire source provenance and other open G0–G6 work.",
     "first_failed_run": {
       "id": 45976163790,
       "job": 140428299621,
@@ -5612,6 +5612,29 @@
       "actual_PNG_and_RGBA_pairs": 6,
       "published_typo_fields": 2,
       "corrected_expectation_matches": 36
-    }
+    },
+    "actual_source_regressions": 296,
+    "actual_V11_V12_controls": 37,
+    "actual_V15_controls": 6,
+    "actual_V16_controls": 10,
+    "actual_unfiltered_GPU_texels": 84,
+    "actual_mip_hash_matches": 6,
+    "actual_top_mip_exact_pixels": 70,
+    "actual_renderer_routes": 2,
+    "actual_same_route_slots": 4,
+    "actual_shader_adapter_matches": 4,
+    "exact_exporter_metadata_unchanged": true,
+    "actual_settings_equal_V14_alpha_off": true,
+    "archive": {
+      "id": 15187423558,
+      "bytes": 41374,
+      "sha256": "f98bc0633789aa43fba1f7a20c26554ba6df30bacfa2172d33ca6d3d964cc5d7",
+      "members": 45,
+      "crc_verified": true,
+      "all_member_sha256_verified": true
+    },
+    "independent_actual_three_archive_recheck": true,
+    "evidence": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/actual-pass-45977510081.json",
+    "recheck": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/recheck_three_archives.py"
   }
 }
