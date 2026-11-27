@@ -23,6 +23,7 @@ on:
           - renderer-submesh-routes
           - public-renderer-pointer-witness
           - submesh-route-pixels
+          - submesh-color-replay
   push:
     branches: [feature/android-native-port]
     paths:
@@ -41,7 +42,7 @@ concurrency:
 
 jobs:
   synthetic-pixels:
-    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]') && !contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]') && !contains(github.event.head_commit.message, '[gt-imported-alpha-pixels]') && !contains(github.event.head_commit.message, '[gt-b05-local-documents]') && !contains(github.event.head_commit.message, '[gt-particle-pixel-parity]') && !contains(github.event.head_commit.message, '[gt-particle-local-net-loss]') && !contains(github.event.head_commit.message, '[gt-renderer-submesh-routes]') && !contains(github.event.head_commit.message, '[gt-public-renderer-pointer-witness]') && !contains(github.event.head_commit.message, '[gt-submesh-route-pixels]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]') && !contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]') && !contains(github.event.head_commit.message, '[gt-imported-alpha-pixels]') && !contains(github.event.head_commit.message, '[gt-b05-local-documents]') && !contains(github.event.head_commit.message, '[gt-particle-pixel-parity]') && !contains(github.event.head_commit.message, '[gt-particle-local-net-loss]') && !contains(github.event.head_commit.message, '[gt-renderer-submesh-routes]') && !contains(github.event.head_commit.message, '[gt-public-renderer-pointer-witness]') && !contains(github.event.head_commit.message, '[gt-submesh-route-pixels]') && !contains(github.event.head_commit.message, '[gt-submesh-color-replay]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 30
@@ -1658,3 +1659,87 @@ jobs:
           fi
           docker image rm "$RAFT_SUBMESH_ROUTE_IMAGE" >/dev/null 2>&1 || true
           rm -rf "$RUNNER_TEMP/raft-submesh-route-docker"
+
+
+  submesh-color-replay:
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-submesh-color-replay]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'submesh-color-replay'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only exact authored raster source and immutable previous receipt
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/gt_synthetic_material_alpha.py
+            /scripts/gt_imported_alpha_pixels.py
+            /scripts/gt_submesh_route_pixels.py
+            /tools/synthetic_material_alpha/SyntheticSubmeshRouteValidation.cs
+            /tools/synthetic_material_alpha/AuthoredRouteA.shader
+            /tools/synthetic_material_alpha/AuthoredRouteB.shader
+            /tests/test_gt_submesh_route_pixels.py
+            /clients/GT/sessions/20261127-authored-submesh-vulkan/actual-raster-run-45944786101.zip
+            /.github/workflows/raft-gt-synthetic-material-alpha.yml
+      - name: Verify corrected Color oracle and replay immutable Unity receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          mkdir submesh-replay-results
+          python3 -m unittest discover -s tests -p test_gt_submesh_route_pixels.py -v 2>&1 | tee submesh-replay-results/oracle-tests.log
+          python3 - <<'PY'
+          from hashlib import sha256
+          from pathlib import Path
+          import json,os,zipfile
+          from scripts import gt_submesh_route_pixels as gate
+          archive=Path("clients/GT/sessions/20261127-authored-submesh-vulkan/actual-raster-run-45944786101.zip")
+          data=archive.read_bytes()
+          assert len(data)==6410 and sha256(data).hexdigest()=="b5d7400fa34948d2fe472945aa6331e1bc47b659f1d3990e5d2d5b044e44d391"
+          with zipfile.ZipFile(archive) as z:
+              assert z.testzip() is None
+              assert sorted(z.namelist())==["oracle-tests.log","raw.unity.json","verified.json"]
+              raw=z.read("raw.unity.json")
+              assert sha256(raw).hexdigest()=="74076d174a9b9e9c41316dcf00688fed29cd5bb32a76ee05ea96eccc80b227b1"
+              original=json.loads(z.read("verified.json"))
+          assert original["status"]=="FAIL" and original["reason"]=="numeric_vector_mismatch"
+          run_id="45944786101-1-4e1b28de9c9caa0ef81dad5e5967a9487516604d"
+          assert original["run_id"]==run_id
+          out=Path("submesh-replay-results")
+          private=out/"raw.private.json"
+          private.write_bytes(raw)
+          try:
+              report=gate.verify_file(private,out/"replayed-unity.json",run_id,0)
+          finally:
+              private.unlink()
+          assert report["status"]=="PASS_AUTHORED_SUBMESH_ROUTE_VULKAN"
+          assert report["actual_imported_RGBA8_pixels_verified"]==16
+          assert report["actual_Vulkan_RGBA_pixels_verified"]==320
+          assert report["counterfactual_cases_distinguished_from_baseline"]==8
+          assert report["swapped_materials_and_reversed_mesh_same_pixels_distinct_observed_bindings"] is True
+          assert report["restored_baseline_verified"] is True
+          result=dict(status="PASS_EXACT_SUBMESH_RECEIPT_COLOR_ORACLE_REPLAY",
+              replay_run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
+              original_Unity_run=45944786101,original_Unity_render_step_succeeded=True,
+              original_verifier_failed=True,raw_receipt_sha256=sha256(raw).hexdigest(),
+              raw_receipt_unchanged=True,shader_and_probe_inputs_unchanged=True,new_Unity_render_executed=False,
+              oracle_tests=15,original_assets_read=False,production_pixels=False,Android_device=False,XAPK=False)
+          (out/"report.json").write_text(json.dumps(result,sort_keys=True,indent=2)+"\n")
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - name: Retain only replay receipt and authored oracle logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-submesh-color-replay-${{ github.run_id }}
+          path: submesh-replay-results/*
+          if-no-files-found: warn
+          retention-days: 14
