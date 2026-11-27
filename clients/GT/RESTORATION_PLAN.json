@@ -1306,11 +1306,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "e867b31791ca00c58108ce2d3ea3933aee5234a2",
-    "purpose": "A1/A2 authored proofs retained; G2 resource metadata to Unity Vulkan authored pixel gate passed; original integration remains open; proceed to G4 concrete FFT coordinate diagnostic",
+    "reviewed_remote_head": "e79e09151def7abe680b03dc230cdff9ff41b27e",
+    "purpose": "G4 authored FFT coordinate diagnosis complete: both Unity compiler controls build, independent replay validates image operations, strict keyword-table condition exposed. Original FFT/other G0-G6 unresolved.",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-resource-pixels/README_AR.md",
+    "index": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -1562,11 +1562,10 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G4-FFT-utilities-coordinate",
+      "id": "G4-FFT-bundle-gate",
       "status": "ACTIVE_NEXT",
-      "previous_G2_status": "COMPLETE_AUTHORED_METADATA_TO_UNITY_PIXELS_ONLY",
-      "previous_G2_evidence": "clients/GT/sessions/20261127-resource-pixels/artifact-review.json",
-      "next": "Read current FFT Utilities and G4 source-safe receipts and code, compare latest Unity/HLSLcc status. Investigate the historical gt_fs_main coordinate type error (run 44781701884) on authored minimal HLSL/SPIR-V using real compiler/Unity Actions; distinguish float Sample coordinates from integer Load, and only propose a bounded fix if a failure is reproducible. No commercial source acquisition without verified authorization, no blanket casts or guessed kernel identity. If not reproducible, report blocker and move to nearest concrete authorized G4/G5 repair."
+      "previous_diagnostic": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/actual-replay-45936590347.zip",
+      "next": "Implement a narrowly scoped fail-closed FFT acceptance gate that distinguishes the four observed inert engine Stereo names from any actually used local/global/legacy keyword indices. Require exact independently authorized source topology, no active route variants, correct name/flag evidence and full decoded SPIR-V validation plus source/receipt/bundle byte commitments. Test with the existing authored bundles and negative controls, including unknown/active keyword, missing stage, same-size bundle mutation and wrong-coordinate program. Do not weaken original acceptance or assert historical FFT coordinate bug fixed. No original acquisition until authorization verified. Then proceed to next G4/G5 repair, keep G0-G6 open."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -1603,6 +1602,56 @@
       "original_game_or_Android_pixels_verified": false,
       "original_assets_read": false,
       "unrelated_CB_mesh_varying_checks_stubbed": true
+    },
+    "latest_fft_coordinate_diagnostic": {
+      "status": "PASS_AUTHORED_BUNDLE_COORDINATE_DIAGNOSTIC",
+      "historical_failed_run": 44781701884,
+      "comparison_run": 45935871773,
+      "comparison_head": "5b6f8f21627269d946aa549cd7055384914cdf82",
+      "comparison_conclusion": "failure",
+      "unity_compile_steps_succeeded": 2,
+      "strict_gate_rejection": "fft_utilities_bundle_requires_seven_zero_keyword_routes",
+      "strict_gate_changed": false,
+      "exact_pragma_only_control": true,
+      "mode_labels_not_independent_internal_compiler_attestation": true,
+      "external_compiler_valid_stages": 28,
+      "intentional_invalid_coordinate_rejections": 4,
+      "historical_diagnostic_reproduced_by_intentional_mutation": true,
+      "historical_Unity_failure_reproduced_on_authored_fixture": false,
+      "actual_replay_run": 45936590347,
+      "replay_job_id": 140301098539,
+      "replay_head": "e79e09151def7abe680b03dc230cdff9ff41b27e",
+      "replay_conclusion": "success",
+      "pass_count_per_mode": 7,
+      "decoded_unique_modules_per_mode": 14,
+      "validated_module_count_sum": 28,
+      "invalid_modules": 0,
+      "wrong_fragment_family_references": 0,
+      "fragment_references_per_mode": 21,
+      "serialized_keyword_names_per_mode": [
+        "STEREO_INSTANCING_ON",
+        "UNITY_SINGLE_PASS_STEREO",
+        "STEREO_MULTIVIEW_ON",
+        "STEREO_CUBEMAP_RENDER_ON"
+      ],
+      "serialized_keyword_flags_per_mode": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "used_keyword_names_per_mode": [],
+      "all_passes_empty_route_pair": true,
+      "original_zero_keyword_table_condition_met": false,
+      "actual_archive": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/actual-replay-45936590347.zip",
+      "archive_sha256": "5bd5ce19f2cf64bc16ee09cd2b8f2434c7b92c1317f54de076eef3db6a93f95e",
+      "archive_bytes": 3561,
+      "report_sha256": "9eafaf0a84a04a85183b0b4a53396be2fd7ffa8fa4f7d95894f5c0bfb92b9a21",
+      "report_bytes": 63206,
+      "original_source_coordinate_rootcause_resolved": false,
+      "original_assets_read": false,
+      "original_game_or_device_pixels_verified": false,
+      "new_XAPK": false
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."

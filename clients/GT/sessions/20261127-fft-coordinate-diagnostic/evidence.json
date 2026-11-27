@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-27",
+  "starting_head": "38458644d1399d008cee87c9def05a67d6768f76",
+  "first_tool_head": "2dcd30b4ffb8c28ce878274686ed0cc4c1f7c15a",
+  "comparison_head": "5b6f8f21627269d946aa549cd7055384914cdf82",
+  "replay_tool_head": "325f972debb671fc117c72a0fd0d612f4943ae37",
+  "replay_head": "e79e09151def7abe680b03dc230cdff9ff41b27e",
+  "read_only_lab_head": "f933c4429803583d1ed5fa26e46bb0d3227f2027",
+  "acceptance": {
+    "status": "PASS_AUTHORED_BUNDLE_COORDINATE_DIAGNOSTIC",
+    "historical_failed_run": 44781701884,
+    "comparison_run": 45935871773,
+    "comparison_head": "5b6f8f21627269d946aa549cd7055384914cdf82",
+    "comparison_conclusion": "failure",
+    "unity_compile_steps_succeeded": 2,
+    "strict_gate_rejection": "fft_utilities_bundle_requires_seven_zero_keyword_routes",
+    "strict_gate_changed": false,
+    "exact_pragma_only_control": true,
+    "mode_labels_not_independent_internal_compiler_attestation": true,
+    "external_compiler_valid_stages": 28,
+    "intentional_invalid_coordinate_rejections": 4,
+    "historical_diagnostic_reproduced_by_intentional_mutation": true,
+    "historical_Unity_failure_reproduced_on_authored_fixture": false,
+    "actual_replay_run": 45936590347,
+    "replay_job_id": 140301098539,
+    "replay_head": "e79e09151def7abe680b03dc230cdff9ff41b27e",
+    "replay_conclusion": "success",
+    "pass_count_per_mode": 7,
+    "decoded_unique_modules_per_mode": 14,
+    "validated_module_count_sum": 28,
+    "invalid_modules": 0,
+    "wrong_fragment_family_references": 0,
+    "fragment_references_per_mode": 21,
+    "serialized_keyword_names_per_mode": [
+      "STEREO_INSTANCING_ON",
+      "UNITY_SINGLE_PASS_STEREO",
+      "STEREO_MULTIVIEW_ON",
+      "STEREO_CUBEMAP_RENDER_ON"
+    ],
+    "serialized_keyword_flags_per_mode": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "used_keyword_names_per_mode": [],
+    "all_passes_empty_route_pair": true,
+    "original_zero_keyword_table_condition_met": false,
+    "actual_archive": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/actual-replay-45936590347.zip",
+    "archive_sha256": "5bd5ce19f2cf64bc16ee09cd2b8f2434c7b92c1317f54de076eef3db6a93f95e",
+    "archive_bytes": 3561,
+    "report_sha256": "9eafaf0a84a04a85183b0b4a53396be2fd7ffa8fa4f7d95894f5c0bfb92b9a21",
+    "report_bytes": 63206,
+    "original_source_coordinate_rootcause_resolved": false,
+    "original_assets_read": false,
+    "original_game_or_device_pixels_verified": false,
+    "new_XAPK": false
+  },
+  "historical": {
+    "run_id": 44781701884,
+    "job_id": 136445781719,
+    "safe_coordinate_receipt": "clients/GT/sessions/20261126-complete-handoff/evidence/local/gt-fft-coordinate-types-safe.json",
+    "diagnostic_matches": 1,
+    "pass_number_not_proven": true,
+    "source_excerpt_retained": false
+  },
+  "comparison": {
+    "run_id": 45935871773,
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "id": 140298837257,
+        "mode": "dxc",
+        "unity_step": "success",
+        "gate_step": "failure",
+        "artifact": 15171100631,
+        "archive_sha256": "eedccb8afa34ca208604c111b232ea42bb7f91c0cab01d409253d7a4e8ee5972",
+        "expires_at": "2026-12-11T03:46:52Z"
+      },
+      {
+        "id": 140299709457,
+        "mode": "hlslcc",
+        "unity_step": "success",
+        "gate_step": "failure",
+        "artifact": 15170637402,
+        "archive_sha256": "95afbce3a5afb5073023caae625aabeda5b2fa7ed74c4c08aa025fc180558d6c",
+        "expires_at": "2026-12-11T03:50:00Z"
+      }
+    ]
+  },
+  "replay": {
+    "id": 45936590347,
+    "head": "e79e09151def7abe680b03dc230cdff9ff41b27e",
+    "status": "completed",
+    "conclusion": "success",
+    "job_id": 140301098539,
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Checkout only source tools and authored receipt review",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Fetch only two pinned authored Actions archives",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Install public bundle and SPIR-V inspection tools",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate every referenced module and inspect actual keyword table without changing original gate",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Retain authored diagnostic report only",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Checkout only source tools and authored receipt review",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "artifact_id": 15170807230,
+    "archive_sha256": "5bd5ce19f2cf64bc16ee09cd2b8f2434c7b92c1317f54de076eef3db6a93f95e",
+    "archive_retained_in_git": true,
+    "log_lines": 315,
+    "traceback_or_nonzero_exit_matches": 0
+  },
+  "guards": [
+    {
+      "id": 45935871899,
+      "conclusion": "success"
+    },
+    {
+      "id": 45936590335,
+      "conclusion": "success"
+    }
+  ],
+  "local": {
+    "prior_files_unchanged": 131,
+    "source_selftests": 3,
+    "archive_test_double_positive": 2,
+    "archive_test_double_negative": 6,
+    "keyword_lane_positive": 2,
+    "keyword_lane_negative": 5,
+    "actual_archives_reviewed": true,
+    "actual_replay_report_cross_checked": true,
+    "full_clone_verified": false,
+    "local_Unity_or_compiler_or_decoder_executed": false
+  },
+  "limits": {
+    "original_source_authorization_verified": false,
+    "original_gate_changed": false,
+    "original_rootcause_fixed": false,
+    "original_material_GUID_installed": false,
+    "G0_G6": "OPEN",
+    "new_game_or_device_pixels": false,
+    "new_XAPK": false
+  },
+  "files": [
+    {
+      "path": "tools/synthetic_material_alpha/fft_coordinate_probe.py",
+      "git_blob_sha": "83658ea1f5bc6e6e7dca8b4a3e733ef75bf3b25c",
+      "sha256": "72a29611d92211dc31a206daf10efbe4f535b78ef890ec0fbe4e9942356d3870"
+    },
+    {
+      "path": "tools/synthetic_material_alpha/fft_coordinate_artifact_replay.py",
+      "git_blob_sha": "e282a2bf6ed58c004715c4f20c59b24d473e372b",
+      "sha256": "8e8b736fd3858e2cbd5fc4a1f1b05363de24b9a2037003b4801ae675659152ba"
+    },
+    {
+      "path": "scripts/gt_fft_utilities_restore.py",
+      "git_blob_sha": "22f3eae0f2ee61c7e063e346278dd4634f78c8a1"
+    },
+    {
+      "path": "scripts/gt_verify_921_shader_bundle.py",
+      "git_blob_sha": "c19d1847654541dba105cbfb419be2d57e5fca70"
+    },
+    {
+      "path": "android-port/Experiments/GT/Editor/FFTUtilitiesShaderValidation.cs",
+      "git_blob_sha": "16e480f1b27ca384b6a1aba53ed4d614ec1d8202"
+    },
+    {
+      "path": ".github/workflows/raft-gt-synthetic-material-alpha.yml",
+      "git_blob_sha": "b138dbf9263f613441bd2c1b49b32c10a7a3e2bd"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/review_coordinate_artifacts.py",
+      "git_blob_sha": "3e88f7359210e91b2187039983d327b978ec1a45",
+      "sha256": "62e57026bd282ecdc921c6ee3b65b5fad31cc58f06ce594751c1d170d8796ea6"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/artifact-review.json",
+      "git_blob_sha": "2533b41ea1d02d28d8cb0f0473012969ef1c189c",
+      "sha256": "324025dcfbb936b77e4364557a5e5051c92f70e9cadfada5334a7f9a09375c79"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/cpu.json",
+      "git_blob_sha": "ac2895daf91bdd7218f3f7fcc9b571769a192278",
+      "sha256": "16e93115a80242cea94bcb17ebba617f028c44a90728b3486983aad487c49482"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/dxc-unity.json",
+      "git_blob_sha": "856dd1973199d86e643d672ba506cfe9b2f2030b",
+      "sha256": "526311c14ef62256a429a8b994f6ffbceaabaf8f5843712d54af2b85ded53cb6"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/dxc-stage.json",
+      "git_blob_sha": "51876236384568eb86ad169c8bc2f9098bc1957e",
+      "sha256": "508f040326a1cca74c6566a57fa3527d2b7ae82236d68c3e534d4451af011ca4"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/hlslcc-unity.json",
+      "git_blob_sha": "19000ec80b2dced20bfd91d33d4008f5ec063792",
+      "sha256": "86afa0a6f6b97bdcb33ebd69f0408b763f69fc49d572c81f6a98f73220c06ee4"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/hlslcc-stage.json",
+      "git_blob_sha": "969e430ee5ff8a5f812414ddc48b22fc26c052ed",
+      "sha256": "318e141a44874f80efbdf417bb95e377e08cf2bcbc1ddd3845ade1f6dadd55a3"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-fft-coordinate-diagnostic/actual-replay-45936590347.zip",
+      "git_blob_sha": "42ad6098ed18e0d947c91eda727f76a7ef561728",
+      "sha256": "5bd5ce19f2cf64bc16ee09cd2b8f2434c7b92c1317f54de076eef3db6a93f95e"
+    }
+  ]
+}
