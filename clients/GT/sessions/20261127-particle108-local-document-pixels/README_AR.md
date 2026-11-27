@@ -1,0 +1,3 @@
+# GT G5 Particle108 document-local Texture2D top mip | PENDING
+
+Starting HEAD de4d4989cdadb30c55fcc9296fb5fcda5babe1ac. Third original comparison blocked. New diagnostic rebinds all same-file Material TexEnv mappings against B05 in the same bounded physical YAML snapshot as the exact class28 payload, strict global GUID/anchor/trace scope, ordinary RGBA32/BC3 source and inline exported storage. Real authored v22 binary and authored multi-document YAML, no claimed AssetRipper embedded export. No original acquisition. Existing original-workflow trigger explicitly suppressed by [skip ci]; activate only dedicated authored test workflow separately. PASS pending.

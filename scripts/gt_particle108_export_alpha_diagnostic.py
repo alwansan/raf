@@ -22,6 +22,7 @@ from scripts.verify_export_lineage import identity, pointer
 from scripts.verify_exported_material_texture_links import GUID, IMAGES, BUILTIN, ZERO, is_texture
 from scripts.gt_next23b_unity_receipt import strict_json, read_snapshot
 from scripts.gt_particle108_source_pixel_parity import decode_original_texture, external_parity
+from scripts.gt_particle108_local_texture_document import compare_local
 
 MAX_IMAGE_BYTES = 256 * 1024 * 1024
 MAX_PIXELS = 64 * 1024 * 1024
@@ -29,6 +30,7 @@ MAX_META = 256 * 1024
 EXPECTED_TARGETS = 3
 STATUS = "GT_PARTICLE108_THREE_SAME_EXPORT_TEXTURE_ALPHA_CLASSIFIED"
 PARTIAL_STATUS = "GT_PARTICLE108_TWO_EXTERNAL_ALPHA_IMAGES_ONE_LOCAL_TEXTURE_PPTR_PENDING"
+LOCAL_COMPARED_STATUS = "GT_PARTICLE108_TWO_EXTERNAL_IMAGES_ONE_DOCUMENT_LOCAL_TOP_MIP_COMPARED"
 UNPROVEN_STATUS = "GT_PARTICLE108_EXTERNAL_ALPHA_CLASSIFIED_TEXTURE_TRACE_UNPROVEN"
 TRACE_LIMIT = 40 * 1024 * 1024
 META_FIELDS = ("alphaSource", "alphaIsTransparency", "sRGBTexture", "mipmapEnabled")
@@ -576,7 +578,15 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
         "original_local_Type0_original_and_exported_pixels_compared":False,
         "source_original_texture_bytes_or_identifiers_disclosed":False,
     }
-    if local_pointers:
+    mark("compare_document_local_Texture2D28_top_mip")
+    local_pixels=compare_local(original,manifest,project,trace,selected,routes,trace_exportability,exported_materials)
+    if local_pixels["source_top_mip_decoded"]:
+        source_local_alpha.update(
+            original_local_Type0_Texture2D28_source_top_mip_alpha_decoded=True,
+            original_local_Type0_Texture2D28_source_top_mip_alpha_profile=local_pixels["source_alpha_profile"],
+            original_local_Type0_source_payload_kind=local_pixels["source_payload_kind"],
+            original_local_Type0_source_payload_byte_binding_verified=True)
+    elif local_pointers:
         try:
             source_local_alpha=original_local_type0_source_pixel_alpha(original,local_pointers,manifest)
         except Exception as failure:
@@ -584,6 +594,8 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
             # decoder. An unavailable source mip must remain inconclusive,
             # never be silently fabricated from an exported image.
             source_local_alpha["original_local_Type0_source_alpha_safe_error_type"]=type(failure).__name__
+    source_local_alpha["original_local_Type0_original_and_exported_pixels_compared"]=bool(
+        local_pixels["coordinate_compared_targets"])
     mark("locate_exported_TextureImporter_image")
     if len(mapping) not in (2, EXPECTED_TARGETS):
         raise ValueError("incomplete_original_particle_two_external_texture_alpha_scope")
@@ -603,7 +615,8 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
     all_image_routes_proven = not local_count and all_proven
     return {
         "schema_version": 4,
-        "status": PARTIAL_STATUS if local_count else STATUS if all_proven else UNPROVEN_STATUS,
+        "status": (LOCAL_COMPARED_STATUS if local_count and all_proven and local_pixels["coordinate_compared_targets"]
+                   else PARTIAL_STATUS if local_count else STATUS if all_proven else UNPROVEN_STATUS),
         "source_original_texture2d_sha_verified": True,
         "source_particle_material_to_texture_references": 10,
         "source_original_texture2d_objects": EXPECTED_TARGETS,
@@ -619,18 +632,20 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
         "source_original_all_three_Texture2D_as_exported_images_verified": all_image_routes_proven,
         **local_proof,
         **source_local_alpha,
-        "original_local_Type0_texture_pixel_alpha_verified": False,
+        "original_local_Type0_texture_pixel_alpha_verified": bool(local_pixels["exact_alpha_targets"]),
+        "original_local_Type0_serialized_export_top_mip_decoded": local_pixels["serialized_export_top_mip_decoded"],
+        "source_export_document_local_top_mip_parity":local_pixels,
         "original_texture_direct_export_trace_guid_usable": all_image_routes_proven,
         "original_material_same_export_GUID_and_UV_linkage_verified": all_image_routes_proven,
         "original_material_exact_texture_PPtr_and_UV_routes_checked": all_proven,
         "source_to_export_UV_slots_compared": 10,
         "actual_exported_alpha_image_counts": dict(sorted(counts.items())),
         "exported_importer_metadata_numeric_counts": importers,
-        "original_source_texture_pixels_compared": parity["coordinate_compared_targets"] > 0,
-        "texture_alpha_loss_from_original_proven": parity["targets_with_alpha_loss"] > 0,
-        "texture_all_source_transparency_lost_in_export_targets": parity["targets_with_all_transparency_lost"],
+        "original_source_texture_pixels_compared": parity["coordinate_compared_targets"]+local_pixels["coordinate_compared_targets"] > 0,
+        "texture_alpha_loss_from_original_proven": parity["targets_with_alpha_loss"]+local_pixels["targets_with_alpha_loss"] > 0,
+        "texture_all_source_transparency_lost_in_export_targets": parity["targets_with_all_transparency_lost"]+local_pixels["targets_with_all_transparency_lost"],
         "source_export_byte_bound_top_mip_parity": parity,
-        "all_three_source_export_RGBA8_samples_equal": all_proven and parity["exact_rgba8_targets"] == EXPECTED_TARGETS,
+        "all_three_source_export_RGBA8_samples_equal": all_proven and parity["exact_rgba8_targets"]+local_pixels["exact_rgba8_targets"] == EXPECTED_TARGETS,
         "correct_runtime_particle_shader_blend_proven": False,
         "android_device_fire_pixels_verified": False,
         "original_source_or_exported_assets_modified": False,
@@ -660,6 +675,7 @@ def main():
         "join_original_Material_TexEnv_to_exported_Texture2D_GUID",
         "classify_same_export_local_Texture2D28_type0_pointer",
         "decode_original_local_type0_Texture2D28_top_mip",
+        "compare_document_local_Texture2D28_top_mip",
         "locate_exported_TextureImporter_image",
         "decode_exported_image_alpha",
         "compare_byte_bound_source_export_top_mip_pixels",
@@ -688,7 +704,7 @@ def main():
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     print("GT_PARTICLE108_EXPORTED_TEXTURE_ALPHA " + json.dumps(report, sort_keys=True))
-    return 0 if report["status"] in (STATUS, PARTIAL_STATUS, UNPROVEN_STATUS) else 2
+    return 0 if report["status"] in (STATUS, PARTIAL_STATUS, LOCAL_COMPARED_STATUS, UNPROVEN_STATUS) else 2
 
 
 if __name__ == "__main__":
