@@ -1,0 +1,155 @@
+{
+  "status": "PASS_AUTHORED_MESH_YAML_UNIQUE_MAPPING",
+  "reviewed_base": "4afb43de969b377aae7451ee4108f68f0e80b821",
+  "preparation_commit": "cbf5d0c2f3bfa8fc1b39403803e88778f2198c21",
+  "first_activation": "14d478d1ac9c525562be4c567070832a157ea19b",
+  "fixture_fix": "6cad47357d1d193b6df6b0b46a6da01a24156ad9",
+  "head": "849a09e1c4d21e31fd184e6fe89f957a7cbd0e04",
+  "run_id": 46004048079,
+  "job_id": 140522627331,
+  "conclusion": "success",
+  "guard_run_id": 46004048217,
+  "guard_job_id": 140522625837,
+  "guard_conclusion": "success",
+  "session": "clients/GT/sessions/20261127-mesh-yaml-unique-mapping/README_AR.md",
+  "evidence": "clients/GT/sessions/20261127-mesh-yaml-unique-mapping/evidence.json",
+  "archive": "clients/GT/sessions/20261127-mesh-yaml-unique-mapping/actual-run-46004048079.zip",
+  "artifact_id": 15201055031,
+  "archive_bytes": 4858,
+  "archive_sha256": "01bdb5ab03235cdd726e371c93e810fabbd6968438e4eb10a0ffd513903e36c6",
+  "archive_git_blob": "feeb5c059c38f749c4d33db602b9fa59a54edf1f",
+  "archive_crc_sha_size_verified_locally": true,
+  "old_gate_git_blob": "c85732b2b553a4e030e8bd6d945a2355af991123",
+  "new_gate_git_blob": "01b4b712fec397fe04c2454c231fac9e804d8066",
+  "new_tests_git_blob": "784838732330b33dca0ad0c5552035a367ae0555",
+  "distinct_counterfactuals": 29,
+  "duplicate_mapping_variants": 28,
+  "merge_override_variants": 1,
+  "yaml_backends": 2,
+  "baseline_false_geometry_equalities": 58,
+  "fixed_rejections": 58,
+  "ci_total_tests": 56,
+  "ci_new_test_methods": 7,
+  "failed_first_run": 46003838995,
+  "failed_first_run_archive": "clients/GT/sessions/20261127-mesh-yaml-unique-mapping/failed-run-46003838995.zip",
+  "scope": "Actual legacy Mesh YAML loader and export_geometry on authored synthetic fixtures; not original geometry or visual parity.",
+  "original_assets_read": false,
+  "original_geometry_verified": false,
+  "unity_or_device_tested": false,
+  "XAPK_requested": false,
+  "next": "G1-G2-mesh-export-full-document-and-stream-identity: audit actual native-used gt_verify_original_mesh_export.export_geometry, which currently tests matching HEADER class/fileID and m_StreamData.size==0, but HEADER permits stripped suffix and loader normalizes it away. Check whether a stripped Mesh, malformed additional document marker, or nonempty provider/path/offset on a zero-size stream can yield the same inline geometry witness; compare the existing strict same-route gt_mesh_vertex_payload.stream_descriptor and unique-document controls. Reproduce actual acceptance with source-free full Mesh fixtures, then repair only distinct gaps while preserving legitimate header, signed fileID domain, legacy real source schema and verified inline bytes. Do not repeat strict same-route proof or the completed duplicate-mapping repair. No new original equivalence, imported visual or device claims. A3 and Particle108 third source/export alpha comparison blocked; original FFT/kernel6 cause, NEXT23b and ten runtime groups remain open. G0–G6 open. No acquisition without independently verified authorization/provenance, no native request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali pinned reference.",
+  "source_sha256": "2dcb599e0a3182e3c5bafe199c37914dc111eb4415dfd7f2aeaa439a69196e63",
+  "test_sha256": "179b2c8f0913f666e1243082c1bbf747f856c8b1166bfcf24b83779ac130fa8f",
+  "tools": {
+    "Python": "3.12.3",
+    "PyYAML": "6.0.3",
+    "backends": [
+      "CSafeLoader/libyaml",
+      "SafeLoader/Python"
+    ]
+  },
+  "tests": {
+    "test_compare_exported_mesh_geometry.py": 6,
+    "test_gt_mesh_vertex_payload.py": 15,
+    "test_gt_mesh_yaml_unique_mapping.py": 7,
+    "test_gt_renderer_submesh_routes.py": 21,
+    "test_gt_verify_original_mesh_export.py": 7
+  },
+  "members": {
+    "baseline.json": {
+      "bytes": 10549,
+      "sha256": "c762d860924b5fb32f065fb04e7bc78248efc662760e3778730122392309ef54"
+    },
+    "baseline.log": {
+      "bytes": 3027,
+      "sha256": "d214fa423c398f6b5d240cc277e95cc8eaba9f8646a958b00c6d05fca24a52da"
+    },
+    "report.json": {
+      "bytes": 855,
+      "sha256": "ba7c94268937865bdd4a58b8e0017504cff32a8fcd5d72192a717887be8d71e2"
+    },
+    "test_compare_exported_mesh_geometry.py.log": {
+      "bytes": 1002,
+      "sha256": "2fd453477be765b29a877e54717670e92956489a8240ac7310476fa74b0d8ee7"
+    },
+    "test_gt_mesh_vertex_payload.py.log": {
+      "bytes": 1881,
+      "sha256": "e1a8ef13772498fcbaf4c25290255aa46691d517efcf85b2913f28e402af660a"
+    },
+    "test_gt_mesh_yaml_unique_mapping.py.log": {
+      "bytes": 1400,
+      "sha256": "a843d0994aafaba5791350b432adb8716eb62eaf32bbffd74ca4c33faf5e1088"
+    },
+    "test_gt_renderer_submesh_routes.py.log": {
+      "bytes": 3004,
+      "sha256": "58846863db484eb8b04f8d7b055945679ee5cd44626db099ed5bbaf9d485f77a"
+    },
+    "test_gt_verify_original_mesh_export.py.log": {
+      "bytes": 1259,
+      "sha256": "acd58e829f3dcfdf64167e918a2123e7efe89652be0bae9507df87c33153de10"
+    },
+    "tools.log": {
+      "bytes": 76,
+      "sha256": "82768fa2ad863d3212c13c8609fd333cd7708643d9d0cf253cfd8f4e548a9930"
+    }
+  },
+  "first_failed_run": {
+    "run_id": 46003838995,
+    "job_id": 140521921303,
+    "head": "14d478d1ac9c525562be4c567070832a157ea19b",
+    "conclusion": "failure",
+    "stage": "baseline fixture construction, before actual comparison",
+    "reason": "replace_once matched Mesh: and the suffix of m_CompressedMesh:; no fixed tests executed",
+    "fix": "6cad47357d1d193b6df6b0b46a6da01a24156ad9",
+    "artifact_id": 15198863941,
+    "archive": "clients/GT/sessions/20261127-mesh-yaml-unique-mapping/failed-run-46003838995.zip",
+    "archive_bytes": 588,
+    "archive_sha256": "5220589add9b2b89934e2158459874da77d38bed8a5e05295ec211d417c802e4",
+    "archive_git_blob": "dde28deb47eba37de2843c11ebcf8b9ab5146694",
+    "members": {
+      "baseline.log": {
+        "bytes": 525,
+        "sha256": "06e60a49d7454452a9b65be0b7ef251e230a37c898f8e120287e9e4d8d8c54b5"
+      },
+      "tools.log": {
+        "bytes": 76,
+        "sha256": "82768fa2ad863d3212c13c8609fd333cd7708643d9d0cf253cfd8f4e548a9930"
+      }
+    },
+    "guard_run_id": 46003838953,
+    "guard_conclusion": "success"
+  },
+  "integration_review": {
+    "gt_renderer_submesh_routes_yaml_tree_already_duplicate_strict": true,
+    "B05_mapping_already_duplicate_strict": true,
+    "native_workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+    "native_mesh_export_call_lines": "454-460",
+    "legacy_export_geometry_calls_repaired_loader": true,
+    "native_workflow_modified": false,
+    "native_execution_performed": false
+  },
+  "local_archive_recheck": {
+    "crc": true,
+    "sha256": true,
+    "all_9_success_member_hashes_calculated": true,
+    "all_2_failure_member_hashes_calculated": true,
+    "all_58_distinct_backend_case_pairs_verified": true,
+    "baseline_equalities_verified_from_receipt_and_log": true,
+    "fixed_5_suite_log_counts_verified": true,
+    "local_code_execution": false,
+    "prior_archives_unchanged": true
+  },
+  "original_particle108_third_export_comparison_proven": false,
+  "original_source_authorization_proven": false,
+  "original_fft_coordinate_or_kernel6_root_cause_resolved": false,
+  "original_runtime_keywords_or_install_proven": false,
+  "original_same_export_inventory": {
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "shader_guids": 37,
+    "historical": true
+  },
+  "G0_G6_closed": false,
+  "other_branches_written": false
+}
