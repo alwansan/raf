@@ -400,19 +400,45 @@ def verified_source_next23b_pass_modes(manifest):
     return tuple(selected)
 
 
-def compose(private, engine_keywords=False, *, original_array_padding_zero=False):
+def compose(private, engine_keywords=False, *, original_array_padding_zero=False, candidate_proof=None):
+    # Explicit candidate-only mode; existing historical callers unchanged.
+    # Caller must independently establish rights and source/semantic provenance.
+    candidate = None
+    if candidate_proof is not None:
+        from scripts import gt_keyword_candidate_plan as migration
+        if engine_keywords or original_array_padding_zero:
+            raise ValueError("ambiguous_candidate_compose_mode")
     layout = (private / "original-private-layout.txt").read_text(encoding="utf-8")
     routes = json.loads((private / "original-private-keyword-routes.json").read_text())
     manifest = json.loads((private / "original-private-variant-manifest.json").read_text())
     counts = tuple(len(row["routes"]) for row in routes)
-    pass_modes = (verified_source_next23b_pass_modes(manifest)
+    if candidate_proof is not None:
+        candidate = migration.plan(manifest, routes, candidate_proof)
+        if candidate["status"] != "PREPARED_PRIVATE_CANDIDATE_ONLY":
+            raise ValueError("original_keyword_candidate_blocked")
+        if migration.sha(layout.encode("utf-8")) != candidate_proof["layout_sha256"]:
+            raise ValueError("candidate_layout_commitment_drift")
+    pass_modes = (tuple(p["pass_mode"] for p in candidate["passes"])
+                  if candidate is not None else
+                  verified_source_next23b_pass_modes(manifest)
                   if len(counts) == 4 and sum(counts) == 1156 else
                   verified_source_next_six_pass_modes(manifest)
                   if counts == NEXT_SIX_ORIGINAL_ROUTES else
                   verified_source_next_seven_pass_modes(manifest)
                   if counts == NEXT_SEVEN_7P11_ORIGINAL_ROUTES
                   else pass_modes_for_routes(counts))
-    records = json.loads((private / "original-private-parameter-records.json").read_text())["stage_records"]
+    if candidate is not None:
+        records_raw = (private / "original-private-parameter-records.json").read_bytes()
+        if migration.sha(records_raw) != candidate_proof["parameter_records_sha256"]:
+            raise ValueError("candidate_parameter_record_commitment_drift")
+        records = json.loads(records_raw)["stage_records"]
+        if len(records) != 2 * len(manifest["paired"]):
+            raise ValueError("candidate_parameter_record_population_drift")
+        for ref, proof in candidate_proof["programs"].items():
+            if migration.sha((private / ref / "source.dxbc").read_bytes()) != proof["dxbc_sha256"]:
+                raise ValueError("candidate_DXBC_commitment_drift")
+    else:
+        records = json.loads((private / "original-private-parameter-records.json").read_text())["stage_records"]
     stage_sources = {}
     for index, pair in enumerate(manifest["paired"]):
         layouts = paired_uniform_layouts(records[index * 2:index * 2 + 2])
@@ -421,8 +447,15 @@ def compose(private, engine_keywords=False, *, original_array_padding_zero=False
             key = (pair["subshader"], pair["pass"], stage, row["program_ref"],
                    tuple(sorted(row["original_variant_metadata"]["m_KeywordIndices"])))
             directory = private / f"bound-stage-{index * 2 + offset:03d}"
+            if candidate is not None:
+                raw = (directory / "resource-bound.hlsl").read_bytes()
+                if migration.sha(raw) != candidate_proof["bound_stage_sha256"][index * 2 + offset]:
+                    raise ValueError("candidate_bound_stage_commitment_drift")
+                source_text = raw.decode("utf-8")
+            else:
+                source_text = (directory / "resource-bound.hlsl").read_text(encoding="utf-8")
             source = rebind_constant_buffers(
-                (directory / "resource-bound.hlsl").read_text(encoding="utf-8"),
+                source_text,
                 layouts[offset],
                 original_array_padding_zero=original_array_padding_zero)
             if stage == "vs":
@@ -441,7 +474,8 @@ def compose(private, engine_keywords=False, *, original_array_padding_zero=False
         raise ValueError("original_921_shaderlab_layout_has_wrong_pass_count")
     parts = [blocks[0].replace('"LIGHTMODE" = "FORWARDBASE"', '"LightMode" = "ForwardBase"')]
     for index, row in enumerate(routes):
-        engine_keys = engine_route_keys(row, index, pass_modes)
+        engine_keys = (candidate["passes"][index]["engine_keys"]
+                       if candidate is not None else engine_route_keys(row, index, pass_modes))
         # A private per-pass keyword dimension lets Unity compile every
         # recovered program without assuming production keyword selection.
         names = [f"GT_ORIGINAL_921_P{index}_V{variant}"
@@ -457,7 +491,9 @@ def compose(private, engine_keywords=False, *, original_array_padding_zero=False
             programs[number] = combine_stages(*pair_sources)
             clauses.append({"enabled": [names[number - 1]] if number else [],
                             "program": number})
-        if engine_keywords and len(counts) == 4 and sum(counts) == 1156:
+        if candidate is not None:
+            pragmas, code = migration.emit(candidate["passes"][index], programs)
+        elif engine_keywords and len(counts) == 4 and sum(counts) == 1156:
             # NEXT23b strict candidate: never substitute route zero for a missing set.
             pragmas, code = strict_engine_router(engine_keys, programs)
         elif engine_keywords:
@@ -486,6 +522,9 @@ def compose(private, engine_keywords=False, *, original_array_padding_zero=False
             remainder = remainder.replace(f'"LIGHTMODE" = "{mode.upper()}"', f'"LightMode" = "{mode}"')
         parts.extend(("\n".join(program), remainder))
     shader = "".join(parts)
+    if candidate is not None and ("GT_ORIGINAL_921_" in shader
+            or shader.count("#error Unmapped_original_keyword_set") != len(pass_modes)):
+        raise ValueError("candidate_private_selector_or_fallback_detected")
     result = pass_coverage(shader)
     if (result["subshader_pass_counts"] != [len(pass_modes)]
             or result["passes_with_complete_program"] != len(pass_modes)):
