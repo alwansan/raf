@@ -36,7 +36,7 @@ def need(condition,reason):
         raise Unproven(reason)
 
 
-def proof(tree, *, exported=False):
+def descriptor(tree):
     need(type(tree) is dict and all(k in tree for k in FIELDS),
          "missing_texture_descriptor")
     desc=tuple(tree[k] for k in FIELDS)
@@ -49,6 +49,10 @@ def proof(tree, *, exported=False):
     need(type(stripped) is int and stripped==0,"unsupported_stripped_texture_mips")
     lengths=tuple(4*max(1,w>>n)*max(1,h>>n) for n in range(mips))
     need(0<size<=MAX_BYTES and sum(lengths)==size,"texture_mip_size_mismatch")
+    return desc,lengths
+
+
+def stream_fields(tree, *, exported=False):
     stream=tree.get("m_StreamData")
     need(type(stream) is dict and {"path","offset","size"}<=set(stream),
          "missing_texture_stream_descriptor")
@@ -59,10 +63,16 @@ def proof(tree, *, exported=False):
          type(stream["serializedVersion"]) is int and stream["serializedVersion"] in (1,2)),
          "unsupported_texture_stream_descriptor_version")
     # Unity YAML empty strings may be parsed as null; source must be explicit.
-    path=stream["path"]
+    return stream["path"],stream["offset"],stream["size"]
+
+
+def proof(tree, *, exported=False):
+    desc,lengths=descriptor(tree)
+    size=desc[-1]
+    path,offset,stream_size=stream_fields(tree,exported=exported)
     need((path=="" or (exported and path is None)) and
-         type(stream["offset"]) is int and stream["offset"]==0 and
-         type(stream["size"]) is int and stream["size"]==0,
+         type(offset) is int and offset==0 and
+         type(stream_size) is int and stream_size==0,
          "unsupported_texture_stream_payload")
     need("image data" in tree,"missing_texture_payload")
     raw=tree["image data"]

@@ -3,8 +3,8 @@
 Strict bounded candidate: triangle-list submeshes with inline indices and
 UV0 descriptors. Unsupported topology/renderer/material scope is UNKNOWN,
 never auto-repaired. V1 identity and V2 byte-binding APIs remain available;
-CLI requires V5 native inline RGBA32 Texture2D payloads on V4 routes.
-V1-V4 APIs remain scoped. No import, active-variant or GPU claim.
+CLI requires V6 pinned streamed or inline RGBA32 Texture2D payloads on V4 routes.
+V1-V5 APIs remain scoped. No import, active-variant or GPU claim.
 Private original source and three traces are never published.
 """
 from __future__ import annotations
@@ -26,6 +26,7 @@ from scripts import gt_mesh_vertex_payload as vertex_payload
 from scripts import gt_material_route_values as material_value
 from scripts import gt_material_route_keyword_state as material_keyword
 from scripts import gt_texture_route_payload as texture_payload
+from scripts import gt_streamed_texture_route_payload as streamed_texture
 from scripts.b05_verify_material_texenv_bindings import normalize_texenvs
 from scripts.verify_exported_material_texture_links import is_texture, BUILTIN, ZERO, IMAGES
 from scripts.b03_verify_renderer_material_links import GUID
@@ -242,12 +243,13 @@ def src_target(owner,raw,externals):
     return target,pid
 
 
-def source_records(root,records,owners,*,loader=None,vertex_payloads=None,texture_payloads=False):
+def source_records(root,records,owners,*,loader=None,vertex_payloads=None,texture_payloads=False,streamed_textures=False):
     """Parse the actual bytes matched to pinned manifest size and SHA."""
     if loader is None:
         import UnityPy
         loader=UnityPy.load
-    objects={};externals={};requests={}
+    require(not streamed_textures or texture_payloads,"streamed_texture_gate_requires_payload_binding",Unknown)
+    objects={};externals={};requests={};texture_requests={}
     for name in owners:
         _,size,digest=records["Raft_Data/"+name]
         raw=verified_range(root/name,(size,digest),0,size)
@@ -260,7 +262,12 @@ def source_records(root,records,owners,*,loader=None,vertex_payloads=None,textur
             require(type(key[1]) is int and key[1]>0 and key not in objects,"duplicate_source_identity")
             if cls==28 and texture_payloads:
                 # Same authenticated owner bytes consumed by the parser.
-                try:tree=texture_payload.safe_proof(obj.read_typetree())
+                try:
+                    raw_tree=obj.read_typetree()
+                    if streamed_textures:
+                        texture_requests[key]=streamed_texture.safe_request(raw_tree)
+                        tree=None
+                    else:tree=texture_payload.safe_proof(raw_tree)
                 except Exception:tree="unreadable_source_texture_payload"
             else:tree=obj.read_typetree() if cls not in {48,*TEX} else None
             if cls==43:
@@ -274,10 +281,14 @@ def source_records(root,records,owners,*,loader=None,vertex_payloads=None,textur
     if vertex_payloads is not None:
         require(not vertex_payloads,'fresh_vertex_payload_mapping_required')
         vertex_payloads.update(vertex_payload.resolve_requests(root,records,requests))
+    if streamed_textures:
+        for key,proof in streamed_texture.resolve_requests(root,records,texture_requests).items():
+            objects[key]=(28,proof)
     return objects,externals
 
 
-def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material_values=False,material_keywords=False,texture_payloads=False):
+def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material_values=False,material_keywords=False,texture_payloads=False,streamed_textures=False):
+    require(not streamed_textures or texture_payloads,"streamed_texture_gate_requires_payload_binding",Unknown)
     require(not material_values or vertex_payloads is not None,"material_value_gate_requires_vertex_binding",Unknown)
     require(not material_keywords or material_values,"material_keyword_gate_requires_value_binding",Unknown)
     require(not texture_payloads or material_keywords,"texture_payload_gate_requires_keyword_binding",Unknown)
@@ -422,11 +433,18 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material
                         cls_tex,source_tex=source(tex,TEX)
                         require(cls_tex==28,"unsupported_same_route_texture_class",Unknown)
                         _,actual_tex=target(tex,{28})
-                        try: size,mips=texture_payload.compare(source_tex,actual_tex)
+                        try:
+                            if streamed_textures:
+                                size,mips=streamed_texture.compare(source_tex,actual_tex)
+                            else:size,mips=texture_payload.compare(source_tex,actual_tex)
                         except texture_payload.Unproven as exc:raise Unknown(str(exc)) from None
                         except texture_payload.Mismatch as exc:raise Drift(str(exc)) from None
                         submesh_texture_slots+=1
                         counts["texture_payload_slots_matched"]+=1
+                        if streamed_textures and isinstance(source_tex,streamed_texture.StreamProof):
+                            counts["streamed_texture_payload_slots_matched"]+=1
+                            counts["streamed_texture_payload_bytes_matched_per_route"]+=size
+                            counts["streamed_texture_mip_levels_matched_per_route"]+=mips
                         counts["texture_payload_bytes_matched_per_route"]+=size
                         counts["texture_mip_levels_matched_per_route"]+=mips
                 counts["complete_submesh_material_identity_routes"]+=1
@@ -479,7 +497,8 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material
         counts["complete_material_keyword_bound_renderer_routes"]==counts["source_renderers"])
     # Null-only submeshes are preserved identities, not texture byte proofs.
     texture_bound=texture_payloads and keyword_bound and bool(counts["texture_payload_slots_matched"])
-    return {"schema_version":5 if texture_payloads else 4 if material_keywords else 3 if material_values else 2 if vertex_payloads is not None else 1,
+    stream_bound=streamed_textures and texture_bound and bool(counts["streamed_texture_payload_slots_matched"])
+    return {"schema_version":6 if streamed_textures else 5 if texture_payloads else 4 if material_keywords else 3 if material_values else 2 if vertex_payloads is not None else 1,
             "counts":dict(sorted(counts.items())),"reason_counts":dict(sorted(reasons.items())),
             "selected_renderer_routes_preserved":complete,
             "full_game_renderers_verified":False,
@@ -488,6 +507,7 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material
             "selected_same_route_material_values_verified":value_bound,
             "selected_same_route_material_keyword_pass_state_verified":keyword_bound,
             "selected_nonnull_same_route_texture_payloads_verified":texture_bound,
+            "selected_same_route_streamed_texture_payloads_verified":stream_bound,
             "texture_sampler_import_colorspace_or_GPU_verified":False,
             "active_shader_variant_or_runtime_keyword_scope_verified":False,
             "UV_decoded_values_or_GPU_verified":False,
@@ -498,10 +518,10 @@ def audit(source,zip2,project,material_trace,mesh_trace,renderer_trace,owners):
     require(owners and len(owners)==len(set(owners)) and set(owners)<=set(OWNERS),"invalid_source_owner_scope")
     pins=manifest(zip2)
     payloads={}
-    objects,externals=source_records(source,pins,owners,vertex_payloads=payloads,texture_payloads=True)
+    objects,externals=source_records(source,pins,owners,vertex_payloads=payloads,texture_payloads=True,streamed_textures=True)
     mapping=traces(*(strict_json(bounded_snapshot(p,MAX_DOC)) for p in (material_trace,mesh_trace,renderer_trace)))
     files,docs=actual_index(project,mapping,texture_payloads=True)
-    report=compare(objects,externals,mapping,files,docs,vertex_payloads=payloads,material_values=True,material_keywords=True,texture_payloads=True)
+    report=compare(objects,externals,mapping,files,docs,vertex_payloads=payloads,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True)
     report["authenticated_selected_source_owners"]=len(owners)
     return report
 
@@ -517,7 +537,7 @@ def main():
     try:
         report=audit(a.source,a.zip2,a.project,a.material_trace,a.mesh_trace,a.renderer_trace,a.owner)
     except Exception as exc:
-        report={"schema_version":5,"status":"INCONCLUSIVE","error_type":type(exc).__name__,
+        report={"schema_version":6,"status":"INCONCLUSIVE","error_type":type(exc).__name__,
                 "selected_renderer_routes_preserved":False,"private_identifiers_published":False}
     with a.out.open("x") as f:json.dump(report,f,sort_keys=True,indent=2);f.write("\n")
     return 0 if report["selected_renderer_routes_preserved"] and report.get("selected_nonnull_same_route_texture_payloads_verified") else 2

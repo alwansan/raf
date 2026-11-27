@@ -10,6 +10,8 @@ using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.ResourceFiles;
+using System.Security.Cryptography;
 using AssetRipper.Primitives;
 using AssetRipper.Processing.Prefabs;
 using AssetRipper.SourceGenerated;
@@ -167,6 +169,11 @@ public static class RaftAuthoredSceneRouteWitness
             m_SubMeshes=mesh.SubMeshes.Select(sub=>new {firstByte=sub.FirstByte,indexCount=sub.IndexCount,
                 topology=(int)sub.GetTopology(),baseVertex=sub.BaseVertex,firstVertex=sub.FirstVertex,vertexCount=sub.VertexCount}).ToArray()
         }));
+        const string providerName="authored-textures.resS";
+        var providerData=Enumerable.Repeat((byte)0xA7,61).ToArray();
+        var providerRoot=Path.Combine(root,"providers");
+        Directory.CreateDirectory(providerRoot);
+        var providerPath=Path.Combine(providerRoot,providerName);
         var mats=new List<IMaterial>();
         for(int i=0;i<2;i++)
         {
@@ -180,14 +187,19 @@ public static class RaftAuthoredSceneRouteWitness
             tex.Format_C28E=AssetRipper.SourceGenerated.Enums.TextureFormat.RGBA32;
             tex.MipCount_C28=2;tex.ImageCount_C28=1;
             int dimension=SetTextureDimension(tex);
-            tex.ImageData_C28=new byte[]{(byte)(32+64*i),64,192,0,
+            var mipBytes=new byte[]{(byte)(32+64*i),64,192,0,
                 128,(byte)(96+32*i),32,255,18,172,93,127,207,9,55,64,
                 (byte)(90+32*i),66,33,171};
-            if(tex.Has_CompleteImageSize_C28_UInt32()) tex.CompleteImageSize_C28_UInt32=(uint)tex.ImageData_C28.Length;
-            else tex.CompleteImageSize_C28_Int32=tex.ImageData_C28.Length;
+            int extent=7+27*i;
+            Buffer.BlockCopy(mipBytes,0,providerData,extent,mipBytes.Length);
+            tex.ImageData_C28=[];
+            if(tex.Has_CompleteImageSize_C28_UInt32()) tex.CompleteImageSize_C28_UInt32=(uint)mipBytes.Length;
+            else tex.CompleteImageSize_C28_Int32=mipBytes.Length;
             Require(tex.StreamData_C28 is not null,"authored_texture_stream_field_missing");
-            tex.StreamData_C28!.GetValues(out Utf8String streamPath,out ulong streamOffset,out uint streamSize);
-            Require(streamPath.String=="" && streamOffset==0 && streamSize==0,"authored_texture_not_inline");
+            tex.StreamData_C28!.SetValues((Utf8String)providerName,(ulong)extent,(uint)mipBytes.Length);
+            tex.StreamData_C28.GetValues(out Utf8String streamPath,out ulong streamOffset,out uint streamSize);
+            Require(tex.ImageData_C28.Length==0 && streamPath.String==providerName &&
+                streamOffset==(ulong)extent && streamSize==(uint)mipBytes.Length,"authored_texture_stream_capture_drift");
             mat.Shader_C21P=shader;
             var props=mat.SavedProperties_C21;
             Require(props.Has_TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5(),"unexpected_authored_texenv_layout");
@@ -226,7 +238,7 @@ public static class RaftAuthoredSceneRouteWitness
             mats.Add(mat);
             collections.Add(new AssetExportCollection<IUnityObjectBase>(native,mat));
             collections.Add(new YamlShaderExportCollection(new YamlShaderExporter(),shader));
-            collections.Add(new AssetExportCollection<IUnityObjectBase>(native,tex));
+            collections.Add(new YamlStreamedAssetExportCollection(new YamlStreamedAssetExporter(),tex));
             // AssetDictionary exposes multiple enumerable interfaces; use
             // explicit indexed reads of the generated objects, not LINQ
             // inference or reconstructed literals from exported YAML.
@@ -264,6 +276,11 @@ public static class RaftAuthoredSceneRouteWitness
                 ["m_StreamData"]=new {path=streamPath.String,offset=streamOffset,size=streamSize}
             }));
         }
+        // Actual file-backed ResourceFile consumed by the pinned exporter.
+        File.WriteAllBytes(providerPath,providerData);
+        bundle.AddResource(new ResourceFile(providerPath,providerName));
+        Require(bundle.ResolveResource(providerName) is not null,"authored_provider_not_resolved");
+        string providerSHA=Convert.ToHexString(SHA256.HashData(providerData)).ToLowerInvariant();
         // Independent scene owners with identical PathIDs. Material owners
         // also share a PathID, and dependency order differs across scenes.
         var hidden=new List<IUnityObjectBase>();
@@ -305,7 +322,8 @@ public static class RaftAuthoredSceneRouteWitness
         var externals=owners.ToDictionary(o=>o.Name,o=>o.Dependencies.Skip(1).Select(d=>d?.Name).ToArray());
         // The source contract is captured from generated objects before any
         // export or trace. It is not reconstructed from exported YAML.
-        var source=new {schema_version=5,authored_generated_objects=true,objects=rows,externals,
+        var source=new {schema_version=6,authored_generated_objects=true,objects=rows,externals,
+            providers=new[]{new {name=providerName,bytes=providerData.Length,sha256=providerSHA}},
             hidden=hidden.Select(o=>new {owner=o.Collection.Name,path_id=o.PathID,class_id=o.ClassID}).ToArray()};
         File.WriteAllText(Path.Combine(root,"source.json"),JsonSerializer.Serialize(source));
         LibraryConfiguration settings=new();settings.SetProjectSettings(version);
@@ -336,7 +354,8 @@ public static class RaftAuthoredSceneRouteWitness
             actual_scene_collections=scenes.Count,source_objects=rows.Count,hidden_components=hidden.Count,
             public_tool_revision="036098ab525a3f9f693dc101edeb21faad4d32d8",
             original_assets_read=false,original_serialized_source=false,production_auto_exporter_selection=false,
-            authored_native_shader_programs_verified=false,Android_device=false,XAPK=false
+            authored_native_shader_programs_verified=false,authored_file_backed_streamed_texture_collections=2,
+            Android_device=false,XAPK=false
         }));
         Console.WriteLine("RAFT_AUTHORED_SCENE_YAML_EXPORT_OBSERVED");
     }

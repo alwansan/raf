@@ -1,0 +1,15 @@
+{
+  "status": "CANDIDATE_NOT_EXECUTED",
+  "base": "4f6099f080c42175e79078f012111b3d818e827c",
+  "gate": "G1-G2-streamed-texture-full-mip-same-route-binding",
+  "session": "clients/GT/sessions/20261127-streamed-texture-route-binding/README_AR.md",
+  "new_test": "tests/test_gt_streamed_texture_route_payload.py",
+  "source_scope": "pinned flat .resS/.resource, native inline RGBA32 export; full mip bytes",
+  "original_assets_read": false,
+  "production_renderer_parity_verified": false,
+  "texture_sampler_import_colorspace_or_GPU_verified": false,
+  "white_or_fire_fixed": false,
+  "Unity_render_executed": false,
+  "XAPK": false,
+  "next": "Execute focused authored-scene-route-join only; verify actual file-backed resource export and controls; retain raw evidence."
+}

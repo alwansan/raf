@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-texture-payload-route-binding/README_AR.md",
-  "next_action": "Extend V5 only to explicit SHA-pinned streamed RGBA32 Texture2D source payloads, still comparing exact all declared mip ranges to the SAME native YAML GUID/anchor and V4 route. Reuse gt_mesh_vertex_payload.verified_range_digests (one authenticated sequential read) with per-texture whole range and per-mip subranges, bounded grouped requests; strict Raft_Data provider identity/path parsing from gt_particle108_source_pixel_parity, reject ambiguous inline+stream, wrong provider, traversal, missing manifest pin, out-of-bounds, same-size provider mutation and swapped equal-length ranges. Do not use UnityPy implicit stream loading or re-read after verification. Preserve inline V5 and compare original exported byte/descriptor scope, no claimed sampler/import/GPU parity. Inspect public pinned YamlStreamedAssetExportCollection.ExportTexture and resource APIs; if feasible actual authored provider (no original data) export via actual streamed collection, with nonzero offset and two distinct textures/mips in shared resource, capture provider bytes/pins before export and verify real YAML stream cleared, full mip bytes retained. If actual exporter stream creation unsupported, document gap and distinguish injected parser tests from actual export. After stream proof, separately bind native sampler (B15) and imported PNG decoded top-mip scope; no assumption PNG retains full mip chain. A3 remains blocked on verified authorized source; G0-G6 open, no unauthorized original assets, no unnecessary Unity raster, phone or XAPK.",
+  "latest_session": "clients/GT/sessions/20261127-streamed-texture-route-binding/README_AR.md",
+  "next_action": "Execute focused authored-scene-route-join only; verify actual file-backed resource export and controls; retain raw evidence.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "05540f2d8c0dcb9c8ea938f96dbfbbbf986b163a",
+    "reviewed_remote_head": "4f6099f080c42175e79078f012111b3d818e827c",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-streamed-texture-full-mip-same-route-binding",
-      "status": "NEXT_PRODUCTIVE",
-      "next": "Extend V5 only to explicit SHA-pinned streamed RGBA32 Texture2D source payloads, still comparing exact all declared mip ranges to the SAME native YAML GUID/anchor and V4 route. Reuse gt_mesh_vertex_payload.verified_range_digests (one authenticated sequential read) with per-texture whole range and per-mip subranges, bounded grouped requests; strict Raft_Data provider identity/path parsing from gt_particle108_source_pixel_parity, reject ambiguous inline+stream, wrong provider, traversal, missing manifest pin, out-of-bounds, same-size provider mutation and swapped equal-length ranges. Do not use UnityPy implicit stream loading or re-read after verification. Preserve inline V5 and compare original exported byte/descriptor scope, no claimed sampler/import/GPU parity. Inspect public pinned YamlStreamedAssetExportCollection.ExportTexture and resource APIs; if feasible actual authored provider (no original data) export via actual streamed collection, with nonzero offset and two distinct textures/mips in shared resource, capture provider bytes/pins before export and verify real YAML stream cleared, full mip bytes retained. If actual exporter stream creation unsupported, document gap and distinguish injected parser tests from actual export. After stream proof, separately bind native sampler (B15) and imported PNG decoded top-mip scope; no assumption PNG retains full mip chain. A3 remains blocked on verified authorized source; G0-G6 open, no unauthorized original assets, no unnecessary Unity raster, phone or XAPK."
+      "status": "CANDIDATE_NOT_EXECUTED",
+      "next": "Execute focused authored-scene-route-join only; verify actual file-backed resource export and controls; retain raw evidence."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -3865,6 +3865,21 @@
           "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
         }
       }
+    },
+    "latest_streamed_texture_route_binding": {
+      "status": "CANDIDATE_NOT_EXECUTED",
+      "base": "4f6099f080c42175e79078f012111b3d818e827c",
+      "gate": "G1-G2-streamed-texture-full-mip-same-route-binding",
+      "session": "clients/GT/sessions/20261127-streamed-texture-route-binding/README_AR.md",
+      "new_test": "tests/test_gt_streamed_texture_route_payload.py",
+      "source_scope": "pinned flat .resS/.resource, native inline RGBA32 export; full mip bytes",
+      "original_assets_read": false,
+      "production_renderer_parity_verified": false,
+      "texture_sampler_import_colorspace_or_GPU_verified": false,
+      "white_or_fire_fixed": false,
+      "Unity_render_executed": false,
+      "XAPK": false,
+      "next": "Execute focused authored-scene-route-join only; verify actual file-backed resource export and controls; retain raw evidence."
     }
   }
 }

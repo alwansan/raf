@@ -11,6 +11,7 @@ import tempfile
 from scripts import gt_renderer_submesh_routes as gate
 from scripts import gt_mesh_vertex_payload as payload
 from scripts import gt_texture_route_payload as texture_payload
+from scripts import gt_streamed_texture_route_payload as streamed_texture
 import struct
 import yaml
 
@@ -25,11 +26,16 @@ def load(root):
     producer=gate.strict_json(gate.bounded_snapshot(root/"producer.json",256*1024))
     need(producer.get("status")=="OBSERVED_AUTHORED_PUBLIC_YAML_EXPORT" and
          producer.get("actual_public_export_collections")==9 and
-         producer.get("actual_scene_collections")==2 and producer.get("original_assets_read") is False,
+         producer.get("actual_scene_collections")==2 and producer.get("authored_file_backed_streamed_texture_collections")==2
+         and producer.get("original_assets_read") is False,
          "authored_producer_contract")
-    need(source.get("authored_generated_objects") is True and source.get("schema_version")==5,
+    need(source.get("authored_generated_objects") is True and source.get("schema_version")==6,
          "authored_source_contract")
-    objects={};proofs={}
+    objects={};proofs={};requests={}
+    providers=source.get("providers")
+    need(type(providers) is list and len(providers)==1 and providers[0].get("name")=="authored-textures.resS"
+         and providers[0].get("bytes")==61,"authored_provider_contract")
+    pins={"Raft_Data/"+p["name"]:("plain",p["bytes"],p["sha256"]) for p in providers}
     for row in source["objects"]:
         key=(row["owner"],row["path_id"]);cls=row["class_id"]
         need(key not in objects and cls in gate.CLASSES,"authored_source_identity_collision")
@@ -38,10 +44,17 @@ def load(root):
             need(isinstance(proof,payload.Proof) and proof.length==120,"authored_120_byte_mesh_required")
             proofs[key]=proof
         if cls==28:
-            proof=texture_payload.proof(row["tree"])
-            need(proof.length==20 and proof.mip_lengths==(16,4),"authored_two_mip_RGBA32_required")
-            objects[key]=(cls,proof)
+            req=streamed_texture.source_request(row["tree"])
+            need(isinstance(req,streamed_texture.Request) and req.mip_lengths==(16,4),
+                 "authored_two_mip_stream_request_required")
+            requests[key]=req
         else:objects[key]=(cls,gate.mesh_layout(row["tree"]) if cls==43 else row["tree"])
+    need(len(requests)==2 and sorted(r.offset for r in requests.values())==[7,34],
+         "authored_distinct_nonzero_stream_extents_required")
+    resolved=streamed_texture.resolve_requests(root/"providers",pins,requests)
+    need(all(isinstance(p,streamed_texture.StreamProof) for p in resolved.values()),
+         "authored_stream_provider_authentication_failed")
+    objects.update((k,(28,p)) for k,p in resolved.items())
     externals=source["externals"]
     need(set(externals)=={key[0] for key in objects},"authored_external_table_population")
     traces=[gate.strict_json(gate.bounded_snapshot(root/f,1024*1024)) for f in ("materials.json","meshes.json","components.json")]
@@ -54,7 +67,7 @@ def load(root):
     need(len(renderers)==len(materials)==2 and renderers[0][1]==renderers[1][1] and materials[0][1]==materials[1][1],
          "same_pathID_different_owner_control_missing")
     need(externals[renderers[0][0]]!=externals[renderers[1][0]],"different_external_table_order_missing")
-    return objects,externals,mapping,hidden,renderers,materials,producer,proofs
+    return objects,externals,mapping,hidden,renderers,materials,producer,proofs,requests,pins
 
 
 def scene_row(text,anchor,cls,transform):
@@ -68,7 +81,7 @@ def scene_row(text,anchor,cls,transform):
 def audit(root,out):
     root=Path(root);out=Path(out)
     need(not out.exists() and out.parent.is_dir(),"fresh_aggregate_receipt_required")
-    objects,externals,mapping,hidden,renderers,materials,producer,proofs=load(root)
+    objects,externals,mapping,hidden,renderers,materials,producer,proofs,requests,pins=load(root)
     files,docs=gate.actual_index(root/"project",mapping,texture_payloads=True)
     need(len(docs)==len(objects) and all(k in docs for _,p,_ in mapping.values() for k in (p[:2],)),
          "actual_native_documents_missing")
@@ -94,12 +107,13 @@ def audit(root,out):
         schemas.extend(captured)
     (out.parent/"texture-schema.json").write_text(json.dumps(
         {"authored_only":True,"native_texture_schemas":schemas},sort_keys=True,indent=2)+"\n")
-    baseline=gate.compare(objects,externals,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True)
+    baseline=gate.compare(objects,externals,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True)
     need(baseline["selected_renderer_routes_preserved"],"baseline_not_preserved:"+json.dumps(baseline["reason_counts"],sort_keys=True))
     need(baseline["selected_same_route_vertex_and_UV_bytes_verified"],"authored_payload_not_bound")
     need(baseline["selected_same_route_material_values_verified"],"authored_material_values_not_bound")
     need(baseline["selected_same_route_material_keyword_pass_state_verified"],"authored_keyword_state_not_bound")
     need(baseline["selected_nonnull_same_route_texture_payloads_verified"],"authored_texture_bytes_not_bound")
+    need(baseline["selected_same_route_streamed_texture_payloads_verified"],"authored_streamed_texture_bytes_not_bound")
     counts=baseline["counts"]
     for k,v in {"source_renderers":2,"complete_renderer_routes":2,
                 "complete_submesh_material_identity_routes":4,"renderer_mesh_layouts_matched":2,
@@ -117,6 +131,9 @@ def audit(root,out):
                 "material_disabled_pass_entries_matched":4,
                 "texture_payload_slots_matched":4,"texture_payload_bytes_matched_per_route":80,
                 "texture_mip_levels_matched_per_route":8,
+                "streamed_texture_payload_slots_matched":4,
+                "streamed_texture_payload_bytes_matched_per_route":80,
+                "streamed_texture_mip_levels_matched_per_route":8,
                 "complete_texture_payload_bound_renderer_routes":2,
                 "complete_texture_payload_bound_submesh_routes":4}.items():need(counts.get(k)==v,"baseline_count:"+k)
     rp=mapping[renderers[0]][1];other=mapping[renderers[1]][1]
@@ -145,7 +162,7 @@ def audit(root,out):
             if old_texture_gate_passes:
                 old=gate.compare(objects,externals,mapping,f,d,vertex_payloads=proofs,material_values=True,material_keywords=True)
                 need(old["selected_same_route_material_keyword_pass_state_verified"],"old_keyword_gate_did_not_pass:"+name)
-            record(name,gate.compare(objects,externals,mapping,f,d,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True),reason)
+            record(name,gate.compare(objects,externals,mapping,f,d,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),reason)
             if old_value_gate_passes:controls[name]["V2_vertex_identity_gate_passed"]=True
             if old_keyword_gate_passes:controls[name]["V3_material_value_gate_passed"]=True
             if old_texture_gate_passes:controls[name]["V4_material_keyword_gate_passed"]=True
@@ -289,7 +306,7 @@ def audit(root,out):
         return hit
     other_raw=scene_row(files[op[0]][0].read_text(),op[1],28,lambda body:body)
     other_bytes=bytes.fromhex(tex_hex(other_raw)[2])
-    need(sha256(other_bytes).hexdigest()==objects[textures[1]][1].sha256,"actual_other_texture_proof_drift")
+    need(sha256(other_bytes).hexdigest()==objects[textures[1]][1].content.sha256,"actual_other_texture_proof_drift")
     def mutate_tex(body,offset=None,swap=False):
         hit=tex_hex(body);raw=bytearray.fromhex(hit[2])
         if swap:raw=bytearray(other_bytes)
@@ -316,32 +333,69 @@ def audit(root,out):
     ):
         disk_control(name,lambda text:scene_row(text,tp[1],28,lambda body:replace_tex_scalar(body,field,value)),
                      reason,tex_path,old_texture_gate_passes=True)
+    # Keep actual native output fixed; mutate the provider or source extent
+    # in a separate authored copy. V4 identity/values/keywords must pass.
+    def source_control(name,changed,reason):
+        altered=dict(objects)
+        altered.update((k,(28,p)) for k,p in changed.items())
+        old=gate.compare(altered,externals,mapping,files,docs,vertex_payloads=proofs,
+                         material_values=True,material_keywords=True)
+        need(old["selected_same_route_material_keyword_pass_state_verified"],"old_identity_gate_did_not_pass:"+name)
+        record(name,gate.compare(altered,externals,mapping,files,docs,vertex_payloads=proofs,
+                    material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),reason)
+        controls[name]["V4_material_keyword_gate_passed"]=True
+    from dataclasses import replace
+    a,b=textures
+    changed=dict(requests);changed[a]=replace(requests[a],offset=requests[b].offset)
+    source_control("actual_source_same_size_stream_extent_swap",
+                   streamed_texture.resolve_requests(root/"providers",pins,changed),
+                   "same_route_texture_payload_bytes_drift")
+    changed=dict(requests);changed[a]=replace(requests[a],offset=60)
+    source_control("actual_source_out_of_bounds_stream_extent",
+                   streamed_texture.resolve_requests(root/"providers",pins,changed),
+                   "texture_stream_extent_out_of_bounds")
+    changed=dict(requests);changed[a]=replace(requests[a],provider="unlisted.resS")
+    source_control("actual_source_unpinned_stream_provider",
+                   streamed_texture.resolve_requests(root/"providers",pins,changed),
+                   "texture_stream_provider_not_pinned")
+    with tempfile.TemporaryDirectory() as tmp:
+        provider=next(iter(requests.values())).provider
+        dest=Path(tmp)/provider
+        raw=bytearray((root/"providers"/provider).read_bytes())
+        # Mutate padding outside either selected texture: both range
+        # bytes still match, but entire provider identity must fail.
+        raw[0]^=1;dest.write_bytes(raw)
+        source_control("actual_source_same_size_provider_padding_mutation",
+                       streamed_texture.resolve_requests(Path(tmp),pins,requests),
+                       "texture_stream_provider_SHA_mismatch")
     # Actual trace identity with source and export owner confusion.
     table=deepcopy(externals);table[renderers[0][0]]=list(reversed(table[renderers[0][0]]))
     # Change only the two dependency entries for the two valid Materials,
     # preserving the mesh provider and every local component reference.
     table=deepcopy(externals);ls=table[renderers[0][0]]
     i,j=ls.index(materials[0][0]),ls.index(materials[1][0]);ls[i],ls[j]=ls[j],ls[i]
-    record("source_external_table_swapped_same_PathIDs",gate.compare(objects,table,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True),"ordered_pointer_target_mismatch")
+    record("source_external_table_swapped_same_PathIDs",gate.compare(objects,table,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),"ordered_pointer_target_mismatch")
     altered=deepcopy(mapping);cls,p,exp=altered[renderers[0]];altered[renderers[0]]=(cls,(p[0],p[1],0),exp)
-    record("unscoped_type0_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True),"unproven_exportable_global_target")
+    record("unscoped_type0_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),"unproven_exportable_global_target")
     altered=deepcopy(mapping);cls,p,exp=altered[renderers[0]];altered[renderers[0]]=(cls,(p[0],p[1],3),exp)
-    record("wrong_global_serialized_type",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True),"serialized_document_trace_type_mismatch")
+    record("wrong_global_serialized_type",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),"serialized_document_trace_type_mismatch")
     altered=deepcopy(mapping);cls,p,exp=altered[renderers[0]];altered[renderers[0]]=(cls,p,False)
-    record("nonexportable_component_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True),"unproven_exportable_global_target")
+    record("nonexportable_component_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),"unproven_exportable_global_target")
     # Hidden components must have no actual YAML document/trace. Since they
     # are intentionally excluded from this authored baseline, add them to
     # the source census and show that it cannot falsely claim full closure.
     augmented=dict(objects)
     for key in hidden:augmented[key]=(23,{})
-    record("hidden_source_renderers_not_promoted",gate.compare(augmented,externals,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True),"missing_source_export_trace")
-    result=dict(status="PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_TEXTURE_PAYLOAD_ROUTE_JOIN",producer=producer,
+    record("hidden_source_renderers_not_promoted",gate.compare(augmented,externals,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),"missing_source_export_trace")
+    result=dict(status="PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_STREAMED_TEXTURE_ROUTE_JOIN",producer=producer,
                 actual_exported_documents=len(docs),actual_native_scene_files=2,source_generated_object_count=len(objects),
                 baseline=baseline,counterfactuals=controls,counterfactual_count=len(controls),
                 same_PathID_distinct_owners=True,actual_cross_owner_dependency_order=True,
                 source_contract_captured_before_export=True,hidden_source_renderers_excluded_from_baseline_but_not_promoted=True,
                 original_assets_read=False,original_serialized_source_verified=False,production_renderer_parity_verified=False,
-                native_inline_RGBA32_texture_payload_bytes_verified=True,
+                native_exported_RGBA32_texture_payload_bytes_verified=True,
+                source_pinned_streamed_RGBA32_texture_payload_bytes_verified=True,
+                authored_provider_count=1,authored_provider_bytes=61,authored_stream_offsets=[7,34],
                 texture_sampler_import_colorspace_or_GPU_verified=False,
                 vertex_payload_bytes_verified=True,serialized_material_values_verified=True,
                 serialized_material_keyword_pass_state_verified=True,active_shader_variant_or_runtime_keyword_scope_verified=False,
