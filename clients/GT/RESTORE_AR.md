@@ -1,3 +1,15 @@
+## GT — نقطة متابعة تحقق منشأ كلمات NEXT23b | 27 نوفمبر 2026
+
+- رأس بدء هذه الدفعة `ef558e8d3ab1c6f4b03f5e821fc979013f679c84`. [جلسة التنفيذ](sessions/20261127-next23b-route-provenance/README_AR.md) و[evidence.json](sessions/20261127-next23b-route-provenance/evidence.json) و[سجل الاختبارات](sessions/20261127-next23b-route-provenance/tests.log) منشورة مع الكود؛ اقرأ رأس commit الحامل لهذا الملف كرأس النشر. سبق فحص Actions والمختبر للقراءة فقط؛ لا تعديل على CL أو BLACK أو المختبر.
+- الإيصال التاريخي NEXT23b [44783011957](https://github.com/alwansan/raf/actions/runs/44783011957) يحفظ 4Pass و1156route/2312 entrypoint المصدرية لا جدول scope/LightMode الخام. [43297804472](https://github.com/alwansan/raf/actions/runs/43297804472) معايرة Unity تاريخية ناجحة لكن artifacts المتاحة صفر؛ القيم الموثقة 0 global و1 local في عينة Spectrum/Unity2021 لا تثبت scope الفعلي لـNEXT23b.
+- أضيف فاحص مستقل للـParsedForm ومطابقة metadata/VS-FS slots وPassType ومجموعة الكلمات الكاملة، وربط `Next23bEngineRoutes.json` ببصمتَي ملف المصدر والمرشح (schema2). يتطلب verifier الجديد الملف الخاص المستقل، ويرفض اختلاف LightMode وبايتات الأعلام للكلمات المستخدمة في parsed bundle. لا يفسر قيم الأعلام دلالياً ولا يعد مراجع البرامج إثبات bytes أو تشغيل. صحح حقل source report الذي كان يدعي original_runtime_engine_keywords_preserved لمجرد توليد المرشح. وضعا legacy والدفعات العشر لم يصبحا مثبتين.
+- **19/19** اختباراً اصطناعياً (16 عقداً و3 دوال إنتاج معزولة ببدائل الترجمة/UnityPy)، تشمل 2312 slot و4 وسوم و27 flag متغيراً في عينة مؤلفة. إعادة مستقلة **19/19 +14/14** لاختبارات الدفعة السابقة. تحقق تطابق شرائح الدوال SHA256 وبصمات blobs؛ لا clone كامل أو full suite أو قراءة metadata أصلية أو Unity/SPIR-V/device جديد. ملفات العمل السابقة حُفظت بلا تغيير. لا تعتمد الاستعادة على sandbox.
+- مسودة workflow تلقت خيار مصدر manifest والفحوص فقط، لم تُشغل، وcommit يحمل [skip ci] لمنع جلب الأصول بلا تحقق إذن؛ هذا ليس نجاح CI. يبقى 688/786 Custom و98 Dummy/37GUID من آخر SAME-EXPORT، وG0–G6 وFFT/NEXT6/Foam والنار والمجسمات وruntime الدفعات العشر مفتوحة. لا XAPK.
+
+**عند المتابعة:** تحقق من الرأس وActions والبصمات. أكمل ربط receipt Unity ببصمة manifest المقروءة وبصمة bundle الفعلي واختبار الرفض؛ ثم عند وجود مصدر مأذون مثبت استعمل ParsedForm الحقيقي لإثبات scope/PassType والـlattice، وصحح pragmas عند اختلاف flags دون تجاوز البوابة. أثبت اختيار Material runtime وحزمة Unity الأصلية قبل قبول أي دمج إنتاجي. لا تلمس BLACK أو المختبر أو CL كتابةً، ولا بناء مبكر أو هاتف جزئي.
+
+---
+
 # GT — استئناف RAFT بتوجيه المالك | 27 نوفمبر 2026
 
 **توجيه 27 نوفمبر الأحدث يرفع وقف RAFT السابق ويجيز نشر التعديلات المختبرة المسموح بها وأدواتها وأدلتها على `feature/android-native-port` وحده.** لا كتابة على المختبر أو CL أو BLACK. الأنيميشن مؤجل، ولا أصل غير مصرح أو مفاتيح أو تراخيص أو LFS أو CI يجلبها. XAPK النهائي فقط بعد إغلاق G0–G6 ودمجها والتحقق من الناتج.

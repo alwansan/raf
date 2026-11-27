@@ -1,0 +1,24 @@
+test_bundle_verifier_requires_source_commitment_and_metadata (test_gt_next23b_provenance_wiring.Next23bProvenanceWiring.test_bundle_verifier_requires_source_commitment_and_metadata) ... ok
+test_producer_rejects_disagreeing_pass_type_before_entrypoint_gate (test_gt_next23b_provenance_wiring.Next23bProvenanceWiring.test_producer_rejects_disagreeing_pass_type_before_entrypoint_gate) ... ok
+test_producer_seals_exact_source_and_candidate_and_does_not_claim_runtime (test_gt_next23b_provenance_wiring.Next23bProvenanceWiring.test_producer_seals_exact_source_and_candidate_and_does_not_claim_runtime) ... ok
+test_ambiguous_lightmode_in_original (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_ambiguous_lightmode_in_original) ... ok
+test_bundle_flag_byte_mismatch_is_rejected_even_with_exact_routes (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_bundle_flag_byte_mismatch_is_rejected_even_with_exact_routes) ... ok
+test_bundle_metadata_matches_raw_flags_by_name_not_index (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_bundle_metadata_matches_raw_flags_by_name_not_index) ... ok
+test_bundle_pass_tag_mismatch_is_rejected_even_with_exact_routes (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_bundle_pass_tag_mismatch_is_rejected_even_with_exact_routes) ... ok
+test_complete_but_renamed_keyword_lattice_does_not_match_source (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_complete_but_renamed_keyword_lattice_does_not_match_source) ... ok
+test_copied_pass_state_drift (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_copied_pass_state_drift) ... ok
+test_copied_variant_metadata_drift (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_copied_variant_metadata_drift) ... ok
+test_duplicate_source_slot (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_duplicate_source_slot) ... ok
+test_flag_type_drift (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_flag_type_drift) ... ok
+test_full_source_slot_join_and_numeric_scope_boundary (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_full_source_slot_join_and_numeric_scope_boundary) ... ok
+test_route_order_is_not_source_slot_identity (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_route_order_is_not_source_slot_identity) ... ok
+test_route_pass_type_drift_even_with_correct_counts (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_route_pass_type_drift_even_with_correct_counts) ... ok
+test_scope_lane_not_silently_ignored (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_scope_lane_not_silently_ignored) ... ok
+test_stale_candidate_and_source_bytes_fail (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_stale_candidate_and_source_bytes_fail) ... ok
+test_unsealed_manifest_cannot_be_accepted (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_unsealed_manifest_cannot_be_accepted) ... ok
+test_vertex_fragment_pair_must_match_actual_permutation (test_gt_next23b_route_provenance.Next23bRouteProvenance.test_vertex_fragment_pair_must_match_actual_permutation) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 1.791s
+
+OK

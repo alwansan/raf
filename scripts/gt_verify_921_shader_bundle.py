@@ -9,6 +9,7 @@ import subprocess
 from scripts.gt_original_921_shaderlab import EXPECTED_ROUTES, NEXT_30_MATERIAL_ROUTES, SKIN_ROUTES, NEXT_SEVEN_7P11_ORIGINAL_ROUTES, expected_routes_for_shader
 from scripts.restore_builtin_shaders import exported_shader_identity
 from scripts.gt_runtime_keyword_contract import exact_independent_toggle_plan, strict_bundle_route_key
+from scripts.gt_next23b_route_provenance import verify_candidate_route_manifest, verify_bundle_metadata
 from scripts.w1_recover_depth_passes import stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
 
@@ -87,7 +88,7 @@ def vulkan_execution_models(blob, decoder):
     return models
 
 
-def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None, *, next30=False, next17=False, next7p11=False, fft_utilities=False, next23b=False):
+def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None, *, next30=False, next17=False, next7p11=False, fft_utilities=False, next23b=False, source_variant_manifest=None):
     import UnityPy
 
     shader = source.read_bytes()
@@ -108,6 +109,10 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
         raise ValueError("fft_utilities_requires_decoded_empty_keyword_routes")
     if next23b and (engine_route_manifest is None or smolv_decoder is None):
         raise ValueError("next23b_requires_actual_engine_routes_and_decoded_entrypoints")
+    if next23b and source_variant_manifest is None:
+        raise ValueError("next23b_requires_independent_source_variant_manifest")
+    if not next23b and source_variant_manifest is not None:
+        raise ValueError("source_variant_manifest_only_supported_for_next23b")
     unity = json.loads(receipt.read_text(encoding="utf-8"))
     if next23b and (unity.get("unityVersion") != "2021.3.45f2" or
                     unity.get("passCount") != 4 or unity.get("errors") != 0):
@@ -130,16 +135,20 @@ def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=N
     if platform != 18:
         raise ValueError("original_921_bundle_platform_table_mismatch")
     engine_routes = None
+    provenance = {}
     if engine_route_manifest is not None:
         packet = json.loads(engine_route_manifest.read_text(encoding="utf-8"))
         if next23b:
             validate_next23b_engine_manifest(packet)
+            source_bytes = source_variant_manifest.read_bytes()
+            provenance = verify_candidate_route_manifest(source_bytes, shader, packet)
+            provenance.update(verify_bundle_metadata(source_bytes, tree["m_ParsedForm"], packet))
         engine_routes = [{frozenset(row["keywords"]) for row in item["variants"]}
                          for item in packet["passes"]]
         if tuple(map(len, engine_routes)) != counts:
             raise ValueError("original_921_engine_route_contract_mismatch")
     result = verify_routes(tree["m_ParsedForm"], records(segments), engine_routes, smolv_decoder, counts, zero_keywords=fft_utilities, strict_engine=next23b)
-    return dict(result, candidate_sha256=unity["candidateSha256"],
+    return dict(result, **provenance, candidate_sha256=unity["candidateSha256"],
                 engine_keywords_verified=engine_routes is not None,
                 vertex_and_fragment_entrypoints_verified=smolv_decoder is not None)
 
@@ -258,6 +267,7 @@ def main():
     for option in ("bundle", "source", "receipt", "out"):
         parser.add_argument("--" + option, required=True, type=Path)
     parser.add_argument("--engine-route-manifest", type=Path)
+    parser.add_argument("--source-variant-manifest", type=Path)
     parser.add_argument("--smolv-decoder", type=Path)
     variant_profile = parser.add_mutually_exclusive_group()
     variant_profile.add_argument("--next23b", action="store_true", help="Require original 1156 engine routes and decoded VS/FS")
@@ -266,7 +276,7 @@ def main():
     variant_profile.add_argument("--next7p11", action="store_true", help="Require SHA-original distinct 7-material 3-pass [4,5,2] routes")
     variant_profile.add_argument("--fft-utilities", action="store_true", help="Require seven source passes with one empty-keyword VSFS route each")
     args = parser.parse_args()
-    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest, args.smolv_decoder, next30=args.next30, next17=args.next17, next7p11=args.next7p11, fft_utilities=args.fft_utilities, next23b=args.next23b)
+    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest, args.smolv_decoder, next30=args.next30, next17=args.next17, next7p11=args.next7p11, fft_utilities=args.fft_utilities, next23b=args.next23b, source_variant_manifest=args.source_variant_manifest)
     args.out.write_text(json.dumps(result, sort_keys=True) + "\n", encoding="utf-8")
     print("GT_ORIGINAL_921_BUNDLE_ROUTES " + json.dumps(result, sort_keys=True))
 

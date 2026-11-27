@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-27",
+  "base_commit": "ef558e8d3ab1c6f4b03f5e821fc979013f679c84",
+  "base_tree": "de0546026a9e2ccf23101a430f992afa4f9c905f",
+  "branch": "feature/android-native-port",
+  "lab_read_only_head": "f933c4429803583d1ed5fa26e46bb0d3227f2027",
+  "scope": "Private NEXT23b route metadata consistency and byte commitments; authored metadata fixtures only. No original payload acquired.",
+  "historical_evidence": {
+    "next23b_source_run": 44783011957,
+    "source_run_head": "7e9925fdba601f84f495f3a9e6ba6d752544fe22",
+    "source_artifact": 14654640691,
+    "source_receipt_blob": "7ca0e1d77f79636d2a8328445bd3200b3b0c89e5",
+    "source_receipt_route_counts": [
+      512,
+      4,
+      128,
+      512
+    ],
+    "source_receipt_contains_raw_keyword_flags_or_pass_tags": false,
+    "scope_control_run": 43297804472,
+    "scope_control_head": "682cbea730daf4af33c29f066639d84e14609839",
+    "scope_control_conclusion": "success",
+    "scope_control_listed_artifacts": 0,
+    "scope_control_historical_documented_values": {
+      "global": 0,
+      "local": 1
+    },
+    "scope_control_raw_receipt_reverified": false,
+    "latest_same_export_run": 43929698985,
+    "non_dummy_materials": 688,
+    "total_custom_materials": 786,
+    "dummy_materials": 98,
+    "dummy_guids": 37
+  },
+  "local": {
+    "prior_full_checkout_present": false,
+    "direct_github_dns_available": false,
+    "python": "3.13.5",
+    "prior_batch5_archive_sha256": "a7b0a80c25c753f6e081f9307c804575399d833e5deec5ff338ef4ceee5222a6",
+    "prior_local_files_left_unchanged": true,
+    "clean_full_checkout_verified": false,
+    "clean_isolated_function_snapshot_replay": true
+  },
+  "tests": {
+    "new_passed": 19,
+    "new_failed": 0,
+    "new_skipped": 0,
+    "metadata_contract_tests": 16,
+    "production_function_body_wiring_tests": 3,
+    "clean_new_replay_passed": 19,
+    "clean_previous_runtime_contract_regressions_passed": 14,
+    "commands": [
+      "python3 -B -m unittest discover -s tests -p 'test_gt_next23b*provenance*.py' -v",
+      "python3 -B -m unittest discover -s tests -p 'test_gt_runtime_keyword_*.py' -v"
+    ],
+    "authored_fixture_paired_stage_slots": 2312,
+    "authored_fixture_passes": 4,
+    "authored_fixture_route_counts": [
+      512,
+      4,
+      128,
+      512
+    ],
+    "authored_bundle_fixture_used_keyword_flag_bytes": 27,
+    "authored_source_fixture_used_flag_population": {
+      "0": 17,
+      "1": 12
+    },
+    "UnityPy_and_translation_and_decoder_doubles": true
+  },
+  "function_slices": {
+    "producer_base_sha256": "813ccfbe881ee69351783ae122528b7853ba739110af1e6d611e660bef8c342a",
+    "producer_tested_sha256": "365b58e5dcaab7feff12676e0127c8ffb3e68e3f72fad0501ae3a9bdb99a303e",
+    "verifier_base_sha256": "0f464d67d5c9d660c9da45de388708e1d999bb7bf6d8a8a1f820d5507b4a2752",
+    "verifier_tested_sha256": "f3cfafff3290a37ff61072e245d7c641dd7e7cb8c36d905633f57612b20c50df",
+    "exact_base_and_patched_slices_matched": true
+  },
+  "changes": {
+    "source_rows_rejoined_by_bucket_and_ordinal": true,
+    "expected_route_sets_rederived_from_parsed_form": true,
+    "compare_original_pass_state_and_program_table_copies": true,
+    "compare_exact_engine_manifest_pass_type_and_sets": true,
+    "candidate_and_source_bytes_sha256_bound": true,
+    "bundle_pass_lightmode_checked": true,
+    "bundle_used_raw_flag_bytes_checked_by_name": true,
+    "source_report_does_not_claim_runtime": true,
+    "workflow_added_lines": 6,
+    "workflow_existing_asset_checkout_and_upload_unchanged": true
+  },
+  "limits": {
+    "original_source_packet_loaded": false,
+    "actual_original_keyword_scope_verified": false,
+    "original_runtime_selection_verified": false,
+    "actual_Unity_bundle_decoded": false,
+    "actual_SPIRV_compilation": false,
+    "actual_game_pixels": false,
+    "original_fixed_macro_semantics_proved": false,
+    "source_packet_consistency_not_input_authenticity": true,
+    "compiled_program_identity_not_proved_by_slot_population": true,
+    "Unity_receipt_bundle_and_route_manifest_hashes_not_yet_independently_bound": true,
+    "full_suite_run": false,
+    "workflow_executed": false,
+    "skip_ci_intentional": true,
+    "G0_G6": "OPEN",
+    "XAPK": "NOT_REQUESTED"
+  },
+  "files": [
+    {
+      "path": "scripts/gt_next23b_route_provenance.py",
+      "git_blob_sha": "fd32bcbfab7c08fcd6fe06c32b803c702ea9da5e",
+      "sha256": "31982fefd138ab389f08e30419b0e8192c16f660f441d5f373fb410c0b67ac80"
+    },
+    {
+      "path": "tests/test_gt_next23b_route_provenance.py",
+      "git_blob_sha": "129041ab5dbe176946a669857c4eb08a4d7c9ab2",
+      "sha256": "7f50f300233990e5fbac3ba85779468e7770c3f9da09cb11629672e992d9ea0e"
+    },
+    {
+      "path": "tests/test_gt_next23b_provenance_wiring.py",
+      "git_blob_sha": "2dc9effa945a56a44f075bb1f05453384e75fdb2",
+      "sha256": "3dc952841d4a6b86419389a3e84218bd04219f54b8490f134d1cebabae8caf62"
+    },
+    {
+      "path": "scripts/gt_next23b_private_stage_translation.py",
+      "git_blob_sha": "c3b48dca2a6972adf7028af0cf522206163ab5aa",
+      "sha256": "308053aab6de2f6c03d18c7c58731e243adf880b58ff8096b5ccae22d012fc04"
+    },
+    {
+      "path": "scripts/gt_verify_921_shader_bundle.py",
+      "git_blob_sha": "4c7dec6efdfd4b5eab600df502ff6f12ee76c873",
+      "sha256": "235774b4cbf02eb17721e0c1b7631ec0ed2787419bd85f8cab2561d59221aa81"
+    },
+    {
+      "path": ".github/workflows/raft-gt-next23b-original-shader-unity.yml",
+      "git_blob_sha": "8cbd2dfb876a7f5f3fe72999de0a954615fc1101",
+      "sha256": "518afaebb3de2decb2aee8fdf7586bc654e62d1cb60a6f6ae20485434703fa18"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-next23b-route-provenance/tests.log",
+      "git_blob_sha": "8371d60ae9146bc12af4e2a4d46b4de46a07b0cf",
+      "sha256": "cd7dd34042b1f242f5ff3b96299fbbac7d688cf107d75fbc89928395f7f400aa"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-next23b-route-provenance/clean-replay.log",
+      "git_blob_sha": "48ceb9beb03d9dd3c7897697eef088bba3833bc3",
+      "sha256": "f23413f4357e1cf7e3e23d51873a955d3c697fd31721086e7bb668e22209dc42"
+    }
+  ]
+}

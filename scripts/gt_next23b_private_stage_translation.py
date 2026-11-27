@@ -16,6 +16,7 @@ from scripts.gt_stage_serialized_owners import read_expected
 from scripts.gt_serialized_graphics_counts import verify
 from scripts.gt_original_921_all_variants import enumerate_all, stage_parameter_records
 from scripts.gt_original_921_keyword_routes import keyword_routes, compile_routed_stages, shaderlab_layout
+from scripts.gt_next23b_route_provenance import bind_candidate_route_manifest
 from scripts.gt_original_921_shaderlab import compose, verify_entrypoints, engine_route_keys, verified_source_next23b_pass_modes
 from scripts.t3_original_top_shader_dxbc_feasibility import summarize
 from scripts.w1_recover_depth_passes import linked_program, stage_variants, variant_key
@@ -112,12 +113,18 @@ def compose_private(parsed, paired, orphans, passes, table, refs, private, repor
             route_packet = {'passes': [{'passType': 'Normal' if mode in ('Always', 'Untagged') else mode,
                                        'variants': [{'keywords': list(key)} for key in keys]}
                                       for mode, keys in zip(modes, routes)]}
+            checkpoint = 'independent_source_keyword_route_provenance'
+            route_packet, provenance = bind_candidate_route_manifest(
+                (private / 'original-private-variant-manifest.json').read_bytes(),
+                shader.encode('utf-8'), route_packet)
+            report['source_keyword_route_packet_consistency'] = provenance
             (private / 'Next23bEngineRoutes.json').write_text(json.dumps(route_packet), encoding='utf-8')
         checkpoint = 'verify_all_composed_entrypoints_Vulkan11'
         verify_entrypoints(shader, private, routes=routes)
         report.update(status=STATUS, source_exact_keyword_routes_by_pass=route_counts,
                       private_ShaderLab_four_pass_composed=True,
-                      original_runtime_engine_keywords_preserved=engine_keywords,
+                      engine_keyword_candidate_names_match_source_packet=engine_keywords,
+                      original_runtime_engine_keywords_preserved=False,
                       private_ShaderLab_vertex_fragment_entrypoints_validated=2312)
     except Exception as exc:
         # Tracebacks may contain source names or identifiers; only this fixed
