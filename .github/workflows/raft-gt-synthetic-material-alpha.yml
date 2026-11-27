@@ -1915,7 +1915,7 @@ jobs:
               assert m and int(m[1])>0 and re.search(r"^OK$",s,re.M)
               tests[p.name]=int(m[1])
           assert len(tests)==11
-          assert sum(tests.values())-tests['test_gt_imported_png_route_importer.py']==217
+          assert sum(tests.values())-tests['test_gt_imported_png_route_importer.py.log']==217
           report=dict(status="PASS_AUTHORED_ACTUAL_EXPORT_NATIVE_TEXTURE_SAMPLER_ROUTE_GATE",
               run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
               test_counts=tests,total_regression_tests=sum(tests.values()),
