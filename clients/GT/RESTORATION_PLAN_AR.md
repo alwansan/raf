@@ -1,3 +1,9 @@
+# GT V9 — scoped CI syntax failure retained | 27 نوفمبر 2026
+
+[45960160652](https://github.com/alwansan/raf/actions/runs/45960160652) stopped in source regression import: extra indentation line 483, no exporter run. Fix one space only, retain full-state false for omitted Swizzle. No V9 pass claimed.
+
+---
+
 # GT V9 — actual Swizzle omission, scope separation | 27 نوفمبر 2026
 
 [45959834665](https://github.com/alwansan/raf/actions/runs/45959834665) actual V7 and separate V8 succeeded; V9 stopped on missing_png_exporter_policy_swizzle (2 textures). Both actual meta schemas omit Swizzle. Pinned TextureImporterExtensions.SetSwizzle only writes if Has_Swizzle(); absent is UNKNOWN, not RGBA equality. Artifact 15179794604 downloaded, CRC and all 22 member SHA256 verified; 15161 bytes SHA256 52ee13b55c7ab0c78e8a8cffa37aeab9f02898a6fd71bbd3d36825e3d03776b6, Git blob 73cdb806641780147f07d430231c77a86f918e1f; member hashes retained. New scoped receipt and explicit missing-swizzle counter: complete serialized-state flag and strict CLI remain false/exit 2 for absence; supported source and policy comparisons separate; explicit wrong-swizzle injection rejected, null invalid; other missing fields still fail. No claim of successful retry yet. A3 blocked; G0–G6 open; no original assets, Unity reimport or XAPK.

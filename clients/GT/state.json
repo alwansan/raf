@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "5fbe7ca0f95c8e9d281e0ce01cc11e75bb7576d6",
+    "reviewed_remote_head": "87ab96cbdc65103fff763f45191f3dd156b4771d",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,7 +2221,7 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-imported-PNG-importer-state-same-route-binding",
-      "status": "SWIZZLE_UNKNOWN_SCOPED_RETRY_PENDING",
+      "status": "V9_SCOPED_RETRY_INDENT_FIXED_PENDING",
       "next": "Run scoped actual V9: retain full V9=false when swizzle absent, verify supported serialized fields and explicit bad-swizzle injection, retain full strict CLI exit 2 for absence; no Unity/Android claim."
     },
     "latest_resource_binding_pixel_run": {
@@ -4427,7 +4427,7 @@
       }
     },
     "latest_imported_png_importer_state_binding": {
-      "status": "V9_SWIZZLE_UNKNOWN_SCOPED_RETRY_PENDING",
+      "status": "V9_SCOPED_RETRY_INDENT_FIXED_PENDING",
       "starting_head": "d477529faffbf82c8758d2e466943944a98757ba",
       "source_gate_commit": "e81dde6404b59a433c81d0568f7818f87d83126c",
       "authored_witness_commit": "080bb3ec339c0fb5930e1ac156f41942adb9e5fd",
@@ -4635,11 +4635,25 @@
           "witness.log": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
         },
         "raw_zip_in_git": false
+      },
+      "scoped_initial_failure": {
+        "run": 45960160652,
+        "head": "87ab96cbdc65103fff763f45191f3dd156b4771d",
+        "job": 140375837229,
+        "reason": "IndentationError unexpected indent at gt_renderer_submesh_routes.py line 483; no actual export ran",
+        "artifact_metadata": [
+          {
+            "id": 15180272477,
+            "bytes": 1202,
+            "digest": "sha256:24b9746d16a9d935dd49d9ec619626766b8de76ef8761af14b2dab2396b075d8"
+          }
+        ],
+        "fix": "remove one extra space; no proof semantics changed"
       }
     }
   },
   "v9_importer_state_checkpoint": {
-    "status": "V9_SWIZZLE_UNKNOWN_SCOPED_RETRY_PENDING",
+    "status": "V9_SCOPED_RETRY_INDENT_FIXED_PENDING",
     "starting_head": "d477529faffbf82c8758d2e466943944a98757ba",
     "source_gate_commit": "e81dde6404b59a433c81d0568f7818f87d83126c",
     "authored_witness_commit": "080bb3ec339c0fb5930e1ac156f41942adb9e5fd",
@@ -4847,6 +4861,20 @@
         "witness.log": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
       },
       "raw_zip_in_git": false
+    },
+    "scoped_initial_failure": {
+      "run": 45960160652,
+      "head": "87ab96cbdc65103fff763f45191f3dd156b4771d",
+      "job": 140375837229,
+      "reason": "IndentationError unexpected indent at gt_renderer_submesh_routes.py line 483; no actual export ran",
+      "artifact_metadata": [
+        {
+          "id": 15180272477,
+          "bytes": 1202,
+          "digest": "sha256:24b9746d16a9d935dd49d9ec619626766b8de76ef8761af14b2dab2396b075d8"
+        }
+      ],
+      "fix": "remove one extra space; no proof semantics changed"
     }
   }
 }
