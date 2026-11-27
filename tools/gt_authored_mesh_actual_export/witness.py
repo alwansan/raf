@@ -83,6 +83,8 @@ def patch_host(root,cs):
     mark="                if (asset.ClassID != 43)\n                    continue;"
     w.need(s.count(mark)==1,"missing_class43_capture")
     s=s.replace(mark,mark+"""
+                if (asset.Collection.Name != "authored.assets")
+                    continue;
                 if (!ReferenceEquals(asset, AuthoredLoadedMesh))
                     throw new InvalidDataException("Export collection Mesh differs from loaded reference");""")
     mark='                Identity(json, "source", asset);'
@@ -143,6 +145,15 @@ def verify(out,export_root):
             source=root/"source"
             pins=json.loads((root/"input.json").read_text())["files"]
             w.need({p.name:w.commit(p.read_bytes()) for p in source.iterdir()}==pins,"source_mutated")
+            raw_parser=json.loads((root/"raw-parser.json").read_text())
+            source_receipt=json.loads((root/"input.json").read_text())
+            w.need(raw_parser["generation"]==22 and raw_parser["owner"]==w.OWNER and
+                   raw_parser["embedded_type_tree"] is False and
+                   raw_parser["objects"]==[{"path_id":w.PATH_ID,"class_id":43,**source_receipt["object"]}],
+                   "actual_pinned_raw_parser_identity_mismatch")
+            row["actual_pinned_raw_parser"]=True
+            census=json.loads((root/"load-census.json").read_text())
+            row["load_census"]={k:census[k] for k in ("authored_objects","all_meshes")}
             loaded=json.loads((root/"loaded.json").read_text())
             w.need(loaded["phase"]=="actual_handler_load_before_processing" and
                    loaded["class_id"]==43 and loaded["mesh_count"]==1 and

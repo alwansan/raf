@@ -1,0 +1,20 @@
+{
+  "status": "FAIL_TYPED_LOAD_GUARD_BEFORE_EXPORT",
+  "run_id": 46014352539,
+  "job_id": 140557541129,
+  "guard_run_id": 46014352444,
+  "head": "9c5c5887045da63a5ecb61c81f3109e9de5d42d3",
+  "artifact_id": 15205016924,
+  "artifact_bytes": 17261,
+  "artifact_sha256": "cc6ededd3ee683660ee463aa80f7129ffc037384bbdf640cec18f2db11817cd1",
+  "archive_local_size_sha_crc_verified": true,
+  "archive_members": 31,
+  "public_exporter_build": "success",
+  "prior_regressions": 73,
+  "retained_mixed_exit": 134,
+  "uncompressed_inline_exit": 134,
+  "uncompressed_streamed_exit": 134,
+  "reason": "The initial guard required exactly one Class43 across the entire loaded GameBundle, and all three runs threw Actual serialized Class43 Mesh not loaded. No typed load receipt, no actual YAML or trace. Root cause not yet proven; upstream GameInitializer.OnPathsLoaded injects engine resources, so the next run records complete Mesh census and scopes selection to the serialized authored owner. Also records pinned raw SerializedFile.FromFile object table and payload SHA before typed load.",
+  "original_assets_read": false,
+  "original_geometry_verified": false
+}

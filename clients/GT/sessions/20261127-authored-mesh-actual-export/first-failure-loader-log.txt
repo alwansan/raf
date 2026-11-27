@@ -1,0 +1,36 @@
+2026-11-27T14:17:04.1205160Z GT_EXPORT_EXIT retained_mixed 134
+2026-11-27T14:17:04.1208965Z Import : Attempting to read files from /home/runner/work/raf/raf/mesh-actual-evidence/cases/retained_mixed/source/authored.assets
+2026-11-27T14:17:04.1209932Z Import : Game file 'authored.assets' has been found
+2026-11-27T14:17:04.1210831Z Import : Mixed game structure has been found at /home/runner/work/raf/raf/mesh-actual-evidence/cases/retained_mixed/source/authored.assets
+2026-11-27T14:17:04.1211675Z Import : Files use the 'Unknown' scripting backend.
+2026-11-27T14:17:04.1212212Z Import : Finished reading files
+2026-11-27T14:17:04.1212894Z Unhandled exception. System.IO.InvalidDataException: Actual serialized Class43 Mesh not loaded
+2026-11-27T14:17:04.1214252Z    at AssetRipper.Export.UnityProjects.RaftAuthoredBinaryMeshWitness.Run(String[] args) in /home/runner/work/raf/raf/ar-host/Source/AssetRipper.Export.UnityProjects/RaftAuthoredBinaryMeshWitness.cs:line 33
+2026-11-27T14:17:04.1215641Z    at Program.<Main>$(String[] args) in /home/runner/work/raf/raf/android-port/Experiments/ExportLineage/Program.cs:line 2
+2026-11-27T14:17:04.1216685Z timeout: the monitored command dumped core
+2026-11-27T14:17:04.6363695Z /home/runner/work/_temp/04a7160c-fe42-4d53-85a8-f445eae8e12b.sh: line 3:  2833 Aborted                 RAFT_PRIVATE_EXPORT_LINEAGE="$root/export-trace.json" RAFT_PRIVATE_EXPORT_MESH_LINEAGE="$root/mesh-trace.json" timeout 120s dotnet "$RUNNER_TEMP/gt-mesh-actual-host/ExportLineage.dll" "$root/source" "$RUNNER_TEMP/gt-mesh-actual-output/$case" "$root/loaded.json" > "$root/export.log" 2>&1
+2026-11-27T14:17:04.6365946Z GT_EXPORT_EXIT uncompressed_inline 134
+2026-11-27T14:17:04.6365946Z GT_EXPORT_EXIT uncompressed_inline 134
+2026-11-27T14:17:04.6379269Z Import : Attempting to read files from /home/runner/work/raf/raf/mesh-actual-evidence/cases/uncompressed_inline/source/authored.assets
+2026-11-27T14:17:04.6403099Z Import : Game file 'authored.assets' has been found
+2026-11-27T14:17:04.6404488Z Import : Mixed game structure has been found at /home/runner/work/raf/raf/mesh-actual-evidence/cases/uncompressed_inline/source/authored.assets
+2026-11-27T14:17:04.6406079Z Import : Files use the 'Unknown' scripting backend.
+2026-11-27T14:17:04.6406890Z Import : Finished reading files
+2026-11-27T14:17:04.6407644Z Unhandled exception. System.IO.InvalidDataException: Actual serialized Class43 Mesh not loaded
+2026-11-27T14:17:04.6409071Z    at AssetRipper.Export.UnityProjects.RaftAuthoredBinaryMeshWitness.Run(String[] args) in /home/runner/work/raf/raf/ar-host/Source/AssetRipper.Export.UnityProjects/RaftAuthoredBinaryMeshWitness.cs:line 33
+2026-11-27T14:17:04.6410549Z    at Program.<Main>$(String[] args) in /home/runner/work/raf/raf/android-port/Experiments/ExportLineage/Program.cs:line 2
+2026-11-27T14:17:04.6411343Z timeout: the monitored command dumped core
+2026-11-27T14:17:05.2202712Z /home/runner/work/_temp/04a7160c-fe42-4d53-85a8-f445eae8e12b.sh: line 3:  2857 Aborted                 RAFT_PRIVATE_EXPORT_LINEAGE="$root/export-trace.json" RAFT_PRIVATE_EXPORT_MESH_LINEAGE="$root/mesh-trace.json" timeout 120s dotnet "$RUNNER_TEMP/gt-mesh-actual-host/ExportLineage.dll" "$root/source" "$RUNNER_TEMP/gt-mesh-actual-output/$case" "$root/loaded.json" > "$root/export.log" 2>&1
+2026-11-27T14:17:05.2208320Z GT_EXPORT_EXIT uncompressed_streamed 134
+2026-11-27T14:17:05.2208320Z GT_EXPORT_EXIT uncompressed_streamed 134
+2026-11-27T14:17:05.2220639Z Import : Attempting to read files from 2 paths...
+2026-11-27T14:17:05.2221437Z Import : Game file 'authored.assets' has been found
+2026-11-27T14:17:05.2221912Z Import : Game file 'authored.resS' has been found
+2026-11-27T14:17:05.2222318Z Import : Mixed game structure has been found for 2 paths
+2026-11-27T14:17:05.2222765Z Import : Files use the 'Unknown' scripting backend.
+2026-11-27T14:17:05.2223223Z Import : Finished reading files
+2026-11-27T14:17:05.2223756Z Unhandled exception. System.IO.InvalidDataException: Actual serialized Class43 Mesh not loaded
+2026-11-27T14:17:05.2224902Z    at AssetRipper.Export.UnityProjects.RaftAuthoredBinaryMeshWitness.Run(String[] args) in /home/runner/work/raf/raf/ar-host/Source/AssetRipper.Export.UnityProjects/RaftAuthoredBinaryMeshWitness.cs:line 33
+2026-11-27T14:17:05.2226424Z    at Program.<Main>$(String[] args) in /home/runner/work/raf/raf/android-port/Experiments/ExportLineage/Program.cs:line 2
+2026-11-27T14:17:05.2227133Z timeout: the monitored command dumped core
+2026-11-27T14:17:05.2271300Z ##[group]Run python3 - <<'PY'
