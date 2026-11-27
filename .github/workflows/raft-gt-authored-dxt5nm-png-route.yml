@@ -1,5 +1,6 @@
 name: GT authored DXT5nm PNG same-route proof (NO Unity or APK)
 on:
+  # Dedicated authored-only V11 activation; no original game acquisition.
   workflow_dispatch:
   push:
     branches: [feature/android-native-port]
