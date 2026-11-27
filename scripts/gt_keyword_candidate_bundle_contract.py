@@ -51,7 +51,7 @@ def check_receipt(c,raw,shader,contract_bytes,bundle,run_id):
     """Unity result and exact bytes, actual callbacks; no trust in registration alone."""
     expected=dict(schema=1,status="OBSERVED_CANDIDATE_ANDROID_VULKAN_BUNDLE",
                   run_id=run_id,unity_version="2021.3.45f2",errors=0,
-                  shader_name=c["shader_name"],android_vulkan_only=True,
+                  shader_name=c["shader_name"],android_vulkan_only=True,editor_graphics_api="Vulkan",
                   candidate_sha256=p.sha(shader),contract_sha256=p.sha(contract_bytes),
                   bundle_sha256=p.sha(bundle),bundle_bytes=len(bundle),original_assets_read=False)
     need(type(raw) is dict and all(type(raw.get(k)) is type(v) and raw[k]==v for k,v in expected.items()),"unity_receipt_or_bytes_mismatch")

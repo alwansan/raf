@@ -1,0 +1,83 @@
+{
+  "status": "INCONCLUSIVE_AUTHORED_UNITY_VARIANT_REGISTRATION",
+  "head": "b4cb8a5b56d8ae93197ba7e1f36b0a87d58ce0e7",
+  "run": 45984849786,
+  "job": 140457707101,
+  "conclusion": "failure",
+  "guard": 45984850061,
+  "source_regressions": 41,
+  "unity_action_step_conclusion": "success_due_to_continue_on_error_not_editor_success",
+  "actual_editor_exit_code": 2,
+  "actual_editor_graphics_api_from_log": "OpenGL 4.5 Mesa llvmpipe",
+  "actual_import_pass_count": 1,
+  "actual_scope_control": {
+    "global_overridable": true,
+    "local_overridable": false
+  },
+  "checkpoint": "register",
+  "failure_type": "ArgumentException:shader GT/AuthoredKeywordCandidate pass type 0 does not have a shader snippet",
+  "actual_bundle_bytes": 0,
+  "actual_observations": 0,
+  "original_runtime_verified": false,
+  "production_activation": false,
+  "original_assets_read": false,
+  "archive": {
+    "id": 15191481633,
+    "bytes": 8831,
+    "sha256": "fe182f17c9d90a3fd8be729947d25cb80c501b0627757d3fa99233ff17cf6306",
+    "crc_verified": true,
+    "member_hashes": {
+      "gt-keyword-bundle-results/candidate-contract.json": [
+        1500,
+        "a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f"
+      ],
+      "gt-keyword-bundle-results/candidate.shader": [
+        1303,
+        "d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537"
+      ],
+      "gt-keyword-bundle-results/route-packet.json": [
+        843,
+        "8eeefc73d3d8fd2c64812c63bdfd287fe50fbcaf86bef788628f03ef9c5a8722"
+      ],
+      "gt-keyword-bundle-results/source-manifest.json": [
+        11522,
+        "14a7b9b1e3843edc51a13db0413c0ff58a1a73519e777eb1b988a21cea17b331"
+      ],
+      "gt-keyword-bundle-results/source-proof.json": [
+        2897,
+        "e485af51e75906c504f392612e9528509b78709dbd39961e734c2a77f028b6d2"
+      ],
+      "gt-keyword-bundle-results/tool-versions.txt": [
+        560,
+        "02391550e0b0e25498a2a045b37fd512f2bd49485036f31c8ca1b700380d1a3e"
+      ],
+      "gt-keyword-bundle-results/unity-raw.json": [
+        987,
+        "7658b71d39dfd6b97954f24fac7e1711c06e54ba1c7e3b6fabb36343759153ba"
+      ],
+      "gt-keyword-bundle-results/verified.json": [
+        224,
+        "bc70baf2e595dcb014c24af82d1a5da5fe69cbc0e8c436f2545ae96f2698205b"
+      ],
+      "gt-keyword-bundle-test-logs/test_gt_keyword_candidate_bundle_contract.py.log": [
+        1943,
+        "355a3c926f043e9b33392600c44f1887da88b5fb216ff8b69f95ddf57e1953c5"
+      ],
+      "gt-keyword-bundle-test-logs/test_gt_keyword_candidate_plan.py.log": [
+        2240,
+        "a33a19e43d5117ce582b08625a8f2716e440e4010bf5bb45786007db62f79fff"
+      ],
+      "gt-keyword-bundle-test-logs/test_gt_runtime_keyword_contract.py.log": [
+        1547,
+        "df667d8faa14da9337f5d25ef07bd1f42e744246fc07bc5dfeb2642529718118"
+      ],
+      "gt-keyword-bundle-test-logs/test_gt_runtime_keyword_integration.py.log": [
+        1077,
+        "0f2bce1f50cd12eb7ccf07fe3519c51fd3df65fb9cc16414db51e480754788ce"
+      ]
+    }
+  },
+  "raw_git_blob": "2004e57b2c767d1cb6878bcf345a55591dea61f9",
+  "verified_git_blob": "c9aa9dd02a4a0795e494435a9bbd5146247754f5",
+  "hypothesis": "Editor OpenGL cannot register this Vulkan-only shader snippet; retry exact same candidate and contract in explicit software Vulkan editor. Hypothesis is not yet proved."
+}

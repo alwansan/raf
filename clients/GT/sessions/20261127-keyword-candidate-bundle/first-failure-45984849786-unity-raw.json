@@ -1,0 +1,30 @@
+{
+    "schema": 1,
+    "errors": 0,
+    "pass_count": 1,
+    "status": "INCONCLUSIVE",
+    "run_id": "45984849786-1-b4cb8a5b56d8ae93197ba7e1f36b0a87d58ce0e7",
+    "unity_version": "2021.3.45f2",
+    "shader_name": "GT/AuthoredKeywordCandidate",
+    "candidate_sha256": "d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537",
+    "contract_sha256": "a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f",
+    "bundle_sha256": "",
+    "error": "ArgumentException:shader GT/AuthoredKeywordCandidate pass type 0 does not have a shader snippet",
+    "checkpoint": "register",
+    "bundle_bytes": 0,
+    "android_vulkan_only": true,
+    "original_assets_read": false,
+    "material_restored_empty": false,
+    "scopes": [
+        {
+            "name": "GT_AUTHORED_GLOBAL",
+            "overridable": true
+        },
+        {
+            "name": "GT_AUTHORED_LOCAL",
+            "overridable": false
+        }
+    ],
+    "observations": [],
+    "material_routes": []
+}

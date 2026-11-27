@@ -49,6 +49,9 @@ def payload():
                        '#pragma only_renderers vulkan','#pragma vertex gt_vs_main','#pragma fragment gt_fs_main',
                        '#pragma use_dxc vulkan',*pragmas,branches,'ENDHLSL','} }','Fallback Off','}',''])).encode()
     c=gate.contract(manifest,packet,proof,shader)
+    # Immutable authored candidate/contract from first real registration failure.
+    need(p.sha(shader)=="d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537","retry_candidate_byte_drift")
+    need(p.sha(dump(c))=="a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f","retry_contract_byte_drift")
     return manifest,packet,proof,shader,c
 
 def dump(x):return (json.dumps(x,sort_keys=True,indent=2,allow_nan=False)+"\n").encode()
@@ -118,13 +121,15 @@ def verify(project,out,run_id,decoder,exit_code):
     from scripts.w1_recover_graphics_programs import decoded_platforms,records
     result=dict(status="INCONCLUSIVE",original_assets_read=False,original_runtime_verified=False,production_activation=False,Android_device=False,XAPK=False)
     try:
-        need(exit_code==0,"actual_Unity_job_not_success")
         manifest,packet,proof,shader,c=payload()
         for name,data in (("source-manifest.json",dump(manifest)),("route-packet.json",dump(packet)),("source-proof.json",dump(proof)),("candidate.shader",shader),("candidate-contract.json",dump(c))):
             need(bounded(out/name)==data,"authored_input_commitment_drift")
         contract_bytes=bounded(out/"candidate-contract.json")
         need(bounded(project/"Assets/GTKeywordCandidate.shader")==shader and bounded(project/"GTKeywordCandidateContract.json")==contract_bytes,"Unity_input_bytes_changed")
         raw=strict_json(bounded(out/"unity-raw.json"))
+        need(raw.get("run_id")==run_id and raw.get("candidate_sha256")==p.sha(shader) and raw.get("contract_sha256")==p.sha(contract_bytes),"Unity_failure_or_success_identity_drift")
+        result.update(observed_editor_graphics_api=raw.get("editor_graphics_api"),observed_editor_checkpoint=raw.get("checkpoint"),observed_editor_error=raw.get("error"),observed_editor_bundle_bytes=raw.get("bundle_bytes"))
+        need(exit_code==0 and raw.get("status")=="OBSERVED_CANDIDATE_ANDROID_VULKAN_BUNDLE","actual_Unity_job_not_success")
         bundle=bounded(out/"gt-keyword-candidate.bundle")
         report=gate.check_receipt(c,raw,shader,contract_bytes,bundle,run_id)
         expected_keys=gate.checked_keys(c["passes"][0])

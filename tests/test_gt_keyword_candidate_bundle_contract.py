@@ -8,7 +8,7 @@ class CandidateBundleContract(unittest.TestCase):
     def setUp(self):
         self.manifest,self.packet,self.proof,self.shader,self.c=w.payload()
         self.contract=w.dump(self.c);self.bundle=b"authored fake bundle only"
-        self.r=dict(schema=1,status="OBSERVED_CANDIDATE_ANDROID_VULKAN_BUNDLE",run_id="fixture",unity_version="2021.3.45f2",errors=0,shader_name=self.c["shader_name"],android_vulkan_only=True,candidate_sha256=g.p.sha(self.shader),contract_sha256=g.p.sha(self.contract),bundle_sha256=g.p.sha(self.bundle),bundle_bytes=len(self.bundle),original_assets_read=False,pass_count=1,error="",scopes=[dict(name=x["name"],overridable=x["scope"]=="global") for x in self.c["scopes"]],observations=[dict(pass_name=w.PASS,pass_type="Normal",stage=s,platform="Vulkan",keywords=v["keywords"]) for v in self.c["passes"][0]["variants"] for s in ("Vertex","Fragment")])
+        self.r=dict(schema=1,status="OBSERVED_CANDIDATE_ANDROID_VULKAN_BUNDLE",run_id="fixture",unity_version="2021.3.45f2",errors=0,shader_name=self.c["shader_name"],android_vulkan_only=True,editor_graphics_api="Vulkan",candidate_sha256=g.p.sha(self.shader),contract_sha256=g.p.sha(self.contract),bundle_sha256=g.p.sha(self.bundle),bundle_bytes=len(self.bundle),original_assets_read=False,pass_count=1,error="",scopes=[dict(name=x["name"],overridable=x["scope"]=="global") for x in self.c["scopes"]],observations=[dict(pass_name=w.PASS,pass_type="Normal",stage=s,platform="Vulkan",keywords=v["keywords"]) for v in self.c["passes"][0]["variants"] for s in ("Vertex","Fragment")])
         names=[x["name"] for x in self.c["scopes"]];flags=[x["source_flag"] for x in self.c["scopes"]]
         table=[dict(m_KeywordIndices=[names.index(n) for n in v["keywords"]],m_BlobIndex=i) for i,v in enumerate(self.c["passes"][0]["variants"])]
         state={"m_Name":w.PASS,"m_Tags":{"tags":[["LightMode","Always"]]}}
@@ -61,6 +61,12 @@ class CandidateBundleContract(unittest.TestCase):
         m=deepcopy(self.manifest);s=m["original_shader_ParsedForm_full_private"]["m_SubShaders"][0]["m_Passes"][0]["m_State"];s.pop("m_Name");m["original_passes"][0]["original_state"]=s
         p=deepcopy(self.proof);p["manifest_sha256"]=g.p.commitment(m);p["passes"][0]["pass_state_sha256"]=g.p.commitment(s)
         with self.assertRaisesRegex(ValueError,"unique_named_source_pass"):g.contract(m,self.packet,p,self.shader)
+    def test_editor_OpenGL_or_missing_graphics_api_rejected(self):
+        for value in ("OpenGLCore",None):
+            r=deepcopy(self.r)
+            if value is None:r.pop("editor_graphics_api")
+            else:r["editor_graphics_api"]=value
+            with self.assertRaisesRegex(ValueError,"receipt_or_bytes_mismatch"):self.check(r)
     def test_receipt_cannot_authorize(self):
         self.assertFalse(self.decoded(authored_marker_mode=True)["installation_allowed"])
 if __name__=="__main__":unittest.main()

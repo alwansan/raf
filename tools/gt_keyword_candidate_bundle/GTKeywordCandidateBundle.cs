@@ -40,6 +40,7 @@ namespace RaftGT {
         [Serializable] public sealed class Result {
             public int schema=1,errors,pass_count;
             public string status="INCONCLUSIVE",run_id,unity_version,shader_name,candidate_sha256,contract_sha256,bundle_sha256,error="",checkpoint;
+            public string editor_graphics_api,editor_graphics_device;
             public long bundle_bytes;
             public bool android_vulkan_only,original_assets_read,material_restored_empty;
             public Scope[] scopes;public Observation[] observations;public MaterialRoute[] material_routes;
@@ -57,6 +58,9 @@ namespace RaftGT {
                 result.checkpoint="input";
                 ShaderUtil.allowAsyncCompilation=false;
                 Need(result.unity_version=="2021.3.45f2","editor_version");
+                result.editor_graphics_api=SystemInfo.graphicsDeviceType.ToString();
+                result.editor_graphics_device=SystemInfo.graphicsDeviceName;
+                Need(SystemInfo.graphicsDeviceType==GraphicsDeviceType.Vulkan,"editor_Vulkan_required");
                 byte[] candidate=File.ReadAllBytes(Path.Combine(root,ShaderPath));
                 byte[] contract=File.ReadAllBytes(Path.Combine(root,"GTKeywordCandidateContract.json"));
                 result.candidate_sha256=Hash(candidate);result.contract_sha256=Hash(contract);
@@ -70,6 +74,7 @@ namespace RaftGT {
                 AssetDatabase.ImportAsset(ShaderPath,ImportAssetOptions.ForceSynchronousImport|ImportAssetOptions.ForceUpdate);
                 var shader=AssetDatabase.LoadAssetAtPath<Shader>(ShaderPath);
                 Need(shader!=null&&shader.name==Target&&shader.passCount==c.passes.Length,"actual_shader_import");
+                Need(shader.isSupported,"candidate_not_supported_by_editor_Vulkan");
                 result.shader_name=shader.name;result.pass_count=shader.passCount;
                 result.scopes=c.scopes.Select(e=>{
                     var k=shader.keywordSpace.keywords.Where(v=>v.name==e.name).ToArray();
