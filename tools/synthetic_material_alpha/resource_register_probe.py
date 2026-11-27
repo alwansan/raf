@@ -84,6 +84,13 @@ AuthoredOutput main(AuthoredInput i) {
 '''
 
 
+def tool_version(tool):
+    result = subprocess.run([tool,'--version'],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=15,check=True)
+    lines = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    require(bool(lines), 'compiler_version_missing:' + tool)
+    return lines[0]
+
+
 def run_probe(out, run_id):
     require(not out.exists() and not out.is_symlink() and bool(run_id), 'fresh_output_and_run_id_required')
     for tool in TOOLS:
@@ -192,7 +199,7 @@ def run_probe(out, run_id):
             'forms':variants,'stage_resource_records_checked':4,'normalized_rebind_equivalence_checks':4,
             'combined_source_identical':True,'negative_wrong_valid_SPIRV_rejected':True,
             'negative_invalid_binding_cases_rejected':2,'tool_invocations':dict(commands),
-            'versions':{tool:subprocess.check_output([tool,'--version'],text=True).splitlines()[0] for tool in TOOLS},
+            'versions':{tool:tool_version(tool) for tool in TOOLS},
             'Unity_compilation_or_render_verified':False,'original_game_assets_read':False,
             'Android_device_pixels_verified':False,'XAPK_requested':False}
     out.parent.mkdir(parents=True,exist_ok=True)
