@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/README_AR.md",
-  "next_action": "G3 ten-group original keyword migration: prepare a separate fail-closed candidate-only path that consumes a future explicitly authorized private original packet, proves exact per-pass keyword sets, scope/passType, VS/FS identities and classifies orphan/sparse routes without fallback. Use existing strict runtime contract and authored witnesses only for code testing, do not blindly flip engine_keywords=True, activate or install. A3 cannot acquire source until authorization/provenance independently established; then NEXT23b and ten groups get real source-specific Unity bundle/runtime and same-export protected-census proofs. Particle108 third local source-to-export alpha parity and actual fire association remain open; G0–G6 and XAPK blocked.",
+  "next_action": "G3 candidate-only next: add a separate strict Unity bundle/receipt join for the prepared candidate (source pass mode versus observed Unity PassType, exact active keyword sets including local/global scope and actual stage program identities, candidate/input SHA and no projection). Reuse existing authored Unity evidence where its scope is exact; no automatic scope/flag mapping or proof from source hashes alone. Sparse lattices, unmatched stages and instancing remain explicit blocked cases until source-specific semantics. A3 remains blocked on independently verified authorization and original provenance; no original assets acquisition, production activation, installer changes or XAPK. Then actual NEXT23b and ten-group migration with authorized private packets, same-export protected hashes and real runtime evidence; Particle108 local export alpha and water/other G0–G6 open.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1963,6 +1963,17 @@
     "new_XAPK_requested": false
   },
   "current_handoff": {
+    "latest_keyword_candidate_only_run": {
+      "id": 45983299008,
+      "job": 140452399023,
+      "head": "b9d3753f03dabae2b2697440f2f7f7dce3e86676",
+      "status": "completed",
+      "conclusion": "success",
+      "compatibility_guard": {
+        "id": 45983298780,
+        "conclusion": "success"
+      }
+    },
     "latest_original_keyword_migration_preflight_run": {
       "id": 45982181437,
       "job": 140448589771,
@@ -1997,11 +2008,11 @@
       }
     },
     "date": "2026-11-27",
-    "reviewed_remote_head": "db2e344dcf5cd875ce22de0f1df1554ba0fe3599",
-    "purpose": "V17 authored raster PASS; actual ten-group source preflight completed, all private selectors confirmed; original acceptance blocked",
+    "reviewed_remote_head": "b9d3753f03dabae2b2697440f2f7f7dce3e86676",
+    "purpose": "G3 candidate-only source route preparation authored compiler PASS; original runtime, Unity scope and provenance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-original-keyword-migration-preflight/README_AR.md",
+    "index": "clients/GT/sessions/20261127-keyword-candidate-only/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -2254,8 +2265,8 @@
     },
     "active_fallback_workstream": {
       "id": "G3-original-runtime-keyword-migration",
-      "status": "SOURCE_ONLY_PREPARED_ORIGINAL_ACCEPTANCE_BLOCKED",
-      "next": "G3 ten-group original keyword migration: prepare a separate fail-closed candidate-only path that consumes a future explicitly authorized private original packet, proves exact per-pass keyword sets, scope/passType, VS/FS identities and classifies orphan/sparse routes without fallback. Use existing strict runtime contract and authored witnesses only for code testing, do not blindly flip engine_keywords=True, activate or install. A3 cannot acquire source until authorization/provenance independently established; then NEXT23b and ten groups get real source-specific Unity bundle/runtime and same-export protected-census proofs. Particle108 third local source-to-export alpha parity and actual fire association remain open; G0–G6 and XAPK blocked.",
+      "status": "CANDIDATE_ONLY_AUTHORED_COMPILER_PASS_ORIGINAL_ACCEPTANCE_BLOCKED",
+      "next": "G3 candidate-only next: add a separate strict Unity bundle/receipt join for the prepared candidate (source pass mode versus observed Unity PassType, exact active keyword sets including local/global scope and actual stage program identities, candidate/input SHA and no projection). Reuse existing authored Unity evidence where its scope is exact; no automatic scope/flag mapping or proof from source hashes alone. Sparse lattices, unmatched stages and instancing remain explicit blocked cases until source-specific semantics. A3 remains blocked on independently verified authorization and original provenance; no original assets acquisition, production activation, installer changes or XAPK. Then actual NEXT23b and ten-group migration with authorized private packets, same-export protected hashes and real runtime evidence; Particle108 local export alpha and water/other G0–G6 open.",
       "previous_V11_V17_authored_witnesses_preserved": true
     },
     "latest_resource_binding_pixel_run": {
@@ -6468,5 +6479,132 @@
     },
     "session": "clients/GT/sessions/20261127-original-keyword-migration-preflight/README_AR.md",
     "next": "G3 ten-group original keyword migration: prepare a separate fail-closed candidate-only path that consumes a future explicitly authorized private original packet, proves exact per-pass keyword sets, scope/passType, VS/FS identities and classifies orphan/sparse routes without fallback. Use existing strict runtime contract and authored witnesses only for code testing, do not blindly flip engine_keywords=True, activate or install. A3 cannot acquire source until authorization/provenance independently established; then NEXT23b and ten groups get real source-specific Unity bundle/runtime and same-export protected-census proofs. Particle108 third local source-to-export alpha parity and actual fire association remain open; G0–G6 and XAPK blocked."
+  },
+  "keyword_candidate_only_checkpoint": {
+    "status": "PASS_AUTHORED_CANDIDATE_ROUTER_COMPILER_ONLY",
+    "starting_head": "c49fc557667aa60cbdc4ff3f313f9d86a33ea71c",
+    "planner_head": "2f79652800899eac1dfd38fbac32f4bf247bd76a",
+    "composer_head": "c2305a9d719de034980afdb735ee8a3ba913afb2",
+    "test_head": "36c4048fc33a74c865419cef26f1a760456e3258",
+    "activation_head": "b9d3753f03dabae2b2697440f2f7f7dce3e86676",
+    "run": {
+      "id": 45983299008,
+      "job": 140452399023,
+      "head": "b9d3753f03dabae2b2697440f2f7f7dce3e86676",
+      "status": "completed",
+      "conclusion": "success",
+      "compatibility_guard": {
+        "id": 45983298780,
+        "conclusion": "success"
+      }
+    },
+    "actual_tests": 29,
+    "actual_new_tests": 15,
+    "actual_legacy_contract_tests": 9,
+    "actual_legacy_integration_tests": 5,
+    "actual_new_cpp_routes": 1156,
+    "actual_legacy_cpp_routes": 1156,
+    "actual_compiled_and_validated_Vulkan11_stages": 8,
+    "actual_unmapped_compiler_rejections": 1,
+    "actual_compiled_marker_rows": [
+      {
+        "route": 0,
+        "stage": "vert",
+        "marker": 11,
+        "sha256": "7e0774fc1580ab0c39d2463310b4a7a519d59516205086a699929b75f52bac80"
+      },
+      {
+        "route": 0,
+        "stage": "frag",
+        "marker": 21,
+        "sha256": "952b05420116bc1de00d8d15b5d136512bc859b446920e2ef73ae9dbafc441ff"
+      },
+      {
+        "route": 1,
+        "stage": "vert",
+        "marker": 12,
+        "sha256": "21635fc31465e49a0ddccdc8be74d9a237db0ef974dd925287a502b9660cc0d4"
+      },
+      {
+        "route": 1,
+        "stage": "frag",
+        "marker": 22,
+        "sha256": "a2847507eee7971df75ea6e06817cd6186a40ba7b80b213229aed79489773fc5"
+      },
+      {
+        "route": 2,
+        "stage": "vert",
+        "marker": 13,
+        "sha256": "0bdbea5274558d7d2ce4b4a99605dd47b6fbb15cff7ead56afb88c58cda7e6d1"
+      },
+      {
+        "route": 2,
+        "stage": "frag",
+        "marker": 23,
+        "sha256": "b3959677a2c5f74abdde11bf3fabe6b49575c9b5b81fcb1a1930854db864fc2a"
+      },
+      {
+        "route": 3,
+        "stage": "vert",
+        "marker": 14,
+        "sha256": "4432e0fb2a0678638c9030d9b0a1ba7783ca091d54096bcb413925426491b224"
+      },
+      {
+        "route": 3,
+        "stage": "frag",
+        "marker": 24,
+        "sha256": "68065d99a974dd1c92254848911927cc3c518dc1b2cb9296840680d28c8db77b"
+      }
+    ],
+    "actual_compose_function_executed": true,
+    "source_stage_transforms_mocked": true,
+    "original_DXBC_read": false,
+    "original_assets_read": false,
+    "original_source_authorization_verified": false,
+    "original_runtime_verified": false,
+    "Unity_executed": false,
+    "original_runtime_passType_scope_verified": false,
+    "production_activation": false,
+    "installation_allowed": false,
+    "legacy_production_callers_changed": false,
+    "Android_device": false,
+    "XAPK": false,
+    "archive": {
+      "id": 15190485947,
+      "bytes": 3554,
+      "sha256": "cff4dcd77f4b885d716ae9dcfcfc436352f44e058f8d0be3fd637cf0a4bbdf09",
+      "git_blob_sha1": "ae27e38b05671c984961860317c523c3a05882b1",
+      "crc_verified": true,
+      "members": {
+        "compiler.json": {
+          "bytes": 2015,
+          "sha256": "c12c25db739fa88a3b1b83158f8fb690d9474b223ac7621b8ca7587f3d63cc6e"
+        },
+        "summary.json": {
+          "bytes": 491,
+          "sha256": "3052da549f8e986a3121bc2ddeb0d37c549dc77aae75fd734aed16604891d30b"
+        },
+        "test_gt_keyword_candidate_plan.py.log": {
+          "bytes": 2240,
+          "sha256": "2f1b4941201f57a3730f82ea2645c269ef9bd61734f8285e765372f85e4de861"
+        },
+        "test_gt_runtime_keyword_contract.py.log": {
+          "bytes": 1547,
+          "sha256": "2d39dcd964ad31c6dba9b864d2c90f994731944efb3a422bdac795a27a638e6e"
+        },
+        "test_gt_runtime_keyword_integration.py.log": {
+          "bytes": 1077,
+          "sha256": "c7a4aa781b128eab37ffe26650d53ef1b4671fa961544e0c5b1ec38b1d15ebcd"
+        },
+        "tool-versions.txt": {
+          "bytes": 1019,
+          "sha256": "ed6167ed161c4d1a564806a8343f91226cce6a65effdcd975c4b3a0513b3663b"
+        }
+      },
+      "locally_rechecked_archive_and_report": true,
+      "local_compiler_rerun": false
+    },
+    "session": "clients/GT/sessions/20261127-keyword-candidate-only/README_AR.md",
+    "next": "G3 candidate-only next: add a separate strict Unity bundle/receipt join for the prepared candidate (source pass mode versus observed Unity PassType, exact active keyword sets including local/global scope and actual stage program identities, candidate/input SHA and no projection). Reuse existing authored Unity evidence where its scope is exact; no automatic scope/flag mapping or proof from source hashes alone. Sparse lattices, unmatched stages and instancing remain explicit blocked cases until source-specific semantics. A3 remains blocked on independently verified authorization and original provenance; no original assets acquisition, production activation, installer changes or XAPK. Then actual NEXT23b and ten-group migration with authorized private packets, same-export protected hashes and real runtime evidence; Particle108 local export alpha and water/other G0–G6 open."
   }
 }
