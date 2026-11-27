@@ -475,11 +475,12 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material
                                 try:importer_cache[tex]=png_importer.compare(png_importer_states.get(tex),files[tptr[0]][1],tptr)
                                 except png_importer.Unproven as exc:raise Unknown(str(exc)) from None
                                 except png_importer.Mismatch as exc:raise Drift(str(exc)) from None
-                            sampler_fields,mapping_fields,policy_fields=importer_cache[tex]
+                            sampler_fields,mapping_fields,policy_fields,swizzle_unknown=importer_cache[tex]
                             counts["imported_png_importer_state_slots_matched"]+=1
                             counts["imported_png_importer_sampler_fields_matched_per_route"]+=sampler_fields
                             counts["imported_png_importer_source_mapping_fields_matched_per_route"]+=mapping_fields
                             counts["imported_png_importer_exporter_policy_fields_matched_per_route"]+=policy_fields
+                             counts["imported_png_importer_swizzle_unknown_slots"]+=swizzle_unknown
                         pixels,from_stream,unset=png_cache[tex]
                         submesh_png_slots+=1
                         counts["imported_png_top_mip_slots_matched"]+=1
@@ -584,7 +585,9 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material
             "selected_same_route_streamed_texture_payloads_verified":stream_bound,
             "selected_same_route_native_texture_sampler_verified":sampler_bound,
             "selected_same_route_imported_png_top_mip_verified":png_bound,
-            **({"selected_same_route_imported_png_serialized_importer_state_verified":importer_bound,
+            **({"selected_same_route_imported_png_supported_serialized_importer_state_verified":importer_bound,
+                 "selected_same_route_imported_png_serialized_importer_state_verified":importer_bound and counts["imported_png_importer_swizzle_unknown_slots"]==0,
+                 "selected_same_route_imported_png_swizzle_verified":importer_bound and counts["imported_png_importer_swizzle_unknown_slots"]==0,
                 "original_runtime_importer_or_Android_platform_fidelity_verified":False} if importer_gate else {}),
             "imported_png_lower_mip_or_Unity_import_verified":False,
             "texture_sampler_import_colorspace_or_GPU_verified":False,

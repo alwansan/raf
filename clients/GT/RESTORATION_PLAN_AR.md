@@ -1,3 +1,9 @@
+# GT V9 — actual Swizzle omission, scope separation | 27 نوفمبر 2026
+
+[45959834665](https://github.com/alwansan/raf/actions/runs/45959834665) actual V7 and separate V8 succeeded; V9 stopped on missing_png_exporter_policy_swizzle (2 textures). Both actual meta schemas omit Swizzle. Pinned TextureImporterExtensions.SetSwizzle only writes if Has_Swizzle(); absent is UNKNOWN, not RGBA equality. Artifact 15179794604 downloaded, CRC and all 22 member SHA256 verified; 15161 bytes SHA256 52ee13b55c7ab0c78e8a8cffa37aeab9f02898a6fd71bbd3d36825e3d03776b6, Git blob 73cdb806641780147f07d430231c77a86f918e1f; member hashes retained. New scoped receipt and explicit missing-swizzle counter: complete serialized-state flag and strict CLI remain false/exit 2 for absence; supported source and policy comparisons separate; explicit wrong-swizzle injection rejected, null invalid; other missing fields still fail. No claim of successful retry yet. A3 blocked; G0–G6 open; no original assets, Unity reimport or XAPK.
+
+---
+
 # GT V9 — focused retry in progress | 27 نوفمبر 2026
 
 [c0ff25c](https://github.com/alwansan/raf/commit/c0ff25c6a08c5c4bcd0d5402f650c0aebec8351b) fixes only report log key suffix (.py.log), not gate conditions. [45959834665](https://github.com/alwansan/raf/actions/runs/45959834665) job 140374777770 in_progress; source regression step successful, guard [45959834608](https://github.com/alwansan/raf/actions/runs/45959834608) successful. Native and PNG actual proof not yet accepted for this retry. Preserve initial failure and its receipt hashes. Next: read exact retry result, verify ZIP, field schema/enum ABI and controls; no Unity reimport claim. A3 blocked; G0–G6 open; white/black fire not proven fixed; no XAPK. Only authorized branch, CL/lab read-only, BLACK out of scope.

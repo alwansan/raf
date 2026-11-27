@@ -2014,16 +2014,20 @@ jobs:
           root=Path("authored-scene-results")
           v8=json.loads((root/"png-report.json").read_text())
           v9=json.loads((root/"importer-route-join.json").read_text())
-          assert v9["status"]=="PASS_ACTUAL_AUTHORED_PUBLIC_PNG_SERIALIZED_IMPORTER_ROUTE_JOIN"
+          assert v9["status"]=="PASS_SCOPED_ACTUAL_AUTHORED_PNG_IMPORTER_STATE_SWIZZLE_UNKNOWN"
           assert v9["counterfactual_count"]==13
           assert v9["source_states"]==2
-          assert v9["baseline"]["selected_same_route_imported_png_serialized_importer_state_verified"]
+          assert v9["baseline"]["selected_same_route_imported_png_supported_serialized_importer_state_verified"]
+          assert not v9["baseline"]["selected_same_route_imported_png_serialized_importer_state_verified"]
+          assert not v9["baseline"]["selected_same_route_imported_png_swizzle_verified"]
+          assert v9["baseline"]["counts"]["imported_png_importer_swizzle_unknown_slots"]==4
           assert not v9["baseline"]["original_runtime_importer_or_Android_platform_fidelity_verified"]
           assert all(c["V8_pass"] and c["V9_reject"] for c in v9["counterfactuals"].values())
           report=dict(status=v9["status"],run_id=v8["run_id"],head=v8["head"],
               total_regression_tests=v8["total_regression_tests"],test_counts=v8["test_counts"],
               native_V7_counterfactuals=v8["native_V7_counterfactuals"],imported_V8_counterfactuals=v8["imported_png_counterfactuals"],
               V8_pass_V9_reject_counterfactuals=v9["counterfactual_count"],counts=v9["baseline"]["counts"],
+              supported_serialized_state_verified=True,complete_serialized_state_verified=False,swizzle_verified=False,
               original_assets_read=False,Unity_import_verified=False,Android_device=False,XAPK=False)
           (root/"importer-report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
           print(json.dumps(report,sort_keys=True))

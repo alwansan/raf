@@ -30,7 +30,7 @@ def check(tree=None,doc=None,ptr=PTR):
 
 class ImporterTests(unittest.TestCase):
     def test_exact(self):
-        self.assertEqual(check(),(6,9,17))
+        self.assertEqual(check(),(6,9,17,0))
     def test_required_source(self):
         for k in v9.SOURCE_FIELDS:
             with self.subTest(k=k):
@@ -45,7 +45,7 @@ class ImporterTests(unittest.TestCase):
     def test_single_mip(self):
         s=source();s.update(m_MipCount=1,m_CompleteImageSize=16)
         d=meta();d["TextureImporter"]["mipmaps"]["enableMipMap"]=0
-        self.assertEqual(check(s,d),(6,9,17))
+        self.assertEqual(check(s,d),(6,9,17,0))
         s["m_MipMap"]=True
         with self.assertRaises(v9.Mismatch):check(s,d)
     def test_sampler_drift(self):
@@ -70,10 +70,10 @@ class ImporterTests(unittest.TestCase):
         d=meta();d["TextureImporter"]["textureSettings"]["mipBias"]=0.0
         with self.assertRaises(v9.Mismatch):check(s,d)
         raw=yaml.safe_dump(d).replace("mipBias: 0.0","mipBias: -0")
-        self.assertEqual(v9.compare(v9.source_proof(s),raw,PTR),(6,9,17))
+        self.assertEqual(v9.compare(v9.source_proof(s),raw,PTR),(6,9,17,0))
     def test_exact_float32(self):
         d=meta();d["TextureImporter"]["textureSettings"]["mipBias"]=-.625000001
-        self.assertEqual(check(doc=d),(6,9,17))
+        self.assertEqual(check(doc=d),(6,9,17,0))
     def test_source_mapping_drift(self):
         for k in ("isReadable","streamingMipmaps","streamingMipmapsPriority","textureFormat","maxTextureSize"):
             d=meta();d["TextureImporter"][k]+=1
@@ -93,6 +93,11 @@ class ImporterTests(unittest.TestCase):
         with self.assertRaises(v9.Unproven):check(doc=d)
     def test_missing_is_unknown(self):
         d=meta();del d["TextureImporter"]["alphaUsage"]
+        with self.assertRaises(v9.Unproven):check(doc=d)
+    def test_swizzle_absent_is_unknown_not_equal(self):
+        d=meta();del d["TextureImporter"]["swizzle"]
+        self.assertEqual(check(doc=d),(6,9,16,1))
+        d["TextureImporter"]["swizzle"]=None
         with self.assertRaises(v9.Unproven):check(doc=d)
     def test_wrong_guid(self):
         with self.assertRaises(v9.Unproven):check(ptr=("1234567890abcdef1234567890abcdef",2800000,3))

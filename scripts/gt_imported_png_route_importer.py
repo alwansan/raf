@@ -100,8 +100,12 @@ def compare(source,meta,ptr):
         field(imp,name,expected,"source_mapping")
     # Exporter decisions, not recovered original runtime properties.
     for name,expected in (("nPOTScale",0),("alphaUsage",1),("alphaIsTransparency",1),
-                          ("swizzle",50462976),("compressionQuality",50)):
+                          ("compressionQuality",50)):
         field(imp,name,expected,"exporter_policy")
+    # SetSwizzle in the pinned exporter is conditional on Has_Swizzle().
+    # Absence is UNKNOWN, not RGBA equality. Explicit null/invalid/drift fails.
+    swizzle_unknown=int("swizzle" not in imp)
+    if not swizzle_unknown:field(imp,"swizzle",50462976,"exporter_policy")
     platforms=imp.get("platformSettings")
     need(type(platforms) is list and len(platforms)==1 and type(platforms[0]) is dict,
          "unknown_png_importer_platform_population")
@@ -111,4 +115,4 @@ def compare(source,meta,ptr):
                           ("crunchedCompression",0),("allowsAlphaSplitting",0),("overridden",0),
                           ("androidETC2FallbackOverride",0),("forceMaximumCompressionQuality_BC6H_BC7",0)):
         field(platforms[0],name,expected,"exporter_policy")
-    return 6,9,17
+    return 6,9,17-swizzle_unknown,swizzle_unknown

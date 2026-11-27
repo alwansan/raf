@@ -1,5 +1,5 @@
 {
-  "status": "V9_RETRY_ACTUAL_PENDING",
+  "status": "V9_SWIZZLE_UNKNOWN_SCOPED_RETRY_PENDING",
   "starting_head": "d477529faffbf82c8758d2e466943944a98757ba",
   "source_gate_commit": "e81dde6404b59a433c81d0568f7818f87d83126c",
   "authored_witness_commit": "080bb3ec339c0fb5930e1ac156f41942adb9e5fd",
@@ -24,7 +24,7 @@
   "unity_import_verified": false,
   "xapk": false,
   "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-  "next": "Read 45959834665 actual result, verify receipt ZIP and all schema/ABI fields and V8-pass/V9-reject controls; retain actual results before selecting next productive authorized step.",
+  "next": "Run scoped actual V9: retain full V9=false when swizzle absent, verify supported serialized fields and explicit bad-swizzle injection, retain full strict CLI exit 2 for absence; no Unity/Android claim.",
   "initial_failure": {
     "run": 45959587458,
     "head": "f26030acf76d972d10181af52380c935e0a7201a",
@@ -163,5 +163,49 @@
       }
     ],
     "fix": "aggregation dictionary lookup uses .py.log; no proof conditions changed"
+  },
+  "retry_actual_failure": {
+    "run": 45959834665,
+    "head": "c0ff25c6a08c5c4bcd0d5402f650c0aebec8351b",
+    "job": 140374777770,
+    "conclusion": "failure",
+    "regression_tests": 233,
+    "native_V7_actual": true,
+    "native_controls": 43,
+    "imported_V8_actual": true,
+    "imported_controls": 13,
+    "V9_complete": false,
+    "reason": "actual_importer_baseline: missing_png_exporter_policy_swizzle: 2",
+    "artifact": 15179794604,
+    "bytes": 15161,
+    "sha256": "52ee13b55c7ab0c78e8a8cffa37aeab9f02898a6fd71bbd3d36825e3d03776b6",
+    "git_blob": "73cdb806641780147f07d430231c77a86f918e1f",
+    "crc_verified": true,
+    "member_count": 22,
+    "member_sha256": {
+      "build.json": "7508c5d8997acc02238582ee471a3c0e9340db877638132b5f2578cadf566f8a",
+      "png-report.json": "dc388e539d1e8b2e637f3fea03a33e5d7835876ed8a358ff2be14c89db89719e",
+      "importer-state-schema.json": "786d9cbe8a2904391ecec30fcd90ad16de22393ea04b0763dc3d720e3a299c6c",
+      "png-route-join.json": "4373a77f278da4263cbf8efae227efbcc43cf3f879fa98deffd9b5fb7243ccf4",
+      "png-schema.json": "521ad41eba8baec977dbcb02b57fe3ab794b73581f10453a7ed0d5731e704f4f",
+      "png-witness.log": "44f7a0069cee04484827fcaa1eee568f905fc54b27aab99b252dd63c9391e0ae",
+      "report.json": "15538941a69c4806cc3c853ed998cf16bc809721384b7657c61b08ea4c2aadec",
+      "route-join.json": "09776d8023ebe4e0d434cf7f8e685090e28d3c6a5701f9fb31ff6ec29195b4bd",
+      "test_b03_verify_renderer_material_links.py.log": "9dfe6439bfbe6159ed85487fc9bdaec0d4e51fb75aea626b93eafa1ff7d3d468",
+      "test_gt_imported_png_route_importer.py.log": "1ea0ed299992e438ef1a767a2133edf0690cc035195dd2f60c76178fbd253ef3",
+      "test_gt_imported_png_route_pixels.py.log": "7f6c531c0ea937d7cee9adb23a002f449447410c845d991441c3e64e1a84efda",
+      "test_gt_material_route_keyword_state.py.log": "fbab739edf0f825272be77ac9525f13915bd6a0edb442588a230b3aa8ac4c3f6",
+      "test_gt_material_route_values.py.log": "d380274f6844e9828a8b32abf09841af52598b10364ff80ab7132e7a648be1f1",
+      "test_gt_mesh_vertex_payload.py.log": "fdac2597a19520058b58ea5aede1db3720490d27c432072304aa9bac3ea82e8a",
+      "test_gt_native_texture_route_sampler.py.log": "9ec3a4984f3cbb14c1ca95ccb0976563d6ae3a01fda277f7b83a184faab943be",
+      "test_gt_renderer_submesh_routes.py.log": "df9381582c93ab6ea94d44a2b86273227091e2af366420ebfce778805eec6cc1",
+      "test_gt_streamed_texture_route_payload.py.log": "a921b7d921430ca0297371cd01a3ff011e028ddeae908359716468d06d7abb37",
+      "test_gt_texture_route_payload.py.log": "3f1d5a789d0fbf053c3aa0ea981ff08d6b3fe21b149f3810d3592717886e644e",
+      "test_gt_verify_original_mesh_export.py.log": "21d1ab39a67a6d1c7f4a681c42060a2d6b4a2c4c78afea83309a7912db05681d",
+      "texture-schema.json": "0d67d316aa3d7b979786c6a6bbf926061d60f13d76bb1eb7981a968842b96133",
+      "tool-smoke.log": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e",
+      "witness.log": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
+    },
+    "raw_zip_in_git": false
   }
 }
