@@ -1,0 +1,81 @@
+name: GT NEXT23b actual final composed module admission
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-next23b-final-route-admission.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  final-route-admission:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tools/gt_next23b_final_route_admission/
+            /tools/gt_next23b_translation_replay/
+            /tools/gt_next23b_source_program_admission/
+            /clients/GT/sessions/20261127-next23b-bound-stage-identity/actual-authored-bound-stage-evidence.zip
+      - name: Verify pinned code and retained authored archive; install public tools
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git hash-object tools/gt_next23b_final_route_admission/audit.py)" = 3085cf2a772002a1d7aed1ce2e851f2fabb0121b
+          test "$(git hash-object tools/gt_next23b_final_route_admission/witness.py)" = ba2ed0c42d99a28c1dc8f26eacc5536892d199df
+          test "$(git hash-object tools/gt_next23b_translation_replay/audit.py)" = c790f11ff1c822c2859e72fe7c6919db358757cf
+          test "$(git hash-object tools/gt_next23b_source_program_admission/audit.py)" = aa221fa2b64bb6ab0ff97df474f7fb2384b01253
+          test "$(git hash-object scripts/gt_original_921_shaderlab.py)" = 33d08da56c3e11fb18f4ce511e8bfc17279edf67
+          test "$(git hash-object scripts/gt_original_921_cb_hlsl.py)" = 975bb92f79598b2c3179ee4fa301da1e29160e1f
+          test "$(git hash-object scripts/gt_original_921_cb_layout.py)" = 61f668c59055f453f05334438aef3a0b5665010b
+          test "$(git hash-object scripts/gt_original_921_semantics.py)" = cfcfb698e0d5aca84dc622cd2d29b66ac2b767a4
+          test "$(git hash-object scripts/gt_runtime_keyword_contract.py)" = 617a4ca349281a8e2ad99bf4f04364a028fb7c16
+          echo '8a11b0947d864a409876136ac666e96d4e1cf2afeb41d0878c6b75e9e0dbc8c4  clients/GT/sessions/20261127-next23b-bound-stage-identity/actual-authored-bound-stage-evidence.zip' | sha256sum -c -
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          mkdir -p evidence
+          git rev-parse HEAD > evidence/tested-head.txt
+          dpkg-query -W vkd3d-compiler libvkd3d-shader1 spirv-tools spirv-cross glslang-tools > evidence/package-versions.txt
+      - name: Independently reconstruct and compile exact routes; test arithmetic counterfactual
+        run: |
+          set -euo pipefail
+          python3 -B -m tools.gt_next23b_final_route_admission.witness --archive clients/GT/sessions/20261127-next23b-bound-stage-identity/actual-authored-bound-stage-evidence.zip --out evidence | tee evidence/actual.log
+      - name: Preserve bounded authored evidence
+        if: success()
+        run: |
+          python3 - <<'PY'
+          import base64,hashlib,zipfile
+          from pathlib import Path
+          root=Path("evidence")
+          files=[p for p in sorted(root.rglob("*")) if p.is_file()]
+          assert len(files)<=64 and sum(p.stat().st_size for p in files)<=2*1024*1024
+          with zipfile.ZipFile(root/"permanent-authored-evidence.zip","w",compression=zipfile.ZIP_DEFLATED) as z:
+              for p in files:
+                  assert not p.is_symlink()
+                  z.write(p,p.relative_to(root))
+          data=(root/"permanent-authored-evidence.zip").read_bytes()
+          assert len(data)<=128*1024
+          print("GT_PERMANENT_EVIDENCE_SHA",len(data),hashlib.sha256(data).hexdigest())
+          enc=base64.b64encode(data).decode("ascii")
+          for i in range(0,len(enc),2048): print("GT_PERMANENT_EVIDENCE_B64",i//2048,enc[i:i+2048])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gt-next23b-final-route-admission
+          path: evidence/
+          retention-days: 14
+          if-no-files-found: warn
