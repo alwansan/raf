@@ -4,6 +4,7 @@ Starting head 8c59433895a8e1bc89bc5ca1d0f551a43a114cce matched; prior V6 4595366
 
 **Next:** Execute focused actual public native sampler route witness; verify captured source and actual YAML, preserve evidence. A3 blocked until authorized original source verified; G0–G6 open. Historical 688/786 non-dummy, 98 Dummy/37 GUID. No original source acquisition, phone or XAPK. CL/lab read-only, BLACK excluded, animation deferred. Only feature/android-native-port, no force push.
 CI [45954775949](https://github.com/alwansan/raf/actions/runs/45954775949) job 140358606965 head 2ebdbb8365169c5128fe57917443914dea15609f; Python regression step success, guard 45954775966 success, native sampler export pending. No V7 success claim yet.
+Initial [45954775949](https://github.com/alwansan/raf/actions/runs/45954775949) failed compilation CS0136 conflicting local 'settings'. All 183 Python tests passed, guard success; no actual export executed. Renamed local samplerInstances only; retry required. Failure artifact 15177938237, 7635 bytes SHA256 07fea82c1b7779a6e5c76a39a14c07585adc07ce82344f448652b6b96261a246.
 
 ---
 

@@ -192,10 +192,10 @@ public static class RaftAuthoredSceneRouteWitness
             // Different interface aliases must resolve to the same instance.
             var samplerProps=tex.GetType().GetInterfaces().SelectMany(t=>t.GetProperties())
                 .Where(p=>p.CanRead && typeof(IGLTextureSettings).IsAssignableFrom(p.PropertyType)).ToArray();
-            var settings=samplerProps.Select(p=>p.GetValue(tex)).OfType<IGLTextureSettings>().ToArray();
-            Require(settings.Length>0 && settings.All(s=>ReferenceEquals(s,settings[0])),
+            var samplerInstances=samplerProps.Select(p=>p.GetValue(tex)).OfType<IGLTextureSettings>().ToArray();
+            Require(samplerInstances.Length>0 && samplerInstances.All(s=>ReferenceEquals(s,samplerInstances[0])),
                 "authored_texture_sampler_not_unique");
-            var sampler=settings[0];
+            var sampler=samplerInstances[0];
             sampler.FilterMode=1+i;
             sampler.Aniso=2+i*6;
             sampler.MipBias=i==0?-.625f:.375f;

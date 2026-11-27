@@ -1,5 +1,5 @@
 {
-  "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
+  "status": "PYTHON_PASS_CSHARP_NAME_COLLISION_FIXED_RETRY_PENDING",
   "base": "8c59433895a8e1bc89bc5ca1d0f551a43a114cce",
   "gate": "G1-G2-native-texture-sampler-same-route-binding",
   "session": "clients/GT/sessions/20261127-native-texture-sampler-route-binding/README_AR.md",
@@ -9,7 +9,7 @@
   "production_renderer_parity_verified": false,
   "texture_import_colorspace_or_GPU_verified": false,
   "XAPK": false,
-  "next": "Inspect run 45954775949 completion; retain actual sampler schema and receipt or fix strict witness without weakening source or payload proof.",
+  "next": "Retry actual native export after C# samplerInstances rename; retain raw failure and retry receipts.",
   "candidate_commit": "7f90fd79376ad5922a5092f38b3cadf1bf0215ef",
   "activation_commit": "2ebdbb8365169c5128fe57917443914dea15609f",
   "run_id": 45954775949,
@@ -17,5 +17,19 @@
   "guard_run_id": 45954775966,
   "guard_conclusion": "success",
   "regression_step": "success",
-  "observed_run_status": "in_progress"
+  "observed_run_status": "in_progress",
+  "initial_failure": {
+    "run_id": 45954775949,
+    "job_id": 140358606965,
+    "head": "2ebdbb8365169c5128fe57917443914dea15609f",
+    "conclusion": "failure",
+    "total_regression_tests": 183,
+    "new_sampler_tests": 28,
+    "reason": "CS0136 local settings collides with LibraryConfiguration settings in enclosing scope; actual native export not executed",
+    "artifact_id": 15177938237,
+    "archive_bytes": 7635,
+    "archive_sha256": "07fea82c1b7779a6e5c76a39a14c07585adc07ce82344f448652b6b96261a246",
+    "guard_run_id": 45954775966,
+    "guard_conclusion": "success"
+  }
 }
