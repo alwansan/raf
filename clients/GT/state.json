@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
-  "next_action": "Test v2 receipt, original installer mocked-decoder regressions, and one authored-only actual Unity producer + compiled bundle verification. Keep A3 blocked and G0-G6 open; then G5 particle/fire/white materials.",
+  "latest_session": "clients/GT/sessions/20261127-particle108-resource-census/README_AR.md",
+  "next_action": "Review existing Particle108/fire material alpha, texture pointer and blend provenance, especially local type-0 texture references and white-mesh material/resource parity. Choose a concrete source defect and authored falsification test; do not repeat passed G4/G5 probes without a new reason. A3 remains blocked on verified authorized original source; G0-G6 remain open. Recheck live HEAD and Actions before changes.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,11 +1964,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "108898104496277005f559c11d9524089433f65b",
-    "purpose": "FFT v2 original receipt provenance candidate staged; actual CI pending; no original acceptance",
+    "reviewed_remote_head": "7a42c79f4fdad26e1231ccd7b01e8c8c6005ad43",
+    "purpose": "G4 FFT receipt v2 authored actual pass; G5 Particle108 census authored compiler pass; original acceptance remains open",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-fft-receipt-provenance/README_AR.md",
+    "index": "clients/GT/sessions/20261127-particle108-resource-census/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -2220,9 +2220,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G4-FFT-original-receipt-provenance",
-      "status": "CANDIDATE_PENDING_ACTUAL_CI",
-      "next": "Test v2 receipt, original installer mocked-decoder regressions, and one authored-only actual Unity producer + compiled bundle verification. Keep A3 blocked and G0-G6 open; then G5 particle/fire/white materials."
+      "id": "G5-Particle108-material-alpha-provenance",
+      "status": "NEXT_SOURCE_AUDIT",
+      "next": "Review existing Particle108/fire material alpha, texture pointer and blend provenance, especially local type-0 texture references and white-mesh material/resource parity. Choose a concrete source defect and authored falsification test; do not repeat passed G4/G5 probes without a new reason. A3 remains blocked on verified authorized original source; G0-G6 remain open. Recheck live HEAD and Actions before changes."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -2365,6 +2365,100 @@
         "XAPK_requested": false,
         "scope": "Pinned authored Android Vulkan bundles only; compiler mode labels are not independent internal compiler attestation."
       }
+    },
+    "latest_fft_receipt_v2": {
+      "status": "PASS_AUTHORED_UNITY_ANDROID_VULKAN_COORDINATES",
+      "run_id": 45938699002,
+      "job_id": 140307767792,
+      "head": "a6f76b425ef02dddf8885412b3c864a354ca46fd",
+      "conclusion": "success",
+      "guard_run_id": 45938699019,
+      "artifact_id": 15172121322,
+      "archive": "clients/GT/sessions/20261127-fft-receipt-provenance/actual-run-45938699002.zip",
+      "archive_bytes": 13229,
+      "archive_sha256": "9228d97107ed3d70c77b81156370dfefe51ea431c5e88a11b6324fd57281d9fb",
+      "archive_git_blob": "cec8155438f0cf4413ad0d018f31bb79af7b9c6a",
+      "archive_crc_sha_size_verified_locally": true,
+      "member_sha256": {
+        "authored.bundle": "2bd17a63890f5a0e53d046ed8bc1601dbd6e04a45e9052d63c550dd11f0226a8",
+        "authored.shader": "3249858ea00a30b718992cef563261e457cbecd6d7b8471313d5b32f197b3dfc",
+        "cpu.json": "16e93115a80242cea94bcb17ebba617f028c44a90728b3486983aad487c49482",
+        "stage.json": "5a6665129cf64e5c99811ec686666c2017f0cfd74f1014c496167455592658b0",
+        "unity.json": "0128fc72ea2bc106397895cae0c6454f4fbe9219950d8199dbc86234e2601179",
+        "verified.json": "08bbd1c2d1ee8fb5133ccb2970a92adf3fd9d01a171aeaa8a87817216caed4b6"
+      },
+      "bundle_bytes": 8610,
+      "receipt_schema": 2,
+      "Unity_version": "2021.3.45f2",
+      "scope": "Authored fixture only; actual Android Vulkan AssetBundle, no APK, no device, no original asset use",
+      "mode": "hlslcc",
+      "unit_regressions": 22,
+      "probe_selftests": 3,
+      "actual_external_compiler_stages": 14,
+      "actual_compiled_bundle_modules_validated": 14,
+      "passes": 7,
+      "blobs": 7,
+      "fragment_references": 21,
+      "used_keywords": 0,
+      "serialized_inactive_stereo_names": 4,
+      "receipt_negative_controls": 7,
+      "external_invalid_coordinate_rejections": 2,
+      "actual_receipt_commitment_recomputed_locally": true,
+      "original_gate_changed_in_code": true,
+      "original_installer_test_decoder_mocked": true,
+      "original_gate_actual_execution_proven": false,
+      "original_coordinate_root_cause_resolved": false,
+      "cryptographic_attestation": false,
+      "original_assets_read": false,
+      "original_game_or_device_pixels_verified": false,
+      "XAPK_requested": false
+    },
+    "latest_particle108_resource_census": {
+      "status": "PASS_AUTHORED_PARTICLE108_RESOURCE_CENSUS_AND_SPIRV_PARITY",
+      "run_id": 45938971358,
+      "job_id": 140308763652,
+      "head": "7a42c79f4fdad26e1231ccd7b01e8c8c6005ad43",
+      "conclusion": "success",
+      "guard_run_id": 45938971386,
+      "artifact_id": 15172230939,
+      "archive": "clients/GT/sessions/20261127-particle108-resource-census/actual-run-45938971358.zip",
+      "archive_bytes": 3042,
+      "archive_sha256": "308b44f7731087a60872f340b207cc5e0894c49401f618c4e27d097ea6fd5115",
+      "archive_git_blob": "249d6d83aacf1ab4f1e8cc7441ce3297d8c04eb1",
+      "archive_crc_sha_size_verified_locally": true,
+      "member_sha256": {
+        "depth-tests.log": "dce89ff05af79baf942bd680aa8f8c2833d61b363ad7dcb15976a396e264929e",
+        "particle-compiler.json": "d9814bc2ebb7acefca9590be86d7051e0a3bfcdb9f563d274228fe000bb4d039",
+        "particle-tests.log": "15d3204ba2056e28aab53d1118ae5d3a36526f00c88a423786254e09ff897ba1",
+        "source-tests.log": "6e9198ae3815785a5dbb3f6a94990b90e18323aadbef312a8895b6f0793ffe90"
+      },
+      "unit_tests": 50,
+      "particle_unit_tests": 37,
+      "shared_resource_unit_tests": 10,
+      "depth_regressions": 3,
+      "actual_glslang_compilations": 7,
+      "actual_spirv_validations": 7,
+      "actual_spirv_normalizations": 7,
+      "positive_cases": [
+        "bare",
+        "space0",
+        "comment"
+      ],
+      "positive_stripped_spirv_sha256": "5a577b9e4940da64f940235c72bd569279f32d4c54986c644967b6c045baf7ae",
+      "negative_controls": [
+        "wrong_valid_resource_pair",
+        "nonzero_texture_space",
+        "unregistered_texture",
+        "descriptor_array",
+        "texture_wrong_register_class",
+        "duplicate_translated_slot"
+      ],
+      "negative_controls_rejected": 6,
+      "actual_original_DXBC_or_RDEF_used": false,
+      "original_assets_read": false,
+      "original_fire_or_white_mesh_repaired": false,
+      "Unity_or_Android_pixels_verified": false,
+      "XAPK_requested": false
     }
   }
 }

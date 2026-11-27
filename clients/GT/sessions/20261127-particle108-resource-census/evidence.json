@@ -1,0 +1,47 @@
+{
+  "status": "PASS_AUTHORED_PARTICLE108_RESOURCE_CENSUS_AND_SPIRV_PARITY",
+  "run_id": 45938971358,
+  "job_id": 140308763652,
+  "head": "7a42c79f4fdad26e1231ccd7b01e8c8c6005ad43",
+  "conclusion": "success",
+  "guard_run_id": 45938971386,
+  "artifact_id": 15172230939,
+  "archive": "clients/GT/sessions/20261127-particle108-resource-census/actual-run-45938971358.zip",
+  "archive_bytes": 3042,
+  "archive_sha256": "308b44f7731087a60872f340b207cc5e0894c49401f618c4e27d097ea6fd5115",
+  "archive_git_blob": "249d6d83aacf1ab4f1e8cc7441ce3297d8c04eb1",
+  "archive_crc_sha_size_verified_locally": true,
+  "member_sha256": {
+    "depth-tests.log": "dce89ff05af79baf942bd680aa8f8c2833d61b363ad7dcb15976a396e264929e",
+    "particle-compiler.json": "d9814bc2ebb7acefca9590be86d7051e0a3bfcdb9f563d274228fe000bb4d039",
+    "particle-tests.log": "15d3204ba2056e28aab53d1118ae5d3a36526f00c88a423786254e09ff897ba1",
+    "source-tests.log": "6e9198ae3815785a5dbb3f6a94990b90e18323aadbef312a8895b6f0793ffe90"
+  },
+  "unit_tests": 50,
+  "particle_unit_tests": 37,
+  "shared_resource_unit_tests": 10,
+  "depth_regressions": 3,
+  "actual_glslang_compilations": 7,
+  "actual_spirv_validations": 7,
+  "actual_spirv_normalizations": 7,
+  "positive_cases": [
+    "bare",
+    "space0",
+    "comment"
+  ],
+  "positive_stripped_spirv_sha256": "5a577b9e4940da64f940235c72bd569279f32d4c54986c644967b6c045baf7ae",
+  "negative_controls": [
+    "wrong_valid_resource_pair",
+    "nonzero_texture_space",
+    "unregistered_texture",
+    "descriptor_array",
+    "texture_wrong_register_class",
+    "duplicate_translated_slot"
+  ],
+  "negative_controls_rejected": 6,
+  "actual_original_DXBC_or_RDEF_used": false,
+  "original_assets_read": false,
+  "original_fire_or_white_mesh_repaired": false,
+  "Unity_or_Android_pixels_verified": false,
+  "XAPK_requested": false
+}
