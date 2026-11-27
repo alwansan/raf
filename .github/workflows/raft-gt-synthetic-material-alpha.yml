@@ -14,6 +14,7 @@ on:
           - resource-bindings
           - resource-pixels
           - fft-coordinate
+          - fft-coordinate-replay
   push:
     branches: [feature/android-native-port]
     paths:
@@ -32,7 +33,7 @@ concurrency:
 
 jobs:
   synthetic-pixels:
-    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 30
@@ -749,3 +750,89 @@ jobs:
           if test -f synthetic-fft-coordinate-project/CandidateCompiler.txt; then
             sudo rm -rf synthetic-fft-coordinate-project
           fi
+
+  fft-coordinate-replay:
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'fft-coordinate-replay'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    permissions:
+      contents: read
+      actions: read
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only source tools and authored receipt review
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /scripts/gt_decode_smolv.cpp
+            /tools/synthetic_material_alpha/fft_coordinate_probe.py
+            /tools/synthetic_material_alpha/fft_coordinate_artifact_replay.py
+            /clients/GT/sessions/20261127-fft-coordinate-diagnostic/review_coordinate_artifacts.py
+            /clients/GT/sessions/20261127-fft-coordinate-diagnostic/artifact-review.json
+      - name: Fetch only two pinned authored Actions archives
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          mkdir authored-fft-inputs authored-fft-replay-results
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/45935871773" > authored-fft-inputs/run.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15171100631" > authored-fft-inputs/dxc-meta.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15170637402" > authored-fft-inputs/hlslcc-meta.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('authored-fft-inputs')
+          r=json.loads((root/'run.json').read_text())
+          assert r['id']==45935871773 and r['head_sha']=='5b6f8f21627269d946aa549cd7055384914cdf82'
+          assert r['status']=='completed' and r['conclusion']=='failure'
+          for mode,ident,digest in [('dxc',15171100631,'eedccb8afa34ca208604c111b232ea42bb7f91c0cab01d409253d7a4e8ee5972'),('hlslcc',15170637402,'95afbce3a5afb5073023caae625aabeda5b2fa7ed74c4c08aa025fc180558d6c')]:
+              a=json.loads((root/(mode+'-meta.json')).read_text())
+              assert a['id']==ident and a['digest']=='sha256:'+digest and not a['expired']
+              assert a['name']=='gt-authored-fft-coordinate-'+mode+'-45935871773'
+          PY
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15171100631/zip" > authored-fft-inputs/dxc.zip
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15170637402/zip" > authored-fft-inputs/hlslcc.zip
+          printf '%s\n' 'eedccb8afa34ca208604c111b232ea42bb7f91c0cab01d409253d7a4e8ee5972  authored-fft-inputs/dxc.zip' '95afbce3a5afb5073023caae625aabeda5b2fa7ed74c4c08aa025fc180558d6c  authored-fft-inputs/hlslcc.zip' | sha256sum -c -
+      - name: Install public bundle and SPIR-V inspection tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends spirv-tools
+          python3 -m venv "$RUNNER_TEMP/gt-fft-replay-venv"
+          "$RUNNER_TEMP/gt-fft-replay-venv/bin/python" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          smolv="$RUNNER_TEMP/gt-fft-replay-smolv"
+          mkdir "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+      - name: Validate every referenced module and inspect actual keyword table without changing original gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/gt-fft-replay-venv/bin/python" -B tools/synthetic_material_alpha/fft_coordinate_artifact_replay.py \
+            --decoder "$RUNNER_TEMP/gt-fft-replay-smolv/decode" \
+            --run-id-prefix 45935871773-1-5b6f8f21627269d946aa549cd7055384914cdf82 \
+            --dxc authored-fft-inputs/dxc.zip --dxc-sha256 eedccb8afa34ca208604c111b232ea42bb7f91c0cab01d409253d7a4e8ee5972 --dxc-job-success 0 \
+            --hlslcc authored-fft-inputs/hlslcc.zip --hlslcc-sha256 95afbce3a5afb5073023caae625aabeda5b2fa7ed74c4c08aa025fc180558d6c --hlslcc-job-success 0 \
+            --out authored-fft-replay-results/diagnostic.json
+      - name: Retain authored diagnostic report only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-authored-fft-coordinate-replay-${{ github.run_id }}
+          path: authored-fft-replay-results/*.json
+          if-no-files-found: warn
+          retention-days: 14
