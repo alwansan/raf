@@ -1,4 +1,216 @@
 {
+  "latest_particle108_local_document_pixels": {
+    "status": "PASS_AUTHORED_ACTUAL_BINARY_PARTICLE108_DOCUMENT_LOCAL_TOP_MIP_DIAGNOSTIC",
+    "starting_head": "de4d4989cdadb30c55fcc9296fb5fcda5babe1ac",
+    "preparation_commit": "bc1c75ad6a8fe919d8d57cd6fa1b57c575aa857d",
+    "tested_head": "6957926f5ba8d7a97c9e897e5f23725a2cc5bac4",
+    "run_id": 46032368113,
+    "job_id": 140619096557,
+    "guard_run_id": 46032367949,
+    "guard_job_id": 140619096444,
+    "conclusion": "success",
+    "artifact_id": 15214587876,
+    "artifact_bytes": 107940,
+    "artifact_sha256": "2fe51a7e417ed8ccaab5c7a31ef48c01175de3d62c6294045af6ef638f22e8dc",
+    "artifact_members": 88,
+    "permanent_archive": "clients/GT/sessions/20261127-particle108-local-document-pixels/actual-evidence-46032368113.zip",
+    "permanent_archive_bytes": 68619,
+    "permanent_archive_sha256": "2f9d2524f054b518937bc0c942b699e3afe48283164277a96849a1a81de3a73e",
+    "permanent_archive_git_blob": "58740f3eb7a4cb4c3820c0a8d27c4feec0894044",
+    "permanent_archive_members": 87,
+    "local_size_SHA_CRC_and_all_inner_member_bytes_verified": true,
+    "locally_verified_object_payload_instances": 45,
+    "locally_verified_owner_instances": 5,
+    "locally_verified_provider_instances": 5,
+    "locally_verified_manifest_git_blobs": 5,
+    "locally_verified_local_top_mip_comparisons": 5,
+    "locally_verified_external_PNG_instances": 10,
+    "unitypy": "1.23.0",
+    "Pillow": "11.3.0",
+    "PyYAML": "6.0.3",
+    "unity_version": "2021.3.0f1",
+    "serialized_file_version": 22,
+    "regressions": {
+      "B05": 31,
+      "particle108_alpha_provenance": 16,
+      "particle108_export_alpha_diagnostic": 10,
+      "particle108_source_pixel_parity": 20,
+      "particle108_local_document_pixels": 22,
+      "total": 99
+    },
+    "new_tests": 22,
+    "report_count": 25,
+    "exact_three_target_reports": 7,
+    "unproven_local_reports": 14,
+    "pixel_drift_reports": 3,
+    "dimension_mismatch_reports": 1,
+    "duplicate_anchor_exception_control": 1,
+    "numeric_hex_lexeme_control": 1,
+    "report_statuses": {
+      "exact": [
+        "rgba32-compiled",
+        "rgba32-python",
+        "bc3-compiled",
+        "bc3-python",
+        "bc3-converted",
+        "inline",
+        "lower-mip-only"
+      ],
+      "pixel_drift": [
+        "alpha-loss",
+        "vertical-flip",
+        "transparent-rgb-drift"
+      ],
+      "dimension_mismatch": [
+        "dimensions"
+      ],
+      "unproven": [
+        [
+          "bad-hex",
+          "local_export_payload_hex_mismatch"
+        ],
+        [
+          "bad-length",
+          "local_export_payload_length_mismatch"
+        ],
+        [
+          "class-15",
+          "local_document_wrong_class_or_stripped"
+        ],
+        [
+          "class-23",
+          "local_document_wrong_class_or_stripped"
+        ],
+        [
+          "duplicate-guid",
+          "local_document_duplicate_meta_guid"
+        ],
+        [
+          "duplicate-payload",
+          "local_document_duplicate_or_invalid_key"
+        ],
+        [
+          "export-provider",
+          "local_export_stream_not_authenticated"
+        ],
+        [
+          "malformed-header",
+          "local_document_invalid_serialized_header"
+        ],
+        [
+          "snapshot-drift",
+          "local_document_material_snapshot_drift"
+        ],
+        [
+          "stale-source-provider",
+          "pinned_pixel_provider_SHA_mismatch"
+        ],
+        [
+          "trace-collision",
+          "local_texture_global_trace_collision"
+        ],
+        [
+          "unscoped-trace",
+          "local_texture_document_route_unproved"
+        ],
+        [
+          "unsupported-usage",
+          "local_texture_unsupported_usage"
+        ],
+        [
+          "yaml-anchor",
+          "local_document_yaml_alias_or_anchor"
+        ]
+      ]
+    },
+    "source_fixture": {
+      "objects": 9,
+      "materials": 5,
+      "textures": 3,
+      "shader_identity": 1,
+      "texenv_slots": 10,
+      "local_document_texture_slots": 3,
+      "external_texture_slots": 7,
+      "source_census_derived_from_actual_binary": true,
+      "original_scene_selection_mocked_to_authored_census": true,
+      "original_pin_constants_replaced_only_in_tests": true,
+      "actual_UnityPy_parser": true,
+      "actual_compiled_and_python_typetree_backends": true,
+      "actual_export_document_parser": true,
+      "actual_B05_join": true,
+      "actual_source_resource_pin_and_manifest_binding": true,
+      "actual_AssetRipper_export": false,
+      "authored_multi_document_YAML": true,
+      "RGBA32": {
+        "owner_bytes": 2180,
+        "owner_sha256": "7c6ea554103b7b916b0c2d62eb8cb26998062e8da875a32b35ea64f4630eb000",
+        "provider_bytes": 43,
+        "provider_sha256": "30422155429efea1268c33565e4a1d61daf2de64e388ff2129974e6be3cd7bd3",
+        "local_pixels": 6,
+        "source_mips": 2
+      },
+      "BC3": {
+        "owner_bytes": 2180,
+        "owner_sha256": "e07b07ed582123103041a7224689076c9cea8234941823743a894648ec26a501",
+        "provider_bytes": 95,
+        "provider_sha256": "0ccbdf7c5e81103f4c783e9b4226d31ddc67f6d321faaf7ef9d1c143d274ea56",
+        "local_pixels": 35,
+        "source_mips": 2
+      },
+      "two_external_PNGs_exact_in_all_25_reports": true
+    },
+    "alpha_loss_control": {
+      "coordinate_pixels": 6,
+      "nonopaque_population_loss": 5,
+      "all_source_transparency_lost": true,
+      "RGB_equal": true
+    },
+    "vertical_flip_control": {
+      "coordinate_pixels": 6,
+      "alpha_flip_only_match": true,
+      "nonopaque_population_loss": 0
+    },
+    "lower_mip_only_positive_scope": true,
+    "production_diagnostic_extended": true,
+    "B05_general_parser_changed": false,
+    "existing_original_workflow_not_triggered": true,
+    "original_game_data_read": false,
+    "original_particle108_third_comparison": false,
+    "historical_nonexportable": {
+      "classification_run": 42132262184,
+      "classification_job": 127611530228,
+      "exact_container_pointer_run": 42134436841,
+      "pointer_job": 127618876019,
+      "collection_exportable_false_targets": 1,
+      "exact_container_pointer_slots": 1,
+      "all_ten_exact_pointer_slots_historical": true,
+      "external_alpha_run": 43777398215,
+      "external_alpha_job": 133006699574,
+      "local_source_alpha_run": 43778717548,
+      "local_source_alpha_job": 133011142731,
+      "original_exported_third_payload_proven": false,
+      "original_missing_texture_proven": false,
+      "original_source_authorization_newly_available": false
+    },
+    "local_serialized_proof_not_PNG": true,
+    "supported_ordinary_formats": [
+      4,
+      12
+    ],
+    "unsupported_export_streams_fail_closed": true,
+    "special_usages_fail_closed": true,
+    "lower_mip_parity_verified": false,
+    "Unity_import_or_GPU_verified": false,
+    "device_verified": false,
+    "XAPK_requested": false,
+    "production_activation": false,
+    "gate_closures": [],
+    "historical_non_dummy": 688,
+    "historical_total": 786,
+    "historical_dummy": 98,
+    "historical_dummy_guids": 37,
+    "next_action": "G5-Particle108-nonexportable-collection-cause-and-authorized-recovery: now that the valid document-local native Texture2D diagnostic exists, do not repeat it or assume the historical third target is a serialized local document. Historical T3 runs 42132262184 and 42134436841 actually classified the third selected original Texture2D28 in collection.Exportable=false and verified its exact container.CreateExportPointer to tenth Material TexEnv; 43777398215/43778717548 only add two actual images and third source alpha, not an export payload. Read retained safe T3 receipts/docs, gt_particle108_export_alpha_diagnostic, t3_stage_particle_nonexportable_trace, t3_particle_same_export_bindings and exact pinned public AssetRipper collection-selection/export-pointer code; distinguish documented built-in/nonexportable semantics from missing or wrongly suppressed real texture data, locate the precise source-only actionable cause or an explicit authorized-input requirement. If a distinct concrete exporter/instrumentation gap exists, prove it with a narrowly authored binary case and safe numeric evidence; never force export, invent a separate GUID, replace the original texture, or claim original pixel restoration from authored evidence. If classification cannot advance without authorized original data, record the exact minimum approved input + same-instance receipt needed and move to original FFT/kernel6 or another actionable visual gate instead of redundant synthetic runs. A3 and third original Particle108 comparison remain blocked, original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 open; 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. No unauthorized acquisition, secrets/LFS, CL/lab writes, BLACK, animation, production, Unity/device/APK/XAPK/native request/installer until owner gates met. Preserve Ali pinned reference."
+  },
   "latest_authored_external_bc3_normal": {
     "status": "PASS_ACTUAL_SERIALIZED_BC3_DXT5NM_EXTERNAL_STREAMS",
     "starting_head": "1ec236c3ca5a7edbc6d3896c07baf4ab96d51c1f",
