@@ -24,7 +24,7 @@ with warnings.catch_warnings():
                             category=DeprecationWarning, module=r"UnityPy\.helpers\.Tpk")
     import UnityPy
 from UnityPy.helpers import TypeTreeHelper
-from UnityPy.helpers.Tpk import get_typetree_node, UnityVersion
+from UnityPy.helpers.Tpk import get_typetree_node
 
 from scripts import gt_verify_original_mesh_export as mesh
 
@@ -174,7 +174,7 @@ def decode(raw,payload,boost):
     env=UnityPy.load(raw)
     owner=env.file
     need(type(owner).__name__=="SerializedFile" and owner.header.version==22,"not_real_serialized_file")
-    need(owner.unity_version==UNITY and list(owner.objects)==[PATH_ID],"wrong_authored_owner_identity")
+    need(owner.unity_version==UNITY and tuple(owner.version)==(2021,3,0,1) and list(owner.objects)==[PATH_ID],"wrong_authored_owner_identity")
     obj=owner.objects[PATH_ID]
     need(obj.type.name=="Mesh" and obj.byte_size==len(payload),"wrong_real_mesh_object")
     need(obj.get_raw_data()==payload,"object_payload_not_exact")
@@ -246,7 +246,9 @@ def run(out):
     need(version("UnityPy")=="1.23.0","decoder_version_mismatch")
     boost=TypeTreeHelper.read_typetree_boost
     need(callable(boost),"compiled_typetree_decoder_unavailable")
-    node=get_typetree_node(CLASS,UnityVersion.from_str(UNITY))
+    # Match the actual 1.23.0 ObjectReader fallback (tuple API, before 807f388).
+    # https://github.com/K0lb3/UnityPy/commit/807f3888b8a2ddaa6504fca0737481baab4d6a99
+    node=get_typetree_node(CLASS,(2021,3,0,1))
     need(node.m_Type=="Mesh","public_schema_not_mesh")
     schema=schema_rows(node)
     out.mkdir(parents=True,exist_ok=True)

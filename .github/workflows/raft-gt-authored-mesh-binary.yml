@@ -1,3 +1,4 @@
+# Match actual 1.23.0 ObjectReader version tuple API before upstream change 807f388.
 # Use the installed 1.23.0 TPK version type, not the newer module path.
 # Retry after exact UnityPy import warning handling; geometry receipt field count corrected.
 # Isolated real authored Mesh binary witness; no original game acquisition.
