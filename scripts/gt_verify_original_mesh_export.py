@@ -14,7 +14,7 @@ import struct
 from scripts.gt_stage_serialized_owners import OWNERS
 from scripts.gt_particle108_source_pixel_parity import verified_range
 from scripts.gt_zip2_payloads import manifest
-from scripts.verify_exported_material_texture_links import HEADER, GUID
+from scripts.verify_exported_material_texture_links import SERIALIZED_MARKER, SERIALIZED_HEADER, GUID
 
 HEX32 = re.compile(r"[0-9a-f]{32}\Z")
 CHANNEL_FIELDS = ("stream", "offset", "format", "dimension")
@@ -116,17 +116,58 @@ def hex_payload(value):
     return bytes.fromhex(value)
 
 
+def full_mesh_document_body(text, fid):
+    """Bind a single, non-stripped Mesh document to its exact signed fileID."""
+    if type(fid) is not int or fid == 0 or not -(2**63) <= fid < 2**63:
+        raise ValueError("wrong_exported_mesh_yaml_identity")
+    markers = list(SERIALIZED_MARKER.finditer(text))
+    if len(markers) != 1:
+        raise ValueError("wrong_exported_mesh_yaml_identity")
+    marker = markers[0]
+    header = SERIALIZED_HEADER.fullmatch(marker.group())
+    if (header is None or int(header[1]) != 43 or int(header[2]) != fid
+            or header[3] is not None):
+        raise ValueError("wrong_exported_mesh_yaml_identity")
+    # Only the canonical optional Unity directives, blank lines and comments
+    # may precede this header. Do not erase arbitrary directives or documents.
+    seen = set()
+    for line in text[:marker.start()].splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        if re.fullmatch(r"%YAML[ \t]+1\.1[ \t]*", line):
+            key = "yaml"
+        elif re.fullmatch(r"%TAG[ \t]+!u![ \t]+tag:unity3d\.com,2011:[ \t]*", line):
+            key = "tag"
+        else:
+            raise ValueError("wrong_exported_mesh_yaml_identity")
+        if key in seen:
+            raise ValueError("wrong_exported_mesh_yaml_identity")
+        seen.add(key)
+    return text[marker.end():]
+
+
+def require_inline_export_storage(tree, payload):
+    vertex = tree["m_VertexData"]
+    length = vertex["m_DataSize"]
+    stream = tree["m_StreamData"]
+    # Legacy inline fixtures omit path/offset; the explicit fields, when
+    # present, must be canonical empty/zero. Booleans/floats are not integers.
+    if type(stream) is not dict or type(length) is not int or length != len(payload):
+        raise ValueError("invalid_exported_mesh_vertex_storage")
+    size, offset, name = stream.get("size"), stream.get("offset", 0), stream.get("path")
+    if (type(size) is not int or size != 0 or type(offset) is not int or offset != 0
+            or not (name is None or (type(name) is str and name == ""))):
+        raise ValueError("invalid_exported_mesh_vertex_storage")
+
+
 def export_geometry(path, fid):
     from scripts.compare_exported_mesh_geometry import load_mesh_yaml
 
     text = path.read_text(encoding="utf-8-sig")
-    if [(int(h[1]), int(h[2])) for h in HEADER.finditer(text)] != [(43, fid)]:
-        raise ValueError("wrong_exported_mesh_yaml_identity")
-    tree = load_mesh_yaml(text)
+    tree = load_mesh_yaml(full_mesh_document_body(text, fid), document_body=True)
     vertex = tree["m_VertexData"]
     payload = hex_payload(vertex["_typelessdata"])
-    if vertex["m_DataSize"] != len(payload) or tree["m_StreamData"]["size"] != 0:
-        raise ValueError("invalid_exported_mesh_vertex_storage")
+    require_inline_export_storage(tree, payload)
     indices = hex_payload(tree["m_IndexBuffer"])
     return geometry(tree, payload, indices, exported=True)
 

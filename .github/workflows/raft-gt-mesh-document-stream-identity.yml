@@ -1,0 +1,123 @@
+name: GT full Mesh document and inline stream identity (NO original assets)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-mesh-document-stream-identity.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mesh-document-stream:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout authored code and existing geometry fixtures only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tests/test_gt_mesh_document_stream_identity.py
+            /tests/test_gt_mesh_yaml_unique_mapping.py
+            /tests/test_compare_exported_mesh_geometry.py
+            /tests/test_gt_verify_original_mesh_export.py
+            /tests/test_gt_mesh_vertex_payload.py
+            /tests/test_gt_renderer_submesh_routes.py
+            /android-port/Experiments/ExportLineage/
+            /.github/workflows/raft-gt-mesh-document-stream-identity.yml
+      - name: Checkout immutable previous consumer and loader
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: c7dadb491261b8ed2f0e10d111dcd6a646f6d912
+          path: baseline-source
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tests/test_gt_verify_original_mesh_export.py
+      - name: Install pinned public Python dependencies
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test ! -e baseline-source/Raft
+          test ! -e baseline-source/.gt-zip2
+          mkdir mesh-document-stream-evidence
+          python3 -m venv "$RUNNER_TEMP/gt-mesh-document-python"
+          py="$RUNNER_TEMP/gt-mesh-document-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check PyYAML==6.0.3 Pillow==11.3.0
+          "$py" -c 'import yaml,sys; assert yaml.__version__=="6.0.3" and yaml.__with_libyaml__; print(sys.version); print("PyYAML",yaml.__version__,"libyaml",yaml.__with_libyaml__)' | tee mesh-document-stream-evidence/tools.log
+      - name: Reproduce identical geometry despite inconsistent document and storage
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-mesh-document-python/bin/python"
+          cp tests/test_gt_mesh_document_stream_identity.py baseline-source/tests/
+          test "$(git -C baseline-source rev-parse HEAD)" = c7dadb491261b8ed2f0e10d111dcd6a646f6d912
+          test "$(git hash-object baseline-source/scripts/gt_verify_original_mesh_export.py)" = 1570d9356b6aaf1a1d753c1a7238e8ad577eddc7
+          test "$(git hash-object baseline-source/scripts/compare_exported_mesh_geometry.py)" = 01b4b712fec397fe04c2454c231fac9e804d8066
+          cd baseline-source
+          "$py" -B - <<'PY' 2>&1 | tee ../mesh-document-stream-evidence/baseline.log
+          import json,sys,tempfile
+          from pathlib import Path
+          from unittest.mock import patch
+          import yaml
+          sys.path.insert(0,"tests")
+          from test_gt_mesh_document_stream_identity import cases,backends,YAML,FID,export_geometry
+          rows=[]
+          variants=cases()
+          assert len(variants)==23 and len({r[0] for r in variants})==23
+          with tempfile.TemporaryDirectory() as tmp:
+              path=Path(tmp)/"authored.asset"
+              for label,loader in backends():
+                  with patch.object(yaml,"CSafeLoader",loader):
+                      path.write_text(YAML)
+                      expected=export_geometry(path,FID)
+                      for name,text,fid,reason in variants:
+                          path.write_text(text)
+                          assert export_geometry(path,fid)==expected,(label,name)
+                          rows.append({"backend":label,"case":name,"old_geometry_equal_clean":True,"fixed_reason":reason})
+                          print("GT_OLD_FALSE_ACCEPT",label,name)
+          assert len(rows)==46
+          Path("../mesh-document-stream-evidence/baseline.json").write_text(json.dumps({"base":"c7dadb491261b8ed2f0e10d111dcd6a646f6d912","old_consumer_blob":"1570d9356b6aaf1a1d753c1a7238e8ad577eddc7","old_loader_blob":"01b4b712fec397fe04c2454c231fac9e804d8066","distinct_cases":23,"backends":2,"old_false_acceptances":46,"cases":rows},indent=2,sort_keys=True)+"\n")
+          PY
+      - name: Test fixed consumer and earlier geometry suites
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-mesh-document-python/bin/python"
+          for f in test_gt_mesh_document_stream_identity.py test_gt_mesh_yaml_unique_mapping.py test_compare_exported_mesh_geometry.py test_gt_verify_original_mesh_export.py test_gt_mesh_vertex_payload.py test_gt_renderer_submesh_routes.py; do
+            "$py" -B -W error -m unittest discover -s tests -p "$f" -v 2>&1 | tee "mesh-document-stream-evidence/$f.log"
+          done
+          "$py" -B - <<'PY'
+          import json,re,hashlib
+          from pathlib import Path
+          root=Path("mesh-document-stream-evidence")
+          tests={}
+          for f in ("test_gt_mesh_document_stream_identity.py","test_gt_mesh_yaml_unique_mapping.py","test_compare_exported_mesh_geometry.py","test_gt_verify_original_mesh_export.py","test_gt_mesh_vertex_payload.py","test_gt_renderer_submesh_routes.py"):
+              log=(root/(f+".log")).read_text()
+              count=re.search(r"^Ran (\d+) tests? in ",log,re.M)
+              assert count and re.search(r"^OK$",log,re.M),f
+              tests[f]=int(count[1])
+          assert tests["test_gt_mesh_document_stream_identity.py"]==8
+          report={"status":"PASS_AUTHORED_MESH_DOCUMENT_STREAM_IDENTITY","tests":tests,"total_tests":sum(tests.values()),"distinct_cases":23,"yaml_backends":2,"old_false_acceptances":46,"fixed_rejections":46,"scope":"actual export_geometry consumer, full Mesh YAML identity and inline storage declaration on authored fixtures","original_assets_read":False,"original_geometry_verified":False,"unity_or_device_tested":False,"XAPK_requested":False,"consumer_sha256":hashlib.sha256(Path("scripts/gt_verify_original_mesh_export.py").read_bytes()).hexdigest(),"loader_sha256":hashlib.sha256(Path("scripts/compare_exported_mesh_geometry.py").read_bytes()).hexdigest(),"test_sha256":hashlib.sha256(Path("tests/test_gt_mesh_document_stream_identity.py").read_bytes()).hexdigest()}
+          (root/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - name: Retain exact before and after logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-mesh-document-stream-identity-${{ github.run_id }}
+          path: mesh-document-stream-evidence/
+          if-no-files-found: warn
+          retention-days: 14

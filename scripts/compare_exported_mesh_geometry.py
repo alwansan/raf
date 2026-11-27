@@ -10,7 +10,7 @@ import re
 import struct
 
 
-def load_mesh_yaml(text):
+def load_mesh_yaml(text, *, document_body=False):
     import yaml
     matrix_fields = {f"e{row}{column}" for row in range(4) for column in range(4)}
 
@@ -40,9 +40,19 @@ def load_mesh_yaml(text):
                     value.tag = 'tag:yaml.org,2002:float'
                 mapping[key] = self.construct_object(value, deep=deep)
             return mapping
-    text = re.sub(r'(?m)^%[^\n]*\n', '', text)
-    text = re.sub(r'(?m)^--- !u!43 &[^\n]*', '---', text)
-    return yaml.load(text, Loader=MeshLoader)['Mesh']
+    if not document_body:
+        text = re.sub(r'(?m)^%[^\n]*\n', '', text)
+        text = re.sub(r'(?m)^--- !u!43 &[^\n]*', '---', text)
+    try:
+        document = yaml.load(text, Loader=MeshLoader)
+    except yaml.YAMLError:
+        if document_body:
+            raise ValueError("invalid_exported_mesh_yaml_body") from None
+        raise
+    if document_body and (type(document) is not dict or set(document) != {"Mesh"}
+                          or type(document["Mesh"]) is not dict):
+        raise ValueError("wrong_exported_mesh_yaml_identity")
+    return document["Mesh"]
 
 
 def positions(tree):
