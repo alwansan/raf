@@ -1307,7 +1307,7 @@
   "current_handoff": {
     "date": "2026-11-27",
     "reviewed_remote_head": "e3e3ca06b604aa07b90a1934aa695207be2e46a6",
-    "purpose": "V14 actual authored alpha policy cause proved; V15 selective opt-in public exporter candidate CI in progress; original acceptance blocked",
+    "purpose": "Actual authored V15 selective exporter policy proved; V16 exact unmodified candidate Unity reimport next; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
     "index": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/README_AR.md",
@@ -4198,7 +4198,8 @@
     "latest_actual_authored_v13_run": 45970415390,
     "latest_v14_run": 45972362899,
     "latest_actual_authored_v14_run": 45972362899,
-    "latest_v15_run": 45975084812
+    "latest_v15_run": 45975084812,
+    "latest_actual_authored_v15_run": 45975084812
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date.",
   "v9_importer_state_checkpoint": {
@@ -5485,17 +5486,19 @@
     "evidence": "clients/GT/sessions/20261127-dxt5nm-texel-policy-v14/actual-pass-45972362899.json"
   },
   "v15_dxt5nm_alpha_exporter_checkpoint": {
-    "status": "V15_SELECTIVE_AUTHORED_EXPORTER_CI_IN_PROGRESS",
+    "status": "PASS_ACTUAL_AUTHORED_SELECTIVE_DXT5NM_PNG_EXPORTER_ALPHA_POLICY",
     "starting_head": "5eb4f91f25e2883c0cb064cd1b088d7c90a1fe10",
     "prior_v14_pass_head": "46bcce298d077cedd8e78247066c40d3e1189292",
     "activation_head": "e3e3ca06b604aa07b90a1934aa695207be2e46a6",
     "run": {
       "id": 45975084812,
+      "job": 140424699719,
       "head": "e3e3ca06b604aa07b90a1934aa695207be2e46a6",
-      "status": "in_progress",
+      "status": "completed",
+      "conclusion": "success",
       "compatibility_guard": {
         "id": 45975085164,
-        "status": "in_progress"
+        "conclusion": "success"
       }
     },
     "planned_regressions": 283,
@@ -5504,13 +5507,21 @@
     "planned_actual_exports": 6,
     "planned_normalmap_changes": 2,
     "planned_ordinary_unchanged": 4,
-    "actual_candidate_policy_verified": false,
+    "actual_candidate_policy_verified": true,
     "production_activation": false,
     "Unity_reimport_of_candidate_verified": false,
     "original_assets_read": false,
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/README_AR.md",
-    "next": "G1-G2-selective-DXT5nm-PNG-alpha-policy-exporter-binding (V15): inspect actual run 45975084812, verify candidate and ordinary controls/metadata/PNG hashes; if successful next Unity reimport exact corrected exporter output without manual alpha edit. No production enablement until authorized original-source proof."
+    "next": "V16: licensed authored Unity direct texel reimport of actual V15 corrected exporter metadata, no manual alpha edits. Compare each actual mip hash and exact same-route texture/material/mesh/adapter identity to V14 alpha_off; retain historical V12 original policy as separate, preserve ordinary policy. No original source or production activation.",
+    "source_regressions": 283,
+    "actual_v11_v12_controls": 37,
+    "actual_v15_controls": 6,
+    "actual_compiled_exporter_modes": 6,
+    "actual_normalmap_policy_changes": 2,
+    "actual_ordinary_policy_unchanged": 4,
+    "source_bytes_unchanged": true,
+    "evidence": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/actual-pass-45975084812.json"
   }
 }
