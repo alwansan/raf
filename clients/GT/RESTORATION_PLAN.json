@@ -1306,13 +1306,13 @@
   },
   "current_handoff": {
     "latest_keyword_candidate_bundle_run": {
-      "id": 45992643749,
-      "job": 140484089089,
-      "head": "de0ac1de51e06cbb8fd60426ee3478d13eb2d093",
-      "status": "in_progress",
-      "conclusion": null,
+      "id": 45994668802,
+      "job": 140490955513,
+      "head": "68aa975b39d1bda359d1446bdc44a0938087abc7",
+      "status": "completed",
+      "conclusion": "success",
       "compatibility_guard": {
-        "id": 45992643947,
+        "id": 45994668695,
         "conclusion": "success"
       }
     },
@@ -1361,8 +1361,8 @@
       }
     },
     "date": "2026-11-27",
-    "reviewed_remote_head": "de0ac1de51e06cbb8fd60426ee3478d13eb2d093",
-    "purpose": "G3 second run cancelled before actual Unity; bounded identical candidate Editor Vulkan retry; original acceptance blocked",
+    "reviewed_remote_head": "68aa975b39d1bda359d1446bdc44a0938087abc7",
+    "purpose": "G3 actual authored Android Vulkan bundle verified via independent combined stage replay; original runtime acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
     "index": "clients/GT/sessions/20261127-keyword-candidate-bundle/README_AR.md",
@@ -1618,8 +1618,8 @@
     },
     "active_fallback_workstream": {
       "id": "G3-original-runtime-keyword-migration",
-      "status": "CANDIDATE_ONLY_AUTHORED_BOUNDED_VULKAN_EDITOR_RETRY_IN_PROGRESS_ORIGINAL_ACCEPTANCE_BLOCKED",
-      "next": "Inspect bounded actual retry 45992643749 at immutable de0ac1de51e06cbb8fd60426ee3478d13eb2d093. Retains byte-identical candidate/contract, mandatory actual Unity Vulkan and shader support, exact scope/PassType/callback/decoded module evidence. Distinguish image build timeout, Editor startup/backend failure, actual registration failure, and real serialized stage failure; retain exact artifacts and final log. If this bounded retry is blocked, do not launch the same expensive job repeatedly; classify blocker and switch to the next independent productive G3/G4/Particle108 work permitted by verified source authorization, or request the precise missing source/runner prerequisite. A3 original authorization/provenance remains blocked. No original acquisition, production, legacy installer changes or APK/XAPK. Preserve Ali's pinned reference, white meshes/black fire, water and remaining G0–G6 priorities.",
+      "status": "PASS_ACTUAL_AUTHORED_UNITY_BUNDLE_COMBINED_JOIN_ORIGINAL_ACCEPTANCE_BLOCKED",
+      "next": "G3 candidate-only actual authored mixed-scope Android Vulkan bundle acceptance is complete in its exact one named Always/Normal pass scope. Do not repeat this authored Unity job merely to generate another receipt. Original runtime migration still requires independently verified authorization/provenance (A3), source-specific pass/scope/fixed macro/instancing or sparse lattice semantics, independently established original-to-candidate stage identities, original material runtime selection, same-export protected hashes, actual NEXT23b and ten-group integration evidence. Next productive independent work: inspect Particle108 original local export-alpha binding historical evidence and the existing exporter/census/receipt tools, then complete the missing third exported top-mip comparison only with already authorized private bytes; if those bytes or authorization are absent, preserve the precise blocker and work on a genuinely independent G4/G0–G6 source-independent repair that does not assert original equivalence. Prioritize white meshes, black fire and water; no original acquisition, production activation, installer changes, APK/XAPK, phone, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference.",
       "previous_V11_V17_authored_witnesses_preserved": true
     },
     "latest_resource_binding_pixel_run": {
@@ -5962,33 +5962,33 @@
     "next": "G3 candidate-only next: add a separate strict Unity bundle/receipt join for the prepared candidate (source pass mode versus observed Unity PassType, exact active keyword sets including local/global scope and actual stage program identities, candidate/input SHA and no projection). Reuse existing authored Unity evidence where its scope is exact; no automatic scope/flag mapping or proof from source hashes alone. Sparse lattices, unmatched stages and instancing remain explicit blocked cases until source-specific semantics. A3 remains blocked on independently verified authorization and original provenance; no original assets acquisition, production activation, installer changes or XAPK. Then actual NEXT23b and ten-group migration with authorized private packets, same-export protected hashes and real runtime evidence; Particle108 local export alpha and water/other G0–G6 open."
   },
   "keyword_candidate_bundle_checkpoint": {
-    "status": "IN_PROGRESS_AUTHORED_CANDIDATE_UNITY_BUNDLE_BOUNDED_RETRY",
+    "status": "PASS_ACTUAL_AUTHORED_CANDIDATE_UNITY_ANDROID_VULKAN_BUNDLE_COMBINED_JOIN",
     "starting_head": "d7d9fe9113a528fc6671abdb30d7548425dff42a",
     "contract_head": "f75492503be745cb1f740cde7c7ce6938cb4fbde",
     "probe_head": "4849e0c725355b87ffdef84790d7fd93f29f4070",
     "activation_head": "b4cb8a5b56d8ae93197ba7e1f36b0a87d58ce0e7",
     "run": {
-      "id": 45992643749,
-      "job": 140484089089,
-      "head": "de0ac1de51e06cbb8fd60426ee3478d13eb2d093",
-      "status": "in_progress",
-      "conclusion": null,
+      "id": 45994668802,
+      "job": 140490955513,
+      "head": "68aa975b39d1bda359d1446bdc44a0938087abc7",
+      "status": "completed",
+      "conclusion": "success",
       "compatibility_guard": {
-        "id": 45992643947,
+        "id": 45994668695,
         "conclusion": "success"
       }
     },
-    "actual_source_regressions": 42,
-    "actual_new_source_tests": 13,
+    "actual_source_regressions": 46,
+    "actual_new_source_tests": 17,
     "actual_previous_tests": 29,
     "source_regression_step": "success",
     "planned_authored_passes": 1,
     "planned_exact_routes": 4,
     "planned_stage_markers": 8,
     "planned_actual_bundle_controls": 3,
-    "actual_Unity_bundle_verified": false,
-    "actual_scope_observations_verified": false,
-    "actual_decoded_stage_identity_verified": false,
+    "actual_Unity_bundle_verified": true,
+    "actual_scope_observations_verified": true,
+    "actual_decoded_stage_identity_verified": true,
     "source_fixed_macro_semantics_verified": false,
     "original_source_authorization_verified": false,
     "original_assets_read": false,
@@ -5998,7 +5998,7 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-keyword-candidate-bundle/README_AR.md",
-    "next": "Inspect bounded actual retry 45992643749 at immutable de0ac1de51e06cbb8fd60426ee3478d13eb2d093. Retains byte-identical candidate/contract, mandatory actual Unity Vulkan and shader support, exact scope/PassType/callback/decoded module evidence. Distinguish image build timeout, Editor startup/backend failure, actual registration failure, and real serialized stage failure; retain exact artifacts and final log. If this bounded retry is blocked, do not launch the same expensive job repeatedly; classify blocker and switch to the next independent productive G3/G4/Particle108 work permitted by verified source authorization, or request the precise missing source/runner prerequisite. A3 original authorization/provenance remains blocked. No original acquisition, production, legacy installer changes or APK/XAPK. Preserve Ali's pinned reference, white meshes/black fire, water and remaining G0–G6 priorities.",
+    "next": "G3 candidate-only actual authored mixed-scope Android Vulkan bundle acceptance is complete in its exact one named Always/Normal pass scope. Do not repeat this authored Unity job merely to generate another receipt. Original runtime migration still requires independently verified authorization/provenance (A3), source-specific pass/scope/fixed macro/instancing or sparse lattice semantics, independently established original-to-candidate stage identities, original material runtime selection, same-export protected hashes, actual NEXT23b and ten-group integration evidence. Next productive independent work: inspect Particle108 original local export-alpha binding historical evidence and the existing exporter/census/receipt tools, then complete the missing third exported top-mip comparison only with already authorized private bytes; if those bytes or authorization are absent, preserve the precise blocker and work on a genuinely independent G4/G0–G6 source-independent repair that does not assert original equivalence. Prioritize white meshes, black fire and water; no original acquisition, production activation, installer changes, APK/XAPK, phone, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference.",
     "first_run": {
       "id": 45984849786,
       "job": 140457707101,
@@ -6044,6 +6044,130 @@
       "archive_sha256": "052dbf31dd8fa443d2cdcf7c2e225de3ec0f3698497b0432f9b4d7f852db40c9"
     },
     "bounded_retry_source_head": "6821263e73a07969ffda48ffc32c9f13f61403c8",
-    "bounded_retry_activation_head": "de0ac1de51e06cbb8fd60426ee3478d13eb2d093"
+    "bounded_retry_activation_head": "de0ac1de51e06cbb8fd60426ee3478d13eb2d093",
+    "third_run": {
+      "id": 45992643749,
+      "job": 140484089089,
+      "head": "de0ac1de51e06cbb8fd60426ee3478d13eb2d093",
+      "status": "completed",
+      "conclusion": "failure",
+      "compatibility_guard": {
+        "id": 45992643947,
+        "conclusion": "success"
+      },
+      "actual_editor_success": true,
+      "actual_bundle_bytes": 6534,
+      "actual_bundle_sha256": "6f0777213ac238677d51b97c3bc975e38347bf2fdcf94d85f92e7bb42d93a034",
+      "original_verifier_reason": "unity_compiler_route_coverage",
+      "observed_callback_rows": 12,
+      "observed_vertex_callback_routes": 4,
+      "observed_fragment_callback_routes": 0,
+      "receipt": "clients/GT/sessions/20261127-keyword-candidate-bundle/third-45992643749.json"
+    },
+    "combined_join_source_head": "e7297239a408815bcbd1801489d997c28a862200",
+    "replay_probe_head": "11cac372e169a0eb55763819f4572446b0f798ca",
+    "replay_activation_head": "68aa975b39d1bda359d1446bdc44a0938087abc7",
+    "actual_registered_routes": 4,
+    "actual_material_keyword_routes": 4,
+    "actual_material_restored_empty": true,
+    "actual_callback_rows": 12,
+    "actual_vertex_callback_unique_routes": 4,
+    "actual_fragment_callback_unique_routes": 0,
+    "actual_combined_bundle_join_fragment_routes": 4,
+    "actual_decoded_blobs": 4,
+    "actual_validated_modules": 8,
+    "actual_bundle_controls": 7,
+    "actual_marker_rows": [
+      {
+        "keywords": [
+          "GT_AUTHORED_GLOBAL"
+        ],
+        "blob": 3,
+        "stage": "Vertex",
+        "marker": 11,
+        "sha256": "00853190ebfb72ce60beb6c301e76266d661fd8d51ddf24becd86700abfff978"
+      },
+      {
+        "keywords": [
+          "GT_AUTHORED_GLOBAL"
+        ],
+        "blob": 3,
+        "stage": "Fragment",
+        "marker": 21,
+        "sha256": "94bcecd356f2f35b66a31cfcb732324245fc249763b9bff56e37bc6ed25e9747"
+      },
+      {
+        "keywords": [],
+        "blob": 1,
+        "stage": "Vertex",
+        "marker": 12,
+        "sha256": "38f6d2781f329a3f2404919201704871c83cf2afa4f604a70ea5ca10ffe3072e"
+      },
+      {
+        "keywords": [],
+        "blob": 1,
+        "stage": "Fragment",
+        "marker": 22,
+        "sha256": "5dc8ea73dd02eb18e9599d9573b034f0304a8584c2ef702ee9d03ae47e153c18"
+      },
+      {
+        "keywords": [
+          "GT_AUTHORED_GLOBAL",
+          "GT_AUTHORED_LOCAL"
+        ],
+        "blob": 4,
+        "stage": "Vertex",
+        "marker": 13,
+        "sha256": "4c62b3a7c232e3a651c1b671e735d13e60a84af62ed945f914aaa5f32974e499"
+      },
+      {
+        "keywords": [
+          "GT_AUTHORED_GLOBAL",
+          "GT_AUTHORED_LOCAL"
+        ],
+        "blob": 4,
+        "stage": "Fragment",
+        "marker": 23,
+        "sha256": "9b1676c7b712764a7fe82571ac4fd328ec9709d00401bdaa3e955e25b8d12a01"
+      },
+      {
+        "keywords": [
+          "GT_AUTHORED_LOCAL"
+        ],
+        "blob": 2,
+        "stage": "Vertex",
+        "marker": 14,
+        "sha256": "f6981f7494089f3809da8fae860fbb926ed34e1f7c19d34d860969c43ad91553"
+      },
+      {
+        "keywords": [
+          "GT_AUTHORED_LOCAL"
+        ],
+        "blob": 2,
+        "stage": "Fragment",
+        "marker": 24,
+        "sha256": "a2b4e8f16aac1bce3104713f13bc9cbbf04b083a86c0ffdb8dd05397e44377fe"
+      }
+    ],
+    "actual_authored_keyword_flags": {
+      "global": 0,
+      "local": 1
+    },
+    "source_flag_bytes_compared": false,
+    "original_source_flag_semantics_verified": false,
+    "original_shader_equivalence_verified": false,
+    "local_independent_binary_recheck": true,
+    "artifact": {
+      "id": 15195626214,
+      "bytes": 22736,
+      "sha256": "0cab26b8be7a19838883bc4fe188503d5afbc35aa01b7b2a5a588d9f3a667180",
+      "crc_verified": true,
+      "verified_sha256": "4f2e03dda330cdf997517405fe8bca214ddfc226cf0dad902bbb82ad2e38d542",
+      "verified_git_blob": "bd9f09b0413746205710b69d438acec94ec07be0",
+      "detail_sha256": "93a5145b06553f7ade51569ef201361a6faee9db396a8b224df3b4c82658bb41",
+      "detail_git_blob": "9e56aaa6234ca305fd8c46fc7b8a504ba0b0ca4e",
+      "topology_sha256": "280644cb91b6f12c837d00ca31e97616ad3d0b48e5717e592d03003200963036",
+      "topology_git_blob": "4a0ce2f0552932ac1c379e52a9f3a08461f5de4f"
+    }
   }
 }

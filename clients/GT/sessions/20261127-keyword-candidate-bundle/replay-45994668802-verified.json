@@ -1,0 +1,220 @@
+{
+  "Android_device": false,
+  "XAPK": false,
+  "actual_bundle_controls": {
+    "different_combined_blob": "combined_decoded_same_blob_stage_identity",
+    "extra_active_keyword": "original_runtime_bundle_unmapped_exact_keyword_set",
+    "missing_decoded_fragment": "combined_decoded_route_population",
+    "partial_fragment_callback": "unity_compiler_route_coverage",
+    "separate_fragment_table": "combined_decoded_stage_identity",
+    "wrong_Pass_LightMode": "bundle_source_pass_state_drift",
+    "wrong_stage_program_marker": "authored_compiled_program_marker_mismatch"
+  },
+  "actual_decoded_stage_markers": 8,
+  "actual_keyword_flags": {
+    "GT_AUTHORED_GLOBAL": 0,
+    "GT_AUTHORED_LOCAL": 1,
+    "STEREO_CUBEMAP_RENDER_ON": 0,
+    "STEREO_INSTANCING_ON": 0,
+    "STEREO_MULTIVIEW_ON": 0,
+    "UNITY_SINGLE_PASS_STEREO": 0
+  },
+  "actual_material_keyword_routes": 4,
+  "actual_material_restoration": true,
+  "bundle_bytes": 6534,
+  "bundle_sha256": "6f0777213ac238677d51b97c3bc975e38347bf2fdcf94d85f92e7bb42d93a034",
+  "candidate_sha256": "d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537",
+  "combined_vertex_only_callback_passes": [
+    0
+  ],
+  "decoded_blob_count": 4,
+  "device_pixels_verified": false,
+  "fragment_routes_verified_by_combined_bundle_join": 4,
+  "installation_allowed": false,
+  "observed_callback_route_stage_count": 4,
+  "observed_callback_rows": 12,
+  "observed_editor_bundle_bytes": 6534,
+  "observed_editor_checkpoint": "verified",
+  "observed_editor_error": "",
+  "observed_editor_graphics_api": "Vulkan",
+  "observed_fragment_callback_routes": 0,
+  "observed_scope_count": 2,
+  "observed_vertex_callback_routes": 4,
+  "original_assets_read": false,
+  "original_authorization_verified": false,
+  "original_runtime_verified": false,
+  "original_shader_equivalence_verified": false,
+  "original_source_flag_semantics_verified": false,
+  "production_activation": false,
+  "rows": [
+    {
+      "combined_table": true,
+      "keywords": [
+        "GT_AUTHORED_GLOBAL"
+      ],
+      "module": {
+        "bytes": 460,
+        "marker_constants": [
+          11
+        ],
+        "model": 0,
+        "sha256": "00853190ebfb72ce60beb6c301e76266d661fd8d51ddf24becd86700abfff978",
+        "spirv_val_exit": 0
+      },
+      "pass_index": 0,
+      "serialized_blob_indices": [
+        3
+      ],
+      "source_ref": "program-000",
+      "stage": "Vertex"
+    },
+    {
+      "combined_table": true,
+      "keywords": [
+        "GT_AUTHORED_GLOBAL"
+      ],
+      "module": {
+        "bytes": 296,
+        "marker_constants": [
+          21
+        ],
+        "model": 4,
+        "sha256": "94bcecd356f2f35b66a31cfcb732324245fc249763b9bff56e37bc6ed25e9747",
+        "spirv_val_exit": 0
+      },
+      "pass_index": 0,
+      "serialized_blob_indices": [
+        3
+      ],
+      "source_ref": "program-001",
+      "stage": "Fragment"
+    },
+    {
+      "combined_table": true,
+      "keywords": [],
+      "module": {
+        "bytes": 460,
+        "marker_constants": [
+          12
+        ],
+        "model": 0,
+        "sha256": "38f6d2781f329a3f2404919201704871c83cf2afa4f604a70ea5ca10ffe3072e",
+        "spirv_val_exit": 0
+      },
+      "pass_index": 0,
+      "serialized_blob_indices": [
+        1
+      ],
+      "source_ref": "program-002",
+      "stage": "Vertex"
+    },
+    {
+      "combined_table": true,
+      "keywords": [],
+      "module": {
+        "bytes": 296,
+        "marker_constants": [
+          22
+        ],
+        "model": 4,
+        "sha256": "5dc8ea73dd02eb18e9599d9573b034f0304a8584c2ef702ee9d03ae47e153c18",
+        "spirv_val_exit": 0
+      },
+      "pass_index": 0,
+      "serialized_blob_indices": [
+        1
+      ],
+      "source_ref": "program-003",
+      "stage": "Fragment"
+    },
+    {
+      "combined_table": true,
+      "keywords": [
+        "GT_AUTHORED_GLOBAL",
+        "GT_AUTHORED_LOCAL"
+      ],
+      "module": {
+        "bytes": 460,
+        "marker_constants": [
+          13
+        ],
+        "model": 0,
+        "sha256": "4c62b3a7c232e3a651c1b671e735d13e60a84af62ed945f914aaa5f32974e499",
+        "spirv_val_exit": 0
+      },
+      "pass_index": 0,
+      "serialized_blob_indices": [
+        4
+      ],
+      "source_ref": "program-004",
+      "stage": "Vertex"
+    },
+    {
+      "combined_table": true,
+      "keywords": [
+        "GT_AUTHORED_GLOBAL",
+        "GT_AUTHORED_LOCAL"
+      ],
+      "module": {
+        "bytes": 296,
+        "marker_constants": [
+          23
+        ],
+        "model": 4,
+        "sha256": "9b1676c7b712764a7fe82571ac4fd328ec9709d00401bdaa3e955e25b8d12a01",
+        "spirv_val_exit": 0
+      },
+      "pass_index": 0,
+      "serialized_blob_indices": [
+        4
+      ],
+      "source_ref": "program-005",
+      "stage": "Fragment"
+    },
+    {
+      "combined_table": true,
+      "keywords": [
+        "GT_AUTHORED_LOCAL"
+      ],
+      "module": {
+        "bytes": 460,
+        "marker_constants": [
+          14
+        ],
+        "model": 0,
+        "sha256": "f6981f7494089f3809da8fae860fbb926ed34e1f7c19d34d860969c43ad91553",
+        "spirv_val_exit": 0
+      },
+      "pass_index": 0,
+      "serialized_blob_indices": [
+        2
+      ],
+      "source_ref": "program-006",
+      "stage": "Vertex"
+    },
+    {
+      "combined_table": true,
+      "keywords": [
+        "GT_AUTHORED_LOCAL"
+      ],
+      "module": {
+        "bytes": 296,
+        "marker_constants": [
+          24
+        ],
+        "model": 4,
+        "sha256": "a2b4e8f16aac1bce3104713f13bc9cbbf04b083a86c0ffdb8dd05397e44377fe",
+        "spirv_val_exit": 0
+      },
+      "pass_index": 0,
+      "serialized_blob_indices": [
+        2
+      ],
+      "source_ref": "program-007",
+      "stage": "Fragment"
+    }
+  ],
+  "source_flag_bytes_compared": false,
+  "status": "PASS_ACTUAL_AUTHORED_CANDIDATE_UNITY_BUNDLE",
+  "unity_receipt_sha256": "3d0ae8c9519e73c1a6c0c19302cc883e48b52416118742b4cd9c5a4d407d27ca"
+}

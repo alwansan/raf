@@ -50,7 +50,7 @@ jobs:
           python3 - <<'PY'
           import re
           from pathlib import Path
-          want={'test_gt_keyword_candidate_bundle_contract.py.log':13,'test_gt_keyword_candidate_plan.py.log':15,'test_gt_runtime_keyword_contract.py.log':9,'test_gt_runtime_keyword_integration.py.log':5}
+          want={'test_gt_keyword_candidate_bundle_contract.py.log':17,'test_gt_keyword_candidate_plan.py.log':15,'test_gt_runtime_keyword_contract.py.log':9,'test_gt_runtime_keyword_integration.py.log':5}
           for n,count in want.items():
               s=(Path('gt-keyword-bundle-test-logs')/n).read_text()
               assert re.search(r'^Ran '+str(count)+r' tests? in ',s,re.M) and re.search(r'^OK$',s,re.M)

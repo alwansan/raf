@@ -1,0 +1,172 @@
+{
+  "keyword_flags": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    1
+  ],
+  "keyword_names": [
+    "STEREO_INSTANCING_ON",
+    "UNITY_SINGLE_PASS_STEREO",
+    "STEREO_MULTIVIEW_ON",
+    "STEREO_CUBEMAP_RENDER_ON",
+    "GT_AUTHORED_GLOBAL",
+    "GT_AUTHORED_LOCAL"
+  ],
+  "passes": [
+    {
+      "name": "GT_CANDIDATE_PASS",
+      "tables": {
+        "progDomain": {
+          "legacy": [],
+          "player": []
+        },
+        "progFragment": {
+          "legacy": [],
+          "player": []
+        },
+        "progGeometry": {
+          "legacy": [],
+          "player": []
+        },
+        "progHull": {
+          "legacy": [],
+          "player": []
+        },
+        "progRayTracing": {
+          "legacy": [],
+          "player": []
+        },
+        "progVertex": {
+          "legacy": [],
+          "player": [
+            [
+              {
+                "blob": 1,
+                "global_indices": null,
+                "indices": [],
+                "local_indices": null,
+                "tier": null
+              },
+              {
+                "blob": 2,
+                "global_indices": null,
+                "indices": [
+                  5
+                ],
+                "local_indices": null,
+                "tier": null
+              },
+              {
+                "blob": 3,
+                "global_indices": null,
+                "indices": [
+                  4
+                ],
+                "local_indices": null,
+                "tier": null
+              },
+              {
+                "blob": 4,
+                "global_indices": null,
+                "indices": [
+                  4,
+                  5
+                ],
+                "local_indices": null,
+                "tier": null
+              }
+            ],
+            [
+              {
+                "blob": 1,
+                "global_indices": null,
+                "indices": [],
+                "local_indices": null,
+                "tier": null
+              },
+              {
+                "blob": 2,
+                "global_indices": null,
+                "indices": [
+                  5
+                ],
+                "local_indices": null,
+                "tier": null
+              },
+              {
+                "blob": 3,
+                "global_indices": null,
+                "indices": [
+                  4
+                ],
+                "local_indices": null,
+                "tier": null
+              },
+              {
+                "blob": 4,
+                "global_indices": null,
+                "indices": [
+                  4,
+                  5
+                ],
+                "local_indices": null,
+                "tier": null
+              }
+            ],
+            [
+              {
+                "blob": 1,
+                "global_indices": null,
+                "indices": [],
+                "local_indices": null,
+                "tier": null
+              },
+              {
+                "blob": 2,
+                "global_indices": null,
+                "indices": [
+                  5
+                ],
+                "local_indices": null,
+                "tier": null
+              },
+              {
+                "blob": 3,
+                "global_indices": null,
+                "indices": [
+                  4
+                ],
+                "local_indices": null,
+                "tier": null
+              },
+              {
+                "blob": 4,
+                "global_indices": null,
+                "indices": [
+                  4,
+                  5
+                ],
+                "local_indices": null,
+                "tier": null
+              }
+            ],
+            []
+          ]
+        }
+      },
+      "tags": {
+        "tags": [
+          [
+            "LIGHTMODE",
+            "ALWAYS"
+          ]
+        ]
+      },
+      "type": 0
+    }
+  ],
+  "record_count": 5
+}
