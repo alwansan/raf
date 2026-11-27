@@ -33,22 +33,15 @@ from scripts.w1_rebind_depth_resources import IDENT
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
 from scripts.t3_particle108_original_dxbc_rdef import source_rdef, BIND_FAMILIES
 
-# SPIRV-Cross HLSL may emit register(sN, space0) while older
-# recovered code uses register(sN). Zero-space is explicit D3D11's
-# default descriptor register space; no reassignment or guessing.
-RESOURCE = re.compile(
-    r'\b(Texture\w*(?:\s*<[^;{}>]+>)?|SamplerState|SamplerComparisonState)'
-    r'\s+([A-Za-z_]\w*)\s*:\s*register\(\s*([ts])(\d+)'
-    r'\s*(?:,\s*space0\s*)?\)\s*;'
-)
+# Use the shared G2 scanner for BOTH resource classes. The old partial
+# regex census could silently ignore an unsupported Texture declaration
+# when another valid sampler still existed.
+from scripts.gt_resource_register_contract import RESOURCE, registered_resources, mask_noncode
+
 SAMPLER_DECL = re.compile(r'\b(?:SamplerState|SamplerComparisonState)\s+[A-Za-z_]\w*\b')
-SAMPLER_SPACE0 = re.compile(
-    r'\b(?:SamplerState|SamplerComparisonState)\s+[A-Za-z_]\w*'
-    r'\s*:\s*register\(\s*s\d+\s*,\s*space0\s*\)'
-)
 SAMPLER_UNSUPPORTED_SPACE = re.compile(
     r'\b(?:SamplerState|SamplerComparisonState)\s+[A-Za-z_]\w*'
-    r'\s*:\s*register\(\s*s\d+\s*,\s*space[1-9]\d*\s*\)'
+    r'\s*:\s*register\s*\(\s*s\d+\s*,\s*space[1-9]\d*\s*\)'
 )
 REGISTER_ANNOTATION=re.compile(r'\bregister\s*\([^)]*\)')
 BUFFER=re.compile(r'\bcb\d+_\d+_m\d+\b')
@@ -115,8 +108,10 @@ def original_names_and_registers(program,name_indices,variant_resources=()):
         t,n,s=row["m_Index"],row["m_NameIndex"],row["m_SamplerIndex"]
         if type(t) is not int or t<0 or t in texture_slots:
             raise BridgeError("ORIGINAL_TEXTURE_REGISTER_DUPLICATED")
-        if n not in names:
+        if type(n) is not int or n not in names:
             raise BridgeError("ORIGINAL_TEXTURE_NAME_INDEX_MISSING")
+        if type(s) is not int or not 0 <= s <= 65535:
+            raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_ENTRY_INVALID")
         texture_slots[t]=(names[n],s)
     variant_slots=set()
     for row in variant_resources:
@@ -126,6 +121,9 @@ def original_names_and_registers(program,name_indices,variant_resources=()):
         if type(slot) is not int or slot<0 or slot in variant_slots:
             raise BridgeError("ORIGINAL_VARIANT_TEXTURE_SLOT_DUPLICATED")
         variant_slots.add(slot)
+        if (type(row.get("name")) is not str or type(row.get("extra_value")) is not int
+                or not 0 <= row["extra_value"] <= 65535):
+            raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_ENTRY_INVALID")
         texture_slots[slot]=(row["name"],row["extra_value"])
     textures,samplers={},{}
     for t,(name,s) in texture_slots.items():
@@ -216,13 +214,23 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None,variant_re
     # Reject a nonzero descriptor space even if ANOTHER sampler happens to
     # have a valid source mapping. This is originally compiled D3D11, not a
     # license to silently rewrite unsupported register spaceN.
-    if SAMPLER_UNSUPPORTED_SPACE.search(hlsl):
+    code=mask_noncode(hlsl)
+    if SAMPLER_UNSUPPORTED_SPACE.search(code):
         raise BridgeError("TRANSLATOR_SAMPLER_SPACE_NOT_ZERO")
+    try:
+        declarations=registered_resources(hlsl)
+    except ValueError as error:
+        if str(error)=="duplicate_translated_resource_symbol_or_slot":
+            raise BridgeError("TRANSLATOR_RESOURCE_COLLISION") from None
+        if len(SAMPLER_DECL.findall(code)) != sum(
+                m[1].startswith("Sampler") and m[3]=="s" for m in RESOURCE.finditer(code)):
+            raise BridgeError("TRANSLATOR_SAMPLER_DECLARATION_UNBOUND") from None
+        raise BridgeError("TRANSLATOR_RESOURCE_REGISTER_UNPROVEN") from None
     mapping={}
     used={"t":set(),"s":set()}
     translated_used={"t":set(),"s":set()}
     source_vs_translated_drift=0
-    for match in RESOURCE.finditer(hlsl):
+    for match in declarations:
         cls,translated_num,variable=match[3],int(match[4]),match[2]
         table=textures if cls=="t" else samplers
         # vkd3d retains ORIGINAL DXBC resource register identities in the
@@ -258,9 +266,9 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None,variant_re
         used[cls].add(original_num)
         translated_used[cls].add(translated_num)
     if not used["s"]:
-        if SAMPLER_UNSUPPORTED_SPACE.search(hlsl):
+        if SAMPLER_UNSUPPORTED_SPACE.search(code):
             raise BridgeError("TRANSLATOR_SAMPLER_SPACE_NOT_ZERO")
-        if SAMPLER_DECL.search(hlsl):
+        if SAMPLER_DECL.search(code):
             raise BridgeError("TRANSLATOR_SAMPLER_DECLARATION_UNBOUND")
         # A vertex-only stage genuinely may have no texture/sampler inputs.
         # Permit that ONLY if the SHA-original program metadata also declares
@@ -269,11 +277,11 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None,variant_re
         # sampled resource; no fabricated dummy sampler or register mapping.
         if not (stage == 1 and not textures and not samplers and
                 not used["t"] and
-                not re.search(r'\b(?:Texture\w*|sampler2D|Sample|SampleLevel|SampleBias)\b', hlsl)):
+                not re.search(r'\b(?:Texture\w*|sampler2D|Sample|SampleLevel|SampleBias)\b', code)):
             raise BridgeError("TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS")
     # Every emitted sampler declaration must be covered by an exact source
     # register match. Partial proof can still give Unity "unrecognized sampler".
-    if len(SAMPLER_DECL.findall(hlsl)) != len(used["s"]):
+    if len(SAMPLER_DECL.findall(code)) != len(used["s"]):
         raise BridgeError("TRANSLATOR_SAMPLER_DECLARATION_UNBOUND")
     if len(set(mapping.values()))!=len(mapping):
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
@@ -281,15 +289,22 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None,variant_re
     # arrays in Vertex and Fragment can have DIFFERENT source dimensions:
     # disjoint stage-local identifiers prevent Unity's glslang linker from
     # incorrectly treating two different original stage layouts as one.
-    buffers=sorted(set(BUFFER.findall(hlsl)))
+    buffers=sorted(set(BUFFER.findall(code)))
     stage_prefix="GT_ORIGINAL_VS_" if stage==1 else "GT_ORIGINAL_PS_"
+    if set(buffers) & set(mapping):
+        raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
     mapping.update({name:stage_prefix+name for name in buffers})
+    if len(set(mapping.values()))!=len(mapping):
+        raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
     fixed=hlsl
     if mapping:
         symbols='|'.join(re.escape(k) for k in sorted(mapping,key=len,reverse=True))
         tokens=re.compile(REGISTER_ANNOTATION.pattern+r'|\b(?:'+symbols+r')\b')
-        fixed=tokens.sub(lambda m:mapping.get(m[0],m[0]),hlsl)
-    if REGISTER_ANNOTATION.findall(fixed)!=REGISTER_ANNOTATION.findall(hlsl):
+        # Use masked offsets, not substitution over comments or strings.
+        for match in reversed(list(tokens.finditer(code))):
+            if match[0] in mapping:
+                fixed=fixed[:match.start()]+mapping[match[0]]+fixed[match.end():]
+    if REGISTER_ANNOTATION.findall(mask_noncode(fixed))!=REGISTER_ANNOTATION.findall(code):
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
     if len(fixed)>MAX_HLSL or (fixed==hlsl and variant_resources is None):
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")

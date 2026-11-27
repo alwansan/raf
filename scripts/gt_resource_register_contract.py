@@ -15,6 +15,13 @@ _UNREGISTERED = re.compile(r'\b(' + _TYPE + r')\s+([A-Za-z_]\w*)\s*;')
 _COMMENT_OR_STRING = re.compile(r'//[^\r\n]*|/\*[\s\S]*?\*/|"(?:\\.|[^"\\\r\n])*"')
 
 
+def mask_noncode(source):
+    """Preserve offsets and line endings while masking comments/strings."""
+    if not isinstance(source, str):
+        raise ValueError('resource_source_not_text')
+    return _COMMENT_OR_STRING.sub(lambda m: re.sub(r'[^\r\n]', ' ', m[0]), source)
+
+
 def registered_resources(source, *, allow_unregistered=False):
     """Return offset-preserving matches; reject unsupported declarations.
 
@@ -23,9 +30,7 @@ def registered_resources(source, *, allow_unregistered=False):
     such as Texture2DArray are types; descriptor arrays (name[N]) are not
     supported here. Nonzero spaces must never disappear from the census.
     """
-    if not isinstance(source, str):
-        raise ValueError('resource_source_not_text')
-    masked = _COMMENT_OR_STRING.sub(lambda m: re.sub(r'[^\r\n]', ' ', m[0]), source)
+    masked = mask_noncode(source)
     matches, symbols, translated = [], set(), set()
     for start in _START.finditer(masked):
         match = RESOURCE.match(masked, start.start())

@@ -278,5 +278,40 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
         with self.assertRaises(BridgeError):
             rebind_stage(self.code,self.program,self.indices,0)
 
+    def test_every_texture_declaration_must_be_covered_even_with_valid_samplers(self):
+        changes=(
+            ("register(t0)", "register(t0, space1)"),
+            ("texture_t0 : register(t0);", "texture_t0;"),
+            ("texture_t0 : register(t0);", "texture_t0[2] : register(t0);"),
+            ("register(t0)", "register(s7)"),
+        )
+        for before,after in changes:
+            changed=self.code.replace(before,after)
+            with self.subTest(after=after),self.assertRaisesRegex(BridgeError,"TRANSLATOR_RESOURCE_REGISTER_UNPROVEN"):
+                rebind_stage(changed,self.program,self.indices,0)
+
+    def test_comments_do_not_add_resource_or_buffer_declarations_or_change_bytes(self):
+        comment="// Texture2D<float4> ghost : register(t3, space7); samplers0 cb1_0_m0\n"
+        comment+="/* SamplerState falseSampler : register(s4, space5); texture_t0 */\n"
+        mapped,counts=rebind_stage(comment+self.code,self.program,self.indices,0)
+        self.assertTrue(mapped.startswith(comment))
+        self.assertEqual(counts["original_sampler_registers_mapped"],2)
+        self.assertEqual(counts["original_texture_registers_mapped"],2)
+        self.assertEqual(counts["stage_local_original_cbuffer_symbols_disambiguated"],1)
+
+    def test_register_whitespace_and_default_space_preserve_annotation(self):
+        changed=self.code.replace("register(t0)","register ( t0 , space0 )")
+        mapped,_=rebind_stage(changed,self.program,self.indices,0)
+        self.assertIn("_MainTex : register ( t0 , space0 )",mapped)
+
+    def test_malformed_metadata_cannot_alias_integer_slots(self):
+        self.program["m_CommonParameters"]["m_TextureParams"][0]["m_NameIndex"]=False
+        with self.assertRaisesRegex(BridgeError,"ORIGINAL_TEXTURE_NAME_INDEX_MISSING"):
+            rebind_stage(self.code,self.program,self.indices,0)
+        self.program["m_CommonParameters"]["m_TextureParams"][0]["m_NameIndex"]=0
+        self.program["m_CommonParameters"]["m_TextureParams"][0]["m_SamplerIndex"]=False
+        with self.assertRaisesRegex(BridgeError,"ORIGINAL_TEXTURE_PARAMETER_ENTRY_INVALID"):
+            rebind_stage(self.code,self.program,self.indices,0)
+
 if __name__=="__main__":
     unittest.main()
