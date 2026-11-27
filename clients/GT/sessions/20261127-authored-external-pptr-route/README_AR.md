@@ -1,0 +1,3 @@
+# GT external PPtr authored binary witness | PENDING | 27 November 2026
+
+Starting HEAD b92d6d540daae64c09f5abfbcc808fd4de9255a5; prior local-PPtr 46016953991 PASS rechecked. Four synthetic physically distinct named owners, equal PathIDs, opposing external table order, real raw parser and typed dependency edges, unchanged native V2/V3 and full geometry. Six independent binary mutations, wrong exported GUID with equal fileID, wrong trace fileID; positive control table reorder with consistent pointer remap. No original assets; shader/texture identity only. No PASS until actual Actions and evidence verified.
