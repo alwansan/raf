@@ -1,0 +1,3 @@
+# GT actual external streamed texture + supported PNG importer state | PENDING
+
+Starting HEAD 24e86ec610749a3387632409465be5c864e3af65. Replay permanent 46027617181 archive V9 without rebuilding. New independent external resource provider 79B, two non-overlapping 28/24B texture ranges, real public AssetRipper typed GetImageData and integrity before Process, nontrivial independent sampler/state, same export V4/V8/V9. Scope: supported serialized fields, swizzle unknown in 2021.3 schema, no lower mip/GPU/original claim. Eleven controls (provider pin/range/alpha, source and emitted importer drift). No PASS until Actions and independent verification.
