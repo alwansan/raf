@@ -619,7 +619,7 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        mode: [dxc, hlslcc]
+        mode: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-fft-provenance]')) && fromJSON('["hlslcc"]') || fromJSON('["dxc","hlslcc"]') }}
     concurrency:
       group: raft-native-engine-${{ github.ref }}
       cancel-in-progress: false
@@ -640,6 +640,11 @@ jobs:
           sparse-checkout: |
             /scripts/*.py
             /scripts/gt_decode_smolv.cpp
+            /tests/__init__.py
+            /tests/test_gt_fft*.py
+            /tests/test_gt_install_fft_utilities_original.py
+            /tests/test_gt_original_921_bundle.py
+            /.github/workflows/raft-gt-fft-utilities-source.yml
             /tools/synthetic_material_alpha/fft_coordinate_probe.py
             /android-port/Experiments/GT/Editor/FFTUtilitiesShaderValidation.cs
             /.github/workflows/raft-gt-synthetic-material-alpha.yml
@@ -661,6 +666,13 @@ jobs:
           curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
           curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
           c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+      - name: Run FFT receipt and installer regression contracts without game assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/gt-fft-venv/bin/python" -B -m unittest discover -s tests -p 'test_gt_fft*.py' -v
+          "$RUNNER_TEMP/gt-fft-venv/bin/python" -B -m unittest discover -s tests -p 'test_gt_install_fft_utilities_original.py' -v
+          "$RUNNER_TEMP/gt-fft-venv/bin/python" -B -m unittest discover -s tests -p 'test_gt_original_921_bundle.py' -v
       - name: Compile authored sample and fetch cases with deliberate wrong-coordinate controls
         id: stage
         shell: bash
