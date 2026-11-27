@@ -1,0 +1,99 @@
+name: GT exact authored FFT complete-row replay (NO Unity execution)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-fft-row-coverage-replay.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authored-row-replay:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout source tools and prior authored gate receipt only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /scripts/gt_decode_smolv.cpp
+            /tests/test_gt_fft_row_coverage.py
+            /tools/gt_fft_row_replay/replay.py
+            /tools/synthetic_material_alpha/fft_coordinate_probe.py
+            /clients/GT/sessions/20261127-fft-coordinate-diagnostic/review_coordinate_artifacts.py
+            /clients/GT/sessions/20261127-fft-coordinate-diagnostic/artifact-review.json
+            /clients/GT/sessions/20261127-fft-bundle-gate/actual-run-45937731362.zip
+            /.github/workflows/raft-gt-fft-row-coverage-replay.yml
+      - name: Run focused row regressions
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          mkdir authored-fft-inputs authored-fft-row-results
+          python3 -B -m unittest discover -s tests -p test_gt_fft_row_coverage.py -v 2>&1 | tee authored-fft-row-results/unit.log
+          grep -E '^Ran 15 tests in ' authored-fft-row-results/unit.log
+          grep -x 'OK' authored-fft-row-results/unit.log
+          python3 -B -m py_compile tools/gt_fft_row_replay/replay.py
+      - name: Fetch only two exact authored Actions archives
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/45935871773" > authored-fft-inputs/run.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15171100631" > authored-fft-inputs/dxc-meta.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15170637402" > authored-fft-inputs/hlslcc-meta.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('authored-fft-inputs')
+          r=json.loads((root/'run.json').read_text())
+          assert r['id']==45935871773 and r['head_sha']=='5b6f8f21627269d946aa549cd7055384914cdf82'
+          assert r['status']=='completed' and r['conclusion']=='failure'
+          for mode,ident,digest,size in [('dxc',15171100631,'eedccb8afa34ca208604c111b232ea42bb7f91c0cab01d409253d7a4e8ee5972',11197),('hlslcc',15170637402,'95afbce3a5afb5073023caae625aabeda5b2fa7ed74c4c08aa025fc180558d6c',11512)]:
+              a=json.loads((root/(mode+'-meta.json')).read_text())
+              assert a['id']==ident and a['digest']=='sha256:'+digest and a['expired'] is False and a['size_in_bytes']==size
+              assert a['name']=='gt-authored-fft-coordinate-'+mode+'-45935871773'
+          PY
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15171100631/zip" > authored-fft-inputs/dxc.zip
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15170637402/zip" > authored-fft-inputs/hlslcc.zip
+          printf '%s\n' 'eedccb8afa34ca208604c111b232ea42bb7f91c0cab01d409253d7a4e8ee5972  authored-fft-inputs/dxc.zip' '95afbce3a5afb5073023caae625aabeda5b2fa7ed74c4c08aa025fc180558d6c  authored-fft-inputs/hlslcc.zip' | sha256sum -c -
+      - name: Install public bundle and SPIR-V inspection tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends spirv-tools
+          python3 -m venv "$RUNNER_TEMP/gt-fft-row-venv"
+          "$RUNNER_TEMP/gt-fft-row-venv/bin/python" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          smolv="$RUNNER_TEMP/gt-fft-row-smolv"
+          mkdir "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          { spirv-val --version; spirv-dis --version; "$RUNNER_TEMP/gt-fft-row-venv/bin/python" -m pip show UnityPy | grep '^Version:'; } > authored-fft-row-results/tool-versions.txt
+      - name: Verify actual bundle rows, compare prior proof and reject partial-row controls
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/gt-fft-row-venv/bin/python" -B tools/gt_fft_row_replay/replay.py \
+            --decoder "$RUNNER_TEMP/gt-fft-row-smolv/decode" \
+            --dxc authored-fft-inputs/dxc.zip --hlslcc authored-fft-inputs/hlslcc.zip \
+            --out authored-fft-row-results/row-proof.json
+      - name: Retain only authored row proof and local regression logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-authored-fft-row-coverage-${{ github.run_id }}
+          path: authored-fft-row-results/
+          if-no-files-found: warn
+          retention-days: 14
