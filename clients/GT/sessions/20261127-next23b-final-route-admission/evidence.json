@@ -1,0 +1,182 @@
+{
+  "status": "PASS_ACTUAL_FINAL_ROUTE_MODULE_ADMISSION_AUTHORED",
+  "starting_head": "ce45b0b47360b99987dcc86d1937e90aa3d05808",
+  "preparation_commit": "2ad97dfe0c4efa21b29f4da5737c702a2bf8d71f",
+  "execution_head": "2c3933ef1c00d5a4c064226608668a180fa7b761",
+  "run": 46042755531,
+  "job": 140654358109,
+  "conclusion": "success",
+  "lint_run": 46042755384,
+  "lint_job": 140654357695,
+  "lint_conclusion": "success",
+  "source_blobs": {
+    "tools/gt_next23b_final_route_admission/audit.py": "3085cf2a772002a1d7aed1ce2e851f2fabb0121b",
+    "tools/gt_next23b_final_route_admission/witness.py": "ba2ed0c42d99a28c1dc8f26eacc5536892d199df",
+    "tools/gt_next23b_translation_replay/audit.py": "c790f11ff1c822c2859e72fe7c6919db358757cf",
+    "tools/gt_next23b_source_program_admission/audit.py": "aa221fa2b64bb6ab0ff97df474f7fb2384b01253",
+    "scripts/gt_original_921_shaderlab.py": "33d08da56c3e11fb18f4ce511e8bfc17279edf67",
+    "scripts/gt_original_921_cb_hlsl.py": "975bb92f79598b2c3179ee4fa301da1e29160e1f",
+    "scripts/gt_original_921_cb_layout.py": "61f668c59055f453f05334438aef3a0b5665010b",
+    "scripts/gt_original_921_semantics.py": "cfcfb698e0d5aca84dc622cd2d29b66ac2b767a4",
+    "scripts/gt_runtime_keyword_contract.py": "617a4ca349281a8e2ad99bf4f04364a028fb7c16"
+  },
+  "retained_input": {
+    "path": "clients/GT/sessions/20261127-next23b-bound-stage-identity/actual-authored-bound-stage-evidence.zip",
+    "sha256": "8a11b0947d864a409876136ac666e96d4e1cf2afeb41d0878c6b75e9e0dbc8c4",
+    "blob": "7df162c5cb0054be3ea5c3194ac7fbeb5bc3a593",
+    "bytes": 24551,
+    "entries": 48,
+    "previous_run": 46041454326,
+    "previous_experiments_repeated": false,
+    "new_dxbc_programs": 0
+  },
+  "actual_report": {
+    "actual_mutated_stage_modules": 1,
+    "actual_op_after": "OpFAdd",
+    "actual_op_before": "OpFMul",
+    "baseline_exact_module_matches": 4,
+    "expected_stage_modules": 4,
+    "identical_actual_spirv_reflection": true,
+    "legacy_entrypoint_gate_accepted_final_arithmetic_mutation": true,
+    "new_dxbc_programs": 0,
+    "new_exact_module_gate_rejects": true,
+    "original_2312_stage_modules_verified": false,
+    "original_assets_read": false,
+    "previous_archive_sha256": "8a11b0947d864a409876136ac666e96d4e1cf2afeb41d0878c6b75e9e0dbc8c4",
+    "production_install_allowed": false,
+    "reused_previous_fixture": true,
+    "scope_or_semantic_equivalence_verified": false,
+    "source_routes": 2,
+    "stage_rows": [
+      {
+        "actual_sha256": "84a3e852047d75a7a88780c8f9c6634bafbf6e0b577a415aabb7bfc81401a99e",
+        "expected_sha256": "84a3e852047d75a7a88780c8f9c6634bafbf6e0b577a415aabb7bfc81401a99e",
+        "keywords": [],
+        "mutated_sha256": "84a3e852047d75a7a88780c8f9c6634bafbf6e0b577a415aabb7bfc81401a99e",
+        "pass": 0,
+        "slot": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "source_ref": "program-000",
+        "stage": 1,
+        "transformed_stage_sha256": "c98bd68f23af8db4bbe3615a2f3d07692d82c59d9fd5f2f6af60f1844063cdf4"
+      },
+      {
+        "actual_sha256": "8a03535d4fee8e0306392d1e4484d1ee87c06d71b4365ab0648ac3dc55c88eb4",
+        "expected_sha256": "8a03535d4fee8e0306392d1e4484d1ee87c06d71b4365ab0648ac3dc55c88eb4",
+        "keywords": [],
+        "mutated_sha256": "8a03535d4fee8e0306392d1e4484d1ee87c06d71b4365ab0648ac3dc55c88eb4",
+        "pass": 0,
+        "slot": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "source_ref": "program-001",
+        "stage": 0,
+        "transformed_stage_sha256": "730d48873396afd295392b5a1ed81812fd63293ee07cfb3793ecb977e76af91a"
+      },
+      {
+        "actual_sha256": "84a3e852047d75a7a88780c8f9c6634bafbf6e0b577a415aabb7bfc81401a99e",
+        "expected_sha256": "84a3e852047d75a7a88780c8f9c6634bafbf6e0b577a415aabb7bfc81401a99e",
+        "keywords": [
+          "GT_AUTHORED_ALT"
+        ],
+        "mutated_sha256": "84a3e852047d75a7a88780c8f9c6634bafbf6e0b577a415aabb7bfc81401a99e",
+        "pass": 0,
+        "slot": [
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        "source_ref": "program-000",
+        "stage": 1,
+        "transformed_stage_sha256": "c98bd68f23af8db4bbe3615a2f3d07692d82c59d9fd5f2f6af60f1844063cdf4"
+      },
+      {
+        "actual_sha256": "d11014aee7903fb905144e6c5a8ecebc4f556b29c3153b45ab941c41af1a77bc",
+        "expected_sha256": "d11014aee7903fb905144e6c5a8ecebc4f556b29c3153b45ab941c41af1a77bc",
+        "keywords": [
+          "GT_AUTHORED_ALT"
+        ],
+        "mutated_sha256": "6153881e6112a159268a11681038c7bd7d7e0c4c82d74875634996986543e59f",
+        "pass": 0,
+        "slot": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "source_ref": "program-001",
+        "stage": 0,
+        "transformed_stage_sha256": "e7d2aa372594372c07600d1351c66e452f5f5cfbe16dbf276e4667fd3e8fae67"
+      }
+    ],
+    "status": "PASS_ACTUAL_FINAL_ROUTE_MODULE_ADMISSION_AUTHORED",
+    "unity_bundle_verified": false
+  },
+  "artifacts": [
+    {
+      "id": 15221171656,
+      "name": "gt-next23b-final-route-admission",
+      "bytes": 26812,
+      "github_reported_digest": "sha256:d3c695358e8e7868ec8d61c21935c741355e4eb2ba6b1c28e2fad83c3e7ae793"
+    }
+  ],
+  "permanent_archive": {
+    "path": "clients/GT/sessions/20261127-next23b-final-route-admission/actual-final-route-module-evidence.zip",
+    "blob": "087950eae29d0a8f6b61520c623998acc3649331",
+    "bytes": 16671,
+    "sha256": "84b482edba2d05ff9cd604abc37ba6753550bf584ed2b5b35221b36f61cb7851",
+    "entries": 27,
+    "uncompressed_bytes": 40734,
+    "log_chunks": 11,
+    "independent_size_sha256_all_member_crc_verified": true,
+    "actual_report_matches_log": true,
+    "module_hashes_verified": 12,
+    "baseline_exact_byte_matches": 4,
+    "changed_modules": 1,
+    "independent_numeric_opcodes": {
+      "before": 133,
+      "after": 129
+    },
+    "actual_reflection_exact": true,
+    "one_final_source_mutation": true,
+    "outer_artifact_independently_downloaded": false
+  },
+  "toolchain": {
+    "vkd3d_compiler": "1.2-15build1",
+    "libvkd3d_shader": "1.2-15build1",
+    "spirv_cross": "2021.01.15+1.3.239.0-1build1",
+    "spirv_tools": "2025.1~rc1-1~ubuntu0.24.04.2",
+    "glslang_tools": "15.1.0-2~ubuntu0.24.04.2",
+    "trusted_preapproved_toolchain_proven": false,
+    "unity_compiler_hashes_established": false
+  },
+  "historical_material_census": {
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "dummy_shader_guid": 37,
+    "new_census": false
+  },
+  "original_source_authorization_verified": false,
+  "original_assets_read_or_acquired": false,
+  "original_2312_module_gate_executed": false,
+  "original_semantic_equivalence_proven": false,
+  "original_compiled_unity_route_identity_proven": false,
+  "production_install_allowed": false,
+  "unity_or_device_run": false,
+  "xapk_started": false,
+  "next_action": "G1-G2-G5-original-white-mesh-black-fire-priority-admission: NEXT23b source-slot DXBC, actual translation replay, bound-stage resource identity and same-toolchain final route module admission now have separate verifiers and actual authored evidence (46038739224,46040018978,46041454326,46042755531; retained Unity markers 46037428567). Do not repeat these or other completed authored route/pixel/mesh batches. Prioritize independently authorized original source-backed white mesh / black fire and highest-impact Dummy GUID fanout. Read the latest A3/Particle108/mesh/renderer/material fanout evidence and exact authorized handoff blockers; review actual source-only code for a materially new demonstrated integration defect only if it directly advances restoration, not a new synthetic ladder. Original access requires independently verifiable rights-holder authorization/ownership and storage/CI/port scope, immutable source commit/manifest, source owner length/SHA, typed owner/PathID/raw object SHA, protected same-instance export and exact resource/Material/Renderer trace. If absent, record the exact blocked resource and evidence needed; do not acquire originals or represent authored tests as restoration. NEXT23b remains open: after lawful handoff, run the admitted full 134-program/2312-stage chain, prove source-derived keyword scope/pass semantics and actual final same-toolchain modules. glslang hashes are NOT Unity DXC expectations; require separate independently authenticated same-version Unity Android Vulkan compiler inputs/options, actual module capture and independent serialized same-export route/module decode and byte join, actual GUID/consumer and protected census. Original semantic equivalence and visual recovery unproved. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. A3, third Particle108, original FFT/kernel6, NEXT23b, ten runtime groups, G0-G6 open. CL/lab read-only, BLACK/animation excluded. No production/native/device/APK/XAPK before integrated closure.",
+  "session": "clients/GT/sessions/20261127-next23b-final-route-admission/README_AR.md"
+}
