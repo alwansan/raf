@@ -1,0 +1,3 @@
+2026-11-27T17:44:35.4431489Z GT_PRESERVATION_RETAINED_INPUT a9849829dc7c6bb261d73fca5467066cddf2cf5645d91818f0bd69d8f0af409c 1920
+2026-11-27T17:45:10.7990612Z ##[error]/home/runner/work/raf/raf/ar-host/Source/AssetRipper.Export.UnityProjects/VerifiedTexturePreservationExporter.cs(42,13): error CS0019: Operator '!=' cannot be applied to operands of type 'int' and 'ClassIDType' [/home/runner/work/raf/raf/ar-host/Source/AssetRipper.Export.UnityProjects/AssetRipper.Export.UnityProjects.csproj]
+2026-11-27T17:45:10.8327960Z GT_PERMANENT_EVIDENCE_SHA 3967 161de28118efb53616072aa64c2f93282f819444c75697323ca5f0410ad01821

@@ -39,7 +39,7 @@ public sealed class VerifiedTexturePreservationExporter : IAssetExporter
 
     private static void Check(ITexture2D t, Approval a)
     {
-        if (t.ClassID != ClassIDType.Texture2D ||
+        if (t.ClassID != (int)ClassIDType.Texture2D ||
             t.Collection is not SerializedAssetCollection ||
             t.Collection.Name != a.Owner || t.PathID != a.PathID ||
             SpecialFileNames.IsDefaultResourceOrBuiltinExtra(t.Collection.Name) ||

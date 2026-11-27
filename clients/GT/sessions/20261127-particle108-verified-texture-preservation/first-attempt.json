@@ -1,0 +1,20 @@
+{
+  "status": "FAILED_COMPILE_ONLY",
+  "head": "8d0bdc9c75065b0e5e114785cad23d55423eeb63",
+  "run": 46044158963,
+  "job": 140659102887,
+  "lint": 46044158765,
+  "lint_conclusion": "success",
+  "retained_input_verified": true,
+  "owner_bytes": 1920,
+  "owner_sha256": "a9849829dc7c6bb261d73fca5467066cddf2cf5645d91818f0bd69d8f0af409c",
+  "failure": "CS0019 int vs ClassIDType in new wrapper comparison; actual export and RGBA comparison not reached",
+  "archive": {
+    "bytes": 3967,
+    "sha256": "161de28118efb53616072aa64c2f93282f819444c75697323ca5f0410ad01821",
+    "blob": "9025d18ce9c11617fa10bd41bfb1f9ce9a0bb738",
+    "log_chunks": 3,
+    "independent_rehash_pending": true
+  },
+  "actual_original_assets_read": false
+}
