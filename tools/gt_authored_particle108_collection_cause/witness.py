@@ -142,8 +142,11 @@ def verify(out, project):
         pid = int(name.rsplit(" ", 1)[1])
         need(pid not in mats, "duplicate material")
         slots = mat["m_SavedProperties"]["m_TexEnvs"]
-        need(len(slots) == 1 and set(slots[0]) == {"_MainTex"}, "material route")
-        ptr = slots[0]["_MainTex"]["m_Texture"]
+        if isinstance(slots, list):
+            need(len(slots) == 1 and isinstance(slots[0], dict), "material route list")
+            slots = slots[0]
+        need(isinstance(slots, dict) and set(slots) == {"_MainTex"}, "material route")
+        ptr = slots["_MainTex"]["m_Texture"]
         ptr = {"fileID": int(ptr["fileID"]), "guid": str(ptr["guid"]), "type": int(ptr["type"])}
         need(ptr == byid[pid+10]["pointer"], "actual exported material pointer")
         mats[pid] = ptr

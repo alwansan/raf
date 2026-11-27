@@ -74,7 +74,6 @@ jobs:
         run: |
           set -euo pipefail
           py="$RUNNER_TEMP/gt-collection-python/bin/python"
-          PYTHONPATH="$PWD" "$py" -B tools/gt_authored_particle108_collection_cause/witness.py verify --out collection-evidence --project "$RUNNER_TEMP/gt-collection-output/ExportedProject"
           python3 - <<'PY'
           from pathlib import Path
           import shutil
@@ -85,6 +84,7 @@ jobs:
                   dst=target/p.relative_to(source);dst.parent.mkdir(parents=True,exist_ok=True)
                   shutil.copyfile(p,dst)
           PY
+          PYTHONPATH="$PWD" "$py" -B tools/gt_authored_particle108_collection_cause/witness.py verify --out collection-evidence --project "$RUNNER_TEMP/gt-collection-output/ExportedProject"
       - name: Preserve bounded authored evidence
         if: always()
         run: |
