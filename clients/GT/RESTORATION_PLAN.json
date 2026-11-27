@@ -1306,7 +1306,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "0b1caab65536a993628979df34210c978f26ad5f",
+    "reviewed_remote_head": "0912ba8f6b541271b5dfb8f794327117c344e3ca",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -1563,8 +1563,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-imported-PNG-top-mip-same-route-binding",
-      "status": "CANDIDATE_NOT_EXECUTED",
-      "next": "Execute focused actual native V7 and separate imported PNG V8 export witnesses; preserve receipts and fix any strict schema discrepancy."
+      "status": "PYTHON_PASS_ACTUAL_PNG_EXPORT_PENDING",
+      "next": "Inspect run 45957439789 actual native and PNG results; retain actual schema/receipts or fix witness without weakening original pin/route/top mip oracle."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -3588,15 +3588,23 @@
       "retry_activation_commit": "956ff560d50b89ecb7b897d5a381e2d790b231b1"
     },
     "latest_imported_png_route_binding": {
-      "status": "CANDIDATE_NOT_EXECUTED",
+      "status": "PYTHON_PASS_ACTUAL_PNG_EXPORT_PENDING",
       "gate": "G1-G2-imported-PNG-top-mip-same-route-binding",
       "base": "adbfe7c2d50bbf81b3c765d509abe1fe20e5121c",
       "session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
       "original_assets_read": false,
       "original_serialized_source_verified": false,
       "production_renderer_parity_verified": false,
-      "next": "Execute focused actual native V7 and separate imported PNG V8 export witnesses; preserve receipts and fix any strict schema discrepancy.",
-      "oracle_commit": "0b1caab65536a993628979df34210c978f26ad5f"
+      "next": "Inspect run 45957439789 actual native and PNG results; retain actual schema/receipts or fix witness without weakening original pin/route/top mip oracle.",
+      "oracle_commit": "0b1caab65536a993628979df34210c978f26ad5f",
+      "candidate_commit": "c43693c15472b4f7494cab879e2fe0a4e6b0e7ec",
+      "activation_commit": "0912ba8f6b541271b5dfb8f794327117c344e3ca",
+      "run_id": 45957439789,
+      "job_id": 140367073873,
+      "guard_run_id": 45957440880,
+      "guard_conclusion": "success",
+      "regression_step": "success",
+      "observed_run_status": "in_progress"
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."
