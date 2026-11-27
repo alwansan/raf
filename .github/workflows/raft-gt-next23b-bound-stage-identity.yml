@@ -1,0 +1,120 @@
+name: GT NEXT23b actual authored shared-program bound-stage identity
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-next23b-bound-stage-identity.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  author-dxbc:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: windows-2022
+    timeout-minutes: 5
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/gt_next23b_bound_stage_identity/author_windows.py
+            /tools/gt_next23b_translation_replay/author_windows.py
+      - name: Compile authored shared texture and CB program
+        shell: pwsh
+        run: |
+          if (Test-Path Raft) { throw 'Unexpected game tree' }
+          if ((git hash-object tools/gt_next23b_bound_stage_identity/author_windows.py) -ne '7ed399e74a0d0433e70726e224ce95dc4c146192') { throw 'Source pin mismatch' }
+          if ((git hash-object tools/gt_next23b_translation_replay/author_windows.py) -ne '1e48b87bc52281f306c57cebac5713c40ec92517') { throw 'Source pin mismatch' }
+          python -m tools.gt_next23b_bound_stage_identity.author_windows authored-dxbc
+          if ($LASTEXITCODE -ne 0) { throw 'Authored compiler failed' }
+          (Get-Item "$env:SystemRoot/System32/d3dcompiler_47.dll").VersionInfo.FileVersion | Set-Content authored-dxbc/dll-version.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gt-next23b-shared-program-dxbc
+          path: authored-dxbc/
+          retention-days: 14
+          if-no-files-found: error
+  bound-stage-identity:
+    needs: author-dxbc
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tools/gt_next23b_bound_stage_identity/
+            /tools/gt_next23b_translation_replay/
+            /tools/gt_next23b_source_program_admission/
+      - uses: actions/download-artifact@v4
+        with:
+          name: gt-next23b-shared-program-dxbc
+          path: authored-dxbc
+      - name: Verify pinned code and install public compiler tools
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git hash-object tools/gt_next23b_bound_stage_identity/audit.py)" = 440240abcc278bfcb5c4679b8bcdf5f608ade869
+          test "$(git hash-object tools/gt_next23b_bound_stage_identity/author_windows.py)" = 7ed399e74a0d0433e70726e224ce95dc4c146192
+          test "$(git hash-object tools/gt_next23b_bound_stage_identity/witness.py)" = aebef10645f283a8336fa40860168f11ee4ac62f
+          test "$(git hash-object tools/gt_next23b_translation_replay/author_windows.py)" = 1e48b87bc52281f306c57cebac5713c40ec92517
+          test "$(git hash-object tools/gt_next23b_translation_replay/audit.py)" = c790f11ff1c822c2859e72fe7c6919db358757cf
+          test "$(git hash-object tools/gt_next23b_source_program_admission/audit.py)" = aa221fa2b64bb6ab0ff97df474f7fb2384b01253
+          test "$(git hash-object scripts/gt_original_921_all_variants.py)" = 3ab23da40c1cfd8e77af5721e4bdd3d72fe749a9
+          test "$(git hash-object scripts/gt_original_921_shaderlab.py)" = 33d08da56c3e11fb18f4ce511e8bfc17279edf67
+          test "$(git hash-object scripts/gt_original_921_keyword_routes.py)" = 1672c7e9ad6698c2703d57dc30c760f4bd4a41af
+          test "$(git hash-object scripts/gt_original_921_cb_layout.py)" = 61f668c59055f453f05334438aef3a0b5665010b
+          test "$(git hash-object scripts/gt_original_921_cb_hlsl.py)" = 975bb92f79598b2c3179ee4fa301da1e29160e1f
+          test "$(git hash-object scripts/gt_original_921_resource_rebind.py)" = 53440b6e09f13c691bc4c5ade48cb27c87f6a027
+          test "$(git hash-object scripts/gt_resource_register_contract.py)" = 04e0d8e6f89794247b6d4c0a8ebdd558b724f20a
+          test "$(git hash-object scripts/a12_shader_parameter_decode.py)" = c057b630bfcab8d093ac77601b6e20d91215b20c
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          mkdir -p evidence
+          git rev-parse HEAD > evidence/tested-head.txt
+          dpkg-query -W vkd3d-compiler libvkd3d-shader1 spirv-tools spirv-cross glslang-tools > evidence/package-versions.txt
+      - name: Actual legacy producer composer and independent slot-identity audit
+        run: |
+          set -euo pipefail
+          python3 -B -m tools.gt_next23b_bound_stage_identity.witness --fixture authored-dxbc --out evidence | tee evidence/actual.log
+          cp -r authored-dxbc evidence/authored-dxbc
+      - name: Preserve bounded authored evidence
+        if: success()
+        run: |
+          python3 - <<'PY'
+          import base64,hashlib,zipfile
+          from pathlib import Path
+          root=Path("evidence")
+          files=[p for p in sorted(root.rglob("*")) if p.is_file()]
+          assert len(files)<=64 and sum(p.stat().st_size for p in files)<=2*1024*1024
+          with zipfile.ZipFile(root/"permanent-authored-evidence.zip","w",compression=zipfile.ZIP_DEFLATED) as z:
+              for p in files:
+                  assert not p.is_symlink()
+                  z.write(p,p.relative_to(root))
+          data=(root/"permanent-authored-evidence.zip").read_bytes()
+          assert len(data)<=128*1024
+          print("GT_PERMANENT_EVIDENCE_SHA",len(data),hashlib.sha256(data).hexdigest())
+          enc=base64.b64encode(data).decode("ascii")
+          for i in range(0,len(enc),2048): print("GT_PERMANENT_EVIDENCE_B64",i//2048,enc[i:i+2048])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gt-next23b-bound-stage-identity
+          path: evidence/
+          retention-days: 14
+          if-no-files-found: warn
