@@ -1,3 +1,4 @@
+# Bounded offline replay of two pinned authored archives, 2026-11-27.
 name: GT exact authored FFT complete-row replay (NO Unity execution)
 on:
   push:
