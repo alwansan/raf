@@ -61,9 +61,23 @@ def inspect(archive,digest,run,head,attempt):
             need(q is not None and re.search(r"^OK$",s,re.M),"regression_failure:"+name)
             tests[name]=int(q[1])
     report=load("normalmap-importer-report.json")
-    need(len(tests)==19 and sum(tests.values())==293 and report["tests"]==tests and report["counterfactual_count"]==37,"regression_population")
+    need(len(tests)==19 and sum(tests.values())==296 and report["tests"]==tests and report["counterfactual_count"]==37,"regression_population")
     need(a["status"]==h15["status"] and a["actual_compiled_exporter_modes"]==6 and a["actual_normalmap_policy_changes"]==2 and a["actual_ordinary_policy_unchanged"]==4 and a["actual_metadata_control_count"]==6 and a["production_activation"] is False,"six_export_modes_scope")
-    old={(x["mode"],tuple(x["source_key"])):x for x in h15["independent"]["six_pair_rows"]}
+    old={(x["mode"],tuple(x["source_key"])):dict(x) for x in h15["independent"]["six_pair_rows"]}
+    # Recompute the erratum from the archived raw authored metadata rather
+    # than accept a different normalized hash or weaken ordinary policy.
+    need(h15["archive"]["id"]==15186083739 and h15["archive"]["sha256"]=="25506dd7361b2849b7de90cc78b2d59d8d80fbf2cf6c2913cb3d8c848388059c" and h15["archive"]["member_sha256"]["alpha-exporter-actual.json"]=="51ed86ab7908ed2128ea756a0c503e2ef97215111a5d5fd1879a3e5a0ba4fabf","erratum_archive_binding")
+    fix=old[("rgba",("sharedassets3.assets",1))]
+    raw=V15.with_name("authored-rgba32-pathid1-historical-before.meta.txt").read_bytes()
+    need(fix["normalized_before_sha256"]==fix["normalized_after_sha256"]=="886a66512cc4ffd828e2a5b5c6c03da0e91f54394f7cdce847aa42161dee8ea7" and sha(raw)==fix["before_meta_sha256"]=="5df34a977820ac1fff63a388afa11ac73190caddf6f90520c33fedcc0c9e4784","erratum_before_binding")
+    old_header=b"guid: f7d698ac048f0f84da74c515ebbf85c5\ntimeCreated: 1795772245\n"
+    new_header=b"guid: 605a4e8ae43c6334685245f7e2c2a1de\ntimeCreated: 1795772246\n"
+    need(raw.count(old_header)==1,"erratum_header")
+    other=raw.replace(old_header,new_header)
+    need(sha(other)==fix["after_meta_sha256"]=="627b3a0b3506f6bf2afdb5ffeb3785e74b5ff93151b7dc8205e75bda0e16e3ca","erratum_after_binding")
+    corrected=sha(meta_stable(raw))
+    need(corrected==sha(meta_stable(other))=="886a66512cc4ffd828e2a2b5c6c03da0e91f54394f7cdce847aa42161dee8ea7" and fix["normalized_before_sha256"][:21]+corrected[21]+fix["normalized_before_sha256"][22:]==corrected,"erratum_exact_digest")
+    fix["normalized_before_sha256"]=fix["normalized_after_sha256"]=corrected
     need(set(a["scopes"])=={"normal","bc3","rgba"} and len(old)==6,"historical_six_pairs")
     for mode,scope in a["scopes"].items():
         need(len(scope["rows"])==2,"pair_count")
@@ -117,7 +131,7 @@ def inspect(archive,digest,run,head,attempt):
             need(cpu==top and cpu!=flip_top(top),"CPU_GPU_orientation")
         else:need(cpu==b"" and obs["cpu_status"]=="not_readable_as_imported","nonreadable_CPU_bypass")
         rows.append(dict(source_key=after["key"],guid=tex["guid"],file_id=tex["file_id"],png_sha256=sha(png),meta_sha256=sha(meta),rgba_sha256=sha(rgba),actual_mip_sha256=hashes,actual_mip_RGBA_hex=hexes))
-    return dict(status=v["status"],run=run,head=head,attempt=attempt,actual_regressions=293,actual_V11_V12_controls=37,actual_V15_controls=6,actual_V16_controls=10,actual_mip_hash_matches=6,actual_GPU_texels=84,top_mip_exact_pixels=70,max_unorm_error=max_error,renderer_route_matches=2,submesh_material_texture_matches=4,shader_adapter_matches=4,archive=dict(bytes=len(raw_zip),sha256=sha(raw_zip),crc_verified=True,member_count=len(files),member_sha256={n:sha(b) for n,b in sorted(files.items())}),rows=rows,original_assets_read=False,source_lower_mip_parity_verified=False,production_activation=False,Android_device=False,XAPK=False)
+    return dict(status=v["status"],run=run,head=head,attempt=attempt,actual_regressions=296,actual_V11_V12_controls=37,actual_V15_controls=6,actual_V16_controls=10,actual_mip_hash_matches=6,actual_GPU_texels=84,top_mip_exact_pixels=70,max_unorm_error=max_error,renderer_route_matches=2,submesh_material_texture_matches=4,shader_adapter_matches=4,archive=dict(bytes=len(raw_zip),sha256=sha(raw_zip),crc_verified=True,member_count=len(files),member_sha256={n:sha(b) for n,b in sorted(files.items())}),rows=rows,original_assets_read=False,source_lower_mip_parity_verified=False,production_activation=False,Android_device=False,XAPK=False)
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--archive",required=True,type=Path)

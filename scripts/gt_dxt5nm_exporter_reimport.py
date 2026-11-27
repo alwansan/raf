@@ -32,12 +32,38 @@ def historical_meta_stable(raw):
         need(n==1,"historical_V15_volatile_header_population")
     return raw
 
+def historical_expected_rows(h,raw=None):
+    """A narrowly scoped archive-backed erratum, never a metadata edit.
+
+    Preserve V15's immutable historical receipt, including its typo.
+    Require the original artifact/member hashes, original raw metadata
+    hashes and precisely the one wrong hex character in both fields.
+    """
+    rows={(x["mode"],tuple(x["source_key"])):dict(x) for x in h["independent"]["six_pair_rows"]}
+    need(len(rows)==6,"historical_six_pairs")
+    need(h["archive"]["id"]==15186083739 and h["archive"]["sha256"]=="25506dd7361b2849b7de90cc78b2d59d8d80fbf2cf6c2913cb3d8c848388059c" and h["archive"]["member_sha256"]["alpha-exporter-actual.json"]=="51ed86ab7908ed2128ea756a0c503e2ef97215111a5d5fd1879a3e5a0ba4fabf","historical_erratum_archive_binding")
+    r=rows[("rgba",("sharedassets3.assets",1))]
+    need(r["normalized_before_sha256"]==r["normalized_after_sha256"]=="886a66512cc4ffd828e2a5b5c6c03da0e91f54394f7cdce847aa42161dee8ea7" and r["alpha_before"]==r["alpha_after"]==1,"historical_erratum_exact_row")
+    need(r["before_guid"]=="f7d698ac048f0f84da74c515ebbf85c5" and r["after_guid"]=="605a4e8ae43c6334685245f7e2c2a1de" and r["before_meta_sha256"]=="5df34a977820ac1fff63a388afa11ac73190caddf6f90520c33fedcc0c9e4784" and r["after_meta_sha256"]=="627b3a0b3506f6bf2afdb5ffeb3785e74b5ff93151b7dc8205e75bda0e16e3ca","historical_erratum_original_row_binding")
+    if raw is None:raw=V15.with_name("authored-rgba32-pathid1-historical-before.meta.txt").read_bytes()
+    need(digest(raw)==r["before_meta_sha256"],"historical_erratum_raw_meta_drift")
+    before_header=b"guid: f7d698ac048f0f84da74c515ebbf85c5\ntimeCreated: 1795772245\n"
+    after_header=b"guid: 605a4e8ae43c6334685245f7e2c2a1de\ntimeCreated: 1795772246\n"
+    need(raw.count(before_header)==1,"historical_erratum_exact_header")
+    after=raw.replace(before_header,after_header)
+    need(digest(after)==r["after_meta_sha256"],"historical_erratum_after_meta_drift")
+    corrected=digest(historical_meta_stable(raw))
+    need(corrected==digest(historical_meta_stable(after))=="886a66512cc4ffd828e2a2b5c6c03da0e91f54394f7cdce847aa42161dee8ea7","historical_erratum_recomputed_digest")
+    need(r["normalized_before_sha256"][:21]+corrected[21]+r["normalized_before_sha256"][22:]==corrected,"historical_erratum_single_hex_character")
+    r["normalized_before_sha256"]=r["normalized_after_sha256"]=corrected
+    return rows
+
 def validate_replay(a,p,h):
     status="PASS_ACTUAL_AUTHORED_SELECTIVE_DXT5NM_PNG_EXPORTER_ALPHA_POLICY"
     need(a["status"]==h["status"]==status and a["actual_compiled_exporter_modes"]==6 and a["actual_normalmap_policy_changes"]==2 and a["actual_ordinary_policy_unchanged"]==4 and a["actual_metadata_control_count"]==6 and a["source_bytes_unchanged"] is True and a["production_activation"] is False and a["original_assets_read"] is False and a["Unity_reimport_of_candidate_verified"] is False,"V15_actual_replay_required")
     for k in ("original_git_blob","original_sha256","patched_sha256","patch_script_sha256","opt_in_environment","opt_in_value","default_behavior_changed","general_importer_factory_changed","production_activation","source_asset_bytes_modified"):
         need(p[k]==h["patch"][k],"V15_pinned_patch_drift:"+k)
-    historical={(x["mode"],tuple(x["source_key"])):x for x in h["independent"]["six_pair_rows"]}
+    historical=historical_expected_rows(h)
     need(len(historical)==6 and set(a["scopes"])=={"normal","bc3","rgba"},"six_historical_pairs_required")
     for mode in ("normal","bc3","rgba"):
         scope=a["scopes"][mode];need(len(scope["rows"])==2,"pair_population")
@@ -47,7 +73,12 @@ def validate_replay(a,p,h):
             x=historical.pop((mode,tuple(c["key"])))
             need(b["key"]==c["key"] and b["ptr"][1:]==c["ptr"][1:] and b["alpha"]==x["alpha_before"] and c["alpha"]==x["alpha_after"] and pair["only_alpha_policy_changed"]==(mode=="normal"),"selective_policy_drift")
             for side,row in (("before",b),("after",c)):
-                need(row["png_sha256"]==x["png_sha256"] and row["rgba_sha256"]==x["rgba_sha256"]==digest(bytes.fromhex(row["rgba_hex"])) and digest(historical_meta_stable(row["metadata"].encode()))==x["normalized_"+side+"_sha256"],"historical_V15_export_bytes_drift")
+                context=f"{mode}:{row['key']}:{side}"
+                need(row["png_sha256"]==x["png_sha256"],"historical_V15_PNG_drift:"+context)
+                need(row["rgba_sha256"]==x["rgba_sha256"]==digest(bytes.fromhex(row["rgba_hex"])),"historical_V15_RGBA_drift:"+context)
+                got=digest(historical_meta_stable(row["metadata"].encode()))
+                expected=x["normalized_"+side+"_sha256"]
+                need(got==expected,"historical_V15_metadata_drift:"+context+":"+got+":"+expected)
             v15.compare_meta(b["metadata"].encode(),c["metadata"].encode(),mode=="normal")
     need(not historical,"missing_historical_pairs")
 

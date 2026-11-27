@@ -1,0 +1,43 @@
+{
+  "status": "FAILED_PRE_UNITY_V15_PUBLISHED_DIGEST_TRANSCRIPTION_ERRATUM",
+  "run": 45976648432,
+  "job": 140429921178,
+  "head": "a441a743f09f3a71f10a1f550b0281a4b46c343d",
+  "guard": {
+    "run": 45976648602,
+    "conclusion": "success"
+  },
+  "source_regressions": 293,
+  "actual_V11_V12_controls": 37,
+  "actual_V15_controls": 6,
+  "actual_compiled_exports": 6,
+  "actual_normalmap_policy_changes": 2,
+  "actual_ordinary_policy_unchanged": 4,
+  "actual_Unity_started": false,
+  "failed_step": "Stage direct corrected exporter PNG and metadata with exact authored routes",
+  "error": "historical_V15_export_bytes_drift",
+  "archive": {
+    "id": 15187487628,
+    "bytes": 30213,
+    "sha256": "d7cb7c944e9dba560d6378dd166c0fe775fa362c58afb6277930b6aa55b57837",
+    "crc_verified": true,
+    "member_count": 38,
+    "receipt_sha256": "d63ec90bf44ce23046ea2bcd1020bb849f6ce789c9aa2b19e3c0a52c6f8d4a80",
+    "source_report_sha256": "b4e9dac588bcf4482e1060cd6403e2c5ff17ad66232af2e5daff3e78bf993057"
+  },
+  "erratum": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/normalized-rgba32-pathid1-digest-erratum.json",
+  "prior_failure_receipt_inaccurate_claim": "First failure receipt incorrectly said all 12 published normalized hashes reproduced; 10/12 match, two RGBA32 pathID1 fields contain same hex typo. Both archived output sets unchanged.",
+  "actual_archive_comparison": {
+    "zip_crc_all": true,
+    "normalized_metadata_hashes_recomputed": 36,
+    "receipt_RGBA_hashes_recomputed": 36,
+    "retained_actual_normal_PNG_and_decoded_RGBA_hashes_recomputed": 6,
+    "normalized_metadata_byte_strings_equal_across_archives": true,
+    "only_published_hash_fields_wrong": 2,
+    "corrected_expected_table_passes_all_36": true
+  },
+  "original_assets_read": false,
+  "production_activation": false,
+  "Android_device": false,
+  "XAPK": false
+}

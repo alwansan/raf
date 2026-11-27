@@ -55,6 +55,30 @@ class DirectCandidateTests(unittest.TestCase):
         raw=b"guid: "+b"a"*32+b"\ntimeCreated: 123\ntimeCreated: 456\n"
         with self.assertRaises(ValueError):v16.historical_meta_stable(raw)
 
+    def test_actual_historical_erratum_raw_metadata(self):
+        h=v16.read(v16.V15);raw=v16.V15.with_name("authored-rgba32-pathid1-historical-before.meta.txt").read_bytes()
+        rows=v16.historical_expected_rows(h,raw)
+        original={(r["mode"],tuple(r["source_key"])):r for r in h["independent"]["six_pair_rows"]}
+        for key,r in rows.items():
+            if key==("rgba",("sharedassets3.assets",1)):
+                self.assertEqual(r["normalized_before_sha256"],"886a66512cc4ffd828e2a2b5c6c03da0e91f54394f7cdce847aa42161dee8ea7")
+                self.assertEqual(r["normalized_after_sha256"],v16.digest(v16.historical_meta_stable(raw)))
+                self.assertEqual(original[key]["normalized_before_sha256"],"886a66512cc4ffd828e2a5b5c6c03da0e91f54394f7cdce847aa42161dee8ea7")
+                for field in r:
+                    if not field.startswith("normalized_"):self.assertEqual(r[field],original[key][field])
+            else:self.assertEqual(r,original[key])
+
+    def test_historical_erratum_rejects_wrong_archive_or_old_hash(self):
+        for key in ("archive","row"):
+            h=v16.read(v16.V15)
+            if key=="archive":h["archive"]["sha256"]="0"*64
+            else:next(r for r in h["independent"]["six_pair_rows"] if r["mode"]=="rgba" and r["source_key"][1]==1)["normalized_after_sha256"]="0"*64
+            with self.assertRaises(ValueError):v16.historical_expected_rows(h)
+
+    def test_historical_erratum_rejects_changed_raw_bytes(self):
+        h=v16.read(v16.V15);raw=v16.V15.with_name("authored-rgba32-pathid1-historical-before.meta.txt").read_bytes()
+        with self.assertRaises(ValueError):v16.historical_expected_rows(h,raw.replace(b"alphaIsTransparency: 1",b"alphaIsTransparency: 0"))
+
     def test_probe_never_writes_texture_metadata(self):
         s=(v16.V16_TOOLS/"SyntheticNormalExporterReimport.cs").read_text()
         self.assertNotIn("File.WriteAllBytes",s)
