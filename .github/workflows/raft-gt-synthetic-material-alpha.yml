@@ -15,6 +15,7 @@ on:
           - resource-pixels
           - fft-coordinate
           - fft-coordinate-replay
+          - particle-alpha-provenance
   push:
     branches: [feature/android-native-port]
     paths:
@@ -33,7 +34,7 @@ concurrency:
 
 jobs:
   synthetic-pixels:
-    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]') && !contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 30
@@ -863,5 +864,79 @@ jobs:
         with:
           name: gt-authored-fft-coordinate-replay-${{ github.run_id }}
           path: authored-fft-replay-results/*.json
+          if-no-files-found: warn
+          retention-days: 14
+
+
+  particle-alpha-provenance:
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'particle-alpha-provenance'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout source-only diagnostics and authored tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tests/test_gt_particle108_export_alpha_diagnostic.py
+            /tests/test_gt_particle108_alpha_provenance.py
+            /tests/test_b05_verify_material_texenv_bindings.py
+            /tests/test_verify_exported_material_texture_links.py
+            /.github/workflows/raft-gt-synthetic-material-alpha.yml
+      - name: Install public YAML and image decoders
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          python3 -m venv "$RUNNER_TEMP/gt-alpha-provenance"
+          "$RUNNER_TEMP/gt-alpha-provenance/bin/python" -m pip install --disable-pip-version-check Pillow==11.3.0 PyYAML==6.0.3
+      - name: Execute authored YAML PNG pointer and alpha regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir alpha-provenance-results
+          py="$RUNNER_TEMP/gt-alpha-provenance/bin/python"
+          for test_file in test_gt_particle108_export_alpha_diagnostic.py test_gt_particle108_alpha_provenance.py test_b05_verify_material_texenv_bindings.py test_verify_exported_material_texture_links.py; do
+            test -f "tests/$test_file"
+            "$py" -B -m unittest discover -s tests -p "$test_file" -v 2>&1 | tee "alpha-provenance-results/$test_file.log"
+          done
+          "$py" -B - <<'PY'
+          import json,os,re
+          from pathlib import Path
+          root=Path('alpha-provenance-results')
+          counts={}
+          for p in sorted(root.glob('*.log')):
+              data=p.read_text()
+              m=re.search(r'^Ran (\d+) tests? in ', data, re.M)
+              assert m and int(m[1])>0 and re.search(r'^OK$',data,re.M)
+              counts[p.name]=int(m[1])
+          assert len(counts)==4
+          result=dict(status="PASS_AUTHORED_PARTICLE108_ALPHA_POINTER_PROVENANCE",
+              run_id=os.environ["GITHUB_RUN_ID"],head=os.environ["GITHUB_SHA"],
+              test_counts=counts,total_tests=sum(counts.values()),
+              actual_authored_Material_YAML_and_PNG_decoded=True,
+              original_source_readers_mocked_in_integration_tests=True,
+              original_assets_read=False,original_alpha_loss_proven=False,
+              Unity_or_Android_pixels_verified=False,original_game_fire_repaired=False,
+              XAPK_requested=False)
+          (root/'report.json').write_text(json.dumps(result,sort_keys=True,indent=2)+'\n')
+          print(json.dumps(result,sort_keys=True))
+          PY
+      - name: Retain only authored test logs and aggregate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-particle-alpha-provenance-${{ github.run_id }}
+          path: alpha-provenance-results/*
           if-no-files-found: warn
           retention-days: 14
