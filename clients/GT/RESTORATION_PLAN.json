@@ -1306,11 +1306,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "0bade38ed8d4d68271571add9d4396f06b64d111",
-    "purpose": "Public exporter component capture executed and actual authored Unity Vulkan submesh routing proven via corrected independent receipt replay; original acceptance blocked",
+    "reviewed_remote_head": "ae362d0a4314ab38d14b3649859844255b33c2dc",
+    "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-authored-submesh-vulkan/README_AR.md",
+    "index": "clients/GT/sessions/20261127-actual-authored-scene-routes/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -1562,9 +1562,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G1-G2-actual-exported-scene-route-join",
+      "id": "G1-G2-mesh-vertex-payload-same-route-byte-binding",
       "status": "NEXT_PRODUCTIVE",
-      "next": "Connect the now-tested public component capture to actual authored SceneExportCollection YAML export and the Python ordered-route gate. Use pinned public tool build, actual generated GameObject/MeshFilter/MeshRenderer/material references and exact trace; ensure same source PathID in two owners, correct global type2 pointer and local YAML anchors, hidden/stripped and non-exportable components unproven. Generate a complete authored mesh/material/shader/texture route with asymmetric ordered indices/UV, cross-owner external table or explicit typed source fixtures; verify actual serialized export against source metadata, rejecting swapped existing materials and wrong scene scope. No original acquisition; do not call source reader mocked metadata original acceptance. Reuse successful public compile and raster receipts, no repeat without new purpose. If full authored export path not feasible, strengthen cross-owner and collection semantics in Python using exact public witness contract, and document the blocker. Future integration into original workflow requires explicit authorized source proof (A3 blocked). Continue prioritizing white objects and black fire, then other G0-G6; all remain OPEN, no phone/XAPK."
+      "next": "Extend the same-instance ordered renderer route gate to exact vertex/UV payload proof, using actual pinned owner bytes and stream range bytes instead of historical isolated counts. Review gt_verify_original_mesh_export.py source_geometry: current verify-then-seek (cached whole-provider verification) does not bind the exact subsequently consumed stream bytes; replace with one-pass SHA+size+bounded range capture (reuse verified_range or efficient verified multi-range pass with bounded memory, no repeated full-file hashes per mesh if feasible). Preserve old geometry comparison incl compressed attrs/bindposes. Implement explicit v2 per-mesh payload/layout evidence joined through the same actual scene trace GUID/anchor and MeshFilter/Renderer; source inline bytes vs streamed cases, equal-length mutation, swapped range, altered UV payload with same descriptors and indices, unsupported/unbound stream, compressed/unsupported layout kept unproven. Author independent tests; if actual public YAML witness rerun justified, add source m_DataSize bytes from typed object before export and verify exact 120-byte authored interleaved vertex payload and wrong-UV counterfactual against actual output. Do not imply vertex payload validation from current 13-document identity gate. No new Unity run unless new raster purpose. Original source authorization A3 remains blocked; G0-G6 open; do not acquire source, install original shaders, package or phone test. Then progress other white/fire causes incl material scalar/color and keywords by real evidence."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -2372,6 +2372,128 @@
       "white_mesh_repaired": false,
       "production_pixels": false,
       "Android_device": false,
+      "XAPK": false
+    },
+    "latest_actual_authored_scene_route_join": {
+      "status": "PASS_AUTHORED_ACTUAL_EXPORT_ROUTE_GATE",
+      "run_id": 45946854653,
+      "job_id": 140333416363,
+      "head": "a630e5855fe9373d27a8876a7391835e35b2e4e8",
+      "conclusion": "success",
+      "guard_run_id": 45946854501,
+      "artifact_id": 15174404039,
+      "archive": "clients/GT/sessions/20261127-actual-authored-scene-routes/actual-run-45946854653.zip",
+      "archive_bytes": 3771,
+      "archive_sha256": "f87979a8a236de3092292909a2339f54d2c84d645f594af53940c47e9b446d25",
+      "archive_git_blob": "7335605c22dfcd00bf800aa51c5f4cb29eb27a81",
+      "archive_crc_sha_size_verified_locally": true,
+      "members": {
+        "build.json": {
+          "bytes": 576,
+          "sha256": "469055bed678621dcc4c6e6993173db0aa379529d7d8fcc745020a3cb61cda7c"
+        },
+        "report.json": {
+          "bytes": 563,
+          "sha256": "0beb75194765384f1d072688e7e8090ad3b60f7e5a82530c7a9458362366750a"
+        },
+        "route-join.json": {
+          "bytes": 3135,
+          "sha256": "4cfcc88d9bb4643c894884db65076d63e1e8fcdaaf6015b5adba1da7b73a1914"
+        },
+        "test_b03_verify_renderer_material_links.py.log": {
+          "bytes": 2556,
+          "sha256": "c28e4d716a01ac768cf6d55e50d36f32ec6422e9561960fb35485eb759985a6b",
+          "tests": 17
+        },
+        "test_gt_renderer_submesh_routes.py.log": {
+          "bytes": 3004,
+          "sha256": "7af2e74e4ea5f2c16cb7cb53ab5aa28ed76607fb8c35f0a1a2c041c1ba243c76",
+          "tests": 21
+        },
+        "tool-smoke.log": {
+          "bytes": 63,
+          "sha256": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+        },
+        "witness.log": {
+          "bytes": 41,
+          "sha256": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
+        }
+      },
+      "compiled_files": {
+        "AssetRipper.Export.UnityProjects.dll": "2f3a002172facc120c0378967259512c82fd62f48511505c1c9e3c715a99bea1",
+        "RaftAuthoredSceneRouteWitness.cs": "fe19096129c7142ef9c948f8d2612a0d412b57ac159102ca1d36c07c061a22a5",
+        "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
+      },
+      "public_tool_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+      "actual_public_export_collections": 9,
+      "actual_exported_documents": 13,
+      "actual_native_scene_files": 2,
+      "source_generated_object_count": 13,
+      "hidden_components": 2,
+      "source_contract_captured_before_export": true,
+      "same_PathID_distinct_owners": true,
+      "actual_cross_owner_dependency_order": true,
+      "complete_renderer_routes": 2,
+      "complete_submesh_routes": 4,
+      "material_shader_links_matched": 4,
+      "material_texenv_slots_matched": 4,
+      "regression_tests_passed": 38,
+      "counterfactual_count": 9,
+      "counterfactuals": {
+        "foreign_scene_gameobject_in_real_YAML": "ordered_pointer_target_mismatch",
+        "hidden_source_renderers_not_promoted": "missing_source_export_trace",
+        "nonexportable_component_trace": "unproven_exportable_global_target",
+        "same_document_but_nonlocal_gameobject_reference": "renderer_gameobject_not_local",
+        "source_external_table_swapped_same_PathIDs": "ordered_pointer_target_mismatch",
+        "stripped_renderer_is_not_complete": "missing_actual_serialized_target",
+        "swap_existing_materials_in_real_YAML": "ordered_pointer_target_mismatch",
+        "unscoped_type0_trace": "unproven_exportable_global_target",
+        "wrong_global_serialized_type": "serialized_document_trace_type_mismatch"
+      },
+      "original_assets_read": false,
+      "original_serialized_source_verified": false,
+      "production_auto_exporter_selection": false,
+      "authored_native_shader_programs_verified": false,
+      "production_renderer_parity_verified": false,
+      "vertex_payload_or_GPU_verified": false,
+      "Unity_render_executed": false,
+      "XAPK": false
+    },
+    "latest_actual_authored_scene_build_failure": {
+      "status": "FAIL_AUTHORED_WITNESS_GENERIC_POINTER_COMPILATION",
+      "run_id": 45946688897,
+      "job_id": 140332885448,
+      "head": "793e1f0f8f6e80d05f7a9e79a63d1cdd3201ebef",
+      "conclusion": "failure",
+      "guard_run_id": 45946688780,
+      "artifact_id": 15175335329,
+      "archive": "clients/GT/sessions/20261127-actual-authored-scene-routes/failed-build-45946688897.zip",
+      "archive_bytes": 3431,
+      "archive_sha256": "3307811851bcce07faa76406610ecce02f106f95f424b31d75e83dcc3c5ab8ab",
+      "archive_git_blob": "42db56a11e5bbdfc18a9bf7c9b05f5c70baf8382",
+      "archive_crc_sha_size_verified_locally": true,
+      "members": {
+        "build-failure.log": {
+          "bytes": 12840,
+          "sha256": "a031102dfd9370c8980cb21424749e975b9d987dedb34cab748f5f507f4e06e2"
+        },
+        "test_gt_renderer_submesh_routes.py.log": {
+          "bytes": 3004,
+          "sha256": "1c76a432b127059606e6deb11cae87de5eea3ee66d7c8e24ac6ed3fa78745362",
+          "tests": 21
+        },
+        "test_b03_verify_renderer_material_links.py.log": {
+          "bytes": 2556,
+          "sha256": "bff0c89bbd927c2a0bca3660dee364fd629fb1f4248c357ef771bc344eafdebc",
+          "tests": 17
+        }
+      },
+      "regression_tests_passed": 38,
+      "actual_export_executed": false,
+      "reason": "C# LINQ inferred object rather than IPPtr for Distinct(ReferenceEqualityComparer.Instance), causing CS1061 and CS0266. Explicit Distinct<IPPtr> corrects the compile error, actual export not yet confirmed.",
+      "fix_commit": "0caf15f6a892549bdcc09d055b349a96be1ec65f",
+      "retry_run_id": 45946854653,
+      "original_assets_read": false,
       "XAPK": false
     }
   },
