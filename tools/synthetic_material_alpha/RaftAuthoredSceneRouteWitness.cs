@@ -20,6 +20,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Subclasses.GLTextureSettings;
 using AssetRipper.SourceGenerated.Classes.ClassID_33;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
@@ -187,6 +188,21 @@ public static class RaftAuthoredSceneRouteWitness
             tex.Format_C28E=AssetRipper.SourceGenerated.Enums.TextureFormat.RGBA32;
             tex.MipCount_C28=2;tex.ImageCount_C28=1;
             int dimension=SetTextureDimension(tex);
+            // Typed generated GLTextureSettings, including distinct U/V/W.
+            // Different interface aliases must resolve to the same instance.
+            var samplerProps=tex.GetType().GetInterfaces().SelectMany(t=>t.GetProperties())
+                .Where(p=>p.CanRead && typeof(IGLTextureSettings).IsAssignableFrom(p.PropertyType)).ToArray();
+            var settings=samplerProps.Select(p=>p.GetValue(tex)).OfType<IGLTextureSettings>().ToArray();
+            Require(settings.Length>0 && settings.All(s=>ReferenceEquals(s,settings[0])),
+                "authored_texture_sampler_not_unique");
+            var sampler=settings[0];
+            sampler.FilterMode=1+i;
+            sampler.Aniso=2+i*6;
+            sampler.MipBias=i==0?-.625f:.375f;
+            sampler.WrapU=i;sampler.WrapV=2-i;sampler.WrapW=3-i;
+            Require(sampler.FilterMode==1+i && sampler.Aniso==2+i*6 &&
+                sampler.MipBias==(i==0?-.625f:.375f) && sampler.WrapU==i &&
+                sampler.WrapV==2-i && sampler.WrapW==3-i,"authored_sampler_capture_drift");
             var mipBytes=new byte[]{(byte)(32+64*i),64,192,0,
                 128,(byte)(96+32*i),32,255,18,172,93,127,207,9,55,64,
                 (byte)(90+32*i),66,33,171};
@@ -269,6 +285,8 @@ public static class RaftAuthoredSceneRouteWitness
             rows.Add(Row(tex,new Dictionary<string,object>{
                 ["m_Width"]=tex.Width_C28,["m_Height"]=tex.Height_C28,
                 ["m_TextureFormat"]=(int)tex.Format_C28E,["m_MipCount"]=tex.MipCount_C28,
+                ["m_TextureSettings"]=new {m_FilterMode=sampler.FilterMode,m_Aniso=sampler.Aniso,
+                    m_MipBias=sampler.MipBias,m_WrapU=sampler.WrapU,m_WrapV=sampler.WrapV,m_WrapW=sampler.WrapW},
                 ["m_ImageCount"]=tex.ImageCount_C28,["m_TextureDimension"]=dimension,
                 ["m_CompleteImageSize"]=tex.Has_CompleteImageSize_C28_UInt32()?
                     (long)tex.CompleteImageSize_C28_UInt32:tex.CompleteImageSize_C28_Int32,
@@ -322,7 +340,7 @@ public static class RaftAuthoredSceneRouteWitness
         var externals=owners.ToDictionary(o=>o.Name,o=>o.Dependencies.Skip(1).Select(d=>d?.Name).ToArray());
         // The source contract is captured from generated objects before any
         // export or trace. It is not reconstructed from exported YAML.
-        var source=new {schema_version=6,authored_generated_objects=true,objects=rows,externals,
+        var source=new {schema_version=7,authored_generated_objects=true,objects=rows,externals,
             providers=new[]{new {name=providerName,bytes=providerData.Length,sha256=providerSHA}},
             hidden=hidden.Select(o=>new {owner=o.Collection.Name,path_id=o.PathID,class_id=o.ClassID}).ToArray()};
         File.WriteAllText(Path.Combine(root,"source.json"),JsonSerializer.Serialize(source));

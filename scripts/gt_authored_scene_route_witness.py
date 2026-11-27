@@ -12,6 +12,7 @@ from scripts import gt_renderer_submesh_routes as gate
 from scripts import gt_mesh_vertex_payload as payload
 from scripts import gt_texture_route_payload as texture_payload
 from scripts import gt_streamed_texture_route_payload as streamed_texture
+from scripts import gt_native_texture_route_sampler as native_sampler
 import struct
 import yaml
 
@@ -29,16 +30,16 @@ def load(root):
          producer.get("actual_scene_collections")==2 and producer.get("authored_file_backed_streamed_texture_collections")==2
          and producer.get("original_assets_read") is False,
          "authored_producer_contract")
-    need(source.get("authored_generated_objects") is True and source.get("schema_version")==6,
+    need(source.get("authored_generated_objects") is True and source.get("schema_version")==7,
          "authored_source_contract")
-    objects={};proofs={};requests={}
+    objects={};proofs={};requests={};source_samplers={}
     providers=source.get("providers")
     need(type(providers) is list and len(providers)==1 and providers[0].get("name")=="authored-textures.resS"
          and providers[0].get("bytes")==61,"authored_provider_contract")
     pins={"Raft_Data/"+p["name"]:("plain",p["bytes"],p["sha256"]) for p in providers}
     for row in source["objects"]:
         key=(row["owner"],row["path_id"]);cls=row["class_id"]
-        need(key not in objects and cls in gate.CLASSES,"authored_source_identity_collision")
+        need(key not in objects and key not in requests and cls in gate.CLASSES,"authored_source_identity_collision")
         if cls==43:
             proof=payload.source_request(row["tree"])
             need(isinstance(proof,payload.Proof) and proof.length==120,"authored_120_byte_mesh_required")
@@ -48,6 +49,7 @@ def load(root):
             need(isinstance(req,streamed_texture.Request) and req.mip_lengths==(16,4),
                  "authored_two_mip_stream_request_required")
             requests[key]=req
+            source_samplers[key]=native_sampler.proof(row["tree"])
         else:objects[key]=(cls,gate.mesh_layout(row["tree"]) if cls==43 else row["tree"])
     need(len(requests)==2 and sorted(r.offset for r in requests.values())==[7,34],
          "authored_distinct_nonzero_stream_extents_required")
@@ -67,7 +69,7 @@ def load(root):
     need(len(renderers)==len(materials)==2 and renderers[0][1]==renderers[1][1] and materials[0][1]==materials[1][1],
          "same_pathID_different_owner_control_missing")
     need(externals[renderers[0][0]]!=externals[renderers[1][0]],"different_external_table_order_missing")
-    return objects,externals,mapping,hidden,renderers,materials,producer,proofs,requests,pins
+    return objects,externals,mapping,hidden,renderers,materials,producer,proofs,requests,pins,source_samplers
 
 
 def scene_row(text,anchor,cls,transform):
@@ -81,8 +83,9 @@ def scene_row(text,anchor,cls,transform):
 def audit(root,out):
     root=Path(root);out=Path(out)
     need(not out.exists() and out.parent.is_dir(),"fresh_aggregate_receipt_required")
-    objects,externals,mapping,hidden,renderers,materials,producer,proofs,requests,pins=load(root)
-    files,docs=gate.actual_index(root/"project",mapping,texture_payloads=True)
+    objects,externals,mapping,hidden,renderers,materials,producer,proofs,requests,pins,source_samplers=load(root)
+    export_samplers={}
+    files,docs=gate.actual_index(root/"project",mapping,texture_payloads=True,samplers=export_samplers)
     need(len(docs)==len(objects) and all(k in docs for _,p,_ in mapping.values() for k in (p[:2],)),
          "actual_native_documents_missing")
     # Native exporter produced all classes, so no imported-image fallback.
@@ -99,6 +102,7 @@ def audit(root,out):
             tree=gate.yaml_tree(body.partition("\n")[2],28)
             captured.append({"stream_descriptor":tree.get("m_StreamData"),
                              "descriptor_fields_present":all(k in tree for k in texture_payload.FIELDS),
+                             "native_sampler":tree.get("m_TextureSettings"),
                              "image_data_count":tree.get("image data"),
                              "payload_hex_characters":len(tree.get("_typelessdata") or "")})
             return body
@@ -107,13 +111,14 @@ def audit(root,out):
         schemas.extend(captured)
     (out.parent/"texture-schema.json").write_text(json.dumps(
         {"authored_only":True,"native_texture_schemas":schemas},sort_keys=True,indent=2)+"\n")
-    baseline=gate.compare(objects,externals,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True)
+    baseline=gate.compare(objects,externals,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True,source_samplers=source_samplers,export_samplers=export_samplers)
     need(baseline["selected_renderer_routes_preserved"],"baseline_not_preserved:"+json.dumps(baseline["reason_counts"],sort_keys=True))
     need(baseline["selected_same_route_vertex_and_UV_bytes_verified"],"authored_payload_not_bound")
     need(baseline["selected_same_route_material_values_verified"],"authored_material_values_not_bound")
     need(baseline["selected_same_route_material_keyword_pass_state_verified"],"authored_keyword_state_not_bound")
     need(baseline["selected_nonnull_same_route_texture_payloads_verified"],"authored_texture_bytes_not_bound")
     need(baseline["selected_same_route_streamed_texture_payloads_verified"],"authored_streamed_texture_bytes_not_bound")
+    need(baseline["selected_same_route_native_texture_sampler_verified"],"authored_native_sampler_not_bound")
     counts=baseline["counts"]
     for k,v in {"source_renderers":2,"complete_renderer_routes":2,
                 "complete_submesh_material_identity_routes":4,"renderer_mesh_layouts_matched":2,
@@ -134,6 +139,10 @@ def audit(root,out):
                 "streamed_texture_payload_slots_matched":4,
                 "streamed_texture_payload_bytes_matched_per_route":80,
                 "streamed_texture_mip_levels_matched_per_route":8,
+                "native_texture_sampler_slots_matched":4,
+                "native_texture_sampler_fields_matched_per_route":24,
+                "complete_native_sampler_bound_renderer_routes":2,
+                "complete_native_sampler_bound_submesh_routes":4,
                 "complete_texture_payload_bound_renderer_routes":2,
                 "complete_texture_payload_bound_submesh_routes":4}.items():need(counts.get(k)==v,"baseline_count:"+k)
     rp=mapping[renderers[0]][1];other=mapping[renderers[1]][1]
@@ -145,14 +154,15 @@ def audit(root,out):
              "counterfactual_not_rejected:"+name+":"+str(report["reason_counts"]))
         controls[name]={"reason":reason,"mismatched":report["counts"].get("mismatched_renderer_routes",0),
                          "unproven":report["counts"].get("unproven_renderer_routes",0)}
-    def disk_control(name,mutator,reason,asset_path=scene_path,old_value_gate_passes=False,old_keyword_gate_passes=False,old_texture_gate_passes=False):
+    def disk_control(name,mutator,reason,asset_path=scene_path,old_value_gate_passes=False,old_keyword_gate_passes=False,old_texture_gate_passes=False,old_sampler_gate_passes=False):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/"project";shutil.copytree(root/"project",p)
             dest=p/asset_path.relative_to(root/"project")
             text=dest.read_text()
             changed=mutator(text);need(changed!=text,"no_counterfactual_mutation")
             dest.write_text(changed)
-            f,d=gate.actual_index(p,mapping,texture_payloads=True)
+            mutated_samplers={}
+            f,d=gate.actual_index(p,mapping,texture_payloads=True,samplers=mutated_samplers)
             if old_value_gate_passes:
                 old=gate.compare(objects,externals,mapping,f,d,vertex_payloads=proofs)
                 need(old["selected_same_route_vertex_and_UV_bytes_verified"],"old_identity_gate_did_not_pass:"+name)
@@ -162,10 +172,15 @@ def audit(root,out):
             if old_texture_gate_passes:
                 old=gate.compare(objects,externals,mapping,f,d,vertex_payloads=proofs,material_values=True,material_keywords=True)
                 need(old["selected_same_route_material_keyword_pass_state_verified"],"old_keyword_gate_did_not_pass:"+name)
-            record(name,gate.compare(objects,externals,mapping,f,d,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),reason)
+            if old_sampler_gate_passes:
+                old=gate.compare(objects,externals,mapping,f,d,vertex_payloads=proofs,material_values=True,
+                    material_keywords=True,texture_payloads=True,streamed_textures=True)
+                need(old["selected_same_route_streamed_texture_payloads_verified"],"old_V6_gate_did_not_pass:"+name)
+            record(name,gate.compare(objects,externals,mapping,f,d,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True,source_samplers=source_samplers,export_samplers=mutated_samplers),reason)
             if old_value_gate_passes:controls[name]["V2_vertex_identity_gate_passed"]=True
             if old_keyword_gate_passes:controls[name]["V3_material_value_gate_passed"]=True
             if old_texture_gate_passes:controls[name]["V4_material_keyword_gate_passed"]=True
+            if old_sampler_gate_passes:controls[name]["V6_texture_payload_gate_passed"]=True
     def swap(body):
         hit=re.search(r"(?m)^  m_Materials:\s*\n((?:  - \{[^\r\n]+\}\r?\n){2})",body)
         need(hit is not None,"actual_material_array_shape_unavailable")
@@ -333,6 +348,40 @@ def audit(root,out):
     ):
         disk_control(name,lambda text:scene_row(text,tp[1],28,lambda body:replace_tex_scalar(body,field,value)),
                      reason,tex_path,old_texture_gate_passes=True)
+    # Change only nested actual native sampler values. The source bytes,
+    # payload, dimensions, PPtrs, and all material/mesh state remain fixed.
+    def replace_sampler_field(body,field,value,rename=None):
+        head,sep,raw=body.partition("\n")
+        node=yaml.compose(raw)
+        settings=[n for k,n in node.value[0][1].value if k.value=="m_TextureSettings"]
+        need(len(settings)==1 and isinstance(settings[0],yaml.MappingNode),"actual_sampler_map_missing")
+        hits=[(k,n) for k,n in settings[0].value if k.value==field]
+        need(len(hits)==1,"actual_sampler_field_missing")
+        k,n=hits[0]
+        need(isinstance(n,yaml.ScalarNode),"actual_sampler_scalar_missing")
+        if rename is not None:
+            raw=raw[:k.start_mark.index]+rename+raw[k.end_mark.index:]
+        elif value is None:
+            lo=raw.rfind("\n",0,k.start_mark.index)+1
+            hi=raw.find("\n",n.end_mark.index)
+            raw=raw[:lo]+raw[hi+1:]
+        else:
+            raw=raw[:n.start_mark.index]+value+raw[n.end_mark.index:]
+        return head+sep+raw
+    for field,value in (("m_FilterMode","0"),("m_Aniso","16"),("m_MipBias","0.875"),
+                        ("m_WrapU","3"),("m_WrapV","0"),("m_WrapW","0")):
+        disk_control("actual_YAML_sampler_"+field.removeprefix("m_")+"_drift",
+            lambda text:scene_row(text,tp[1],28,lambda body:replace_sampler_field(body,field,value)),
+            "same_route_texture_sampler_"+field.removeprefix("m_")+"_drift",tex_path,old_sampler_gate_passes=True)
+    for name,field,value,rename,reason in (
+        ("actual_YAML_sampler_missing_axis","m_WrapV",None,None,"missing_native_texture_sampler_field"),
+        ("actual_YAML_sampler_legacy_wrap_alias","m_WrapU",None,"m_WrapMode","missing_native_texture_sampler_field"),
+        ("actual_YAML_sampler_invalid_filter","m_FilterMode","3",None,"invalid_native_texture_sampler_value"),
+        ("actual_YAML_sampler_importer_unset_mip_bias","m_MipBias","-100",None,"invalid_native_texture_sampler_value"),
+    ):
+        disk_control(name,lambda text:scene_row(text,tp[1],28,
+                      lambda body:replace_sampler_field(body,field,value,rename)),
+                     reason,tex_path,old_sampler_gate_passes=True)
     # Keep actual native output fixed; mutate the provider or source extent
     # in a separate authored copy. V4 identity/values/keywords must pass.
     def source_control(name,changed,reason):
@@ -342,7 +391,7 @@ def audit(root,out):
                          material_values=True,material_keywords=True)
         need(old["selected_same_route_material_keyword_pass_state_verified"],"old_identity_gate_did_not_pass:"+name)
         record(name,gate.compare(altered,externals,mapping,files,docs,vertex_payloads=proofs,
-                    material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),reason)
+                    material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True,source_samplers=source_samplers,export_samplers=export_samplers),reason)
         controls[name]["V4_material_keyword_gate_passed"]=True
     from dataclasses import replace
     a,b=textures
@@ -374,25 +423,26 @@ def audit(root,out):
     # preserving the mesh provider and every local component reference.
     table=deepcopy(externals);ls=table[renderers[0][0]]
     i,j=ls.index(materials[0][0]),ls.index(materials[1][0]);ls[i],ls[j]=ls[j],ls[i]
-    record("source_external_table_swapped_same_PathIDs",gate.compare(objects,table,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),"ordered_pointer_target_mismatch")
+    record("source_external_table_swapped_same_PathIDs",gate.compare(objects,table,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True,source_samplers=source_samplers,export_samplers=export_samplers),"ordered_pointer_target_mismatch")
     altered=deepcopy(mapping);cls,p,exp=altered[renderers[0]];altered[renderers[0]]=(cls,(p[0],p[1],0),exp)
-    record("unscoped_type0_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),"unproven_exportable_global_target")
+    record("unscoped_type0_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True,source_samplers=source_samplers,export_samplers=export_samplers),"unproven_exportable_global_target")
     altered=deepcopy(mapping);cls,p,exp=altered[renderers[0]];altered[renderers[0]]=(cls,(p[0],p[1],3),exp)
-    record("wrong_global_serialized_type",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),"serialized_document_trace_type_mismatch")
+    record("wrong_global_serialized_type",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True,source_samplers=source_samplers,export_samplers=export_samplers),"serialized_document_trace_type_mismatch")
     altered=deepcopy(mapping);cls,p,exp=altered[renderers[0]];altered[renderers[0]]=(cls,p,False)
-    record("nonexportable_component_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),"unproven_exportable_global_target")
+    record("nonexportable_component_trace",gate.compare(objects,externals,altered,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True,source_samplers=source_samplers,export_samplers=export_samplers),"unproven_exportable_global_target")
     # Hidden components must have no actual YAML document/trace. Since they
     # are intentionally excluded from this authored baseline, add them to
     # the source census and show that it cannot falsely claim full closure.
     augmented=dict(objects)
     for key in hidden:augmented[key]=(23,{})
-    record("hidden_source_renderers_not_promoted",gate.compare(augmented,externals,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True),"missing_source_export_trace")
-    result=dict(status="PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_STREAMED_TEXTURE_ROUTE_JOIN",producer=producer,
+    record("hidden_source_renderers_not_promoted",gate.compare(augmented,externals,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True,streamed_textures=True,source_samplers=source_samplers,export_samplers=export_samplers),"missing_source_export_trace")
+    result=dict(status="PASS_ACTUAL_AUTHORED_PUBLIC_SCENE_NATIVE_TEXTURE_SAMPLER_ROUTE_JOIN",producer=producer,
                 actual_exported_documents=len(docs),actual_native_scene_files=2,source_generated_object_count=len(objects),
                 baseline=baseline,counterfactuals=controls,counterfactual_count=len(controls),
                 same_PathID_distinct_owners=True,actual_cross_owner_dependency_order=True,
                 source_contract_captured_before_export=True,hidden_source_renderers_excluded_from_baseline_but_not_promoted=True,
                 original_assets_read=False,original_serialized_source_verified=False,production_renderer_parity_verified=False,
+                serialized_native_texture_sampler_verified=True,
                 native_exported_RGBA32_texture_payload_bytes_verified=True,
                 source_pinned_streamed_RGBA32_texture_payload_bytes_verified=True,
                 authored_provider_count=1,authored_provider_bytes=61,authored_stream_offsets=[7,34],

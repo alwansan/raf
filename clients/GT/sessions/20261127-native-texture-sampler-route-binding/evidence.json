@@ -1,0 +1,13 @@
+{
+  "status": "CANDIDATE_NOT_EXECUTED",
+  "base": "8c59433895a8e1bc89bc5ca1d0f551a43a114cce",
+  "gate": "G1-G2-native-texture-sampler-same-route-binding",
+  "session": "clients/GT/sessions/20261127-native-texture-sampler-route-binding/README_AR.md",
+  "source_scope": "modern native GLTextureSettings six fields, same V6 texture GUID/anchor",
+  "new_test": "tests/test_gt_native_texture_route_sampler.py",
+  "original_assets_read": false,
+  "production_renderer_parity_verified": false,
+  "texture_import_colorspace_or_GPU_verified": false,
+  "XAPK": false,
+  "next": "Execute focused actual public native sampler route witness; verify captured source and actual YAML, preserve evidence."
+}

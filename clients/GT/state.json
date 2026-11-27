@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-streamed-texture-route-binding/README_AR.md",
-  "next_action": "Extend V6 same native RGBA32 Texture2D route to independently captured serialized m_TextureSettings (m_FilterMode, m_Aniso, m_MipBias, m_WrapU/V/W). Reuse B15 FIELDS/original_sampler normalization with strict modern native fields and type/range checks, exact finite float32 mip-bias bits (including signed zero or conservative UNKNOWN), no importer -100 unset equivalence or legacy single wrap alias without proved mapping. Carry sampler proof alongside V5 inline or V6 StreamProof, tied to same source owner snapshot and exact export GUID/anchor; compare native YAML after bytes and keywords. V6 historical API stays sampler-blind. Actual public pinned C# fixture should set distinct typed IGLTextureSettings and capture them before file-backed streamed export. Public pinned Source/AssetRipper.SourceGenerated.Extensions/GLTextureSettingsExtensions.cs confirms FilterMode, Aniso, MipBias, WrapMode, WrapU/V/W; verify texture property name and explicit modern fields. Add V6-pass/new-gate-reject real YAML filter/anisotropy/mip-bias/wrap-axis drift and absent/legacy/invalid values, preserve all 155 tests and 33 controls. Keep serialized native sampler fidelity separate from TextureImporter, colorspace, sRGB, active shader or GPU behavior. After sampler, separately scope decoded PNG top mip and importer settings (never claim full mip byte parity on PNG). A3 remains blocked on verified authorized original source; G0–G6 open; no unauthorized originals/LFS or phone/XAPK.",
+  "latest_session": "clients/GT/sessions/20261127-native-texture-sampler-route-binding/README_AR.md",
+  "next_action": "Execute focused actual public native sampler route witness; verify captured source and actual YAML, preserve evidence.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "594b1aaeea1358394ca62abfcbf3a6b8f3ee8c7d",
+    "reviewed_remote_head": "8c59433895a8e1bc89bc5ca1d0f551a43a114cce",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-native-texture-sampler-same-route-binding",
-      "status": "NEXT_PRODUCTIVE",
-      "next": "Extend V6 same native RGBA32 Texture2D route to independently captured serialized m_TextureSettings (m_FilterMode, m_Aniso, m_MipBias, m_WrapU/V/W). Reuse B15 FIELDS/original_sampler normalization with strict modern native fields and type/range checks, exact finite float32 mip-bias bits (including signed zero or conservative UNKNOWN), no importer -100 unset equivalence or legacy single wrap alias without proved mapping. Carry sampler proof alongside V5 inline or V6 StreamProof, tied to same source owner snapshot and exact export GUID/anchor; compare native YAML after bytes and keywords. V6 historical API stays sampler-blind. Actual public pinned C# fixture should set distinct typed IGLTextureSettings and capture them before file-backed streamed export. Public pinned Source/AssetRipper.SourceGenerated.Extensions/GLTextureSettingsExtensions.cs confirms FilterMode, Aniso, MipBias, WrapMode, WrapU/V/W; verify texture property name and explicit modern fields. Add V6-pass/new-gate-reject real YAML filter/anisotropy/mip-bias/wrap-axis drift and absent/legacy/invalid values, preserve all 155 tests and 33 controls. Keep serialized native sampler fidelity separate from TextureImporter, colorspace, sRGB, active shader or GPU behavior. After sampler, separately scope decoded PNG top mip and importer settings (never claim full mip byte parity on PNG). A3 remains blocked on verified authorized original source; G0–G6 open; no unauthorized originals/LFS or phone/XAPK."
+      "status": "CANDIDATE_NOT_EXECUTED",
+      "next": "Execute focused actual public native sampler route witness; verify captured source and actual YAML, preserve evidence."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -4046,6 +4046,19 @@
           "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
         }
       }
+    },
+    "latest_native_texture_sampler_route_binding": {
+      "status": "CANDIDATE_NOT_EXECUTED",
+      "base": "8c59433895a8e1bc89bc5ca1d0f551a43a114cce",
+      "gate": "G1-G2-native-texture-sampler-same-route-binding",
+      "session": "clients/GT/sessions/20261127-native-texture-sampler-route-binding/README_AR.md",
+      "source_scope": "modern native GLTextureSettings six fields, same V6 texture GUID/anchor",
+      "new_test": "tests/test_gt_native_texture_route_sampler.py",
+      "original_assets_read": false,
+      "production_renderer_parity_verified": false,
+      "texture_import_colorspace_or_GPU_verified": false,
+      "XAPK": false,
+      "next": "Execute focused actual public native sampler route witness; verify captured source and actual YAML, preserve evidence."
     }
   }
 }
