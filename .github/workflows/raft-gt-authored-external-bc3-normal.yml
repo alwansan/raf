@@ -1,0 +1,160 @@
+name: GT actual serialized BC3 and DXT5nm external streams (NO original assets)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-authored-external-bc3-normal.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  actual-external-bc3-normal:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      DOTNET_PROCESSOR_COUNT: '2'
+    steps:
+      - name: Checkout authored-only code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tools/gt_authored_mesh_binary/witness.py
+            /tools/gt_authored_mesh_actual_export/witness.py
+            /tools/gt_authored_serialized_renderer_route/witness.py
+            /tools/gt_authored_external_pptr_route/
+            /tools/gt_authored_external_png_keywords/
+            /tools/gt_authored_external_stream_png_importer/
+            /tests/test_gt_imported_png_route_importer.py
+            /tools/gt_authored_external_bc3_normal/
+            /tests/test_gt_imported_bc3_route_pixels.py
+            /tests/test_gt_imported_dxt5nm_route_pixels.py
+            /tests/test_gt_imported_dxt5nm_route_importer.py
+            /tests/test_gt_patch_bc3_export_decoder.py
+            /tests/test_gt_material_route_keyword_state.py
+            /tests/test_gt_imported_png_route_pixels.py
+            /tests/test_gt_texture_route_payload.py
+            /android-port/Experiments/ExportLineage/
+            /tests/test_gt_original_mesh_source_storage.py
+            /tests/test_gt_mesh_document_stream_identity.py
+            /tests/test_gt_mesh_yaml_unique_mapping.py
+            /tests/test_compare_exported_mesh_geometry.py
+            /tests/test_gt_verify_original_mesh_export.py
+            /tests/test_gt_mesh_vertex_payload.py
+            /tests/test_gt_renderer_submesh_routes.py
+            /tests/test_gt_material_route_values.py
+            /.github/workflows/raft-gt-authored-external-bc3-normal.yml
+      - name: Prepare actual compressed owners and external resources
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          mkdir compressed-evidence
+          python3 -m venv "$RUNNER_TEMP/gt-compressed-python"
+          py="$RUNNER_TEMP/gt-compressed-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3 Pillow==11.3.0
+          "$py" -m pip freeze | tee compressed-evidence/tools.log
+          PYTHONPATH="$PWD" "$py" -B -W error tools/gt_authored_external_bc3_normal/witness.py prepare --out compressed-evidence/case 2>&1 | tee compressed-evidence/prepare.log
+      - name: Earlier geometry, material, keyword, PNG and importer regressions
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-compressed-python/bin/python"
+          for f in test_gt_original_mesh_source_storage.py test_gt_mesh_document_stream_identity.py test_gt_mesh_yaml_unique_mapping.py test_compare_exported_mesh_geometry.py test_gt_verify_original_mesh_export.py test_gt_mesh_vertex_payload.py test_gt_renderer_submesh_routes.py test_gt_material_route_values.py test_gt_material_route_keyword_state.py test_gt_imported_png_route_pixels.py test_gt_imported_png_route_importer.py test_gt_imported_bc3_route_pixels.py test_gt_imported_dxt5nm_route_pixels.py test_gt_imported_dxt5nm_route_importer.py test_gt_patch_bc3_export_decoder.py; do
+            test -f "tests/$f"
+            "$py" -B -W error -m unittest discover -s tests -p "$f" -v 2>&1 | tee "compressed-evidence/$f.log"
+          done
+          "$py" -B - <<'PY'
+          import json,re
+          from pathlib import Path
+          root=Path("compressed-evidence")
+          tests={}
+          for p in sorted(root.glob("test_*.py.log")):
+              log=p.read_text()
+              count=re.search(r"^Ran (\d+) tests? in ",log,re.M)
+              assert count and int(count[1])>0 and re.search(r"^OK$",log,re.M),p.name
+              tests[p.name]=int(count[1])
+          assert len(tests)==15 and sum(v for k,v in tests.items() if k not in {"test_gt_imported_bc3_route_pixels.py.log","test_gt_imported_dxt5nm_route_pixels.py.log","test_gt_imported_dxt5nm_route_importer.py.log","test_gt_patch_bc3_export_decoder.py.log"})==171
+          (root/"regressions.json").write_text(json.dumps(tests,indent=2)+"\n")
+          print("GT_PRIOR_REGRESSIONS_PASS",sum(tests.values()))
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Checkout pinned public exporter source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: Source
+      - name: Build actual exporter with isolated same-reference trace
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git -C ar-host rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          git -C ar-host rev-parse HEAD > compressed-evidence/public-exporter-head.txt
+          py="$RUNNER_TEMP/gt-compressed-python/bin/python"
+          "$py" -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --renderer-lineage
+          PYTHONPATH="$PWD" "$py" -B tools/gt_authored_external_pptr_route/witness.py patch-host --root "$PWD" --cs "$PWD/tools/gt_authored_external_bc3_normal/RaftAuthoredExternalPPtrRoute.cs"
+          "$py" -m scripts.gt_patch_bc3_export_decoder --tool-source ar-host | tee compressed-evidence/bc3-patch.json
+          echo '186108e478686524b4703dc7280015bd8eb58cd0939b4e270c4114c69c8d755a  ar-host/Source/AssetRipper.Export.Modules.Textures/TextureConverter.cs' | sha256sum -c -
+          test -z "${RAFT_GT_DXT5NM_PNG_ALPHA_POLICY:-}"
+          sha256sum ar-host/Source/AssetRipper.Export.UnityProjects/{RaftExportLineage,RaftAuthoredExternalPPtrRoute,ProjectExporter}.cs android-port/Experiments/ExportLineage/Program.cs > compressed-evidence/host-sha256.txt
+          dotnet --info > compressed-evidence/dotnet.log
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/gt-compressed-host" > compressed-evidence/build.log 2>&1 || { tail -100 compressed-evidence/build.log; exit 1; }
+      - name: Load and export both actual compressed owner populations
+        run: |
+          set -euo pipefail
+          for mode in bc3 dxt5nm; do
+            root="$PWD/compressed-evidence/case/$mode"
+            RAFT_PRIVATE_EXPORT_LINEAGE="$root/export-trace.json" RAFT_PRIVATE_EXPORT_MESH_LINEAGE="$root/mesh-trace.json" RAFT_PRIVATE_EXPORT_RENDERER_LINEAGE="$root/renderer-trace.json" RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE=1 timeout 120s dotnet "$RUNNER_TEMP/gt-compressed-host/ExportLineage.dll" "$root/source" "$RUNNER_TEMP/gt-compressed-output-$mode" "$root" 2>&1 | tee "$root/export.log"
+          done
+      - name: Verify distinct V10 and V11 V12 on actual compressed files
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-compressed-python/bin/python"
+          for mode in bc3 dxt5nm; do
+            PYTHONPATH="$PWD" "$py" -B -W error tools/gt_authored_external_bc3_normal/witness.py verify --case "$mode" --out "compressed-evidence/case/$mode" --project "$RUNNER_TEMP/gt-compressed-output-$mode/ExportedProject" 2>&1 | tee "compressed-evidence/verify-$mode.log"
+          done
+      - name: Preserve bounded authored evidence on success or failure
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import base64,hashlib,zipfile
+          from pathlib import Path
+          root=Path("compressed-evidence"); root.mkdir(exist_ok=True)
+          selected=[p for p in root.glob("case/**/*") if p.is_file()]
+          selected+= [p for p in root.glob("*.log") if p.name!="build.log"]
+          selected+= [p for p in (root/"regressions.json",root/"public-exporter-head.txt",root/"host-sha256.txt",root/"bc3-patch.json") if p.is_file()]
+          assert len(selected)<=220 and sum(p.stat().st_size for p in selected)<=2*1024*1024
+          dest=root/"permanent-authored-evidence.zip"
+          with zipfile.ZipFile(dest,"w",compression=zipfile.ZIP_DEFLATED) as z:
+              for p in sorted(set(selected)):
+                  assert not p.is_symlink()
+                  z.write(p,p.relative_to(root).as_posix())
+          data=dest.read_bytes()
+          assert len(data)<=256*1024
+          print("GT_PERMANENT_EVIDENCE_SHA",len(data),hashlib.sha256(data).hexdigest())
+          b64=base64.b64encode(data).decode("ascii")
+          for i in range(0,len(b64),2048):
+              print("GT_PERMANENT_EVIDENCE_B64",i//2048,b64[i:i+2048])
+          PY
+      - name: Upload exact authored inputs and receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-external-bc3-normal-${{ github.run_id }}
+          path: compressed-evidence/
+          if-no-files-found: warn
+          retention-days: 14
