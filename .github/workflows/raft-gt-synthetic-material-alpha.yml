@@ -13,6 +13,7 @@ on:
           - keyword-pixels
           - resource-bindings
           - resource-pixels
+          - fft-coordinate
   push:
     branches: [feature/android-native-port]
     paths:
@@ -31,7 +32,7 @@ concurrency:
 
 jobs:
   synthetic-pixels:
-    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 30
@@ -607,3 +608,144 @@ jobs:
           fi
           docker image rm "$GT_RESOURCE_PIXEL_IMAGE" >/dev/null 2>&1 || true
           rm -rf "$RUNNER_TEMP/raft-resource-pixel-docker"
+
+  fft-coordinate:
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-fft-coordinate]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'fft-coordinate'))
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        mode: [dxc, hlslcc]
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+      queue: max
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      GT_FFT_MODE: ${{ matrix.mode }}
+      GT_FFT_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}-${{ matrix.mode }}
+    steps:
+      - name: Checkout only authored tools and source-side FFT validator
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /scripts/gt_decode_smolv.cpp
+            /tools/synthetic_material_alpha/fft_coordinate_probe.py
+            /android-port/Experiments/GT/Editor/FFTUtilitiesShaderValidation.cs
+            /.github/workflows/raft-gt-synthetic-material-alpha.yml
+      - name: Install public compilers and bundle inspection dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends glslang-tools spirv-tools
+          glslangValidator --version
+          spirv-val --version
+          python3 -m venv "$RUNNER_TEMP/gt-fft-venv"
+          "$RUNNER_TEMP/gt-fft-venv/bin/python" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          smolv="$RUNNER_TEMP/gt-fft-authored-smolv"
+          mkdir "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+      - name: Compile authored sample and fetch cases with deliberate wrong-coordinate controls
+        id: stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B tools/synthetic_material_alpha/fft_coordinate_probe.py selftest
+          python3 -B tools/synthetic_material_alpha/fft_coordinate_probe.py stage \
+            --project synthetic-fft-coordinate-project --results synthetic-fft-coordinate-results \
+            --mode "$GT_FFT_MODE" --run-id "$GT_FFT_RUN_ID"
+          cat synthetic-fft-coordinate-results/cpu.json
+      - name: Require existing activation inputs and disk budget
+        shell: bash
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && { [ -z "${UNITY_SERIAL:-}" ] || [ -z "${UNITY_EMAIL:-}" ] || [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo 'GT_FFT_COORDINATE activation_inputs_missing=true editor_not_run=true'
+            exit 1
+          fi
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+      - name: Compile seven authored coordinate passes in Unity Android Vulkan AssetBundle only
+        id: compile
+        continue-on-error: true
+        uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: synthetic-fft-coordinate-project
+          targetPlatform: Android
+          buildMethod: RaftGT.FFTUtilitiesShaderValidation.Validate
+          manualExit: true
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 10g
+          dockerCpuLimit: 2
+          customParameters: -job-worker-count 2
+      - name: Decode actual seven-pass bundle and validate fragment image operation families
+        if: always() && steps.stage.outcome == 'success'
+        env:
+          COMPILE_OUTCOME: ${{ steps.compile.outcome }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          project=synthetic-fft-coordinate-project
+          results=synthetic-fft-coordinate-results
+          if test -d "$project/ProbeResults"; then
+            sudo chown -R "$(id -u):$(id -g)" "$project/ProbeResults"
+          fi
+          code=1
+          if [ "$COMPILE_OUTCOME" = success ]; then code=0; fi
+          set +e
+          "$RUNNER_TEMP/gt-fft-venv/bin/python" -B tools/synthetic_material_alpha/fft_coordinate_probe.py verify \
+            --project "$project" --results "$results" \
+            --decoder "$RUNNER_TEMP/gt-fft-authored-smolv/decode" \
+            --mode "$GT_FFT_MODE" --run-id "$GT_FFT_RUN_ID" --exit-code "$code"
+          verify_exit=$?
+          set -e
+          if test ! -f "$results/unity.json" && test -f "$project/ProbeResults/gt-fft-utilities-unity-safe.json"; then
+            cp "$project/ProbeResults/gt-fft-utilities-unity-safe.json" "$results/unity.json"
+          fi
+          if test ! -f "$results/authored.bundle" && test -f "$project/ProbeResults/Private/gt-fft-utilities"; then
+            cp "$project/ProbeResults/Private/gt-fft-utilities" "$results/authored.bundle"
+          fi
+          if test -f "$results/verified.json"; then cat "$results/verified.json"; fi
+          exit "$verify_exit"
+      - name: Retain only authored diagnostics and bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-authored-fft-coordinate-${{ matrix.mode }}-${{ github.run_id }}
+          path: synthetic-fft-coordinate-results/*
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove only authored test project
+        if: always()
+        shell: bash
+        run: |
+          if test -f synthetic-fft-coordinate-project/CandidateCompiler.txt; then
+            sudo rm -rf synthetic-fft-coordinate-project
+          fi
