@@ -1,0 +1,120 @@
+name: GT original Mesh storage byte type identity (NO original assets)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-original-mesh-source-storage.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-storage:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout authored code and previous geometry tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tests/test_gt_original_mesh_source_storage.py
+            /tests/test_gt_mesh_document_stream_identity.py
+            /tests/test_gt_mesh_yaml_unique_mapping.py
+            /tests/test_compare_exported_mesh_geometry.py
+            /tests/test_gt_verify_original_mesh_export.py
+            /tests/test_gt_mesh_vertex_payload.py
+            /tests/test_gt_renderer_submesh_routes.py
+            /android-port/Experiments/ExportLineage/
+            /.github/workflows/raft-gt-original-mesh-source-storage.yml
+      - name: Checkout immutable pre-fix consumer separately
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: a84509db54e77b09367fa4b15606c3b2e3422cca
+          path: baseline-source
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tests/test_gt_verify_original_mesh_export.py
+      - name: Install pinned public dependencies only
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test ! -e baseline-source/Raft
+          test ! -e baseline-source/.gt-zip2
+          mkdir source-storage-evidence
+          python3 -m venv "$RUNNER_TEMP/gt-source-storage-python"
+          py="$RUNNER_TEMP/gt-source-storage-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check PyYAML==6.0.3 Pillow==11.3.0
+          "$py" -c 'import yaml,sys; assert yaml.__version__=="6.0.3" and yaml.__with_libyaml__; print(sys.version); print("PyYAML",yaml.__version__,"libyaml",yaml.__with_libyaml__)' | tee source-storage-evidence/tools.log
+      - name: Prove malformed source storage equals clean actual exported geometry on old code
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-source-storage-python/bin/python"
+          cp tests/test_gt_original_mesh_source_storage.py baseline-source/tests/
+          test "$(git -C baseline-source rev-parse HEAD)" = a84509db54e77b09367fa4b15606c3b2e3422cca
+          test "$(git hash-object baseline-source/scripts/gt_verify_original_mesh_export.py)" = bac8985fcee0ae3cef22601de5699b4f89e28db2
+          cd baseline-source
+          "$py" -B - <<'PY' 2>&1 | tee ../source-storage-evidence/baseline.log
+          import json,sys,tempfile
+          from pathlib import Path
+          sys.path.insert(0,"tests")
+          from test_gt_original_mesh_source_storage import cases,authored_export,mesh,FID
+          rows=[]
+          variants=cases()
+          assert len(variants)==31 and len({r[0] for r in variants})==31
+          with tempfile.TemporaryDirectory() as tmp:
+              root=Path(tmp)
+              target=root/"authored.asset"
+              for name,clean,bad,reason in variants:
+                  target.write_text(authored_export(clean))
+                  expected=mesh.export_geometry(target,FID)
+                  assert mesh.source_geometry(clean,root,{},set())==expected,name
+                  assert mesh.source_geometry(bad,root,{},set())==expected,name
+                  rows.append({"case":name,"old_malformed_geometry_equal_clean_export":True,"fixed_reason":reason})
+                  print("GT_OLD_FALSE_ACCEPT",name)
+          assert len(rows)==31
+          Path("../source-storage-evidence/baseline.json").write_text(json.dumps({"base":"a84509db54e77b09367fa4b15606c3b2e3422cca","old_blob":"bac8985fcee0ae3cef22601de5699b4f89e28db2","old_false_acceptances":31,"cases":rows},indent=2,sort_keys=True)+"\n")
+          PY
+      - name: Verify repaired source types and real authored SHA-bound ranges
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-source-storage-python/bin/python"
+          for f in test_gt_original_mesh_source_storage.py test_gt_mesh_document_stream_identity.py test_gt_mesh_yaml_unique_mapping.py test_compare_exported_mesh_geometry.py test_gt_verify_original_mesh_export.py test_gt_mesh_vertex_payload.py test_gt_renderer_submesh_routes.py; do
+            "$py" -B -W error -m unittest discover -s tests -p "$f" -v 2>&1 | tee "source-storage-evidence/$f.log"
+          done
+          "$py" -B - <<'PY'
+          import json,re,hashlib
+          from pathlib import Path
+          root=Path("source-storage-evidence")
+          tests={}
+          for f in ("test_gt_original_mesh_source_storage.py","test_gt_mesh_document_stream_identity.py","test_gt_mesh_yaml_unique_mapping.py","test_compare_exported_mesh_geometry.py","test_gt_verify_original_mesh_export.py","test_gt_mesh_vertex_payload.py","test_gt_renderer_submesh_routes.py"):
+              log=(root/(f+".log")).read_text()
+              count=re.search(r"^Ran (\d+) tests? in ",log,re.M)
+              assert count and re.search(r"^OK$",log,re.M),f
+              tests[f]=int(count[1])
+          assert tests["test_gt_original_mesh_source_storage.py"]==9
+          report={"status":"PASS_AUTHORED_ORIGINAL_MESH_SOURCE_STORAGE","tests":tests,"total_tests":sum(tests.values()),"old_false_acceptances":31,"fixed_rejections":31,"scope":"actual source_geometry and export_geometry on authored typetree-shaped fixtures, real SHA-bound authored provider range; not original source or actual UnityPy decode","original_assets_read":False,"actual_unitypy_decode_tested":False,"original_geometry_verified":False,"unity_or_device_tested":False,"XAPK_requested":False,"source_sha256":hashlib.sha256(Path("scripts/gt_verify_original_mesh_export.py").read_bytes()).hexdigest(),"test_sha256":hashlib.sha256(Path("tests/test_gt_original_mesh_source_storage.py").read_bytes()).hexdigest()}
+          (root/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - name: Retain actual before and after receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-original-mesh-source-storage-${{ github.run_id }}
+          path: source-storage-evidence/
+          if-no-files-found: warn
+          retention-days: 14

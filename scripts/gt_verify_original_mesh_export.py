@@ -12,7 +12,7 @@ import re
 import struct
 
 from scripts.gt_stage_serialized_owners import OWNERS
-from scripts.gt_particle108_source_pixel_parity import verified_range
+from scripts.gt_particle108_source_pixel_parity import verified_range, MAX_PAYLOAD
 from scripts.gt_zip2_payloads import manifest
 from scripts.verify_exported_material_texture_links import SERIALIZED_MARKER, SERIALIZED_HEADER, GUID
 
@@ -21,15 +21,52 @@ CHANNEL_FIELDS = ("stream", "offset", "format", "dimension")
 SUBMESH_FIELDS = ("firstByte", "indexCount", "topology", "baseVertex", "firstVertex", "vertexCount")
 
 
+def source_byte_array(value):
+    """Explicit byte sequence, never Python's bytes(integer) allocation."""
+    if type(value) not in (bytes, bytearray, list, tuple):
+        raise ValueError("invalid_original_mesh_byte_array")
+    if len(value) > MAX_PAYLOAD:
+        raise ValueError("oversized_original_mesh_payload")
+    if type(value) in (list, tuple) and any(
+            type(item) is not int or not 0 <= item <= 255 for item in value):
+        raise ValueError("invalid_original_mesh_byte_array")
+    return bytes(value)
+
+
+def source_uint32_array(value):
+    """Typed uint32 words, not a scalar, mapping or byte-per-word coercion."""
+    if type(value) not in (list, tuple):
+        raise ValueError("invalid_original_mesh_uint32_array")
+    if len(value) > MAX_PAYLOAD // 4:
+        raise ValueError("oversized_original_mesh_payload")
+    if any(type(item) is not int or not 0 <= item <= 0xffffffff for item in value):
+        raise ValueError("invalid_original_mesh_uint32_array")
+    return struct.pack(f"<{len(value)}I", *value)
+
+
+def source_stream_descriptor(stream):
+    if type(stream) is not dict:
+        raise ValueError("invalid_original_mesh_stream_descriptor")
+    offset, size, name = stream.get("offset"), stream.get("size"), stream.get("path")
+    if (type(offset) is not int or type(size) is not int
+            or offset < 0 or size < 0):
+        raise ValueError("invalid_original_mesh_stream_descriptor")
+    if size == 0:
+        # The legacy decoder can omit an empty path, but cannot declare a
+        # provider or nonzero offset when no external bytes are referenced.
+        if offset or not (name is None or (type(name) is str and name == "")):
+            raise ValueError("invalid_original_mesh_stream_descriptor")
+    elif type(name) is not str or not re.fullmatch(r"[A-Za-z0-9_.-]+\.resS", name):
+        raise ValueError("invalid_original_mesh_stream_name")
+    return name, offset, size
+
+
 def source_geometry(tree, source, records, verified_streams):
     vertex = tree["m_VertexData"]
-    payload = bytes(vertex["m_DataSize"])
-    stream = tree["m_StreamData"]
-    offset, size = stream["offset"], stream["size"]
+    payload = source_byte_array(vertex["m_DataSize"])
+    indices = source_byte_array(tree["m_IndexBuffer"])
+    name, offset, size = source_stream_descriptor(tree["m_StreamData"])
     if size:
-        name = stream["path"]
-        if not isinstance(name,str) or not re.fullmatch(r"[A-Za-z0-9_.-]+\.resS",name):
-            raise ValueError("invalid_original_mesh_stream_name")
         _, stream_size, sha = records["Raft_Data/" + name]
         if offset < 0 or size < 0 or offset + size > stream_size:
             raise ValueError("invalid_original_mesh_stream_extent")
@@ -37,11 +74,11 @@ def source_geometry(tree, source, records, verified_streams):
         # The set is accounting only, never authorization for later reads.
         # Correctness takes precedence over the historical cached fast path.
         streamed = verified_range(file, (stream_size, sha), offset, size)
-        verified_streams.add(name)
         if len(streamed) != size or (payload and streamed != payload):
             raise ValueError("conflicting_original_mesh_vertex_payload")
+        verified_streams.add(name)
         payload = streamed
-    return geometry(tree, payload, bytes(tree["m_IndexBuffer"]))
+    return geometry(tree, payload, indices)
 
 
 def geometry(tree, payload, indices, *, exported=False):
@@ -49,8 +86,8 @@ def geometry(tree, payload, indices, *, exported=False):
         if exported:
             return hex_payload(value)
         if uint32:
-            return struct.pack(f"<{len(value)}I", *value)
-        return bytes(value)
+            return source_uint32_array(value)
+        return source_byte_array(value)
 
     vertex = tree["m_VertexData"]
     compressed = tree["m_CompressedMesh"]
