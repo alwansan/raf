@@ -1848,7 +1848,7 @@ jobs:
               original_assets_read=False,APK=False)
           Path("authored-scene-results/build.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
           PY
-      - name: Execute actual streamed Texture2D export with native sampler fidelity
+      - name: Execute actual streamed Texture2D export and native sampler proof after witness compile fix
         shell: bash
         run: |
           set -euo pipefail
