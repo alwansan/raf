@@ -1,5 +1,5 @@
 {
-  "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
+  "status": "PASS_AUTHORED_ACTUAL_EXPORT_STREAMED_TEXTURE_ROUTE_GATE",
   "base": "4f6099f080c42175e79078f012111b3d818e827c",
   "gate": "G1-G2-streamed-texture-full-mip-same-route-binding",
   "session": "clients/GT/sessions/20261127-streamed-texture-route-binding/README_AR.md",
@@ -11,7 +11,11 @@
   "white_or_fire_fixed": false,
   "Unity_render_executed": false,
   "XAPK": false,
-  "next": "Inspect run 45953665475 completion, preserve actual result or fix witness without weakening pinned provider or mip proof.",
+  "next": {
+    "id": "G1-G2-native-texture-sampler-same-route-binding",
+    "status": "NEXT_PRODUCTIVE",
+    "next": "Extend V6 same native RGBA32 Texture2D route to independently captured serialized m_TextureSettings (m_FilterMode, m_Aniso, m_MipBias, m_WrapU/V/W). Reuse B15 FIELDS/original_sampler normalization with strict modern native fields and type/range checks, exact finite float32 mip-bias bits (including signed zero or conservative UNKNOWN), no importer -100 unset equivalence or legacy single wrap alias without proved mapping. Carry sampler proof alongside V5 inline or V6 StreamProof, tied to same source owner snapshot and exact export GUID/anchor; compare native YAML after bytes and keywords. V6 historical API stays sampler-blind. Actual public pinned C# fixture should set distinct typed IGLTextureSettings and capture them before file-backed streamed export. Public pinned Source/AssetRipper.SourceGenerated.Extensions/GLTextureSettingsExtensions.cs confirms FilterMode, Aniso, MipBias, WrapMode, WrapU/V/W; verify texture property name and explicit modern fields. Add V6-pass/new-gate-reject real YAML filter/anisotropy/mip-bias/wrap-axis drift and absent/legacy/invalid values, preserve all 155 tests and 33 controls. Keep serialized native sampler fidelity separate from TextureImporter, colorspace, sRGB, active shader or GPU behavior. After sampler, separately scope decoded PNG top mip and importer settings (never claim full mip byte parity on PNG). A3 remains blocked on verified authorized original source; G0–G6 open; no unauthorized originals/LFS or phone/XAPK."
+  },
   "candidate_commit": "c88ec3507c3e7985bc7573187963aae7e5eef7fc",
   "activation_commit": "66042df3aa35299d1d5337a644fdb38e8497a0d2",
   "run_id": 45953665475,
@@ -19,5 +23,159 @@
   "guard_run_id": 45953665476,
   "guard_conclusion": "success",
   "regression_step": "success",
-  "observed_run_status": "in_progress"
+  "observed_run_status": "completed",
+  "success": {
+    "status": "PASS_AUTHORED_ACTUAL_EXPORT_STREAMED_TEXTURE_ROUTE_GATE",
+    "run_id": 45953665475,
+    "job_id": 140355077407,
+    "head": "66042df3aa35299d1d5337a644fdb38e8497a0d2",
+    "conclusion": "success",
+    "guard_run_id": 45953665476,
+    "guard_conclusion": "success",
+    "artifact_id": 15177393585,
+    "archive": "clients/GT/sessions/20261127-streamed-texture-route-binding/actual-run-45953665475.zip",
+    "archive_bytes": 8983,
+    "archive_sha256": "4d5fc272045f6a275a343300cf1bca9cdf26e9d639e875003e72ee6126cb0b8a",
+    "archive_git_blob": "dd99a86420b8fbaeadee7ef0e3db550806fe402d",
+    "archive_crc_sha_size_verified_locally": true,
+    "public_tool_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "actual_public_export_collections": 9,
+    "actual_exported_documents": 13,
+    "actual_native_scene_files": 2,
+    "actual_file_backed_streamed_texture_collections": 2,
+    "complete_texture_bound_renderers": 2,
+    "complete_texture_bound_submeshes": 4,
+    "complete_keyword_bound_renderers": 2,
+    "complete_keyword_bound_submeshes": 4,
+    "complete_value_bound_renderers": 2,
+    "complete_value_bound_submeshes": 4,
+    "complete_vertex_byte_bound_renderers": 2,
+    "complete_vertex_byte_bound_submeshes": 4,
+    "streamed_texture_payload_slots": 4,
+    "streamed_texture_payload_bytes_per_route": 80,
+    "streamed_texture_mip_levels_per_route": 8,
+    "unique_textures": 2,
+    "unique_texture_bytes": 40,
+    "unique_mip_levels": 4,
+    "authored_provider_count": 1,
+    "authored_provider_bytes": 61,
+    "authored_stream_offsets": [
+      7,
+      34
+    ],
+    "dimensions": [
+      2,
+      2
+    ],
+    "mips_per_texture": 2,
+    "mip_lengths": [
+      16,
+      4
+    ],
+    "observed_native_stream_schema": {
+      "serializedVersion": 2,
+      "offset": 0,
+      "size": 0,
+      "path": null
+    },
+    "source_scope": "direct flat .resS/.resource provider path, explicit authenticated size/SHA and bounded whole/per-mip ranges; no archive/CAB alias guessing; native RGBA32 exported inline",
+    "total_regression_tests": 155,
+    "new_streamed_texture_tests": 23,
+    "counterfactual_count": 33,
+    "V4_pass_V6_reject_controls": 11,
+    "new_provider_controls": 4,
+    "V3_pass_V4_reject_controls": 6,
+    "V2_pass_V3_reject_controls": 5,
+    "controls": [
+      "actual_source_same_size_stream_extent_swap",
+      "actual_source_out_of_bounds_stream_extent",
+      "actual_source_unpinned_stream_provider",
+      "actual_source_same_size_provider_padding_mutation"
+    ],
+    "native_exported_RGBA32_texture_payload_bytes_verified": true,
+    "source_pinned_streamed_RGBA32_texture_payload_bytes_verified": true,
+    "same_route_material_keyword_pass_state_verified": true,
+    "same_route_material_values_verified": true,
+    "same_route_vertex_bytes_verified": true,
+    "active_shader_variant_or_runtime_keyword_scope_verified": false,
+    "texture_sampler_import_colorspace_or_GPU_verified": false,
+    "original_assets_read": false,
+    "original_serialized_source_verified": false,
+    "production_auto_exporter_selection": false,
+    "production_renderer_parity_verified": false,
+    "Unity_render_executed": false,
+    "Android_device": false,
+    "XAPK": false,
+    "members": {
+      "build.json": {
+        "bytes": 576,
+        "sha256": "c55f19a09035616eee5c2b0f6ab92feeb4c31ed5f23a50e17492b3c6eb4cc82a"
+      },
+      "route-join.json": {
+        "bytes": 9977,
+        "sha256": "28f0701630a6366139c7ae74ee776422bb22c3d8879e40aaa5236b033e5efa84"
+      },
+      "report.json": {
+        "bytes": 2341,
+        "sha256": "f9365d40b53ee1bec745398b863d4e9bf3ce76db985241e231a8fb7a4e7f8236"
+      },
+      "test_b03_verify_renderer_material_links.py.log": {
+        "bytes": 2556,
+        "sha256": "c28e4d716a01ac768cf6d55e50d36f32ec6422e9561960fb35485eb759985a6b",
+        "tests": 17
+      },
+      "test_gt_material_route_keyword_state.py.log": {
+        "bytes": 2905,
+        "sha256": "b281eeca9263f8e8981df7c2c0bdfbcde1f0dbf791516d29380c730acc4a2a55",
+        "tests": 25
+      },
+      "test_gt_material_route_values.py.log": {
+        "bytes": 2725,
+        "sha256": "17d5f1e01f5e9471d1e11bae9c37b94b4a3c2b8101632eb604383a3b883cc075",
+        "tests": 22
+      },
+      "test_gt_mesh_vertex_payload.py.log": {
+        "bytes": 1881,
+        "sha256": "d4fd27c6ddb5bedeaeb54da1d9c1e25f66e797855a4600fa9f851a5a5067d708",
+        "tests": 15
+      },
+      "test_gt_renderer_submesh_routes.py.log": {
+        "bytes": 3004,
+        "sha256": "59ee955955ea7b2f5adc8a759f00371408dd59cba77858205e4940aada153901",
+        "tests": 21
+      },
+      "test_gt_streamed_texture_route_payload.py.log": {
+        "bytes": 2830,
+        "sha256": "3b9dd6085ab76bc6360df174c913e423285e4ae2e3eeb32e6e8a5fc59dcf96d0",
+        "tests": 23
+      },
+      "test_gt_texture_route_payload.py.log": {
+        "bytes": 2818,
+        "sha256": "544326d66e40fec1f35845f0d01e144d0c3e682ad3bda1c47fb391d4daedee53",
+        "tests": 25
+      },
+      "test_gt_verify_original_mesh_export.py.log": {
+        "bytes": 1259,
+        "sha256": "4fa1e34501cc7873993fcc2fc567b180527cc1ff3a5442f97cdd224b1a32258a",
+        "tests": 7
+      },
+      "texture-schema.json": {
+        "bytes": 562,
+        "sha256": "589af0386850cd94c42a1c059b3e0eed62f80e86de00d25dee8aa5001977b862"
+      },
+      "tool-smoke.log": {
+        "bytes": 63,
+        "sha256": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+      },
+      "witness.log": {
+        "bytes": 41,
+        "sha256": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
+      }
+    },
+    "compiled_files": {
+      "AssetRipper.Export.UnityProjects.dll": "d2e39f13fc9c45fe9b60455161ef66b92a8e4e9a4820151ab1293beef84a2aa5",
+      "RaftAuthoredSceneRouteWitness.cs": "5a0d4d506ee2620b228907574427aa9aa07b7dae249a1659f5c9bd89a02ec83b",
+      "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
+    }
+  }
 }
