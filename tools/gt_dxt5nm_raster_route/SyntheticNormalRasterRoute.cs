@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Experimental.Rendering;
 using Id=SyntheticNormalRouteValidation.Id;
 using Manifest=SyntheticNormalRouteValidation.Manifest;
 
@@ -43,7 +44,8 @@ public static class SyntheticNormalRasterRoute
         var rb=new Texture2D(W,H,TextureFormat.RGBAFloat,false,true);
         var cmd=new CommandBuffer();var previous=RenderTexture.active;bool previousSrgb=GL.sRGBWrite;
         try {
-            Need(rt.Create()&&!rt.sRGB,"linear_float_RT_required");GL.sRGBWrite=false;
+            rt.antiAliasing=1;rt.useMipMap=false;rt.autoGenerateMips=false;rt.filterMode=FilterMode.Point;
+            Need(rt.Create()&&!rt.sRGB&&rt.graphicsFormat==GraphicsFormat.R32G32B32A32_SFloat,"linear_float_RT_required");GL.sRGBWrite=false;
             var block=new MaterialPropertyBlock();block.SetFloat("_GTProbeMip",mip);
             if(overrideTex!=null)block.SetTexture("_MainTex",overrideTex);
             if(overrideST.HasValue)block.SetVector("_MainTex_ST",overrideST.Value);
@@ -56,8 +58,9 @@ public static class SyntheticNormalRasterRoute
     public static void Run(){
         int exit=2;string output=Arg("-gtNormalReport");
         var report=new Receipt{status="INCONCLUSIVE",editor=Application.unityVersion,backend=SystemInfo.graphicsDeviceType.ToString(),active_color_space=QualitySettings.activeColorSpace.ToString(),width=W,height=H,explicit_fragment_integer_repeat_load=true};
-        var routes=new List<Route>();
+        var routes=new List<Route>();bool previousAsync=ShaderUtil.allowAsyncCompilation;
         try {
+            ShaderUtil.allowAsyncCompilation=false;
             report.run_id=Arg("-gtNormalRunId");var raw=File.ReadAllBytes(Root("gt-normal-raster-manifest.json"));report.raster_manifest_sha256=Hash(raw);
             var m=JsonUtility.FromJson<Manifest>(System.Text.Encoding.UTF8.GetString(raw));
             Need(m.run_id==report.run_id&&m.routes.Length==2&&m.textures.Length==2,"fresh_manifest");
@@ -96,6 +99,7 @@ public static class SyntheticNormalRasterRoute
                             Match(Identity(mat),mi);Match(Identity(mat.GetTexture("_MainTex")),ti);
                             Need(mat.GetTextureScale("_MainTex")==scale&&mat.GetTextureOffset("_MainTex")==offset,"in_memory_control_restore");
                         }
+                        Need(!ShaderUtil.ShaderHasError(mat.shader),"shader_compile_error_after_draw");
                         slots.Add(s);
                     }
                     routes.Add(new Route{key=e.key,mesh=Identity(filter.sharedMesh),vertex_count=mesh.vertexCount,index_counts=Enumerable.Range(0,2).Select(i=>(int)mesh.GetIndexCount(i)).ToArray(),base_vertices=Enumerable.Range(0,2).Select(i=>(int)mesh.GetBaseVertex(i)).ToArray(),
@@ -105,7 +109,7 @@ public static class SyntheticNormalRasterRoute
             report.exact_candidate_metadata_unchanged=m.textures.All(t=>Hash(File.ReadAllBytes(Root(t.path+".meta")))==t.meta_sha256&&Hash(File.ReadAllBytes(Root(t.path)))==t.sha256);
             Need(report.exact_candidate_metadata_unchanged,"postimport_candidate_bytes");report.status="OBSERVED_AUTHORED_DIRECT_RASTER_ROUTE";exit=0;
         }catch(Exception e){report.error=e.GetType().Name+":"+e.Message;Debug.LogError(report.error);}
-        finally{report.routes=routes.ToArray();File.WriteAllText(output,JsonUtility.ToJson(report,true));}
+        finally{ShaderUtil.allowAsyncCompilation=previousAsync;report.routes=routes.ToArray();File.WriteAllText(output,JsonUtility.ToJson(report,true));}
         EditorApplication.Exit(exit);
     }
 }

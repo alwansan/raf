@@ -203,6 +203,8 @@ def verify_files(project,base,manifest,m):
     raw=base.read_bytes();m0=json.loads(raw)
     need(m["base_V16_stage_manifest_sha256"]==digest(raw) and (project/"gt-normal-route-manifest.json").read_bytes()==raw and (project/"gt-normal-raster-manifest.json").read_bytes()==manifest.read_bytes(),"actual_manifest_files")
     need(m["textures"]==m0["textures"] and m["candidate_rows"]==m0["candidate_rows"],"V16_texture_records_unchanged")
+    for file,key in (("alpha-exporter-actual.json","exporter_receipt_sha256"),("alpha-policy-patch.json","exporter_patch_receipt_sha256")):
+        need(digest((manifest.parent/file).read_bytes())==m[key]==m0[key],"actual_export_receipt_bytes")
     restored=deepcopy(m["routes"]);adapters={x["path"]:x for x in m["raster_adapters"]}
     for rt in restored:
         for sh in rt["shaders"]:
@@ -211,6 +213,9 @@ def verify_files(project,base,manifest,m):
             sh["sha256"]=a["baseline_shader_sha256"]
     need(restored==m0["routes"],"only_declared_shader_adapter_changed")
     need(set(m["staged_files"])-set(m0["staged_files"])=={"Assets/Editor/SyntheticNormalRasterRoute.cs"},"new_stage_file_scope")
+    for i,path in enumerate(sorted(adapters)):
+        a=adapters[path]
+        need(digest(shader_bytes(i))==a["diagnostic_shader_sha256"]==m["staged_files"][path] and a["marker"]==.25+.5*i,"pinned_diagnostic_shader_bytes")
     for name,h in m0["staged_files"].items():
         if name not in adapters:need(m["staged_files"][name]==h,"non_adapter_stage_drift")
     for name,h in m["staged_files"].items():
