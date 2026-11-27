@@ -1,0 +1,119 @@
+{
+  "status": "FAILED_PRE_UNITY_HISTORICAL_HASH_NORMALIZATION_MISMATCH",
+  "run": 45976163790,
+  "job": 140428299621,
+  "head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
+  "guard": {
+    "run": 45976163752,
+    "conclusion": "success"
+  },
+  "actual_source_regressions": 291,
+  "actual_V11_V12_controls": 37,
+  "actual_V15_controls": 6,
+  "actual_V15_compiled_exports": 6,
+  "actual_normalmap_policy_changes": 2,
+  "actual_ordinary_policy_unchanged": 4,
+  "failed_step": "Stage direct corrected exporter PNG and metadata with exact authored routes",
+  "error": "ValueError: historical_V15_export_bytes_drift",
+  "actual_Unity_started": false,
+  "archive": {
+    "id": 15187192023,
+    "bytes": 30146,
+    "sha256": "821022c0df48e32d35109b496b6484e645519a1d365c914d3af7d25b08f6e170",
+    "crc_verified": true,
+    "member_count": 38,
+    "receipt_sha256": "c8f1823220a9e05f902f6dec535c992d82c5d4ac13992c164a45fc665a0d2bca",
+    "source_report_sha256": "85b8866c37c9351f5b3e53a8cf4897dbb6a376adc679918680e0fd76a45744f1"
+  },
+  "historical_V15_archive": {
+    "id": 15186083739,
+    "bytes": 29716,
+    "sha256": "25506dd7361b2849b7de90cc78b2d59d8d80fbf2cf6c2913cb3d8c848388059c",
+    "crc_verified": true,
+    "member_count": 37,
+    "receipt_sha256": "51ed86ab7908ed2128ea756a0c503e2ef97215111a5d5fd1879a3e5a0ba4fabf"
+  },
+  "independent_local_comparison": {
+    "actual_archives_downloaded_and_rehashed": true,
+    "raw_PNG_files_per_archive_verified": 2,
+    "all_12_receipt_RGBA_hex_rehashed_and_equal": true,
+    "all_12_receipt_PNG_hashes_equal": true,
+    "all_12_normalized_meta_byte_strings_equal": true,
+    "historical_normalization": "guid: VOLATILE / timeCreated: VOLATILE",
+    "incorrect_V16_normalization": "<volatile> for both full lines",
+    "all_12_historical_published_normalized_SHA256_reproduced": true,
+    "rows": [
+      {
+        "mode": "bc3",
+        "source_key": [
+          "sharedassets3.assets",
+          1
+        ],
+        "png_sha256": "1e1044323c151ea546d8746baec7650655f32152a6a7aaa87065e2af7d454aff",
+        "rgba_sha256": "f5658b12d615e2ad91659385308acf061f22984b8e95d5f001e5e3cda9351270",
+        "historical_and_failed_run_before_normalized_sha256": "01d43c3c52351bdc65b83b729273c7ee0cb476f644e0f439b0cd3f80c595f668",
+        "historical_and_failed_run_after_normalized_sha256": "01d43c3c52351bdc65b83b729273c7ee0cb476f644e0f439b0cd3f80c595f668"
+      },
+      {
+        "mode": "bc3",
+        "source_key": [
+          "sharedassets3.assets",
+          2
+        ],
+        "png_sha256": "ae64dc23f84471f290a22ac934dd46b945ae626c93cf8b9adaf44fde4fd7cf5a",
+        "rgba_sha256": "274f3229db15aaf172b4d40fb2688a22827ae8dd6592254359f41771ec65c2e5",
+        "historical_and_failed_run_before_normalized_sha256": "4ec78628450a41a45df4b1a5906edab1d946c18e993dace21adfc8560810cc28",
+        "historical_and_failed_run_after_normalized_sha256": "4ec78628450a41a45df4b1a5906edab1d946c18e993dace21adfc8560810cc28"
+      },
+      {
+        "mode": "normal",
+        "source_key": [
+          "sharedassets3.assets",
+          1
+        ],
+        "png_sha256": "9e6be9b9f97d2bf835fbf3ae21d79f889170b7588dddde3f1c351f85cc3b0a54",
+        "rgba_sha256": "c4613e57a409b503b1b7c354b38ff2c8656a48a842159ca8c1765b2826c1f895",
+        "historical_and_failed_run_before_normalized_sha256": "1291994d63ffa8bcc55564c538948c554def2c19e6f4ce241f0bd52355264919",
+        "historical_and_failed_run_after_normalized_sha256": "f2064afe6f35cac72808a48c34f855f05f5a9756e614f0fb0e25ca8ef0040311"
+      },
+      {
+        "mode": "normal",
+        "source_key": [
+          "sharedassets3.assets",
+          2
+        ],
+        "png_sha256": "5ab65d8dc9fb153f045cdc8ea0b5e8293d0e9006ec22938b7aafcddb9ed575d1",
+        "rgba_sha256": "e284bacc769e1e86fcb71099a4c7473a84c143c540edee397b67c769e466dc1e",
+        "historical_and_failed_run_before_normalized_sha256": "70b54426a5aa9c6fab009d5cb7f788e451e20f632e056e7d9a73e9c6c34bf3be",
+        "historical_and_failed_run_after_normalized_sha256": "96d01ce0e96b2ab5130647bd595cc8803858bc749050831d050617057bbd9643"
+      },
+      {
+        "mode": "rgba",
+        "source_key": [
+          "sharedassets3.assets",
+          1
+        ],
+        "png_sha256": "9930681426209d292373008aa639b507a0b89c46027f377ed564f3768d762c9c",
+        "rgba_sha256": "3f05555ec3492e0b420aa16fa7e4870b919c4104633160ac1f9e11e26edf2a30",
+        "historical_and_failed_run_before_normalized_sha256": "886a66512cc4ffd828e2a5b5c6c03da0e91f54394f7cdce847aa42161dee8ea7",
+        "historical_and_failed_run_after_normalized_sha256": "886a66512cc4ffd828e2a5b5c6c03da0e91f54394f7cdce847aa42161dee8ea7"
+      },
+      {
+        "mode": "rgba",
+        "source_key": [
+          "sharedassets3.assets",
+          2
+        ],
+        "png_sha256": "1b07fec83733517a7c8c566dd13f6dc6549420e6f16856af8bcebd80514e6e5f",
+        "rgba_sha256": "691d356f720c93a0eaab88eb6391b979be2600918f87d8865791b7a6e3f6a0d4",
+        "historical_and_failed_run_before_normalized_sha256": "11805870983948dd09c3ac9ec502340674bc48429a35b9aaccd87a872fa755bb",
+        "historical_and_failed_run_after_normalized_sha256": "11805870983948dd09c3ac9ec502340674bc48429a35b9aaccd87a872fa755bb"
+      }
+    ]
+  },
+  "fix": "Use exact V15 historical labelled header normalization in-memory; retain actual V15 pair checker and old receipt unchanged. Add two source falsifiers. No candidate metadata edit.",
+  "original_assets_read": false,
+  "production_activation": false,
+  "Android_device": false,
+  "XAPK": false
+}

@@ -44,6 +44,17 @@ class DirectCandidateTests(unittest.TestCase):
         a=list(self.args(0));a[4]=deepcopy(a[4]);a[4]["alpha_off"][2]="00000000"
         with self.assertRaises(ValueError):v16.compare_mips(*a)
 
+    def test_published_V15_normalization_is_labelled(self):
+        raw=b"fileFormatVersion: 2\nguid: "+b"a"*32+b"\ntimeCreated: 123\nTextureImporter:\n  alphaIsTransparency: 0\n"
+        canonical=b"fileFormatVersion: 2\nguid: VOLATILE\ntimeCreated: VOLATILE\nTextureImporter:\n  alphaIsTransparency: 0\n"
+        self.assertEqual(v16.historical_meta_stable(raw),canonical)
+        self.assertNotEqual(v15.meta_stable(raw),canonical)
+        self.assertEqual(v16.historical_meta_stable(raw.replace(b"a"*32,b"b"*32).replace(b"123",b"456")),canonical)
+
+    def test_normalization_rejects_duplicate_header(self):
+        raw=b"guid: "+b"a"*32+b"\ntimeCreated: 123\ntimeCreated: 456\n"
+        with self.assertRaises(ValueError):v16.historical_meta_stable(raw)
+
     def test_probe_never_writes_texture_metadata(self):
         s=(v16.V16_TOOLS/"SyntheticNormalExporterReimport.cs").read_text()
         self.assertNotIn("File.WriteAllBytes",s)

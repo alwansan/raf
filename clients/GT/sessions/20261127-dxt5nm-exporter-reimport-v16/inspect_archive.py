@@ -22,8 +22,8 @@ def need(ok,msg):
 def sha(b):return hashlib.sha256(b).hexdigest()
 def json_bytes(b):return json.loads(b.decode("utf-8"))
 def meta_stable(raw):
-    for p in (rb"(?m)^guid: [0-9a-f]{32}\r?$",rb"(?m)^timeCreated: [0-9]+\r?$"):
-        raw,n=re.subn(p,b"<volatile>",raw)
+    for p,marker in ((rb"(?m)^guid: [0-9a-f]{32}\r?$",b"guid: VOLATILE"),(rb"(?m)^timeCreated: [0-9]+\r?$",b"timeCreated: VOLATILE")):
+        raw,n=re.subn(p,marker,raw)
         need(n==1,"volatile_header_population")
     return raw
 def flip_top(raw):
@@ -61,7 +61,7 @@ def inspect(archive,digest,run,head,attempt):
             need(q is not None and re.search(r"^OK$",s,re.M),"regression_failure:"+name)
             tests[name]=int(q[1])
     report=load("normalmap-importer-report.json")
-    need(len(tests)==19 and sum(tests.values())==291 and report["tests"]==tests and report["counterfactual_count"]==37,"regression_population")
+    need(len(tests)==19 and sum(tests.values())==293 and report["tests"]==tests and report["counterfactual_count"]==37,"regression_population")
     need(a["status"]==h15["status"] and a["actual_compiled_exporter_modes"]==6 and a["actual_normalmap_policy_changes"]==2 and a["actual_ordinary_policy_unchanged"]==4 and a["actual_metadata_control_count"]==6 and a["production_activation"] is False,"six_export_modes_scope")
     old={(x["mode"],tuple(x["source_key"])):x for x in h15["independent"]["six_pair_rows"]}
     need(set(a["scopes"])=={"normal","bc3","rgba"} and len(old)==6,"historical_six_pairs")
@@ -117,7 +117,7 @@ def inspect(archive,digest,run,head,attempt):
             need(cpu==top and cpu!=flip_top(top),"CPU_GPU_orientation")
         else:need(cpu==b"" and obs["cpu_status"]=="not_readable_as_imported","nonreadable_CPU_bypass")
         rows.append(dict(source_key=after["key"],guid=tex["guid"],file_id=tex["file_id"],png_sha256=sha(png),meta_sha256=sha(meta),rgba_sha256=sha(rgba),actual_mip_sha256=hashes,actual_mip_RGBA_hex=hexes))
-    return dict(status=v["status"],run=run,head=head,attempt=attempt,actual_regressions=291,actual_V11_V12_controls=37,actual_V15_controls=6,actual_V16_controls=10,actual_mip_hash_matches=6,actual_GPU_texels=84,top_mip_exact_pixels=70,max_unorm_error=max_error,renderer_route_matches=2,submesh_material_texture_matches=4,shader_adapter_matches=4,archive=dict(bytes=len(raw_zip),sha256=sha(raw_zip),crc_verified=True,member_count=len(files),member_sha256={n:sha(b) for n,b in sorted(files.items())}),rows=rows,original_assets_read=False,source_lower_mip_parity_verified=False,production_activation=False,Android_device=False,XAPK=False)
+    return dict(status=v["status"],run=run,head=head,attempt=attempt,actual_regressions=293,actual_V11_V12_controls=37,actual_V15_controls=6,actual_V16_controls=10,actual_mip_hash_matches=6,actual_GPU_texels=84,top_mip_exact_pixels=70,max_unorm_error=max_error,renderer_route_matches=2,submesh_material_texture_matches=4,shader_adapter_matches=4,archive=dict(bytes=len(raw_zip),sha256=sha(raw_zip),crc_verified=True,member_count=len(files),member_sha256={n:sha(b) for n,b in sorted(files.items())}),rows=rows,original_assets_read=False,source_lower_mip_parity_verified=False,production_activation=False,Android_device=False,XAPK=False)
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--archive",required=True,type=Path)

@@ -8,6 +8,7 @@ except for explicit candidate input verification and V16 probe files.
 import argparse
 from copy import deepcopy
 import json
+import re
 from pathlib import Path
 from scripts import gt_dxt5nm_unity_reimport as v13
 from scripts import gt_dxt5nm_texel_policy as v14
@@ -17,6 +18,19 @@ from scripts.gt_dxt5nm_unity_reimport import (ROOT,TOOLS,V12,FIELD,PNG_SHA,EDITO
 
 V15=ROOT/"clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/actual-pass-45975084812.json"
 V16_TOOLS=ROOT/"tools/gt_dxt5nm_exporter_reimport"
+
+def historical_meta_stable(raw):
+    """Exact V15 published hash convention, distinct from V15 pair checker.
+
+    Normalize only the two already-declared volatile header values in memory;
+    never change a candidate file. V15 permanent receipt uses labelled
+    VOLATILE headers, whereas its live pair checker uses <volatile>.
+    """
+    for pattern,replacement in ((rb"(?m)^guid: [0-9a-f]{32}\r?$",b"guid: VOLATILE"),
+                                (rb"(?m)^timeCreated: [0-9]+\r?$",b"timeCreated: VOLATILE")):
+        raw,n=re.subn(pattern,replacement,raw)
+        need(n==1,"historical_V15_volatile_header_population")
+    return raw
 
 def validate_replay(a,p,h):
     status="PASS_ACTUAL_AUTHORED_SELECTIVE_DXT5NM_PNG_EXPORTER_ALPHA_POLICY"
@@ -33,7 +47,7 @@ def validate_replay(a,p,h):
             x=historical.pop((mode,tuple(c["key"])))
             need(b["key"]==c["key"] and b["ptr"][1:]==c["ptr"][1:] and b["alpha"]==x["alpha_before"] and c["alpha"]==x["alpha_after"] and pair["only_alpha_policy_changed"]==(mode=="normal"),"selective_policy_drift")
             for side,row in (("before",b),("after",c)):
-                need(row["png_sha256"]==x["png_sha256"] and row["rgba_sha256"]==x["rgba_sha256"]==digest(bytes.fromhex(row["rgba_hex"])) and digest(v15.meta_stable(row["metadata"].encode()))==x["normalized_"+side+"_sha256"],"historical_V15_export_bytes_drift")
+                need(row["png_sha256"]==x["png_sha256"] and row["rgba_sha256"]==x["rgba_sha256"]==digest(bytes.fromhex(row["rgba_hex"])) and digest(historical_meta_stable(row["metadata"].encode()))==x["normalized_"+side+"_sha256"],"historical_V15_export_bytes_drift")
             v15.compare_meta(b["metadata"].encode(),c["metadata"].encode(),mode=="normal")
     need(not historical,"missing_historical_pairs")
 
@@ -103,7 +117,7 @@ def stage(root,project,run_id,receipt,audit,patch,out):
         rgba=bytes.fromhex(historical["v11_replay"]["textures"][i]["actual_rgba_hex"])
         need(digest(rgba)==after["rgba_sha256"]==act["source_rgba_sha256"],"actual_candidate_RGBA_binding")
         textures.append(dict(id,expected_source=act["source"],expected_rgba_hex=rgba.hex()))
-        candidate_rows.append(dict(source_key=list(key),guid=id["guid"],file_id=id["file_id"],png_sha256=id["sha256"],meta_sha256=id["meta_sha256"],rgba_sha256=digest(rgba),normalized_meta_sha256=digest(v15.meta_stable(after["metadata"].encode()))))
+        candidate_rows.append(dict(source_key=list(key),guid=id["guid"],file_id=id["file_id"],png_sha256=id["sha256"],meta_sha256=id["meta_sha256"],rgba_sha256=digest(rgba),normalized_meta_sha256=digest(historical_meta_stable(after["metadata"].encode()))))
     routes=[]
     for key,(cls,tree) in sorted(objects.items()):
         if cls!=23:continue
@@ -215,6 +229,7 @@ def verify_files(m,manifest,audit,patch,project):
         if p.startswith("Assets/"):
             need(digest(regular_path(project/p).read_bytes())==h,"actual_staged_asset_bytes_drift:"+p)
     for i,t in enumerate(m["textures"]):
+        need(digest(historical_meta_stable((manifest.parent/("candidate-"+str(i)+".png.meta")).read_bytes()))==m["candidate_rows"][i]["normalized_meta_sha256"],"retained_V15_normalized_metadata_drift")
         for suffix,field in (("","sha256"),(".meta","meta_sha256")):
             evidence=manifest.parent/("candidate-"+str(i)+".png"+suffix)
             need(evidence.read_bytes()==(project/(t["path"]+suffix)).read_bytes() and digest(evidence.read_bytes())==t[field],"retained_direct_exporter_file_drift")
