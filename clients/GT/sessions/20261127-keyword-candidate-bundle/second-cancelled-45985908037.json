@@ -1,0 +1,84 @@
+{
+  "status": "CANCELLED_BEFORE_UNITY_EDITOR_EXECUTION",
+  "run": 45985908037,
+  "job": 140461344674,
+  "head": "b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b",
+  "conclusion": "cancelled",
+  "guard": 45985907788,
+  "source_regressions": 42,
+  "decoder_setup": "success",
+  "activation_and_disk_budget": "success",
+  "prepare_image_step": "cancelled",
+  "image_build_reported_sha256": "6532a99106f1b75b314d4307a8295a02104edac7f722887287c880ab6f9f14f6",
+  "image_build_log_at": "2026-11-27T11:00:04.1933638Z",
+  "cancel_log_at": "2026-11-27T11:38:49.4665160Z",
+  "vulkaninfo_summary_bytes": 0,
+  "editor_step": "skipped",
+  "actual_editor_executed": false,
+  "actual_bundle_present": false,
+  "observations_present": false,
+  "reason": "image build emitted image SHA; separate docker run xvfb-run vulkaninfo command never returned before job deadline. Exact blocking subprocess and Vulkan device availability not proved.",
+  "candidate_sha256": "d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537",
+  "contract_sha256": "a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f",
+  "archive": {
+    "id": 15194366448,
+    "bytes": 8355,
+    "sha256": "052dbf31dd8fa443d2cdcf7c2e225de3ec0f3698497b0432f9b4d7f852db40c9",
+    "git_blob_digest_not_uploaded": "f4e61851c99ff33ea424cb1691a9333979fa2c0b",
+    "crc_verified": true,
+    "member_hashes": {
+      "candidate-contract.json": [
+        1500,
+        "a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f"
+      ],
+      "route-packet.json": [
+        843,
+        "8eeefc73d3d8fd2c64812c63bdfd287fe50fbcaf86bef788628f03ef9c5a8722"
+      ],
+      "candidate.shader": [
+        1303,
+        "d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537"
+      ],
+      "source-manifest.json": [
+        11522,
+        "14a7b9b1e3843edc51a13db0413c0ff58a1a73519e777eb1b988a21cea17b331"
+      ],
+      "source-proof.json": [
+        2897,
+        "e485af51e75906c504f392612e9528509b78709dbd39961e734c2a77f028b6d2"
+      ],
+      "tool-versions.txt": [
+        560,
+        "02391550e0b0e25498a2a045b37fd512f2bd49485036f31c8ca1b700380d1a3e"
+      ],
+      "verified.json": [
+        217,
+        "e0de9d1e63182f26a687f5ab4504f9c0d590b34cc91602c0b66e4c6664258ee4"
+      ],
+      "vulkaninfo-summary.txt": [
+        0,
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ],
+      "test_gt_keyword_candidate_bundle_contract.py.log": [
+        2122,
+        "fef983ba9154bc1e23307aa35907e953981dd1ded50615550bf816121dd949e2"
+      ],
+      "test_gt_keyword_candidate_plan.py.log": [
+        2240,
+        "2ae7b7b09bf5eae13879a2b88440652ca774b80a1354004dd9ddd338ca19a69a"
+      ],
+      "test_gt_runtime_keyword_contract.py.log": [
+        1547,
+        "6b761359dba2d28b5715d46cffa779bd66342f68bbcb7bc66e2ca689cbcde535"
+      ],
+      "test_gt_runtime_keyword_integration.py.log": [
+        1077,
+        "1534e170b7906438f457c369e02dd247214b866a12207312fa941eb1c7c858bb"
+      ]
+    }
+  },
+  "original_assets_read": false,
+  "original_runtime_verified": false,
+  "production_activation": false,
+  "installation_allowed": false
+}

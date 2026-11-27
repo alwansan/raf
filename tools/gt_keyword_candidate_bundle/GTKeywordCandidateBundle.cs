@@ -60,10 +60,11 @@ namespace RaftGT {
                 Need(result.unity_version=="2021.3.45f2","editor_version");
                 result.editor_graphics_api=SystemInfo.graphicsDeviceType.ToString();
                 result.editor_graphics_device=SystemInfo.graphicsDeviceName;
-                Need(SystemInfo.graphicsDeviceType==GraphicsDeviceType.Vulkan,"editor_Vulkan_required");
+                // Commit the input even when the backend gate fails.
                 byte[] candidate=File.ReadAllBytes(Path.Combine(root,ShaderPath));
                 byte[] contract=File.ReadAllBytes(Path.Combine(root,"GTKeywordCandidateContract.json"));
                 result.candidate_sha256=Hash(candidate);result.contract_sha256=Hash(contract);
+                Need(SystemInfo.graphicsDeviceType==GraphicsDeviceType.Vulkan,"editor_Vulkan_required");
                 var c=JsonUtility.FromJson<Contract>(System.Text.Encoding.UTF8.GetString(contract));
                 Need(c.schema==1&&c.shader_name==Target&&c.candidate_sha256==result.candidate_sha256&&c.passes.Length==1&&c.scopes.Length==2,"authored_contract");
                 PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android,false);

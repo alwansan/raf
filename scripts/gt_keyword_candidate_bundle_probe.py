@@ -126,6 +126,9 @@ def verify(project,out,run_id,decoder,exit_code):
             need(bounded(out/name)==data,"authored_input_commitment_drift")
         contract_bytes=bounded(out/"candidate-contract.json")
         need(bounded(project/"Assets/GTKeywordCandidate.shader")==shader and bounded(project/"GTKeywordCandidateContract.json")==contract_bytes,"Unity_input_bytes_changed")
+        if not (out/"unity-raw.json").is_file():
+            need(exit_code==0,"Unity_not_completed_or_no_editor_receipt")
+            raise ValueError("Unity_success_without_editor_receipt")
         raw=strict_json(bounded(out/"unity-raw.json"))
         need(raw.get("run_id")==run_id and raw.get("candidate_sha256")==p.sha(shader) and raw.get("contract_sha256")==p.sha(contract_bytes),"Unity_failure_or_success_identity_drift")
         result.update(observed_editor_graphics_api=raw.get("editor_graphics_api"),observed_editor_checkpoint=raw.get("checkpoint"),observed_editor_error=raw.get("error"),observed_editor_bundle_bytes=raw.get("bundle_bytes"))
