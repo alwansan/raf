@@ -168,12 +168,28 @@ public static class RaftAuthoredSceneRouteWitness
             collections.Add(new AssetExportCollection<IUnityObjectBase>(native,mat));
             collections.Add(new YamlShaderExportCollection(new YamlShaderExporter(),shader));
             collections.Add(new AssetExportCollection<IUnityObjectBase>(native,tex));
+            // AssetDictionary exposes multiple enumerable interfaces; use
+            // explicit indexed reads of the generated objects, not LINQ
+            // inference or reconstructed literals from exported YAML.
+            var colors=props.Colors_AssetDictionary_Utf8String_ColorRGBAf;
+            var floats=props.Floats_AssetDictionary_Utf8String_Single;
+            var ints=props.Ints;
+            var capturedColors=new object[colors.Count];
+            var capturedFloats=new object[floats.Count];
+            var capturedInts=new object[ints.Count];
+            for(int n=0;n<colors.Count;n++)
+            {
+                var c=colors.GetValue(n);
+                capturedColors[n]=new object[]{colors.GetKey(n).String,new {r=c.R,g=c.G,b=c.B,a=c.A}};
+            }
+            for(int n=0;n<floats.Count;n++)
+                capturedFloats[n]=new object[]{floats.GetKey(n).String,floats.GetValue(n)};
+            for(int n=0;n<ints.Count;n++)
+                capturedInts[n]=new object[]{ints.GetKey(n).String,ints.GetValue(n)};
             rows.Add(Row(mat,new {m_Shader=Ref(mat,shader),m_SavedProperties=new {
-                m_Colors=props.Colors_AssetDictionary_Utf8String_ColorRGBAf.Select(p=>new object[]{
-                    p.Key.String,new {r=p.Value.R,g=p.Value.G,b=p.Value.B,a=p.Value.A}}).ToArray(),
-                m_Floats=props.Floats_AssetDictionary_Utf8String_Single.Select(p=>new object[]{
-                    p.Key.String,p.Value}).ToArray(),
-                m_Ints=props.Ints.Select(p=>new object[]{p.Key.String,p.Value}).ToArray(),
+                m_Colors=capturedColors,
+                m_Floats=capturedFloats,
+                m_Ints=capturedInts,
                 m_TexEnvs=new object[]{new object[]{"_MainTex",new {m_Texture=Ptr(env.Texture),
                     m_Scale=new {x=env.Scale.X,y=env.Scale.Y},m_Offset=new {x=env.Offset.X,y=env.Offset.Y}}}}
             }}));
