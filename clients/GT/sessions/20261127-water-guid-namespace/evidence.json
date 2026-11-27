@@ -1,0 +1,136 @@
+{
+  "status": "PASS_AUTHORED_WATER_GUID_ASSETS_NAMESPACE",
+  "reviewed_base": "d1cb6cec320eccf649a416e6340d9cd868562e44",
+  "preparation_commit": "5d48de7f45831319c210e5de8db1529f5d13050d",
+  "head": "10e3d6ec40c6ff8e5191d2970b6b3f5a72da0be7",
+  "run_id": 45999548157,
+  "job_id": 140507379178,
+  "conclusion": "success",
+  "guard_run_id": 45999547931,
+  "guard_job_id": 140507378433,
+  "guard_conclusion": "success",
+  "session": "clients/GT/sessions/20261127-water-guid-namespace/README_AR.md",
+  "evidence": "clients/GT/sessions/20261127-water-guid-namespace/evidence.json",
+  "archive": "clients/GT/sessions/20261127-water-guid-namespace/actual-run-45999548157.zip",
+  "artifact_id": 15196914395,
+  "archive_bytes": 5682,
+  "archive_sha256": "b22a6b262a6d9c4eefc30b60331f47771c167f719acae344a67781e758615d28",
+  "archive_git_blob": "489f18798746c1c1efce078c60ec6dfb79210022",
+  "archive_crc_sha_size_verified_locally": true,
+  "old_gate_git_blob": "65c96c8a2059e73bff48fcbc1d81ee2bb0eddd81",
+  "new_gate_git_blob": "dddb89135435bf587639be073c0d6e8c521ca59c",
+  "new_tests_git_blob": "775a68ae478f838cffb7d0900cbba224e310bb78",
+  "baseline_test_methods": 16,
+  "baseline_positive_methods": 2,
+  "baseline_failed_methods": 14,
+  "baseline_negative_cases_accepted": 21,
+  "fixed_negative_cases_rejected": 21,
+  "ci_total_tests": 45,
+  "ci_new_test_methods": 16,
+  "scope": "Selected physical water shader/compute GUIDs against all physical Assets sidecars; not unrelated GUID uniqueness or package namespace.",
+  "original_assets_read": false,
+  "original_identity_verified": false,
+  "unity_or_device_tested": false,
+  "XAPK_requested": false,
+  "next": "G0-G2-folder-meta-aware-material-texture-registry: inspect and reproduce the distinct existing verify_exported_material_texture_links.py audit gap (lines 151–160: files-only targets reject ordinary Unity directory .meta as orphan_asset_meta). Source-free fixtures must prove a legitimate physical folder with canonical folderAsset metadata can be registered for GUID collision detection without becoming a resolvable Texture2D target; preserve duplicate/reserved rejection, reject missing/non-directory folder targets and folder-vs-file mismatch, preserve all strict PPtr/texture checks. Compare existing provenance tools and do not weaken audit or activate native build. This supports white-mesh material/texture integrity; does not prove original visual repair. If already covered by a separate exact integrated gate, move to another distinct G1/G2 or G4 source-free gap. Water GUID namespace repair and prior G3/FFT authored replay are complete only in tested scope, do not repeat. A3, Particle108 third source/export alpha comparison, original FFT/kernel6 cause, NEXT23b and ten runtime groups remain blocked/open; no acquisition without proven authorized source. G0–G6 open; no installer or production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference.",
+  "source_sha256": "a45798123794ecb62828f7ae97e154730d7532cbdfceef61988726a84321f190",
+  "test_sha256": "ba01593040042137c0ccd6fedceda8652fb5810a2cd5d39b77c547f53a0d13e2",
+  "tests": {
+    "test_b47_compute_kernel_contract.py": 8,
+    "test_gt_water_guid_namespace.py": 16,
+    "test_record_documented_water_limitation.py": 4,
+    "test_verify_water_render_contract.py": 17
+  },
+  "baseline_failed_methods_names": [
+    "test_acknowledged_limits_cannot_bypass_collision",
+    "test_ambiguous_unrelated_meta",
+    "test_folder_collision",
+    "test_linked_directory_hiding_collision",
+    "test_linked_meta_hiding_collision",
+    "test_malformed_unrelated_meta",
+    "test_model_collision",
+    "test_orphan_meta_collision",
+    "test_oversized_unrelated_meta",
+    "test_redirected_project_ancestor",
+    "test_reserved_selected_identities",
+    "test_texture_collision_case_insensitive",
+    "test_unselected_compute_collision",
+    "test_unselected_shader_collision"
+  ],
+  "members": {
+    "baseline.json": {
+      "bytes": 775,
+      "sha256": "92c15f30361b70d47d6ec4a8558ae0da9560e7cd356836adda3da8e545f2a56b"
+    },
+    "baseline.log": {
+      "bytes": 19435,
+      "sha256": "f84f96bcd843928ef67aebf9c0691d1d1805bfdd205e203a49ee261e2e1f142f"
+    },
+    "report.json": {
+      "bytes": 747,
+      "sha256": "d4a4781f01de05d4d9d89f80b6b9fd50ecc66fa14286b66667c7ad8fc1b365fc"
+    },
+    "test_b47_compute_kernel_contract.py.log": {
+      "bytes": 1302,
+      "sha256": "d359858d60f04560d1e8d90c35a12eb28f5ea0770fa69b91e37f1402a757179c"
+    },
+    "test_gt_water_guid_namespace.py.log": {
+      "bytes": 2101,
+      "sha256": "474e30d9d52114ab48286316bdce9b55b369946d75a79d12431680473f17257b"
+    },
+    "test_record_documented_water_limitation.py.log": {
+      "bytes": 11100,
+      "sha256": "eadccb7e9188d53b3b981410369582f945787c6baabc785c1ab557c4836054e9"
+    },
+    "test_verify_water_render_contract.py.log": {
+      "bytes": 3065,
+      "sha256": "97f1110dbb3a7548440234fd124f31751388613f581207210753d93a099b8911"
+    }
+  },
+  "namespace_bounds": {
+    "selected_water_meta_max_bytes": 65536,
+    "other_meta_max_bytes": 4194304,
+    "entries_max": 250000,
+    "bounds_fail_closed": true
+  },
+  "integration_review": {
+    "native_workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+    "material_texture_audit_lines": "3852-3859",
+    "material_texture_audit_continue_on_error": true,
+    "water_inspect_lines": "3860-3871",
+    "strict_or_documented_limits_lines": "3896-3903",
+    "documented_limitation_collision_rejected": true,
+    "native_workflow_modified": false,
+    "native_execution_performed": false
+  },
+  "local_archive_recheck": {
+    "crc": true,
+    "sha256": true,
+    "all_7_member_hashes_calculated": true,
+    "baseline_21_failure_headers_and_result_count_verified": true,
+    "fixed_4_suite_logs_verified": true,
+    "local_code_execution": false
+  },
+  "reserved_guid_classes": [
+    "null",
+    "Unity_builtin_e",
+    "Unity_builtin_f",
+    "AssetRipper_known_placeholder"
+  ],
+  "full_real_export_namespace_scanned": false,
+  "external_package_guid_namespace_verified": false,
+  "unrelated_duplicate_guid_groups_verified": false,
+  "original_particle108_third_export_comparison_proven": false,
+  "original_source_authorization_proven": false,
+  "original_fft_coordinate_or_kernel6_root_cause_resolved": false,
+  "original_runtime_keywords_or_install_proven": false,
+  "original_same_export_inventory": {
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "shader_guids": 37,
+    "historical": true
+  },
+  "G0_G6_closed": false,
+  "other_branches_written": false
+}

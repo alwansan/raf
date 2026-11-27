@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-fft-row-replay/README_AR.md",
-  "next_action": "G4 complete-row replay is accepted only for the exact two authored FFT bundles; do not repeat it or the authored G3 bundle run. A3 and the third Particle108 export-alpha comparison remain blocked without independently authorized original bytes and same-export document-scoped payload. Next independent G0/G4 task: audit global same-export GUID identity for water shader/compute resources; verify whether verify_water_render_contract.py's selected-water-only GUID set can overlook collisions with non-water assets or reserved/zero GUIDs, compare existing project-wide provenance tools, reproduce and fix only a real remaining gap with source-free fixtures. If already covered by the integrated gate, choose the next distinct G1/G2 white-mesh or G4 resource-binding repair. No original acquisition or original parity claims; original FFT coordinate cause, NEXT23b and all ten runtime groups remain open. No installer/native request or APK/XAPK before G0-G6 closure; CL/lab read-only, BLACK out of scope, animation deferred. Preserve Ali's pinned reference.",
+  "latest_session": "clients/GT/sessions/20261127-water-guid-namespace/README_AR.md",
+  "next_action": "G0-G2-folder-meta-aware-material-texture-registry: inspect and reproduce the distinct existing verify_exported_material_texture_links.py audit gap (lines 151–160: files-only targets reject ordinary Unity directory .meta as orphan_asset_meta). Source-free fixtures must prove a legitimate physical folder with canonical folderAsset metadata can be registered for GUID collision detection without becoming a resolvable Texture2D target; preserve duplicate/reserved rejection, reject missing/non-directory folder targets and folder-vs-file mismatch, preserve all strict PPtr/texture checks. Compare existing provenance tools and do not weaken audit or activate native build. This supports white-mesh material/texture integrity; does not prove original visual repair. If already covered by a separate exact integrated gate, move to another distinct G1/G2 or G4 source-free gap. Water GUID namespace repair and prior G3/FFT authored replay are complete only in tested scope, do not repeat. A3, Particle108 third source/export alpha comparison, original FFT/kernel6 cause, NEXT23b and ten runtime groups remain blocked/open; no acquisition without proven authorized source. G0–G6 open; no installer or production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1963,6 +1963,42 @@
     "new_XAPK_requested": false
   },
   "current_handoff": {
+    "latest_water_guid_namespace_repair": {
+      "status": "PASS_AUTHORED_WATER_GUID_ASSETS_NAMESPACE",
+      "reviewed_base": "d1cb6cec320eccf649a416e6340d9cd868562e44",
+      "preparation_commit": "5d48de7f45831319c210e5de8db1529f5d13050d",
+      "head": "10e3d6ec40c6ff8e5191d2970b6b3f5a72da0be7",
+      "run_id": 45999548157,
+      "job_id": 140507379178,
+      "conclusion": "success",
+      "guard_run_id": 45999547931,
+      "guard_job_id": 140507378433,
+      "guard_conclusion": "success",
+      "session": "clients/GT/sessions/20261127-water-guid-namespace/README_AR.md",
+      "evidence": "clients/GT/sessions/20261127-water-guid-namespace/evidence.json",
+      "archive": "clients/GT/sessions/20261127-water-guid-namespace/actual-run-45999548157.zip",
+      "artifact_id": 15196914395,
+      "archive_bytes": 5682,
+      "archive_sha256": "b22a6b262a6d9c4eefc30b60331f47771c167f719acae344a67781e758615d28",
+      "archive_git_blob": "489f18798746c1c1efce078c60ec6dfb79210022",
+      "archive_crc_sha_size_verified_locally": true,
+      "old_gate_git_blob": "65c96c8a2059e73bff48fcbc1d81ee2bb0eddd81",
+      "new_gate_git_blob": "dddb89135435bf587639be073c0d6e8c521ca59c",
+      "new_tests_git_blob": "775a68ae478f838cffb7d0900cbba224e310bb78",
+      "baseline_test_methods": 16,
+      "baseline_positive_methods": 2,
+      "baseline_failed_methods": 14,
+      "baseline_negative_cases_accepted": 21,
+      "fixed_negative_cases_rejected": 21,
+      "ci_total_tests": 45,
+      "ci_new_test_methods": 16,
+      "scope": "Selected physical water shader/compute GUIDs against all physical Assets sidecars; not unrelated GUID uniqueness or package namespace.",
+      "original_assets_read": false,
+      "original_identity_verified": false,
+      "unity_or_device_tested": false,
+      "XAPK_requested": false,
+      "next": "G0-G2-folder-meta-aware-material-texture-registry: inspect and reproduce the distinct existing verify_exported_material_texture_links.py audit gap (lines 151–160: files-only targets reject ordinary Unity directory .meta as orphan_asset_meta). Source-free fixtures must prove a legitimate physical folder with canonical folderAsset metadata can be registered for GUID collision detection without becoming a resolvable Texture2D target; preserve duplicate/reserved rejection, reject missing/non-directory folder targets and folder-vs-file mismatch, preserve all strict PPtr/texture checks. Compare existing provenance tools and do not weaken audit or activate native build. This supports white-mesh material/texture integrity; does not prove original visual repair. If already covered by a separate exact integrated gate, move to another distinct G1/G2 or G4 source-free gap. Water GUID namespace repair and prior G3/FFT authored replay are complete only in tested scope, do not repeat. A3, Particle108 third source/export alpha comparison, original FFT/kernel6 cause, NEXT23b and ten runtime groups remain blocked/open; no acquisition without proven authorized source. G0–G6 open; no installer or production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference."
+    },
     "latest_fft_row_coverage_replay": {
       "status": "PASS_AUTHORED_FFT_COMPLETE_ROW_COVERAGE",
       "reviewed_base": "aefdad8771546cfedd57823472f31b535f39f701",
@@ -2334,9 +2370,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G0-G4-water-guid-namespace-audit",
-      "status": "NEXT_SOURCE_FREE_AFTER_AUTHORED_FFT_ROW_REPLAY_PASS",
-      "next": "G4 complete-row replay is accepted only for the exact two authored FFT bundles; do not repeat it or the authored G3 bundle run. A3 and the third Particle108 export-alpha comparison remain blocked without independently authorized original bytes and same-export document-scoped payload. Next independent G0/G4 task: audit global same-export GUID identity for water shader/compute resources; verify whether verify_water_render_contract.py's selected-water-only GUID set can overlook collisions with non-water assets or reserved/zero GUIDs, compare existing project-wide provenance tools, reproduce and fix only a real remaining gap with source-free fixtures. If already covered by the integrated gate, choose the next distinct G1/G2 white-mesh or G4 resource-binding repair. No original acquisition or original parity claims; original FFT coordinate cause, NEXT23b and all ten runtime groups remain open. No installer/native request or APK/XAPK before G0-G6 closure; CL/lab read-only, BLACK out of scope, animation deferred. Preserve Ali's pinned reference.",
+      "id": "G0-G2-folder-meta-aware-material-texture-registry",
+      "status": "NEXT_SOURCE_FREE_AFTER_WATER_GUID_NAMESPACE_PASS",
+      "next": "G0-G2-folder-meta-aware-material-texture-registry: inspect and reproduce the distinct existing verify_exported_material_texture_links.py audit gap (lines 151–160: files-only targets reject ordinary Unity directory .meta as orphan_asset_meta). Source-free fixtures must prove a legitimate physical folder with canonical folderAsset metadata can be registered for GUID collision detection without becoming a resolvable Texture2D target; preserve duplicate/reserved rejection, reject missing/non-directory folder targets and folder-vs-file mismatch, preserve all strict PPtr/texture checks. Compare existing provenance tools and do not weaken audit or activate native build. This supports white-mesh material/texture integrity; does not prove original visual repair. If already covered by a separate exact integrated gate, move to another distinct G1/G2 or G4 source-free gap. Water GUID namespace repair and prior G3/FFT authored replay are complete only in tested scope, do not repeat. A3, Particle108 third source/export alpha comparison, original FFT/kernel6 cause, NEXT23b and ten runtime groups remain blocked/open; no acquisition without proven authorized source. G0–G6 open; no installer or production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali's pinned reference.",
       "previous_G3_and_G4_authored_witnesses_preserved": true,
       "original_acceptance_blocked": true
     },
