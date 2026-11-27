@@ -5,6 +5,8 @@ import json
 import struct
 import tempfile
 import unittest
+from types import SimpleNamespace as NS
+from hashlib import sha256
 from PIL import Image
 import yaml
 
@@ -138,6 +140,57 @@ class OrderedRoutes(unittest.TestCase):
     def test_wrong_exportable_type0_not_promoted(self):
         next(r for r in self.mappings if r["class_id"]==23)["export"]["type"]=0
         self.assertIn("unproven_exportable_global_target",self.run_audit()["reason_counts"])
+    def test_skinned_renderer_direct_mesh_path(self):
+        source=self.objects[(self.owner,3)][1]
+        source["m_Mesh"]=src(4)
+        self.objects[(self.owner,3)]=(137,source)
+        cls,actual=self.docs[(self.scene,102)]
+        actual["m_Mesh"]=ext(4300000,self.mesh)
+        self.docs[(self.scene,102)]=(137,actual)
+        next(r for r in self.mappings if r["class_id"]==23)["class_id"]=137
+        self.objects[(self.owner,1)][1]["m_Component"].pop(0)
+        self.docs[(self.scene,100)][1]["m_Component"].pop(0)
+        del self.objects[(self.owner,2)]
+        del self.docs[(self.scene,101)]
+        self.mappings=[r for r in self.mappings if r["class_id"]!=33]
+        self.assertTrue(self.run_audit()["selected_renderer_routes_preserved"])
+
+    def test_original_owner_byte_snapshot_passed_to_parser_and_drift_rejected(self):
+        root=self.project/"authored-source";root.mkdir()
+        raw=b"authored owner bytes; metadata fixture only"
+        p=root/self.owner;p.write_bytes(raw)
+        digest=sha256(raw).hexdigest()
+        seen=[]
+        def loader(data):
+            self.assertIs(type(data),bytes)
+            self.assertEqual(data,raw);seen.append(True)
+            obj=NS(type=NS(name="MeshRenderer"),path_id=3,
+                   read_typetree=lambda:self.objects[(self.owner,3)][1])
+            return NS(file=NS(objects={3:obj},externals=[]))
+        records={"Raft_Data/"+self.owner:("plain",len(raw),digest)}
+        objects,externals=routes.source_records(root,records,[self.owner],loader=loader)
+        self.assertEqual(objects,{(self.owner,3):self.objects[(self.owner,3)]})
+        self.assertEqual(externals,{self.owner:[]})
+        p.write_bytes(b"x"+raw[1:])
+        with self.assertRaisesRegex(ValueError,"SHA_mismatch"):
+            routes.source_records(root,records,[self.owner],loader=loader)
+        self.assertEqual(seen,[True])
+
+    def test_valid_but_wrong_mesh_filter_gameobject(self):
+        self.add(1,9,guid(109),900,{"m_Component":[]},{"m_Component":[]})
+        self.docs[(self.scene,101)][1]["m_GameObject"]=ext(900,guid(109))
+        result=self.run_audit()
+        self.assertFalse(result["selected_renderer_routes_preserved"])
+        self.assertIn("ordered_pointer_target_mismatch",result["reason_counts"])
+
+    def test_native_wrong_class_cannot_pass_imported_texture_fallback(self):
+        p=self.assets/"tex5.png"
+        p.unlink();Path(str(p)+".meta").unlink()
+        wrong=self.assets/"wrong.asset"
+        wrong.write_text("%YAML 1.1\n--- !u!84 &2800000\nRenderTexture:\n  m_Width: 2\n")
+        self.meta(wrong,guid(25))
+        self.assertIn("export_target_wrong_class",self.run_audit()["reason_counts"])
+
     def test_mixed_instance_refused(self):
         a={"schema_version":1,"export_instance":"a"*32,"objects":[]}
         b={"schema_version":1,"export_instance":"b"*32,"meshes":[]}

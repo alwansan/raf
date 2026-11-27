@@ -21,7 +21,7 @@ from scripts.gt_original_material_link_graph import pointer as source_pointer, d
 from scripts.gt_particle108_source_pixel_parity import verified_range, bounded_snapshot
 from scripts.gt_next23b_unity_receipt import strict_json
 from scripts.b05_verify_material_texenv_bindings import normalize_texenvs
-from scripts.verify_exported_material_texture_links import is_texture, BUILTIN, ZERO
+from scripts.verify_exported_material_texture_links import is_texture, BUILTIN, ZERO, IMAGES
 from scripts.b03_verify_renderer_material_links import GUID
 
 CLASSES={1:"GameObject",21:"Material",23:"MeshRenderer",28:"Texture2D",
@@ -228,14 +228,16 @@ def src_target(owner,raw,externals):
     return target,pid
 
 
-def source_records(root,records,owners):
+def source_records(root,records,owners,*,loader=None):
     """Parse the actual bytes matched to pinned manifest size and SHA."""
-    import UnityPy
+    if loader is None:
+        import UnityPy
+        loader=UnityPy.load
     objects={};externals={}
     for name in owners:
         _,size,digest=records["Raft_Data/"+name]
         raw=verified_range(root/name,(size,digest),0,size)
-        env=UnityPy.load(raw)
+        env=loader(raw)
         externals[name]=[getattr(e,"path",None) for e in env.file.externals]
         for obj in env.file.objects.values():
             cls=NAMES.get(obj.type.name)
@@ -277,12 +279,14 @@ def compare(objects,externals,mapping,files,docs):
             return ptr,doc[1]
         require(ptr[0] in files,"missing_actual_export_target",Unknown)
         path,meta=files[ptr[0]]
+        require(path.stat().st_size>0,"empty_actual_export_target",Unknown)
         if cls==48:
             require(ptr[1]==4800000 and path.suffix==".shader" and
                     re.search(r"(?m)^ShaderImporter:[ \t]*$",meta),"shader_importer_identity_mismatch")
         elif cls in TEX:
             # Non-YAML images must have the expected native file ID/class.
-            require(cls in (28,187) and ptr[1]==cls*100000 and is_texture(path,meta,ptr[1]),
+            require(cls in (28,187) and path.suffix.lower() in IMAGES and ptr[1]==cls*100000
+                    and is_texture(path,meta,ptr[1]),
                     "texture_importer_identity_mismatch")
         else:raise Unknown("missing_actual_serialized_target")
         return ptr,None
