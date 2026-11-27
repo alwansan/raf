@@ -1,0 +1,277 @@
+{
+  "status": "PASS_AUTHORED_REAL_MESH_BINARY_CONSUMER",
+  "reviewed_base": "a97b398b099f14ca12f01a4626e777f2344e0009",
+  "preparation_commit": "9b68d36bfe8339e4ae9c1e86571f20830ace1a1a",
+  "head": "2d41c3d22c8397c5431b7aa4e2d0ff73d5afdf23",
+  "run_id": 46011546542,
+  "job_id": 140548039211,
+  "conclusion": "success",
+  "guard_run_id": 46011546393,
+  "guard_job_id": 140548038219,
+  "guard_conclusion": "success",
+  "session": "clients/GT/sessions/20261127-authored-mesh-binary/README_AR.md",
+  "evidence": "clients/GT/sessions/20261127-authored-mesh-binary/evidence.json",
+  "archive": "clients/GT/sessions/20261127-authored-mesh-binary/actual-run-46011546542.zip",
+  "artifact_id": 15204511805,
+  "archive_bytes": 9979,
+  "archive_sha256": "fa6351ec1e0437b32c19a4489b13d1746baf8ffaa2ac51684d597e0b0f630b83",
+  "archive_git_blob": "9a7f5b42a83d9a0f21e11b169b6a159971f9f8fd",
+  "archive_crc_sha_size_verified_locally": true,
+  "failed_runs": [
+    46010936038,
+    46011104273,
+    46011279848
+  ],
+  "witness_git_blob": "18c23415a29cf537f7341517729e2ccb7de8bad3",
+  "consumer_git_blob": "77e6a626ac9542b6704ac1a46bc454ba7983e2bf",
+  "unitypy": "1.23.0",
+  "public_schema_unity_version": "2021.3.0f1",
+  "serialized_file_version": 22,
+  "public_schema_nodes": 238,
+  "positive_matches": 6,
+  "negative_controls": 18,
+  "regression_tests": 73,
+  "geometry_fields_equal_per_positive": 10,
+  "actual_serialized_file_load": true,
+  "actual_objectreader_typetree_decode": true,
+  "actual_full_native_inspect": true,
+  "actual_assetripper_export": false,
+  "authored_yaml": true,
+  "original_assets_read": false,
+  "original_geometry_verified": false,
+  "unity_or_device_tested": false,
+  "XAPK_requested": false,
+  "next": "G1-G2-authored-serialized-mesh-actual-export-consumer: close the remaining authored source-to-real-export gap, not repeat decoder-only or V12 in-memory IMesh receipts. Review the pinned public AssetRipper CLI 036098ab525a3f9f693dc101edeb21faad4d32d8, existing ExportLineage patch and native export invocation. On isolated source-free CI, generate or recover the retained authored v22 Mesh owner and a physically consistent supported uncompressed authored variant (separate from intentionally mixed packed attributes), load that actual binary with the exact public exporter, retain same-instance mesh/source trace and actual exported YAML, compare the actual authored binary and actual exported Mesh via full gt_verify_original_mesh_export.inspect and/or precise source_geometry/export_geometry, including storage/unsigned hashes/pose if compatible. First establish that the exporter loads the actual file and schema, not a C# in-memory object injected after parsing. If importer/exporter or authored schema cannot accept the fixture, retain exact failure and make a narrow supported authored case rather than inventing equivalence. Avoid full original acquisition, no unauthorized original use, no repeated expensive builds without a distinct new witness, no Unity/device/APK/XAPK or production activation. A3/Particle108 third same-export comparison blocked; original FFT/kernel6, NEXT23b and ten runtime groups open; G0–G6 open. CL/lab read-only, BLACK/animation out of scope. Preserve Ali pinned reference.",
+  "witness_sha256": "4062970a494bf09b7f7b5593c10845559553aff3d0f02f53992a111f0caf96cc",
+  "consumer_sha256": "9456d10d0f99e8a72b4bd4d8212514f6f7136dd6d59a7dd3f517b2c168a92775",
+  "decoder_backends": [
+    "UnityPy compiled",
+    "UnityPy Python"
+  ],
+  "storage_variants": [
+    "inline",
+    "streamed",
+    "dual_equal"
+  ],
+  "decoded_types": {
+    "vertex": "bytes",
+    "index": "list",
+    "packed": "list",
+    "bones": "list",
+    "weights": "list"
+  },
+  "public_schema_api_reference": "https://github.com/K0lb3/UnityPy/commit/807f3888b8a2ddaa6504fca0737481baab4d6a99",
+  "public_package_reference": "https://pypi.org/project/UnityPy/1.23.0/",
+  "failed_runs_detail": [
+    {
+      "run_id": 46010936038,
+      "job_id": 140545951540,
+      "head": "4a3047e90b96d9b1a9f985219b4c0fe30d305c35",
+      "conclusion": "failure",
+      "reason": "UnityPy TPK import open_binary DeprecationWarning treated as error; no decode",
+      "fix": "08d9a64af03ae6917b3ccea11861a5335e13f6cb",
+      "artifact_id": 15203692527,
+      "archive_bytes": 953,
+      "archive_sha256": "e4ccbec2525b599d97647365f4157ed0219c59fb438e237bcfed2ff2ef8c89bf",
+      "archive_git_blob": "cff26284238c743dae28ecfa8eae2e6cf950ec67",
+      "archive": "clients/GT/sessions/20261127-authored-mesh-binary/failed-run-46010936038.zip",
+      "crc_sha_size_verified_locally": true
+    },
+    {
+      "run_id": 46011104273,
+      "job_id": 140546529184,
+      "head": "08d9a64af03ae6917b3ccea11861a5335e13f6cb",
+      "conclusion": "failure",
+      "reason": "newer UnityVersion module path absent in installed 1.23.0; no decode",
+      "fix": "da0e92dc32c4cdc2878d5bc1cab58a510184465f",
+      "artifact_id": 15203463055,
+      "archive_bytes": 576,
+      "archive_sha256": "10b94265400a7bc6c75a416aa44c6b0e92a65112566cd1353ba260414e738e52",
+      "archive_git_blob": "a0ef9d79df4b6ce9cfc146c66447a91f84bd7df6",
+      "archive": "clients/GT/sessions/20261127-authored-mesh-binary/failed-run-46011104273.zip",
+      "crc_sha_size_verified_locally": true
+    },
+    {
+      "run_id": 46011279848,
+      "job_id": 140547118317,
+      "head": "da0e92dc32c4cdc2878d5bc1cab58a510184465f",
+      "conclusion": "failure",
+      "reason": "old TPK UnityVersion has no from_str; actual 1.23.0 get_typetree_node accepts version tuple; no decode",
+      "fix": "2d41c3d22c8397c5431b7aa4e2d0ff73d5afdf23",
+      "artifact_id": 15203468270,
+      "archive_bytes": 659,
+      "archive_sha256": "1040ef5417f3d7b99a3915ee7acea04f3e35c5322b1b07a7da24dc729a4e401d",
+      "archive_git_blob": "dfba4b609972601172c9ae13d7f0520cb592669a",
+      "archive": "clients/GT/sessions/20261127-authored-mesh-binary/failed-run-46011279848.zip",
+      "crc_sha_size_verified_locally": true
+    }
+  ],
+  "source_encoder": "independent struct encoder using public TPK schema; full authored v22 SerializedFile with no embedded tree",
+  "positive_fixtures": {
+    "inline": {
+      "owner": {
+        "bytes": 728,
+        "sha256": "eb128140292288b4adab34f9f253ccc14e497a5677332cebfc37a437b9e7193f"
+      },
+      "object": {
+        "bytes": 584,
+        "sha256": "c5d6cf463606101da2a683f9f0106f2b974a7daa4aba995ceb2e27121f6f97de"
+      }
+    },
+    "streamed": {
+      "owner": {
+        "bytes": 684,
+        "sha256": "aeeb029777d5aea3eb571311b351923c3ce94f06e897c2bc3cd0b2c044f7a085"
+      },
+      "object": {
+        "bytes": 540,
+        "sha256": "c861110ee8b424dde7ab46d39de6aacbaf67a3df063ef5e9567a4630b6dad8ee"
+      }
+    },
+    "dual_equal": {
+      "owner": {
+        "bytes": 744,
+        "sha256": "55e4f133452757e563398b7fc0fa4361ec50e02ab2615317d6d6656fb6c3ea43"
+      },
+      "object": {
+        "bytes": 600,
+        "sha256": "ef295543acb5f7ae5eff5e726175aa60aaada7049d91ec3d6085d71c74690c22"
+      }
+    }
+  },
+  "payload_commitments": {
+    "vertex": {
+      "bytes": 60,
+      "sha256": "acda3bdfa0bdc6ee440ba8bc7834edf836a21449fd30417486e60730a2d047d2"
+    },
+    "index": {
+      "bytes": 6,
+      "sha256": "90c2698921ca9fd02950be353f721888760e33ab5095a21e50f1e4360b6de1a0"
+    },
+    "provider": {
+      "bytes": 67,
+      "sha256": "4855f6fae7d6fc7cd2d914a66ef5735997be1c63e3b2afa35ee8de5551182318"
+    },
+    "yaml": {
+      "bytes": 2703,
+      "sha256": "811881c2cd04939d30f4100ba15d0f82be0fdc2a57d8f3afbb9d3af254498ff9"
+    }
+  },
+  "negative_cases": [
+    "uv_only",
+    "position_only",
+    "indices",
+    "bone_hash",
+    "packed",
+    "pose",
+    "stale_zero_provider",
+    "dual_conflict",
+    "provider_mutated"
+  ],
+  "tests": {
+    "test_compare_exported_mesh_geometry.py": 6,
+    "test_gt_mesh_document_stream_identity.py": 8,
+    "test_gt_mesh_vertex_payload.py": 15,
+    "test_gt_mesh_yaml_unique_mapping.py": 7,
+    "test_gt_original_mesh_source_storage.py": 9,
+    "test_gt_renderer_submesh_routes.py": 21,
+    "test_gt_verify_original_mesh_export.py": 7
+  },
+  "members": {
+    "authored-dual.assets": {
+      "bytes": 744,
+      "sha256": "55e4f133452757e563398b7fc0fa4361ec50e02ab2615317d6d6656fb6c3ea43"
+    },
+    "authored-mesh.asset": {
+      "bytes": 2703,
+      "sha256": "811881c2cd04939d30f4100ba15d0f82be0fdc2a57d8f3afbb9d3af254498ff9"
+    },
+    "authored-inline.assets": {
+      "bytes": 728,
+      "sha256": "eb128140292288b4adab34f9f253ccc14e497a5677332cebfc37a437b9e7193f"
+    },
+    "authored-streamed.assets": {
+      "bytes": 684,
+      "sha256": "aeeb029777d5aea3eb571311b351923c3ce94f06e897c2bc3cd0b2c044f7a085"
+    },
+    "authored.resS": {
+      "bytes": 67,
+      "sha256": "4855f6fae7d6fc7cd2d914a66ef5735997be1c63e3b2afa35ee8de5551182318"
+    },
+    "schema.json": {
+      "bytes": 14440,
+      "sha256": "3840cf6c4e21a86591552faf3cb0c081c2793097d9298331778ab17ebd01b09d"
+    },
+    "report.json": {
+      "bytes": 12404,
+      "sha256": "8e874e9c77ecf4f4f23b5a44af0ce3377104b482f93cf3cfd2b26fd09a081047"
+    },
+    "test_compare_exported_mesh_geometry.py.log": {
+      "bytes": 1002,
+      "sha256": "2fd453477be765b29a877e54717670e92956489a8240ac7310476fa74b0d8ee7"
+    },
+    "test_gt_mesh_document_stream_identity.py.log": {
+      "bytes": 1538,
+      "sha256": "f5534d67b3d39acd76199e55fbda806a7e6f41940999826f02091df594ad6185"
+    },
+    "test_gt_mesh_vertex_payload.py.log": {
+      "bytes": 1881,
+      "sha256": "d4cf2dbf442a4b79045ba7fad64d354a90844e901a5ccb46e758c054417f909a"
+    },
+    "test_gt_mesh_yaml_unique_mapping.py.log": {
+      "bytes": 1400,
+      "sha256": "a843d0994aafaba5791350b432adb8716eb62eaf32bbffd74ca4c33faf5e1088"
+    },
+    "test_gt_original_mesh_source_storage.py.log": {
+      "bytes": 1688,
+      "sha256": "6425098c1a9ede69a55318713feba45f4234c4c6b0357a6ea4b7305f494db616"
+    },
+    "test_gt_renderer_submesh_routes.py.log": {
+      "bytes": 3004,
+      "sha256": "beb145cbb6e56ab42d3d418d6a127dfa6a08956a18fe61d63375bb6018df38d2"
+    },
+    "test_gt_verify_original_mesh_export.py.log": {
+      "bytes": 1259,
+      "sha256": "acd58e829f3dcfdf64167e918a2123e7efe89652be0bae9507df87c33153de10"
+    },
+    "tools.log": {
+      "bytes": 196,
+      "sha256": "04c95336cfef3ffea1e66b6a0afc074c1c3074935d9079776b1b6d6ed0e59d25"
+    },
+    "witness.log": {
+      "bytes": 294,
+      "sha256": "5bc7ae0cda32d76ab0c71c1b8aa125da09cdd8819afaab06fbf2430a7b2698f1"
+    }
+  },
+  "limitations": {
+    "public_fallback_schema_1_23_0_legacy_version_tuple_not_claimed_exact_raft_schema": true,
+    "mixed_authored_packed_and_inline_fields_not_claimed_valid_engine_mesh": true,
+    "actual_export_not_yet_proven": true,
+    "source_geometry_changed": false,
+    "native_workflow_changed": false
+  },
+  "local_archive_recheck": {
+    "crc": true,
+    "sha256": true,
+    "all_16_member_hashes_calculated": true,
+    "three_owner_and_object_payload_hashes_verified": true,
+    "provider_yaml_hashes_verified": true,
+    "all_six_positive_inspect_and_18_negative_receipts_verified": true,
+    "all_seven_regression_log_counts_verified": true,
+    "local_code_execution": false,
+    "prior_archives_not_modified": true
+  },
+  "original_particle108_third_export_comparison_proven": false,
+  "original_source_authorization_proven": false,
+  "original_fft_coordinate_or_kernel6_root_cause_resolved": false,
+  "original_runtime_keywords_or_install_proven": false,
+  "original_same_export_inventory": {
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "shader_guids": 37,
+    "historical": true
+  },
+  "G0_G6_closed": false,
+  "other_branches_written": false
+}

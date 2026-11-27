@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-original-mesh-source-storage/README_AR.md",
-  "next_action": "G1-G2-authored-binary-mesh-decoder-consumer-witness: move beyond typetree-shaped dictionary counterfactuals. Review prior authored V12 exporter witness (RaftAuthoredSceneRouteWitness.cs produces source rows from in-memory C# IMesh; its route witness is not the full native geometry consumer) and any existing actual UnityPy Mesh decode receipts before choosing the exact experiment. On isolated source-only CI, use pinned public UnityPy 1.23.0 with the real Mesh TypeTree schema and independently authored binary bytes, preferably actual serialized Mesh owner if feasible, or explicitly scoped object-level TypeTree binary read/write. Compare actual decoded storage types and source_geometry with canonical authored Mesh YAML through export_geometry; cover nontrivial vertex/UV/index bytes, unsigned bone hashes, packed data, stream descriptor and signed zero where supported, actual verified_range for external bytes. Record actual decoder path(s), schema/version, byte commitments, exact comparison and negative changes; never call an injected dict a real binary decode, a generated YAML an AssetRipper export, or a public schema original Raft. Reuse the earlier authored C# exporter only if a genuinely new same-instance full-geometry witness can be demonstrated without repeating V12; do not rebuild merely for a duplicate receipt. Correct any genuine compatibility issue exposed by real decoder output, retaining the fixed source storage/document/mapping controls. No original acquisition, no actual original geometry/visual acceptance. A3 and Particle108 third source/export alpha comparison blocked; original FFT/kernel6, NEXT23b and ten runtime groups open; G0–G6 open. No native request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali pinned reference.",
+  "latest_session": "clients/GT/sessions/20261127-authored-mesh-binary/README_AR.md",
+  "next_action": "G1-G2-authored-serialized-mesh-actual-export-consumer: close the remaining authored source-to-real-export gap, not repeat decoder-only or V12 in-memory IMesh receipts. Review the pinned public AssetRipper CLI 036098ab525a3f9f693dc101edeb21faad4d32d8, existing ExportLineage patch and native export invocation. On isolated source-free CI, generate or recover the retained authored v22 Mesh owner and a physically consistent supported uncompressed authored variant (separate from intentionally mixed packed attributes), load that actual binary with the exact public exporter, retain same-instance mesh/source trace and actual exported YAML, compare the actual authored binary and actual exported Mesh via full gt_verify_original_mesh_export.inspect and/or precise source_geometry/export_geometry, including storage/unsigned hashes/pose if compatible. First establish that the exporter loads the actual file and schema, not a C# in-memory object injected after parsing. If importer/exporter or authored schema cannot accept the fixture, retain exact failure and make a narrow supported authored case rather than inventing equivalence. Avoid full original acquisition, no unauthorized original use, no repeated expensive builds without a distinct new witness, no Unity/device/APK/XAPK or production activation. A3/Particle108 third same-export comparison blocked; original FFT/kernel6, NEXT23b and ten runtime groups open; G0–G6 open. CL/lab read-only, BLACK/animation out of scope. Preserve Ali pinned reference.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1963,6 +1963,51 @@
     "new_XAPK_requested": false
   },
   "current_handoff": {
+    "latest_authored_real_mesh_binary_consumer": {
+      "status": "PASS_AUTHORED_REAL_MESH_BINARY_CONSUMER",
+      "reviewed_base": "a97b398b099f14ca12f01a4626e777f2344e0009",
+      "preparation_commit": "9b68d36bfe8339e4ae9c1e86571f20830ace1a1a",
+      "head": "2d41c3d22c8397c5431b7aa4e2d0ff73d5afdf23",
+      "run_id": 46011546542,
+      "job_id": 140548039211,
+      "conclusion": "success",
+      "guard_run_id": 46011546393,
+      "guard_job_id": 140548038219,
+      "guard_conclusion": "success",
+      "session": "clients/GT/sessions/20261127-authored-mesh-binary/README_AR.md",
+      "evidence": "clients/GT/sessions/20261127-authored-mesh-binary/evidence.json",
+      "archive": "clients/GT/sessions/20261127-authored-mesh-binary/actual-run-46011546542.zip",
+      "artifact_id": 15204511805,
+      "archive_bytes": 9979,
+      "archive_sha256": "fa6351ec1e0437b32c19a4489b13d1746baf8ffaa2ac51684d597e0b0f630b83",
+      "archive_git_blob": "9a7f5b42a83d9a0f21e11b169b6a159971f9f8fd",
+      "archive_crc_sha_size_verified_locally": true,
+      "failed_runs": [
+        46010936038,
+        46011104273,
+        46011279848
+      ],
+      "witness_git_blob": "18c23415a29cf537f7341517729e2ccb7de8bad3",
+      "consumer_git_blob": "77e6a626ac9542b6704ac1a46bc454ba7983e2bf",
+      "unitypy": "1.23.0",
+      "public_schema_unity_version": "2021.3.0f1",
+      "serialized_file_version": 22,
+      "public_schema_nodes": 238,
+      "positive_matches": 6,
+      "negative_controls": 18,
+      "regression_tests": 73,
+      "geometry_fields_equal_per_positive": 10,
+      "actual_serialized_file_load": true,
+      "actual_objectreader_typetree_decode": true,
+      "actual_full_native_inspect": true,
+      "actual_assetripper_export": false,
+      "authored_yaml": true,
+      "original_assets_read": false,
+      "original_geometry_verified": false,
+      "unity_or_device_tested": false,
+      "XAPK_requested": false,
+      "next": "G1-G2-authored-serialized-mesh-actual-export-consumer: close the remaining authored source-to-real-export gap, not repeat decoder-only or V12 in-memory IMesh receipts. Review the pinned public AssetRipper CLI 036098ab525a3f9f693dc101edeb21faad4d32d8, existing ExportLineage patch and native export invocation. On isolated source-free CI, generate or recover the retained authored v22 Mesh owner and a physically consistent supported uncompressed authored variant (separate from intentionally mixed packed attributes), load that actual binary with the exact public exporter, retain same-instance mesh/source trace and actual exported YAML, compare the actual authored binary and actual exported Mesh via full gt_verify_original_mesh_export.inspect and/or precise source_geometry/export_geometry, including storage/unsigned hashes/pose if compatible. First establish that the exporter loads the actual file and schema, not a C# in-memory object injected after parsing. If importer/exporter or authored schema cannot accept the fixture, retain exact failure and make a narrow supported authored case rather than inventing equivalence. Avoid full original acquisition, no unauthorized original use, no repeated expensive builds without a distinct new witness, no Unity/device/APK/XAPK or production activation. A3/Particle108 third same-export comparison blocked; original FFT/kernel6, NEXT23b and ten runtime groups open; G0–G6 open. CL/lab read-only, BLACK/animation out of scope. Preserve Ali pinned reference."
+    },
     "latest_original_mesh_source_storage": {
       "status": "PASS_AUTHORED_ORIGINAL_MESH_SOURCE_STORAGE",
       "reviewed_base": "a84509db54e77b09367fa4b15606c3b2e3422cca",
@@ -2553,9 +2598,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G1-G2-authored-binary-mesh-decoder-consumer-witness",
-      "status": "NEXT_SOURCE_FREE_AFTER_ORIGINAL_MESH_SOURCE_STORAGE_PASS",
-      "next": "G1-G2-authored-binary-mesh-decoder-consumer-witness: move beyond typetree-shaped dictionary counterfactuals. Review prior authored V12 exporter witness (RaftAuthoredSceneRouteWitness.cs produces source rows from in-memory C# IMesh; its route witness is not the full native geometry consumer) and any existing actual UnityPy Mesh decode receipts before choosing the exact experiment. On isolated source-only CI, use pinned public UnityPy 1.23.0 with the real Mesh TypeTree schema and independently authored binary bytes, preferably actual serialized Mesh owner if feasible, or explicitly scoped object-level TypeTree binary read/write. Compare actual decoded storage types and source_geometry with canonical authored Mesh YAML through export_geometry; cover nontrivial vertex/UV/index bytes, unsigned bone hashes, packed data, stream descriptor and signed zero where supported, actual verified_range for external bytes. Record actual decoder path(s), schema/version, byte commitments, exact comparison and negative changes; never call an injected dict a real binary decode, a generated YAML an AssetRipper export, or a public schema original Raft. Reuse the earlier authored C# exporter only if a genuinely new same-instance full-geometry witness can be demonstrated without repeating V12; do not rebuild merely for a duplicate receipt. Correct any genuine compatibility issue exposed by real decoder output, retaining the fixed source storage/document/mapping controls. No original acquisition, no actual original geometry/visual acceptance. A3 and Particle108 third source/export alpha comparison blocked; original FFT/kernel6, NEXT23b and ten runtime groups open; G0–G6 open. No native request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali pinned reference.",
+      "id": "G1-G2-authored-serialized-mesh-actual-export-consumer",
+      "status": "NEXT_SOURCE_FREE_AFTER_AUTHORED_REAL_MESH_BINARY_CONSUMER_PASS",
+      "next": "G1-G2-authored-serialized-mesh-actual-export-consumer: close the remaining authored source-to-real-export gap, not repeat decoder-only or V12 in-memory IMesh receipts. Review the pinned public AssetRipper CLI 036098ab525a3f9f693dc101edeb21faad4d32d8, existing ExportLineage patch and native export invocation. On isolated source-free CI, generate or recover the retained authored v22 Mesh owner and a physically consistent supported uncompressed authored variant (separate from intentionally mixed packed attributes), load that actual binary with the exact public exporter, retain same-instance mesh/source trace and actual exported YAML, compare the actual authored binary and actual exported Mesh via full gt_verify_original_mesh_export.inspect and/or precise source_geometry/export_geometry, including storage/unsigned hashes/pose if compatible. First establish that the exporter loads the actual file and schema, not a C# in-memory object injected after parsing. If importer/exporter or authored schema cannot accept the fixture, retain exact failure and make a narrow supported authored case rather than inventing equivalence. Avoid full original acquisition, no unauthorized original use, no repeated expensive builds without a distinct new witness, no Unity/device/APK/XAPK or production activation. A3/Particle108 third same-export comparison blocked; original FFT/kernel6, NEXT23b and ten runtime groups open; G0–G6 open. CL/lab read-only, BLACK/animation out of scope. Preserve Ali pinned reference.",
       "previous_G3_and_G4_authored_witnesses_preserved": true,
       "original_acceptance_blocked": true
     },
