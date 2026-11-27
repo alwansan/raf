@@ -1307,7 +1307,7 @@
   "current_handoff": {
     "date": "2026-11-27",
     "reviewed_remote_head": "db5952b6fae2d6878214c2d9bf748bc63dd14ff8",
-    "purpose": "V13 actual authored Unity route observation passed; V14 isolated reversible alpha policy direct GPU texels in progress; original source acceptance blocked",
+    "purpose": "Actual authored V14 alpha policy causality established; prepare selective candidate public exporter patch, original source acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
     "index": "clients/GT/sessions/20261127-dxt5nm-texel-policy-v14/README_AR.md",
@@ -4196,7 +4196,8 @@
       "actual_original_DXT5_restored": false
     },
     "latest_actual_authored_v13_run": 45970415390,
-    "latest_v14_run": 45972362899
+    "latest_v14_run": 45972362899,
+    "latest_actual_authored_v14_run": 45972362899
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date.",
   "v9_importer_state_checkpoint": {
@@ -5430,7 +5431,7 @@
     "evidence": "clients/GT/sessions/20261127-dxt5nm-unity-v13/actual-pass-45970415390.json"
   },
   "v14_dxt5nm_texel_policy_checkpoint": {
-    "status": "V14_EXPORT_AND_POLICY_STAGE_SUCCESS_UNITY_PENDING",
+    "status": "PASS_ACTUAL_AUTHORED_DXT5NM_ALPHA_POLICY_CAUSAL_TEXEL_WITNESS",
     "starting_head": "0571c5844f2cef31e07e813bdf30c374e0c90023",
     "prior_v13_pass_head": "0be8ee0555f381e8e7de4882d96937533300ad26",
     "activation_head": "db5952b6fae2d6878214c2d9bf748bc63dd14ff8",
@@ -5438,11 +5439,8 @@
       "id": 45972362899,
       "job": 140415627749,
       "head": "db5952b6fae2d6878214c2d9bf748bc63dd14ff8",
-      "status": "in_progress",
-      "regression_step": "success",
-      "actual_export_step": "success",
-      "stage_step": "success",
-      "unity_activation_preflight": "success",
+      "status": "completed",
+      "conclusion": "success",
       "compatibility_guard": {
         "id": 45972362780,
         "conclusion": "success"
@@ -5453,16 +5451,36 @@
     "planned_v14_controls": 10,
     "planned_unfiltered_GPU_texels": 252,
     "planned_submesh_material_texture_matches": 12,
-    "actual_Unity_texel_observation_verified": false,
-    "actual_alpha_zero_repack_loss_isolated": false,
+    "actual_Unity_texel_observation_verified": true,
+    "actual_alpha_zero_repack_loss_isolated": true,
     "source_lower_mip_parity_verified": false,
     "original_assets_read": false,
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-texel-policy-v14/README_AR.md",
-    "next": "G1-G2-imported-DXT5nm-alpha-transparency-unfiltered-texel-policy-same-route (V14): inspect exact run 45972362899 and independently verify actual unfiltered texel, metadata restoration, per-phase route and alpha-zero differences; do not treat filtered V13 observation as raw source parity.",
+    "next": "V15: pin opt-in candidate in converted PNG TextureExportCollection after AddSprites; only exact 2D DXT5/NormalmapDXT5nm/Gamma, final NormalMap no sprite, preserve ordinary/default imports; actual compiled exporter baseline/fix/ordinary control; do not activate production.",
     "source_regressions": 278,
     "actual_v11_v12_controls": 37,
-    "unique_authored_pixels_exact": 70
+    "unique_authored_pixels_exact": 70,
+    "actual_v14_controls": 10,
+    "unfiltered_GPU_texels": 252,
+    "alpha_on_exact_pixels": 65,
+    "alpha_off_exact_pixels": 70,
+    "renderer_route_matches_across_phases": 6,
+    "submesh_material_texture_matches_across_phases": 12,
+    "restored_exact_meta_and_texels": true,
+    "changed_texels_by_mip": [
+      [
+        3,
+        1,
+        0
+      ],
+      [
+        2,
+        1,
+        0
+      ]
+    ],
+    "evidence": "clients/GT/sessions/20261127-dxt5nm-texel-policy-v14/actual-pass-45972362899.json"
   }
 }

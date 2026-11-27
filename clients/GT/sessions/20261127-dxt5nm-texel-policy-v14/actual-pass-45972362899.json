@@ -1,0 +1,418 @@
+{
+  "status": "PASS_ACTUAL_AUTHORED_DXT5NM_ALPHA_POLICY_CAUSAL_TEXEL_WITNESS",
+  "run": 45972362899,
+  "job": 140415627749,
+  "head": "db5952b6fae2d6878214c2d9bf748bc63dd14ff8",
+  "guard": 45972362780,
+  "source_regressions": 278,
+  "V11_V12_controls": 37,
+  "V14_controls": 10,
+  "unique_authored_pixels_exact": 70,
+  "verified": {
+    "Android_device": false,
+    "XAPK": false,
+    "actual_GPU_row_orientation": "bottom_first",
+    "actual_Unity_texel_observation_verified": true,
+    "actual_alpha_zero_repack_loss_isolated": true,
+    "actual_receipt_negative_control_count": 10,
+    "actual_receipt_negative_controls": {
+      "changed_other_sampler": "actual_importer_or_runtime_setting_drift",
+      "invalid_mip_extent": "actual_mip_dimensions",
+      "missing_restore": "scope_or_restore_flag",
+      "nonreadable_CPU_fabrication": "nonreadable_CPU_bypass",
+      "off_meta_wrong": "actual_meta_sha256_drift",
+      "off_policy_unchanged": "actual_importer_or_runtime_setting_drift",
+      "phase_swap": "actual_phase_order",
+      "restored_texel_drift": "actual_ABA_restoration_drift",
+      "texture_route_swap": "Unity_asset_identity_or_file_bytes_drift",
+      "wrong_run": "actual_run_environment"
+    },
+    "alpha_on_exact_pixels": 65,
+    "original_assets_read": false,
+    "original_shader_program_parity_verified": false,
+    "renderer_route_matches_across_phases": 6,
+    "restored_exact_meta_and_texels": true,
+    "rows": [
+      {
+        "actual_cpu_comparison_available": true,
+        "actual_mip_dimensions": [
+          [
+            5,
+            7
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "alpha_off": {
+          "all_mismatches_zero_source_alpha": true,
+          "matches": 35,
+          "mismatches": []
+        },
+        "alpha_off_mip_sha256": [
+          "bdf7eb83596635a1a88cd9a6548c42f03a9a71dccbd8c22b62c6033e89be38cc",
+          "f347c46f53fbc21b684bae23dd98facdcd38a02c867b870349e79c7a16d498e7",
+          "5bf74a1081cda41b543b93581869ce18af393b1cc18a645e6027b81ac7554ca4"
+        ],
+        "alpha_on": {
+          "all_mismatches_zero_source_alpha": true,
+          "matches": 32,
+          "mismatches": [
+            {
+              "actual_packed": [
+                255,
+                130,
+                130,
+                80
+              ],
+              "expected_packed": [
+                255,
+                243,
+                243,
+                48
+              ],
+              "source_rgba": [
+                48,
+                243,
+                127,
+                0
+              ],
+              "x": 1,
+              "y": 0
+            },
+            {
+              "actual_packed": [
+                255,
+                130,
+                130,
+                112
+              ],
+              "expected_packed": [
+                255,
+                243,
+                243,
+                80
+              ],
+              "source_rgba": [
+                80,
+                243,
+                153,
+                0
+              ],
+              "x": 2,
+              "y": 1
+            },
+            {
+              "actual_packed": [
+                255,
+                130,
+                130,
+                144
+              ],
+              "expected_packed": [
+                255,
+                243,
+                243,
+                112
+              ],
+              "source_rgba": [
+                112,
+                243,
+                179,
+                0
+              ],
+              "x": 3,
+              "y": 2
+            }
+          ]
+        },
+        "alpha_on_mip_sha256": [
+          "f5cf5730a84bf213739f22b5d449d4716b9ffab75220248175d5afcd020e825e",
+          "fb000f82bf185f8e113645706b4c3a48b5436d4c6c17e4655061ef4215d5a69f",
+          "5bf74a1081cda41b543b93581869ce18af393b1cc18a645e6027b81ac7554ca4"
+        ],
+        "alpha_restored_exact": true,
+        "changed_texels_by_mip": [
+          3,
+          1,
+          0
+        ],
+        "guid": "145628f37d64cfc4a9f1d0fee244728d",
+        "source_zero_alpha_pixels": 3
+      },
+      {
+        "actual_cpu_comparison_available": false,
+        "actual_mip_dimensions": [
+          [
+            5,
+            7
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "alpha_off": {
+          "all_mismatches_zero_source_alpha": true,
+          "matches": 35,
+          "mismatches": []
+        },
+        "alpha_off_mip_sha256": [
+          "c1d70e413874cf5d845588d50b6f8c5837d579ea04fc310d782b3694ac849f40",
+          "0a7ffa16ce057afbd1a7fcd487ddda2b2ae7c8777b3a4b98066361adb9e43fe3",
+          "cc165d4f57c70f7de1b9ccf4fbcb036c50b8f64b8490e9b7c7ee7e0b2a8b6273"
+        ],
+        "alpha_on": {
+          "all_mismatches_zero_source_alpha": true,
+          "matches": 33,
+          "mismatches": [
+            {
+              "actual_packed": [
+                255,
+                211,
+                211,
+                0
+              ],
+              "expected_packed": [
+                255,
+                243,
+                243,
+                144
+              ],
+              "source_rgba": [
+                144,
+                243,
+                178,
+                0
+              ],
+              "x": 4,
+              "y": 2
+            },
+            {
+              "actual_packed": [
+                255,
+                125,
+                125,
+                0
+              ],
+              "expected_packed": [
+                255,
+                243,
+                243,
+                80
+              ],
+              "source_rgba": [
+                80,
+                243,
+                153,
+                0
+              ],
+              "x": 4,
+              "y": 4
+            }
+          ]
+        },
+        "alpha_on_mip_sha256": [
+          "e7a79241ff561debec718ed930319925553bfe1d4d16ed4ad6ea452822a87cde",
+          "638fa1802daf0fbb8a57122312bbdbea27b5ed10cf4c77b6feaa66f636644dc9",
+          "cc165d4f57c70f7de1b9ccf4fbcb036c50b8f64b8490e9b7c7ee7e0b2a8b6273"
+        ],
+        "alpha_restored_exact": true,
+        "changed_texels_by_mip": [
+          2,
+          1,
+          0
+        ],
+        "guid": "297ffd4ae0b7fc34286da35c41c9bd0a",
+        "source_zero_alpha_pixels": 2
+      }
+    ],
+    "scene_import_verified": false,
+    "shader_adapter_identity_matches_across_phases": 12,
+    "source_lower_mip_parity_verified": false,
+    "status": "PASS_ACTUAL_AUTHORED_DXT5NM_ALPHA_POLICY_CAUSAL_TEXEL_WITNESS",
+    "submesh_material_texture_matches_across_phases": 12,
+    "top_mip_alpha_off_exact_pixels": 70,
+    "unfiltered_GPU_texels": 252
+  },
+  "policy_manifest_log": {
+    "status": "PREPARED_V14",
+    "texture_patches": [
+      {
+        "path": "Assets/GTExport/145628f37d64cfc4a9f1d0fee244728d.png",
+        "guid": "145628f37d64cfc4a9f1d0fee244728d",
+        "baseline_sha256": "0c7fdcb8e4191df1aa3b93e96dbe5c85541d27233e4dcfe125fe72e9fc5d0bf0",
+        "off_sha256": "e2daace2e95817e46f3be021739eefca21642c17c67e3f4f10c5408d5f58b30d",
+        "changed_byte_offset": 1227
+      },
+      {
+        "path": "Assets/GTExport/297ffd4ae0b7fc34286da35c41c9bd0a.png",
+        "guid": "297ffd4ae0b7fc34286da35c41c9bd0a",
+        "baseline_sha256": "db5e9c2cea8be3bbd02fe3244e4cf716d0fa7011e6754fcadca3fa27d0d55c7c",
+        "off_sha256": "a3b4213dbda04439e958fb1c9b40ac46791e049e4dc494f175658a905e09cbae",
+        "changed_byte_offset": 1225
+      }
+    ],
+    "policy_manifest_sha256": "8d7454de91f702f31c66dc88b3d54ed0604e1a9cc14ae578251603676bd80754"
+  },
+  "source_and_actual": [
+    {
+      "actual_metadata": "fileFormatVersion: 2\nguid: 145628f37d64cfc4a9f1d0fee244728d\ntimeCreated: 1795771073\nlicenseType: Free\nTextureImporter:\n  serializedVersion: 12\n  internalIDToNameTable: []\n  externalObjects: {}\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 0\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 0\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n  isReadable: 1\n  streamingMipmaps: 0\n  streamingMipmapsPriority: -2\n  vTOnly: 0\n  ignoreMasterTextureLimit: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 12\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: 1\n    aniso: 2\n    mipBias: -0.625\n    wrapU: 0\n    wrapV: 2\n    wrapW: 3\n  nPOTScale: 0\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 1\n  spriteExtrude: 1\n  spriteMeshType: 0\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 1\n  spriteTessellationDetail: -1\n  textureType: 1\n  textureShape: 1\n  singleChannelComponent: 0\n  flipbookRows: 0\n  flipbookColumns: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  ignorePngGamma: 0\n  applyGammaDecoding: 0\n  cookieLightType: 0\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 2\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID:\n    internalID: 0\n    vertices: []\n    indices:\n    edges: []\n    weights: []\n    secondaryTextures: []\n    nameFileIdTable: {}\n  spritePackingTag:\n  output:\n    textureImportInstructions:\n      compressedFormat: 0\n      uncompressedFormat: 0\n      desiredFormat: 0\n      usageMode: 0\n      colorSpace: 0\n      androidETC2FallbackFormat: 0\n      width: 0\n      height: 0\n      depth: 0\n      cubeIntermediateSize: 0\n      cubeMode: 0\n      cubeLayout: 0\n      compressionQuality: 0\n      androidETC2FallbackDownscale: 0\n      vtOnly: 0\n    sourceTextureInformation:\n      width: 0\n      height: 0\n      doesTextureContainAlpha: 0\n      sourceWasHDR: 0\n    importInspectorWarnings:\n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData:\n  assetBundleName:\n  assetBundleVariant:\n",
+      "source": {
+        "color_space": 0,
+        "format": 12,
+        "max_size": 2048,
+        "mip_count": 2,
+        "mip_enabled": 1,
+        "priority": -2,
+        "readable": 1,
+        "sampler": [
+          1,
+          2,
+          3206545408,
+          0,
+          2,
+          3
+        ],
+        "size": [
+          5,
+          7
+        ],
+        "streaming": 0
+      },
+      "source_rgba_sha256": "c4613e57a409b503b1b7c354b38ff2c8656a48a842159ca8c1765b2826c1f895",
+      "swizzle_present": false
+    },
+    {
+      "actual_metadata": "fileFormatVersion: 2\nguid: 297ffd4ae0b7fc34286da35c41c9bd0a\ntimeCreated: 1795771073\nlicenseType: Free\nTextureImporter:\n  serializedVersion: 12\n  internalIDToNameTable: []\n  externalObjects: {}\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 0\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 0\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 1\n  streamingMipmapsPriority: 3\n  vTOnly: 0\n  ignoreMasterTextureLimit: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 12\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: 2\n    aniso: 8\n    mipBias: 0.375\n    wrapU: 1\n    wrapV: 1\n    wrapW: 2\n  nPOTScale: 0\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 1\n  spriteExtrude: 1\n  spriteMeshType: 0\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 1\n  spriteTessellationDetail: -1\n  textureType: 1\n  textureShape: 1\n  singleChannelComponent: 0\n  flipbookRows: 0\n  flipbookColumns: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  ignorePngGamma: 0\n  applyGammaDecoding: 0\n  cookieLightType: 0\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 2\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID:\n    internalID: 0\n    vertices: []\n    indices:\n    edges: []\n    weights: []\n    secondaryTextures: []\n    nameFileIdTable: {}\n  spritePackingTag:\n  output:\n    textureImportInstructions:\n      compressedFormat: 0\n      uncompressedFormat: 0\n      desiredFormat: 0\n      usageMode: 0\n      colorSpace: 0\n      androidETC2FallbackFormat: 0\n      width: 0\n      height: 0\n      depth: 0\n      cubeIntermediateSize: 0\n      cubeMode: 0\n      cubeLayout: 0\n      compressionQuality: 0\n      androidETC2FallbackDownscale: 0\n      vtOnly: 0\n    sourceTextureInformation:\n      width: 0\n      height: 0\n      doesTextureContainAlpha: 0\n      sourceWasHDR: 0\n    importInspectorWarnings:\n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData:\n  assetBundleName:\n  assetBundleVariant:\n",
+      "source": {
+        "color_space": 0,
+        "format": 12,
+        "max_size": 2048,
+        "mip_count": 2,
+        "mip_enabled": 1,
+        "priority": 3,
+        "readable": 0,
+        "sampler": [
+          2,
+          8,
+          1052770304,
+          1,
+          1,
+          2
+        ],
+        "size": [
+          5,
+          7
+        ],
+        "streaming": 1
+      },
+      "source_rgba_sha256": "e284bacc769e1e86fcb71099a4c7473a84c143c540edee397b67c769e466dc1e",
+      "swizzle_present": false
+    }
+  ],
+  "archive": {
+    "id": 15185044560,
+    "bytes": 32152,
+    "sha256": "4144ade139361c85bafd013f70c6886218ca390e89210d2c22ac26090917eacc",
+    "git_blob_sha1": "c03a503e0b6e9eb77234e56f593ae394c7c539dd",
+    "member_count": 33,
+    "crc_verified": true,
+    "member_sha256": {
+      "bc3-patch.json": "083270cb86eab100edb52e235d6e6ef43a019075cc72f08abec7654b4d7f3162",
+      "build.json": "798c7ebff065621678eddd8dda8df1f80a28fff1518d5deaf9919ff0bf655a9e",
+      "normalmap-authored-0.png": "9e6be9b9f97d2bf835fbf3ae21d79f889170b7588dddde3f1c351f85cc3b0a54",
+      "normalmap-authored-1.png": "5ab65d8dc9fb153f045cdc8ea0b5e8293d0e9006ec22938b7aafcddb9ed575d1",
+      "normalmap-baseline.json": "7fd0357e2ff48b94ac0f5b45511210222eac5922b09f5f7a1bce641e369f9803",
+      "normalmap-diagnostic.json": "37001784b47d16388d33395533b179025c50d86aedfa91182321ac22682a33ba",
+      "normalmap-importer-diagnostic.json": "8cc6deef845fe3831578c03789b50d7dfe4c0e50a310d06f61773d84d533e9e1",
+      "normalmap-importer-report.json": "1043b2d014a36396012816580bc7ea9961c899c012b0daa69d651f3a871c2f36",
+      "normalmap-importer-route-join.json": "be2b3d92a46ad9681c8ca734c650c3162daf47064083ae451e6561d08126e2dd",
+      "normalmap-route-join.json": "cc8acf2b8352b55482bc2ed871a0178b15691f07b65fb4cd8b9b0a7fd930940d",
+      "normalmap-texel-policy-manifest.json": "8d7454de91f702f31c66dc88b3d54ed0604e1a9cc14ae578251603676bd80754",
+      "normalmap-texel-policy-raw.json": "dabab75b5ba2e949c2ba642cb160b128114ed9c1fd64c0493b0950d968f917ce",
+      "normalmap-texel-policy-verified.json": "b4682b8c95fe08117f00b3443596018dc2cfc12369fa843a62bf9aae0d2cc4e2",
+      "normalmap-unity-manifest.json": "f8fbfa4ab93ca372b77427a6c559d2d35e714efb6ad89fa90e6fb5720ec2ea90",
+      "normalmap-witness.log": "44f7a0069cee04484827fcaa1eee568f905fc54b27aab99b252dd63c9391e0ae",
+      "test_b03_verify_renderer_material_links.py.log": "b73128ad9184a1a467fd5b392e1f8a6bbdfeafba4d1c4e37221fe3ddcfe09927",
+      "test_gt_dxt5nm_texel_policy.py.log": "bcb534a183a88fc246b631bec20815052d250138e29adbebcffc819e58cc9784",
+      "test_gt_dxt5nm_unity_reimport.py.log": "efe343c014c1e259cdb08725dcea4420f23518d6cd625b8d882232711df68c85",
+      "test_gt_imported_bc3_route_pixels.py.log": "013fabe7b90fd7ae66c72712d4f11170c5bf68bcd46c75065007fca374f5ba92",
+      "test_gt_imported_dxt5nm_route_importer.py.log": "8ab8cea49584db52b19875f97b4592537dc4f3c90b848d1124bfaaf6a6f307ac",
+      "test_gt_imported_dxt5nm_route_pixels.py.log": "bc2ac1f99862f645be89a9a052b68a49c173538084adf9a1b50c399dc87f9c71",
+      "test_gt_imported_png_route_importer.py.log": "81342e39edb1c348131e556a33ee17deaaa64fead284fc8d5e178a7b9b85c553",
+      "test_gt_imported_png_route_pixels.py.log": "89e38e7dd9903b235496ed4d28c81f840c7e8cfe27dd927ba81d09851546cee4",
+      "test_gt_material_route_keyword_state.py.log": "cbfbf763c0853d770759aa91b15e5eb49983c0519f3d18d900ca8c386f23b2ee",
+      "test_gt_material_route_values.py.log": "581b64e14dc43b7e18688272e56184e04f8055a279cd7d4a3d636a01b8cb7f20",
+      "test_gt_mesh_vertex_payload.py.log": "3817f85f3fa97a845e3c638f1f7fbc31dc5634ec24a20b02f0ae9429ee90b229",
+      "test_gt_native_texture_route_sampler.py.log": "83d4f01704088dd188f051c3a529c156c09eed72fa8e93ece65c598dee65b801",
+      "test_gt_patch_bc3_export_decoder.py.log": "4fa1d2e863b0fe525b616d8cce798835b283ad0f230c0ce36f441b08ed405c85",
+      "test_gt_renderer_submesh_routes.py.log": "d05dd09de950f6cb24e427396d9aef6aa8c9eef7c4a04c0050c8941e3eee341c",
+      "test_gt_streamed_texture_route_payload.py.log": "dd0209d0c76263bd394d386f351a97901de23bf8aff598576421a0100960f028",
+      "test_gt_texture_route_payload.py.log": "de60316b43a7c72ea64488a48f5f9a9c349d767036da983ef5401a2a064016f6",
+      "test_gt_verify_original_mesh_export.py.log": "5eda26625b4c88707a71a3dde8ed0a154af4d40b77e387248fc546b7eb2e44ac",
+      "tool-smoke.log": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+    }
+  },
+  "independent": {
+    "actual_GPU_texels": 252,
+    "max_unorm_error": 7.409675362168855e-8,
+    "route_matches": 12,
+    "source_png_RGBA_sha256": [
+      "c4613e57a409b503b1b7c354b38ff2c8656a48a842159ca8c1765b2826c1f895",
+      "e284bacc769e1e86fcb71099a4c7473a84c143c540edee397b67c769e466dc1e"
+    ],
+    "row_orientation": "bottom_first",
+    "all_non_alpha_policy_settings_equal": true,
+    "original_and_off_meta_SHA_reconstructed_from_actual_bytes": true,
+    "all_route_asset_identities_and_UV_equal": true,
+    "phase_mip_RGBA_hex": [
+      {
+        "guid": "145628f37d64cfc4a9f1d0fee244728d",
+        "alpha_on": [
+          "ff8282f0ff828210ff8282d0ff8282b0ffffff00ff8282d0ff8282b0ff828290ff828270ffa8a8ffff828290ff828270ff828250ff828230ffd3d3a0ff828250ff828230ff8282f0ff828210ff7d7dffffa7a7d0ffcdcdb0ff828290ff828290ffd3d300ffcdcd90ff828270ff828270ffa7a730ff7d7dffff828250ff828250ffa7a7f0ffcdcd10ffffffff",
+          "ff828293ff93938eff828238ff81814cff8f8f6bffb1b15c",
+          "ff818142"
+        ],
+        "alpha_off": [
+          "ff8282f0ff828210ff8282d0ff8282b0ffffff00ff8282d0ff8282b0ff828290ff828270ffa8a8ffff828290ff828270ff828250ff828230ffd3d3a0ff828250ff828230ff8282f0ff828210ff7d7dffffa7a7d0ffcdcdb0ff828290fff3f370ffd3d300ffcdcd90ff828270fff3f350ffa7a730ff7d7dffff828250fff3f330ffa7a7f0ffcdcd10ffffffff",
+          "ff828293ff93938eff828238ff81814cffabab63ffb1b15c",
+          "ff818142"
+        ],
+        "alpha_restored": [
+          "ff8282f0ff828210ff8282d0ff8282b0ffffff00ff8282d0ff8282b0ff828290ff828270ffa8a8ffff828290ff828270ff828250ff828230ffd3d3a0ff828250ff828230ff8282f0ff828210ff7d7dffffa7a7d0ffcdcdb0ff828290ff828290ffd3d300ffcdcd90ff828270ff828270ffa7a730ff7d7dffff828250ff828250ffa7a7f0ffcdcd10ffffffff",
+          "ff828293ff93938eff828238ff81814cff8f8f6bffb1b15c",
+          "ff818142"
+        ]
+      },
+      {
+        "guid": "297ffd4ae0b7fc34286da35c41c9bd0a",
+        "alpha_on": [
+          "ff7d7d00ff7d7d28ff7d7d50ff7d7d78ffcdcdd0ff7d7dffff7d7d78ff7d7da0ff7d7d00ff828290ff7d7da0ff7d7d00ff7d7dffff7d7d00ff7d7d00ff7d7dffff7d7d00ff7d7dc8ff7d7d28ffa7a7f0ff7d7d00ffffff78ffa8a8a0ffd3d300ffd3d300ffffffffffa8a800ffd3d3ffff7d7d00ffa7a750ffa8a8ffffd3d300ff7d7dc8ffffff28ffcdcdf0",
+          "ff7d7d70ff858547ff7d7d40ff87875affc1c140ffabab2b",
+          "ff82824d"
+        ],
+        "alpha_off": [
+          "ff7d7d00ff7d7d28ff7d7d50ff7d7d78ffcdcdd0ff7d7dffff7d7d78ff7d7da0ff7d7d00ff828290ff7d7da0ff7d7d00ff7d7dffff7d7d00fff3f350ff7d7dffff7d7d00ff7d7dc8ff7d7d28ffa7a7f0ff7d7d00ffffff78ffa8a8a0ffd3d300fff3f390ffffffffffa8a800ffd3d3ffff7d7d00ffa7a750ffa8a8ffffd3d300ff7d7dc8ffffff28ffcdcdf0",
+          "ff7d7d70ff858547ff7d7d40ff88885affc1c140ffabab2b",
+          "ff82824d"
+        ],
+        "alpha_restored": [
+          "ff7d7d00ff7d7d28ff7d7d50ff7d7d78ffcdcdd0ff7d7dffff7d7d78ff7d7da0ff7d7d00ff828290ff7d7da0ff7d7d00ff7d7dffff7d7d00ff7d7d00ff7d7dffff7d7d00ff7d7dc8ff7d7d28ffa7a7f0ff7d7d00ffffff78ffa8a8a0ffd3d300ffd3d300ffffffffffa8a800ffd3d3ffff7d7d00ffa7a750ffa8a8ffffd3d300ff7d7dc8ffffff28ffcdcdf0",
+          "ff7d7d70ff858547ff7d7d40ff87875affc1c140ffabab2b",
+          "ff82824d"
+        ]
+      }
+    ]
+  },
+  "next": "V15: pin opt-in candidate in converted PNG TextureExportCollection after AddSprites; only exact 2D DXT5/NormalmapDXT5nm/Gamma, final NormalMap no sprite, preserve ordinary/default imports; actual compiled exporter baseline/fix/ordinary control; do not activate production."
+}
