@@ -1844,7 +1844,7 @@ jobs:
               original_assets_read=False,APK=False)
           Path("authored-scene-results/build.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
           PY
-      - name: Execute typed authored export and verify same-route material values and vertex bytes
+      - name: Execute indexed typed authored export and verify same-route material values and vertex bytes
         shell: bash
         run: |
           set -euo pipefail
