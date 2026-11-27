@@ -1,0 +1,14 @@
+{
+  "status": "CANDIDATE_NOT_EXECUTED",
+  "base": "96a4508ff79387d08c4a03384ac6e59b136717b8",
+  "gate": "G1-G2-material-keyword-pass-same-route-state-binding",
+  "session": "clients/GT/sessions/20261127-material-keyword-pass-route-binding/README_AR.md",
+  "new_test": "tests/test_gt_material_route_keyword_state.py",
+  "original_assets_read": false,
+  "production_renderer_parity_verified": false,
+  "active_shader_variant_or_runtime_keyword_scope_verified": false,
+  "white_or_fire_fixed": false,
+  "Unity_render_executed": false,
+  "XAPK": false,
+  "next": "Execute focused authored-scene-route-join only; retain actual results."
+}

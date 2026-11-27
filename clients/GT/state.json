@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-material-value-route-binding/README_AR.md",
-  "next_action": "Extend V3 to same-route serialized Material m_ValidKeywords, m_InvalidKeywords and disabledShaderPasses using B43 and gt_runtime_keyword_contract; preserve separate valid/invalid sets, reject duplicates, missing or unsupported legacy schema, private compile selector names and wrong pass state even if V3 values/geometry/texture identity match. Use actual authored public exporter YAML and independent typed pre-export source metadata, not a claim about active Unity variant or runtime global/local scope. Add V3-pass/V4-reject controls (valid/invalid bucket swap, added/removed keyword, disabled pass drift). Keep previous A2 360 pixels and original runtime route evidence separate; do not repeat raster without new purpose. A3 remains blocked pending verified authorized original source. No original acquisition, phone or XAPK.",
+  "latest_session": "clients/GT/sessions/20261127-material-keyword-pass-route-binding/README_AR.md",
+  "next_action": "Execute focused authored-scene-route-join only; retain actual results.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "b849a677830c036dc3ef7bca128285da8b407cf7",
+    "reviewed_remote_head": "96a4508ff79387d08c4a03384ac6e59b136717b8",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-material-keyword-pass-same-route-state-binding",
-      "status": "NEXT_PRODUCTIVE",
-      "next": "Extend V3 to same-route serialized Material m_ValidKeywords, m_InvalidKeywords and disabledShaderPasses using B43 and gt_runtime_keyword_contract; preserve separate valid/invalid sets, reject duplicates, missing or unsupported legacy schema, private compile selector names and wrong pass state even if V3 values/geometry/texture identity match. Use actual authored public exporter YAML and independent typed pre-export source metadata, not a claim about active Unity variant or runtime global/local scope. Add V3-pass/V4-reject controls (valid/invalid bucket swap, added/removed keyword, disabled pass drift). Keep previous A2 360 pixels and original runtime route evidence separate; do not repeat raster without new purpose. A3 remains blocked pending verified authorized original source. No original acquisition, phone or XAPK."
+      "status": "CANDIDATE_NOT_EXECUTED",
+      "next": "Execute focused authored-scene-route-join only; retain actual results."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -3497,6 +3497,20 @@
           "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
         }
       }
+    },
+    "latest_material_keyword_pass_route_binding": {
+      "status": "CANDIDATE_NOT_EXECUTED",
+      "base": "96a4508ff79387d08c4a03384ac6e59b136717b8",
+      "gate": "G1-G2-material-keyword-pass-same-route-state-binding",
+      "session": "clients/GT/sessions/20261127-material-keyword-pass-route-binding/README_AR.md",
+      "new_test": "tests/test_gt_material_route_keyword_state.py",
+      "original_assets_read": false,
+      "production_renderer_parity_verified": false,
+      "active_shader_variant_or_runtime_keyword_scope_verified": false,
+      "white_or_fire_fixed": false,
+      "Unity_render_executed": false,
+      "XAPK": false,
+      "next": "Execute focused authored-scene-route-join only; retain actual results."
     }
   }
 }

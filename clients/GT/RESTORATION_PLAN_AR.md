@@ -1,3 +1,11 @@
+# GT — G1/G2 material keyword/pass same-route state binding | 27 نوفمبر 2026
+
+Starting head 96a4508ff79387d08c4a03384ac6e59b136717b8 matched; previous 45948761058/45948761021 success, archive retained. No local checkout/diff in current container. V4 candidate extends V3 to exact independent valid/invalid keyword sets and disabledShaderPasses through same Material/Renderer/SubMesh/Shader/TexEnv/vertex/value route. B43 FIELDS/NAME + runtime keyword_set, fail closed missing modern fields, nonempty legacy string, duplicates, overlapping lanes, malformed/private selectors; order-independent sets, no union-only parity. 25 new tests, actual public typed list source capture before export, six new actual YAML V3-pass/V4-reject controls. No claim active shader variant, global/local scope or actual GPU/Android. CI not yet executed.
+
+**Next:** Execute focused authored-scene-route-join only; retain actual results. A3 blocked on verified authorized source; G0–G6 open, historical census 688/786 non-dummy and 98 Dummy/37 GUID; no new census or white/fire game proof. No unauthorized source/LFS, partial device or XAPK; CL/lab read-only, BLACK out of scope, animation deferred. Only feature/android-native-port writes without force push.
+
+---
+
 # GT — PASS G1/G2 same-route material scalar/color binding | 27 نوفمبر 2026
 
 رأس البدء 37b2aa410615288c09b443946fedbd0eb4a05d16 مطابق؛ لا checkout محلي/فرق محلي متاح. prior vertex run 45947525967 success وأرشيفه محفوظ. [9e19c17](https://github.com/alwansan/raf/commit/9e19c17c188860b991385eeec1633f7d8959420d) أضاف scripts/gt_material_route_values.py وCLI V3: B22.normalize + B44.normalize_colors، exact finite binary32 RGBA/float وsigned int32 في نفس V2 bytes/Renderer/SubMesh/Material/Shader/TexEnv route. Missing/extra/duplicate/nonfinite/wrong typed slots لا تُعتبر نجاحاً؛ YAML -0 يحافظ على الإشارة، int literal -0 غير مثبت (conservative). Original source requires explicit fields؛ native exported map/array مقبول وفق shape checks. V1/V2 API تاريخيان ولا يدعيان material values؛ لا runtime semantics أو Unity color-space أو shader program parity.

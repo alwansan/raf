@@ -3,7 +3,8 @@
 Strict bounded candidate: triangle-list submeshes with inline indices and
 UV0 descriptors. Unsupported topology/renderer/material scope is UNKNOWN,
 never auto-repaired. V1 identity and V2 byte-binding APIs remain available;
-CLI requires V3 same-route material values and vertex bytes. No GPU claim.
+CLI requires V4 same-route material keyword/pass state, values and bytes.
+V3 remains a value-only API. No active-variant or GPU claim.
 Private original source and three traces are never published.
 """
 from __future__ import annotations
@@ -23,6 +24,7 @@ from scripts.gt_particle108_source_pixel_parity import verified_range, bounded_s
 from scripts.gt_next23b_unity_receipt import strict_json
 from scripts import gt_mesh_vertex_payload as vertex_payload
 from scripts import gt_material_route_values as material_value
+from scripts import gt_material_route_keyword_state as material_keyword
 from scripts.b05_verify_material_texenv_bindings import normalize_texenvs
 from scripts.verify_exported_material_texture_links import is_texture, BUILTIN, ZERO, IMAGES
 from scripts.b03_verify_renderer_material_links import GUID
@@ -267,8 +269,9 @@ def source_records(root,records,owners,*,loader=None,vertex_payloads=None):
     return objects,externals
 
 
-def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material_values=False):
+def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material_values=False,material_keywords=False):
     require(not material_values or vertex_payloads is not None,"material_value_gate_requires_vertex_binding",Unknown)
+    require(not material_keywords or material_values,"material_keyword_gate_requires_value_binding",Unknown)
     counts=Counter();reasons=Counter()
     filters=defaultdict(list)
     for key,(cls,tree) in objects.items():
@@ -412,7 +415,16 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material
                     for kind,total in value_counts.items():
                         counts["material_"+kind+"_slots_matched"]+=total
                     counts["complete_material_value_bound_submesh_routes"]+=1
+                if material_keywords:
+                    try: keyword_counts=material_keyword.compare(ms,ma)
+                    except material_keyword.Unproven as exc:raise Unknown(str(exc)) from None
+                    except material_keyword.Mismatch as exc:raise Drift(str(exc)) from None
+                    for kind,total in keyword_counts.items():
+                        counts["material_"+kind+"_entries_matched"]+=total
+                    counts["complete_material_keyword_bound_submesh_routes"]+=1
             counts["complete_renderer_routes"]+=1
+            if material_keywords:
+                counts["complete_material_keyword_bound_renderer_routes"]+=1
             if material_values:
                 counts["complete_material_value_bound_renderer_routes"]+=1
             if vertex_payloads is not None:
@@ -432,13 +444,17 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material
         counts["complete_vertex_byte_bound_renderer_routes"]==counts["source_renderers"])
     value_bound=material_values and byte_bound and (
         counts["complete_material_value_bound_renderer_routes"]==counts["source_renderers"])
-    return {"schema_version":3 if material_values else 2 if vertex_payloads is not None else 1,
+    keyword_bound=material_keywords and value_bound and (
+        counts["complete_material_keyword_bound_renderer_routes"]==counts["source_renderers"])
+    return {"schema_version":4 if material_keywords else 3 if material_values else 2 if vertex_payloads is not None else 1,
             "counts":dict(sorted(counts.items())),"reason_counts":dict(sorted(reasons.items())),
             "selected_renderer_routes_preserved":complete,
             "full_game_renderers_verified":False,
             "vertex_payload_or_UV_samples_verified":byte_bound,
             "selected_same_route_vertex_and_UV_bytes_verified":byte_bound,
             "selected_same_route_material_values_verified":value_bound,
+            "selected_same_route_material_keyword_pass_state_verified":keyword_bound,
+            "active_shader_variant_or_runtime_keyword_scope_verified":False,
             "UV_decoded_values_or_GPU_verified":False,
             "shader_program_color_scalar_or_GPU_parity_verified":False,"private_identifiers_published":False}
 
@@ -450,7 +466,7 @@ def audit(source,zip2,project,material_trace,mesh_trace,renderer_trace,owners):
     objects,externals=source_records(source,pins,owners,vertex_payloads=payloads)
     mapping=traces(*(strict_json(bounded_snapshot(p,MAX_DOC)) for p in (material_trace,mesh_trace,renderer_trace)))
     files,docs=actual_index(project,mapping)
-    report=compare(objects,externals,mapping,files,docs,vertex_payloads=payloads,material_values=True)
+    report=compare(objects,externals,mapping,files,docs,vertex_payloads=payloads,material_values=True,material_keywords=True)
     report["authenticated_selected_source_owners"]=len(owners)
     return report
 
@@ -466,7 +482,7 @@ def main():
     try:
         report=audit(a.source,a.zip2,a.project,a.material_trace,a.mesh_trace,a.renderer_trace,a.owner)
     except Exception as exc:
-        report={"schema_version":3,"status":"INCONCLUSIVE","error_type":type(exc).__name__,
+        report={"schema_version":4,"status":"INCONCLUSIVE","error_type":type(exc).__name__,
                 "selected_renderer_routes_preserved":False,"private_identifiers_published":False}
     with a.out.open("x") as f:json.dump(report,f,sort_keys=True,indent=2);f.write("\n")
     return 0 if report["selected_renderer_routes_preserved"] else 2

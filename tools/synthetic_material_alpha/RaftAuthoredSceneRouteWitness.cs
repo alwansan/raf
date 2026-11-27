@@ -3,6 +3,7 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.Project;
@@ -60,6 +61,27 @@ public static class RaftAuthoredSceneRouteWitness
         var expected=source.Collection.CreatePPtr(target);
         Require(raw.FileID==expected.FileID && raw.PathID==expected.PathID,"authored_raw_pointer_drift:"+stem);
         return raw;
+    }
+
+    // Generated Material property names vary by version. Only accept the
+    // exact modern typed list from the actual object; never synthesize a
+    // source contract if the factory lacks the corresponding field.
+    private static string[] SetAndCaptureState(IMaterial mat,string stem,params string[] entries)
+    {
+        var matches=mat.GetType().GetInterfaces().SelectMany(t=>t.GetProperties())
+            .Where(p=>(p.Name==stem || p.Name==stem+"_C21") &&
+                p.GetIndexParameters().Length==0 &&
+                typeof(AssetList<Utf8String>).IsAssignableFrom(p.PropertyType))
+            .Select(p=>p.GetValue(mat)).OfType<AssetList<Utf8String>>()
+            .Distinct<AssetList<Utf8String>>(ReferenceEqualityComparer.Instance).ToArray();
+        Require(matches.Length==1,"authored_material_state_field_unavailable:"+stem);
+        var list=matches[0];
+        Require(list.Count==0,"authored_material_state_not_empty:"+stem);
+        foreach(var entry in entries) list.Add((Utf8String)entry);
+        var result=new string[list.Count];
+        for(int n=0;n<list.Count;n++) result[n]=list[n].String;
+        Require(result.SequenceEqual(entries),"authored_material_state_capture_drift:"+stem);
+        return result;
     }
 
     private static object Ptr(IPPtr p)=>new {m_FileID=p.FileID,m_PathID=p.PathID};
@@ -163,6 +185,14 @@ public static class RaftAuthoredSceneRouteWitness
             scalar2.Key="_AuthoredNegative";scalar2.Value=-2.5f-i;
             var integer=props.Ints.AddNew();integer.Key="_AuthoredInteger";integer.Value=16777217+i;
             var integer2=props.Ints.AddNew();integer2.Key="_AuthoredSigned";integer2.Value=-17-i;
+            // Distinct per-material lanes; not a claim that authored shader
+            // code actually declares or uses these names at runtime.
+            var valid=SetAndCaptureState(mat,"ValidKeywords","AUTHORED_SHARED",
+                i==0?"AUTHORED_FOAM":"AUTHORED_ALPHA");
+            var invalid=SetAndCaptureState(mat,"InvalidKeywords",
+                i==0?"AUTHORED_UNUSED_A":"AUTHORED_UNUSED_B");
+            var disabled=SetAndCaptureState(mat,"DisabledShaderPasses",
+                i==0?"AuthoredDepth":"AuthoredShadow");
             Require(mat.Shader_C21P==shader,"authored_shader_binding_failed");
             mats.Add(mat);
             collections.Add(new AssetExportCollection<IUnityObjectBase>(native,mat));
@@ -186,7 +216,8 @@ public static class RaftAuthoredSceneRouteWitness
                 capturedFloats[n]=new object[]{floats.GetKey(n).String,floats.GetValue(n)};
             for(int n=0;n<ints.Count;n++)
                 capturedInts[n]=new object[]{ints.GetKey(n).String,ints.GetValue(n)};
-            rows.Add(Row(mat,new {m_Shader=Ref(mat,shader),m_SavedProperties=new {
+            rows.Add(Row(mat,new {m_Shader=Ref(mat,shader),m_ValidKeywords=valid,
+                m_InvalidKeywords=invalid,disabledShaderPasses=disabled,m_SavedProperties=new {
                 m_Colors=capturedColors,
                 m_Floats=capturedFloats,
                 m_Ints=capturedInts,
@@ -236,7 +267,7 @@ public static class RaftAuthoredSceneRouteWitness
         var externals=owners.ToDictionary(o=>o.Name,o=>o.Dependencies.Skip(1).Select(d=>d?.Name).ToArray());
         // The source contract is captured from generated objects before any
         // export or trace. It is not reconstructed from exported YAML.
-        var source=new {schema_version=3,authored_generated_objects=true,objects=rows,externals,
+        var source=new {schema_version=4,authored_generated_objects=true,objects=rows,externals,
             hidden=hidden.Select(o=>new {owner=o.Collection.Name,path_id=o.PathID,class_id=o.ClassID}).ToArray()};
         File.WriteAllText(Path.Combine(root,"source.json"),JsonSerializer.Serialize(source));
         LibraryConfiguration settings=new();settings.SetProjectSettings(version);
