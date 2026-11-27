@@ -1,3 +1,4 @@
+# Isolated source-only comparison of folder-aware physical GUID resolution.
 name: GT folder-aware Material Texture registry (NO original assets)
 on:
   push:
