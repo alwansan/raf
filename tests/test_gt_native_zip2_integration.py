@@ -75,6 +75,26 @@ class NativeSourceIntegrityTests(unittest.TestCase):
         self.assertIn("--verified-external-master-bank",bank)
         self.assertIn("scripts.stage_original_streaming_assets",bank)
 
+    def test_native_bc3_repair_before_public_publish_and_original_export(self):
+        text=self.text
+        command="python3 -m scripts.gt_patch_bc3_export_decoder --tool-source ar-host"
+        self.assertEqual(text.count(command),1)
+        block=text.split("- name: Build read-only instrumentation into the pinned public exporter",1)[1].split(
+            "- name: Export 40 scenes into a Unity Editor project",1)[0]
+        self.assertIn("set -euo pipefail",block)
+        self.assertNotIn("continue-on-error",block)
+        self.assertIn("036098ab525a3f9f693dc101edeb21faad4d32d8",block)
+        self.assertIn("186108e478686524b4703dc7280015bd8eb58cd0939b4e270c4114c69c8d755a  ar-host/Source/AssetRipper.Export.Modules.Textures/TextureConverter.cs",block)
+        self.assertLess(block.index("scripts.patch_export_lineage"),block.index(command))
+        self.assertLess(block.index(command),block.index("sha256sum -c -"))
+        self.assertLess(block.index("sha256sum -c -"),block.index("dotnet publish"))
+        self.assertLess(text.index(command),text.index("timeout 1200s dotnet"))
+        # Native package workflow still only starts from explicit request path.
+        trigger=text.split("on:",1)[1].split("# Preserve the existing delivery mutex",1)[0]
+        self.assertIn("'.github/raft-native-build-request.json'",trigger)
+        self.assertNotIn("scripts/",trigger)
+        self.assertNotIn("raft-unity-editor-android-import.yml",trigger)
+
     def test_native_resource_request_gate_unchanged(self):
         text=self.text
         self.assertIn("native-request-gate:",text)

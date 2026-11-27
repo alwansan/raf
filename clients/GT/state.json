@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
-  "next_action": "Dedicated public-only CI: pinned patch, 5 new patch tests (256 blocks), historical 242 regressions, exact old fixture replay, extended equal-endpoint fixture. Require strict RGBA match and 10 negative controls each. Historical transparent RGB control selects texture that actually has alpha-zero pixels; extended requires both. No production install yet.",
+  "next_action": "Verify native source-only wiring guard (manifest only, no original payloads), preserve evidence. Then continue next high-value authorized source-only G1/G2 gap; actual original DXT5 and production runtime require A3/source authorization. No full build before all G0-G6 closed.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "c33427181e06ad25548f861da50ced908f556805",
+    "reviewed_remote_head": "8d3183dbb8c8ac64ac7502176956f884bf9af16c",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding",
-      "status": "BC3_REPAIR_AND_TWO_FIXTURE_WITNESS_READY",
-      "next": "Dedicated public-only CI: pinned patch, 5 new patch tests (256 blocks), historical 242 regressions, exact old fixture replay, extended equal-endpoint fixture. Require strict RGBA match and 10 negative controls each. Historical transparent RGB control selects texture that actually has alpha-zero pixels; extended requires both. No production install yet."
+      "status": "PASS_ACTUAL_AUTHORED_BC3_REPAIR_NATIVE_SOURCE_WIRED_GUARD_PENDING",
+      "next": "Verify native source-only wiring guard (manifest only, no original payloads), preserve evidence. Then continue next high-value authorized source-only G1/G2 gap; actual original DXT5 and production runtime require A3/source authorization. No full build before all G0-G6 closed."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -5268,12 +5268,12 @@
     }
   },
   "v10_bc3_checkpoint": {
-    "status": "BC3_REPAIR_AND_TWO_FIXTURE_WITNESS_READY",
+    "status": "PASS_ACTUAL_AUTHORED_BC3_REPAIR_NATIVE_SOURCE_WIRED_GUARD_PENDING",
     "starting_head": "7f80870e611c616ab7d3cf75a6bd4457e3ddad18",
     "prior_v9_run": 45960313046,
     "prior_v9_artifact": 15180771759,
     "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-    "next": "Dedicated public-only CI: pinned patch, 5 new patch tests (256 blocks), historical 242 regressions, exact old fixture replay, extended equal-endpoint fixture. Require strict RGBA match and 10 negative controls each. Historical transparent RGB control selects texture that actually has alpha-zero pixels; extended requires both. No production install yet.",
+    "next": "Verify native source-only wiring guard (manifest only, no original payloads), preserve evidence. Then continue next high-value authorized source-only G1/G2 gap; actual original DXT5 and production runtime require A3/source authorization. No full build before all G0-G6 closed.",
     "original_assets_read": false,
     "Unity_import_verified": false,
     "XAPK": false,
@@ -5548,6 +5548,241 @@
         "decoder_package": "AssetRipper.TextureDecoder 2.3.0",
         "original_assets_read": false
       }
+    },
+    "repair_pass": {
+      "run": 45964427702,
+      "guard": 45964427642,
+      "guard_conclusion": "success",
+      "report": {
+        "Android_device": false,
+        "Unity_import_verified": false,
+        "XAPK": false,
+        "counterfactual_count": 20,
+        "head": "8d3183dbb8c8ac64ac7502176956f884bf9af16c",
+        "original_assets_read": false,
+        "patch": {
+          "DXT1_DXT3_Crunched_changed": false,
+          "original_git_blob": "f8cec77003d86fa3d6ad1a04002927733a1986a6",
+          "original_sha256": "ea6de3e6734b71577b62640a5d7da4ed7122ffd2f6c3f5823f7b648a47d11318",
+          "patch_script_sha256": "86ef0479bbc6ca4008fe97b10b94fa5a0183f2e48d3550e3bfda7dcb0ac9d354",
+          "patched_sha256": "186108e478686524b4703dc7280015bd8eb58cd0939b4e270c4114c69c8d755a",
+          "source_asset_bytes_modified": false,
+          "status": "PATCHED_PINNED_DXT5_DECODER_ONLY"
+        },
+        "production_pipeline_integrated": false,
+        "receipts": {
+          "extended": {
+            "counterfactual_count": 10,
+            "counts": {
+              "complete_imported_png_bound_renderer_routes": 2,
+              "complete_imported_png_bound_submesh_routes": 4,
+              "complete_material_keyword_bound_renderer_routes": 2,
+              "complete_material_keyword_bound_submesh_routes": 4,
+              "complete_material_value_bound_renderer_routes": 2,
+              "complete_material_value_bound_submesh_routes": 4,
+              "complete_renderer_routes": 2,
+              "complete_submesh_material_identity_routes": 4,
+              "complete_vertex_byte_bound_renderer_routes": 2,
+              "complete_vertex_byte_bound_submesh_routes": 4,
+              "imported_png_RGBA_channels_matched_per_route": 560,
+              "imported_png_importer_mip_bias_unset_slots": 0,
+              "imported_png_pixels_matched_per_route": 140,
+              "imported_png_stream_source_slots_matched": 4,
+              "imported_png_top_mip_slots_matched": 4,
+              "material_color_slots_matched": 8,
+              "material_disabled_pass_entries_matched": 4,
+              "material_float_slots_matched": 8,
+              "material_int_slots_matched": 8,
+              "material_invalid_keyword_entries_matched": 4,
+              "material_null_texture_slots_preserved": 0,
+              "material_shader_links_matched": 4,
+              "material_texenv_slots_matched": 4,
+              "material_valid_keyword_entries_matched": 8,
+              "ordered_material_slots_matched": 4,
+              "renderer_mesh_layouts_matched": 2,
+              "renderer_vertex_payloads_matched": 2,
+              "source_renderers": 2
+            },
+            "historical_source_hashes_verified": false,
+            "schemas": [
+              {
+                "dimensions": [
+                  5,
+                  7
+                ],
+                "equal_RGB_endpoint_blocks": 1,
+                "importer_textureFormat": 12,
+                "mip_lengths": [
+                  64,
+                  16
+                ],
+                "rgba_mode": "RGBA",
+                "source_format": 12,
+                "source_top_sha256": "d9890aa86b4c3cb1c635738eb6b162ba79e21b27430516755244bee6c7689269",
+                "unique_alpha_values": 11,
+                "visible_transparent_nonzero_RGB": true
+              },
+              {
+                "dimensions": [
+                  5,
+                  7
+                ],
+                "equal_RGB_endpoint_blocks": 1,
+                "importer_textureFormat": 12,
+                "mip_lengths": [
+                  64,
+                  16
+                ],
+                "rgba_mode": "RGBA",
+                "source_format": 12,
+                "source_top_sha256": "0980fb3f4a01bd1d15c6207aab903f4cf79a10663612f88d6b8c7151bb6fd232",
+                "unique_alpha_values": 10,
+                "visible_transparent_nonzero_RGB": true
+              }
+            ]
+          },
+          "historical": {
+            "counterfactual_count": 10,
+            "counts": {
+              "complete_imported_png_bound_renderer_routes": 2,
+              "complete_imported_png_bound_submesh_routes": 4,
+              "complete_material_keyword_bound_renderer_routes": 2,
+              "complete_material_keyword_bound_submesh_routes": 4,
+              "complete_material_value_bound_renderer_routes": 2,
+              "complete_material_value_bound_submesh_routes": 4,
+              "complete_renderer_routes": 2,
+              "complete_submesh_material_identity_routes": 4,
+              "complete_vertex_byte_bound_renderer_routes": 2,
+              "complete_vertex_byte_bound_submesh_routes": 4,
+              "imported_png_RGBA_channels_matched_per_route": 560,
+              "imported_png_importer_mip_bias_unset_slots": 0,
+              "imported_png_pixels_matched_per_route": 140,
+              "imported_png_stream_source_slots_matched": 4,
+              "imported_png_top_mip_slots_matched": 4,
+              "material_color_slots_matched": 8,
+              "material_disabled_pass_entries_matched": 4,
+              "material_float_slots_matched": 8,
+              "material_int_slots_matched": 8,
+              "material_invalid_keyword_entries_matched": 4,
+              "material_null_texture_slots_preserved": 0,
+              "material_shader_links_matched": 4,
+              "material_texenv_slots_matched": 4,
+              "material_valid_keyword_entries_matched": 8,
+              "ordered_material_slots_matched": 4,
+              "renderer_mesh_layouts_matched": 2,
+              "renderer_vertex_payloads_matched": 2,
+              "source_renderers": 2
+            },
+            "historical_source_hashes_verified": true,
+            "schemas": [
+              {
+                "dimensions": [
+                  5,
+                  7
+                ],
+                "equal_RGB_endpoint_blocks": 0,
+                "importer_textureFormat": 12,
+                "mip_lengths": [
+                  64,
+                  16
+                ],
+                "rgba_mode": "RGBA",
+                "source_format": 12,
+                "source_top_sha256": "b3445c245238ae44a9ad831c5f62f5abe9da8082197beec8a8ac1269d8ae16ae",
+                "unique_alpha_values": 11,
+                "visible_transparent_nonzero_RGB": false
+              },
+              {
+                "dimensions": [
+                  5,
+                  7
+                ],
+                "equal_RGB_endpoint_blocks": 0,
+                "importer_textureFormat": 12,
+                "mip_lengths": [
+                  64,
+                  16
+                ],
+                "rgba_mode": "RGBA",
+                "source_format": 12,
+                "source_top_sha256": "3e285fed5f82a7de5571e1c8b9ca2bff65e44249fe76f0fdad83386025eacede",
+                "unique_alpha_values": 10,
+                "visible_transparent_nonzero_RGB": true
+              }
+            ]
+          }
+        },
+        "run_id": "45964427702",
+        "status": "PASS_ACTUAL_AUTHORED_PATCHED_BC3_FOUR_COLOR_REPLAY_AND_EXTENDED",
+        "test_counts": {
+          "test_b03_verify_renderer_material_links.py.log": 17,
+          "test_gt_imported_bc3_route_pixels.py.log": 8,
+          "test_gt_imported_png_route_importer.py.log": 17,
+          "test_gt_imported_png_route_pixels.py.log": 34,
+          "test_gt_material_route_keyword_state.py.log": 25,
+          "test_gt_material_route_values.py.log": 22,
+          "test_gt_mesh_vertex_payload.py.log": 15,
+          "test_gt_native_texture_route_sampler.py.log": 28,
+          "test_gt_patch_bc3_export_decoder.py.log": 5,
+          "test_gt_renderer_submesh_routes.py.log": 21,
+          "test_gt_streamed_texture_route_payload.py.log": 23,
+          "test_gt_texture_route_payload.py.log": 25,
+          "test_gt_verify_original_mesh_export.py.log": 7
+        },
+        "total_regression_tests": 247,
+        "unique_authored_pixels_exact": 140
+      },
+      "archive": {
+        "artifact_id": 15182028401,
+        "run": 45964427702,
+        "job": 140389601534,
+        "head": "8d3183dbb8c8ac64ac7502176956f884bf9af16c",
+        "bytes": 20902,
+        "sha256": "1f00a570ef2a89c6f8d50366f8df2da89e3a076430cf27bdfb7c06873c687c81",
+        "git_blob": "068c693c174228c9600c976dca33a8026a2d156d",
+        "crc_verified": true,
+        "member_count": 29,
+        "all_four_downloaded_PNG_RGBA_bytes_equal_independent_expected": true,
+        "member_sha256": {
+          "bc3-patch.json": "083270cb86eab100edb52e235d6e6ef43a019075cc72f08abec7654b4d7f3162",
+          "bc3-report.json": "ba879107edad6cb3c711c5816f94cb456d325a7f85824fe3486ebd89c6279975",
+          "build.json": "5a1da5f6164be12df101be69dfd3d51e144c28d99453d83c3dc0a18bcfa75e78",
+          "extended/bc3-authored-0.png": "1e1044323c151ea546d8746baec7650655f32152a6a7aaa87065e2af7d454aff",
+          "extended/bc3-authored-1.png": "ae64dc23f84471f290a22ac934dd46b945ae626c93cf8b9adaf44fde4fd7cf5a",
+          "extended/bc3-baseline.json": "f5a3793971714fee5770d225591537958945660cb07181f4b7a51a649dfe99f5",
+          "extended/bc3-diagnostic.json": "627861c67ff318a45b1d0bac19a0c00c78a360657d63cf8d60b13238cede31ab",
+          "extended/bc3-route-join.json": "c64c6d2117e9294c7e6ca9a4ff78e60bf65b75108dbf1bc84b2ec82a99b1d9f7",
+          "extended/bc3-witness.log": "44f7a0069cee04484827fcaa1eee568f905fc54b27aab99b252dd63c9391e0ae",
+          "historical/bc3-authored-0.png": "1f3faefc8f5120f862130167cb8f5344983c9c9a41a944d3ba8442c7b198def9",
+          "historical/bc3-authored-1.png": "b64132779aa1b0183db69095b13add300ca8812735a299d6a41987139aa2039d",
+          "historical/bc3-baseline.json": "f5a3793971714fee5770d225591537958945660cb07181f4b7a51a649dfe99f5",
+          "historical/bc3-diagnostic.json": "63672f0f87b291aed2498fdcfe909df9d5533e0eace7b082e44aa439280474f2",
+          "historical/bc3-route-join.json": "deeb15e6d541f7f62b2fd2649fa544f2844fdc1dba1310a6cdedee63c7ba00fa",
+          "historical/bc3-witness.log": "44f7a0069cee04484827fcaa1eee568f905fc54b27aab99b252dd63c9391e0ae",
+          "test_b03_verify_renderer_material_links.py.log": "9dfe6439bfbe6159ed85487fc9bdaec0d4e51fb75aea626b93eafa1ff7d3d468",
+          "test_gt_imported_bc3_route_pixels.py.log": "f594c674ecb9959479836f0a7b16a86b6bc0808dd89e77489815e42e8add8042",
+          "test_gt_imported_png_route_importer.py.log": "b56692cf0931d4a0c7bac7a0c087cc0a10f761efd0f6c1c2032a5f92eed33e3c",
+          "test_gt_imported_png_route_pixels.py.log": "fce5d5c853c72f405eadd9349aaee620ac36309b217c0ce340f8e627117409d7",
+          "test_gt_material_route_keyword_state.py.log": "efe0280228aa7b03b292692fee30dd298fcefb4eb86506c76c64eb4b7aaae67f",
+          "test_gt_material_route_values.py.log": "a3b122ea60bf81c661780b32f0a9f37ba2b6ca95c5daf0140d6182f73bedb44e",
+          "test_gt_mesh_vertex_payload.py.log": "a40f9428cfc8a3aec2d3ba1a25b77d07a3013e386d9de1b1f48ec4360be6f545",
+          "test_gt_native_texture_route_sampler.py.log": "c938462def637fdc64b2c680d800fefe99d02e5940e076d9e79d53f09f49c7de",
+          "test_gt_renderer_submesh_routes.py.log": "76cb8cdd8029e33e3d7e9bdc024770396fb32ad665616876e2972a58a8b36808",
+          "test_gt_patch_bc3_export_decoder.py.log": "92cad8126725297acc52cb153d0a14a7cc22ba2c7a7e20521c37090698ad7d27",
+          "test_gt_streamed_texture_route_payload.py.log": "689340cd0f18db115d5f6aa30be0b2897bcb31fca3169f7361f4e55e490fefeb",
+          "test_gt_texture_route_payload.py.log": "d8d43b9c1c532afcb4c090fc3dcf322f4e6caa1ee92fa41bd1cf0e0f3f2b9c4a",
+          "test_gt_verify_original_mesh_export.py.log": "21d1ab39a67a6d1c7f4a681c42060a2d6b4a2c4c78afea83309a7912db05681d",
+          "tool-smoke.log": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+        }
+      }
+    },
+    "production_wiring": {
+      "status": "WIRED_NOT_EXECUTED",
+      "workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+      "tested_patched_converter_sha256": "186108e478686524b4703dc7280015bd8eb58cd0939b4e270c4114c69c8d755a",
+      "source_only_guard_pending": true,
+      "production_original_export_executed": false,
+      "production_Unity_or_XAPK_executed": false
     }
   }
 }

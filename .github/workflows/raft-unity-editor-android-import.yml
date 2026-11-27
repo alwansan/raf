@@ -378,6 +378,13 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --native-texture-arrays --compute-lineage
+          # GT V10: correct BC3 RGB palette only in the disposable public tool.
+          # Exact authored historical replay + extended proof: run 45964427702.
+          # This does not change original serialized/compressed source bytes.
+          test "$(git -C ar-host rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          python3 -m scripts.gt_patch_bc3_export_decoder --tool-source ar-host | tee "$RUNNER_TEMP/gt-bc3-exporter-patch.json"
+          echo "186108e478686524b4703dc7280015bd8eb58cd0939b4e270c4114c69c8d755a  ar-host/Source/AssetRipper.Export.Modules.Textures/TextureConverter.cs" | sha256sum -c -
+          # Any future decoder-source change must be independently re-proved.
           # Publish the CLI and its matching transitive assemblies together;
           # replacing one DLL cannot instrument an AOT or bundled executable.
           dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/ar" > "$RUNNER_TEMP/public-tool-build.log" 2>&1 || { tail -60 "$RUNNER_TEMP/public-tool-build.log"; exit 1; }
