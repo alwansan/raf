@@ -1306,7 +1306,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "96a4508ff79387d08c4a03384ac6e59b136717b8",
+    "reviewed_remote_head": "c5dc812cd3a12539f03c7d6ec2a36e6a409117f1",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -1563,8 +1563,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-material-keyword-pass-same-route-state-binding",
-      "status": "CANDIDATE_NOT_EXECUTED",
-      "next": "Execute focused authored-scene-route-join only; retain actual results."
+      "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
+      "next": "Inspect run 45950366186 completion; retain actual receipt or fix failed witness, no new Unity raster."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -2841,7 +2841,7 @@
       }
     },
     "latest_material_keyword_pass_route_binding": {
-      "status": "CANDIDATE_NOT_EXECUTED",
+      "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
       "base": "96a4508ff79387d08c4a03384ac6e59b136717b8",
       "gate": "G1-G2-material-keyword-pass-same-route-state-binding",
       "session": "clients/GT/sessions/20261127-material-keyword-pass-route-binding/README_AR.md",
@@ -2852,7 +2852,15 @@
       "white_or_fire_fixed": false,
       "Unity_render_executed": false,
       "XAPK": false,
-      "next": "Execute focused authored-scene-route-join only; retain actual results."
+      "next": "Inspect run 45950366186 completion; retain actual receipt or fix failed witness, no new Unity raster.",
+      "candidate_commit": "7554835216d47442134361329f4d47e0030733da",
+      "activation_commit": "c5dc812cd3a12539f03c7d6ec2a36e6a409117f1",
+      "run_id": 45950366186,
+      "job_id": 140344542406,
+      "guard_run_id": 45950366211,
+      "guard_conclusion": "success",
+      "regression_step": "success",
+      "observed_run_status": "in_progress"
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."
