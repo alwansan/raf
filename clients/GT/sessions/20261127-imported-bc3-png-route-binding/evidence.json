@@ -1,10 +1,10 @@
 {
-  "status": "FIXED_AUTHORED_FIXTURE_OVERFLOW_RETRY_PENDING",
+  "status": "ACTUAL_BC3_RGB_DRIFT_DIAGNOSTIC_PENDING",
   "starting_head": "7f80870e611c616ab7d3cf75a6bd4457e3ddad18",
   "prior_v9_run": 45960313046,
   "prior_v9_artifact": 15180771759,
   "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
-  "next": "Run dedicated V10 workflow once after correcting checked byte extraction; verify actual decoder result and retain failure if needed.",
+  "next": "Execute distinct diagnostic goal on exact same authored bytes: retain actual 5x7 PNG, source top hex and per-pixel channel deltas with source block/selector indexes before strict gate abort. Strict V10 remains false until exact independent proof. Fixture 0 locally lacks visible alpha-zero RGB due NPOT crop; fix separately only after drift diagnosis.",
   "original_assets_read": false,
   "Unity_import_verified": false,
   "XAPK": false,
@@ -120,6 +120,47 @@
         "test_gt_streamed_texture_route_payload.py.log": "b8082884799acf92334c9822e8238cb63adbf30ff089c4669d63a760cafa9a2a",
         "test_gt_texture_route_payload.py.log": "5147f95e165b329039aeb0eed7efac6d8ba33acdf0e37707763098103b8f439a",
         "test_gt_verify_original_mesh_export.py.log": "12111dbf9c901c6a936e86ae43bc60e815fee8d9d82d2553bad25e9cea93e723",
+        "tool-smoke.log": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+      }
+    }
+  },
+  "second_run": {
+    "run": 45962079936,
+    "job": 140382028845,
+    "head": "eb57056d08106d0b52533f055dafe08e244f3079",
+    "guard": 45962079910,
+    "guard_conclusion": "success",
+    "conclusion": "failure",
+    "source_regression_tests": 242,
+    "public_build": "success",
+    "actual_public_png_observed": true,
+    "strict_bc3_top_mip": false,
+    "reason_counts": {
+      "same_route_png_RGB_DRIFT": 2
+    },
+    "artifact": 15181053655,
+    "archive": {
+      "bytes": 8745,
+      "sha256": "42206ac56d230c8a673a40aaa13b151c545144c761086ad75976692af2bfaf10",
+      "git_blob": "608472e9a827798dcacb9852bebb36a559d91779",
+      "crc_verified": true,
+      "member_count": 16,
+      "member_sha256": {
+        "bc3-baseline.json": "9bf4160035b7877362d2782347d712b71938ff5b0389c8442c800a3ae2aa2b89",
+        "bc3-witness.log": "44f7a0069cee04484827fcaa1eee568f905fc54b27aab99b252dd63c9391e0ae",
+        "build.json": "6a6447ca34ca1e5613f82e116823ec7991552e0617b4b117a2895ab2ef148f6f",
+        "test_b03_verify_renderer_material_links.py.log": "c28e4d716a01ac768cf6d55e50d36f32ec6422e9561960fb35485eb759985a6b",
+        "test_gt_imported_bc3_route_pixels.py.log": "1c3a1efd044f71308f82a76751a9af58492aa717d3a8c9c7b858e2ab7e0863d1",
+        "test_gt_imported_png_route_importer.py.log": "13689653bad7e10837c5b24940c4d71f7778030edeae46fde82bcbd102005604",
+        "test_gt_imported_png_route_pixels.py.log": "b60d2c1ad4f79f4a6ae54a0eebaf76bfaaf3b4a2fa1e86e3545ca04457365987",
+        "test_gt_material_route_keyword_state.py.log": "58e20283d8e417252c68fce23b715445466ea65fa42fba744854945c451d214f",
+        "test_gt_material_route_values.py.log": "e0befe0e662e54f1f215d0aa2d520d4963d4eec340bb0a9529e525e3a3102044",
+        "test_gt_mesh_vertex_payload.py.log": "d4fd27c6ddb5bedeaeb54da1d9c1e25f66e797855a4600fa9f851a5a5067d708",
+        "test_gt_native_texture_route_sampler.py.log": "521a9c2d1205c5b3bd20c1563465ed98368c1e2a9b6e63f21c96d456f9dca0d2",
+        "test_gt_renderer_submesh_routes.py.log": "59ee955955ea7b2f5adc8a759f00371408dd59cba77858205e4940aada153901",
+        "test_gt_streamed_texture_route_payload.py.log": "bb9ef69d3fa8f3f3fe87cf0a426f847a6bb5fdc2bd3f1f48b63be5c82ba41d71",
+        "test_gt_texture_route_payload.py.log": "fef6e32fcb2362ef37508e327231cb52f86b1fa142b4e58b1d5db9a4ccc939d4",
+        "test_gt_verify_original_mesh_export.py.log": "4fa1e34501cc7873993fcc2fc567b180527cc1ff3a5442f97cdd224b1a32258a",
         "tool-smoke.log": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
       }
     }

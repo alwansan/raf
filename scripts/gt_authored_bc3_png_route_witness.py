@@ -21,6 +21,69 @@ NO_PROMOTION=("selected_same_route_imported_png_top_mip_verified",
               "imported_png_lower_mip_or_Unity_import_verified",
               "texture_sampler_import_colorspace_or_GPU_verified")
 
+def diagnose(root,out,files,requests,mapping,pins):
+    """Retain bounded exact authored pixels even on strict parity failure.
+
+    No adjustment to the oracle, no tolerance, no original assets. The
+    stored-block coordinates and selectors describe the source before FlipY.
+    """
+    from collections import Counter
+    keys=sorted(requests)
+    provider=requests[keys[0]].provider;pin=pins["Raft_Data/"+provider]
+    raw=gate.verified_range(root/"providers"/provider,(pin[1],pin[2]),0,187)
+    rows=[]
+    for n,k in enumerate(keys):
+        req=requests[k];ptr=mapping[k][1];p,meta=files[ptr[0]]
+        need(req.descriptor[:2]==(5,7) and req.mip_lengths==(64,16),"diagnostic_authored_scope")
+        top=raw[req.offset:req.offset+64]
+        expected=bc3.decode_top((5,7),top)
+        png.exported_image(p)
+        with Image.open(p) as im:actual=im.copy()
+        need(actual.mode=="RGBA" and actual.size==(5,7),"diagnostic_actual_image_schema")
+        e=list(expected.getdata());a=list(actual.getdata())
+        per_channel=[Counter() for _ in range(4)];pixels=[]
+        for y in range(7):
+            for x in range(5):
+                index=y*5+x
+                stored_y=6-y
+                block=2*(stored_y//4)+x//4
+                selector=4*(stored_y%4)+x%4
+                b=top[16*block:16*block+16]
+                alpha_idx=(int.from_bytes(b[2:8],"little")>>(3*selector))&7
+                rgb_idx=(int.from_bytes(b[12:16],"little")>>(2*selector))&3
+                delta=[v-u for u,v in zip(e[index],a[index],strict=True)]
+                for i,d in enumerate(delta):per_channel[i][d]+=1
+                pixels.append({"xy":[x,y],"stored_block":block,"selector":selector,
+                    "alpha_index":alpha_idx,"rgb_index":rgb_idx,
+                    "expected":e[index],"actual":a[index],"delta":delta})
+        # Forensic output only. Alternative orientation/channel order is
+        # never used to normalize or accept the strict production comparison.
+        transforms={"identity":expected,"vertical":expected.transpose(Image.Transpose.FLIP_TOP_BOTTOM),
+                    "horizontal":expected.transpose(Image.Transpose.FLIP_LEFT_RIGHT),
+                    "both":expected.transpose(Image.Transpose.ROTATE_180)}
+        matches={name:sum(x==y for x,y in zip(im.getdata(),a,strict=True)) for name,im in transforms.items()}
+        channel_permutation=sum((r,b,g,al)==v for (r,g,b,al),v in zip(e,a,strict=True))
+        swapped_rb=sum((b,g,r,al)==v for (r,g,b,al),v in zip(e,a,strict=True))
+        rows.append({"texture_index":n,"source_top_hex":top.hex(),
+            "source_top_sha256":sha256(top).hexdigest(),
+            "expected_rgba_sha256":sha256(expected.tobytes()).hexdigest(),
+            "actual_rgba_sha256":sha256(actual.tobytes()).hexdigest(),
+            "max_abs_delta_per_channel":[max(abs(d) for d in v) for v in per_channel],
+            "signed_delta_histograms":[dict(sorted(v.items())) for v in per_channel],
+            "orientation_exact_pixel_matches":matches,"swap_RB_exact_pixels":swapped_rb,
+            "swap_GB_exact_pixels":channel_permutation,
+            "expected_transparent_nonzero_RGB":sum(al==0 and bool(r or g or b) for r,g,b,al in e),
+            "actual_transparent_nonzero_RGB":sum(al==0 and bool(r or g or b) for r,g,b,al in a),
+            "pixels":pixels})
+        # These are fresh 5x7 authored outputs only; retain exact PNG bytes.
+        (out.parent/f"bc3-authored-{n}.png").write_bytes(png.bounded_snapshot(p,png.MAX_PNG))
+    result={"authored_only":True,"source_format":12,"source_owner_sha_verified":False,
+            "provider_sha_verified":True,"original_assets_read":False,"strict_parity_waived":False,"textures":rows}
+    (out.parent/"bc3-diagnostic.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+    print(json.dumps({"status":"BC3_AUTHORED_DIAGNOSTIC_ONLY","authored_only":True,
+        "strict_parity_waived":False,"textures":[{k:v for k,v in row.items() if k!="pixels"} for row in rows]},sort_keys=True))
+
+
 def audit(root,out):
     root=Path(root);out=Path(out)
     need(not out.exists() and out.parent.is_dir(),"fresh_bc3_receipt_required")
@@ -33,6 +96,7 @@ def audit(root,out):
               material_keywords=True,**({"png_top_mips":p,"png_bc3":bc3_mode} if strict else {}))
     baseline=run(files,docs)
     (out.parent/"bc3-baseline.json").write_text(json.dumps(baseline,indent=2,sort_keys=True)+"\n")
+    diagnose(root,out,files,requests,mapping,pins)
     need(baseline[FIELD],"actual_bc3_baseline:"+str(baseline["reason_counts"]))
     need(all(baseline[k] is False for k in NO_PROMOTION),"bc3_false_scope_promotion")
     counts=baseline["counts"]

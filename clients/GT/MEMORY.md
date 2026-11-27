@@ -1,3 +1,9 @@
+# GT V10 — actual BC3 RGB mismatch, diagnostic prepared | 27 نوفمبر 2026
+
+[45962079936](https://github.com/alwansan/raf/actions/runs/45962079936) 242 source regressions and pinned public .NET build passed; actual two authored PNG collections exported, strict route proof FAILED for both renderers with same_route_png_RGB_DRIFT:2. No tolerance or normalization accepted; no V10 pass. Verified artifact 15181053655, 8745 bytes SHA256 42206ac56d230c8a673a40aaa13b151c545144c761086ad75976692af2bfaf10, CRC 16 members. Added bounded per-pixel diagnostic to retain exact authored PNGs, source 64-byte top mip hex, expected/actual RGBA, block and selector, channel deltas, orientation and channel-swap diagnostics before unchanged strict gate abort. Exact same fixture bytes retained for reproduction. Independent local Pillow check also identified fixture 0 missing visible alpha-zero pixels due NPOT crop; later adjust selector separately, not to hide RGB mismatch. A3 blocked, G0–G6 open; no original assets or XAPK.
+
+---
+
 # GT V10 — initial actual fixture overflow; corrected, retry pending
 
 [45961831652](https://github.com/alwansan/raf/actions/runs/45961831652) 242/242 source regressions (234 historical +8 V10), public exporter build SUCCESS; actual fixture stopped before export in authored byte generator, System.OverflowException at AuthoredBC3. Mask low 8 bits of packed selectors and RGB565 before checked byte conversions, no oracle or proof condition changed. Archive 15181236191 verified 8390 bytes SHA256 90352767518827fa94bd933c16ab8c4e2c1566b9b71c29c0c8ccd9b1a605f343, CRC and 15 members. No V10 actual pass; retry only dedicated public workflow. A3 blocked; no Unity/Android/XAPK.
