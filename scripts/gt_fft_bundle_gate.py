@@ -56,12 +56,22 @@ def verify_topology(parsed, stage_variants):
                 for k in LANES:
                     require(type(row.get(k, [])) is list and not row.get(k, []),
                             "active_or_invalid_keyword_lane:" + k)
+            # The contract has one empty route per populated player bucket
+            # (or one legacy row), not just one route after deduplication.
+            require(len(rows) == len({bucket for bucket, _, _ in rows}),
+                    "duplicate_empty_route_bucket:" + str(i) + ":" + key)
             tables[key] = rows
         require("progVertex" in tables and "progFragment" in tables and tables["progVertex"],
                 "missing_vertex_stage:" + str(i))
         fallback = not tables["progFragment"]
         if fallback:
             tables["progFragment"] = tables["progVertex"]
+        else:
+            # Separate tables must cover the same populated buckets; empty
+            # buckets do not establish a usable stage route.
+            require({b for b, _, _ in tables["progVertex"]} ==
+                    {b for b, _, _ in tables["progFragment"]},
+                    "stage_bucket_mismatch:" + str(i))
         result.append((tables, fallback))
     return names, result
 
@@ -111,9 +121,12 @@ def verify_modules(parsed, entries, decoder, workdir, stage_variants,
             for bucket, ordinal, row in tables[stage]:
                 index = row.get("m_BlobIndex")
                 matching = [h for h in decode(index) if model in modules[h]["models"]]
-                if matching:
-                    refs.append({"bucket": bucket, "ordinal": ordinal,
-                                 "blob_index": index, "module_sha256": matching})
+                # Every serialized row must carry its exact execution stage.
+                # A complete row in another bucket cannot mask a missing one.
+                require(bool(matching), "missing_execution_stage:" + str(i) + ":" + stage)
+                require(len(matching) == 1, "ambiguous_execution_stage:" + str(i) + ":" + stage)
+                refs.append({"bucket": bucket, "ordinal": ordinal,
+                             "blob_index": index, "module_sha256": matching})
             require(bool(refs), "missing_execution_stage:" + str(i) + ":" + stage)
             for ref in refs:
                 for h in ref["module_sha256"]:

@@ -1963,6 +1963,27 @@
     "new_XAPK_requested": false
   },
   "current_handoff": {
+    "latest_fft_row_coverage_repair": {
+      "status": "PASS_LOCAL_SOURCE_FREE_FFT_ROW_COVERAGE_REGRESSION",
+      "reviewed_base": "cbfbb0a69cb168cc9aa294981f00290f618a8783",
+      "session": "clients/GT/sessions/20261127-fft-row-coverage/README_AR.md",
+      "evidence": "clients/GT/sessions/20261127-fft-row-coverage/evidence.json",
+      "old_gate_git_blob": "81ab2e897f3bbaa197eb4fc31f81aff883248369",
+      "new_gate_git_blob": "08f511b30b6d851cf9c50a34f624ccf088a4e645",
+      "tests_git_blob": "e95e93748fa70d7cb7ce7e4935c58c76d7e9c47d",
+      "local_tests": 15,
+      "local_baseline_pass": 3,
+      "local_baseline_failed_negative_controls": 12,
+      "local_fixed_pass": 15,
+      "decoder_and_validator_injected": true,
+      "actual_bundle_replay_completed": false,
+      "ci_skipped": true,
+      "particle108_local_export_payload_and_source_authorization_blocked": true,
+      "original_assets_read": false,
+      "original_game_visuals_verified": false,
+      "XAPK_requested": false,
+      "next": "Replay the strict G4 row coverage gate against the already retained authored FFT bundles (no new Unity run or original source retrieval), add real-bundle partial-row and bucket counterfactuals to a reviewed isolated source-free workflow, and retain exact receipts or classify rejection. Original Particle108 third top-mip remains blocked without authorized provider bytes and same-export document-scoped exported Texture2D payload. A3 and all G0-G6 remain open; no original acquisition, APK/XAPK, phone, CL/lab writes, BLACK or animation."
+    },
     "latest_keyword_candidate_bundle_run": {
       "id": 45994668802,
       "job": 140490955513,

@@ -1,0 +1,17 @@
+test_combined_partial_fragment_missing (test_gt_fft_row_coverage.FftRowCoverage.test_combined_partial_fragment_missing) ... FAIL
+test_combined_partial_vertex_missing (test_gt_fft_row_coverage.FftRowCoverage.test_combined_partial_vertex_missing) ... FAIL
+test_complete_combined_player_rows (test_gt_fft_row_coverage.FftRowCoverage.test_complete_combined_player_rows) ... ok
+test_complete_legacy_combined_and_separate (test_gt_fft_row_coverage.FftRowCoverage.test_complete_legacy_combined_and_separate) ... ok
+test_complete_separate_player_rows (test_gt_fft_row_coverage.FftRowCoverage.test_complete_separate_player_rows) ... ok
+test_duplicate_empty_route_in_legacy_fragment (test_gt_fft_row_coverage.FftRowCoverage.test_duplicate_empty_route_in_legacy_fragment) ... FAIL
+test_duplicate_empty_route_in_player_bucket (test_gt_fft_row_coverage.FftRowCoverage.test_duplicate_empty_route_in_player_bucket) ... FAIL
+test_duplicate_identical_module_in_row (test_gt_fft_row_coverage.FftRowCoverage.test_duplicate_identical_module_in_row) ... FAIL
+test_last_pass_not_covered_by_prior_success (test_gt_fft_row_coverage.FftRowCoverage.test_last_pass_not_covered_by_prior_success) ... FAIL
+test_multiple_fragment_modules_in_row (test_gt_fft_row_coverage.FftRowCoverage.test_multiple_fragment_modules_in_row) ... FAIL
+test_multiple_vertex_modules_in_row (test_gt_fft_row_coverage.FftRowCoverage.test_multiple_vertex_modules_in_row) ... FAIL
+test_separate_bucket_sets_must_match (test_gt_fft_row_coverage.FftRowCoverage.test_separate_bucket_sets_must_match) ... FAIL
+test_separate_legacy_player_bucket_mismatch (test_gt_fft_row_coverage.FftRowCoverage.test_separate_legacy_player_bucket_mismatch) ... FAIL
+test_separate_partial_fragment_missing (test_gt_fft_row_coverage.FftRowCoverage.test_separate_partial_fragment_missing) ... FAIL
+test_separate_partial_vertex_missing (test_gt_fft_row_coverage.FftRowCoverage.test_separate_partial_vertex_missing) ... FAIL
+
+Baseline run summary: Ran 15 tests in 0.016s; FAILED (failures=12). Each negative control failed with AssertionError: ValueError not raised. Full local traceback log was not published.
