@@ -1,0 +1,15 @@
+{
+    "unityVersion": "2021.3.45f2",
+    "failureType": "",
+    "checkpoint": "compiler_results",
+    "candidateSha256": "3249858ea00a30b718992cef563261e457cbecd6d7b8471313d5b32f197b3dfc",
+    "compilerControl": "hlslcc",
+    "passCount": 7,
+    "registeredKeywordVariants": 1,
+    "errors": 0,
+    "androidVulkanOnly": true,
+    "privateBundleCompiled": true,
+    "originalMaterialGuidProven": false,
+    "gamePlayerBuilt": false,
+    "devicePixelsProven": false
+}

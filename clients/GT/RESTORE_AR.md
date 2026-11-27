@@ -1,3 +1,9 @@
+## GT — تشخيص FFT: نتيجة Unity الجزئية، إعادة فك الحزمتين التالية
+
+[Run45935871773](https://github.com/alwansan/raf/actions/runs/45935871773) انتهى failure: **كلتا مرحلتي Unity compile نجحتا (7Pass، 0 errors)، لكن بوابة zero_keywords رفضت جدول الأسماء قبل التحقق الكامل**. أُعيد إنتاج رسالة نوع الإحداثيات التاريخية بالحقن المتعمد فقط، لا من مترجم Unity في المرشحين. CPU: 28 ترجمة صحيحة، 28 val، 4 ضوابط مرفوضة. [إعادة فحص الأرشيفين](sessions/20261127-fft-coordinate-diagnostic/artifact-review.json) تطابق CRC/SHA ومصادر DXC/HLSLcc بعد إزالة سبع pragma. الأرشيفان الفعليان مؤلفان، artifact15171100631/15170637402. الإيصالات الخام محفوظة. أضفنا replay CPU-only لا يغير البوابة الأصلية: يفحص الأسماء المخزنة والـindices الفعلية وكل SPIR-V المشار إليه؛ لا إعادة Unity. تحقق من تشغيله قبل قبول نتيجة التشخيص؛ G4 الأصلي مفتوح، لا أصول أصلية ولا XAPK.
+
+---
+
 ## GT — G4: مرشح تشخيص FFT coordinate | 27 نوفمبر 2026
 
 [جلسة التشخيص](sessions/20261127-fft-coordinate-diagnostic/README_AR.md). بدأت من 38458644d1399d008cee87c9def05a67d6768f76، وراجعت خطأ DXC التاريخي وإيصالات HLSLcc وfloat coordinates. أداة مؤلفة تقارن 7 ممرات في Unity Android Vulkan (DXC/HLSLcc) وتفصل Sample عن Load، مع ضوابط SPIR-V خاطئة عمداً. 3 اختبارات محلية ناجحة؛ **لا نتيجة مترجم/Unity جديدة بعد**. هذا المرشح [skip ci]، ثم إطلاق CI مؤلف معزول فقط. لا مصادر لعبة أو تغيير GUID. تحقق من HEAD وActions واحفظ نتيجة كل mode قبل تحديث قبول المرحلة.

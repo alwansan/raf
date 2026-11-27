@@ -1,0 +1,138 @@
+{
+  "XAPK_requested": false,
+  "exact_pragma_only_control": true,
+  "execution_authenticity_requires_matching_GitHub_jobs": true,
+  "modes": {
+    "dxc": {
+      "archive": {
+        "bytes": 11197,
+        "sha256": "eedccb8afa34ca208604c111b232ea42bb7f91c0cab01d409253d7a4e8ee5972"
+      },
+      "bundle_acceptance": false,
+      "cpu_valid_stages": 14,
+      "job_success": false,
+      "local_bundle_decoder_reexecution": false,
+      "local_compiler_or_Unity_reexecution": false,
+      "members": {
+        "authored.bundle": {
+          "bytes": 8342,
+          "sha256": "f570f7d7e045c9750d3b65858819c5c1bc36c5f29f7dec9b48c1ab859d642ffa"
+        },
+        "authored.shader": {
+          "bytes": 4274,
+          "sha256": "a7a54d6ccf31931379362ed73971e5970282acd42befc32f0fc08c052764e59e"
+        },
+        "cpu.json": {
+          "bytes": 3123,
+          "sha256": "16e93115a80242cea94bcb17ebba617f028c44a90728b3486983aad487c49482"
+        },
+        "stage.json": {
+          "bytes": 528,
+          "sha256": "508f040326a1cca74c6566a57fa3527d2b7ae82236d68c3e534d4451af011ca4"
+        },
+        "unity.json": {
+          "bytes": 462,
+          "sha256": "526311c14ef62256a429a8b994f6ffbceaabaf8f5843712d54af2b85ded53cb6"
+        }
+      },
+      "mode": "dxc",
+      "negative_controls": [
+        {
+          "diagnostic": "error: line 46: Expected Coordinate to be float scalar or vector\n  %30 = OpImageSampleImplicitLod %v4float %28 %29",
+          "family": "sample",
+          "pass": 0,
+          "validator_exit": 1
+        },
+        {
+          "diagnostic": "error: line 46: Expected Coordinate to be int scalar or vector\n  %33 = OpImageFetch %v4float %25 %32 Lod %int_0",
+          "family": "fetch",
+          "pass": 6,
+          "validator_exit": 1
+        }
+      ],
+      "run_id": "45935871773-1-5b6f8f21627269d946aa549cd7055384914cdf82-dxc",
+      "unity_receipt": {
+        "androidVulkanOnly": true,
+        "candidateSha256": "a7a54d6ccf31931379362ed73971e5970282acd42befc32f0fc08c052764e59e",
+        "checkpoint": "compiler_results",
+        "compilerControl": "dxc",
+        "devicePixelsProven": false,
+        "errors": 0,
+        "failureType": "",
+        "gamePlayerBuilt": false,
+        "originalMaterialGuidProven": false,
+        "passCount": 7,
+        "privateBundleCompiled": true,
+        "registeredKeywordVariants": 1,
+        "unityVersion": "2021.3.45f2"
+      }
+    },
+    "hlslcc": {
+      "archive": {
+        "bytes": 11512,
+        "sha256": "95afbce3a5afb5073023caae625aabeda5b2fa7ed74c4c08aa025fc180558d6c"
+      },
+      "bundle_acceptance": false,
+      "cpu_valid_stages": 14,
+      "job_success": false,
+      "local_bundle_decoder_reexecution": false,
+      "local_compiler_or_Unity_reexecution": false,
+      "members": {
+        "authored.bundle": {
+          "bytes": 8665,
+          "sha256": "da266f22b82d37c19a090f2d2d4776c33afe9b5a0cbeda48f1a3cce5b94b64e8"
+        },
+        "authored.shader": {
+          "bytes": 4113,
+          "sha256": "3249858ea00a30b718992cef563261e457cbecd6d7b8471313d5b32f197b3dfc"
+        },
+        "cpu.json": {
+          "bytes": 3123,
+          "sha256": "16e93115a80242cea94bcb17ebba617f028c44a90728b3486983aad487c49482"
+        },
+        "stage.json": {
+          "bytes": 534,
+          "sha256": "318e141a44874f80efbdf417bb95e377e08cf2bcbc1ddd3845ade1f6dadd55a3"
+        },
+        "unity.json": {
+          "bytes": 465,
+          "sha256": "86afa0a6f6b97bdcb33ebd69f0408b763f69fc49d572c81f6a98f73220c06ee4"
+        }
+      },
+      "mode": "hlslcc",
+      "negative_controls": [
+        {
+          "diagnostic": "error: line 46: Expected Coordinate to be float scalar or vector\n  %30 = OpImageSampleImplicitLod %v4float %28 %29",
+          "family": "sample",
+          "pass": 0,
+          "validator_exit": 1
+        },
+        {
+          "diagnostic": "error: line 46: Expected Coordinate to be int scalar or vector\n  %33 = OpImageFetch %v4float %25 %32 Lod %int_0",
+          "family": "fetch",
+          "pass": 6,
+          "validator_exit": 1
+        }
+      ],
+      "run_id": "45935871773-1-5b6f8f21627269d946aa549cd7055384914cdf82-hlslcc",
+      "unity_receipt": {
+        "androidVulkanOnly": true,
+        "candidateSha256": "3249858ea00a30b718992cef563261e457cbecd6d7b8471313d5b32f197b3dfc",
+        "checkpoint": "compiler_results",
+        "compilerControl": "hlslcc",
+        "devicePixelsProven": false,
+        "errors": 0,
+        "failureType": "",
+        "gamePlayerBuilt": false,
+        "originalMaterialGuidProven": false,
+        "passCount": 7,
+        "privateBundleCompiled": true,
+        "registeredKeywordVariants": 1,
+        "unityVersion": "2021.3.45f2"
+      }
+    }
+  },
+  "original_failure_reproduced_by_Unity": null,
+  "original_game_or_device_pixels_verified": false,
+  "schema_version": 1
+}

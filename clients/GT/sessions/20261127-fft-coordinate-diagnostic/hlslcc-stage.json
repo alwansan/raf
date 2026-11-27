@@ -1,0 +1,13 @@
+{
+  "Unity_executed": false,
+  "compiler_control_only_seven_pragmas": true,
+  "cpu_sha256": "16e93115a80242cea94bcb17ebba617f028c44a90728b3486983aad487c49482",
+  "editor_sha256": "120fe2797695f113244173c29f6b7dd2beea79f10f48d1f6c3f9288c2af6dd72",
+  "mode": "hlslcc",
+  "original_assets_read": false,
+  "pass_count": 7,
+  "run_id": "45935871773-1-5b6f8f21627269d946aa549cd7055384914cdf82-hlslcc",
+  "source_sha256": "3249858ea00a30b718992cef563261e457cbecd6d7b8471313d5b32f197b3dfc",
+  "status": "PREPARED",
+  "synthetic_only": true
+}

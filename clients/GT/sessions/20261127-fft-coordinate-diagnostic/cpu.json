@@ -1,0 +1,119 @@
+{
+  "actual_compiler_executed": true,
+  "negative_controls": [
+    {
+      "diagnostic": "error: line 46: Expected Coordinate to be float scalar or vector\n  %30 = OpImageSampleImplicitLod %v4float %28 %29",
+      "family": "sample",
+      "pass": 0,
+      "validator_exit": 1
+    },
+    {
+      "diagnostic": "error: line 46: Expected Coordinate to be int scalar or vector\n  %33 = OpImageFetch %v4float %25 %32 Lod %int_0",
+      "family": "fetch",
+      "pass": 6,
+      "validator_exit": 1
+    }
+  ],
+  "original_assets_read": false,
+  "stages": [
+    {
+      "image_ops": [],
+      "pass": 0,
+      "sha256": "5ec300d5772c70efa799e3f53f1849407abb62765bbfbb1e1f1bc09619ab3c29",
+      "stage": "vert"
+    },
+    {
+      "image_ops": [
+        "OpImageSampleImplicitLod"
+      ],
+      "pass": 0,
+      "sha256": "86bac1b00ad6024d5cb02eceba94d285db5948f12115fc9242625171e937efcc",
+      "stage": "frag"
+    },
+    {
+      "image_ops": [],
+      "pass": 1,
+      "sha256": "bdd772f488a3dd6196a3a47c4095543639811351d6d039195dfa65a4684ab093",
+      "stage": "vert"
+    },
+    {
+      "image_ops": [
+        "OpImageSampleImplicitLod"
+      ],
+      "pass": 1,
+      "sha256": "fd166f84f35b4004e0db7e98f732f5cab57c3f537686a7d3283fcc4974f36438",
+      "stage": "frag"
+    },
+    {
+      "image_ops": [],
+      "pass": 2,
+      "sha256": "431940e75bbfde39d00b21f854eaefe88bcf6f6d6701ad90f5d937d98a998e62",
+      "stage": "vert"
+    },
+    {
+      "image_ops": [
+        "OpImageSampleExplicitLod"
+      ],
+      "pass": 2,
+      "sha256": "2940d5f7deb090b6bcb4359de8a2833c062587bae92bcc3d0fe019437d6073b2",
+      "stage": "frag"
+    },
+    {
+      "image_ops": [],
+      "pass": 3,
+      "sha256": "6c0c82f31838f461108e9af961ae6f962a5481e2c345f24d7b80a9a8d45151d4",
+      "stage": "vert"
+    },
+    {
+      "image_ops": [
+        "OpImageSampleImplicitLod"
+      ],
+      "pass": 3,
+      "sha256": "099dea91657c17c3f20302381c3621dd82d8864b4dfac68e88e10295197f83d1",
+      "stage": "frag"
+    },
+    {
+      "image_ops": [],
+      "pass": 4,
+      "sha256": "a736ca48ecda3fb70d66d5dfec614cdac2659e8442c2d98c7055a779fee8fff6",
+      "stage": "vert"
+    },
+    {
+      "image_ops": [
+        "OpImageSampleExplicitLod"
+      ],
+      "pass": 4,
+      "sha256": "bf3f3c16238b157b302f5edbf662a373aaabeeafa3345c4ea26d01fbd53eaf48",
+      "stage": "frag"
+    },
+    {
+      "image_ops": [],
+      "pass": 5,
+      "sha256": "ac84e274bea86495f2763cfbe67d71810bd4b217f36a6547807a120218ef8456",
+      "stage": "vert"
+    },
+    {
+      "image_ops": [
+        "OpImageSampleExplicitLod"
+      ],
+      "pass": 5,
+      "sha256": "101a6569663747a6b0070543165817b8c4e6ba4f87eba34b550340d106ce28a6",
+      "stage": "frag"
+    },
+    {
+      "image_ops": [],
+      "pass": 6,
+      "sha256": "add8c6b97f9eac8eb9ba61f4501e2b607bd126ddda5a43cfd88ac506bc85a5f1",
+      "stage": "vert"
+    },
+    {
+      "image_ops": [
+        "OpImageFetch"
+      ],
+      "pass": 6,
+      "sha256": "2da922ba4e21a25a96195c3b123598f4ad962aed2a2825a60855207da6ebd669",
+      "stage": "frag"
+    }
+  ],
+  "status": "PASS_AUTHORED_COORDINATE_COMPILER_CONTROLS"
+}
