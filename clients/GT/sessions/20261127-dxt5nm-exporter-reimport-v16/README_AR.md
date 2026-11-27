@@ -17,7 +17,7 @@ Source 4a206be8844aa0e455079208a301dcddf0c0e1bb; activation 97666cc835f929053aa7
 `inspect_archive.py` is an independent offline checker, not an executed result. After V16 succeeds, download the exact Actions ZIP, verify its digest from the API, then run from a repo checkout with Python + Pillow:
 
 ```bash
-python3 clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/inspect_archive.py --archive actual-v16.zip --sha256 <Actions-artifact-sha256> --run 45976163790 --head 97666cc835f929053aa7621a058ce9bdfbfe633f --out actual-pass-45976163790.json
+python3 clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/inspect_archive.py --archive actual-v16.zip --sha256 <Actions-artifact-sha256> --run 45976648432 --head a441a743f09f3a71f10a1f550b0281a4b46c343d --out actual-pass-45976648432.json
 ```
 
 It checks CRC, every member SHA, immutable run ID, actual candidate PNG/metadata bytes and decoded RGBA, six normalized V15 export pairs, four exact route and shader adapter slots, all six V14 alpha_off observed mip byte strings and hashes, 70 top pixels, 84 actual GPU texels and negative-control/regression counts. Do not run it on a substituted or constructed receipt. It has not yet been exercised on the V16 archive. Last live check: checkout and source-only regression step SUCCESS, public exporter build in progress; no V16 actual Unity verdict.
@@ -25,3 +25,7 @@ It checks CRC, every member SHA, immutable run ID, actual candidate PNG/metadata
 ## First V16 actual attempt — FAILED before Unity
 
 [45976163790](https://github.com/alwansan/raf/actions/runs/45976163790) completed failure at stage, after actual 291 regressions, 37+6 controls and six exporter runs passed. No Unity startup. [Failure receipt](failed-run-45976163790.json), [artifact 15187192023](https://github.com/alwansan/raf/actions/runs/45976163790/artifacts/15187192023) downloaded, SHA/CRC checked (30146 bytes; 38 members). Historical V15 ZIP 15186083739 also downloaded and rehashed. All 12 paired normalized meta strings and all PNG/decoded receipt RGBA hashes identical across archives, two actual retained PNG files in each rehashed. Historical published header normalization used labelled `guid: VOLATILE` and `timeCreated: VOLATILE`, not the runtime V15 pair checker's `<volatile>`. No content drift. Exact normalization fixed, no on-disk importer or source edit. Two extra source controls (293 planned total). Do not call V16 PASS; retry the dedicated workflow only.
+
+## Corrected retry
+
+[45976648432](https://github.com/alwansan/raf/actions/runs/45976648432) in_progress on a441a743f09f3a71f10a1f550b0281a4b46c343d job 140429921178, guard [45976648602](https://github.com/alwansan/raf/actions/runs/45976648602) success. First attempt retained as FAILED, not superseded evidence; no actual Unity verdict yet. Use the retry archive and exact retry immutable head for the offline checker.

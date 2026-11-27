@@ -1306,19 +1306,19 @@
   },
   "current_handoff": {
     "latest_v16_run": {
-      "id": 45976163790,
-      "job": 140428299621,
-      "head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
+      "id": 45976648432,
+      "job": 140429921178,
+      "head": "a441a743f09f3a71f10a1f550b0281a4b46c343d",
       "status": "in_progress",
       "conclusion": null,
       "compatibility_guard": {
-        "id": 45976163752,
+        "id": 45976648602,
         "conclusion": "success"
       }
     },
     "date": "2026-11-27",
-    "reviewed_remote_head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
-    "purpose": "V16 authored direct V15 candidate Unity reimport in progress; compatibility guard success; original acceptance blocked",
+    "reviewed_remote_head": "a441a743f09f3a71f10a1f550b0281a4b46c343d",
+    "purpose": "V16 first attempt failed pre-Unity; actual archives proved normalization-only mismatch, corrected retry in progress; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
     "index": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/README_AR.md",
@@ -5536,22 +5536,22 @@
     "evidence": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/actual-pass-45975084812.json"
   },
   "v16_dxt5nm_exporter_reimport_checkpoint": {
-    "status": "IN_PROGRESS_ACTUAL_AUTHORED_V15_EXPORTER_DIRECT_UNITY_REIMPORT",
+    "status": "IN_PROGRESS_V16_RETRY_AFTER_PROVEN_HISTORICAL_NORMALIZATION_MISMATCH",
     "starting_head": "2d3adcabfa60198072c9f70da4206c5e0e62b02f",
     "source_head": "4a206be8844aa0e455079208a301dcddf0c0e1bb",
     "activation_head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
     "run": {
-      "id": 45976163790,
-      "job": 140428299621,
-      "head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
+      "id": 45976648432,
+      "job": 140429921178,
+      "head": "a441a743f09f3a71f10a1f550b0281a4b46c343d",
       "status": "in_progress",
       "conclusion": null,
       "compatibility_guard": {
-        "id": 45976163752,
+        "id": 45976648602,
         "conclusion": "success"
       }
     },
-    "planned_regressions": 291,
+    "planned_regressions": 293,
     "planned_historical_V11_V12_controls": 37,
     "planned_V15_controls": 6,
     "planned_V16_receipt_controls": 10,
@@ -5567,6 +5567,24 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/README_AR.md",
-    "next": "Inspect actual V16 run 45976163790 (guard success); retain raw/verified archive with exact candidate PNG/meta and independently compare every observed mip to V14 alpha_off. If fail retain evidence, fix precise cause; no original-source or production activation."
+    "next": "Inspect exact V16 retry 45976648432, verify actual Unity stage and six V14 alpha_off mip hashes/bytes from retained candidate PNG/meta archive; retain both failed and retry evidence. If fail, diagnose without weakening route or alpha gate. No original source or production activation.",
+    "first_failed_run": {
+      "id": 45976163790,
+      "job": 140428299621,
+      "head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
+      "status": "completed",
+      "conclusion": "failure",
+      "compatibility_guard": {
+        "id": 45976163752,
+        "conclusion": "success"
+      },
+      "failure": "historical_V15_export_bytes_drift",
+      "source_regressions": 291,
+      "actual_compiled_exporter_modes": 6,
+      "actual_Unity_started": false,
+      "evidence": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/failed-run-45976163790.json"
+    },
+    "retry_source_head": "234352777705d15a145aa54406ec3b543853650e",
+    "retry_activation_head": "a441a743f09f3a71f10a1f550b0281a4b46c343d"
   }
 }
