@@ -1,0 +1,84 @@
+name: GT original runtime keyword migration source-only preflight (NO ASSETS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-original-keyword-migration-preflight.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gt-original-keyword-migration-preflight-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-preflight:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only fixed code paths and retained numeric receipts
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/gt_keyword_migration_preflight.py
+            /tests/test_gt_keyword_migration_preflight.py
+            /scripts/gt_install_recovered_model_shader.py
+            /scripts/gt_translate_next_remaining_30_shader48.py
+            /scripts/gt_install_next30_original_shader48.py
+            /scripts/gt_translate_next_remaining_23_shader48.py
+            /scripts/gt_install_next23_original_shader48.py
+            /scripts/gt_translate_next_remaining_18_shader48.py
+            /scripts/gt_install_next18_original_shader48.py
+            /scripts/gt_translate_next_remaining_17_shader48.py
+            /scripts/gt_install_next17_original_shader48.py
+            /scripts/gt_translate_next_remaining_15_shader48.py
+            /scripts/gt_install_next15_original_shader48.py
+            /scripts/gt_translate_next_remaining_11_shader48.py
+            /scripts/gt_install_next11_original_shader48.py
+            /scripts/gt_translate_next_remaining_10p33_shader48.py
+            /scripts/gt_install_next10p33_original_shader48.py
+            /scripts/gt_translate_next_remaining_10p31_shader48.py
+            /scripts/gt_install_next10p31_original_shader48.py
+            /scripts/gt_translate_next_remaining_7p11_shader48.py
+            /scripts/gt_install_next7p11_original_shader48.py
+            /scripts/gt_translate_next_remaining_7p33_shader48.py
+            /scripts/gt_install_next7p33_original_shader48.py
+            /clients/GT/evidence/20261117_gt_post23_same_export_and_next6_cb_order_progress.json
+            /clients/GT/evidence/20261121_gt_next23b_source_composition_verified.json
+            /clients/GT/evidence/20261116_gt_next30_post14_next23_and_particle108_progress.json
+            /clients/GT/state.json
+            /clients/GT/sessions/20261127-dxt5nm-raster-route-v17/actual-pass-45979650728.json
+            /.github/workflows/raft-gt-original-keyword-migration-preflight.yml
+      - name: Audit actual ten source groups and historic acceptance boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          mkdir gt-keyword-preflight-results
+          python3 -B -m unittest discover -s tests -p test_gt_keyword_migration_preflight.py -v 2>&1 | tee gt-keyword-preflight-results/tests.log
+          python3 -B -m scripts.gt_keyword_migration_preflight --out gt-keyword-preflight-results/audit.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('gt-keyword-preflight-results/audit.json').read_text())
+          assert r['status']=='BLOCKED_ORIGINAL_RUNTIME_MIGRATION_PREFLIGHT'
+          assert r['group_count']==r['private_selector_groups']==r['private_entrypoint_selector_groups']==10
+          assert r['positive_engine_keyword_receipt_fields']==0 and r['explicit_false_shared_override_groups']==1
+          assert all(r[k] is False for k in ('original_source_authorization_verified','original_assets_read','acceptance_eligible','original_runtime_parity_proven','production_activation','Android_device','XAPK'))
+          PY
+      - name: Publish source-only blocked preflight and test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-keyword-migration-preflight-${{ github.run_id }}
+          path: gt-keyword-preflight-results/
+          retention-days: 14
+          if-no-files-found: warn
