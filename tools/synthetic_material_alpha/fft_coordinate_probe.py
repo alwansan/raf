@@ -167,13 +167,15 @@ def stage(project, results, mode, run_id):
     write_json(results/'stage.json',{'status':'PREPARED','mode':mode,'run_id':run_id,'synthetic_only':True,'Unity_executed':False,
         'source_sha256':digest(source),'editor_sha256':digest(editor),'cpu_sha256':digest((results/'cpu.json').read_bytes()),
         'compiler_control_only_seven_pragmas':True,'pass_count':7,'original_assets_read':False})
+    (project/'SourceReceipt.json').write_bytes((results/'stage.json').read_bytes())
     (results/'authored.shader').write_bytes(source)
 
 
 def verify(project, results, decoder, mode, run_id, exit_code):
     import UnityPy
     sys.path.insert(0,str(ROOT))
-    from scripts.gt_verify_921_shader_bundle import verify_routes, unity_vulkan_modules, spirv_execution_models
+    from scripts.gt_verify_921_shader_bundle import decode_fft_empty_routes, unity_vulkan_modules, spirv_execution_models
+    from scripts.gt_fft_receipt_contract import verify_commitments, require_same_decoded_receipt
     from scripts.w1_recover_graphics_programs import decoded_platforms, records
     from scripts.w1_recover_depth_passes import stage_variants
     source=(results/'authored.shader').read_bytes(); cpu=(results/'cpu.json').read_bytes()
@@ -190,7 +192,37 @@ def verify(project, results, decoder, mode, run_id, exit_code):
     require(len(trees)==1 and trees[0]['m_ParsedForm']['m_Name']==NAME and list(trees[0]['platforms'])==[18],'authored_shader_platform_identity')
     tree=trees[0];[(platform,segments)]=list(decoded_platforms(tree));require(platform==18,'platform')
     entries=records(segments); parsed=tree['m_ParsedForm']
-    routes=verify_routes(parsed,entries,smolv_decoder=str(decoder),expected_counts=(1,)*7,zero_keywords=True)
+    stage_raw=(results/'stage.json').read_bytes()
+    require(stage_raw==(project/'SourceReceipt.json').read_bytes(), 'source_receipt_changed')
+    _,_,commitments=verify_commitments(source,stage_raw,receipt,bundle)
+    routes=decode_fft_empty_routes(bundle,NAME,decoder,authored_coordinate_profile=True)
+    controls=[]
+    def must_reject(name, candidate, source_raw, unity_raw, compiled):
+        try:
+            verify_commitments(candidate,source_raw,unity_raw,compiled)
+        except ValueError as exc:
+            controls.append({'name':name,'reason':str(exc),'rejected':True})
+        else:
+            raise ValueError('receipt_control_accepted:'+name)
+    def mutate(data):
+        i=len(data)//2
+        return data[:i]+bytes([data[i]^1])+data[i+1:]
+    must_reject('same_size_candidate',mutate(source),stage_raw,receipt,bundle)
+    must_reject('same_size_source_receipt',source,stage_raw+b' ',receipt,bundle)
+    must_reject('same_size_bundle',source,stage_raw,receipt,mutate(bundle))
+    legacy=dict(u);legacy.pop('receiptSchemaVersion')
+    must_reject('legacy_receipt',source,stage_raw,json.dumps(legacy).encode(),bundle)
+    stale=dict(u);stale['bundleBytes']=len(bundle)+1
+    must_reject('wrong_bundle_size',source,stage_raw,json.dumps(stale).encode(),bundle)
+    # Raw Unity receipt bytes also bind the independently decoded receipt.
+    changed_receipt=receipt+b' '
+    _,_,changed_commitments=verify_commitments(source,stage_raw,changed_receipt,bundle)
+    try:
+        require_same_decoded_receipt(commitments,changed_commitments)
+    except ValueError as exc:
+        controls.append({'name':'changed_unity_receipt_bytes','reason':str(exc),'rejected':True})
+    else:
+        raise ValueError('unity_receipt_byte_commitment_not_checked')
     cache={};passes=[]
     with tempfile.TemporaryDirectory(prefix='gt-fft-compiled-') as d:
         for i,p in enumerate(parsed['m_SubShaders'][0]['m_Passes']):
@@ -217,7 +249,8 @@ def verify(project, results, decoder, mode, run_id, exit_code):
     (results/'authored.bundle').write_bytes(bundle)
     write_json(results/'verified.json',{'status':'PASS_AUTHORED_UNITY_ANDROID_VULKAN_COORDINATES','mode':mode,'run_id':run_id,
         'source_sha256':digest(source),'unity_receipt_sha256':digest(receipt),'bundle_sha256':digest(bundle),'bundle_bytes':len(bundle),
-        'routes':routes,'passes':passes,'validated_fragment_referenced_blobs':len(cache),'actual_android_bundle':True,'original_game_or_device_pixels_verified':False,'XAPK_requested':False})
+        'routes':routes,'passes':passes,'validated_fragment_referenced_blobs':len(cache),'actual_android_bundle':True,
+        'receipt_v2_commitments':commitments,'receipt_negative_controls':controls,'original_game_or_device_pixels_verified':False,'XAPK_requested':False})
 
 
 class Tests(unittest.TestCase):

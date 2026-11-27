@@ -92,9 +92,85 @@ def vulkan_execution_models(blob, decoder):
     return models
 
 
-def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None, *, next30=False, next17=False, next7p11=False, fft_utilities=False, next23b=False, source_variant_manifest=None):
+
+def decode_fft_empty_routes(bundle_bytes, expected_name, decoder, *, authored_coordinate_profile=False):
+    """Actual immutable bundle validation; no source or install attestation."""
+    import tempfile
+    import UnityPy
+    from scripts.gt_fft_bundle_gate import verify_modules
+    from scripts.gt_fft_receipt_contract import digest
+    if decoder is None:
+        raise ValueError("fft_smolv_decoder_required")
+    trees = [obj.read_typetree() for obj in UnityPy.load(bundle_bytes).objects
+             if obj.type.name == "Shader"]
+    if (len(trees) != 1 or trees[0]["m_ParsedForm"]["m_Name"] != expected_name
+            or list(trees[0]["platforms"]) != [18]):
+        raise ValueError("fft_vulkan_shader_missing_or_ambiguous")
+    tree = trees[0]
+    [(platform, segments)] = list(decoded_platforms(tree))
+    if platform != 18:
+        raise ValueError("fft_vulkan_platform_mismatch")
+
+    def sample_ops(asm):
+        rows = []
+        for line in asm.splitlines():
+            fields = line.split(";", 1)[0].split()
+            if len(fields) >= 6 and fields[1] == "=" and (
+                    fields[2].startswith("OpImageSample") or fields[2] == "OpImageFetch"):
+                rows.append((fields[2], fields[5]))
+        return rows
+
+    with tempfile.TemporaryDirectory(prefix="gt-fft-validate-") as tmp:
+        proof, _ = verify_modules(
+            tree["m_ParsedForm"], records(segments), str(decoder), tmp,
+            stage_variants, unity_vulkan_modules, spirv_execution_models,
+            sample_ops, authored_coordinate_profile=authored_coordinate_profile)
+    # Retain only counts and a commitment to private detailed evidence.
+    return {
+        "vulkan_platform_only": True, "compiled_program_table_verified": True,
+        "vertex_and_fragment_entrypoints_verified": True,
+        "engine_keywords_verified": False,
+        "vertex_routes_by_pass": [1] * 7, "fragment_routes_by_pass": [1] * 7,
+        "all_referenced_spirv_validated": True, "validator_target": "vulkan1.1",
+        "decoded_unique_modules": proof["validated_unique_modules"],
+        "decoded_blob_count": proof["decoded_blobs"],
+        "inactive_stereo_keyword_count": len(proof["serialized_keyword_names"]),
+        "used_keyword_count": len(proof["used_keyword_names"]),
+        "decoded_private_evidence_sha256": digest(json.dumps(
+            proof, sort_keys=True, separators=(",", ":")).encode()),
+    }
+
+
+def inspect_fft_original_bytes(candidate, source_receipt, unity_receipt, bundle, decoder):
+    from scripts.gt_fft_receipt_contract import verify_original_commitments
+    from scripts.b49_shaderlab_pass_contract import pass_coverage
+    import re
+    proof = verify_original_commitments(candidate, source_receipt, unity_receipt, bundle)
+    text = candidate.decode("utf-8")
+    name = exported_shader_identity(text)
+    coverage = pass_coverage(text)
+    if (name != "UltimateWater/Utilities/FFT Utilities" or "DummyShaderTextExporter" in text
+            or coverage["subshader_pass_counts"] != [7]
+            or coverage["passes_with_complete_program"] != 7
+            or coverage["pass_braces_balanced"] is not True
+            or re.search(r"(?m)^\s*#pragma\s+(?:multi_compile|shader_feature)", text)):
+        raise ValueError("fft_original_candidate_topology")
+    return dict(proof, **decode_fft_empty_routes(bundle, name, decoder))
+
+def inspect(bundle, source, receipt, engine_route_manifest=None, smolv_decoder=None, *, next30=False, next17=False, next7p11=False, fft_utilities=False, next23b=False, source_variant_manifest=None, fft_source_receipt=None):
     import UnityPy
 
+    if fft_utilities:
+        if (any((next30, next17, next7p11, next23b)) or engine_route_manifest is not None
+                or source_variant_manifest is not None or fft_source_receipt is None):
+            raise ValueError("fft_original_requires_independent_source_receipt")
+        return inspect_fft_original_bytes(
+            read_snapshot(source, MAX_SOURCE_BYTES),
+            read_snapshot(fft_source_receipt, MAX_RECEIPT_BYTES),
+            read_snapshot(receipt, MAX_RECEIPT_BYTES),
+            read_snapshot(bundle, MAX_BUNDLE_BYTES), smolv_decoder)
+    if fft_source_receipt is not None:
+        raise ValueError("fft_source_receipt_only_for_fft")
     shader = read_snapshot(source, MAX_SOURCE_BYTES) if next23b else source.read_bytes()
     expected_name = exported_shader_identity(shader.decode("utf-8"))
     if sum(bool(value) for value in (next30, next17, next7p11, fft_utilities, next23b)) > 1:
@@ -281,6 +357,7 @@ def main():
         parser.add_argument("--" + option, required=True, type=Path)
     parser.add_argument("--engine-route-manifest", type=Path)
     parser.add_argument("--source-variant-manifest", type=Path)
+    parser.add_argument("--fft-source-receipt", type=Path)
     parser.add_argument("--smolv-decoder", type=Path)
     variant_profile = parser.add_mutually_exclusive_group()
     variant_profile.add_argument("--next23b", action="store_true", help="Require original 1156 engine routes and decoded VS/FS")
@@ -289,7 +366,7 @@ def main():
     variant_profile.add_argument("--next7p11", action="store_true", help="Require SHA-original distinct 7-material 3-pass [4,5,2] routes")
     variant_profile.add_argument("--fft-utilities", action="store_true", help="Require seven source passes with one empty-keyword VSFS route each")
     args = parser.parse_args()
-    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest, args.smolv_decoder, next30=args.next30, next17=args.next17, next7p11=args.next7p11, fft_utilities=args.fft_utilities, next23b=args.next23b, source_variant_manifest=args.source_variant_manifest)
+    result = inspect(args.bundle, args.source, args.receipt, args.engine_route_manifest, args.smolv_decoder, next30=args.next30, next17=args.next17, next7p11=args.next7p11, fft_utilities=args.fft_utilities, next23b=args.next23b, source_variant_manifest=args.source_variant_manifest, fft_source_receipt=args.fft_source_receipt)
     args.out.write_text(json.dumps(result, sort_keys=True) + "\n", encoding="utf-8")
     print("GT_ORIGINAL_921_BUNDLE_ROUTES " + json.dumps(result, sort_keys=True))
 

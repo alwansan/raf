@@ -83,7 +83,7 @@ def validate_module(data, workdir, execution_models, sample_ops):
 
 
 def verify_modules(parsed, entries, decoder, workdir, stage_variants,
-                   unity_vulkan_modules, execution_models, sample_ops):
+                   unity_vulkan_modules, execution_models, sample_ops, *, authored_coordinate_profile=True):
     names, topology = verify_topology(parsed, stage_variants)
     blobs, modules, assembly, passes = {}, {}, {}, []
     def decode(index):
@@ -118,6 +118,8 @@ def verify_modules(parsed, entries, decoder, workdir, stage_variants,
             for ref in refs:
                 for h in ref["module_sha256"]:
                     ops = modules[h]["image_ops"]
+                    if not authored_coordinate_profile:
+                        continue
                     if model == 0:
                         require(not ops, "unexpected_vertex_image_operation")
                     else:

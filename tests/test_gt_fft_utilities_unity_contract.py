@@ -13,7 +13,9 @@ class UnityProbeContract(unittest.TestCase):
                          'ForceRebuildAssetBundle | BuildAssetBundleOptions.StrictMode',
                          'result.errors == 0 && !ShaderUtil.ShaderHasError(shader)',
                          'SourceReceiptCandidateMismatch','2021.3.45f2',
-                         'CandidateCompiler.txt', 'UnsupportedCompilerControl'):
+                         'CandidateCompiler.txt', 'UnsupportedCompilerControl', 'receiptSchemaVersion = 2',
+                         'SourceReceipt.json', 'HashFile(artifact.FullName, out result.bundleBytes)',
+                         'ReceiptInputsChangedDuringCompile'):
             self.assertIn(required,source)
         self.assertNotIn('BuildPlayer(',source)
         self.assertNotIn('registeredRoutes =',source)
@@ -30,6 +32,8 @@ class UnityProbeContract(unittest.TestCase):
         self.assertTrue(all(p.endswith('-safe.json') and '*' not in p for p in paths))
         proof=next(s['run'] for s in steps if '--smolv-decoder' in s.get('run',''))
         self.assertIn('--fft-utilities',proof)
+        self.assertIn('--fft-source-receipt',proof)
+        self.assertIn("bundle['all_referenced_spirv_validated'] is True",proof)
         self.assertIn("bundle['vertex_routes_by_pass']==bundle['fragment_routes_by_pass']==[1]*7",proof)
         self.assertIn("source['candidate_shader_sha256']",proof)
         self.assertIn("unity['compilerControl']==source['compiler_control']=='hlslcc'",proof)

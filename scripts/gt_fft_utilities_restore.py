@@ -120,6 +120,11 @@ def recover(original, private, *, compiler_mode="dxc"):
         topology=(7, 7, 0, 12))
     routes, _ = keyword_routes(parsed, pairs, orphans, passes)
     validate_routes(routes)
+    if (len(parsed["m_SubShaders"]) != 1
+            or len(parsed["m_SubShaders"][0]["m_Passes"]) != 7
+            or any(type(p.get("m_Type")) is not int or p["m_Type"] != 0
+                   for p in parsed["m_SubShaders"][0]["m_Passes"])):
+        raise ValueError("fft_utilities_original_normal_passes_required")
     layout, counts = shaderlab_layout(parsed, passes,
         expected_property_count=len(parsed['m_PropInfo']['m_Props']))
     private.mkdir(mode=0o700)
@@ -142,6 +147,8 @@ def recover(original, private, *, compiler_mode="dxc"):
     (private/'fft-utilities-private.shader').write_text(shader)
     verify_entrypoints(shader, private, routes=[[[]] for _ in range(7)])
     return dict(status=STATUS, candidate_shader_sha256=sha256(shader.encode()).hexdigest(),
+        candidate_shader_bytes=len(shader.encode()), original_normal_passes=7,
+        original_empty_keyword_routes_verified=True,
         compiler_control=compiler_mode,
         compiler_control_only_dxc_pragma_removed=compiler_mode == "hlslcc",
         dxc_candidate_shader_sha256=sha256(dxc_shader.encode()).hexdigest(),

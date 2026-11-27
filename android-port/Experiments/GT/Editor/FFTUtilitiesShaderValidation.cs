@@ -12,7 +12,12 @@ namespace RaftGT
     {
         [Serializable] private sealed class Result
         {
+            public int receiptSchemaVersion = 2;
             public string unityVersion;
+            public long candidateBytes;
+            public string sourceReceiptSha256;
+            public long bundleBytes;
+            public string bundleSha256;
             public string failureType;
             public string checkpoint;
             public string candidateSha256;
@@ -25,6 +30,20 @@ namespace RaftGT
             public bool originalMaterialGuidProven;
             public bool gamePlayerBuilt;
             public bool devicePixelsProven;
+        }
+
+        private static string HashFile(string path, out long size)
+        {
+            using (var sha256 = SHA256.Create())
+            using (var input = File.OpenRead(path))
+            {
+                size = input.Length;
+                if (size <= 0) throw new InvalidOperationException("EmptyReceiptInput");
+                string hash = BitConverter.ToString(sha256.ComputeHash(input))
+                    .Replace("-", "").ToLowerInvariant();
+                if (input.Length != size) throw new InvalidOperationException("ReceiptInputSizeChanged");
+                return hash;
+            }
         }
 
         public static void Validate()
@@ -43,10 +62,10 @@ namespace RaftGT
                 result.androidVulkanOnly = PlayerSettings.GetGraphicsAPIs(BuildTarget.Android)
                     .SequenceEqual(new[] { GraphicsDeviceType.Vulkan });
                 const string shaderPath = "Assets/GTFFTUtilities.shader";
-                using (var sha256 = SHA256.Create())
-                using (var input = File.OpenRead(Path.Combine(Application.dataPath, "GTFFTUtilities.shader")))
-                    result.candidateSha256 = BitConverter.ToString(sha256.ComputeHash(input))
-                        .Replace("-", "").ToLowerInvariant();
+                string candidatePath = Path.Combine(Application.dataPath, "GTFFTUtilities.shader");
+                string sourceReceiptPath = Path.Combine(root, "SourceReceipt.json");
+                result.candidateSha256 = HashFile(candidatePath, out result.candidateBytes);
+                result.sourceReceiptSha256 = HashFile(sourceReceiptPath, out long sourceReceiptBytes);
                 if (result.candidateSha256 != File.ReadAllText(Path.Combine(root, "CandidateSha256.txt")).Trim())
                     throw new InvalidOperationException("SourceReceiptCandidateMismatch");
                 result.compilerControl = File.ReadAllText(Path.Combine(root, "CandidateCompiler.txt")).Trim();
@@ -88,9 +107,20 @@ namespace RaftGT
                 result.errors = ShaderUtil.GetShaderMessages(shader)
                     .Count(message => message.severity.ToString() == "Error");
                 var artifact = new FileInfo(Path.Combine(directory, bundleName));
-                result.privateBundleCompiled = manifest != null && artifact.Exists && artifact.Length > 0
+                bool compiled = manifest != null && artifact.Exists && artifact.Length > 0
                     && result.errors == 0 && !ShaderUtil.ShaderHasError(shader);
-                exitCode = result.privateBundleCompiled && result.androidVulkanOnly ? 0 : 1;
+                if (compiled && result.androidVulkanOnly)
+                {
+                    if (HashFile(candidatePath, out long finalSourceBytes) != result.candidateSha256
+                            || finalSourceBytes != result.candidateBytes
+                            || HashFile(sourceReceiptPath, out long finalReceiptBytes) != result.sourceReceiptSha256
+                            || finalReceiptBytes != sourceReceiptBytes)
+                        throw new InvalidOperationException("ReceiptInputsChangedDuringCompile");
+                    result.bundleSha256 = HashFile(artifact.FullName, out result.bundleBytes);
+                    result.failureType = "";
+                    result.privateBundleCompiled = true;
+                    exitCode = 0;
+                }
             }
             catch (Exception error) { result.failureType = error.GetType().Name; }
             File.WriteAllText(Path.Combine(output, "gt-fft-utilities-unity-safe.json"),

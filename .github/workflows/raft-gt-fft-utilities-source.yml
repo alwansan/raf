@@ -97,6 +97,7 @@ jobs:
               (project/child).mkdir(parents=True,exist_ok=False)
           shutil.copyfile(temp/'gt-fft-private/fft-utilities-private.shader',project/'Assets/GTFFTUtilities.shader')
           shutil.copyfile('android-port/Experiments/GT/Editor/FFTUtilitiesShaderValidation.cs',project/'Assets/Editor/FFTUtilitiesShaderValidation.cs')
+          shutil.copyfile(temp/'gt-fft-utilities-safe.json',project/'SourceReceipt.json')
           (project/'CandidateCompiler.txt').write_text(q['compiler_control']+'\n')
           (project/'CandidateSha256.txt').write_text(q['candidate_shader_sha256']+'\n')
           (project/'Packages/manifest.json').write_text('{"dependencies":{}}\n')
@@ -132,6 +133,7 @@ jobs:
             --bundle "$project/ProbeResults/Private/gt-fft-utilities" \
             --source "$project/Assets/GTFFTUtilities.shader" \
             --receipt "$project/ProbeResults/gt-fft-utilities-unity-safe.json" \
+            --fft-source-receipt "$RUNNER_TEMP/gt-fft-utilities-safe.json" \
             --smolv-decoder "$smolv/decode" --fft-utilities \
             --out "$RUNNER_TEMP/gt-fft-utilities-bundle-safe.json"
           python3 - <<'PY'
@@ -150,6 +152,11 @@ jobs:
           assert bundle['vertex_and_fragment_entrypoints_verified'] is True
           assert bundle['vertex_routes_by_pass']==bundle['fragment_routes_by_pass']==[1]*7
           assert bundle['candidate_sha256']==unity['candidateSha256']==source['candidate_shader_sha256']
+          assert bundle['all_referenced_spirv_validated'] is True
+          assert bundle['original_source_receipt_contract_verified'] is True
+          assert bundle['bundle_sha256']==unity['bundleSha256']
+          assert bundle['bundle_bytes']==unity['bundleBytes']
+          assert bundle['unity_receipt_byte_commitments_verified'] is True
           print('GT_FFT_UTILITIES_SEVEN_ACTUAL_VULKAN_VSFS_ROUTES_VERIFIED noAPK=true')
           PY
       - uses: actions/upload-artifact@v4

@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
-  "next_action": "G4-FFT-original-receipt-provenance: harden the original receipt producer/verifier/install contract with actual bundle SHA-256 and size, source/receipt/bundle byte binding and independent validation of all referenced SPIR-V; keep original acceptance fail-closed, do not reuse authored sample/fetch profile as original evidence. A3 remains blocked without verified authorized source. If original evidence cannot be obtained, advance G5 particle/fire or white-material diagnostics without acquiring assets.",
+  "next_action": "Test v2 receipt, original installer mocked-decoder regressions, and one authored-only actual Unity producer + compiled bundle verification. Keep A3 blocked and G0-G6 open; then G5 particle/fire/white materials.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,11 +1964,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "d7a692d682c7e94510cbca5b9a46c2b771d233a8",
-    "purpose": "G4 authored FFT bundle gate passed on real pinned bundles; advance original receipt provenance without accepting original.",
+    "reviewed_remote_head": "108898104496277005f559c11d9524089433f65b",
+    "purpose": "FFT v2 original receipt provenance candidate staged; actual CI pending; no original acceptance",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-fft-bundle-gate/README_AR.md",
+    "index": "clients/GT/sessions/20261127-fft-receipt-provenance/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -2221,9 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G4-FFT-original-receipt-provenance",
-      "status": "NEXT_PRODUCTIVE",
-      "previous_gate": "PASS_AUTHORED_FFT_EMPTY_ROUTE_BUNDLE_GATE",
-      "next": "G4-FFT-original-receipt-provenance: harden the original receipt producer/verifier/install contract with actual bundle SHA-256 and size, source/receipt/bundle byte binding and independent validation of all referenced SPIR-V; keep original acceptance fail-closed, do not reuse authored sample/fetch profile as original evidence. A3 remains blocked without verified authorized source. If original evidence cannot be obtained, advance G5 particle/fire or white-material diagnostics without acquiring assets."
+      "status": "CANDIDATE_PENDING_ACTUAL_CI",
+      "next": "Test v2 receipt, original installer mocked-decoder regressions, and one authored-only actual Unity producer + compiled bundle verification. Keep A3 blocked and G0-G6 open; then G5 particle/fire/white materials."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",

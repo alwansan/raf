@@ -94,6 +94,16 @@ def review(path, expected_sha, run_id, mode, job_success):
             for m in p['fragment_modules']:
                 require(4 in m['models'] and bool(re.fullmatch('[0-9a-f]{64}',m['sha256'])),'fragment_model_or_digest')
                 ops=m['image_ops']; require(len(ops)==1 and (ops[0]=='OpImageFetch' if p['pass']==6 else ops[0].startswith('OpImageSample')),'bundle_image_operation_family')
+        if u.get('receiptSchemaVersion') == 2:
+            exact_fields(u, {'candidateBytes':len(source),'sourceReceiptSha256':digest(raw['stage.json']),
+                'bundleSha256':digest(bundle),'bundleBytes':len(bundle),'failureType':''})
+            exact_fields(v['receipt_v2_commitments'], {
+                'receipt_schema_version':2,'candidate_sha256':source_hash,'candidate_bytes':len(source),
+                'source_receipt_sha256':digest(raw['stage.json']),'unity_receipt_sha256':digest(raw['unity.json']),
+                'bundle_sha256':digest(bundle),'bundle_bytes':len(bundle),
+                'unity_receipt_byte_commitments_verified':True,'cryptographic_attestation_verified':False})
+            require(len(v['receipt_negative_controls'])==6 and all(c['rejected'] is True for c in v['receipt_negative_controls']),
+                    'receipt_negative_controls_missing')
         result['verified']=v
         result['bundle_acceptance']=job_success
     if job_success:
