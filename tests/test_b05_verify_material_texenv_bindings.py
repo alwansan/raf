@@ -213,5 +213,105 @@ class B05TexEnvTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'Linked'):
                 exported_texenvs(Path(td))
 
+
+class DocumentScopedLocalTextureTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp=tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.project=Path(self.tmp.name)
+        self.assets=self.project/'Assets'
+        self.assets.mkdir()
+        self.t,self.s,self.a=fixture()
+        self.s[SRC]={'_MainTex':((0,101),(1.,1.,0.,0.))}
+        self.t['objects'][1]['export']={'file_id':2800000,'guid':MAT[1],'type':2}
+        self.t['objects'][1]['exportable']=True
+
+    def document(self,name='embedded.asset',guid=MAT[1],anchor=2100000,texture_class=28,
+                 texture_root='Texture2D',stripped=False,texture=True):
+        p=self.assets/name
+        body=f'%YAML 1.1\n--- !u!21 &{anchor}\nMaterial:\n  m_SavedProperties:\n    m_TexEnvs:\n    - _MainTex:\n        m_Texture: {{fileID: 2800000}}\n        m_Scale: {{x: 1, y: 1}}\n        m_Offset: {{x: 0, y: 0}}\n'
+        if texture:
+            body+=f'--- !u!{texture_class} &2800000'+(' stripped' if stripped else '')+f'\n{texture_root}:\n  m_Width: 2\n  m_Height: 2\n'
+        p.write_text(body)
+        Path(str(p)+'.meta').write_text(f'guid: {guid}\n')
+        return p
+
+    def audit(self):
+        docs={}
+        actual=exported_texenvs(self.project,private_texture_documents=docs)
+        r=compare(self.t,self.s,actual,private_texture_documents=docs)
+        self.assertNotIn(MAT[1],json.dumps(r))
+        self.assertNotIn('_MainTex',json.dumps(r))
+        return r
+
+    def test_real_yaml_document_scoped_local_texture(self):
+        self.document()
+        result=self.audit()
+        self.assertEqual(result['document_scoped_local_texture_targets_proven'],1)
+        self.assertEqual(result['exact_internal_targets_compared'],1)
+        self.assertTrue(result['all_texture_targets_proven'])
+        self.assertTrue(result['all_uv_transforms_verified'])
+
+    def test_equal_anchor_in_different_document_is_wrong_target(self):
+        self.document()
+        self.t['objects'][1]['export']['guid']='b'*32
+        result=self.audit()
+        self.assertEqual(result['local_texture_document_identity_mismatch'],1)
+        self.assertFalse(result['selected_texture_targets_proven'])
+
+    def test_same_triple_type0_is_not_identity(self):
+        self.document()
+        self.t['objects'][1]['export']={'file_id':2800000,'guid':'0'*32,'type':0}
+        result=self.audit()
+        self.assertEqual(result['equal_unscoped_type0_triples'],1)
+        self.assertEqual(result['exact_internal_targets_compared'],0)
+        self.assertEqual(result['unresolved_internal_targets'],1)
+        self.assertFalse(result['source_slots_faithful_with_resolved_scope'])
+
+    def test_missing_texture_document(self):
+        self.document(texture=False)
+        r=self.audit()
+        self.assertEqual(r['local_texture_document_unavailable'],1)
+        self.assertFalse(r['selected_texture_targets_proven'])
+
+    def test_stripped_reference_not_texture_document(self):
+        self.document(stripped=True)
+        self.assertEqual(self.audit()['local_texture_document_unavailable'],1)
+
+    def test_wrong_texture_class_even_same_anchor_and_guid(self):
+        self.document(texture_class=117,texture_root='Texture3D')
+        result=self.audit()
+        self.assertEqual(result['local_texture_document_class_mismatch'],1)
+        self.assertFalse(result['selected_texture_targets_proven'])
+
+    def test_wrong_root_not_texture_document(self):
+        self.document(texture_root='Material')
+        self.assertEqual(self.audit()['local_texture_document_unavailable'],1)
+
+    def test_exportability_must_be_proven(self):
+        self.document()
+        del self.t['objects'][1]['exportable']
+        self.assertEqual(self.audit()['local_texture_document_unavailable'],1)
+
+    def test_duplicate_guid_across_documents_rejected(self):
+        self.document()
+        self.document(name='alias.asset',anchor=2100001)
+        with self.assertRaisesRegex(ValueError,'Duplicate GUID across'):
+            self.audit()
+
+    def test_duplicate_anchor_rejected_even_nonmaterial(self):
+        p=self.document()
+        p.write_text(p.read_text()+'--- !u!28 &2800000\nTexture2D: {}\n')
+        with self.assertRaisesRegex(ValueError,'Duplicate anchor'):
+            self.audit()
+
+    def test_local_cannot_pass_without_actual_document_inventory(self):
+        self.document()
+        actual=exported_texenvs(self.project)
+        r=compare(self.t,self.s,actual)
+        self.assertEqual(r['local_texture_document_unavailable'],1)
+        self.assertFalse(r['selected_texture_targets_proven'])
+
+
 if __name__=='__main__':
     unittest.main()

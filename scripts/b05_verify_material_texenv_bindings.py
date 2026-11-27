@@ -18,6 +18,9 @@ from scripts.b44_verify_material_colors import (
 
 HEX32 = re.compile(r'[0-9a-fA-F]{32}\Z')
 TEXTURE_TYPES = frozenset((28, 84, 89, 117, 187))
+TEXTURE_ROOTS = {28:'Texture2D', 84:'RenderTexture', 89:'Cubemap', 117:'Texture3D', 187:'Texture2DArray'}
+DOCUMENT_HEADER = re.compile(r'--- !u!(\d+) &(-?\d+)(?: (stripped))?\s*\Z')
+ZERO_GUID = '0'*32
 # Independently immutable ZIP2 pin used for bounded authentic B05 acceptance.
 # Larger full 14-provider source mode still uses the separate W1/A12 inventory.
 B05_SMALL_OWNER_PINS = {
@@ -151,8 +154,14 @@ def original_texenvs(root: Path, owner_names=None):
     return result
 
 
-def exported_texenvs(project: Path):
-    """Parse actual exported Material YAML documents, including embedded ones."""
+def exported_texenvs(project: Path, *, private_texture_documents=None):
+    """Parse actual exported Material YAML, retaining optional document-scoped texture anchors.
+
+    Local fileIDs only have meaning within the containing serialized YAML file.
+    The outparam remains private; no paths, GUIDs or anchors enter receipts.
+    """
+    if private_texture_documents is not None and (type(private_texture_documents) is not dict or private_texture_documents):
+        raise ValueError('Private texture document outparam must be empty')
     import yaml
     # Unity YAML may carry duplicate keys at any nesting level. PyYAML's
     # default safe_load silently keeps the last value, so a conflicting
@@ -178,6 +187,8 @@ def exported_texenvs(project: Path):
     if any(path.is_symlink() for path in entries):
         raise ValueError('Linked export path is unsafe')
     found = {}
+    seen_guids = set()
+    texture_documents = {}
     for path in entries:
         if not path.is_file() or path.suffix not in ('.mat', '.asset', '.unity', '.prefab'):
             continue
@@ -194,9 +205,29 @@ def exported_texenvs(project: Path):
         if not meta.is_file() or meta.is_symlink():
             raise ValueError('Missing or linked Material metadata')
         guids = GUID.findall(meta.read_text(encoding='utf-8-sig'))
-        if len(guids) != 1 or guids[0].lower() == '0'*32:
+        if len(guids) != 1 or guids[0].lower() in {ZERO_GUID, *ENGINE}:
             raise ValueError('Invalid exported Material GUID')
+        file_guid = guids[0].lower()
+        if file_guid in seen_guids:
+            raise ValueError('Duplicate GUID across exported Material documents')
+        seen_guids.add(file_guid)
+        anchors = set()
         for i, header in enumerate(headers):
+            h = DOCUMENT_HEADER.fullmatch(header.group(0))
+            if h is None:
+                raise ValueError('Invalid serialized document header')
+            cls, anchor, stripped = int(h[1]), int(h[2]), h[3]
+            if anchor in anchors:
+                raise ValueError('Duplicate anchor within exported serialized document')
+            anchors.add(anchor)
+            if (private_texture_documents is not None and cls in TEXTURE_TYPES
+                    and anchor > 0 and not stripped):
+                # A stripped prefab reference is not a serialized texture.
+                # Match the root mapping as well as the Unity class header;
+                # do not decode or expose any texture payload.
+                body = text[header.end():headers[i+1].start() if i+1<len(headers) else len(text)]
+                if re.match(r'\s*'+TEXTURE_ROOTS[cls]+r':(?:[ \t]*(?:\{\})?[ \t]*(?:\r?\n|$))',body):
+                    texture_documents[(anchor,file_guid)] = cls
             match = MATERIAL_HEADER.fullmatch(header.group(0))
             if match is None:
                 continue
@@ -208,12 +239,14 @@ def exported_texenvs(project: Path):
             saved = mat.get('m_SavedProperties') if isinstance(mat, dict) else None
             if not isinstance(saved, dict) or 'm_TexEnvs' not in saved:
                 raise ValueError('Material texture data absent in export')
-            ptr = (int(match.group(1)), guids[0].lower())
+            ptr = (int(match.group(1)), file_guid)
             if ptr in found:
                 raise ValueError('Duplicated exported Material pointer')
             found[ptr] = normalize_texenvs(saved['m_TexEnvs'], exported=True)
     if not found:
         raise ValueError('No exported Material texture documents')
+    if private_texture_documents is not None:
+        private_texture_documents.update(texture_documents)
     return found
 
 
@@ -231,7 +264,13 @@ def _trace_export(row):
     return _export_pointer({'fileID':ptr['file_id'], 'guid':ptr['guid'], 'type':ptr['type']})
 
 
-def compare(trace: dict, original: dict, exported: dict, *, selected_owners=None):
+def compare(trace: dict, original: dict, exported: dict, *, selected_owners=None, private_texture_documents=None):
+    if private_texture_documents is not None and (type(private_texture_documents) is not dict or any(
+            type(k) is not tuple or len(k)!=2 or type(k[0]) is not int or k[0]<=0
+            or type(k[1]) is not str or not HEX32.fullmatch(k[1]) or k[1] in {ZERO_GUID, *ENGINE}
+            or type(v) is not int or v not in TEXTURE_TYPES for k,v in private_texture_documents.items())):
+        raise ValueError('Invalid private texture document scope')
+    local_documents = private_texture_documents or {}
     if (trace.get('schema_version') != 1 or not isinstance(trace.get('export_instance'), str)
             or not HEX32.fullmatch(trace['export_instance']) or not isinstance(trace.get('objects'), list)):
         raise ValueError('Missing same-instance export trace')
@@ -278,7 +317,7 @@ def compare(trace: dict, original: dict, exported: dict, *, selected_owners=None
             ptr = _trace_export(row)
             if src in mapped_textures or not ptr[0]:
                 raise ValueError('Unusable duplicate Texture object trace')
-            mapped_textures[src] = ptr
+            mapped_textures[src] = (ptr, row['class_id'], row.get('exportable'))
     covered = {s for s in traced_sources if s in original}
     exported_set = set(exported)
     material_set = set(mapped_materials)
@@ -292,6 +331,10 @@ def compare(trace: dict, original: dict, exported: dict, *, selected_owners=None
              missing_slots=0, extra_slots=0, null_to_bound=0, bound_to_null=0,
              exact_internal_targets_compared=0, wrong_internal_targets=0,
              unresolved_internal_targets=0, external_targets_not_proven=0,
+             document_scoped_local_texture_targets_proven=0,
+             unscoped_type0_trace_targets=0, equal_unscoped_type0_triples=0,
+             local_texture_document_unavailable=0, local_texture_document_class_mismatch=0,
+             local_texture_document_identity_mismatch=0,
              source_null_bindings=0, uv_transform_slots_compared=0,
              uv_transform_missing_or_unproven=0, uv_transform_value_mismatches=0)
     for dst, src in mapped_materials.items():
@@ -324,9 +367,40 @@ def compare(trace: dict, original: dict, exported: dict, *, selected_owners=None
                 if src_file > 0:
                     c['external_targets_not_proven'] += 1
                 else:
-                    expected = mapped_textures.get((src[0],src_path))
-                    if expected is None:
+                    traced = mapped_textures.get((src[0],src_path))
+                    if traced is None:
                         c['unresolved_internal_targets'] += 1
+                        continue
+                    expected, expected_class, exportable = traced
+                    if expected[2] == 0:
+                        # Equal unscoped type-0 triples are not target identity.
+                        # This includes non-exportable and engine GUID hints.
+                        c['unscoped_type0_trace_targets'] += 1
+                        c['equal_unscoped_type0_triples'] += expected == actual
+                        c['unresolved_internal_targets'] += 1
+                    elif expected[2] not in (2,3) or expected[1] in {ZERO_GUID,*ENGINE} or exportable is False:
+                        c['unresolved_internal_targets'] += 1
+                    elif actual[2] == 0:
+                        # Actual local {fileID: n} is relative to *this*
+                        # Material YAML file. Only a globally traced texture
+                        # object with that exact document GUID/anchor and an
+                        # actual nonstripped same-file texture header may pass.
+                        document_key = (actual[0], dst[1])
+                        if actual[1] != ZERO_GUID or expected[:2] != document_key:
+                            c['local_texture_document_identity_mismatch'] += 1
+                            c['wrong_internal_targets'] += 1
+                        elif document_key not in local_documents:
+                            c['local_texture_document_unavailable'] += 1
+                            c['unresolved_internal_targets'] += 1
+                        elif local_documents[document_key] != expected_class:
+                            c['local_texture_document_class_mismatch'] += 1
+                            c['wrong_internal_targets'] += 1
+                        elif exportable is not True:
+                            c['local_texture_document_unavailable'] += 1
+                            c['unresolved_internal_targets'] += 1
+                        else:
+                            c['exact_internal_targets_compared'] += 1
+                            c['document_scoped_local_texture_targets_proven'] += 1
                     else:
                         c['exact_internal_targets_compared'] += 1
                         c['wrong_internal_targets'] += expected != actual
@@ -356,9 +430,11 @@ def main(argv=None):
     if a.out.resolve().is_relative_to(a.project.resolve()):
         raise ValueError('Report must be outside export')
     owners = set(a.owner) if a.owner else None
+    documents = {}
+    actual = exported_texenvs(a.project, private_texture_documents=documents)
     result = compare(json.loads(a.trace.read_text(encoding='utf-8')),
                      original_texenvs(a.original, owner_names=owners),
-                     exported_texenvs(a.project), selected_owners=owners)
+                     actual, selected_owners=owners, private_texture_documents=documents)
     a.out.write_text(json.dumps(result,indent=2,sort_keys=True)+'\n',encoding='utf-8')
     print('RAFT_B05_MATERIAL_TEXENV_FIDELITY '+json.dumps(result,sort_keys=True))
     if not result['source_slots_faithful_with_resolved_scope']:

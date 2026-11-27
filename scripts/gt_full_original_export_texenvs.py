@@ -43,6 +43,10 @@ PUBLIC_ERRORS = {
     "Missing or linked Material metadata",
     "Duplicated exported Material pointer",
     "No exported Material texture documents",
+    "Duplicate GUID across exported Material documents",
+    "Duplicate anchor within exported serialized document",
+    "Invalid serialized document header",
+    "Invalid private texture document scope",
 }
 
 
@@ -114,7 +118,9 @@ def inspect(root:Path,manifest:Path,export_project:Path,private_trace:Path,
     trace=json.loads(private_trace.read_text(encoding="utf-8"))
     if phase is not None:
         phase("exported_material_yaml")
-    exported=(exported_parser or exported_texenvs)(export_project)
+    documents={}
+    exported=(exported_parser(export_project) if exported_parser is not None else
+              exported_texenvs(export_project,private_texture_documents=documents))
     if phase is not None:
         phase("source_export_pointer_join")
     # The same exporter instance also traces Unity built-in engine Material
@@ -123,7 +129,7 @@ def inspect(root:Path,manifest:Path,export_project:Path,private_trace:Path,
     # Selected-owner B05 remains fail-closed for every one of the 82 owners
     # while recording out-of-scope engine targets separately; never interpret
     # an engine-owned Material as missing game source content.
-    result=compare(trace,source,exported,selected_owners=set(OWNERS))
+    result=compare(trace,source,exported,selected_owners=set(OWNERS),private_texture_documents=documents)
     result.update({
         "source_scope": "all_82_authenticated_original_game_owners",
         "external_engine_materials_outside_source_scope": result["outside_scope_trace_materials"],
