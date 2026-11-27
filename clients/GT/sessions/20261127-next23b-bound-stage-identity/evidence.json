@@ -1,0 +1,157 @@
+{
+  "status": "PASS_ACTUAL_AUTHORED_SHARED_PROGRAM_SLOT_BINDING",
+  "starting_head": "45c2d1b5b25443790c998a4d02b7ad52c1e4af0c",
+  "preparation_commit": "c7c80148b9a050d12d35796e41987743aa0dc5ed",
+  "execution_head": "a9531145fa623fb1cfdf37a7db8972f8a189a13b",
+  "run": 46041454326,
+  "windows_job": 140649924973,
+  "linux_job": 140650067534,
+  "conclusion": "success",
+  "lint_run": 46041454248,
+  "lint_job": 140649925449,
+  "lint_conclusion": "success",
+  "source_blobs": {
+    "tools/gt_next23b_bound_stage_identity/audit.py": "440240abcc278bfcb5c4679b8bcdf5f608ade869",
+    "tools/gt_next23b_bound_stage_identity/author_windows.py": "7ed399e74a0d0433e70726e224ce95dc4c146192",
+    "tools/gt_next23b_bound_stage_identity/witness.py": "aebef10645f283a8336fa40860168f11ee4ac62f",
+    "tools/gt_next23b_translation_replay/author_windows.py": "1e48b87bc52281f306c57cebac5713c40ec92517",
+    "tools/gt_next23b_translation_replay/audit.py": "c790f11ff1c822c2859e72fe7c6919db358757cf",
+    "tools/gt_next23b_source_program_admission/audit.py": "aa221fa2b64bb6ab0ff97df474f7fb2384b01253",
+    "scripts/gt_original_921_all_variants.py": "3ab23da40c1cfd8e77af5721e4bdd3d72fe749a9",
+    "scripts/gt_original_921_shaderlab.py": "33d08da56c3e11fb18f4ce511e8bfc17279edf67",
+    "scripts/gt_original_921_keyword_routes.py": "1672c7e9ad6698c2703d57dc30c760f4bd4a41af",
+    "scripts/gt_original_921_cb_layout.py": "61f668c59055f453f05334438aef3a0b5665010b",
+    "scripts/gt_original_921_cb_hlsl.py": "975bb92f79598b2c3179ee4fa301da1e29160e1f",
+    "scripts/gt_original_921_resource_rebind.py": "53440b6e09f13c691bc4c5ade48cb27c87f6a027",
+    "scripts/gt_resource_register_contract.py": "04e0d8e6f89794247b6d4c0a8ebdd558b724f20a",
+    "scripts/a12_shader_parameter_decode.py": "c057b630bfcab8d093ac77601b6e20d91215b20c"
+  },
+  "actual_report": {
+    "actual_programs": 2,
+    "bound_stage_slots": 4,
+    "distinct_parameter_blobs": 3,
+    "legacy_producer_actual_report": {
+      "constant_buffer_bindings_from_variant": 2,
+      "constant_buffer_layouts_with_shared_members_table": 0,
+      "constant_buffer_named_32bit_lanes": 8,
+      "constant_buffer_named_member_occurrences": 2,
+      "constant_buffer_named_struct_occurrences": 0,
+      "distinct_original_parameter_blobs": 3,
+      "named_constant_buffer_candidate_stages_vulkan11_valid": 4,
+      "named_constant_buffer_reflected_offsets_verified": 2,
+      "named_original_numeric_members_in_distinct_parameter_blobs": 2,
+      "named_original_resource_entries_in_distinct_parameter_blobs": 4,
+      "original_variant_stages_with_cb_bindings": 2,
+      "original_variant_stages_with_parameter_records": 4,
+      "original_variant_stages_with_textures": 2,
+      "original_vertex_fragment_varying_records_matched": 0,
+      "original_vertex_input_semantics_restored": 2,
+      "resource_rebound_stages_verified_spirv_identical_excluding_debug": 4,
+      "translated_constant_buffer_declarations_mapped": 2,
+      "translated_sampler_declarations_mapped_to_source_texture": 2,
+      "translated_texture_declarations_mapped_to_source_name": 2,
+      "vertex_variants_with_verified_mesh_inputs": 2,
+      "vulkan_vertex_fragment_locations_matched": 0
+    },
+    "negative_controls": {
+      "bound_only_swap": "resource_bound_bytes_mismatch",
+      "forged_coordinates": "parameter_record_slot_or_payload_mismatch",
+      "paired_record_and_folder_swap": "parameter_record_slot_or_payload_mismatch",
+      "parameter_bytes": "parameter_blob_bytes_drift",
+      "route_packet": "route_packet_identity"
+    },
+    "old_composer_and_compiler_accepted_swap": true,
+    "original_2312_slots_verified": false,
+    "original_assets_read": false,
+    "production_install_allowed": false,
+    "reflected_baseline": [
+      {
+        "cb": "GT_CBufferA",
+        "member": "GT_TintA",
+        "sampler": "sampler_GT_TexA",
+        "texture": "_GT_TexA"
+      },
+      {
+        "cb": "GT_CBufferB",
+        "member": "GT_TintB",
+        "sampler": "sampler_GT_TexB",
+        "texture": "_GT_TexB"
+      }
+    ],
+    "reflected_swapped": [
+      {
+        "cb": "GT_CBufferB",
+        "member": "GT_TintB",
+        "sampler": "sampler_GT_TexB",
+        "texture": "_GT_TexB"
+      },
+      {
+        "cb": "GT_CBufferA",
+        "member": "GT_TintA",
+        "sampler": "sampler_GT_TexA",
+        "texture": "_GT_TexA"
+      }
+    ],
+    "same_fragment_dxbc_for_both_routes": true,
+    "semantic_equivalence_verified": false,
+    "source_routes": 2,
+    "status": "PASS_ACTUAL_AUTHORED_SHARED_PROGRAM_SLOT_BINDING",
+    "unity_bundle_or_gpu_proven": false
+  },
+  "artifacts": [
+    {
+      "id": 15220460871,
+      "name": "gt-next23b-bound-stage-identity",
+      "bytes": 41602,
+      "github_reported_digest": "sha256:1a4c4190eba814687ef3c1ebadbf0626bd5096d53a232e4ed79a716f28e48166"
+    },
+    {
+      "id": 15219179879,
+      "name": "gt-next23b-shared-program-dxbc",
+      "bytes": 1992,
+      "github_reported_digest": "sha256:6a7fc2a7eac74ca6269575d0196d50b26325a96a55a4f5f378e25f65d1b7ad69"
+    }
+  ],
+  "permanent_archive": {
+    "path": "clients/GT/sessions/20261127-next23b-bound-stage-identity/actual-authored-bound-stage-evidence.zip",
+    "blob": "7df162c5cb0054be3ea5c3194ac7fbeb5bc3a593",
+    "bytes": 24551,
+    "sha256": "8a11b0947d864a409876136ac666e96d4e1cf2afeb41d0878c6b75e9e0dbc8c4",
+    "entries": 48,
+    "uncompressed_bytes": 69373,
+    "log_chunks": 16,
+    "independent_size_sha256_all_member_crc_verified": true,
+    "actual_report_matches_log": true,
+    "translation_hashes_verified": 8,
+    "fixture_hashes_verified": 4,
+    "slot_record_and_bound_file_joins_verified": 4,
+    "actual_compiled_reflections_checked": 4,
+    "outer_artifact_independently_downloaded": false
+  },
+  "toolchain": {
+    "windows_dll_sha256": "e37a92636c21318c95894fa24d779db124f8923f4e77b2f35714275cf81a32f7",
+    "vkd3d_compiler": "1.2-15build1",
+    "libvkd3d_shader": "1.2-15build1",
+    "spirv_cross": "2021.01.15+1.3.239.0-1build1",
+    "spirv_tools": "2025.1~rc1-1~ubuntu0.24.04.2",
+    "glslang_tools": "15.1.0-2~ubuntu0.24.04.2",
+    "trusted_preapproved_toolchain_proven": false
+  },
+  "historical_material_census": {
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "dummy_shader_guid": 37,
+    "new_census": false
+  },
+  "original_source_authorization_verified": false,
+  "original_assets_read_or_acquired": false,
+  "original_2312_slot_gate_executed": false,
+  "original_semantic_equivalence_proven": false,
+  "original_compiled_unity_route_identity_proven": false,
+  "production_install_allowed": false,
+  "unity_or_device_run": false,
+  "xapk_started": false,
+  "next_action": "G3-NEXT23b-final-composed-route-and-compiled-module-admission: previous exact DXBC source-slot byte gate (46038739224), actual independent translation replay (46040018978), retained output marker witness (46037428567), and new actual shared-program route-specific slot/parameter/bound HLSL gate (46041454326) are complete only in stated authored scopes. Do not repeat them. Original lawful rights-holder authorization/ownership, immutable approved manifest/owner/object SHA, typed Shader48/PathID, same-object private source segments, and trusted toolchain still required. Upon authorized original handoff run 134-program replay and verify_next23b on all 2312 source slots. Then independently bind exact per-route paired CB layout merging, actual transformed vertex and fragment sources, normalized engine keyword/pass scope and compiled module to that trusted slot witness. Do not equate entrypoint counts, module validation, self-declared hashes, debug-stripped equality, or authored resource reflection with semantic equivalence or original module identity. Review actual final composer/Unity route binding for a genuinely distinct defect only; no repeated authored tests. If rights/source remain unavailable, prioritize genuinely productive distinct white-mesh/black-fire/other open workstream work and preserve explicit blocker. Require same-export typed Shader48-to-GUID/Material/Renderer protected census. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. A3, third Particle108, original FFT/kernel6, NEXT23b, ten runtime groups, G0-G6 remain open; no original acquisition without independent verification, production/native/device/APK/XAPK until integrated closure. CL/lab read-only, BLACK/animation excluded.",
+  "session": "clients/GT/sessions/20261127-next23b-bound-stage-identity/README_AR.md"
+}
