@@ -1,0 +1,127 @@
+name: GT Particle108 verified ordinary texture preservation (authored only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-particle108-verified-texture-preservation.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authored-preservation:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      DOTNET_PROCESSOR_COUNT: '2'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tools/gt_authored_mesh_binary/witness.py
+            /tools/gt_authored_mesh_actual_export/witness.py
+            /tools/gt_authored_serialized_renderer_route/witness.py
+            /tools/gt_authored_external_pptr_route/witness.py
+            /tools/gt_authored_particle108_collection_cause/
+            /tools/gt_particle108_verified_texture_preservation/
+            /android-port/Experiments/ExportLineage/
+            /clients/GT/sessions/20261127-particle108-nonexportable-cause/actual-evidence-46033714513.zip
+      - name: Verify pinned sources and reuse retained exact authored binary
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git hash-object tools/gt_particle108_verified_texture_preservation/VerifiedTexturePreservationExporter.cs)" = 3d6de696ee1f6214ef03e479f93c9fbfb66efbb5
+          test "$(git hash-object tools/gt_particle108_verified_texture_preservation/RaftGTCollectionWitness.cs)" = e21a6fc62132c2a0733ac9ecceb5f19cfc7115fe
+          test "$(git hash-object tools/gt_particle108_verified_texture_preservation/witness.py)" = 7dc7ce8370f91c9b2a2d1ad08ce822bb812bef16
+          test "$(git hash-object tools/gt_authored_particle108_collection_cause/witness.py)" = 7c5e19c0c8b55a54a05d8196258c8c171a4047bb
+          test "$(git hash-object tools/gt_authored_particle108_collection_cause/RaftGTCollectionWitness.cs)" = 0f637d58b8b89de518ecb0360e93762e3b241f26
+          test "$(git hash-object tools/gt_authored_mesh_binary/witness.py)" = 18c23415a29cf537f7341517729e2ccb7de8bad3
+          test "$(git hash-object tools/gt_authored_serialized_renderer_route/witness.py)" = 24835f05575b40eb91fbb5bd635e1fcf0bb028db
+          test "$(git hash-object tools/gt_authored_external_pptr_route/witness.py)" = 83b463886c052376f9d439707447c3c1991ad8be
+          test "$(git hash-object tools/gt_authored_mesh_actual_export/witness.py)" = 49a45fdc73a1846cab1556ab39c4ce2d73d3a374
+          test "$(git hash-object android-port/Experiments/ExportLineage/ExportLineage.csproj)" = 7e3fd92ce4f1b093780266c619c46b7871513f66
+          test "$(git hash-object scripts/b05_verify_material_texenv_bindings.py)" = 730550c9851e3ce974ee97037c489eba1e7347d5
+          python3 -m venv "$RUNNER_TEMP/gt-preservation-python"
+          py="$RUNNER_TEMP/gt-preservation-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3 Pillow==11.3.0
+          PYTHONPATH="$PWD" "$py" -B tools/gt_particle108_verified_texture_preservation/witness.py prepare --archive clients/GT/sessions/20261127-particle108-nonexportable-cause/actual-evidence-46033714513.zip --out evidence
+          "$py" -m pip freeze > evidence/python-tools.txt
+          git rev-parse HEAD > evidence/tested-head.txt
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Checkout pinned GPL public exporter (no game source)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: Source
+      - name: Compile disposable selective exporter override
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git -C ar-host rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          git -C ar-host rev-parse HEAD > evidence/public-exporter-head.txt
+          test "$(git -C ar-host hash-object Source/AssetRipper.Export.UnityProjects/EngineAssets/EngineAssetsExporter.cs)" = 74181029996848ae223cc5f8019b6675d1d23170
+          test "$(git -C ar-host hash-object Source/AssetRipper.Export.UnityProjects/Textures/TextureAssetExporter.cs)" = eb8ebe66d42b328dd751244f6e58e20680dd5401
+          py="$RUNNER_TEMP/gt-preservation-python/bin/python"
+          PYTHONPATH="$PWD" "$py" -B tools/gt_particle108_verified_texture_preservation/witness.py stage --root "$PWD"
+          sha256sum ar-host/Source/AssetRipper.Export.UnityProjects/{VerifiedTexturePreservationExporter,RaftGTCollectionWitness,ProjectExporter}.cs > evidence/host-sha256.txt
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/gt-preservation-host" > evidence/build.log 2>&1 || { tail -100 evidence/build.log; exit 1; }
+      - name: Actual typed load, Process and native texture export
+        run: |
+          set -euo pipefail
+          timeout 120s dotnet "$RUNNER_TEMP/gt-preservation-host/ExportLineage.dll" "$PWD/evidence/source" "$RUNNER_TEMP/gt-preservation-output" "$PWD/evidence" 2>&1 | tee evidence/export.log
+      - name: Independently verify all four Material pointers and RGBA images
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-preservation-python/bin/python"
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil, os
+          source=Path(os.environ["RUNNER_TEMP"])/"gt-preservation-output/ExportedProject/Assets"
+          target=Path("evidence/actual-assets")
+          for p in source.rglob("*"):
+              if p.is_file() and p.suffix in {".mat",".png",".meta"}:
+                  dst=target/p.relative_to(source);dst.parent.mkdir(parents=True,exist_ok=True)
+                  shutil.copyfile(p,dst)
+          PY
+          PYTHONPATH="$PWD" "$py" -B tools/gt_particle108_verified_texture_preservation/witness.py verify --out evidence --project "$RUNNER_TEMP/gt-preservation-output/ExportedProject"
+      - name: Preserve bounded authored results
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import base64,hashlib,zipfile
+          from pathlib import Path
+          root=Path("evidence");root.mkdir(exist_ok=True)
+          files=[p for p in sorted(root.rglob("*")) if p.is_file() and p.name!="build.log"]
+          assert len(files)<=100 and sum(p.stat().st_size for p in files)<=1024*1024
+          with zipfile.ZipFile(root/"permanent-authored-evidence.zip","w",compression=zipfile.ZIP_DEFLATED) as z:
+              for p in files:
+                  assert not p.is_symlink()
+                  z.write(p,p.relative_to(root))
+          data=(root/"permanent-authored-evidence.zip").read_bytes()
+          assert len(data)<=128*1024
+          print("GT_PERMANENT_EVIDENCE_SHA",len(data),hashlib.sha256(data).hexdigest())
+          enc=base64.b64encode(data).decode("ascii")
+          for i in range(0,len(enc),2048): print("GT_PERMANENT_EVIDENCE_B64",i//2048,enc[i:i+2048])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gt-verified-texture-preservation
+          path: evidence/
+          retention-days: 14
+          if-no-files-found: warn
