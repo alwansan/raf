@@ -1369,7 +1369,7 @@ jobs:
           test ! -e .gt-zip2
           python3 -m venv "$RUNNER_TEMP/gt-renderer-submesh-routes"
           "$RUNNER_TEMP/gt-renderer-submesh-routes/bin/python" -m pip install --disable-pip-version-check Pillow==11.3.0 PyYAML==6.0.3
-      - name: Verify ordered source export routes and regression controls
+      - name: Verify independent source fixtures and ordered renderer route regressions
         shell: bash
         run: |
           set -euo pipefail
