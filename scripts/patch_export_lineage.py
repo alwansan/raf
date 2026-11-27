@@ -61,6 +61,26 @@ def add_mesh_lineage(raw):
     return source.replace(w1.METHOD_ANCHOR, MESH_CAPTURE + w1.METHOD_ANCHOR).encode('utf-8')
 
 
+def add_renderer_lineage(raw):
+    """Compose only on the already pinned mesh capture, share its instance."""
+    source=add_mesh_lineage(raw).decode("utf-8")
+    anchor='            CaptureMeshes(container, collections, meshPath, instance);'
+    if source.count(anchor)!=1 or source.count(w1.METHOD_ANCHOR)!=1:
+        raise ValueError('Ambiguous renderer trace composition')
+    capture=MESH_CAPTURE.replace("CaptureMeshes","CaptureRendererComponents").replace('"meshes"','"components"').replace(
+        'asset.ClassID != 43','asset.ClassID is not (1 or 23 or 33 or 137)').replace(
+        'Identity(json, "source", asset);','json.WriteNumber("class_id", asset.ClassID);\n                Identity(json, "source", asset);')
+    return source.replace(anchor,anchor+'''
+        string? rendererPath = Environment.GetEnvironmentVariable("RAFT_PRIVATE_EXPORT_RENDERER_LINEAGE");
+        if (!string.IsNullOrEmpty(rendererPath))
+        {
+            if (string.IsNullOrEmpty(meshPath))
+                throw new InvalidOperationException("Renderer lineage requires mesh lineage");
+            CaptureRendererComponents(container, collections, rendererPath, instance);
+        }
+''').replace(w1.METHOD_ANCHOR,capture+w1.METHOD_ANCHOR).encode("utf-8")
+
+
 def repair_yaml_hex(raw):
     if hashlib.sha256(raw).hexdigest() != YAML_HEX_PIN:
         raise ValueError('Pinned YAML hex writer changed')
@@ -89,7 +109,9 @@ def add_compute_lineage(raw):
                     !(includeComputeObjects && asset.ClassID == 72) &&''').encode('utf-8')
 
 
-def patch(root, helper, *, mesh_lineage=False, native_texture_arrays=False, compute_lineage=False):
+def patch(root, helper, *, mesh_lineage=False, native_texture_arrays=False, compute_lineage=False, renderer_lineage=False):
+    if renderer_lineage and not mesh_lineage:
+        raise ValueError('Renderer lineage requires mesh lineage')
     directory = root / 'Source/AssetRipper.Export.UnityProjects'
     target = directory / 'ProjectExporter.cs'
     raw = target.read_bytes()
@@ -114,7 +136,9 @@ def patch(root, helper, *, mesh_lineage=False, native_texture_arrays=False, comp
     if destination.exists():
         raise FileExistsError('Trace source already exists')
     helper_raw = helper.read_bytes()
-    if mesh_lineage:
+    if renderer_lineage:
+        helper_raw = add_renderer_lineage(helper_raw)
+    elif mesh_lineage:
         helper_raw = add_mesh_lineage(helper_raw)
     if compute_lineage:
         helper_raw = add_compute_lineage(helper_raw)
@@ -138,8 +162,10 @@ if __name__ == '__main__':
     p.add_argument('--tool-source', type=Path, required=True)
     p.add_argument('--helper', type=Path, required=True)
     p.add_argument('--mesh-lineage', action='store_true')
+    p.add_argument('--renderer-lineage', action='store_true')
     p.add_argument('--native-texture-arrays', action='store_true')
     p.add_argument('--compute-lineage', action='store_true')
     a = p.parse_args()
     patch(a.tool_source, a.helper, mesh_lineage=a.mesh_lineage,
-          native_texture_arrays=a.native_texture_arrays, compute_lineage=a.compute_lineage)
+          native_texture_arrays=a.native_texture_arrays, compute_lineage=a.compute_lineage,
+          renderer_lineage=a.renderer_lineage)
