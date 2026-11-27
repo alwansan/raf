@@ -5430,17 +5430,22 @@
     "evidence": "clients/GT/sessions/20261127-dxt5nm-unity-v13/actual-pass-45970415390.json"
   },
   "v14_dxt5nm_texel_policy_checkpoint": {
-    "status": "V14_AUTHORED_ALPHA_POLICY_CI_IN_PROGRESS",
+    "status": "V14_EXPORT_AND_POLICY_STAGE_SUCCESS_UNITY_PENDING",
     "starting_head": "0571c5844f2cef31e07e813bdf30c374e0c90023",
     "prior_v13_pass_head": "0be8ee0555f381e8e7de4882d96937533300ad26",
     "activation_head": "db5952b6fae2d6878214c2d9bf748bc63dd14ff8",
     "run": {
       "id": 45972362899,
+      "job": 140415627749,
       "head": "db5952b6fae2d6878214c2d9bf748bc63dd14ff8",
       "status": "in_progress",
+      "regression_step": "success",
+      "actual_export_step": "success",
+      "stage_step": "success",
+      "unity_activation_preflight": "success",
       "compatibility_guard": {
         "id": 45972362780,
-        "status": "in_progress"
+        "conclusion": "success"
       }
     },
     "planned_regressions": 278,
@@ -5455,6 +5460,9 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-texel-policy-v14/README_AR.md",
-    "next": "G1-G2-imported-DXT5nm-alpha-transparency-unfiltered-texel-policy-same-route (V14): inspect exact run 45972362899 and independently verify actual unfiltered texel, metadata restoration, per-phase route and alpha-zero differences; do not treat filtered V13 observation as raw source parity."
+    "next": "G1-G2-imported-DXT5nm-alpha-transparency-unfiltered-texel-policy-same-route (V14): inspect exact run 45972362899 and independently verify actual unfiltered texel, metadata restoration, per-phase route and alpha-zero differences; do not treat filtered V13 observation as raw source parity.",
+    "source_regressions": 278,
+    "actual_v11_v12_controls": 37,
+    "unique_authored_pixels_exact": 70
   }
 }
