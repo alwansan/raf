@@ -50,8 +50,14 @@ def proof(tree, *, exported=False):
     lengths=tuple(4*max(1,w>>n)*max(1,h>>n) for n in range(mips))
     need(0<size<=MAX_BYTES and sum(lengths)==size,"texture_mip_size_mismatch")
     stream=tree.get("m_StreamData")
-    need(type(stream) is dict and set(stream)=={"path","offset","size"},
+    need(type(stream) is dict and {"path","offset","size"}<=set(stream),
          "missing_texture_stream_descriptor")
+    # Native YAML may include the generated StreamingInfo serializedVersion.
+    # Do not infer missing fields or ignore unrecognized stream metadata.
+    extra=set(stream)-{"path","offset","size"}
+    need(not extra or (exported and extra=={"serializedVersion"} and
+         type(stream["serializedVersion"]) is int and stream["serializedVersion"] in (1,2)),
+         "unsupported_texture_stream_descriptor_version")
     # Unity YAML empty strings may be parsed as null; source must be explicit.
     path=stream["path"]
     need((path=="" or (exported and path is None)) and

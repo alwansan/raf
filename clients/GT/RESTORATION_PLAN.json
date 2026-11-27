@@ -1306,7 +1306,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "22b32a3c8f7da45dd6062d4ec8c451d01273c3bc",
+    "reviewed_remote_head": "58baf1f402f85aded299228ec31859ffb343007c",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -1563,8 +1563,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-texture-payload-same-route-binding",
-      "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
-      "next": "Inspect run 45951495247 completion; retain actual receipt or fix witness. No new Unity raster."
+      "status": "PYTHON_PASS_ACTUAL_EXPORT_SCHEMA_REJECTED_FIX_PENDING",
+      "next": "Retry public native export with bounded serializedVersion handling and retained actual schema receipt."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -2990,7 +2990,7 @@
       }
     },
     "latest_texture_payload_route_binding": {
-      "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
+      "status": "PYTHON_PASS_ACTUAL_EXPORT_SCHEMA_REJECTED_FIX_PENDING",
       "base": "7d476f8b5e0862509ab992b3cb5f82a9659be1d6",
       "gate": "G1-G2-texture-payload-same-route-binding",
       "session": "clients/GT/sessions/20261127-texture-payload-route-binding/README_AR.md",
@@ -3002,7 +3002,7 @@
       "white_or_fire_fixed": false,
       "Unity_render_executed": false,
       "XAPK": false,
-      "next": "Inspect run 45951495247 completion; retain actual receipt or fix witness. No new Unity raster.",
+      "next": "Retry public native export with bounded serializedVersion handling and retained actual schema receipt.",
       "candidate_commit": "5dbe28cb4c87c476eeeb03a5f936e4e94abfdc9e",
       "activation_commit": "22b32a3c8f7da45dd6062d4ec8c451d01273c3bc",
       "run_id": 45951495247,
@@ -3010,7 +3010,34 @@
       "guard_run_id": 45951495211,
       "guard_conclusion": "success",
       "regression_step": "success",
-      "observed_run_status": "in_progress"
+      "observed_run_status": "completed",
+      "initial_failure": {
+        "status": "FAIL_AUTHORED_NATIVE_TEXTURE_STREAM_SCHEMA",
+        "run_id": 45951495247,
+        "job_id": 140348154344,
+        "head": "22b32a3c8f7da45dd6062d4ec8c451d01273c3bc",
+        "guard_run_id": 45951495211,
+        "guard_conclusion": "success",
+        "artifact_id": 15176817413,
+        "archive": "clients/GT/sessions/20261127-texture-payload-route-binding/failed-schema-45951495247.zip",
+        "archive_bytes": 5090,
+        "archive_sha256": "d6e06c279a0f10bd8df359a545096bd370f80e54b1b88f5825785f0abcc37545",
+        "archive_git_blob": "0cf2a80263ae2500545c23d242d80c5d00c475d2",
+        "archive_crc_sha_size_verified_locally": true,
+        "total_regression_tests": 128,
+        "new_texture_tests": 21,
+        "compiled_public_exporter": true,
+        "actual_authored_export_executed": true,
+        "oracle_pass": false,
+        "reason": "baseline_not_preserved: missing_texture_stream_descriptor for 2 renderers; actual exported nested stream schema not retained by initial job. Candidate fix permits only explicit path/offset/size plus recognized native serializedVersion 1 or 2; new authored-only diagnostic will preserve actual schema even on oracle failure. Not assuming missing field empty.",
+        "original_assets_read": false,
+        "XAPK": false,
+        "compiled_files": {
+          "AssetRipper.Export.UnityProjects.dll": "9d8abffd2bfc2e5101a6f8c55cc170cbf00b95c80fb8dc9b1517379582359fcc",
+          "RaftAuthoredSceneRouteWitness.cs": "71500cfd14d1498c0d4ecd11723680c77dfab18f23cd1df75329dea137eba40b",
+          "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
+        }
+      }
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."

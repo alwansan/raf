@@ -123,6 +123,22 @@ class TextureRoutes(unittest.TestCase):
         self.actual[0]["m_StreamData"]={"path":"a.resS","offset":0,"size":20}
         self.reject("unsupported_texture_stream_payload")
 
+    def test_native_stream_version_with_explicit_empty_fields(self):
+        self.actual[0]["m_StreamData"]["serializedVersion"]=2
+        self.assertTrue(self.check()["selected_nonnull_same_route_texture_payloads_verified"])
+
+    def test_unrecognized_native_stream_version(self):
+        self.actual[0]["m_StreamData"]["serializedVersion"]=999
+        self.reject("unsupported_texture_stream_descriptor_version")
+
+    def test_extra_native_stream_field(self):
+        self.actual[0]["m_StreamData"]["unknown"]=0
+        self.reject("unsupported_texture_stream_descriptor_version")
+
+    def test_version_does_not_allow_missing_stream_path(self):
+        self.actual[0]["m_StreamData"]={"serializedVersion":2,"offset":0,"size":0}
+        self.reject("missing_texture_stream_descriptor")
+
     def test_stripped_mips(self):
         self.actual[0]["m_MipsStripped"]=1
         self.reject("unsupported_stripped_texture_mips")

@@ -75,6 +75,25 @@ def audit(root,out):
     # Native exporter produced all classes, so no imported-image fallback.
     need(sum(cls==28 for cls,_ in docs.values())==2 and sum(cls==48 for cls,_ in docs.values())==2,
          "actual_native_shader_texture_documents_required")
+    # Retain the actual generated (not original) nested stream schema even
+    # on an oracle failure. Never synthesize absent stream values.
+    schemas=[]
+    for key,(cls,_) in sorted(objects.items()):
+        if cls!=28:continue
+        ptr=mapping[key][1]
+        captured=[]
+        def capture(body):
+            tree=gate.yaml_tree(body.partition("\n")[2],28)
+            captured.append({"stream_descriptor":tree.get("m_StreamData"),
+                             "descriptor_fields_present":all(k in tree for k in texture_payload.FIELDS),
+                             "image_data_count":tree.get("image data"),
+                             "payload_hex_characters":len(tree.get("_typelessdata") or "")})
+            return body
+        scene_row(files[ptr[0]][0].read_text(),ptr[1],28,capture)
+        need(len(captured)==1,"authored_texture_schema_capture")
+        schemas.extend(captured)
+    (out.parent/"texture-schema.json").write_text(json.dumps(
+        {"authored_only":True,"native_texture_schemas":schemas},sort_keys=True,indent=2)+"\n")
     baseline=gate.compare(objects,externals,mapping,files,docs,vertex_payloads=proofs,material_values=True,material_keywords=True,texture_payloads=True)
     need(baseline["selected_renderer_routes_preserved"],"baseline_not_preserved:"+json.dumps(baseline["reason_counts"],sort_keys=True))
     need(baseline["selected_same_route_vertex_and_UV_bytes_verified"],"authored_payload_not_bound")
