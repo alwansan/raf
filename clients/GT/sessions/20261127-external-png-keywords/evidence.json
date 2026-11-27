@@ -1,0 +1,201 @@
+{
+  "status": "PASS_ACTUAL_EXTERNAL_PPTR_PNG_KEYWORD_STATE",
+  "starting_head": "33f720372354482f6fbd2919edd640ce6c16a466",
+  "preparation_commit": "4f760d069812fc6377fafcf90fbf735ac0e21679",
+  "first_activation_head": "04c9f329a476067a57672adc1a5a45149dd64196",
+  "first_failure": {
+    "run_id": 46027481849,
+    "job_id": 140602506858,
+    "guard_run_id": 46027481806,
+    "guard_conclusion": "success",
+    "error": "ModuleNotFoundError: No module named 'test_gt_texture_route_payload' (omitted sparse checkout test helper)",
+    "prior_tests_passed": 120,
+    "new_export_performed": false,
+    "retained_replay_pass": true,
+    "artifact_id": 15212319874,
+    "artifact_bytes": 23435,
+    "artifact_sha256": "a2a17ba68b542c3236a4919297a74024aaf8cf54f622ba1b110723d0e50b5ccd",
+    "artifact_members": 20,
+    "permanent_archive": "clients/GT/sessions/20261127-external-png-keywords/first-failure-46027481849.zip",
+    "permanent_archive_bytes": 12496,
+    "permanent_archive_members": 19,
+    "permanent_archive_sha256": "ab2fd9f0afb5cfbe0cb6e1d08c7ca4da4c2f3c352195f8f5db825ae722df726a",
+    "permanent_archive_git_blob": "48d04578d0011edbd0c95f39ac71dc4f3ff96735",
+    "local_size_sha_crc_and_inner_members_verified": true
+  },
+  "tested_head": "c57ecbbc126421f9c99242a0e6719ca9a4332db2",
+  "run_id": 46027617181,
+  "job_id": 140602974476,
+  "guard_run_id": 46027617216,
+  "guard_job_id": 140602974167,
+  "conclusion": "success",
+  "artifact_id": 15211704556,
+  "artifact_bytes": 74300,
+  "artifact_sha256": "5d4871ff6a78bb3014346b2393b6a67e15b17ad336aa4cece9b0a8f1f43c0400",
+  "artifact_members": 62,
+  "permanent_archive": "clients/GT/sessions/20261127-external-png-keywords/actual-evidence-46027617181.zip",
+  "permanent_archive_bytes": 40589,
+  "permanent_archive_sha256": "a5af1ef478e6ba00d24165ac78a3cf5064cf6ca7275dbd6caedf0a42ebe5e818",
+  "permanent_archive_git_blob": "991d186a01a2e2143fb7ab42cfaa174ec508da14",
+  "permanent_archive_members": 60,
+  "local_size_sha_crc_inner_member_bytes_verified": true,
+  "local_owner_object_payload_hashes_verified": 16,
+  "local_export_file_hashes_verified": 20,
+  "local_control_bytes_verified": 8,
+  "local_png_actual_pixels_independently_verified": 2,
+  "local_same_instance_ref_traces_verified": 14,
+  "public_exporter_pin": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+  "unitypy": "1.23.0",
+  "unity_version": "2021.3.0f1",
+  "serialized_file_version": 22,
+  "retained_replay": {
+    "run_id": 46018334469,
+    "permanent_archive_sha256": "7a09666cddddb6ede58ab32bbd616fa6a2df248bb52627d4310a6b2f86e2a7e4",
+    "archive_members": 50,
+    "source_and_emitted_pins_verified": true,
+    "new_export_performed": false,
+    "v4_both_decoders_pass": true,
+    "v8_both_decoders_pass": true,
+    "keyword_entries": 0,
+    "unique_textures": 2,
+    "unique_pixels": 8,
+    "unique_RGBA_channels": 32,
+    "texture_slots_per_backend": 4,
+    "pixels_per_route_per_backend": 16,
+    "RGBA_channels_per_route_per_backend": 64
+  },
+  "owners": [
+    {
+      "name": "sharedassets30.assets",
+      "bytes": 704,
+      "sha256": "97a7a19e6808e1f1eaf79637407236b9c884dfd55ccfa64e844df95272f3b477"
+    },
+    {
+      "name": "sharedassets31.assets",
+      "bytes": 704,
+      "sha256": "5cd2ad70a54faa974764c387eb7c02c90841e61464b2b6c16818179cb90742d0"
+    },
+    {
+      "name": "sharedassets32.assets",
+      "bytes": 1452,
+      "sha256": "feb83db18a655b5eb8562a470ee39dcf6dd253b1fa281c1741e60fa9ea42c7d5"
+    },
+    {
+      "name": "sharedassets33.assets",
+      "bytes": 1452,
+      "sha256": "2dbe8964cc5fbb9b04e16c27603ccc4d9c36e0f0700af9e13cbd43b344b09f44"
+    }
+  ],
+  "owner_bytes_total": 4312,
+  "raw_parser_objects": 16,
+  "typed_serialized_objects": 16,
+  "typed_nonnull_external_pptrs": 10,
+  "loaded_reference_trace_matches": 14,
+  "actual_export_assets": 10,
+  "actual_export_asset_meta_files": 20,
+  "actual_prefabs": 2,
+  "unique_renderers": 2,
+  "unique_submesh_material_routes": 4,
+  "unique_textures": 2,
+  "texture_dimensions": [
+    3,
+    2
+  ],
+  "source_mip_count": 2,
+  "source_texture_payload_bytes_per_texture": 28,
+  "unique_top_mip_pixels": 12,
+  "unique_top_mip_RGBA_channels": 48,
+  "alpha_values": [
+    0,
+    1,
+    64,
+    127,
+    254,
+    255
+  ],
+  "unique_material_keyword_pass_entries": 8,
+  "unique_material_valid_keyword_entries": 4,
+  "unique_material_invalid_keyword_entries": 2,
+  "unique_material_disabled_pass_entries": 2,
+  "decoder_backends": [
+    "compiled",
+    "python"
+  ],
+  "v4_nonempty_pass_both": true,
+  "v8_pass_both": true,
+  "texture_slots_per_backend": 4,
+  "pixels_per_route_per_backend": 24,
+  "RGBA_channels_per_route_per_backend": 96,
+  "valid_keyword_entries_per_backend": 8,
+  "invalid_keyword_entries_per_backend": 4,
+  "disabled_pass_entries_per_backend": 4,
+  "importer_mip_bias_unset_slots": 0,
+  "negative_controls_rejected": 7,
+  "negative_controls": [
+    {
+      "name": "source_binary_keyword_bucket_swap",
+      "reason": "material_keyword_bucket_drift",
+      "affected_renderers": 2
+    },
+    {
+      "name": "source_binary_invalid_keyword_removed",
+      "reason": "unexpected_material_invalid_keyword",
+      "affected_renderers": 2
+    },
+    {
+      "name": "source_binary_disabled_pass_removed",
+      "reason": "unexpected_material_disabled_pass",
+      "affected_renderers": 2
+    },
+    {
+      "name": "source_binary_alpha_only",
+      "reason": "same_route_png_ALPHA_ONLY_DRIFT",
+      "affected_renderers": 2
+    },
+    {
+      "name": "source_binary_RGB_only",
+      "reason": "same_route_png_RGB_DRIFT",
+      "affected_renderers": 2
+    },
+    {
+      "name": "actual_export_vertical_flip",
+      "reason": "same_route_png_VERTICAL_FLIP",
+      "affected_renderers": 2
+    },
+    {
+      "name": "actual_export_wrong_owner_pixels",
+      "reason": "same_route_png_RGB_DRIFT",
+      "affected_renderers": 2
+    }
+  ],
+  "lower_mip_only_scope_acceptance": 1,
+  "prior_regressions_pass": 154,
+  "regression_counts": {
+    "original_mesh_source_storage": 9,
+    "mesh_document_stream_identity": 8,
+    "mesh_yaml_unique_mapping": 7,
+    "compare_exported_mesh_geometry": 6,
+    "verify_original_mesh_export": 7,
+    "mesh_vertex_payload": 15,
+    "renderer_submesh_routes": 21,
+    "material_route_values": 22,
+    "material_route_keyword_state": 25,
+    "imported_png_route_pixels": 34
+  },
+  "shader_scope": "two diagnostic empty authored Shader YAML identities; only nonempty serialized Material keyword/pass-state lists preserved, not active shader variants",
+  "texture_scope": "RGBA32 imported PNG top mip only, true alpha and transparent RGB; no lower-mip parity, no full V9 importer mapping or GPU",
+  "authored_yaml_used_as_export": false,
+  "original_assets_read": false,
+  "original_renderer_routes_verified": false,
+  "original_runtime_verified": false,
+  "unity_import_verified": false,
+  "device_verified": false,
+  "XAPK_requested": false,
+  "production_consumer_changed": false,
+  "gate_closures": [],
+  "historical_non_dummy": 688,
+  "historical_total": 786,
+  "historical_dummy": 98,
+  "historical_dummy_guids": 37,
+  "next_action": "G1-G2-authored-serialized-external-streamed-texture-PNG-importer-state: use the retained four-owner actual nonempty V4/V8 archive first, without rebuilding, to exercise unchanged V9 serialized importer mapping and record any exact unsupported field or drift. If useful distinct evidence is still missing, author a bounded real external .resS texture provider with two authenticated ranges, nontrivial source sampler, color-space and mip state, compare actual pinned AssetRipper Load->Process->Export PNG and .meta to real UnityPy source through same-instance V8/V9 (and preserve V4); reject wrong provider range/hash, alpha-only drift, and importer changes. Reuse existing public exporter harness; no production changes, no redundant build or invented original GUIDs. No lower-mip or GPU claims from PNG, no original runtime/variant inference. Prioritize actionable original-source provenance/authorization, white mesh/Particle108 or FFT blocker when available; A3 and third Particle108 comparison remain blocked, original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 open, 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. No unauthorized original acquisition, secrets/LFS, CL/lab writes, BLACK, animation, production, Unity/device/APK/XAPK/native request/installer until owner gates met. Preserve Ali pinned reference."
+}
