@@ -1,0 +1,106 @@
+name: GT folder-aware Material Texture registry (NO original assets)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-folder-meta-texture-registry.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  folder-registry:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only source and authored fixtures
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/verify_exported_material_texture_links.py
+            /tests/test_verify_exported_material_texture_links.py
+            /tests/test_gt_folder_meta_texture_registry.py
+            /.github/workflows/raft-gt-folder-meta-texture-registry.yml
+      - name: Checkout immutable pre-fix source only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 41fc4f8ea76017d500b8f0302a2195bd303707f7
+          path: baseline-source
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/verify_exported_material_texture_links.py
+      - name: Reproduce exact false rejections and false acceptances
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test ! -e baseline-source/Raft
+          test ! -e baseline-source/.gt-zip2
+          mkdir folder-registry-evidence baseline-source/tests
+          cp tests/test_gt_folder_meta_texture_registry.py baseline-source/tests/
+          test "$(git -C baseline-source rev-parse HEAD)" = 41fc4f8ea76017d500b8f0302a2195bd303707f7
+          test "$(git hash-object baseline-source/scripts/verify_exported_material_texture_links.py)" = 0f357e74543645d0570871c159cc55c016dff428
+          cd baseline-source
+          python3 -B - <<'PY' 2>&1 | tee ../folder-registry-evidence/baseline.log
+          import json,sys,unittest
+          from pathlib import Path
+          sys.path.insert(0,"tests")
+          from test_gt_folder_meta_texture_registry import FolderRegistry
+          names=["test_valid_nested_folders_preserve_real_texture_target","test_valid_folder_with_texture_suffix_not_referenced","test_folder_bom_crlf_metadata","test_folder_marker_on_regular_texture_file","test_duplicate_malformed_root_guid_on_file","test_placeholder_identity_on_file_rejected"]
+          result=unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(FolderRegistry(n) for n in names))
+          errors={t._testMethodName:trace for t,trace in result.errors}
+          failures={t._testMethodName:trace for t,trace in result.failures}
+          assert result.testsRun==6 and not result.skipped
+          assert set(errors)==set(names[:3]) and all("orphan_asset_meta" in x for x in errors.values())
+          assert set(failures)==set(names[3:]) and all("GuardError not raised" in x for x in failures.values())
+          report={"base":"41fc4f8ea76017d500b8f0302a2195bd303707f7","old_blob":"0f357e74543645d0570871c159cc55c016dff428",
+              "tests":6,"valid_folders_incorrectly_rejected":sorted(errors),
+              "invalid_file_meta_incorrectly_accepted":sorted(failures)}
+          Path("../folder-registry-evidence/baseline.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print("GT_BASELINE_REPRODUCED false_rejections=3 false_acceptances=3")
+          PY
+      - name: Test repaired folder registry and all existing texture link fixtures
+        run: |
+          set -euo pipefail
+          for f in test_gt_folder_meta_texture_registry.py test_verify_exported_material_texture_links.py; do
+            python3 -B -W error -m unittest discover -s tests -p "$f" -v 2>&1 | tee "folder-registry-evidence/$f.log"
+          done
+          python3 -B - <<'PY'
+          import json,re,hashlib
+          from pathlib import Path
+          root=Path("folder-registry-evidence")
+          tests={}
+          for f in ("test_gt_folder_meta_texture_registry.py","test_verify_exported_material_texture_links.py"):
+              log=(root/(f+".log")).read_text()
+              count=re.search(r"^Ran (\d+) tests? in ",log,re.M)
+              assert count and re.search(r"^OK$",log,re.M), f
+              tests[f]=int(count[1])
+          assert tests["test_gt_folder_meta_texture_registry.py"]==21
+          report={"status":"PASS_AUTHORED_FOLDER_META_TEXTURE_REGISTRY","tests":tests,
+              "total_tests":sum(tests.values()),"baseline_false_rejections_repaired":3,
+              "baseline_false_acceptances_repaired":3,"scope":"physical Assets GUID namespace and file/folder target type",
+              "original_assets_read":False,"source_export_equivalence_verified":False,"unity_or_device_tested":False,
+              "XAPK_requested":False,"source_sha256":hashlib.sha256(Path("scripts/verify_exported_material_texture_links.py").read_bytes()).hexdigest(),
+              "new_test_sha256":hashlib.sha256(Path("tests/test_gt_folder_meta_texture_registry.py").read_bytes()).hexdigest()}
+          (root/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - name: Retain exact source-only baseline and repaired logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-folder-meta-texture-registry-${{ github.run_id }}
+          path: folder-registry-evidence/
+          if-no-files-found: warn
+          retention-days: 14

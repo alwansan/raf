@@ -19,6 +19,9 @@ IMAGES={".png",".jpg",".jpeg",".tga",".psd",".tif",".tiff",".bmp",".exr",".hdr",
 CLASSES={28,84,86,89,117,187,188,205}
 BUILTIN={"0000000000000000e000000000000000","0000000000000000f000000000000000"}
 ZERO="0"*32
+PLACEHOLDER="0000000deadbeef15deadf00d0000000"
+RESERVED_META_GUIDS=BUILTIN | {ZERO,PLACEHOLDER}
+MAX_EXPORT_ENTRIES=250000
 
 class GuardError(ValueError):
     pass
@@ -28,8 +31,13 @@ def fail(code):
 
 def read(path):
     if not path.is_file() or path.is_symlink(): fail("unsafe_or_missing_asset")
-    if path.stat().st_size>4*1024*1024: fail("oversized_asset")
-    try: return path.read_text(encoding="utf-8-sig")
+    # Bound the actual read as well as the initial file size.
+    limit=4*1024*1024
+    if path.stat().st_size>limit: fail("oversized_asset")
+    with path.open("rb") as stream:
+        raw=stream.read(limit+1)
+    if len(raw)>limit: fail("oversized_asset")
+    try: return raw.decode("utf-8-sig").replace("\r\n","\n").replace("\r","\n")
     except UnicodeError: fail("invalid_utf8")
 
 def pointer(raw):
@@ -141,23 +149,65 @@ def is_texture(path,meta,fid):
                    for h in HEADER.finditer(read(path)))
     return False
 
+def physical_entries(assets):
+    """Bounded physical Assets enumeration; never silently skip linked trees."""
+    files=set()
+    dirs=set()
+    count=0
+    def incomplete(_error):
+        fail("unreadable_export")
+    for directory, subdirs, names in os.walk(assets,followlinks=False,onerror=incomplete):
+        count+=len(subdirs)+len(names)
+        if count>MAX_EXPORT_ENTRIES: fail("unsafe_or_excessive_export")
+        parent=Path(directory)
+        for name in subdirs:
+            path=parent/name
+            if path.is_symlink() or not path.is_dir() or name.lower().endswith(".meta"):
+                fail("unsafe_or_excessive_export")
+            dirs.add(path)
+        for name in names:
+            path=parent/name
+            if path.is_symlink() or not path.is_file(): fail("unsafe_or_excessive_export")
+            files.add(path)
+    return files,dirs
+
+
+def meta_identity(data):
+    """Canonical root GUID and optional folder flag, not nested importer refs."""
+    root_keys=re.findall(r"(?m)^guid[ \t]*:[^\n]*$",data)
+    hits=GUID.findall(data)
+    if len(root_keys)!=1 or len(hits)!=1: fail("missing_or_duplicate_meta_guid")
+    flags=re.findall(r"(?m)^folderAsset[ \t]*:[^\n]*$",data)
+    if len(flags)>1 or (flags and not re.fullmatch(r"folderAsset:[ \t]*(?:yes|no)[ \t]*",flags[0])):
+        fail("invalid_folder_meta_flag")
+    return hits[0].lower(),bool(flags and re.fullmatch(r"folderAsset:[ \t]*yes[ \t]*",flags[0]))
+
+
 def audit(project,expected_materials=None):
     root=Path(os.path.abspath(project))
     if any(p.is_symlink() for p in (root,*root.parents)): fail("symlinked_project_root")
     assets=root/"Assets"
     if not assets.is_dir() or assets.is_symlink(): fail("missing_assets_root")
-    entries=list(assets.rglob("*"))
-    if len(entries)>250000 or any(p.is_symlink() for p in entries): fail("unsafe_or_excessive_export")
-    files={p for p in entries if p.is_file()}
+    files,dirs=physical_entries(assets)
     targets={}
-    for meta in files:
-        if not meta.name.endswith(".meta"): continue
-        data=read(meta); hits=GUID.findall(data)
-        if len(hits)!=1: fail("missing_or_duplicate_meta_guid")
-        guid=hits[0].lower(); target=meta.with_name(meta.name[:-5])
-        if guid in targets or guid in BUILTIN or guid==ZERO: fail("duplicate_or_reserved_meta_guid")
-        if target not in files: fail("orphan_asset_meta")
-        targets[guid]=(target,data)
+    folder_count=0
+    for meta in sorted(files):
+        if not meta.name.lower().endswith(".meta"): continue
+        if not meta.name.endswith(".meta"): fail("noncanonical_meta_suffix")
+        data=read(meta)
+        guid,folder=meta_identity(data)
+        target=meta.with_name(meta.name[:-5])
+        if guid in targets or guid in RESERVED_META_GUIDS: fail("duplicate_or_reserved_meta_guid")
+        if target in dirs:
+            if not folder: fail("folder_meta_flag_required")
+            folder_count+=1
+        elif target in files:
+            if folder: fail("folder_meta_targets_file")
+            if target.name.lower().endswith(".meta"): fail("meta_targets_meta")
+        else:
+            fail("orphan_asset_meta")
+        # One collision namespace, separate physical target kinds.
+        targets[guid]=(target,data,folder)
     mats=sorted(p for p in files if p.suffix.lower()==".mat")
     if not mats: fail("missing_exported_materials")
     counts=Counter(); verified={}
@@ -182,12 +232,16 @@ def audit(project,expected_materials=None):
                     if kind not in (2,3): fail("invalid_external_texture_type")
                     if guid not in targets: fail("missing_texture_guid")
                     key=(guid,fid)
-                    if key not in verified: verified[key]=is_texture(*targets[guid],fid)
+                    target,meta,folder=targets[guid]
+                    if folder: fail("reference_target_not_verified_texture")
+                    if key not in verified: verified[key]=is_texture(target,meta,fid)
                     if not verified[key]: fail("reference_target_not_verified_texture")
                     counts["resolved"]+=1
     if expected_materials is not None and (expected_materials<=0 or expected_materials!=counts["materials"]):
         fail("expected_material_count_mismatch")
     return {"material_files":len(mats),"material_objects":counts["materials"],
+            "registered_asset_guids":len(targets)-folder_count,
+            "registered_folder_guids":folder_count,
             "texture_slots":counts["slots"],"null_slots":counts["null"],
             "resolved_local_texture_refs":counts["resolved"],
             "local_embedded_texture_refs":counts["embedded"],
