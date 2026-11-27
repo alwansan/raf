@@ -1306,11 +1306,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "2e5c203a3d2b315dfa0140fb9feeb80403fe7968",
-    "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
+    "reviewed_remote_head": "db5952b6fae2d6878214c2d9bf748bc63dd14ff8",
+    "purpose": "V13 actual authored Unity route observation passed; V14 isolated reversible alpha policy direct GPU texels in progress; original source acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-actual-authored-scene-routes/README_AR.md",
+    "index": "clients/GT/sessions/20261127-dxt5nm-texel-policy-v14/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -4194,7 +4194,9 @@
       "native_source_guard": 45964869783,
       "production_export_executed": false,
       "actual_original_DXT5_restored": false
-    }
+    },
+    "latest_actual_authored_v13_run": 45970415390,
+    "latest_v14_run": 45972362899
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date.",
   "v9_importer_state_checkpoint": {
@@ -5426,5 +5428,33 @@
     "CPU_repack_matches": 32,
     "CPU_repack_alpha_zero_mismatches": 3,
     "evidence": "clients/GT/sessions/20261127-dxt5nm-unity-v13/actual-pass-45970415390.json"
+  },
+  "v14_dxt5nm_texel_policy_checkpoint": {
+    "status": "V14_AUTHORED_ALPHA_POLICY_CI_IN_PROGRESS",
+    "starting_head": "0571c5844f2cef31e07e813bdf30c374e0c90023",
+    "prior_v13_pass_head": "0be8ee0555f381e8e7de4882d96937533300ad26",
+    "activation_head": "db5952b6fae2d6878214c2d9bf748bc63dd14ff8",
+    "run": {
+      "id": 45972362899,
+      "head": "db5952b6fae2d6878214c2d9bf748bc63dd14ff8",
+      "status": "in_progress",
+      "compatibility_guard": {
+        "id": 45972362780,
+        "status": "in_progress"
+      }
+    },
+    "planned_regressions": 278,
+    "planned_v11_v12_controls": 37,
+    "planned_v14_controls": 10,
+    "planned_unfiltered_GPU_texels": 252,
+    "planned_submesh_material_texture_matches": 12,
+    "actual_Unity_texel_observation_verified": false,
+    "actual_alpha_zero_repack_loss_isolated": false,
+    "source_lower_mip_parity_verified": false,
+    "original_assets_read": false,
+    "Android_device": false,
+    "XAPK": false,
+    "session": "clients/GT/sessions/20261127-dxt5nm-texel-policy-v14/README_AR.md",
+    "next": "G1-G2-imported-DXT5nm-alpha-transparency-unfiltered-texel-policy-same-route (V14): inspect exact run 45972362899 and independently verify actual unfiltered texel, metadata restoration, per-phase route and alpha-zero differences; do not treat filtered V13 observation as raw source parity."
   }
 }
