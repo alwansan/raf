@@ -1,0 +1,132 @@
+name: GT exact Shader GUID fanout (authored export only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-shader-fanout-authored.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authored-fanout:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/gt_shader_fanout/audit.py
+            /tools/gt_shader_fanout/test_audit.py
+            /tools/gt_shader_fanout/replay.py
+            /scripts/verify_exported_material_texture_links.py
+            /scripts/b03_verify_renderer_material_links.py
+            /scripts/t3_exported_renderer_shader_impact.py
+            /scripts/t3_audit_exported_material_programs.py
+            /scripts/restore_builtin_shaders.py
+            /scripts/restore_tmp_shaders.py
+            /scripts/b49_shaderlab_pass_contract.py
+            /scripts/w1_audit_export_material_shaders.py
+            /tests/test_t3_exported_renderer_shader_impact.py
+            /tests/test_t3_audit_exported_material_programs.py
+            /tests/test_b03_verify_renderer_material_links.py
+            /clients/GT/sessions/20261127-authored-external-pptr-route/actual-evidence-46018334469.zip
+      - name: Pin exact source and prior authored export
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git hash-object tools/gt_shader_fanout/audit.py)" = f85a0f3a4e92d382065d10dfb84e7d96dde3a43e
+          test "$(git hash-object tools/gt_shader_fanout/test_audit.py)" = e9203e024360014545503c8e3edfb3ae48cac65a
+          test "$(git hash-object tools/gt_shader_fanout/replay.py)" = d1e7be4f8e2d16d4ffcfe64b542dbe4abcd4c417
+          test "$(git hash-object scripts/verify_exported_material_texture_links.py)" = c9d222cfa65b96f0ff096d8c74a3ddd6e7e810a3
+          test "$(git hash-object scripts/b03_verify_renderer_material_links.py)" = 4598fe07cf86231bb3122d1c6170b4a9469c2a4a
+          test "$(git hash-object scripts/t3_exported_renderer_shader_impact.py)" = 7a87fb181c905a936279f4212ac632ac417a0c43
+          test "$(git hash-object scripts/t3_audit_exported_material_programs.py)" = add696ec8bc1f480cce805bf00f10644d189b872
+          test "$(git hash-object scripts/restore_builtin_shaders.py)" = fd5b3e5765da38b95c59c7ac6ae69a5eece3bd0c
+          test "$(git hash-object scripts/restore_tmp_shaders.py)" = cf6e83b9f5344f95a08cba9c749f0fb0dcbe5d23
+          test "$(git hash-object scripts/b49_shaderlab_pass_contract.py)" = b54d0174622de7da0d454a451e63023778696bb5
+          test "$(git hash-object scripts/w1_audit_export_material_shaders.py)" = 03f408f3e01c76310dd858e77c5b7584dec76cf8
+          test "$(git hash-object tests/test_t3_exported_renderer_shader_impact.py)" = 8ed689cc8c408b7c05adc81f4946b74916c6999e
+          test "$(git hash-object tests/test_t3_audit_exported_material_programs.py)" = c01b2f1f2e79304cbff8b40b66bc99d8d3def437
+          test "$(git hash-object tests/test_b03_verify_renderer_material_links.py)" = e802b7ceaedc123a8f2105b3328418e37b621e78
+          test "$(git hash-object clients/GT/sessions/20261127-authored-external-pptr-route/actual-evidence-46018334469.zip)" = c17efb4e8d4bf85947291590bc78fada87a0f85e
+          mkdir -p fanout-evidence
+          git rev-parse HEAD > fanout-evidence/tested-head.txt
+          sha256sum tools/gt_shader_fanout/*.py > fanout-evidence/source-sha256.txt
+          python3 -m venv "$RUNNER_TEMP/fanout-venv"
+          "$RUNNER_TEMP/fanout-venv/bin/python" -m pip install --disable-pip-version-check PyYAML==6.0.3
+          "$RUNNER_TEMP/fanout-venv/bin/python" -m pip freeze > fanout-evidence/python-tools.txt
+      - name: Actual authored control execution and old-gate comparison
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/fanout-venv/bin/python"
+          "$py" -B -m unittest -v tools.gt_shader_fanout.test_audit 2>&1 | tee fanout-evidence/tests.log
+          "$py" -B -m unittest discover -s tests -p 'test_t3_exported_renderer_shader_impact.py' -v 2>&1 | tee fanout-evidence/legacy-renderer.log
+          "$py" -B -m unittest discover -s tests -p 'test_t3_audit_exported_material_programs.py' -v 2>&1 | tee fanout-evidence/legacy-material.log
+          "$py" -B -m unittest discover -s tests -p 'test_b03_verify_renderer_material_links.py' -v 2>&1 | tee fanout-evidence/legacy-b03.log
+          "$py" -B - <<'PY'
+          import json
+          from pathlib import Path
+          from tools.gt_shader_fanout.test_audit import Fanout,A,B
+          from tools.gt_shader_fanout.audit import scan,compare_receipt
+          from scripts import t3_audit_exported_material_programs as old_material
+          from scripts import t3_exported_renderer_shader_impact as old_impact
+          f=Fanout()
+          try:
+              f.setUp()
+              old=old_material.audit(f.root,rank_dummy_targets=True)
+              before,_=scan(f.root)
+              f.edit("one.mat",A,B)
+              f.edit("two.mat",B,A)
+              after,_=scan(f.root)
+              assert old==old_material.audit(f.root,rank_dummy_targets=True)
+              accepted=old_impact.audit(f.root,old)["status"]==old_impact.RESULT_STATUS
+              try:compare_receipt(after,before)
+              except ValueError:rejected=True
+              else:rejected=False
+              assert accepted and rejected
+              result={"status":"PASS_AUTHORED_EXACT_FANOUT_ONLY","old_same_count_stale_report_accepted":accepted,"new_stale_report_rejected":rejected,"before":before,"after":after,"old_name_group_weights":list(old["dummy_shader_material_counts_by_name_digest"].values())}
+              Path("fanout-evidence/rank-control.json").write_text(json.dumps(result,sort_keys=True,indent=2)+"\n")
+              print("GT_SHADER_FANOUT_PASS",json.dumps({"old_name_groups":1,"exact_guid_targets":before["dummy_shader_guid_targets"],"ranked_slot_weights":[x["renderer_slots"] for x in before["ranked_anonymous_targets"]],"old_same_count_stale_report_accepted":accepted,"new_stale_report_rejected":rejected},sort_keys=True))
+          finally:f.doCleanups()
+          PY
+      - name: Replay actual retained exporter bytes, native Shader48 identity only
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/fanout-venv/bin/python" -B -m tools.gt_shader_fanout.replay | tee fanout-evidence/replay.json
+      - name: Preserve bounded authored results
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import base64,hashlib,zipfile
+          from pathlib import Path
+          root=Path("fanout-evidence");root.mkdir(exist_ok=True)
+          files=[p for p in sorted(root.iterdir()) if p.is_file()]
+          assert len(files)<=32 and sum(p.stat().st_size for p in files)<=512*1024
+          dest=root/"permanent-authored-evidence.zip"
+          with zipfile.ZipFile(dest,"w",compression=zipfile.ZIP_DEFLATED) as z:
+              for p in files:
+                  assert not p.is_symlink()
+                  z.write(p,p.name)
+          data=dest.read_bytes()
+          print("GT_PERMANENT_EVIDENCE_SHA",len(data),hashlib.sha256(data).hexdigest())
+          enc=base64.b64encode(data).decode("ascii")
+          for i in range(0,len(enc),2048):print("GT_PERMANENT_EVIDENCE_B64",i//2048,enc[i:i+2048])
+          PY
+      - name: Upload authored receipts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-authored-shader-fanout
+          path: fanout-evidence/
+          retention-days: 14
+          if-no-files-found: warn
