@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-dxt5nm-texel-policy-v14/README_AR.md",
-  "next_action": "V15: pin opt-in candidate in converted PNG TextureExportCollection after AddSprites; only exact 2D DXT5/NormalmapDXT5nm/Gamma, final NormalMap no sprite, preserve ordinary/default imports; actual compiled exporter baseline/fix/ordinary control; do not activate production.",
+  "latest_session": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/README_AR.md",
+  "next_action": "G1-G2-selective-DXT5nm-PNG-alpha-policy-exporter-binding (V15): inspect actual run 45975084812, verify candidate and ordinary controls/metadata/PNG hashes; if successful next Unity reimport exact corrected exporter output without manual alpha edit. No production enablement until authorized original-source proof.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,11 +1964,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "db5952b6fae2d6878214c2d9bf748bc63dd14ff8",
-    "purpose": "Actual authored V14 alpha policy causality established; prepare selective candidate public exporter patch, original source acceptance blocked",
+    "reviewed_remote_head": "e3e3ca06b604aa07b90a1934aa695207be2e46a6",
+    "purpose": "V14 actual authored alpha policy cause proved; V15 selective opt-in public exporter candidate CI in progress; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-dxt5nm-texel-policy-v14/README_AR.md",
+    "index": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -4855,7 +4855,8 @@
     },
     "latest_actual_authored_v13_run": 45970415390,
     "latest_v14_run": 45972362899,
-    "latest_actual_authored_v14_run": 45972362899
+    "latest_actual_authored_v14_run": 45972362899,
+    "latest_v15_run": 45975084812
   },
   "v9_importer_state_checkpoint": {
     "status": "PASS_SCOPED_ACTUAL_AUTHORED_PNG_IMPORTER_STATE_SWIZZLE_UNKNOWN",
@@ -6139,5 +6140,34 @@
       ]
     ],
     "evidence": "clients/GT/sessions/20261127-dxt5nm-texel-policy-v14/actual-pass-45972362899.json"
+  },
+  "v15_dxt5nm_alpha_exporter_checkpoint": {
+    "status": "V15_SELECTIVE_AUTHORED_EXPORTER_CI_IN_PROGRESS",
+    "starting_head": "5eb4f91f25e2883c0cb064cd1b088d7c90a1fe10",
+    "prior_v14_pass_head": "46bcce298d077cedd8e78247066c40d3e1189292",
+    "activation_head": "e3e3ca06b604aa07b90a1934aa695207be2e46a6",
+    "run": {
+      "id": 45975084812,
+      "head": "e3e3ca06b604aa07b90a1934aa695207be2e46a6",
+      "status": "in_progress",
+      "compatibility_guard": {
+        "id": 45975085164,
+        "status": "in_progress"
+      }
+    },
+    "planned_regressions": 283,
+    "planned_v11_v12_controls": 37,
+    "planned_v15_controls": 6,
+    "planned_actual_exports": 6,
+    "planned_normalmap_changes": 2,
+    "planned_ordinary_unchanged": 4,
+    "actual_candidate_policy_verified": false,
+    "production_activation": false,
+    "Unity_reimport_of_candidate_verified": false,
+    "original_assets_read": false,
+    "Android_device": false,
+    "XAPK": false,
+    "session": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/README_AR.md",
+    "next": "G1-G2-selective-DXT5nm-PNG-alpha-policy-exporter-binding (V15): inspect actual run 45975084812, verify candidate and ordinary controls/metadata/PNG hashes; if successful next Unity reimport exact corrected exporter output without manual alpha edit. No production enablement until authorized original-source proof."
   }
 }
