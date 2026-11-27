@@ -1846,7 +1846,7 @@ jobs:
               original_assets_read=False,APK=False)
           Path("authored-scene-results/build.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
           PY
-      - name: Execute authored export and verify native same-route Texture2D full mip payloads
+      - name: Execute authored export and retain native Texture2D stream schema and full mip proof
         shell: bash
         run: |
           set -euo pipefail
