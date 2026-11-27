@@ -1,0 +1,307 @@
+{
+  "status": "PASS_ACTUAL_SERIALIZED_BC3_DXT5NM_EXTERNAL_STREAMS",
+  "starting_head": "1ec236c3ca5a7edbc6d3896c07baf4ab96d51c1f",
+  "preparation_commit": "333d63d82e010961ef8958550c0ba333fc80c507",
+  "tested_head": "a3438e57528475476a265490bdf2df8b60e9faf5",
+  "run_id": 46030298420,
+  "job_id": 140612090344,
+  "guard_run_id": 46030298306,
+  "guard_job_id": 140612088422,
+  "conclusion": "success",
+  "artifact_id": 15214640545,
+  "artifact_bytes": 157535,
+  "artifact_sha256": "4455304c82b145b86cf4d1bb35bb58967f93fc2a0c42afe63a2c5e971bdfb0f7",
+  "artifact_members": 143,
+  "permanent_archive": "clients/GT/sessions/20261127-external-bc3-normal/actual-evidence-46030298420.zip",
+  "permanent_archive_bytes": 93486,
+  "permanent_archive_sha256": "8eb23343d137689e34ba678dec6ca9afc8d55680568d70743d2365d1e4d83079",
+  "permanent_archive_git_blob": "5baff7f349e7614abf3f8aa677e380dd7c862191",
+  "permanent_archive_members": 141,
+  "local_size_sha_crc_inner_member_bytes_verified": true,
+  "local_owner_object_payload_hashes_verified": 32,
+  "local_export_file_hashes_verified": 40,
+  "local_control_file_hashes_verified": 43,
+  "local_png_actual_pixels_independently_verified": 4,
+  "local_same_instance_ref_traces_verified": 28,
+  "public_exporter_pin": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+  "bc3_converter_patched_sha256": "186108e478686524b4703dc7280015bd8eb58cd0939b4e270c4114c69c8d755a",
+  "bc3_patch_previously_tested_and_native_wired": true,
+  "new_production_change": false,
+  "dxt5nm_alpha_policy_opt_in_enabled": false,
+  "unitypy": "1.23.0",
+  "unity_version": "2021.3.0f1",
+  "serialized_file_version": 22,
+  "provider": {
+    "name": "gt-authored-textures.resS",
+    "bytes": 171,
+    "sha256": "69a313df8cdbe26d6ed80e8b5afb1352eab81607fd58e46c41d38ae91e998480",
+    "identical_bytes_in_both_cases": true,
+    "ranges": [
+      {
+        "owner": "sharedassets32.assets",
+        "path_id": 821,
+        "offset": 7,
+        "bytes": 80,
+        "sha256": "dd77e70fc675a46aaeeae912f8172298cb393d77b928c4f9e7b448776e1536fd",
+        "top_bytes": 64,
+        "top_sha256": "2e715e667333567c063b852e875b8e645769c30663783559a6e2e14dca3ade19",
+        "mips": 2
+      },
+      {
+        "owner": "sharedassets33.assets",
+        "path_id": 821,
+        "offset": 98,
+        "bytes": 64,
+        "sha256": "dfd2130ed702d2929b704745767ae38344ede2728a032fb2ce3d3f34647cf407",
+        "top_bytes": 64,
+        "top_sha256": "dfd2130ed702d2929b704745767ae38344ede2728a032fb2ce3d3f34647cf407",
+        "mips": 1
+      }
+    ],
+    "typed_actual_GetImageData_exact_ranges": 4,
+    "typed_inline_bytes": 0,
+    "integrity_checks_passed": 4,
+    "compiled_enum_abi": {
+      "format_DXT5": 12,
+      "usage_NormalmapDXT5nm": 3,
+      "Gamma": 0,
+      "Linear": 1
+    }
+  },
+  "cases": [
+    {
+      "mode": "bc3",
+      "owners": [
+        {
+          "name": "sharedassets30.assets",
+          "bytes": 704,
+          "sha256": "97a7a19e6808e1f1eaf79637407236b9c884dfd55ccfa64e844df95272f3b477"
+        },
+        {
+          "name": "sharedassets31.assets",
+          "bytes": 704,
+          "sha256": "5cd2ad70a54faa974764c387eb7c02c90841e61464b2b6c16818179cb90742d0"
+        },
+        {
+          "name": "sharedassets32.assets",
+          "bytes": 1452,
+          "sha256": "870a5cc022879af3f18759749679151242f84edb289f92fed601e08a85b26b2b"
+        },
+        {
+          "name": "sharedassets33.assets",
+          "bytes": 1452,
+          "sha256": "1ba7705f634fce7569ef6d8573616d8fdf2f22a6c4c50f7f16f9d8505c29b2a0"
+        }
+      ],
+      "usage": 0,
+      "texture_type": 0,
+      "sRGB": [
+        1,
+        0
+      ],
+      "unique_pixels": 70,
+      "RGBA_channels": 280,
+      "transparent_nonzero_RGB_pixels": 3,
+      "decoded_RGBA_sha256": [
+        "d94be681231fecc588e4e1cb3951f582a6f0c62688659379dbb5550746fd1cd3",
+        "740ad8f7f0c066789ac02d251c4428c5c1b951e546211430f5f984721fb687dc"
+      ],
+      "v10_pass_both": true,
+      "v8_promoted": false,
+      "negative_controls": [
+        {
+          "name": "wrong_provider_hash",
+          "reason": "bc3_stream_provider_SHA_mismatch",
+          "affected_renderers": 2
+        },
+        {
+          "name": "missing_provider_pin",
+          "reason": "bc3_stream_provider_not_pinned",
+          "affected_renderers": 2
+        },
+        {
+          "name": "wrong_resource_range",
+          "reason": "same_route_png_RGB_DRIFT",
+          "affected_renderers": 2
+        },
+        {
+          "name": "source_alpha_endpoint",
+          "reason": "same_route_png_ALPHA_ONLY_DRIFT",
+          "affected_renderers": 2
+        },
+        {
+          "name": "wrong_usage",
+          "reason": "unsupported_bc3_texture_usage",
+          "affected_renderers": 2
+        },
+        {
+          "name": "export_vertical_flip",
+          "reason": "same_route_png_VERTICAL_FLIP",
+          "affected_renderers": 2
+        }
+      ],
+      "lower_mip_only_scope_acceptance": 1
+    },
+    {
+      "mode": "dxt5nm",
+      "owners": [
+        {
+          "name": "sharedassets30.assets",
+          "bytes": 704,
+          "sha256": "97a7a19e6808e1f1eaf79637407236b9c884dfd55ccfa64e844df95272f3b477"
+        },
+        {
+          "name": "sharedassets31.assets",
+          "bytes": 704,
+          "sha256": "5cd2ad70a54faa974764c387eb7c02c90841e61464b2b6c16818179cb90742d0"
+        },
+        {
+          "name": "sharedassets32.assets",
+          "bytes": 1452,
+          "sha256": "20463836f45ae7822271e6d180b9acc40b5eef02e4f2e9ff85ad3e170207ac4c"
+        },
+        {
+          "name": "sharedassets33.assets",
+          "bytes": 1452,
+          "sha256": "d266beb60012920d1cf8cb628cb8ed2851b714e15b86d37e4423f05821c6cbdc"
+        }
+      ],
+      "usage": 3,
+      "color_space": 0,
+      "texture_type": 1,
+      "sRGB": [
+        0,
+        0
+      ],
+      "unique_pixels": 70,
+      "RGBA_channels": 280,
+      "normal_Z_interior": 45,
+      "normal_Z_clamp": 25,
+      "decoded_RGBA_sha256": [
+        "5a28fbb8610b7251f2f0c15fbc00fc7a6565e93f6228b817916f6123ed94f826",
+        "c7d568cd95b42b910e448b0eb9325b1185ea1d99a62304882297f8bfd22171c0"
+      ],
+      "v11_pass_both": true,
+      "v12_supported_pass_both": true,
+      "v12_complete_pass_both": false,
+      "swizzle_unknown_slots_per_backend": 4,
+      "sampler_fields_per_backend": 24,
+      "source_mapping_fields_per_backend": 36,
+      "policy_fields_per_backend": 68,
+      "observed_bumpmap_defaults_per_backend": 12,
+      "negative_controls": [
+        {
+          "name": "wrong_provider_hash",
+          "reason": "bc3_stream_provider_SHA_mismatch",
+          "affected_renderers": 2
+        },
+        {
+          "name": "missing_provider_pin",
+          "reason": "bc3_stream_provider_not_pinned",
+          "affected_renderers": 2
+        },
+        {
+          "name": "wrong_resource_range",
+          "reason": "same_route_png_RGB_DRIFT",
+          "affected_renderers": 2
+        },
+        {
+          "name": "source_alpha_endpoint",
+          "reason": "same_route_png_RGB_DRIFT",
+          "affected_renderers": 2
+        },
+        {
+          "name": "wrong_usage",
+          "reason": "unsupported_dxt5nm_usage_or_color_space",
+          "affected_renderers": 2
+        },
+        {
+          "name": "source_mip_bias",
+          "reason": "same_route_png_importer_mipBias_drift",
+          "affected_renderers": 2
+        },
+        {
+          "name": "export_vertical_flip",
+          "reason": "same_route_png_VERTICAL_FLIP",
+          "affected_renderers": 2
+        },
+        {
+          "name": "export_packed_not_normal",
+          "reason": "same_route_png_RGB_DRIFT",
+          "affected_renderers": 2
+        },
+        {
+          "name": "actual_meta_wrap",
+          "reason": "same_route_png_importer_wrapV_drift",
+          "affected_renderers": 2
+        }
+      ],
+      "lower_mip_only_scope_acceptance": 1
+    }
+  ],
+  "actual_export_instances": 2,
+  "actual_serialized_owner_file_instances": 8,
+  "raw_parser_objects": 32,
+  "typed_serialized_objects": 32,
+  "typed_nonnull_external_pptrs": 20,
+  "loaded_reference_trace_matches": 28,
+  "actual_export_assets": 20,
+  "actual_export_asset_meta_files": 40,
+  "unique_exported_PNGs": 4,
+  "unique_pixels_across_export_cases": 140,
+  "RGBA_channels_across_export_cases": 560,
+  "decoder_backends": [
+    "compiled",
+    "python"
+  ],
+  "per_case_per_backend": {
+    "renderer_routes": 2,
+    "submesh_routes": 4,
+    "stream_slots": 4,
+    "pixels": 140,
+    "RGBA_channels": 560,
+    "valid_keyword_entries": 8,
+    "invalid_keyword_entries": 4,
+    "disabled_pass_entries": 4
+  },
+  "negative_controls_rejected": 15,
+  "positive_scope_controls": 2,
+  "prior_regressions_pass": 200,
+  "regression_counts": {
+    "original_mesh_source_storage": 9,
+    "mesh_document_stream_identity": 8,
+    "mesh_yaml_unique_mapping": 7,
+    "compare_exported_mesh_geometry": 6,
+    "verify_original_mesh_export": 7,
+    "mesh_vertex_payload": 15,
+    "renderer_submesh_routes": 21,
+    "material_route_values": 22,
+    "material_route_keyword_state": 25,
+    "imported_png_route_pixels": 34,
+    "imported_png_route_importer": 17,
+    "imported_bc3_route_pixels": 8,
+    "imported_dxt5nm_route_pixels": 4,
+    "imported_dxt5nm_route_importer": 12,
+    "patch_bc3_export_decoder": 5
+  },
+  "historical_particle108": {
+    "external_images_decoded": 2,
+    "third_local_source_top_mip_alpha_decoded_historically": true,
+    "third_same_export_source_pixel_comparison": false,
+    "new_authorized_original_source_available": false
+  },
+  "lower_mip_parity_verified": false,
+  "original_assets_read": false,
+  "original_renderer_routes_verified": false,
+  "original_runtime_verified": false,
+  "unity_import_verified": false,
+  "device_verified": false,
+  "XAPK_requested": false,
+  "production_consumer_changed": false,
+  "gate_closures": [],
+  "historical_non_dummy": 688,
+  "historical_total": 786,
+  "historical_dummy": 98,
+  "historical_dummy_guids": 37,
+  "next_action": "G5-Particle108-document-local-Texture2D28-top-mip-byte-proof: prioritize the unresolved third local Type0 texture, not another generic compressed export replay. Read gt_particle108_export_alpha_diagnostic.py, gt_particle108_source_pixel_parity.py, B05 document-scoped texture census, retained 43777398215 and 43778717548 safe receipts, and current native texture payload checks. Determine whether the exact class28 document at the same material document GUID and anchor can support a bounded authenticated local serialized Texture2D top-mip decode (inline _typelessdata, explicit safe provider if supported). Implement only a genuine missing link if possible using authorized source-free authored serialized documents and real source binary where useful: reject wrong/duplicate/stripped anchor, wrong class, wrong document scope, stale or ambiguous provider, bad size and pixel/alpha drift. Do not treat the historical exact local pointer as image parity, do not invent a separate GUID or normalize away drift. Preserve both external image diagnostics and actual BC3/DXT5nm receipts. If unsupported or no distinct advance, document exact blocking receipt/authorized evidence needed and move to an actionable original-source authorization/provenance or FFT/kernel6 gate, rather than repeating authored cases. A3 and third original Particle108 comparison remain blocked, original FFT/kernel6, NEXT23b, ten runtime groups and G0-G6 open; 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. No unauthorized original acquisition, secrets/LFS, CL/lab writes, BLACK, animation, production, Unity/device/APK/XAPK/native request/installer until owner gates met. Preserve Ali pinned reference."
+}
