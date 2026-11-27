@@ -23,9 +23,11 @@ def need(ok,reason):
     if not ok:raise ValueError(reason)
 
 
-def load(root,*,states=None,bc3_mode=False):
+def load(root,*,states=None,bc3_mode=False,normalmap=False):
+    from scripts import gt_imported_dxt5nm_route_pixels as normal
+    need(not normalmap or bc3_mode,"normalmap_requires_BC3_layout")
     need(not bc3_mode or states is None,"bc3_separate_from_V9_scope")
-    decoder=bc3 if bc3_mode else png
+    decoder=normal if normalmap else bc3 if bc3_mode else png
     source=gate.strict_json(gate.bounded_snapshot(root/"source.json",1024*1024))
     producer=gate.strict_json(gate.bounded_snapshot(root/"producer.json",256*1024))
     need(producer.get("status")=="OBSERVED_AUTHORED_PUBLIC_PNG_EXPORT" and
@@ -33,7 +35,7 @@ def load(root,*,states=None,bc3_mode=False):
          producer.get("actual_scene_collections")==2 and
          producer.get("actual_imported_png_texture_collections")==2 and
          producer.get("original_assets_read") is False,"actual_png_producer_contract")
-    need(source.get("schema_version")==(10 if bc3_mode else 8) and source.get("authored_generated_objects") is True,
+    need(source.get("schema_version")==(11 if normalmap else 10 if bc3_mode else 8) and source.get("authored_generated_objects") is True,
          "authored_png_source_contract")
     objects={};vertices={};requests={}
     providers=source["providers"]
@@ -50,14 +52,14 @@ def load(root,*,states=None,bc3_mode=False):
         elif cls==28:
             requests[key]=decoder.source_request(tree)
             if states is not None:states[key]=importer_state.source_proof(tree)
-            need(isinstance(requests[key],bc3.Request if bc3_mode else stream.Request) and
+            need(isinstance(requests[key],normal.Request if normalmap else bc3.Request if bc3_mode else stream.Request) and
                  requests[key].mip_lengths==((64,16) if bc3_mode else (16,4)),
                  "authored_png_two_mips_stream_source")
             tree=None
         objects[key]=(cls,tree)
     need(len(requests)==2 and sorted(r.offset for r in requests.values())==([7,100] if bc3_mode else [7,34]),"authored_png_source_extents")
     resolved=decoder.resolve_requests(root/"providers",pins,requests)
-    need(all(type(p) is (bc3.Proof if bc3_mode else png.Proof) and p.from_stream for p in resolved.values()),"authored_png_source_authentication")
+    need(all(type(p) is (normal.Proof if normalmap else bc3.Proof if bc3_mode else png.Proof) and p.from_stream for p in resolved.values()),"authored_png_source_authentication")
     traces=[gate.strict_json(gate.bounded_snapshot(root/f,1024*1024)) for f in ("materials.json","meshes.json","components.json")]
     mapping=gate.traces(*traces)
     need(set(mapping)==set(objects),"actual_png_trace_population")

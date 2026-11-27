@@ -118,7 +118,7 @@ def resolve_requests(root,records,requests):
     return result
 
 
-def importer_document(meta,ptr):
+def importer_document(meta,ptr,*,texture_type=0):
     """Strict importer schema and trace identity, not Unity import proof."""
     import yaml
     class Loader(yaml.SafeLoader):
@@ -143,13 +143,13 @@ def importer_document(meta,ptr):
     need(type(imp) is dict and not any(k.endswith("Importer") and k!="TextureImporter" for k in doc if type(k) is str),
          "missing_unique_png_TextureImporter")
     need(type(imp.get("textureShape")) is int and imp["textureShape"]==1 and
-         type(imp.get("textureType")) is int and imp["textureType"]==0,
+         type(imp.get("textureType")) is int and imp["textureType"]==texture_type,
          "unsupported_png_importer_shape_or_type")
     return imp
 
 
-def importer(meta,ptr):
-    imp=importer_document(meta,ptr)
+def importer(meta,ptr,*,texture_type=0):
+    imp=importer_document(meta,ptr,texture_type=texture_type)
     settings=imp.get("textureSettings")
     need(type(settings) is dict,"missing_png_importer_sampler_schema")
     try:values=normalize(settings,original=False)
@@ -178,10 +178,10 @@ def exported_image(path):
         raise Unproven("invalid_png_pixel_decode") from None
 
 
-def compare(source,path,meta,ptr):
+def compare(source,path,meta,ptr,*,texture_type=0):
     need(isinstance(source,Proof),source if type(source) is str else "missing_png_source_top_mip_proof")
     need(path.suffix.lower()==".png","unsupported_png_export_target")
-    imp=importer(meta,ptr)
+    imp=importer(meta,ptr,texture_type=texture_type)
     try:actual=exported_image(path)
     except (OSError,ValueError) as e:
         if isinstance(e,Unproven):raise

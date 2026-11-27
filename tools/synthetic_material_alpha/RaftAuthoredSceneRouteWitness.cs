@@ -153,10 +153,11 @@ public static class RaftAuthoredSceneRouteWitness
         return bytes;
     }
 
-    public static void Run(string root,bool importedPng=false,bool importedBc3=false,bool bc3Extended=false)
+    public static void Run(string root,bool importedPng=false,bool importedBc3=false,bool bc3Extended=false,bool normalmap=false)
     {
         Require(!importedBc3 || importedPng,"bc3_requires_actual_png_export");
         Require(!bc3Extended || importedBc3,"extended_requires_bc3");
+        Require(!normalmap || (importedBc3 && bc3Extended),"normalmap_requires_extended_bc3");
         Require(!Directory.Exists(root),"fresh_authored_route_root_required");
         Directory.CreateDirectory(root);
         string project=Path.Combine(root,"project");
@@ -248,8 +249,14 @@ public static class RaftAuthoredSceneRouteWitness
                     (int)AssetRipper.SourceGenerated.Enums.TextureImporterSwizzle.A==3 &&
                     (int)AssetRipper.SourceGenerated.Enums.AndroidETC2FallbackOverride.UseBuildSettings==0,
                     "authored_importer_enum_ABI_changed");
-                tex.ColorSpace_C28E=i==0?AssetRipper.SourceGenerated.Enums.ColorSpace.Gamma:
+                tex.ColorSpace_C28E=(normalmap || i==0)?AssetRipper.SourceGenerated.Enums.ColorSpace.Gamma:
                     AssetRipper.SourceGenerated.Enums.ColorSpace.Linear;
+                if(normalmap)
+                {
+                    tex.LightmapFormat_C28E=AssetRipper.SourceGenerated.Enums.TextureUsageMode.NormalmapDXT5nm;
+                    Require((int)tex.LightmapFormat_C28E==3 && (int)tex.ColorSpace_C28E==0 &&
+                        (int)AssetRipper.SourceGenerated.Enums.TextureImporterType.NormalMap==1,"normalmap_enum_ABI_changed");
+                }
                 tex.IsReadable_C28=i==0;
                 tex.StreamingMipmaps_C28=i==1;
                 tex.StreamingMipmapsPriority_C28=i==0?-2:3;
@@ -420,7 +427,7 @@ public static class RaftAuthoredSceneRouteWitness
         var externals=owners.ToDictionary(o=>o.Name,o=>o.Dependencies.Skip(1).Select(d=>d?.Name).ToArray());
         // The source contract is captured from generated objects before any
         // export or trace. It is not reconstructed from exported YAML.
-        var source=new {schema_version=importedBc3?10:importedPng?8:7,authored_generated_objects=true,objects=rows,externals,
+        var source=new {schema_version=normalmap?11:importedBc3?10:importedPng?8:7,authored_generated_objects=true,objects=rows,externals,
             providers=new[]{new {name=providerName,bytes=providerData.Length,sha256=providerSHA}},
             hidden=hidden.Select(o=>new {owner=o.Collection.Name,path_id=o.PathID,class_id=o.ClassID}).ToArray()};
         File.WriteAllText(Path.Combine(root,"source.json"),JsonSerializer.Serialize(source));
@@ -453,7 +460,7 @@ public static class RaftAuthoredSceneRouteWitness
             original_assets_read=false,original_serialized_source=false,production_auto_exporter_selection=false,
             authored_native_shader_programs_verified=false,authored_file_backed_streamed_texture_collections=2,
             actual_imported_png_texture_collections=importedPng?2:0,
-            bc3_fixture_variant=importedBc3?(bc3Extended?"extended_equal_endpoints":"historical_replay"):"not_bc3",
+            bc3_fixture_variant=normalmap?"normalmap_dxt5nm":importedBc3?(bc3Extended?"extended_equal_endpoints":"historical_replay"):"not_bc3",
             Android_device=false,XAPK=false
         }));
         Console.WriteLine(importedPng?"RAFT_AUTHORED_SCENE_PNG_EXPORT_OBSERVED":"RAFT_AUTHORED_SCENE_YAML_EXPORT_OBSERVED");

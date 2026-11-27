@@ -63,8 +63,8 @@ def image_proof(size,raw,*,from_stream=False):
     p=png.image_proof(decode_top(size,raw),from_stream=from_stream)
     return Proof(p.size,p.rgba_sha256,p.rgb_sha256,p.flipped_sha256,p.from_stream)
 
-def source_request(tree):
-    desc,sizes=descriptor(tree)
+def source_request(tree,*,_descriptor=descriptor,_image_proof=image_proof,_request_type=Request):
+    desc,sizes=_descriptor(tree)
     try:path,offset,size=native.stream_fields(tree)
     except native.Unproven as e:raise png.Unproven(str(e)) from None
     need("image data" in tree,"missing_bc3_payload")
@@ -74,23 +74,23 @@ def source_request(tree):
         need(len(data)==desc[-1],"bc3_inline_extent_mismatch")
         if type(data) is list:
             need(all(type(v) is int and 0<=v<=255 for v in data),"invalid_bc3_payload_byte")
-        return image_proof(desc[:2],bytes(data[:sizes[0]]))
+        return _image_proof(desc[:2],bytes(data[:sizes[0]]))
     need(type(path) is str and re.fullmatch(r"[A-Za-z0-9_][A-Za-z0-9_.-]*\.(?:resS|resource)",path)
          and ".." not in path,"unsupported_bc3_stream_provider")
     need(type(offset) is int and type(size) is int and offset>=0 and size==desc[-1]
          and offset+size<=MAX_PROVIDER,"invalid_bc3_stream_extent")
     need(len(data)==0,"ambiguous_bc3_inline_and_stream")
-    return Request(desc,sizes,path,offset)
+    return _request_type(desc,sizes,path,offset)
 
 def safe_request(tree):
     try:return source_request(tree)
     except png.Unproven as e:return str(e)
     except (ValueError,TypeError,KeyError,OverflowError,OSError):return "unproved_bc3_source_decode"
 
-def resolve_requests(root,records,requests):
+def resolve_requests(root,records,requests,*,_image_proof=image_proof,_request_type=Request):
     result={};groups=defaultdict(dict)
     for key,req in requests.items():
-        if isinstance(req,Request):groups[req.provider][key]=req
+        if type(req) is _request_type:groups[req.provider][key]=req
         else:result[key]=req
     for provider,group in groups.items():
         try:kind,size,pin=records["Raft_Data/"+provider]
@@ -111,7 +111,7 @@ def resolve_requests(root,records,requests):
             captures={}
             verified_range_digests(Path(root)/provider,(size,pin),ranges,captures=captures)
             for k,r in valid.items():
-                result[k]=image_proof(r.descriptor[:2],captures[(r.offset,r.mip_lengths[0])],from_stream=True)
+                result[k]=_image_proof(r.descriptor[:2],captures[(r.offset,r.mip_lengths[0])],from_stream=True)
         except (ValueError,OSError,TypeError,OverflowError) as e:
             reason={"vertex_provider_SHA_mismatch":"bc3_stream_provider_SHA_mismatch",
                     "vertex_provider_size_mismatch":"bc3_stream_provider_size_mismatch"}.get(str(e),"unproved_bc3_stream_provider")
