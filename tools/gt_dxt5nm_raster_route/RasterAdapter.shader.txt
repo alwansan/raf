@@ -1,0 +1,69 @@
+Shader "__ADAPTER_NAME__" {
+ Properties {
+  _MainTex ("Input", 2D) = "white" {}
+  _AuthoredTint ("Tint", Color)=(1,1,1,1)
+  _AuthoredVector ("Vector", Vector)=(0,0,0,0)
+  _AuthoredFloat ("Float", Float)=0
+  _AuthoredNegative ("Negative", Float)=0
+  _AuthoredInteger ("Integer", Float)=0
+  _AuthoredSigned ("Signed", Float)=0
+  _GTProbeMip ("Diagnostic mip", Float)=0
+ }
+ SubShader {
+  Cull Off ZWrite Off ZTest Always Blend Off
+  CGINCLUDE
+  #include "UnityCG.cginc"
+  Texture2D<float4> _MainTex;
+  float4 _MainTex_ST;
+  float _GTProbeMip;
+  struct Input { float4 vertex:POSITION; float2 uv:TEXCOORD0; };
+  struct Varying { float4 pos:SV_POSITION; float2 raw:TEXCOORD0; float2 transformed:TEXCOORD1; };
+  Varying Vert(Input v) {
+   Varying o; o.pos=float4(v.vertex.x*.5,v.vertex.y,.5,1);
+   o.raw=v.uv; o.transformed=v.uv*_MainTex_ST.xy+_MainTex_ST.zw;
+   return o;
+  }
+  float4 LoadDiagnostic(float2 uv) {
+   uint w,h,n; uint mip=(uint)_GTProbeMip;
+   _MainTex.GetDimensions(mip,w,h,n);
+   int2 xy=(int2)floor(frac(uv)*float2(w,h));
+   return _MainTex.Load(int3(clamp(xy,int2(0,0),int2(w-1,h-1)),mip));
+  }
+  float4 FragUV(Varying i):SV_Target { return float4(i.raw,i.transformed); }
+  float4 FragPacked(Varying i):SV_Target { return LoadDiagnostic(i.transformed); }
+  float4 FragNormal(Varying i):SV_Target {
+   float3 n=UnpackNormal(LoadDiagnostic(i.transformed));
+   const float marker=__ADAPTER_MARKER__;
+   #if defined(UNITY_NO_DXT5nm)
+    return float4(n,-marker);
+   #else
+    return float4(n,marker);
+   #endif
+  }
+  ENDCG
+  Pass {
+   Name "UV"
+   CGPROGRAM
+   #pragma target 4.5
+   #pragma vertex Vert
+   #pragma fragment FragUV
+   ENDCG
+  }
+  Pass {
+   Name "Packed"
+   CGPROGRAM
+   #pragma target 4.5
+   #pragma vertex Vert
+   #pragma fragment FragPacked
+   ENDCG
+  }
+  Pass {
+   Name "Normal"
+   CGPROGRAM
+   #pragma target 4.5
+   #pragma vertex Vert
+   #pragma fragment FragNormal
+   ENDCG
+  }
+ }
+}
