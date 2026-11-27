@@ -1,0 +1,100 @@
+name: GT native FFT API boundary audit (AUTHORED metadata only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-fft-native-api-boundary-authored.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authored-api-boundary:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/gt_fft_native_api_boundary/
+            /scripts/t1_fft_dispatch_pair_audit.py
+            /scripts/t1_stage_original_fft_dispatch_trace.py
+            /android-port/Runtime/Platform/T1FftDirectDispatchTrace.cs
+            /android-port/Runtime/Platform/PersistentDiagnosticLog.cs
+      - name: Verify exact logger, instrumentation and authored audit source
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git hash-object tools/gt_fft_native_api_boundary/audit.py)" = f80d31276c5f9dafc68d585d8216ec65508b9521
+          test "$(git hash-object tools/gt_fft_native_api_boundary/test_audit.py)" = 51fa98dab9487a699fee2e9234eaa6b54ea26332
+          test "$(git hash-object android-port/Runtime/Platform/T1FftDirectDispatchTrace.cs)" = 0e1121a4788d3cf7da708bc1fcd77c39aade1c01
+          test "$(git hash-object android-port/Runtime/Platform/PersistentDiagnosticLog.cs)" = 9cc35f1ac9ce73bd241c7107d1b7cda58fcb5942
+          test "$(git hash-object scripts/t1_stage_original_fft_dispatch_trace.py)" = 5ae1489dae1f8e63611279461b6779d2dd27f6c7
+          test "$(git hash-object scripts/t1_fft_dispatch_pair_audit.py)" = d5f1baf038c2d2ffd0d26178d6c94551046f6273
+          mkdir -p fft-api-evidence
+          git rev-parse HEAD > fft-api-evidence/tested-head.txt
+          sha256sum tools/gt_fft_native_api_boundary/*.py scripts/t1_fft_dispatch_pair_audit.py scripts/t1_stage_original_fft_dispatch_trace.py android-port/Runtime/Platform/{T1FftDirectDispatchTrace,PersistentDiagnosticLog}.cs > fft-api-evidence/source-sha256.txt
+      - name: Execute authored regressions and compare legacy controls
+        run: |
+          set -euo pipefail
+          python3 -B -m unittest -v tools.gt_fft_native_api_boundary.test_audit 2>&1 | tee fft-api-evidence/tests.log
+          python3 -B - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from tools.gt_fft_native_api_boundary.test_audit import scenarios
+          from tools.gt_fft_native_api_boundary.audit import scan,read
+          from scripts.t1_fft_dispatch_pair_audit import audit as old
+          out=Path("fft-api-evidence")
+          result={}
+          for name,rows in scenarios().items():
+              p=out/(name+".jsonl")
+              p.write_text("".join(json.dumps(r,sort_keys=True)+"\n" for r in rows))
+              report=scan(rows)
+              assert report==read(p)
+              result[name]={"authored_trace_sha256":hashlib.sha256(p.read_bytes()).hexdigest(),"report":report}
+          assert result["two_pass_observed"]["report"]["source_order_compatible_windows"]==2
+          assert result["binding_sync_throw"]["report"]["first_observed_paired_synchronous_throw_api"]=="SetTexture"
+          assert result["cross_thread"]["report"]["api_calls"]["dispatch"]["invalid_pair"]==1
+          controls={"legacy_binding_throw_count":old(scenarios()["binding_sync_throw"])["synchronous_thrown_count"],"legacy_cross_thread_paired_count":old(scenarios()["cross_thread"])["paired_count"]}
+          assert controls=={"legacy_binding_throw_count":0,"legacy_cross_thread_paired_count":1}
+          report={"status":"PASS_AUTHORED_NATIVE_API_BOUNDARY_ONLY","authored_scenarios":len(result),"legacy_counterexamples":controls,"cases":result}
+          (out/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print("GT_FFT_API_BOUNDARY_PASS",json.dumps({"scenarios":len(result),**controls},sort_keys=True))
+          PY
+      - name: Preserve exact authored evidence
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import base64,hashlib,zipfile
+          from pathlib import Path
+          root=Path("fft-api-evidence");root.mkdir(exist_ok=True)
+          files=[p for p in sorted(root.iterdir()) if p.is_file()]
+          assert len(files)<=64 and sum(p.stat().st_size for p in files)<=512*1024
+          dest=root/"permanent-authored-evidence.zip"
+          with zipfile.ZipFile(dest,"w",compression=zipfile.ZIP_DEFLATED) as z:
+              for p in files:
+                  assert not p.is_symlink()
+                  z.write(p,p.name)
+          data=dest.read_bytes()
+          print("GT_PERMANENT_EVIDENCE_SHA",len(data),hashlib.sha256(data).hexdigest())
+          enc=base64.b64encode(data).decode("ascii")
+          for i in range(0,len(enc),2048):
+              print("GT_PERMANENT_EVIDENCE_B64",i//2048,enc[i:i+2048])
+          PY
+      - name: Upload authored receipts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-fft-native-api-boundary-authored
+          path: fft-api-evidence/
+          retention-days: 14
+          if-no-files-found: warn
