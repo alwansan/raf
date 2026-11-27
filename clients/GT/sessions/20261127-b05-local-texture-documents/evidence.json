@@ -1,0 +1,52 @@
+{
+  "status": "PASS_AUTHORED_B05_DOCUMENT_SCOPED_LOCAL_TEXTURES",
+  "run_id": 45941656489,
+  "job_id": 140317118772,
+  "head": "ee8c0cc55ab83cc888bbe452bc0f39bd04ecfccd",
+  "conclusion": "success",
+  "guard_run_id": 45941656623,
+  "artifact_id": 15173376188,
+  "archive": "clients/GT/sessions/20261127-b05-local-texture-documents/actual-run-45941656489.zip",
+  "archive_bytes": 3372,
+  "archive_sha256": "5464c7312507a5c8ea699000602f37a613f69bf1f22447678fc13f248369533c",
+  "archive_git_blob": "63f84da0d06f7d6f47423182cd0520cc784852ea",
+  "archive_crc_sha_size_verified_locally": true,
+  "members": {
+    "report.json": {
+      "bytes": 782,
+      "sha256": "fba5757d5eefba427f71ed9382749fe3eb74cb4318270a533d0d9bc11934afd0"
+    },
+    "test_gt_particle108_alpha_provenance.py.log": {
+      "bytes": 2021,
+      "sha256": "ed7814d57b96ac12b0e8c2528bcdd8702cd8e37914cb06f309049bc1cd761373",
+      "tests": 11
+    },
+    "test_gt_full_original_export_texenvs.py.log": {
+      "bytes": 1600,
+      "sha256": "ecd9f2237f4deed1a98fbf86f1a7c51fe0cd7bfc0ca71ac7bfd624f7cbf12801",
+      "tests": 8
+    },
+    "test_b05_verify_material_texenv_bindings.py.log": {
+      "bytes": 5033,
+      "sha256": "bee22d59d2ccd01ca0c92c640abc822c0d4dd38797f142772601a6241b893d9e",
+      "tests": 31
+    },
+    "test_gt_particle108_export_alpha_diagnostic.py.log": {
+      "bytes": 2381,
+      "sha256": "e9890df980717ffd8a702e5f889e4d8e0a17eb65a0510100460ef290fa2725a3",
+      "tests": 10
+    }
+  },
+  "total_tests": 60,
+  "new_document_scope_tests": 11,
+  "actual_authored_Material_YAML_and_PNG_decoded": true,
+  "original_source_readers_mocked_in_integration_tests": true,
+  "unscoped_type0_equal_triples_not_accepted": true,
+  "same_document_texture_anchor_class_and_exportability_required": true,
+  "original_assets_read": false,
+  "original_alpha_loss_proven": false,
+  "Unity_or_Android_pixels_verified": false,
+  "original_game_fire_repaired": false,
+  "white_mesh_repaired": false,
+  "XAPK_requested": false
+}

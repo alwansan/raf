@@ -202,6 +202,7 @@ def validate(report,run_id,source_hashes,exit_code):
         raise ValueError("same_asset_and_material_identity_required")
     return {
         "status":"PASS_AUTHORED_IMPORTED_ALPHA_VULKAN","run_id":run_id,"source_hashes":source_hashes,
+        "reason":"independent_imported_and_rendered_RGBA_validation_passed",
         "actual_imported_RGBA8_pixels_verified":len(CASES)*WIDTH*HEIGHT,
         "actual_Vulkan_RGBA_pixels_verified":len(CASES)*WIDTH*HEIGHT,
         "TextureImporter_reimports_verified":5,"cases_verified":len(CASES),

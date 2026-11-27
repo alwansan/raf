@@ -1,0 +1,88 @@
+{
+  "status": "PASS_AUTHORED_IMPORTED_ALPHA_VULKAN",
+  "run_id": 45941449651,
+  "job_id": 140316463895,
+  "head": "265f639ccb4136c020ac262e7f799e803418ab76",
+  "conclusion": "success",
+  "guard_run_id": 45941449640,
+  "artifact_id": 15172982878,
+  "archive": "clients/GT/sessions/20261127-imported-alpha-vulkan/actual-run-45941449651.zip",
+  "archive_bytes": 4985,
+  "archive_sha256": "9711df98d2dee6a28fb4d943027377059106f0c16f408391855df32edf8c431e",
+  "archive_git_blob": "5143ce0954c843a809471a03d2c90176d3987bd1",
+  "archive_crc_sha_size_verified_locally": true,
+  "members": {
+    "oracle-tests.log": {
+      "bytes": 1345,
+      "sha256": "4b5740477125a66a5a18a9d0c64f3a45f0c628a03917d115685cac1e2f5b2824"
+    },
+    "verified.json": {
+      "bytes": 2948,
+      "sha256": "f569c2fbd075d2ef724d4eabcc31f663f57c9b8aa3300dc19fe08dc7057dd758"
+    },
+    "raw.unity.json": {
+      "bytes": 99583,
+      "sha256": "129568c67297c0792f4c02360903a171f5efa5017c4547a97ffa285d143b5a9a"
+    }
+  },
+  "source_hashes": {
+    "Assets/AuthoredAlpha.png": "9a0d42a40f744370b0d2ca1f4e5c4244ff5b6c51c1e933d46037320fa4ebd2a4",
+    "Assets/Editor/SyntheticImportedAlphaValidation.cs": "92fa6a15d3ed935da67dd7eae845109cb024f0c2c21097c61c74d6a728db6205",
+    "Assets/SyntheticMaterialAlpha.shader": "cd0014106a2bc71a196d8389ce33b20e0b052fca1effe212f6822cac3288b8fc"
+  },
+  "Unity_version": "2021.3.45f2",
+  "backend": "Vulkan",
+  "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+  "software_rasterizer": true,
+  "oracle_tests": 12,
+  "reimports": 5,
+  "cases": 8,
+  "counterfactual_cases": 7,
+  "actual_imported_RGBA8_pixels_verified": 192,
+  "actual_Vulkan_RGBA_pixels_verified": 192,
+  "max_RGBA8_error": 0,
+  "max_rendered_error": 0.0006205881014575976,
+  "independent_local_arithmetic_replay_verified": true,
+  "first_row_alpha8": {
+    "FromInput": [
+      255,
+      0,
+      128,
+      255,
+      64,
+      0
+    ],
+    "None": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
+    "FromGrayScale": [
+      0,
+      64,
+      128,
+      192,
+      255,
+      32
+    ]
+  },
+  "counterfactual_max_delta": {
+    "none_linear": 0.75,
+    "grayscale_linear": 0.75,
+    "input_srgb": 0.16999012617503895,
+    "wrong_blend": 0.4686274491250515,
+    "white_binding": 0.75,
+    "missing_binding": 0.75,
+    "missing_tint": 0.5647059566834394
+  },
+  "same_asset_and_material_identity": true,
+  "raw_verified_json_label_defect": "reason=Unity_receipt_missing despite actual OBSERVED/PASS and correct receipt SHA; independent arithmetic replay agrees; raw evidence kept unmodified. Future verifier reason label corrected; new label regression not executed in this run.",
+  "original_assets_read": false,
+  "original_alpha_loss_proven": false,
+  "production_pixels": false,
+  "Android_device": false,
+  "XAPK": false
+}

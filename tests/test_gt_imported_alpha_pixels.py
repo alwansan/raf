@@ -51,6 +51,17 @@ class OracleTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"fresh_project"):
                 gate.stage(p)
 
+    def test_verify_file_success_reason_not_missing(self):
+        import json
+        with tempfile.TemporaryDirectory() as t:
+            root=Path(t)
+            raw,out=root/"mock.json",root/"verified.json"
+            raw.write_text(json.dumps(self.r))
+            result=gate.verify_file(raw,out,"test-mock",0)
+            self.assertEqual(result["status"],"PASS_AUTHORED_IMPORTED_ALPHA_VULKAN")
+            self.assertEqual(result["reason"],"independent_imported_and_rendered_RGBA_validation_passed")
+            self.assertEqual(json.loads(out.read_text()),result)
+
     def test_wrong_process_exit(self):
         with self.assertRaisesRegex(ValueError,"process_required"):
             gate.validate(self.r,"test-mock",self.h,1)
