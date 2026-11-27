@@ -1,0 +1,88 @@
+name: GT authored serialized Mesh binary consumer (NO original assets)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-authored-mesh-binary.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  binary-mesh:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only authored witness and code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tools/gt_authored_mesh_binary/witness.py
+            /tests/test_gt_original_mesh_source_storage.py
+            /tests/test_gt_mesh_document_stream_identity.py
+            /tests/test_gt_mesh_yaml_unique_mapping.py
+            /tests/test_compare_exported_mesh_geometry.py
+            /tests/test_gt_verify_original_mesh_export.py
+            /tests/test_gt_mesh_vertex_payload.py
+            /tests/test_gt_renderer_submesh_routes.py
+            /android-port/Experiments/ExportLineage/
+            /.github/workflows/raft-gt-authored-mesh-binary.yml
+      - name: Install pinned public decoder and dependencies
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          mkdir -p mesh-binary-evidence
+          python3 -m venv "$RUNNER_TEMP/gt-mesh-binary-python"
+          py="$RUNNER_TEMP/gt-mesh-binary-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3 Pillow==11.3.0
+          "$py" -m pip freeze | tee mesh-binary-evidence/tools.log
+      - name: Real serialized file decoder and exact native geometry consumer
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-mesh-binary-python/bin/python"
+          PYTHONPATH="$PWD" "$py" -B -W error tools/gt_authored_mesh_binary/witness.py --out mesh-binary-evidence 2>&1 | tee mesh-binary-evidence/witness.log
+      - name: Preserve all earlier fixture contracts
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-mesh-binary-python/bin/python"
+          for f in test_gt_original_mesh_source_storage.py test_gt_mesh_document_stream_identity.py test_gt_mesh_yaml_unique_mapping.py test_compare_exported_mesh_geometry.py test_gt_verify_original_mesh_export.py test_gt_mesh_vertex_payload.py test_gt_renderer_submesh_routes.py; do
+            "$py" -B -W error -m unittest discover -s tests -p "$f" -v 2>&1 | tee "mesh-binary-evidence/$f.log"
+          done
+          "$py" -B - <<'PY'
+          import json,re,hashlib
+          from pathlib import Path
+          root=Path("mesh-binary-evidence")
+          report=json.loads((root/"report.json").read_text())
+          tests={}
+          for p in sorted(root.glob("test_*.py.log")):
+              log=p.read_text()
+              count=re.search(r"^Ran (\d+) tests? in ",log,re.M)
+              assert count and re.search(r"^OK$",log,re.M),p.name
+              tests[p.name]=int(count[1])
+          assert len(tests)==7 and sum(tests.values())==73
+          assert report["positive_count"]==6 and report["negative_count"]==18
+          report["regression_tests"]=tests
+          report["total_regression_tests"]=sum(tests.values())
+          report["witness_sha256"]=hashlib.sha256(Path("tools/gt_authored_mesh_binary/witness.py").read_bytes()).hexdigest()
+          report["consumer_sha256"]=hashlib.sha256(Path("scripts/gt_verify_original_mesh_export.py").read_bytes()).hexdigest()
+          (root/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print("GT_ALL_REGRESSIONS_PASS",sum(tests.values()))
+          PY
+      - name: Retain actual authored binary fixtures and receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-authored-mesh-binary-${{ github.run_id }}
+          path: mesh-binary-evidence/
+          if-no-files-found: warn
+          retention-days: 14
