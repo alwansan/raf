@@ -30,6 +30,7 @@ from scripts import gt_texture_route_payload as texture_payload
 from scripts import gt_streamed_texture_route_payload as streamed_texture
 from scripts import gt_native_texture_route_sampler as native_sampler
 from scripts import gt_imported_png_route_pixels as png_pixels
+from scripts import gt_imported_bc3_route_pixels as bc3_pixels
 from scripts import gt_imported_png_route_importer as png_importer
 from scripts.b05_verify_material_texenv_bindings import normalize_texenvs
 from scripts.verify_exported_material_texture_links import is_texture, BUILTIN, ZERO, IMAGES
@@ -250,7 +251,7 @@ def src_target(owner,raw,externals):
     return target,pid
 
 
-def source_records(root,records,owners,*,loader=None,vertex_payloads=None,texture_payloads=False,streamed_textures=False,samplers=None,png_top_mips=None,png_importer_states=None):
+def source_records(root,records,owners,*,loader=None,vertex_payloads=None,texture_payloads=False,streamed_textures=False,samplers=None,png_top_mips=None,png_importer_states=None,png_bc3=False):
     """Parse the actual bytes matched to pinned manifest size and SHA."""
     if loader is None:
         import UnityPy
@@ -259,6 +260,8 @@ def source_records(root,records,owners,*,loader=None,vertex_payloads=None,textur
     require(samplers is None or (streamed_textures and not samplers),"fresh_native_source_sampler_mapping_required",Unknown)
     require(png_top_mips is None or (not texture_payloads and not png_top_mips),"fresh_png_source_map_required",Unknown)
     require(png_importer_states is None or (png_top_mips is not None and type(png_importer_states) is dict and not png_importer_states),"fresh_png_importer_source_map_required",Unknown)
+    require(not png_bc3 or (png_top_mips is not None and png_importer_states is None),"bc3_source_scope_requires_separate_png_mode",Unknown)
+    decoder=bc3_pixels if png_bc3 else png_pixels
     objects={};externals={};requests={};texture_requests={};png_requests={}
     for name in owners:
         _,size,digest=records["Raft_Data/"+name]
@@ -273,7 +276,7 @@ def source_records(root,records,owners,*,loader=None,vertex_payloads=None,textur
             if cls==28 and png_top_mips is not None:
                 try:
                     raw_tree=obj.read_typetree()
-                    png_requests[key]=png_pixels.safe_request(raw_tree)
+                    png_requests[key]=decoder.safe_request(raw_tree)
                     if png_importer_states is not None:png_importer_states[key]=png_importer.safe_source(raw_tree)
                 except Exception:
                     png_requests[key]="unreadable_png_source_texture"
@@ -304,16 +307,17 @@ def source_records(root,records,owners,*,loader=None,vertex_payloads=None,textur
     if streamed_textures:
         for key,proof in streamed_texture.resolve_requests(root,records,texture_requests).items():
             objects[key]=(28,proof)
-    if png_top_mips is not None:png_top_mips.update(png_pixels.resolve_requests(root,records,png_requests))
+    if png_top_mips is not None:png_top_mips.update(decoder.resolve_requests(root,records,png_requests))
     return objects,externals
 
 
-def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material_values=False,material_keywords=False,texture_payloads=False,streamed_textures=False,source_samplers=None,export_samplers=None,png_top_mips=None,png_importer_states=None):
+def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material_values=False,material_keywords=False,texture_payloads=False,streamed_textures=False,source_samplers=None,export_samplers=None,png_top_mips=None,png_importer_states=None,png_bc3=False):
     png_gate=png_top_mips is not None
     require(not png_gate or (type(png_top_mips) is dict and material_keywords and not texture_payloads),
             "png_gate_requires_V4_and_separate_native_scope",Unknown)
     importer_gate=png_importer_states is not None
     require(not importer_gate or (png_gate and type(png_importer_states) is dict),"png_importer_gate_requires_V8",Unknown)
+    require(not png_bc3 or (png_gate and not importer_gate),"bc3_gate_requires_separate_png_mode",Unknown)
     png_cache={};importer_cache={}
     sampler_gate=source_samplers is not None or export_samplers is not None
     require(not sampler_gate or (streamed_textures and type(source_samplers) is dict and type(export_samplers) is dict),
@@ -467,7 +471,10 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material
                         # Imported main object requires explicit type 3 material edge.
                         require(ap[2]==3 and tptr[2]==3,"png_trace_importer_identity_mismatch",Unknown)
                         if tex not in png_cache:
-                            try:png_cache[tex]=png_pixels.compare(png_top_mips.get(tex),*files[tptr[0]],tptr)
+                            proof=png_top_mips.get(tex)
+                            if isinstance(proof,png_pixels.Proof):
+                                require(type(proof) is (bc3_pixels.Proof if png_bc3 else png_pixels.Proof),"png_source_format_scope_mismatch",Unknown)
+                            try:png_cache[tex]=png_pixels.compare(proof,*files[tptr[0]],tptr)
                             except png_pixels.Unproven as exc:raise Unknown(str(exc)) from None
                             except png_pixels.Mismatch as exc:raise Drift(str(exc)) from None
                         if importer_gate:
@@ -573,7 +580,7 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material
     sampler_bound=sampler_gate and texture_bound and counts["native_texture_sampler_slots_matched"]==counts["texture_payload_slots_matched"]
     png_bound=png_gate and keyword_bound and bool(counts["imported_png_top_mip_slots_matched"])
     importer_bound=importer_gate and png_bound and counts["imported_png_importer_state_slots_matched"]==counts["imported_png_top_mip_slots_matched"]
-    return {"schema_version":9 if importer_gate else 8 if png_gate else 7 if sampler_gate else 6 if streamed_textures else 5 if texture_payloads else 4 if material_keywords else 3 if material_values else 2 if vertex_payloads is not None else 1,
+    return {"schema_version":10 if png_bc3 else 9 if importer_gate else 8 if png_gate else 7 if sampler_gate else 6 if streamed_textures else 5 if texture_payloads else 4 if material_keywords else 3 if material_values else 2 if vertex_payloads is not None else 1,
             "counts":dict(sorted(counts.items())),"reason_counts":dict(sorted(reasons.items())),
             "selected_renderer_routes_preserved":complete,
             "full_game_renderers_verified":False,
@@ -584,7 +591,9 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material
             "selected_nonnull_same_route_texture_payloads_verified":texture_bound,
             "selected_same_route_streamed_texture_payloads_verified":stream_bound,
             "selected_same_route_native_texture_sampler_verified":sampler_bound,
-            "selected_same_route_imported_png_top_mip_verified":png_bound,
+            "selected_same_route_imported_png_top_mip_verified":png_bound and not png_bc3,
+            **({"selected_same_route_imported_bc3_png_top_mip_verified":png_bound,
+                "bc3_compressed_payload_or_lower_mip_parity_verified":False} if png_bc3 else {}),
             **({"selected_same_route_imported_png_supported_serialized_importer_state_verified":importer_bound,
                  "selected_same_route_imported_png_serialized_importer_state_verified":importer_bound and counts["imported_png_importer_swizzle_unknown_slots"]==0,
                  "selected_same_route_imported_png_swizzle_verified":importer_bound and counts["imported_png_importer_swizzle_unknown_slots"]==0,
@@ -596,16 +605,16 @@ def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None,material
             "shader_program_color_scalar_or_GPU_parity_verified":False,"private_identifiers_published":False}
 
 
-def audit(source,zip2,project,material_trace,mesh_trace,renderer_trace,owners,*,imported_png=False,imported_png_importer=False):
+def audit(source,zip2,project,material_trace,mesh_trace,renderer_trace,owners,*,imported_png=False,imported_png_importer=False,imported_bc3=False):
     require(owners and len(owners)==len(set(owners)) and set(owners)<=set(OWNERS),"invalid_source_owner_scope")
     pins=manifest(zip2)
-    if imported_png or imported_png_importer:
+    if imported_png or imported_png_importer or imported_bc3:
         payloads={};png_top_mips={};states={} if imported_png_importer else None
-        objects,externals=source_records(source,pins,owners,vertex_payloads=payloads,png_top_mips=png_top_mips,png_importer_states=states)
+        objects,externals=source_records(source,pins,owners,vertex_payloads=payloads,png_top_mips=png_top_mips,png_importer_states=states,png_bc3=imported_bc3)
         mapping=traces(*(strict_json(bounded_snapshot(p,MAX_DOC)) for p in (material_trace,mesh_trace,renderer_trace)))
         files,docs=actual_index(project,mapping)
         report=compare(objects,externals,mapping,files,docs,vertex_payloads=payloads,material_values=True,
-                       material_keywords=True,png_top_mips=png_top_mips,png_importer_states=states)
+                       material_keywords=True,png_top_mips=png_top_mips,png_importer_states=states,png_bc3=imported_bc3)
         report["authenticated_selected_source_owners"]=len(owners)
         return report
     payloads={};source_samplers={};export_samplers={}
@@ -625,16 +634,18 @@ def main():
     mode=p.add_mutually_exclusive_group()
     mode.add_argument("--imported-png-top-mip",action="store_true")
     mode.add_argument("--imported-png-importer-state",action="store_true")
+    mode.add_argument("--imported-bc3-png-top-mip",action="store_true")
     a=p.parse_args()
     if a.out.exists() or any(a.out.resolve().is_relative_to(x.resolve()) for x in (a.source,a.zip2,a.project)):
         p.error("private source/export report boundary")
     try:
-        report=audit(a.source,a.zip2,a.project,a.material_trace,a.mesh_trace,a.renderer_trace,a.owner,imported_png=a.imported_png_top_mip,imported_png_importer=a.imported_png_importer_state)
+        report=audit(a.source,a.zip2,a.project,a.material_trace,a.mesh_trace,a.renderer_trace,a.owner,imported_png=a.imported_png_top_mip,imported_png_importer=a.imported_png_importer_state,imported_bc3=a.imported_bc3_png_top_mip)
     except Exception as exc:
-        report={"schema_version":9 if a.imported_png_importer_state else 8 if a.imported_png_top_mip else 7,"status":"INCONCLUSIVE","error_type":type(exc).__name__,
+        report={"schema_version":10 if a.imported_bc3_png_top_mip else 9 if a.imported_png_importer_state else 8 if a.imported_png_top_mip else 7,"status":"INCONCLUSIVE","error_type":type(exc).__name__,
                 "selected_renderer_routes_preserved":False,"private_identifiers_published":False}
     with a.out.open("x") as f:json.dump(report,f,sort_keys=True,indent=2);f.write("\n")
-    field=("selected_same_route_imported_png_serialized_importer_state_verified" if a.imported_png_importer_state else
+    field=("selected_same_route_imported_bc3_png_top_mip_verified" if a.imported_bc3_png_top_mip else
+           "selected_same_route_imported_png_serialized_importer_state_verified" if a.imported_png_importer_state else
            "selected_same_route_imported_png_top_mip_verified" if a.imported_png_top_mip else "selected_same_route_native_texture_sampler_verified")
     return 0 if report["selected_renderer_routes_preserved"] and report.get(field) else 2
 

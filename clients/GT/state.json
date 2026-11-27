@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-imported-png-route-binding/README_AR.md",
-  "next_action": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding (V10): separate BC3/DXT5 format 12, ordinary usage only; authenticated complete inline/direct-stream layout with block-rounded mip sizes and exact provider extent, independent Pillow DDS decode and pinned public converter FlipY; actual authored nonuniform multiblock PNG with alpha selector modes, same trace/material route, no V8/V9/native promotion or Unity/Android claim. Preserve V9 unknown Swizzle. A3 blocked pending verified authorized original source.",
+  "next_action": "V10 source gate implemented (unexecuted); extend actual authored public DXT5 PNG export fixture with two distinct same-size NPOT multiblock textures, both alpha selector modes, test independent decode plus same-route counterfactuals. Run dedicated authored-only public tool CI; preserve historical 234 tests and 69 controls; no need to rerun actual V7–V9 without new purpose.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "902174e3cd2d266a66748f7c41ed16a51fb531c5",
+    "reviewed_remote_head": "7f80870e611c616ab7d3cf75a6bd4457e3ddad18",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding",
-      "status": "NEXT_PRODUCTIVE",
-      "next": "G1-G2-imported-BC3-PNG-top-mip-same-route-binding (V10): separate BC3/DXT5 format 12, ordinary usage only; authenticated complete inline/direct-stream layout with block-rounded mip sizes and exact provider extent, independent Pillow DDS decode and pinned public converter FlipY; actual authored nonuniform multiblock PNG with alpha selector modes, same trace/material route, no V8/V9/native promotion or Unity/Android claim. Preserve V9 unknown Swizzle. A3 blocked pending verified authorized original source."
+      "status": "SOURCE_GATE_UNEXECUTED",
+      "next": "V10 source gate implemented (unexecuted); extend actual authored public DXT5 PNG export fixture with two distinct same-size NPOT multiblock textures, both alpha selector modes, test independent decode plus same-route counterfactuals. Run dedicated authored-only public tool CI; preserve historical 234 tests and 69 controls; no need to rerun actual V7–V9 without new purpose."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -5266,5 +5266,16 @@
       },
       "total_regression_tests": 234
     }
+  },
+  "v10_bc3_checkpoint": {
+    "status": "SOURCE_GATE_UNEXECUTED",
+    "starting_head": "7f80870e611c616ab7d3cf75a6bd4457e3ddad18",
+    "prior_v9_run": 45960313046,
+    "prior_v9_artifact": 15180771759,
+    "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "next": "V10 source gate implemented (unexecuted); extend actual authored public DXT5 PNG export fixture with two distinct same-size NPOT multiblock textures, both alpha selector modes, test independent decode plus same-route counterfactuals. Run dedicated authored-only public tool CI; preserve historical 234 tests and 69 controls; no need to rerun actual V7–V9 without new purpose.",
+    "original_assets_read": false,
+    "Unity_import_verified": false,
+    "XAPK": false
   }
 }
