@@ -1,0 +1,153 @@
+{
+  "archive_bytes": 2029,
+  "archive_sha256": "a7fe89aa4875ba343f2afb72642214d094f1cbcb34a3cae65dc979e0cd37a95f",
+  "compiler_reexecuted_locally": false,
+  "members": {
+    "compiler.json": {
+      "bytes": 4009,
+      "sha256": "a049de43f9292753242bb21aa6a098f34cd23229fd7f30fc2e393f75bbbfc18a"
+    },
+    "depth-tests.log": {
+      "bytes": 627,
+      "sha256": "dce89ff05af79baf942bd680aa8f8c2833d61b363ad7dcb15976a396e264929e"
+    },
+    "source-tests.log": {
+      "bytes": 1843,
+      "sha256": "2945af71ced4aa552e37f773abb4ce0c5037bb78a522398c578a52c627414b94"
+    }
+  },
+  "receipt": {
+    "Android_device_pixels_verified": false,
+    "Unity_compilation_or_render_verified": false,
+    "XAPK_requested": false,
+    "actual_compiler_executed": true,
+    "actual_stage_parameter_records_executed": true,
+    "combined_source_identical": true,
+    "forms": [
+      {
+        "combined_compiled_stages": [
+          {
+            "entrypoint": "gt_vs_main",
+            "spirv": {
+              "bytes": 1024,
+              "sha256": "c0f0c960c4c2f1fbd02785d467d1bf5f9ed22be5bf13338f2f1539100d93fe95"
+            },
+            "stage": "vs"
+          },
+          {
+            "entrypoint": "gt_fs_main",
+            "spirv": {
+              "bytes": 704,
+              "sha256": "5463ef6f0ab1b6f686dc844d58cfec8f5a56ae274e93cf6ca5b00a3337942da7"
+            },
+            "stage": "fs"
+          }
+        ],
+        "combined_hlsl": {
+          "bytes": 501,
+          "sha256": "837603a32aaa91f1f0f9346b02b0e79b38d690fedd971a6f6192789b187644a3"
+        },
+        "form": "bare",
+        "metadata_stage_records": 2,
+        "normalized_comparisons": [
+          {
+            "baseline_and_rebound_identical": true,
+            "normalized_spirv": {
+              "bytes": 848,
+              "sha256": "ef66bd7b97aa1bd14ca3ecaee307d5d82a9100e1d2c31718ad91fa4f8a63a0f4"
+            },
+            "stage": "vs"
+          },
+          {
+            "baseline_and_rebound_identical": true,
+            "normalized_spirv": {
+              "bytes": 584,
+              "sha256": "4c922f202bca99e7670c085f9388ed3459da3c6df1ad069b169507f571907768"
+            },
+            "stage": "fs"
+          }
+        ],
+        "parameter_blob": {
+          "bytes": 72,
+          "sha256": "c71fab73129c032a3799c1eb06d7b6a6fbf53a58d4af705f61fe73b2ba11f7c3"
+        },
+        "sampler_bindings": 2,
+        "texture_bindings": 2
+      },
+      {
+        "combined_compiled_stages": [
+          {
+            "entrypoint": "gt_vs_main",
+            "spirv": {
+              "bytes": 1024,
+              "sha256": "c0f0c960c4c2f1fbd02785d467d1bf5f9ed22be5bf13338f2f1539100d93fe95"
+            },
+            "stage": "vs"
+          },
+          {
+            "entrypoint": "gt_fs_main",
+            "spirv": {
+              "bytes": 704,
+              "sha256": "5463ef6f0ab1b6f686dc844d58cfec8f5a56ae274e93cf6ca5b00a3337942da7"
+            },
+            "stage": "fs"
+          }
+        ],
+        "combined_hlsl": {
+          "bytes": 501,
+          "sha256": "837603a32aaa91f1f0f9346b02b0e79b38d690fedd971a6f6192789b187644a3"
+        },
+        "form": "space0",
+        "metadata_stage_records": 2,
+        "normalized_comparisons": [
+          {
+            "baseline_and_rebound_identical": true,
+            "normalized_spirv": {
+              "bytes": 848,
+              "sha256": "ef66bd7b97aa1bd14ca3ecaee307d5d82a9100e1d2c31718ad91fa4f8a63a0f4"
+            },
+            "stage": "vs"
+          },
+          {
+            "baseline_and_rebound_identical": true,
+            "normalized_spirv": {
+              "bytes": 584,
+              "sha256": "4c922f202bca99e7670c085f9388ed3459da3c6df1ad069b169507f571907768"
+            },
+            "stage": "fs"
+          }
+        ],
+        "parameter_blob": {
+          "bytes": 72,
+          "sha256": "c71fab73129c032a3799c1eb06d7b6a6fbf53a58d4af705f61fe73b2ba11f7c3"
+        },
+        "sampler_bindings": 2,
+        "texture_bindings": 2
+      }
+    ],
+    "negative_invalid_binding_cases_rejected": 2,
+    "negative_wrong_valid_SPIRV_rejected": true,
+    "normalized_rebind_equivalence_checks": 4,
+    "original_game_assets_read": false,
+    "run_id": "45932314286-1-a02b194c82abab1344101f2efaabf5a600a3fb48",
+    "source_parameter_decoder_executed": true,
+    "stage_resource_records_checked": 4,
+    "status": "PASS_AUTHORED_RESOURCE_METADATA_AND_REAL_SPIRV",
+    "synthetic_only": true,
+    "tool_invocations": {
+      "glslangValidator": 14,
+      "spirv-opt": 10,
+      "spirv-val": 14
+    },
+    "unrelated_cb_mesh_varying_checks_stubbed": true,
+    "versions": {
+      "glslangValidator": "Glslang Version: 11:15.1.0",
+      "spirv-opt": "SPIRV-Tools v2025.1 unknown hash, 2026-05-13T06:03:38+00:00",
+      "spirv-val": "SPIRV-Tools v2025.1 unknown hash, 2026-05-13T06:03:38+00:00"
+    }
+  },
+  "receipt_consistency_verified_locally": true,
+  "run_authenticity_requires_github_job_identity": true,
+  "run_id": "45932314286-1-a02b194c82abab1344101f2efaabf5a600a3fb48",
+  "unit_tests": 13
+}

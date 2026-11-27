@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-27",
+  "starting_head": "f4698e504ce6cebe1ea68dbbb586d51ff6ad2819",
+  "implementation_head": "423cb24e4f662f07b1b5817ecc4b5282b21a1a9c",
+  "first_test_head": "519860c2eb5e8186cd3331390480d747ff0265e2",
+  "tested_head": "a02b194c82abab1344101f2efaabf5a600a3fb48",
+  "read_only_lab_head": "f933c4429803583d1ed5fa26e46bb0d3227f2027",
+  "acceptance": {
+    "status": "PASS_AUTHORED_RESOURCE_METADATA_AND_REAL_SPIRV",
+    "run_id": 45932314286,
+    "job_id": 140287488334,
+    "head": "a02b194c82abab1344101f2efaabf5a600a3fb48",
+    "failed_run_id": 45932233741,
+    "failed_run_reason": "IndexError collecting tool version from stdout; no final compiler receipt",
+    "unit_tests": 13,
+    "actual_glslang_compilations": 14,
+    "actual_spirv_validations_vulkan11": 14,
+    "normalization_invocations": 10,
+    "positive_rebind_equivalence_comparisons": 4,
+    "stage_records_checked": 4,
+    "combined_source_identical": true,
+    "negative_wrong_valid_SPIRV_rejected": true,
+    "negative_invalid_binding_cases_rejected": 2,
+    "actual_parameter_blob_reader": true,
+    "actual_stage_parameter_records": true,
+    "unrelated_cb_mesh_varying_stubbed": true,
+    "artifact_id": 15169013619,
+    "archive": "clients/GT/sessions/20261127-resource-register/actual-run-45932314286.zip",
+    "archive_sha256": "a7fe89aa4875ba343f2afb72642214d094f1cbcb34a3cae65dc979e0cd37a95f",
+    "archive_bytes": 2029,
+    "local_review": "clients/GT/sessions/20261127-resource-register/artifact-review.json",
+    "Unity_or_Android_pixels_verified": false,
+    "original_assets_read": false
+  },
+  "failed_attempt": {
+    "id": 45932233741,
+    "job_id": 140287236705,
+    "status": "completed",
+    "conclusion": "failure",
+    "failure_type": "IndexError: list index out of range",
+    "failure_at": "version collection in run_probe, stdout only, after compiler assertions and before writing final receipt",
+    "compiler_receipt_created": false,
+    "artifact_id": 15168938792,
+    "artifact_bytes": 857,
+    "artifact_sha256": "b8c5a69b029c5f7209412a1cf4f5230c6fe0ba59afd9ccd4188cee9ac0da3e7f",
+    "local_stderr_version_regression": "PASS",
+    "not_counted_as_accepted_run": true
+  },
+  "run": {
+    "id": 45932314286,
+    "head": "a02b194c82abab1344101f2efaabf5a600a3fb48",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-27T03:07:25Z",
+    "updated_at": "2026-11-27T03:07:59Z",
+    "jobs": [
+      {
+        "id": 140287488334,
+        "name": "resource-bindings",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checkout only source functions and authored resource fixtures",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run authored declaration and legacy depth regressions",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install public HLSL and SPIR-V compiler tools",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Execute production metadata-to-SPIR-V resource equivalence probe",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain only authored resource proof and unit test logs",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Checkout only source functions and authored resource fixtures",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 140287490091,
+        "name": "next23b-receipt",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 140287490355,
+        "name": "keyword-pixels",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 140287490493,
+        "name": "synthetic-pixels",
+        "status": "completed",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "guard_run": {
+    "id": 45932233934,
+    "conclusion": "success"
+  },
+  "artifact_expires": "2026-12-11T03:07:55Z",
+  "log_review": {
+    "lines": 271,
+    "compiler_report_logged": true,
+    "traceback_or_nonzero_exit_matches": 0
+  },
+  "authorization_review": {
+    "reviewed": [
+      "docs/ZIP2_SOURCE_PROVIDER.md",
+      "clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md",
+      "clients/GT/sessions/20261126-complete-handoff/REFERENCES_AR.md"
+    ],
+    "original_asset_rights_independently_verified": false,
+    "original_payload_acquired": false
+  },
+  "local": {
+    "contract_tests_passed": 10,
+    "version_stderr_regression_passed": true,
+    "prior_A2_files_unchanged": 17,
+    "prior_batch5_archive_sha256": "a7b0a80c25c753f6e081f9307c804575399d833e5deec5ff338ef4ceee5222a6",
+    "full_clone_verified": false,
+    "compiler_reexecuted_locally": false,
+    "actual_archive_replayed": true
+  },
+  "limits": {
+    "original_runtime_selection_verified": false,
+    "actual_game_assets_read": false,
+    "game_pixels_verified": false,
+    "new_Unity_run": false,
+    "new_Android_build": false,
+    "G0_G6": "OPEN",
+    "no_descriptor_arrays_or_UAV_or_general_macro_parser": true,
+    "CB_mesh_varying_checks_stubbed": true,
+    "no_change_to_material_GUID_or_census": true
+  },
+  "files": [
+    {
+      "path": "scripts/gt_resource_register_contract.py",
+      "git_blob_sha": "2ee53960250f4512dd4b14dbdc4a17cff066d487",
+      "sha256": "f5a28b023d4ac4a6a2185f67bcef64b0a3b01443b089b84bad947a2ef82bd02d"
+    },
+    {
+      "path": "tests/test_gt_resource_register_contract.py",
+      "git_blob_sha": "5037db6099c97db7beee70a6f911e97b9684164c",
+      "sha256": "5064f61a1be95153474aa79d1d920e751aba4d64d3644f61c3613fa142179841"
+    },
+    {
+      "path": "scripts/w1_rebind_depth_resources.py",
+      "git_blob_sha": "8966ce3b0f59c61a42cdd27a507b6c57eb6b811c"
+    },
+    {
+      "path": "scripts/gt_original_921_resource_rebind.py",
+      "git_blob_sha": "53440b6e09f13c691bc4c5ade48cb27c87f6a027"
+    },
+    {
+      "path": "scripts/gt_original_921_all_variants.py",
+      "git_blob_sha": "3ab23da40c1cfd8e77af5721e4bdd3d72fe749a9"
+    },
+    {
+      "path": "scripts/gt_original_921_shaderlab.py",
+      "git_blob_sha": "ca461194916c1f4cd61764ae46453e7ad88473c2"
+    },
+    {
+      "path": "tools/synthetic_material_alpha/resource_register_probe.py",
+      "git_blob_sha": "bbae9a63a5cc544894e16626ee0dac08e91bc0a6",
+      "sha256": "423abc34a1955593898bd6822c6a6f9fc70541cd057d74912e976efc0c4ba152"
+    },
+    {
+      "path": ".github/workflows/raft-gt-synthetic-material-alpha.yml",
+      "git_blob_sha": "f2e20b22ac477c43cea4e9424ac69b812908bb09"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-resource-register/review_resource_artifact.py",
+      "git_blob_sha": "0184636e0fe61f675bb49c05eae4399b0c06c41e",
+      "sha256": "16fc54163f4c2f28867b8075bee7610c218c0b76eab56c0988e7d24d36ce4647"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-resource-register/artifact-review.json",
+      "git_blob_sha": "d8f766c00d474c2fbd211907327591218c28ee10",
+      "sha256": "ae51f0e182fd2d0629a39be8a7f246a8c9dc3c0fe156cccebae656c0c9afb51b"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-resource-register/actual-run-45932314286.zip",
+      "git_blob_sha": "92aa3b0b735962d2b974d526b41530d01661f69d",
+      "sha256": "a7fe89aa4875ba343f2afb72642214d094f1cbcb34a3cae65dc979e0cd37a95f"
+    }
+  ]
+}

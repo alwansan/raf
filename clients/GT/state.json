@@ -1964,11 +1964,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "50332d816ac2bc5a8f92e84a0991f9bffde6a0a8",
-    "purpose": "active RAFT restoration; A1 authored Android Vulkan bundle and A2 authored Linux Vulkan runtime pixels proven; original restoration still open",
+    "reviewed_remote_head": "a02b194c82abab1344101f2efaabf5a600a3fb48",
+    "purpose": "A1/A2 authored proofs retained; original A3 blocked on authorized data, productive G2 shared resource compiler fix integrated and tested on authored fixture",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-keyword-pixels/README_AR.md",
+    "index": "clients/GT/sessions/20261127-resource-register/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -2137,8 +2137,8 @@
       },
       {
         "id": "A3",
-        "status": "ACTIVE_NEXT_SOURCE_AUTHORIZATION_GATE",
-        "action": "Check live authorized-source availability and independent scope/PassType/route metadata for NEXT23b, use existing owner-authorized Actions only within verified asset scope. Do not infer original local/global flags from synthetic behavior. If actual authorized source metadata unavailable, record specific blocker and perform nearest authorized G0-G6 repair instead of further repetitive synthetic gates. Prove original runtime and same-export GUID integration before acceptance."
+        "status": "BLOCKED_ON_VERIFIED_AUTHORIZED_ORIGINAL_SOURCE",
+        "action": "Source transport and hash documents reviewed; rights to use original asset data were not independently established in this environment. Do not acquire ZIP2 original assets based on transport access alone. If an authorized source is available, establish real NEXT23b scope/PassType/route metadata and exact original material selection; otherwise continue the next G0-G6 work item below."
       },
       {
         "id": "A4",
@@ -2191,6 +2191,39 @@
       "artifact_review": "clients/GT/sessions/20261127-keyword-pixels/artifact-review.json",
       "local_replay_matches_runner_report": true,
       "actual_original_runtime_or_Android_pixels_verified": false
+    },
+    "latest_resource_binding_fix": {
+      "status": "PASS_AUTHORED_RESOURCE_METADATA_AND_REAL_SPIRV",
+      "run_id": 45932314286,
+      "job_id": 140287488334,
+      "head": "a02b194c82abab1344101f2efaabf5a600a3fb48",
+      "failed_run_id": 45932233741,
+      "failed_run_reason": "IndexError collecting tool version from stdout; no final compiler receipt",
+      "unit_tests": 13,
+      "actual_glslang_compilations": 14,
+      "actual_spirv_validations_vulkan11": 14,
+      "normalization_invocations": 10,
+      "positive_rebind_equivalence_comparisons": 4,
+      "stage_records_checked": 4,
+      "combined_source_identical": true,
+      "negative_wrong_valid_SPIRV_rejected": true,
+      "negative_invalid_binding_cases_rejected": 2,
+      "actual_parameter_blob_reader": true,
+      "actual_stage_parameter_records": true,
+      "unrelated_cb_mesh_varying_stubbed": true,
+      "artifact_id": 15169013619,
+      "archive": "clients/GT/sessions/20261127-resource-register/actual-run-45932314286.zip",
+      "archive_sha256": "a7fe89aa4875ba343f2afb72642214d094f1cbcb34a3cae65dc979e0cd37a95f",
+      "archive_bytes": 2029,
+      "local_review": "clients/GT/sessions/20261127-resource-register/artifact-review.json",
+      "Unity_or_Android_pixels_verified": false,
+      "original_assets_read": false
+    },
+    "active_fallback_workstream": {
+      "id": "G2-resource-binding",
+      "status": "COMPLETE_AUTHORED_COMPILER_PATH_ONLY",
+      "evidence": "clients/GT/sessions/20261127-resource-register/artifact-review.json",
+      "next": "Use the newly integrated metadata-to-name binding path for a small actual Unity Vulkan texture/sampler pixel probe (not the previous unchanged alpha fixture), including different authored stage descriptor ordinals and nonzero-space rejection. Then move to another concrete G0-G6 repair or the authorized original source, not repeated generic contract tests. No game material claim without original integration."
     }
   }
 }
