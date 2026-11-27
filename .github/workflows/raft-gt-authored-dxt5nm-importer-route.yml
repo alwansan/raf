@@ -1,6 +1,6 @@
 name: GT authored DXT5nm supported importer same-route proof (NO Unity or APK)
 on:
-  # Dedicated authored-only V12 preparation; no original game acquisition.
+  # Dedicated authored-only V12 activation; no original game acquisition.
   workflow_dispatch:
   push:
     branches: [feature/android-native-port]
