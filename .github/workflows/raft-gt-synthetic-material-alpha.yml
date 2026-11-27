@@ -21,6 +21,7 @@ on:
           - particle-pixel-parity
           - particle-local-net-loss
           - renderer-submesh-routes
+          - public-renderer-pointer-witness
   push:
     branches: [feature/android-native-port]
     paths:
@@ -39,7 +40,7 @@ concurrency:
 
 jobs:
   synthetic-pixels:
-    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]') && !contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]') && !contains(github.event.head_commit.message, '[gt-imported-alpha-pixels]') && !contains(github.event.head_commit.message, '[gt-b05-local-documents]') && !contains(github.event.head_commit.message, '[gt-particle-pixel-parity]') && !contains(github.event.head_commit.message, '[gt-particle-local-net-loss]') && !contains(github.event.head_commit.message, '[gt-renderer-submesh-routes]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && !contains(github.event.head_commit.message, '[gt-next23b-receipt]') && !contains(github.event.head_commit.message, '[gt-keyword-pixels]') && !contains(github.event.head_commit.message, '[gt-resource-bindings]') && !contains(github.event.head_commit.message, '[gt-resource-pixels]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate]') && !contains(github.event.head_commit.message, '[gt-fft-coordinate-replay]') && !contains(github.event.head_commit.message, '[gt-particle-alpha-provenance]') && !contains(github.event.head_commit.message, '[gt-imported-alpha-pixels]') && !contains(github.event.head_commit.message, '[gt-b05-local-documents]') && !contains(github.event.head_commit.message, '[gt-particle-pixel-parity]') && !contains(github.event.head_commit.message, '[gt-particle-local-net-loss]') && !contains(github.event.head_commit.message, '[gt-renderer-submesh-routes]') && !contains(github.event.head_commit.message, '[gt-public-renderer-pointer-witness]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'material-alpha'))
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 30
@@ -1406,5 +1407,121 @@ jobs:
         with:
           name: gt-renderer-submesh-routes-${{ github.run_id }}
           path: renderer-submesh-results/*
+          if-no-files-found: warn
+          retention-days: 14
+
+
+  public-renderer-pointer-witness:
+    if: github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[gt-public-renderer-pointer-witness]')) || (github.event_name == 'workflow_dispatch' && inputs.probe == 'public-renderer-pointer-witness'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      DOTNET_PROCESSOR_COUNT: '2'
+    steps:
+      - name: Checkout authored witness and exact private hook composer only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/patch_export_lineage.py
+            /scripts/b02_stage_texture_lineage.py
+            /android-port/Experiments/ExportLineage/
+            /tools/synthetic_material_alpha/RaftAuthoredRendererWitness.cs
+            /.github/workflows/raft-gt-synthetic-material-alpha.yml
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Checkout public pinned exporter source only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: Source
+      - name: Compile exact public exporter and authored witness
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git -C ar-host rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          mkdir public-renderer-results
+          python3 -m scripts.patch_export_lineage --tool-source ar-host \
+            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage --renderer-lineage --native-texture-arrays --compute-lineage
+          cp tools/synthetic_material_alpha/RaftAuthoredRendererWitness.cs ar-host/Source/AssetRipper.Export.UnityProjects/
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("android-port/Experiments/ExportLineage/Program.cs")
+          text=p.read_text()
+          mark='if (args.Length == 1 && args[0] == "--probe-tool")'
+          assert text.count(mark)==1
+          p.write_text(text.replace(mark,'''if (args.Length == 2 && args[0] == "--probe-authored-renderers")
+          {
+              RaftAuthoredRendererWitness.Run(args[1]);
+              return;
+          }
+          '''+mark))
+          PY
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/gt-public-renderer-tool" \
+            > "$RUNNER_TEMP/gt-public-renderer-build.log" 2>&1 || {
+              tail -60 "$RUNNER_TEMP/gt-public-renderer-build.log" | tee public-renderer-results/build-failure.log
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/gt-public-renderer-tool/ExportLineage.dll" --probe-tool | tee public-renderer-results/tool-smoke.log
+          test -s "$RUNNER_TEMP/gt-public-renderer-tool/AssetRipper.Export.UnityProjects.dll"
+          python3 - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json,os
+          root=Path("ar-host/Source/AssetRipper.Export.UnityProjects")
+          result=dict(status="COMPILED_PUBLIC_EXPORTER",run_id=os.environ["GITHUB_RUN_ID"],
+              head=os.environ["GITHUB_SHA"],public_tool_revision="036098ab525a3f9f693dc101edeb21faad4d32d8",
+              files={p.name:sha256(p.read_bytes()).hexdigest() for p in
+                  (root/"RaftExportLineage.cs",root/"RaftAuthoredRendererWitness.cs",
+                   Path(os.environ["RUNNER_TEMP"])/"gt-public-renderer-tool/AssetRipper.Export.UnityProjects.dll")},
+              original_assets_read=False,APK=False)
+          Path("public-renderer-results/build.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          PY
+      - name: Execute actual compiled capture on authored scene collections
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet "$RUNNER_TEMP/gt-public-renderer-tool/ExportLineage.dll" \
+            --probe-authored-renderers "$RUNNER_TEMP/gt-authored-renderer-fixture" \
+            2>&1 | tee public-renderer-results/witness.log
+          cp "$RUNNER_TEMP/gt-authored-renderer-fixture/receipt.json" public-renderer-results/witness.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("public-renderer-results/witness.json")
+          j=json.loads(p.read_text())
+          for key,value in dict(status="PASS_PUBLIC_EXPORTER_AUTHORED_COMPONENT_POINTERS",
+              component_rows_verified=8,hidden_components_excluded=2,
+              global_component_pointers_verified=8,local_pointer_serialized_type2_zero_guid_verified=8,
+              cross_scene_global_pointers_verified=8,same_instance_material_mesh_component_traces=True,
+              actual_compiled_capture_executed=True,missing_mesh_trace_rejected=True,
+              original_assets_read=False,actual_scene_YAML_export_executed=False,
+              production_renderer_parity_verified=False,Unity_render_executed=False,XAPK=False).items():
+              assert type(j[key]) is type(value) and j[key]==value,(key,j[key])
+          print("PASS_PUBLIC_EXPORTER_POINTER_RECEIPT")
+          PY
+      - name: Retain only public-tool aggregate build and authored witness evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-public-renderer-pointer-witness-${{ github.run_id }}
+          path: public-renderer-results/*
           if-no-files-found: warn
           retention-days: 14
