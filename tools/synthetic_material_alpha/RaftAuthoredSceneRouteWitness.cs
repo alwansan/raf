@@ -194,6 +194,29 @@ public static class RaftAuthoredSceneRouteWitness
             tex.Format_C28E=AssetRipper.SourceGenerated.Enums.TextureFormat.RGBA32;
             tex.MipCount_C28=2;tex.ImageCount_C28=1;
             int dimension=SetTextureDimension(tex);
+            // Distinct source-defined serialized importer states. Capture
+            // from typed authored objects before any output importer exists.
+            if(importedPng)
+            {
+                Require((int)AssetRipper.SourceGenerated.Enums.ColorSpace.Linear==1 &&
+                    (int)AssetRipper.SourceGenerated.Enums.ColorSpace.Gamma==0 &&
+                    (int)AssetRipper.SourceGenerated.Enums.TextureImporterNPOTScale.None==0 &&
+                    (int)AssetRipper.SourceGenerated.Enums.TextureImporterAlphaSource.FromInput==1 &&
+                    (int)AssetRipper.SourceGenerated.Enums.TextureImporterCompression.CompressedHQ==2 &&
+                    (int)AssetRipper.SourceGenerated.Enums.TextureImporterFormat.Automatic==-1 &&
+                    (int)AssetRipper.SourceGenerated.Enums.TextureResizeAlgorithm.Mitchell==0 &&
+                    (int)AssetRipper.SourceGenerated.Enums.TextureImporterSwizzle.R==0 &&
+                    (int)AssetRipper.SourceGenerated.Enums.TextureImporterSwizzle.G==1 &&
+                    (int)AssetRipper.SourceGenerated.Enums.TextureImporterSwizzle.B==2 &&
+                    (int)AssetRipper.SourceGenerated.Enums.TextureImporterSwizzle.A==3 &&
+                    (int)AssetRipper.SourceGenerated.Enums.AndroidETC2FallbackOverride.UseBuildSettings==0,
+                    "authored_importer_enum_ABI_changed");
+                tex.ColorSpace_C28E=i==0?AssetRipper.SourceGenerated.Enums.ColorSpace.Gamma:
+                    AssetRipper.SourceGenerated.Enums.ColorSpace.Linear;
+                tex.IsReadable_C28=i==0;
+                tex.StreamingMipmaps_C28=i==1;
+                tex.StreamingMipmapsPriority_C28=i==0?-2:3;
+            }
             // Typed generated GLTextureSettings, including distinct U/V/W.
             // Different interface aliases must resolve to the same instance.
             var samplerProps=tex.GetType().GetInterfaces().SelectMany(t=>t.GetProperties())
@@ -301,6 +324,10 @@ public static class RaftAuthoredSceneRouteWitness
                 ["m_Width"]=tex.Width_C28,["m_Height"]=tex.Height_C28,
                 ["m_TextureFormat"]=(int)tex.Format_C28E,["m_MipCount"]=tex.MipCount_C28,
                 ["m_LightmapFormat"]=(int)tex.LightmapFormat_C28E,
+                ["m_ColorSpace"]=(int)tex.ColorSpace_C28E,
+                ["m_IsReadable"]=tex.IsReadable_C28,
+                ["m_StreamingMipmaps"]=tex.StreamingMipmaps_C28,
+                ["m_StreamingMipmapsPriority"]=tex.StreamingMipmapsPriority_C28,
                 ["m_TextureSettings"]=new {m_FilterMode=sampler.FilterMode,m_Aniso=sampler.Aniso,
                     m_MipBias=sampler.MipBias,m_WrapU=sampler.WrapU,m_WrapV=sampler.WrapV,m_WrapW=sampler.WrapW},
                 ["m_ImageCount"]=tex.ImageCount_C28,["m_TextureDimension"]=dimension,

@@ -13,6 +13,7 @@ from PIL import Image
 from scripts import gt_renderer_submesh_routes as gate
 from scripts import gt_mesh_vertex_payload as payload
 from scripts import gt_imported_png_route_pixels as png
+from scripts import gt_imported_png_route_importer as importer_state
 from scripts import gt_streamed_texture_route_payload as stream
 from scripts.t3_decoded_texture_pixel_parity import compare_pair
 
@@ -21,7 +22,7 @@ def need(ok,reason):
     if not ok:raise ValueError(reason)
 
 
-def load(root):
+def load(root,*,states=None):
     source=gate.strict_json(gate.bounded_snapshot(root/"source.json",1024*1024))
     producer=gate.strict_json(gate.bounded_snapshot(root/"producer.json",256*1024))
     need(producer.get("status")=="OBSERVED_AUTHORED_PUBLIC_PNG_EXPORT" and
@@ -45,6 +46,7 @@ def load(root):
             tree=gate.mesh_layout(tree)
         elif cls==28:
             requests[key]=png.source_request(tree)
+            if states is not None:states[key]=importer_state.source_proof(tree)
             need(isinstance(requests[key],stream.Request) and requests[key].mip_lengths==(16,4),
                  "authored_png_two_mips_stream_source")
             tree=None
@@ -183,9 +185,81 @@ def audit(root,out):
     out.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n");print(json.dumps(report,sort_keys=True))
 
 
+def audit_importer(root,out):
+    root=Path(root);out=Path(out)
+    need(not out.exists() and out.parent.is_dir(),"fresh_importer_receipt_required")
+    states={}
+    objects,externals,mapping,vertices,resolved,requests,pins,producer=load(root,states=states)
+    files,docs=gate.actual_index(root/"project",mapping)
+    need(len(states)==2 and {s.color_space for s in states.values()}=={0,1} and
+         {s.readable for s in states.values()}=={0,1} and {s.streaming for s in states.values()}=={0,1} and
+         {s.priority for s in states.values()}=={-2,3},"distinct_preexport_importer_state_required")
+    def run(f,d,strict=True):
+        return gate.compare(objects,externals,mapping,f,d,vertex_payloads=vertices,material_values=True,
+            material_keywords=True,png_top_mips=resolved,**({"png_importer_states":states} if strict else {}))
+    baseline=run(files,docs)
+    import yaml
+    schemas=[]
+    for key,state in sorted(states.items()):
+        ptr=mapping[key][1];imp=png.importer_document(files[ptr[0]][1],ptr)
+        schemas.append({"source":state.__dict__,"actual_importer":{k:imp.get(k) for k in
+            ("textureSettings","mipmaps","isReadable","streamingMipmaps","streamingMipmapsPriority","textureFormat",
+            "textureShape","textureType","maxTextureSize","nPOTScale","alphaUsage","alphaIsTransparency",
+            "swizzle","compressionQuality","platformSettings")}})
+    (out.parent/"importer-state-schema.json").write_text(json.dumps(schemas,indent=2,sort_keys=True)+"\n")
+    need(baseline["selected_same_route_imported_png_serialized_importer_state_verified"],
+         "actual_importer_baseline:"+str(baseline["reason_counts"]))
+    need(baseline["counts"]["imported_png_importer_state_slots_matched"]==4 and
+         baseline["counts"]["imported_png_importer_sampler_fields_matched_per_route"]==24 and
+         baseline["counts"]["imported_png_importer_source_mapping_fields_matched_per_route"]==36 and
+         baseline["counts"]["imported_png_importer_exporter_policy_fields_matched_per_route"]==68,
+         "actual_importer_baseline_counts")
+    need(not baseline["original_runtime_importer_or_Android_platform_fidelity_verified"] and
+         not baseline["selected_same_route_native_texture_sampler_verified"],"importer_scope_promotion")
+    controls={}
+    target=files[mapping[sorted(states)[0]][1][0]][0]
+    def disk(name,path,value,reason):
+        with tempfile.TemporaryDirectory() as tmp:
+            project=Path(tmp)/"project";shutil.copytree(root/"project",project)
+            p=Path(str(project/target.relative_to(root/"project"))+".meta")
+            # Actual meta only, preserving PNG bytes, GUID and other docs.
+            doc=yaml.safe_load(p.read_text());imp=doc["TextureImporter"];parent=imp
+            for step in path[:-1]:parent=parent[step]
+            field=path[-1]
+            need(field in parent and parent[field]!=value,"actual_importer_control_no_change:"+name)
+            parent[field]=value
+            p.write_text(yaml.safe_dump(doc,sort_keys=False))
+            f,d=gate.actual_index(project,mapping)
+            need(run(f,d,False)["selected_same_route_imported_png_top_mip_verified"],"V8_not_pass:"+name)
+            result=run(f,d)
+            need(not result["selected_same_route_imported_png_serialized_importer_state_verified"] and
+                 result["reason_counts"].get(reason,0)>0,"V9_not_reject:"+name+":"+str(result["reason_counts"]))
+            controls[name]={"V8_pass":True,"V9_reject":True,"reason":reason}
+    source=states[sorted(states)[0]]
+    disk("srgb",("mipmaps","sRGBTexture"),1-source.color_space,"same_route_png_source_mapping_sRGBTexture_drift")
+    disk("mip_enable",("mipmaps","enableMipMap"),1-source.mip_enabled,"same_route_png_source_mapping_enableMipMap_drift")
+    disk("readable",("isReadable",),1-source.readable,"same_route_png_source_mapping_isReadable_drift")
+    disk("streaming",("streamingMipmaps",),1-source.streaming,"same_route_png_source_mapping_streamingMipmaps_drift")
+    disk("priority",("streamingMipmapsPriority",),source.priority+1,"same_route_png_source_mapping_streamingMipmapsPriority_drift")
+    disk("wrap",("textureSettings","wrapV"),(source.sampler[4]+1)%4,"same_route_png_importer_wrapV_drift")
+    disk("unset_bias",("textureSettings","mipBias"),-100,"unknown_png_importer_sampler_default")
+    disk("unset_filter",("textureSettings","filterMode"),-1,"unknown_png_importer_sampler_default")
+    disk("alpha_policy",("alphaIsTransparency",),0,"same_route_png_exporter_policy_alphaIsTransparency_drift")
+    disk("compression",("platformSettings",0,"textureCompression"),0,"same_route_png_exporter_policy_textureCompression_drift")
+    disk("override",("platformSettings",0,"overridden"),1,"same_route_png_exporter_policy_overridden_drift")
+    disk("dimension_budget",("maxTextureSize",),1024,"same_route_png_source_mapping_maxTextureSize_drift")
+    disk("swizzle",("swizzle",),0,"same_route_png_exporter_policy_swizzle_drift")
+    report={"status":"PASS_ACTUAL_AUTHORED_PUBLIC_PNG_SERIALIZED_IMPORTER_ROUTE_JOIN","baseline":baseline,
+            "counterfactuals":controls,"counterfactual_count":len(controls),"source_states":len(states),
+            "source_captured_before_export":True,"original_assets_read":False,"Unity_import_executed":False,
+            "Android_device":False,"XAPK":False,"original_runtime_fidelity_verified":False}
+    out.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n");print(json.dumps(report,sort_keys=True))
+
+
 def main():
     p=argparse.ArgumentParser();p.add_argument("--root",type=Path,required=True);p.add_argument("--out",type=Path,required=True)
-    a=p.parse_args();audit(a.root,a.out)
+    p.add_argument("--importer-state",action="store_true")
+    a=p.parse_args();(audit_importer if a.importer_state else audit)(a.root,a.out)
 
 
 if __name__=="__main__":main()
