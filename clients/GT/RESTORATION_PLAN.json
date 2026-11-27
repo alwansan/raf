@@ -1306,7 +1306,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "4f6099f080c42175e79078f012111b3d818e827c",
+    "reviewed_remote_head": "66042df3aa35299d1d5337a644fdb38e8497a0d2",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -1563,8 +1563,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-streamed-texture-full-mip-same-route-binding",
-      "status": "CANDIDATE_NOT_EXECUTED",
-      "next": "Execute focused authored-scene-route-join only; verify actual file-backed resource export and controls; retain raw evidence."
+      "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
+      "next": "Inspect run 45953665475 completion, preserve actual result or fix witness without weakening pinned provider or mip proof."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -3209,7 +3209,7 @@
       }
     },
     "latest_streamed_texture_route_binding": {
-      "status": "CANDIDATE_NOT_EXECUTED",
+      "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
       "base": "4f6099f080c42175e79078f012111b3d818e827c",
       "gate": "G1-G2-streamed-texture-full-mip-same-route-binding",
       "session": "clients/GT/sessions/20261127-streamed-texture-route-binding/README_AR.md",
@@ -3221,7 +3221,15 @@
       "white_or_fire_fixed": false,
       "Unity_render_executed": false,
       "XAPK": false,
-      "next": "Execute focused authored-scene-route-join only; verify actual file-backed resource export and controls; retain raw evidence."
+      "next": "Inspect run 45953665475 completion, preserve actual result or fix witness without weakening pinned provider or mip proof.",
+      "candidate_commit": "c88ec3507c3e7985bc7573187963aae7e5eef7fc",
+      "activation_commit": "66042df3aa35299d1d5337a644fdb38e8497a0d2",
+      "run_id": 45953665475,
+      "job_id": 140355077407,
+      "guard_run_id": 45953665476,
+      "guard_conclusion": "success",
+      "regression_step": "success",
+      "observed_run_status": "in_progress"
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."
