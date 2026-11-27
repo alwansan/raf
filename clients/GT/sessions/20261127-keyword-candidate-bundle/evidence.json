@@ -1,0 +1,39 @@
+{
+  "status": "IN_PROGRESS_AUTHORED_CANDIDATE_UNITY_BUNDLE",
+  "starting_head": "d7d9fe9113a528fc6671abdb30d7548425dff42a",
+  "contract_head": "f75492503be745cb1f740cde7c7ce6938cb4fbde",
+  "probe_head": "4849e0c725355b87ffdef84790d7fd93f29f4070",
+  "activation_head": "b4cb8a5b56d8ae93197ba7e1f36b0a87d58ce0e7",
+  "run": {
+    "id": 45984849786,
+    "job": 140457707101,
+    "head": "b4cb8a5b56d8ae93197ba7e1f36b0a87d58ce0e7",
+    "status": "in_progress",
+    "conclusion": null,
+    "compatibility_guard": {
+      "id": 45984850061,
+      "conclusion": "success"
+    }
+  },
+  "actual_source_regressions": 41,
+  "actual_new_source_tests": 12,
+  "actual_previous_tests": 29,
+  "source_regression_step": "success",
+  "planned_authored_passes": 1,
+  "planned_exact_routes": 4,
+  "planned_stage_markers": 8,
+  "planned_actual_bundle_controls": 3,
+  "actual_Unity_bundle_verified": false,
+  "actual_scope_observations_verified": false,
+  "actual_decoded_stage_identity_verified": false,
+  "source_fixed_macro_semantics_verified": false,
+  "original_source_authorization_verified": false,
+  "original_assets_read": false,
+  "original_runtime_verified": false,
+  "production_activation": false,
+  "installation_allowed": false,
+  "Android_device": false,
+  "XAPK": false,
+  "session": "clients/GT/sessions/20261127-keyword-candidate-bundle/README_AR.md",
+  "next": "Inspect actual authored Unity Android Vulkan bundle run 45984849786 at immutable b4cb8a5b56d8ae93197ba7e1f36b0a87d58ce0e7. Preserve actual Unity raw receipt, bundle, serialized complete route keys and decoded SPIR-V module hashes/markers, or classify failure exactly; do not soften scope/pass/route/identity checks without evidence. One named Always/Normal pass and mixed global/local authored controls only. After proof, extend distinct remaining source-specific semantics (named pass types, fixed macros, sparse/orphan/instancing) only when justified. A3 remains blocked until independently verified rights and original provenance; no acquisition, production activation, installer or APK/XAPK. Then actual ten-group/NEXT23b source-specific runtime and same-export proof; Particle108 local export alpha, white meshes, black fire, water and remaining G0–G6 still open."
+}
