@@ -1305,6 +1305,17 @@
     "no_GT_XAPK_created": true
   },
   "current_handoff": {
+    "latest_v17_run": {
+      "id": 45979650728,
+      "job": 140439999714,
+      "head": "1fb6a0be70ead8c48915c24b73b520c88a1423b9",
+      "status": "in_progress",
+      "conclusion": null,
+      "compatibility_guard": {
+        "id": 45979650667,
+        "conclusion": "success"
+      }
+    },
     "latest_v16_run": {
       "id": 45977510081,
       "job": 140432842108,
@@ -1317,11 +1328,11 @@
       }
     },
     "date": "2026-11-27",
-    "reviewed_remote_head": "0c198aa16784aa0c5a956b491328827ad6da50cc",
-    "purpose": "Actual authored V16 direct exporter Unity reimport PASS; independent raw three-archive comparison; original restoration still blocked; V17 raster route next",
+    "reviewed_remote_head": "1fb6a0be70ead8c48915c24b73b520c88a1423b9",
+    "purpose": "V16 actual authored PASS retained; V17 exact candidate raster route in progress; original source acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/README_AR.md",
+    "index": "clients/GT/sessions/20261127-dxt5nm-raster-route-v17/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -5636,5 +5647,43 @@
     "independent_actual_three_archive_recheck": true,
     "evidence": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/actual-pass-45977510081.json",
     "recheck": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/recheck_three_archives.py"
+  },
+  "v17_dxt5nm_raster_route_checkpoint": {
+    "status": "IN_PROGRESS_AUTHORED_V16_CANDIDATE_RASTER_ROUTE",
+    "starting_head": "a813024fac5ac051e5536cb47d50a892c3e5a1e5",
+    "source_head": "06301fff698b0a73662c87881c69ad4853856d58",
+    "float_RT_guard_head": "ca25dd2c6dce017d08c9dbe62c1d772a1ac390dd",
+    "activation_head": "1fb6a0be70ead8c48915c24b73b520c88a1423b9",
+    "run": {
+      "id": 45979650728,
+      "job": 140439999714,
+      "head": "1fb6a0be70ead8c48915c24b73b520c88a1423b9",
+      "status": "in_progress",
+      "conclusion": null,
+      "compatibility_guard": {
+        "id": 45979650667,
+        "conclusion": "success"
+      }
+    },
+    "planned_regressions": 306,
+    "planned_historical_V11_V12_controls": 37,
+    "planned_V15_controls": 6,
+    "planned_V17_receipt_falsifiers": 7,
+    "planned_actual_transient_pixel_controls": 2,
+    "planned_renderer_routes": 2,
+    "planned_submesh_slots": 4,
+    "planned_mip_draws": 12,
+    "actual_Unity_raster_verified": false,
+    "native_sampler_parity_verified": false,
+    "manual_alpha_edit": false,
+    "original_assets_read": false,
+    "production_activation": false,
+    "source_lower_mip_parity_verified": false,
+    "original_shader_program_parity_verified": false,
+    "scene_import_verified": false,
+    "Android_device": false,
+    "XAPK": false,
+    "session": "clients/GT/sessions/20261127-dxt5nm-raster-route-v17/README_AR.md",
+    "next": "Inspect actual V17 raster run 45979650728 on immutable 1fb6a0be70ead8c48915c24b73b520c88a1423b9; require actual fragment packed/normal/UV readbacks on four real authored submesh slots, independent V16 mip-byte oracle, two actual transient controls and restoration, seven receipt falsifiers. Keep V16 accepted separately; retain failure or PASS with exact archive. Then return to authentic source provenance and white-mesh/black-fire G0–G6 work; no original acquisition without authorization."
   }
 }
