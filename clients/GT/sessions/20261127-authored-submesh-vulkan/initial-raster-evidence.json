@@ -1,0 +1,43 @@
+{
+  "status": "FAIL_INDEPENDENT_ORACLE_COLOR_PROPERTY_CONVERSION",
+  "run_id": 45944786101,
+  "job_id": 140326878133,
+  "head": "4e1b28de9c9caa0ef81dad5e5967a9487516604d",
+  "conclusion": "failure",
+  "guard_run_id": 45944786181,
+  "artifact_id": 15173699568,
+  "archive": "clients/GT/sessions/20261127-authored-submesh-vulkan/actual-raster-run-45944786101.zip",
+  "archive_bytes": 6410,
+  "archive_sha256": "b5d7400fa34948d2fe472945aa6331e1bc47b659f1d3990e5d2d5b044e44d391",
+  "archive_git_blob": "614b6b194daaea67e98b33ac2f8f1f844f0c4fab",
+  "archive_crc_sha_size_verified_locally": true,
+  "oracle_tests": 13,
+  "Unity_render_step_conclusion": "success",
+  "raw_receipt_status": "OBSERVED",
+  "raw_receipt_reason": "ten_cases_captured_independent_oracle_required",
+  "raw_cases": 10,
+  "raw_imported_textures": 2,
+  "raw_raster_samples": 320,
+  "verified_status": "FAIL",
+  "verified_reason": "numeric_vector_mismatch",
+  "root_cause": "Original Python oracle treated ShaderLab Color values as linear constants; Unity Linear project converts sRGB Color properties to linear before shader upload. Texture import is non-sRGB. Independent documented equation agrees with raw; formal CPU replay pending.",
+  "unity_manual": "https://docs.unity3d.com/2021.3/Documentation/Manual/SL-PropertiesInPrograms.html",
+  "members": {
+    "oracle-tests.log": {
+      "bytes": 1412,
+      "sha256": "c9adfdca24cd0984560f712383f1970c03b450fa1da3ae183f1aaf404409ba8d"
+    },
+    "raw.unity.json": {
+      "bytes": 138740,
+      "sha256": "74076d174a9b9e9c41316dcf00688fed29cd5bb32a76ee05ea96eccc80b227b1"
+    },
+    "verified.json": {
+      "bytes": 334,
+      "sha256": "7893c6f5d4d19716fecd393801198617ab70655a1fbf4b4b8581f00f9e338418"
+    }
+  },
+  "original_assets_read": false,
+  "production_pixels": false,
+  "Android_device": false,
+  "XAPK": false
+}

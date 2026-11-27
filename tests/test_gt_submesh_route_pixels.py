@@ -35,6 +35,17 @@ class Oracle(unittest.TestCase):
     def test_mock_contract_and_pixel_equivalence(self):
         r=self.check();self.assertEqual(r["actual_Vulkan_RGBA_pixels_verified"],320)
         self.assertTrue(r["swapped_materials_and_reversed_mesh_same_pixels_distinct_observed_bindings"])
+    def test_color_property_white_texture_literal_linear_values(self):
+        rgba=gate.expected_pixel("white_texture",0,0)
+        for actual,expected in zip(rgba,[0.6038273388553378,0.21404114048223255,0.05087608817155679,1.]):
+            self.assertAlmostEqual(actual,expected,places=12)
+        # Non-sRGB texture sample 32/255 is not separately linearized.
+        self.assertAlmostEqual(gate.expected_pixel("baseline",0,0)[0],32/255*0.6038273388553378,places=12)
+
+    def test_gamma_color_instead_of_linear_rejected(self):
+        self.r["cases"][4]["pixels"][0]["observed"]=[.8,.5,.25,1.]
+        with self.assertRaisesRegex(ValueError,"numeric_vector_mismatch"):self.check()
+
     def test_stage_no_render(self):
         with TemporaryDirectory() as t:
             p=Path(t)/"project";self.assertFalse(gate.stage(p)["Unity_render_executed"])

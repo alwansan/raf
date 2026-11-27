@@ -9,7 +9,7 @@ import zlib
 from pathlib import Path
 
 from scripts.gt_synthetic_material_alpha import regular_path, SETTINGS, EDITOR_VERSION
-from scripts.gt_imported_alpha_pixels import digest, strict_json
+from scripts.gt_imported_alpha_pixels import digest, strict_json, linear
 
 ROOT=Path(__file__).resolve().parents[1]
 TOOLS=ROOT/"tools/synthetic_material_alpha"
@@ -95,7 +95,12 @@ def expected_pixel(name,x,y):
     v=v*slot["scale"][1]+slot["offset"][1]
     raw=texel(slot["texture"],min(3,max(0,math.floor(u*4))),min(1,max(0,math.floor(v*2))))
     rgb=raw[:3] if slot["shader"]==SHADER_A else raw[:3][::-1]
-    return [c/255*t for c,t in zip(rgb,slot["tint"][:3])]+[1.]
+    # ShaderLab declares _Tint as Color, not Vector. Unity 2021.3
+    # supplies the shader with linearized sRGB material colors in Linear
+    # projects. The authored PNG importer is explicitly non-sRGB, so only
+    # the material RGB is converted, not the sampled texture or alpha.
+    # https://docs.unity3d.com/2021.3/Documentation/Manual/SL-PropertiesInPrograms.html
+    return [c/255*linear(t) for c,t in zip(rgb,slot["tint"][:3])]+[1.]
 
 
 def need(test,reason):
@@ -185,6 +190,7 @@ def validate(report,run_id,source_hashes,exit_code):
                 persistent_mesh_material_texture_assets=6,restored_baseline_verified=True,
                 max_rendered_error=max(errors.values()),case_rendered_errors=errors,case_difference_from_baseline=diffs,
                 backend="Vulkan",Unity_version=EDITOR_VERSION,device=report["graphics_device_name"],
+                tint_policy="ShaderLab_Color_sRGB_to_linear_RGB_only_texture_import_linear",
                 synthetic_only=True,original_assets_read=False,white_mesh_repaired=False,production_pixels=False,Android_device=False,XAPK=False)
 
 
