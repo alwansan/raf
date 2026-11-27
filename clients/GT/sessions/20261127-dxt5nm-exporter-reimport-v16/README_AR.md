@@ -11,3 +11,13 @@ Next: activate only authored V16 workflow after review; inspect exact run and re
 ## Activation and live status
 
 Source 4a206be8844aa0e455079208a301dcddf0c0e1bb; activation 97666cc835f929053aa7621a058ce9bdfbfe633f; [45976163790](https://github.com/alwansan/raf/actions/runs/45976163790), job 140428299621, IN PROGRESS. [Guard 45976163752](https://github.com/alwansan/raf/actions/runs/45976163752) SUCCESS. At check, checkout underway; no actual Unity result. Workflow expected 291 regressions and 37+6+10 controls; no new game build. Next inspect exact run and archive, not a new activation.
+
+## Independent archive inspection
+
+`inspect_archive.py` is an independent offline checker, not an executed result. After V16 succeeds, download the exact Actions ZIP, verify its digest from the API, then run from a repo checkout with Python + Pillow:
+
+```bash
+python3 clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/inspect_archive.py --archive actual-v16.zip --sha256 <Actions-artifact-sha256> --run 45976163790 --head 97666cc835f929053aa7621a058ce9bdfbfe633f --out actual-pass-45976163790.json
+```
+
+It checks CRC, every member SHA, immutable run ID, actual candidate PNG/metadata bytes and decoded RGBA, six normalized V15 export pairs, four exact route and shader adapter slots, all six V14 alpha_off observed mip byte strings and hashes, 70 top pixels, 84 actual GPU texels and negative-control/regression counts. Do not run it on a substituted or constructed receipt. It has not yet been exercised on the V16 archive. Last live check: checkout and source-only regression step SUCCESS, public exporter build in progress; no V16 actual Unity verdict.
