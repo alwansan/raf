@@ -49,7 +49,7 @@ public static class RaftAuthoredSceneRouteWitness
             .Where(p=>p.Name.StartsWith(stem,StringComparison.Ordinal) &&
                 typeof(IPPtr).IsAssignableFrom(p.PropertyType) && p.GetIndexParameters().Length==0)
             .Select(p=>p.GetValue(source)).OfType<IPPtr>()
-            .Distinct(ReferenceEqualityComparer.Instance).ToArray();
+            .Distinct<IPPtr>(ReferenceEqualityComparer.Instance).ToArray();
         Require(values.Length==1,"authored_raw_pointer_ambiguous:"+stem);
         var raw=values[0];
         var setters=raw.GetType().GetInterfaces().Where(t=>t.IsGenericType &&
