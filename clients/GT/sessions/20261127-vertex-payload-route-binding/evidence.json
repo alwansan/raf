@@ -1,0 +1,22 @@
+{
+  "status": "CANDIDATE_NOT_EXECUTED",
+  "base": "de21c5ef6f9cc4bcc4dda3a4c0eb4cc1d2f59335",
+  "gate": "G1-G2-mesh-vertex-payload-same-route-byte-binding",
+  "session": "clients/GT/sessions/20261127-vertex-payload-route-binding/README_AR.md",
+  "scripts": [
+    "scripts/gt_mesh_vertex_payload.py",
+    "scripts/gt_renderer_submesh_routes.py",
+    "scripts/gt_verify_original_mesh_export.py",
+    "scripts/gt_authored_scene_route_witness.py"
+  ],
+  "test": "tests/test_gt_mesh_vertex_payload.py",
+  "actual_public_export_pending": true,
+  "original_assets_read": false,
+  "original_source_authorized": false,
+  "G0_G6_closed": false,
+  "production_renderer_parity_verified": false,
+  "white_or_fire_fixed": false,
+  "unity_render_executed": false,
+  "XAPK": false,
+  "next": "Run only the authored public export and new CPU regression suite; retain actual result; then same-route material scalar/color."
+}

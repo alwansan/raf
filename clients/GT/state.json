@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-actual-authored-scene-routes/README_AR.md",
-  "next_action": "Extend the same-instance ordered renderer route gate to exact vertex/UV payload proof, using actual pinned owner bytes and stream range bytes instead of historical isolated counts. Review gt_verify_original_mesh_export.py source_geometry: current verify-then-seek (cached whole-provider verification) does not bind the exact subsequently consumed stream bytes; replace with one-pass SHA+size+bounded range capture (reuse verified_range or efficient verified multi-range pass with bounded memory, no repeated full-file hashes per mesh if feasible). Preserve old geometry comparison incl compressed attrs/bindposes. Implement explicit v2 per-mesh payload/layout evidence joined through the same actual scene trace GUID/anchor and MeshFilter/Renderer; source inline bytes vs streamed cases, equal-length mutation, swapped range, altered UV payload with same descriptors and indices, unsupported/unbound stream, compressed/unsupported layout kept unproven. Author independent tests; if actual public YAML witness rerun justified, add source m_DataSize bytes from typed object before export and verify exact 120-byte authored interleaved vertex payload and wrong-UV counterfactual against actual output. Do not imply vertex payload validation from current 13-document identity gate. No new Unity run unless new raster purpose. Original source authorization A3 remains blocked; G0-G6 open; do not acquire source, install original shaders, package or phone test. Then progress other white/fire causes incl material scalar/color and keywords by real evidence.",
+  "latest_session": "clients/GT/sessions/20261127-vertex-payload-route-binding/README_AR.md",
+  "next_action": "Run only the authored public export and new CPU regression suite; retain actual result; then same-route material scalar/color.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "ae362d0a4314ab38d14b3649859844255b33c2dc",
+    "reviewed_remote_head": "de21c5ef6f9cc4bcc4dda3a4c0eb4cc1d2f59335",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -3153,6 +3153,28 @@
       "retry_run_id": 45946854653,
       "original_assets_read": false,
       "XAPK": false
+    },
+    "latest_vertex_payload_route_binding": {
+      "status": "CANDIDATE_NOT_EXECUTED",
+      "base": "de21c5ef6f9cc4bcc4dda3a4c0eb4cc1d2f59335",
+      "gate": "G1-G2-mesh-vertex-payload-same-route-byte-binding",
+      "session": "clients/GT/sessions/20261127-vertex-payload-route-binding/README_AR.md",
+      "scripts": [
+        "scripts/gt_mesh_vertex_payload.py",
+        "scripts/gt_renderer_submesh_routes.py",
+        "scripts/gt_verify_original_mesh_export.py",
+        "scripts/gt_authored_scene_route_witness.py"
+      ],
+      "test": "tests/test_gt_mesh_vertex_payload.py",
+      "actual_public_export_pending": true,
+      "original_assets_read": false,
+      "original_source_authorized": false,
+      "G0_G6_closed": false,
+      "production_renderer_parity_verified": false,
+      "white_or_fire_fixed": false,
+      "unity_render_executed": false,
+      "XAPK": false,
+      "next": "Run only the authored public export and new CPU regression suite; retain actual result; then same-route material scalar/color."
     }
   }
 }

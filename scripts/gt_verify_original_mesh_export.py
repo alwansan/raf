@@ -12,7 +12,7 @@ import re
 import struct
 
 from scripts.gt_stage_serialized_owners import OWNERS
-from scripts.gt_serialized_graphics_counts import verify
+from scripts.gt_particle108_source_pixel_parity import verified_range
 from scripts.gt_zip2_payloads import manifest
 from scripts.verify_exported_material_texture_links import HEADER, GUID
 
@@ -28,18 +28,16 @@ def source_geometry(tree, source, records, verified_streams):
     offset, size = stream["offset"], stream["size"]
     if size:
         name = stream["path"]
-        if not name or Path(name).name != name or not name.endswith(".resS"):
+        if not isinstance(name,str) or not re.fullmatch(r"[A-Za-z0-9_.-]+\.resS",name):
             raise ValueError("invalid_original_mesh_stream_name")
         _, stream_size, sha = records["Raft_Data/" + name]
         if offset < 0 or size < 0 or offset + size > stream_size:
             raise ValueError("invalid_original_mesh_stream_extent")
         file = source / name
-        if name not in verified_streams:
-            verify(file, stream_size, sha)
-            verified_streams.add(name)
-        with file.open("rb") as handle:
-            handle.seek(offset)
-            streamed = handle.read(size)
+        # The set is accounting only, never authorization for later reads.
+        # Correctness takes precedence over the historical cached fast path.
+        streamed = verified_range(file, (stream_size, sha), offset, size)
+        verified_streams.add(name)
         if len(streamed) != size or (payload and streamed != payload):
             raise ValueError("conflicting_original_mesh_vertex_payload")
         payload = streamed
@@ -189,8 +187,8 @@ def inspect(source, records, project, trace, same_instance, owners=OWNERS, *, st
     for owner in owners:
         path = source / owner
         _, size, sha = records["Raft_Data/" + owner]
-        verify(path, size, sha)
-        env = UnityPy.load(str(path))
+        raw = verified_range(path, (size, sha), 0, size)
+        env = UnityPy.load(raw)
         for obj in env.file.objects.values():
             if obj.type.name != "Mesh":
                 continue

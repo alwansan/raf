@@ -2,7 +2,8 @@
 
 Strict bounded candidate: triangle-list submeshes with inline indices and
 UV0 descriptors. Unsupported topology/renderer/material scope is UNKNOWN,
-never auto-repaired. This does not prove vertex payload or shader programs.
+never auto-repaired. V1 identity-only is historical; the CLI requires V2
+byte binding. Neither proves shader programs or GPU behavior.
 Private original source and three traces are never published.
 """
 from __future__ import annotations
@@ -20,6 +21,7 @@ from scripts.gt_zip2_payloads import manifest
 from scripts.gt_original_material_link_graph import pointer as source_pointer, declared_external_owner
 from scripts.gt_particle108_source_pixel_parity import verified_range, bounded_snapshot
 from scripts.gt_next23b_unity_receipt import strict_json
+from scripts import gt_mesh_vertex_payload as vertex_payload
 from scripts.b05_verify_material_texenv_bindings import normalize_texenvs
 from scripts.verify_exported_material_texture_links import is_texture, BUILTIN, ZERO, IMAGES
 from scripts.b03_verify_renderer_material_links import GUID
@@ -228,12 +230,12 @@ def src_target(owner,raw,externals):
     return target,pid
 
 
-def source_records(root,records,owners,*,loader=None):
+def source_records(root,records,owners,*,loader=None,vertex_payloads=None):
     """Parse the actual bytes matched to pinned manifest size and SHA."""
     if loader is None:
         import UnityPy
         loader=UnityPy.load
-    objects={};externals={}
+    objects={};externals={};requests={}
     for name in owners:
         _,size,digest=records["Raft_Data/"+name]
         raw=verified_range(root/name,(size,digest),0,size)
@@ -246,13 +248,20 @@ def source_records(root,records,owners,*,loader=None):
             require(type(key[1]) is int and key[1]>0 and key not in objects,"duplicate_source_identity")
             tree=obj.read_typetree() if cls not in {48,*TEX} else None
             if cls==43:
+                if vertex_payloads is not None:
+                    try:requests[key]=vertex_payload.source_request(tree)
+                    except (KeyError,TypeError,ValueError,OverflowError) as e:
+                        requests[key]=str(e) if type(e) is ValueError and re.fullmatch(r'[A-Za-z0-9_]+',str(e)) else 'unsupported_source_vertex_payload'
                 try:tree=mesh_layout(tree)
                 except (Unknown,Drift,KeyError,TypeError,ValueError):tree=None
             objects[key]=(cls,tree)
+    if vertex_payloads is not None:
+        require(not vertex_payloads,'fresh_vertex_payload_mapping_required')
+        vertex_payloads.update(vertex_payload.resolve_requests(root,records,requests))
     return objects,externals
 
 
-def compare(objects,externals,mapping,files,docs):
+def compare(objects,externals,mapping,files,docs,*,vertex_payloads=None):
     counts=Counter();reasons=Counter()
     filters=defaultdict(list)
     for key,(cls,tree) in objects.items():
@@ -353,6 +362,17 @@ def compare(objects,externals,mapping,files,docs):
             observed=mesh_layout(ma,True)
             require(expected==observed,"mesh_index_submesh_or_UV_layout_drift")
             counts["renderer_mesh_layouts_matched"]+=1
+            if vertex_payloads is not None:
+                proof=vertex_payloads.get(mesh)
+                require(isinstance(proof,vertex_payload.Proof),
+                        proof if type(proof) is str else "missing_same_route_vertex_payload",Unknown)
+                try: actual_proof=vertex_payload.exported_proof(ma)
+                except (KeyError,TypeError,ValueError,OverflowError) as exc:
+                    raise Unknown(str(exc) if type(exc) is ValueError and re.fullmatch(r"[A-Za-z0-9_]+",str(exc))
+                                  else "unsupported_export_vertex_payload") from None
+                require((proof.length,proof.sha256)==(actual_proof.length,actual_proof.sha256),
+                        "same_route_vertex_or_UV_bytes_drift")
+                counts["renderer_vertex_payloads_matched"]+=1
             before,after=tree["m_Materials"],actual["m_Materials"]
             require(type(before) is list and type(after) is list,"invalid_material_slot_array")
             require(len(before)==len(after),"renderer_material_slot_count_drift")
@@ -379,6 +399,9 @@ def compare(objects,externals,mapping,files,docs):
                     counts["material_null_texture_slots_preserved"]+=int(tex is None)
                 counts["complete_submesh_material_identity_routes"]+=1
             counts["complete_renderer_routes"]+=1
+            if vertex_payloads is not None:
+                counts["complete_vertex_byte_bound_renderer_routes"]+=1
+                counts["complete_vertex_byte_bound_submesh_routes"]+=len(before)
         except Unknown as error:
             counts["unproven_renderer_routes"]+=1
             reasons[str(error)]+=1
@@ -388,20 +411,27 @@ def compare(objects,externals,mapping,files,docs):
         except (KeyError,TypeError,ValueError,AttributeError,OverflowError,struct.error):
             counts["unproven_renderer_routes"]+=1
             reasons["unsupported_private_object_layout"]+=1
-    return {"schema_version":1,"counts":dict(sorted(counts.items())),"reason_counts":dict(sorted(reasons.items())),
-            "selected_renderer_routes_preserved":bool(counts["source_renderers"]) and
-              counts["complete_renderer_routes"]==counts["source_renderers"],
-            "full_game_renderers_verified":False,"vertex_payload_or_UV_samples_verified":False,
+    complete=bool(counts["source_renderers"]) and counts["complete_renderer_routes"]==counts["source_renderers"]
+    byte_bound=vertex_payloads is not None and complete and (
+        counts["complete_vertex_byte_bound_renderer_routes"]==counts["source_renderers"])
+    return {"schema_version":2 if vertex_payloads is not None else 1,
+            "counts":dict(sorted(counts.items())),"reason_counts":dict(sorted(reasons.items())),
+            "selected_renderer_routes_preserved":complete,
+            "full_game_renderers_verified":False,
+            "vertex_payload_or_UV_samples_verified":byte_bound,
+            "selected_same_route_vertex_and_UV_bytes_verified":byte_bound,
+            "UV_decoded_values_or_GPU_verified":False,
             "shader_program_color_scalar_or_GPU_parity_verified":False,"private_identifiers_published":False}
 
 
 def audit(source,zip2,project,material_trace,mesh_trace,renderer_trace,owners):
     require(owners and len(owners)==len(set(owners)) and set(owners)<=set(OWNERS),"invalid_source_owner_scope")
     pins=manifest(zip2)
-    objects,externals=source_records(source,pins,owners)
+    payloads={}
+    objects,externals=source_records(source,pins,owners,vertex_payloads=payloads)
     mapping=traces(*(strict_json(bounded_snapshot(p,MAX_DOC)) for p in (material_trace,mesh_trace,renderer_trace)))
     files,docs=actual_index(project,mapping)
-    report=compare(objects,externals,mapping,files,docs)
+    report=compare(objects,externals,mapping,files,docs,vertex_payloads=payloads)
     report["authenticated_selected_source_owners"]=len(owners)
     return report
 
@@ -417,7 +447,7 @@ def main():
     try:
         report=audit(a.source,a.zip2,a.project,a.material_trace,a.mesh_trace,a.renderer_trace,a.owner)
     except Exception as exc:
-        report={"schema_version":1,"status":"INCONCLUSIVE","error_type":type(exc).__name__,
+        report={"schema_version":2,"status":"INCONCLUSIVE","error_type":type(exc).__name__,
                 "selected_renderer_routes_preserved":False,"private_identifiers_published":False}
     with a.out.open("x") as f:json.dump(report,f,sort_keys=True,indent=2);f.write("\n")
     return 0 if report["selected_renderer_routes_preserved"] else 2

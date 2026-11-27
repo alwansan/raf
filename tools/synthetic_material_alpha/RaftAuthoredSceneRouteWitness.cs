@@ -117,7 +117,11 @@ public static class RaftAuthoredSceneRouteWitness
         collections.Add(new YamlStreamedAssetExportCollection(new YamlStreamedAssetExporter(),mesh));
         rows.Add(Row(mesh,new {
             m_VertexData=new {m_VertexCount=mesh.VertexData.VertexCount,
-                m_Channels=mesh.VertexData.Channels.Select(ch=>new {stream=ch.Stream,offset=ch.Offset,format=ch.Format,dimension=ch.Dimension}).ToArray()},
+                m_Channels=mesh.VertexData.Channels.Select(ch=>new {stream=ch.Stream,offset=ch.Offset,format=ch.Format,dimension=ch.Dimension}).ToArray(),
+                m_DataSize=mesh.VertexData.Data.Select(b=>(int)b).ToArray()},
+            // This generated fixture has no compressed or external payload.
+            m_CompressedMesh=new {m_UVInfo=0},m_MeshCompression=0,
+            m_StreamData=new {path="",offset=0,size=0},
             m_IndexFormat=(int)mesh.GetIndexFormat(),m_IndexBuffer=mesh.IndexBuffer.Select(b=>(int)b).ToArray(),
             m_SubMeshes=mesh.SubMeshes.Select(sub=>new {firstByte=sub.FirstByte,indexCount=sub.IndexCount,
                 topology=(int)sub.GetTopology(),baseVertex=sub.BaseVertex,firstVertex=sub.FirstVertex,vertexCount=sub.VertexCount}).ToArray()
@@ -194,7 +198,7 @@ public static class RaftAuthoredSceneRouteWitness
         var externals=owners.ToDictionary(o=>o.Name,o=>o.Dependencies.Skip(1).Select(d=>d?.Name).ToArray());
         // The source contract is captured from generated objects before any
         // export or trace. It is not reconstructed from exported YAML.
-        var source=new {schema_version=1,authored_generated_objects=true,objects=rows,externals,
+        var source=new {schema_version=2,authored_generated_objects=true,objects=rows,externals,
             hidden=hidden.Select(o=>new {owner=o.Collection.Name,path_id=o.PathID,class_id=o.ClassID}).ToArray()};
         File.WriteAllText(Path.Combine(root,"source.json"),JsonSerializer.Serialize(source));
         LibraryConfiguration settings=new();settings.SetProjectSettings(version);
