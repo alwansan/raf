@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-native-texture-sampler-route-binding/README_AR.md",
-  "next_action": "Execute focused actual public native sampler route witness; verify captured source and actual YAML, preserve evidence.",
+  "next_action": "Inspect run 45954775949 completion; retain actual sampler schema and receipt or fix strict witness without weakening source or payload proof.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "8c59433895a8e1bc89bc5ca1d0f551a43a114cce",
+    "reviewed_remote_head": "2ebdbb8365169c5128fe57917443914dea15609f",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-native-texture-sampler-same-route-binding",
-      "status": "CANDIDATE_NOT_EXECUTED",
-      "next": "Execute focused actual public native sampler route witness; verify captured source and actual YAML, preserve evidence."
+      "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
+      "next": "Inspect run 45954775949 completion; retain actual sampler schema and receipt or fix strict witness without weakening source or payload proof."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -4048,7 +4048,7 @@
       }
     },
     "latest_native_texture_sampler_route_binding": {
-      "status": "CANDIDATE_NOT_EXECUTED",
+      "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
       "base": "8c59433895a8e1bc89bc5ca1d0f551a43a114cce",
       "gate": "G1-G2-native-texture-sampler-same-route-binding",
       "session": "clients/GT/sessions/20261127-native-texture-sampler-route-binding/README_AR.md",
@@ -4058,7 +4058,15 @@
       "production_renderer_parity_verified": false,
       "texture_import_colorspace_or_GPU_verified": false,
       "XAPK": false,
-      "next": "Execute focused actual public native sampler route witness; verify captured source and actual YAML, preserve evidence."
+      "next": "Inspect run 45954775949 completion; retain actual sampler schema and receipt or fix strict witness without weakening source or payload proof.",
+      "candidate_commit": "7f90fd79376ad5922a5092f38b3cadf1bf0215ef",
+      "activation_commit": "2ebdbb8365169c5128fe57917443914dea15609f",
+      "run_id": 45954775949,
+      "job_id": 140358606965,
+      "guard_run_id": 45954775966,
+      "guard_conclusion": "success",
+      "regression_step": "success",
+      "observed_run_status": "in_progress"
     }
   }
 }

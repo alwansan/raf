@@ -1,5 +1,5 @@
 {
-  "status": "CANDIDATE_NOT_EXECUTED",
+  "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
   "base": "8c59433895a8e1bc89bc5ca1d0f551a43a114cce",
   "gate": "G1-G2-native-texture-sampler-same-route-binding",
   "session": "clients/GT/sessions/20261127-native-texture-sampler-route-binding/README_AR.md",
@@ -9,5 +9,13 @@
   "production_renderer_parity_verified": false,
   "texture_import_colorspace_or_GPU_verified": false,
   "XAPK": false,
-  "next": "Execute focused actual public native sampler route witness; verify captured source and actual YAML, preserve evidence."
+  "next": "Inspect run 45954775949 completion; retain actual sampler schema and receipt or fix strict witness without weakening source or payload proof.",
+  "candidate_commit": "7f90fd79376ad5922a5092f38b3cadf1bf0215ef",
+  "activation_commit": "2ebdbb8365169c5128fe57917443914dea15609f",
+  "run_id": 45954775949,
+  "job_id": 140358606965,
+  "guard_run_id": 45954775966,
+  "guard_conclusion": "success",
+  "regression_step": "success",
+  "observed_run_status": "in_progress"
 }
