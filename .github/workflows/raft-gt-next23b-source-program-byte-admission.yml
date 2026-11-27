@@ -1,0 +1,60 @@
+name: GT NEXT23b source program byte admission (authored parser control)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-next23b-source-program-byte-admission.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-program-byte-admission:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/gt_next23b_source_program_admission/audit.py
+            /tools/gt_next23b_source_program_admission/test_admission.py
+            /scripts/gt_next23b_route_provenance.py
+            /tests/test_gt_next23b_route_provenance.py
+            /scripts/probe_original_compute_containers.py
+            /scripts/run_original_dxbc_translation_probe.py
+            /scripts/probe_directx_shader_bridge.py
+            /scripts/gt_runtime_keyword_contract.py
+            /scripts/mesh_source_files.py
+      - name: Verify exact source-only checkout and run distinct byte-edge controls
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git hash-object tools/gt_next23b_source_program_admission/audit.py)" = aa221fa2b64bb6ab0ff97df474f7fb2384b01253
+          test "$(git hash-object tools/gt_next23b_source_program_admission/test_admission.py)" = 042434fd80430924be07d37e8f9d6bb8bd2130b5
+          test "$(git hash-object scripts/gt_next23b_route_provenance.py)" = fd32bcbfab7c08fcd6fe06c32b803c702ea9da5e
+          test "$(git hash-object tests/test_gt_next23b_route_provenance.py)" = 129041ab5dbe176946a669857c4eb08a4d7c9ab2
+          test "$(git hash-object scripts/probe_original_compute_containers.py)" = a80f85582732efe479981ea2efb8f634fa0a1bd3
+          test "$(git hash-object scripts/run_original_dxbc_translation_probe.py)" = 8640f32ab2835b542f70fc7e583096db499ec127
+          test "$(git hash-object scripts/probe_directx_shader_bridge.py)" = 558e3316ebcb0f80ac2151c0ff76cafdc3ab0d69
+          test "$(git hash-object scripts/gt_runtime_keyword_contract.py)" = 617a4ca349281a8e2ad99bf4f04364a028fb7c16
+          mkdir -p evidence
+          git rev-parse HEAD > evidence/tested-head.txt
+          sha256sum tools/gt_next23b_source_program_admission/*.py scripts/gt_next23b_route_provenance.py tests/test_gt_next23b_route_provenance.py > evidence/source-sha256.txt
+          PYTHONPATH="$PWD/tests:$PWD" python3 -B -m unittest -v tools.gt_next23b_source_program_admission.test_admission 2>&1 | tee evidence/tests.log
+      - name: Upload numeric and authored test evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-next23b-source-program-byte-admission
+          path: evidence/
+          retention-days: 14
+          if-no-files-found: warn
