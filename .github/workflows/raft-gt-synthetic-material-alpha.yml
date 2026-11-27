@@ -1841,7 +1841,7 @@ jobs:
               original_assets_read=False,APK=False)
           Path("authored-scene-results/build.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
           PY
-      - name: Export actual authored scene collections and verify routes against pre-export metadata
+      - name: Execute typed authored scene export and verify independent source metadata
         shell: bash
         run: |
           set -euo pipefail
