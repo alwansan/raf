@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/README_AR.md",
-  "next_action": "Inspect exact V16 retry 45976648432, verify actual Unity stage and six V14 alpha_off mip hashes/bytes from retained candidate PNG/meta archive; retain both failed and retry evidence. If fail, diagnose without weakening route or alpha gate. No original source or production activation.",
+  "next_action": "Inspect actual V16 third attempt 45977510081 on immutable 09a1e80246ecaa96caebdd289f4044658a3ece50; require stage and actual Unity evidence plus six V14 alpha_off mip byte/hash matches, then retain raw/verified archive with candidate PNG/meta. Both prior failed attempts and V15 transcription erratum preserved. No original source or production activation.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,19 +1964,19 @@
   },
   "current_handoff": {
     "latest_v16_run": {
-      "id": 45976648432,
-      "job": 140429921178,
-      "head": "a441a743f09f3a71f10a1f550b0281a4b46c343d",
+      "id": 45977510081,
+      "job": 140432842108,
+      "head": "09a1e80246ecaa96caebdd289f4044658a3ece50",
       "status": "in_progress",
       "conclusion": null,
       "compatibility_guard": {
-        "id": 45976648602,
+        "id": 45977510178,
         "conclusion": "success"
       }
     },
     "date": "2026-11-27",
-    "reviewed_remote_head": "a441a743f09f3a71f10a1f550b0281a4b46c343d",
-    "purpose": "V16 first attempt failed pre-Unity; actual archives proved normalization-only mismatch, corrected retry in progress; original acceptance blocked",
+    "reviewed_remote_head": "09a1e80246ecaa96caebdd289f4044658a3ece50",
+    "purpose": "V16 second pre-Unity failure; exact V15 published hash transcription erratum independently proven from three actual archives; third attempt in progress; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
     "index": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/README_AR.md",
@@ -6193,22 +6193,22 @@
     "evidence": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/actual-pass-45975084812.json"
   },
   "v16_dxt5nm_exporter_reimport_checkpoint": {
-    "status": "IN_PROGRESS_V16_RETRY_AFTER_PROVEN_HISTORICAL_NORMALIZATION_MISMATCH",
+    "status": "IN_PROGRESS_V16_THIRD_ATTEMPT_AFTER_PROVEN_V15_RECEIPT_TRANSCRIPTION_ERRATUM",
     "starting_head": "2d3adcabfa60198072c9f70da4206c5e0e62b02f",
     "source_head": "4a206be8844aa0e455079208a301dcddf0c0e1bb",
     "activation_head": "97666cc835f929053aa7621a058ce9bdfbfe633f",
     "run": {
-      "id": 45976648432,
-      "job": 140429921178,
-      "head": "a441a743f09f3a71f10a1f550b0281a4b46c343d",
+      "id": 45977510081,
+      "job": 140432842108,
+      "head": "09a1e80246ecaa96caebdd289f4044658a3ece50",
       "status": "in_progress",
       "conclusion": null,
       "compatibility_guard": {
-        "id": 45976648602,
+        "id": 45977510178,
         "conclusion": "success"
       }
     },
-    "planned_regressions": 293,
+    "planned_regressions": 296,
     "planned_historical_V11_V12_controls": 37,
     "planned_V15_controls": 6,
     "planned_V16_receipt_controls": 10,
@@ -6224,7 +6224,7 @@
     "Android_device": false,
     "XAPK": false,
     "session": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/README_AR.md",
-    "next": "Inspect exact V16 retry 45976648432, verify actual Unity stage and six V14 alpha_off mip hashes/bytes from retained candidate PNG/meta archive; retain both failed and retry evidence. If fail, diagnose without weakening route or alpha gate. No original source or production activation.",
+    "next": "Inspect actual V16 third attempt 45977510081 on immutable 09a1e80246ecaa96caebdd289f4044658a3ece50; require stage and actual Unity evidence plus six V14 alpha_off mip byte/hash matches, then retain raw/verified archive with candidate PNG/meta. Both prior failed attempts and V15 transcription erratum preserved. No original source or production activation.",
     "first_failed_run": {
       "id": 45976163790,
       "job": 140428299621,
@@ -6242,6 +6242,33 @@
       "evidence": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/failed-run-45976163790.json"
     },
     "retry_source_head": "234352777705d15a145aa54406ec3b543853650e",
-    "retry_activation_head": "a441a743f09f3a71f10a1f550b0281a4b46c343d"
+    "retry_activation_head": "a441a743f09f3a71f10a1f550b0281a4b46c343d",
+    "second_failed_run": {
+      "id": 45976648432,
+      "job": 140429921178,
+      "head": "a441a743f09f3a71f10a1f550b0281a4b46c343d",
+      "status": "completed",
+      "conclusion": "failure",
+      "compatibility_guard": {
+        "id": 45976648602,
+        "conclusion": "success"
+      },
+      "failure": "historical_V15_export_bytes_drift",
+      "source_regressions": 293,
+      "actual_compiled_exporter_modes": 6,
+      "actual_Unity_started": false,
+      "evidence": "clients/GT/sessions/20261127-dxt5nm-exporter-reimport-v16/failed-run-45976648432.json"
+    },
+    "third_source_head": "b54213eeabe961012e5fcb45228e526ec5fe5453",
+    "third_activation_head": "09a1e80246ecaa96caebdd289f4044658a3ece50",
+    "historical_V15_receipt_erratum": "clients/GT/sessions/20261127-dxt5nm-alpha-exporter-v15/normalized-rgba32-pathid1-digest-erratum.json",
+    "actual_archive_independent_recheck": {
+      "archives": 3,
+      "normalized_metadata_hashes": 36,
+      "receipt_RGBA_hashes": 36,
+      "actual_PNG_and_RGBA_pairs": 6,
+      "published_typo_fields": 2,
+      "corrected_expectation_matches": 36
+    }
   }
 }
