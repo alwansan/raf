@@ -1,22 +1,22 @@
 {
-  "status": "IN_PROGRESS_AUTHORED_CANDIDATE_UNITY_BUNDLE",
+  "status": "IN_PROGRESS_AUTHORED_CANDIDATE_UNITY_BUNDLE_VULKAN_EDITOR_RETRY",
   "starting_head": "d7d9fe9113a528fc6671abdb30d7548425dff42a",
   "contract_head": "f75492503be745cb1f740cde7c7ce6938cb4fbde",
   "probe_head": "4849e0c725355b87ffdef84790d7fd93f29f4070",
   "activation_head": "b4cb8a5b56d8ae93197ba7e1f36b0a87d58ce0e7",
   "run": {
-    "id": 45984849786,
-    "job": 140457707101,
-    "head": "b4cb8a5b56d8ae93197ba7e1f36b0a87d58ce0e7",
+    "id": 45985908037,
+    "job": 140461344674,
+    "head": "b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b",
     "status": "in_progress",
     "conclusion": null,
     "compatibility_guard": {
-      "id": 45984850061,
+      "id": 45985907788,
       "conclusion": "success"
     }
   },
-  "actual_source_regressions": 41,
-  "actual_new_source_tests": 12,
+  "actual_source_regressions": 42,
+  "actual_new_source_tests": 13,
   "actual_previous_tests": 29,
   "source_regression_step": "success",
   "planned_authored_passes": 1,
@@ -35,5 +35,30 @@
   "Android_device": false,
   "XAPK": false,
   "session": "clients/GT/sessions/20261127-keyword-candidate-bundle/README_AR.md",
-  "next": "Inspect actual authored Unity Android Vulkan bundle run 45984849786 at immutable b4cb8a5b56d8ae93197ba7e1f36b0a87d58ce0e7. Preserve actual Unity raw receipt, bundle, serialized complete route keys and decoded SPIR-V module hashes/markers, or classify failure exactly; do not soften scope/pass/route/identity checks without evidence. One named Always/Normal pass and mixed global/local authored controls only. After proof, extend distinct remaining source-specific semantics (named pass types, fixed macros, sparse/orphan/instancing) only when justified. A3 remains blocked until independently verified rights and original provenance; no acquisition, production activation, installer or APK/XAPK. Then actual ten-group/NEXT23b source-specific runtime and same-export proof; Particle108 local export alpha, white meshes, black fire, water and remaining G0–G6 still open."
+  "next": "Inspect actual retry 45985908037 at immutable b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b. It retains byte-identical authored candidate d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537 and contract a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f, changes only Editor Vulkan environment and strengthens receipts. Verify observed editor Vulkan, actual registration, callback exact active sets/PassType/stage, material routes, actual bundle and decoded eight markers, plus counterfactual controls. If failure, retain exact receipts/log category, distinguish backend hypothesis from actual cause; no weakening/projection. Original A3 remains blocked; no acquisition, production, legacy installer change or APK/XAPK. Preserve white meshes, black fire, water, G0–G6 priorities; no endless authored repetitions once this gate is bounded.",
+  "first_run": {
+    "id": 45984849786,
+    "job": 140457707101,
+    "head": "b4cb8a5b56d8ae93197ba7e1f36b0a87d58ce0e7",
+    "status": "completed",
+    "conclusion": "failure",
+    "compatibility_guard": {
+      "id": 45984850061,
+      "conclusion": "success"
+    },
+    "actual_editor_exit_code": 2,
+    "checkpoint": "register",
+    "editor_graphics_api_from_log": "OpenGL 4.5 Mesa llvmpipe",
+    "imported_passes": 1,
+    "global_overridable": true,
+    "local_overridable": false,
+    "bundle_bytes": 0,
+    "observed_callbacks": 0,
+    "failure_receipt": "clients/GT/sessions/20261127-keyword-candidate-bundle/first-failure-45984849786.json"
+  },
+  "retry_source_head": "facbcdf688ed4d19878739a572c94a4f8d70d896",
+  "retry_activation_head": "b8ef5a1573e403ec9eabb36ea3d8ff29a5aac53b",
+  "first_run_authored_scope_API_observed": true,
+  "exact_retry_candidate_sha256": "d7218e75c69929b417d9e813be60c95b6b2dd470c2bf4dce3e4be8162df67537",
+  "exact_retry_contract_sha256": "a01e3c8e4cbce8fb2b8e2fe925ded3af41e4921d67d7f77b917c4c96e943ff8f"
 }
