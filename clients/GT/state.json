@@ -366,8 +366,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-mesh-yaml-unique-mapping/README_AR.md",
-  "next_action": "G1-G2-mesh-export-full-document-and-stream-identity: audit actual native-used gt_verify_original_mesh_export.export_geometry, which currently tests matching HEADER class/fileID and m_StreamData.size==0, but HEADER permits stripped suffix and loader normalizes it away. Check whether a stripped Mesh, malformed additional document marker, or nonempty provider/path/offset on a zero-size stream can yield the same inline geometry witness; compare the existing strict same-route gt_mesh_vertex_payload.stream_descriptor and unique-document controls. Reproduce actual acceptance with source-free full Mesh fixtures, then repair only distinct gaps while preserving legitimate header, signed fileID domain, legacy real source schema and verified inline bytes. Do not repeat strict same-route proof or the completed duplicate-mapping repair. No new original equivalence, imported visual or device claims. A3 and Particle108 third source/export alpha comparison blocked; original FFT/kernel6 cause, NEXT23b and ten runtime groups remain open. G0–G6 open. No acquisition without independently verified authorization/provenance, no native request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali pinned reference.",
+  "latest_session": "clients/GT/sessions/20261127-mesh-document-stream-identity/README_AR.md",
+  "next_action": "G1-G2-original-mesh-storage-byte-type-identity: audit native-used gt_verify_original_mesh_export.source_geometry and packed_bytes on the source side. The legacy bytes(value) coercion accepts scalar integers as newly allocated zero-filled bytes, and size==0 can bypass invalid stream path/offset/type checks. Compare current strict same-route gt_mesh_vertex_payload.source_request/inline_bytes/stream_descriptor (different narrow layout scope). Reproduce actual misleading clean-equal geometry on authored typetree-shaped fixtures only, including scalar bytes coercion and zero-length stale stream descriptors; validate byte sequences and integral range metadata without narrowing legitimate legacy compressed/skinned mesh layouts or breaking authenticated streamed payloads, equal dual storage policy, signed-zero tolerance or prior document/duplicate-key checks. Check source-side schema compatibility and exact callers before any fix. No original geometry or device claims. A3, third Particle108 comparison blocked, original FFT/kernel6, NEXT23b and ten runtime groups open, G0–G6 open. No original acquisition without independently verified authorization/provenance, no native request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali pinned reference.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1963,6 +1963,43 @@
     "new_XAPK_requested": false
   },
   "current_handoff": {
+    "latest_mesh_document_stream_identity": {
+      "status": "PASS_AUTHORED_MESH_DOCUMENT_STREAM_IDENTITY",
+      "reviewed_base": "c7dadb491261b8ed2f0e10d111dcd6a646f6d912",
+      "preparation_commit": "7fc3c603e8f711cdb2f1f0811e526a91ba0e22e6",
+      "head": "4b2adfacd2a3f7fc508f3c73970f8d1e1c996ab7",
+      "run_id": 46005189696,
+      "job_id": 140526473563,
+      "conclusion": "success",
+      "guard_run_id": 46005189444,
+      "guard_job_id": 140526472519,
+      "guard_conclusion": "success",
+      "session": "clients/GT/sessions/20261127-mesh-document-stream-identity/README_AR.md",
+      "evidence": "clients/GT/sessions/20261127-mesh-document-stream-identity/evidence.json",
+      "archive": "clients/GT/sessions/20261127-mesh-document-stream-identity/actual-run-46005189696.zip",
+      "artifact_id": 15201036273,
+      "archive_bytes": 5406,
+      "archive_sha256": "b75fab625b301d115d659d127c8a85ac8ecf96cd63389be4c4768846e3b0ab1c",
+      "archive_git_blob": "4daebe67a8fc09e15a78ce2bfb3dcbe99356e052",
+      "archive_crc_sha_size_verified_locally": true,
+      "old_consumer_git_blob": "1570d9356b6aaf1a1d753c1a7238e8ad577eddc7",
+      "old_loader_git_blob": "01b4b712fec397fe04c2454c231fac9e804d8066",
+      "new_consumer_git_blob": "bac8985fcee0ae3cef22601de5699b4f89e28db2",
+      "new_loader_git_blob": "e6a6260899a8091680b4c251e450c24d495f1982",
+      "new_tests_git_blob": "54361948b71f4218ba5052022fd5a37afe219464",
+      "distinct_counterfactuals": 23,
+      "yaml_backends": 2,
+      "baseline_false_geometry_equalities": 46,
+      "fixed_rejections": 46,
+      "ci_total_tests": 64,
+      "ci_new_test_methods": 8,
+      "scope": "Actual native-used export_geometry, complete Mesh document identity and inline storage declaration, authored fixtures only.",
+      "original_assets_read": false,
+      "original_geometry_verified": false,
+      "unity_or_device_tested": false,
+      "XAPK_requested": false,
+      "next": "G1-G2-original-mesh-storage-byte-type-identity: audit native-used gt_verify_original_mesh_export.source_geometry and packed_bytes on the source side. The legacy bytes(value) coercion accepts scalar integers as newly allocated zero-filled bytes, and size==0 can bypass invalid stream path/offset/type checks. Compare current strict same-route gt_mesh_vertex_payload.source_request/inline_bytes/stream_descriptor (different narrow layout scope). Reproduce actual misleading clean-equal geometry on authored typetree-shaped fixtures only, including scalar bytes coercion and zero-length stale stream descriptors; validate byte sequences and integral range metadata without narrowing legitimate legacy compressed/skinned mesh layouts or breaking authenticated streamed payloads, equal dual storage policy, signed-zero tolerance or prior document/duplicate-key checks. Check source-side schema compatibility and exact callers before any fix. No original geometry or device claims. A3, third Particle108 comparison blocked, original FFT/kernel6, NEXT23b and ten runtime groups open, G0–G6 open. No original acquisition without independently verified authorization/provenance, no native request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali pinned reference."
+    },
     "latest_mesh_yaml_unique_mapping": {
       "status": "PASS_AUTHORED_MESH_YAML_UNIQUE_MAPPING",
       "reviewed_base": "4afb43de969b377aae7451ee4108f68f0e80b821",
@@ -2482,9 +2519,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G1-G2-mesh-export-full-document-and-stream-identity",
-      "status": "NEXT_SOURCE_FREE_AFTER_MESH_YAML_UNIQUE_MAPPING_PASS",
-      "next": "G1-G2-mesh-export-full-document-and-stream-identity: audit actual native-used gt_verify_original_mesh_export.export_geometry, which currently tests matching HEADER class/fileID and m_StreamData.size==0, but HEADER permits stripped suffix and loader normalizes it away. Check whether a stripped Mesh, malformed additional document marker, or nonempty provider/path/offset on a zero-size stream can yield the same inline geometry witness; compare the existing strict same-route gt_mesh_vertex_payload.stream_descriptor and unique-document controls. Reproduce actual acceptance with source-free full Mesh fixtures, then repair only distinct gaps while preserving legitimate header, signed fileID domain, legacy real source schema and verified inline bytes. Do not repeat strict same-route proof or the completed duplicate-mapping repair. No new original equivalence, imported visual or device claims. A3 and Particle108 third source/export alpha comparison blocked; original FFT/kernel6 cause, NEXT23b and ten runtime groups remain open. G0–G6 open. No acquisition without independently verified authorization/provenance, no native request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali pinned reference.",
+      "id": "G1-G2-original-mesh-storage-byte-type-identity",
+      "status": "NEXT_SOURCE_FREE_AFTER_MESH_DOCUMENT_STREAM_IDENTITY_PASS",
+      "next": "G1-G2-original-mesh-storage-byte-type-identity: audit native-used gt_verify_original_mesh_export.source_geometry and packed_bytes on the source side. The legacy bytes(value) coercion accepts scalar integers as newly allocated zero-filled bytes, and size==0 can bypass invalid stream path/offset/type checks. Compare current strict same-route gt_mesh_vertex_payload.source_request/inline_bytes/stream_descriptor (different narrow layout scope). Reproduce actual misleading clean-equal geometry on authored typetree-shaped fixtures only, including scalar bytes coercion and zero-length stale stream descriptors; validate byte sequences and integral range metadata without narrowing legitimate legacy compressed/skinned mesh layouts or breaking authenticated streamed payloads, equal dual storage policy, signed-zero tolerance or prior document/duplicate-key checks. Check source-side schema compatibility and exact callers before any fix. No original geometry or device claims. A3, third Particle108 comparison blocked, original FFT/kernel6, NEXT23b and ten runtime groups open, G0–G6 open. No original acquisition without independently verified authorization/provenance, no native request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali pinned reference.",
       "previous_G3_and_G4_authored_witnesses_preserved": true,
       "original_acceptance_blocked": true
     },

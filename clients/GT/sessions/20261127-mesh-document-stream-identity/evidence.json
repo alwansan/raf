@@ -1,0 +1,162 @@
+{
+  "status": "PASS_AUTHORED_MESH_DOCUMENT_STREAM_IDENTITY",
+  "reviewed_base": "c7dadb491261b8ed2f0e10d111dcd6a646f6d912",
+  "preparation_commit": "7fc3c603e8f711cdb2f1f0811e526a91ba0e22e6",
+  "head": "4b2adfacd2a3f7fc508f3c73970f8d1e1c996ab7",
+  "run_id": 46005189696,
+  "job_id": 140526473563,
+  "conclusion": "success",
+  "guard_run_id": 46005189444,
+  "guard_job_id": 140526472519,
+  "guard_conclusion": "success",
+  "session": "clients/GT/sessions/20261127-mesh-document-stream-identity/README_AR.md",
+  "evidence": "clients/GT/sessions/20261127-mesh-document-stream-identity/evidence.json",
+  "archive": "clients/GT/sessions/20261127-mesh-document-stream-identity/actual-run-46005189696.zip",
+  "artifact_id": 15201036273,
+  "archive_bytes": 5406,
+  "archive_sha256": "b75fab625b301d115d659d127c8a85ac8ecf96cd63389be4c4768846e3b0ab1c",
+  "archive_git_blob": "4daebe67a8fc09e15a78ce2bfb3dcbe99356e052",
+  "archive_crc_sha_size_verified_locally": true,
+  "old_consumer_git_blob": "1570d9356b6aaf1a1d753c1a7238e8ad577eddc7",
+  "old_loader_git_blob": "01b4b712fec397fe04c2454c231fac9e804d8066",
+  "new_consumer_git_blob": "bac8985fcee0ae3cef22601de5699b4f89e28db2",
+  "new_loader_git_blob": "e6a6260899a8091680b4c251e450c24d495f1982",
+  "new_tests_git_blob": "54361948b71f4218ba5052022fd5a37afe219464",
+  "distinct_counterfactuals": 23,
+  "yaml_backends": 2,
+  "baseline_false_geometry_equalities": 46,
+  "fixed_rejections": 46,
+  "ci_total_tests": 64,
+  "ci_new_test_methods": 8,
+  "scope": "Actual native-used export_geometry, complete Mesh document identity and inline storage declaration, authored fixtures only.",
+  "original_assets_read": false,
+  "original_geometry_verified": false,
+  "unity_or_device_tested": false,
+  "XAPK_requested": false,
+  "next": "G1-G2-original-mesh-storage-byte-type-identity: audit native-used gt_verify_original_mesh_export.source_geometry and packed_bytes on the source side. The legacy bytes(value) coercion accepts scalar integers as newly allocated zero-filled bytes, and size==0 can bypass invalid stream path/offset/type checks. Compare current strict same-route gt_mesh_vertex_payload.source_request/inline_bytes/stream_descriptor (different narrow layout scope). Reproduce actual misleading clean-equal geometry on authored typetree-shaped fixtures only, including scalar bytes coercion and zero-length stale stream descriptors; validate byte sequences and integral range metadata without narrowing legitimate legacy compressed/skinned mesh layouts or breaking authenticated streamed payloads, equal dual storage policy, signed-zero tolerance or prior document/duplicate-key checks. Check source-side schema compatibility and exact callers before any fix. No original geometry or device claims. A3, third Particle108 comparison blocked, original FFT/kernel6, NEXT23b and ten runtime groups open, G0–G6 open. No original acquisition without independently verified authorization/provenance, no native request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali pinned reference.",
+  "consumer_sha256": "d80b98f60088361a3dfa4faaf05298914f39c4f8effaefc3aec63ce45d09da51",
+  "loader_sha256": "17b9fafcc8828333414997b61528fb59fea1721b3d9ad64b33c35483d0488e3f",
+  "test_sha256": "dd5567c8fbe645e2ca26736d8e59bbeb1bf5c0d2eb31cd16f458e4a51c5b5259",
+  "tools": {
+    "Python": "3.12.3",
+    "PyYAML": "6.0.3",
+    "backends": [
+      "CSafeLoader/libyaml",
+      "SafeLoader/Python"
+    ]
+  },
+  "tests": {
+    "test_compare_exported_mesh_geometry.py": 6,
+    "test_gt_mesh_document_stream_identity.py": 8,
+    "test_gt_mesh_vertex_payload.py": 15,
+    "test_gt_mesh_yaml_unique_mapping.py": 7,
+    "test_gt_renderer_submesh_routes.py": 21,
+    "test_gt_verify_original_mesh_export.py": 7
+  },
+  "baseline_case_names": [
+    "bool_inline_size",
+    "bool_offset",
+    "bool_trace_fileid",
+    "duplicate_yaml_directive",
+    "extra_root_after_mesh",
+    "extra_root_before_mesh",
+    "float_inline_size",
+    "float_offset",
+    "float_trace_fileid",
+    "float_vertex_data_size",
+    "ignored_body_directive",
+    "negative_offset",
+    "nonzero_offset",
+    "numeric_provider",
+    "out_of_range_negative_fileid",
+    "out_of_range_positive_fileid",
+    "sequence_provider",
+    "stale_provider",
+    "string_offset",
+    "stripped_mesh",
+    "unknown_prologue_directive",
+    "whitespace_provider",
+    "zero_fileid"
+  ],
+  "members": {
+    "baseline.log": {
+      "bytes": 2143,
+      "sha256": "32b7926ba30d75f296c853a8bc0646b2fc73aea89f21525567cc19b7b31955cd"
+    },
+    "report.json": {
+      "bytes": 1004,
+      "sha256": "333a016936bbc5b12847aa9cb2abeb339c2de915d8c1d08de1c8a34d7a88fefc"
+    },
+    "baseline.json": {
+      "bytes": 8377,
+      "sha256": "b99f06b94ed57917f807dc6344ec46e01830d657b3ac57324855cbbf3f6d200b"
+    },
+    "test_compare_exported_mesh_geometry.py.log": {
+      "bytes": 1002,
+      "sha256": "0aed76f29a7b82e2ed01b2c7fea0fffa571eb08fdd9537da950d53668dffb3a0"
+    },
+    "test_gt_mesh_document_stream_identity.py.log": {
+      "bytes": 1538,
+      "sha256": "3b34e26baca7d27a020e1f983b87044f549faaa681f5d55f73edff93ca751b61"
+    },
+    "test_gt_mesh_vertex_payload.py.log": {
+      "bytes": 1881,
+      "sha256": "3817f85f3fa97a845e3c638f1f7fbc31dc5634ec24a20b02f0ae9429ee90b229"
+    },
+    "test_gt_mesh_yaml_unique_mapping.py.log": {
+      "bytes": 1400,
+      "sha256": "142e75cf4150c351556a08be8fdee57833d75845f8b96078c9b173c6994a8e02"
+    },
+    "test_gt_renderer_submesh_routes.py.log": {
+      "bytes": 3004,
+      "sha256": "a59b480817791a7d25d8149ddcb149bc07adcbb1ce6facb32c6fa45a4c3b4e5e"
+    },
+    "test_gt_verify_original_mesh_export.py.log": {
+      "bytes": 1259,
+      "sha256": "02295ac15c0817ea6811cce12bd6a30a90fd159249d33f10fef299377ad10cd2"
+    },
+    "tools.log": {
+      "bytes": 76,
+      "sha256": "82768fa2ad863d3212c13c8609fd333cd7708643d9d0cf253cfd8f4e548a9930"
+    }
+  },
+  "integration_review": {
+    "strict_same_route_stream_descriptor_already_validated": true,
+    "native_workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+    "native_mesh_export_call_lines": "454-460",
+    "native_workflow_modified": false,
+    "native_execution_performed": false,
+    "source_geometry_modified": false
+  },
+  "compatibility_decisions": {
+    "legacy_size_zero_only_preserved": true,
+    "optional_path_offset_default_empty_zero": true,
+    "explicit_empty_or_null_path": true,
+    "signed_nonzero_int64_fileid_preserved": true,
+    "legacy_position_loader_default_unchanged_except_previous_unique_mapping": true,
+    "noncanonical_directives_rejected_in_full_document_mode": true
+  },
+  "local_archive_recheck": {
+    "crc": true,
+    "sha256": true,
+    "all_10_member_hashes_calculated": true,
+    "all_46_unique_backend_case_pairs_verified": true,
+    "baseline_log_count_verified": true,
+    "fixed_6_suite_log_counts_verified": true,
+    "local_code_execution": false,
+    "prior_archives_not_modified": true
+  },
+  "original_particle108_third_export_comparison_proven": false,
+  "original_source_authorization_proven": false,
+  "original_fft_coordinate_or_kernel6_root_cause_resolved": false,
+  "original_runtime_keywords_or_install_proven": false,
+  "original_same_export_inventory": {
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "shader_guids": 37,
+    "historical": true
+  },
+  "G0_G6_closed": false,
+  "other_branches_written": false
+}
