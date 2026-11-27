@@ -1,0 +1,147 @@
+name: GT actual authored serialized Mesh AssetRipper export (NO original assets)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-authored-mesh-actual-export.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  actual-mesh-export:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      DOTNET_PROCESSOR_COUNT: '2'
+    steps:
+      - name: Checkout authored-only code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /tools/gt_authored_mesh_binary/witness.py
+            /tools/gt_authored_mesh_actual_export/
+            /android-port/Experiments/ExportLineage/
+            /tests/test_gt_original_mesh_source_storage.py
+            /tests/test_gt_mesh_document_stream_identity.py
+            /tests/test_gt_mesh_yaml_unique_mapping.py
+            /tests/test_compare_exported_mesh_geometry.py
+            /tests/test_gt_verify_original_mesh_export.py
+            /tests/test_gt_mesh_vertex_payload.py
+            /tests/test_gt_renderer_submesh_routes.py
+            /.github/workflows/raft-gt-authored-mesh-actual-export.yml
+      - name: Generate SHA-bound actual authored v22 files
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = alwansan/raf
+          test ! -e Raft
+          test ! -e .gt-zip2
+          mkdir mesh-actual-evidence
+          python3 -m venv "$RUNNER_TEMP/gt-mesh-actual-python"
+          py="$RUNNER_TEMP/gt-mesh-actual-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3 Pillow==11.3.0
+          "$py" -m pip freeze | tee mesh-actual-evidence/tools.log
+          PYTHONPATH="$PWD" "$py" -B -W error tools/gt_authored_mesh_actual_export/witness.py prepare --out mesh-actual-evidence/cases 2>&1 | tee mesh-actual-evidence/prepare.log
+      - name: Earlier geometry contract regressions
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-mesh-actual-python/bin/python"
+          for f in test_gt_original_mesh_source_storage.py test_gt_mesh_document_stream_identity.py test_gt_mesh_yaml_unique_mapping.py test_compare_exported_mesh_geometry.py test_gt_verify_original_mesh_export.py test_gt_mesh_vertex_payload.py test_gt_renderer_submesh_routes.py; do
+            "$py" -B -W error -m unittest discover -s tests -p "$f" -v 2>&1 | tee "mesh-actual-evidence/$f.log"
+          done
+          "$py" -B - <<'PY'
+          import json,re
+          from pathlib import Path
+          root=Path("mesh-actual-evidence")
+          tests={}
+          for p in sorted(root.glob("test_*.py.log")):
+              log=p.read_text()
+              count=re.search(r"^Ran (\d+) tests? in ",log,re.M)
+              assert count and re.search(r"^OK$",log,re.M),p.name
+              tests[p.name]=int(count[1])
+          assert len(tests)==7 and sum(tests.values())==73
+          (root/"regressions.json").write_text(json.dumps(tests,indent=2)+"\n")
+          print("GT_PRIOR_REGRESSIONS_PASS",sum(tests.values()))
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Checkout pinned public exporter source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: Source
+      - name: Build exact public exporter with temporary diagnostic capture
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git -C ar-host rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          git -C ar-host rev-parse HEAD > mesh-actual-evidence/public-exporter-head.txt
+          py="$RUNNER_TEMP/gt-mesh-actual-python/bin/python"
+          "$py" -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage
+          PYTHONPATH="$PWD" "$py" -B tools/gt_authored_mesh_actual_export/witness.py patch-host --root "$PWD" --cs "$PWD/tools/gt_authored_mesh_actual_export/RaftAuthoredBinaryMeshWitness.cs"
+          sha256sum ar-host/Source/AssetRipper.Export.UnityProjects/{RaftExportLineage,RaftAuthoredBinaryMeshWitness,ProjectExporter}.cs android-port/Experiments/ExportLineage/Program.cs > mesh-actual-evidence/host-sha256.txt
+          dotnet --info > mesh-actual-evidence/dotnet.log
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/gt-mesh-actual-host" > mesh-actual-evidence/build.log 2>&1 || { tail -100 mesh-actual-evidence/build.log; exit 1; }
+      - name: Load actual binary before processing then export actual Mesh
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/gt-mesh-actual-output"
+          for case in retained_mixed uncompressed_inline uncompressed_streamed; do
+            root="$PWD/mesh-actual-evidence/cases/$case"
+            set +e
+            RAFT_PRIVATE_EXPORT_LINEAGE="$root/export-trace.json" RAFT_PRIVATE_EXPORT_MESH_LINEAGE="$root/mesh-trace.json" timeout 120s dotnet "$RUNNER_TEMP/gt-mesh-actual-host/ExportLineage.dll" "$root/source" "$RUNNER_TEMP/gt-mesh-actual-output/$case" "$root/loaded.json" > "$root/export.log" 2>&1
+            rc=$?
+            set -e
+            printf '%s\n' "$rc" > "$root/exit.txt"
+            echo "GT_EXPORT_EXIT $case $rc"
+            tail -30 "$root/export.log"
+          done
+      - name: Retain actual emitted Mesh documents even on comparison failure
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import os,re,shutil
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"gt-mesh-actual-output"
+          out=Path("mesh-actual-evidence/cases")
+          for case in ("retained_mixed","uncompressed_inline","uncompressed_streamed"):
+              project=root/case/"ExportedProject"/"Assets"
+              for p in project.rglob("*.asset"):
+                  if p.is_symlink() or p.stat().st_size>4*1024*1024:
+                      raise RuntimeError("unexpected authored export size or symlink")
+                  data=p.read_bytes()
+                  if not re.search(rb"(?m)^--- !u!43 &-?\d+",data):
+                      continue
+                  dest=out/case/"emitted"/p.relative_to(project)
+                  dest.parent.mkdir(parents=True,exist_ok=True)
+                  shutil.copyfile(p,dest)
+                  meta=p.with_suffix(".asset.meta")
+                  if meta.is_file() and not meta.is_symlink():
+                      shutil.copyfile(meta,dest.with_suffix(".asset.meta"))
+          PY
+      - name: Compare real emitted YAML and lineage through unchanged full native inspect
+        run: |
+          set -euo pipefail
+          py="$RUNNER_TEMP/gt-mesh-actual-python/bin/python"
+          PYTHONPATH="$PWD" "$py" -B -W error tools/gt_authored_mesh_actual_export/witness.py verify --out mesh-actual-evidence/cases --export-root "$RUNNER_TEMP/gt-mesh-actual-output" 2>&1 | tee mesh-actual-evidence/verify.log
+      - name: Retain authored input, load receipt, emitted YAML, trace and exact results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-authored-mesh-actual-export-${{ github.run_id }}
+          path: mesh-actual-evidence/
+          if-no-files-found: warn
+          retention-days: 14
