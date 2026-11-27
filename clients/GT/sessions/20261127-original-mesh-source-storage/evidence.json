@@ -1,0 +1,182 @@
+{
+  "status": "PASS_AUTHORED_ORIGINAL_MESH_SOURCE_STORAGE",
+  "reviewed_base": "a84509db54e77b09367fa4b15606c3b2e3422cca",
+  "preparation_commit": "2a329cf394202854441a7e5270bdd98b44f9dc62",
+  "head": "0e403a9b192b630f6b9d9e59451e247d57d2b14b",
+  "run_id": 46009443351,
+  "job_id": 140540891893,
+  "conclusion": "success",
+  "guard_run_id": 46009442155,
+  "guard_job_id": 140540888798,
+  "guard_conclusion": "success",
+  "session": "clients/GT/sessions/20261127-original-mesh-source-storage/README_AR.md",
+  "evidence": "clients/GT/sessions/20261127-original-mesh-source-storage/evidence.json",
+  "archive": "clients/GT/sessions/20261127-original-mesh-source-storage/actual-run-46009443351.zip",
+  "artifact_id": 15203730614,
+  "archive_bytes": 5666,
+  "archive_sha256": "50b975218ebb1dd7527485ced07d11b2af9045cb6598efa970e1adf31e8aee17",
+  "archive_git_blob": "53c7f31c651af712a7691fbe41ec1fea36a1d798",
+  "archive_crc_sha_size_verified_locally": true,
+  "old_consumer_git_blob": "bac8985fcee0ae3cef22601de5699b4f89e28db2",
+  "new_consumer_git_blob": "77e6a626ac9542b6704ac1a46bc454ba7983e2bf",
+  "new_tests_git_blob": "76903e7fd5560684433327f6beb301b76b8ef6e2",
+  "baseline_false_geometry_equalities": 31,
+  "fixed_rejections": 31,
+  "ci_total_tests": 73,
+  "ci_new_test_methods": 9,
+  "scope": "Actual source_geometry and export_geometry on authored typetree-shaped fixtures; actual SHA-bound authored provider read, not actual UnityPy decode or original geometry.",
+  "actual_unitypy_decode_tested": false,
+  "original_assets_read": false,
+  "original_geometry_verified": false,
+  "unity_or_device_tested": false,
+  "XAPK_requested": false,
+  "next": "G1-G2-authored-binary-mesh-decoder-consumer-witness: move beyond typetree-shaped dictionary counterfactuals. Review prior authored V12 exporter witness (RaftAuthoredSceneRouteWitness.cs produces source rows from in-memory C# IMesh; its route witness is not the full native geometry consumer) and any existing actual UnityPy Mesh decode receipts before choosing the exact experiment. On isolated source-only CI, use pinned public UnityPy 1.23.0 with the real Mesh TypeTree schema and independently authored binary bytes, preferably actual serialized Mesh owner if feasible, or explicitly scoped object-level TypeTree binary read/write. Compare actual decoded storage types and source_geometry with canonical authored Mesh YAML through export_geometry; cover nontrivial vertex/UV/index bytes, unsigned bone hashes, packed data, stream descriptor and signed zero where supported, actual verified_range for external bytes. Record actual decoder path(s), schema/version, byte commitments, exact comparison and negative changes; never call an injected dict a real binary decode, a generated YAML an AssetRipper export, or a public schema original Raft. Reuse the earlier authored C# exporter only if a genuinely new same-instance full-geometry witness can be demonstrated without repeating V12; do not rebuild merely for a duplicate receipt. Correct any genuine compatibility issue exposed by real decoder output, retaining the fixed source storage/document/mapping controls. No original acquisition, no actual original geometry/visual acceptance. A3 and Particle108 third source/export alpha comparison blocked; original FFT/kernel6, NEXT23b and ten runtime groups open; G0–G6 open. No native request/installer/production activation, phone/APK/XAPK, CL/lab writes, BLACK or animation. Preserve Ali pinned reference.",
+  "source_sha256": "9456d10d0f99e8a72b4bd4d8212514f6f7136dd6d59a7dd3f517b2c168a92775",
+  "test_sha256": "e48aa5d780b6f8e796f68d95c4fbc973daa585d5c70e6fd176183439f3494974",
+  "tools": {
+    "Python": "3.12.3",
+    "PyYAML": "6.0.3",
+    "Pillow": "11.3.0"
+  },
+  "tests": {
+    "test_compare_exported_mesh_geometry.py": 6,
+    "test_gt_mesh_document_stream_identity.py": 8,
+    "test_gt_mesh_vertex_payload.py": 15,
+    "test_gt_mesh_yaml_unique_mapping.py": 7,
+    "test_gt_original_mesh_source_storage.py": 9,
+    "test_gt_renderer_submesh_routes.py": 21,
+    "test_gt_verify_original_mesh_export.py": 7
+  },
+  "baseline_case_names": [
+    "scalar_vertex_bytes",
+    "bool_vertex_element",
+    "mapping_vertex_bytes",
+    "scalar_index_bytes",
+    "bool_index_element",
+    "mapping_index_bytes",
+    "scalar_packed_bytes",
+    "bool_scalar_packed_bytes",
+    "bool_packed_element",
+    "mapping_packed_bytes",
+    "byte_array_as_bone_words",
+    "bytearray_as_bone_words",
+    "mapping_as_bone_words",
+    "bool_bone_words",
+    "byte_array_as_weight_words",
+    "mapping_as_weight_words",
+    "bool_weight_words",
+    "float_zero_stream_size",
+    "bool_zero_stream_size",
+    "null_stream_size",
+    "empty_string_stream_size",
+    "empty_list_stream_size",
+    "positive_offset_empty_stream",
+    "negative_offset_empty_stream",
+    "float_offset_empty_stream",
+    "bool_offset_empty_stream",
+    "null_offset_empty_stream",
+    "stale_provider_empty_stream",
+    "numeric_provider_empty_stream",
+    "bool_provider_empty_stream",
+    "mapping_provider_empty_stream"
+  ],
+  "members": {
+    "baseline.json": {
+      "bytes": 5459,
+      "sha256": "a8afd9efd644b3dd2521505efcf942352b7731e5a67ddb56186cafe43a91f089"
+    },
+    "baseline.log": {
+      "bytes": 1340,
+      "sha256": "af4d9a246a4309cc997820ffbee856b7539073756d03071c60ff9e5b4bf5d57a"
+    },
+    "report.json": {
+      "bytes": 1016,
+      "sha256": "7ede06a0e8c8dbaca3cac1b996fa405e356f34e257b6fea7fb8ae59c411c88d1"
+    },
+    "test_compare_exported_mesh_geometry.py.log": {
+      "bytes": 1002,
+      "sha256": "25c640b974abe5624b804e9fc9a194124cacd47828fa2fa1bf6d28e0c72b2c0e"
+    },
+    "test_gt_mesh_document_stream_identity.py.log": {
+      "bytes": 1538,
+      "sha256": "93ac0943ad908a6787dab4ec5f727790aacf539dbe9fd5f2867b146bcfdc4440"
+    },
+    "test_gt_mesh_vertex_payload.py.log": {
+      "bytes": 1881,
+      "sha256": "b9d3e1fe1e3e6761173d5a57798a4c40676f8004e439d666288e66c73a7ba590"
+    },
+    "test_gt_mesh_yaml_unique_mapping.py.log": {
+      "bytes": 1400,
+      "sha256": "b43ad1aeffdc99b45bb722c36d811c284e4866773b207c56bfc260d41bc4551d"
+    },
+    "test_gt_original_mesh_source_storage.py.log": {
+      "bytes": 1688,
+      "sha256": "be7912575a05db9156e08bc68c1bb885a90ddf825e22f885ae48d32e9b1aee3e"
+    },
+    "test_gt_renderer_submesh_routes.py.log": {
+      "bytes": 3004,
+      "sha256": "850f3859ea02ee701b853e9dfe750cf9037f04f769ce364c9007e8fbf5aca35a"
+    },
+    "test_gt_verify_original_mesh_export.py.log": {
+      "bytes": 1259,
+      "sha256": "12111dbf9c901c6a936e86ae43bc60e815fee8d9d82d2553bad25e9cea93e723"
+    },
+    "tools.log": {
+      "bytes": 76,
+      "sha256": "82768fa2ad863d3212c13c8609fd333cd7708643d9d0cf253cfd8f4e548a9930"
+    }
+  },
+  "integration_review": {
+    "narrow_same_route_storage_guard_exists": true,
+    "native_workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+    "native_mesh_export_call_lines": "454-460",
+    "native_workflow_modified": false,
+    "native_execution_performed": false,
+    "source_geometry_and_packed_bytes_modified": true,
+    "previous_authored_route_witness": "tools/synthetic_material_alpha/RaftAuthoredSceneRouteWitness.cs",
+    "previous_authored_route_witness_source_rows": "in-memory C# IMesh-derived JSON, not an actual UnityPy Mesh decode"
+  },
+  "compatibility_decisions": {
+    "byte_types": [
+      "bytes",
+      "bytearray",
+      "list",
+      "tuple"
+    ],
+    "uint32_array_types": [
+      "list",
+      "tuple"
+    ],
+    "strict_int_not_bool": true,
+    "per_buffer_max_bytes": 268435456,
+    "empty_or_omitted_path_for_zero_stream": true,
+    "exact_equal_dual_storage_retained": true,
+    "stream_counted_only_after_payload_consistency": true,
+    "actual_range_reauthenticated_every_read": true,
+    "compressed_skinned_multistream_layout_not_narrowed": true,
+    "actual_decoder_compatibility_pending": true
+  },
+  "local_archive_recheck": {
+    "crc": true,
+    "sha256": true,
+    "all_11_member_hashes_calculated": true,
+    "all_31_case_pairs_verified": true,
+    "baseline_log_count_verified": true,
+    "fixed_7_suite_log_counts_verified": true,
+    "local_code_execution": false,
+    "prior_archives_not_modified": true
+  },
+  "original_particle108_third_export_comparison_proven": false,
+  "original_source_authorization_proven": false,
+  "original_fft_coordinate_or_kernel6_root_cause_resolved": false,
+  "original_runtime_keywords_or_install_proven": false,
+  "original_same_export_inventory": {
+    "non_dummy": 688,
+    "total": 786,
+    "dummy": 98,
+    "shader_guids": 37,
+    "historical": true
+  },
+  "G0_G6_closed": false,
+  "other_branches_written": false
+}
