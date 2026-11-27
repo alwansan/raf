@@ -1,0 +1,85 @@
+{
+  "status": "BLOCKED_ORIGINAL_RUNTIME_MIGRATION_PREFLIGHT",
+  "starting_head": "3e930591a0323a024a2841fbba711ffbda6f92a0",
+  "source_head": "40dce19dc51423b9418d13f0cfd8177fd1fd4cd0",
+  "activation_head": "db2e344dcf5cd875ce22de0f1df1554ba0fe3599",
+  "run": {
+    "id": 45982181437,
+    "job": 140448589771,
+    "head": "db2e344dcf5cd875ce22de0f1df1554ba0fe3599",
+    "status": "completed",
+    "conclusion": "success",
+    "compatibility_guard": {
+      "id": 45982181287,
+      "conclusion": "success"
+    }
+  },
+  "actual_tests": 7,
+  "actual_code_groups": 10,
+  "actual_private_compose_mode_groups": 10,
+  "actual_private_entrypoint_route_groups": 10,
+  "positive_engine_keyword_requirement_groups": 0,
+  "shared_override_explicit_false_groups": 1,
+  "original_source_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_scope": "fixed versioned Python and safe retained numeric receipts only",
+  "original_source_authorization_verified": false,
+  "original_assets_read": false,
+  "original_runtime_parity_proven": false,
+  "production_activation": false,
+  "acceptance_eligible": false,
+  "Android_device": false,
+  "XAPK": false,
+  "archive": {
+    "id": 15189527482,
+    "bytes": 4240,
+    "sha256": "a71a0df903fd86ec419880752f700847f6070971fe6cafa2c4209294acabdad9",
+    "git_blob_sha1": "bbc3188d4a64646d88ec85a82b8d259262d57714",
+    "crc_verified": true,
+    "members": {
+      "audit.json": {
+        "bytes": 18492,
+        "sha256": "342b1a37262517a6831f26645e40be053d7e9aca0116f35ff32061bbfa824a04"
+      },
+      "tests.log": {
+        "bytes": 1027,
+        "sha256": "3e80568c02e3677ab2884c84c3a4521d79882b7e76fb23c3a5eb968cc15da092"
+      }
+    },
+    "all_21_code_blob_pins_match_connector_review": true
+  },
+  "historical_post23": {
+    "run": 43929698985,
+    "job": 133533236277,
+    "live_job_success_verified": true,
+    "non_dummy": 688,
+    "custom_total": 786,
+    "dummy": 98,
+    "remaining_GUID_targets": 37,
+    "runtime_keyword_parity_proven": false
+  },
+  "historical_NEXT23b": {
+    "run": 44783011957,
+    "job": 136450376800,
+    "live_job_success_verified": true,
+    "source_programs": 134,
+    "source_paired_routes": 1156,
+    "source_private_compiled_stages": 2312,
+    "original_engine_runtime_verified": false
+  },
+  "historical_Particle108": {
+    "external_run": 43777398215,
+    "external_job": 133006699574,
+    "local_run": 43778717548,
+    "local_job": 133011142731,
+    "both_live_job_success_verified": true,
+    "materials": 5,
+    "source_textures": 3,
+    "texenv_slots": 10,
+    "external_images": 2,
+    "local_Type0_source_top_alpha_decoded": true,
+    "local_source_exported_pixels_compared": false,
+    "actual_fire_association_and_device_pixels_verified": false
+  },
+  "session": "clients/GT/sessions/20261127-original-keyword-migration-preflight/README_AR.md",
+  "next": "G3 ten-group original keyword migration: prepare a separate fail-closed candidate-only path that consumes a future explicitly authorized private original packet, proves exact per-pass keyword sets, scope/passType, VS/FS identities and classifies orphan/sparse routes without fallback. Use existing strict runtime contract and authored witnesses only for code testing, do not blindly flip engine_keywords=True, activate or install. A3 cannot acquire source until authorization/provenance independently established; then NEXT23b and ten groups get real source-specific Unity bundle/runtime and same-export protected-census proofs. Particle108 third local source-to-export alpha parity and actual fire association remain open; G0–G6 and XAPK blocked."
+}
