@@ -1,0 +1,105 @@
+name: GT replay exact retained authored Android Vulkan bundle (NO Unity execution)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-keyword-candidate-bundle-replay.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay-authored-candidate-bundle:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout versioned code and exact authored 6534-byte bundle plus raw receipts only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /scripts/gt_decode_smolv.cpp
+            /tests/test_gt_keyword_candidate_bundle_contract.py
+            /tests/test_gt_keyword_candidate_plan.py
+            /tests/test_gt_runtime_keyword_contract.py
+            /tests/test_gt_runtime_keyword_integration.py
+            /tools/gt_keyword_candidate_bundle/GTKeywordCandidateBundle.cs
+            /clients/GT/sessions/20261127-keyword-candidate-bundle/third-45992643749.bundle
+            /clients/GT/sessions/20261127-keyword-candidate-bundle/third-45992643749-unity-raw.json
+            /clients/GT/sessions/20261127-keyword-candidate-bundle/third-45992643749-verified.json
+            /clients/GT/sessions/20261127-keyword-candidate-bundle/third-45992643749.json
+            /.github/workflows/raft-gt-keyword-candidate-bundle-replay.yml
+      - name: Regression suite including strict combined-only receipt falsifiers
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          mkdir replay-test-logs
+          for f in test_gt_keyword_candidate_bundle_contract.py test_gt_keyword_candidate_plan.py test_gt_runtime_keyword_contract.py test_gt_runtime_keyword_integration.py; do
+            python3 -B -m unittest discover -s tests -p "$f" -v 2>&1 | tee "replay-test-logs/$f.log"
+          done
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          for name,count in {'test_gt_keyword_candidate_bundle_contract.py':17,'test_gt_keyword_candidate_plan.py':15,'test_gt_runtime_keyword_contract.py':9,'test_gt_runtime_keyword_integration.py':5}.items():
+              s=(Path('replay-test-logs')/(name+'.log')).read_text()
+              assert re.search(r'^Ran '+str(count)+r' tests? in ',s,re.M) and re.search(r'^OK$',s,re.M)
+          PY
+      - name: Verify immutable actual Unity inputs and stage offline independent decoding
+        run: |
+          set -euo pipefail
+          python3 -B -m scripts.gt_keyword_candidate_bundle_probe prepare --project replay-project --out replay-results
+          p="clients/GT/sessions/20261127-keyword-candidate-bundle"
+          printf '%s  %s\n' \
+            6f0777213ac238677d51b97c3bc975e38347bf2fdcf94d85f92e7bb42d93a034 "$p/third-45992643749.bundle" \
+            3d0ae8c9519e73c1a6c0c19302cc883e48b52416118742b4cd9c5a4d407d27ca "$p/third-45992643749-unity-raw.json" \
+            22ab7361f7337641b9628b548381fcb062160507f4df535be9810fcbaf88955f "$p/third-45992643749-verified.json" | sha256sum -c -
+          cp "$p/third-45992643749.bundle" replay-results/gt-keyword-candidate.bundle
+          cp "$p/third-45992643749-unity-raw.json" replay-results/unity-raw.json
+          cp "$p/third-45992643749-verified.json" replay-results/original-verifier.json
+          python3 -m venv "$RUNNER_TEMP/gt-replay-python"
+          "$RUNNER_TEMP/gt-replay-python/bin/python" -m pip install --disable-pip-version-check -q UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends spirv-tools
+          smolv="$RUNNER_TEMP/gt-replay-smolv"
+          mkdir "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          { spirv-val --version; spirv-dis --version; "$RUNNER_TEMP/gt-replay-python/bin/python" -m pip show UnityPy | grep '^Version:'; } > replay-results/tool-versions.txt
+      - name: Decode all actual routes and modules; no replacement bundle, no fabricated callbacks
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/gt-replay-python/bin/python" -B -m scripts.gt_keyword_candidate_bundle_probe verify \
+            --project replay-project --out replay-results \
+            --run-id 45992643749-1-de0ac1de51e06cbb8fd60426ee3478d13eb2d093 \
+            --decoder "$RUNNER_TEMP/gt-replay-smolv/decode" --exit-code 0
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('replay-results/verified.json').read_text())
+          assert r['status']=='PASS_ACTUAL_AUTHORED_CANDIDATE_UNITY_BUNDLE'
+          assert r['observed_callback_rows']==12 and r['observed_vertex_callback_routes']==4 and r['observed_fragment_callback_routes']==0
+          assert r['combined_vertex_only_callback_passes']==[0] and r['fragment_routes_verified_by_combined_bundle_join']==4
+          assert r['actual_decoded_stage_markers']==8 and len(r['actual_bundle_controls'])==7
+          assert r['original_runtime_verified'] is False and r['installation_allowed'] is False
+          print('GT_REPLAY_SAME_BUNDLE_ACCEPTED authored_only=true vertex_callbacks=4 fragment_callbacks=0 decoded_fragment_routes=4 modules=8 controls=7')
+          PY
+      - name: Retain actual decoded modules, topology, controls and receipts even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-keyword-candidate-bundle-replay-${{ github.run_id }}
+          path: |
+            replay-results/
+            replay-test-logs/
+          if-no-files-found: warn
+          retention-days: 14
