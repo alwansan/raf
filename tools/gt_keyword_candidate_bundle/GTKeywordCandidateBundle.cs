@@ -52,7 +52,7 @@ namespace RaftGT {
             var output=Path.Combine(root,"ProbeResults");
             Directory.CreateDirectory(output);
             var result=new Result{unity_version=Application.unityVersion,run_id=Arg("-gtCandidateRunId")};
-            int exit=2;bool async=ShaderUtil.allowAsyncCompilation;
+            int exit=2;bool priorAsync=ShaderUtil.allowAsyncCompilation;
             try{
                 result.checkpoint="input";
                 ShaderUtil.allowAsyncCompilation=false;
@@ -124,7 +124,7 @@ namespace RaftGT {
                 result.status="OBSERVED_CANDIDATE_ANDROID_VULKAN_BUNDLE";result.checkpoint="verified";exit=0;
             }catch(Exception e){result.error=e.GetType().Name+":"+e.Message;Debug.LogError("GT authored candidate "+result.error);}
             finally{
-                Capturing=false;ShaderUtil.allowAsyncCompilation=async;
+                Capturing=false;ShaderUtil.allowAsyncCompilation=priorAsync;
                 lock(Observed){result.observations=Observed.ToArray();}
                 File.WriteAllText(Path.Combine(output,"unity-raw.json"),JsonUtility.ToJson(result,true));
             }

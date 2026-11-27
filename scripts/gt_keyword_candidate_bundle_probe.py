@@ -147,14 +147,16 @@ def verify(project,out,run_id,decoder,exit_code):
             ):
                 q=deepcopy(parsed)
                 if name=="extra_active_keyword":
-                    q["m_KeywordNames"].append("GT_UNPROVED_EXTRA");q["m_KeywordFlags"]=list(q["m_KeywordFlags"])+[0]
+                    extra="STEREO_INSTANCING_ON"
+                    if extra not in q["m_KeywordNames"]:
+                        q["m_KeywordNames"]=list(q["m_KeywordNames"])+[extra]
+                        q["m_KeywordFlags"]=list(q["m_KeywordFlags"])+[0]
                     table=mut(q);rows=table.get("m_SubPrograms") or next(b for b in table["m_PlayerSubPrograms"] if b)
-                    rows[0]["m_KeywordIndices"].append(len(q["m_KeywordNames"])-1)
+                    rows[0]["m_KeywordIndices"]=list(rows[0]["m_KeywordIndices"])+[q["m_KeywordNames"].index(extra)]
                 else:
                     tags=mut(q)
-                    for entry in tags:
-                        if entry[0].upper()=="LIGHTMODE":
-                            entry[1]="ForwardAdd";break
+                    q["m_SubShaders"][0]["m_Passes"][0]["m_State"]["m_Tags"]["tags"]=[
+                        [k,"ForwardAdd" if k.upper()=="LIGHTMODE" else v] for k,v in tags]
                 try:gate.verify_parsed(c,q,entries,decode,authored_marker_mode=True)
                 except ValueError as e:controls[name]=str(e)
                 else:raise ValueError("actual_bundle_control_accepted:"+name)

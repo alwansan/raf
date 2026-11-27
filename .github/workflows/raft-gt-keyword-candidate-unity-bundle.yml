@@ -1,0 +1,140 @@
+name: GT authored candidate exact keyword Unity Android Vulkan bundle (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-keyword-candidate-unity-bundle.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gt-keyword-candidate-unity-bundle-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  authored-candidate-bundle:
+    if: github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 45
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      GT_CANDIDATE_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}
+    steps:
+      - name: Checkout only versioned Python, decoder and authored fixture code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/*.py
+            /scripts/gt_decode_smolv.cpp
+            /tests/test_gt_keyword_candidate_bundle_contract.py
+            /tests/test_gt_keyword_candidate_plan.py
+            /tests/test_gt_runtime_keyword_contract.py
+            /tests/test_gt_runtime_keyword_integration.py
+            /tools/gt_keyword_candidate_bundle/GTKeywordCandidateBundle.cs
+            /.github/workflows/raft-gt-keyword-candidate-unity-bundle.yml
+      - name: Run source-only strict bundle and existing candidate contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          mkdir gt-keyword-bundle-test-logs
+          for f in test_gt_keyword_candidate_bundle_contract.py test_gt_keyword_candidate_plan.py test_gt_runtime_keyword_contract.py test_gt_runtime_keyword_integration.py; do
+            python3 -B -m unittest discover -s tests -p "$f" -v 2>&1 | tee "gt-keyword-bundle-test-logs/$f.log"
+          done
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          want={'test_gt_keyword_candidate_bundle_contract.py.log':12,'test_gt_keyword_candidate_plan.py.log':15,'test_gt_runtime_keyword_contract.py.log':9,'test_gt_runtime_keyword_integration.py.log':5}
+          for n,count in want.items():
+              s=(Path('gt-keyword-bundle-test-logs')/n).read_text()
+              assert re.search(r'^Ran '+str(count)+r' tests? in ',s,re.M) and re.search(r'^OK$',s,re.M)
+          PY
+      - name: Stage only authored candidate inputs and prepare independent Vulkan decoder
+        id: stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B -m scripts.gt_keyword_candidate_bundle_probe prepare --project gt-keyword-bundle-project --out gt-keyword-bundle-results
+          python3 -m venv "$RUNNER_TEMP/gt-keyword-bundle-python"
+          "$RUNNER_TEMP/gt-keyword-bundle-python/bin/python" -m pip install --disable-pip-version-check -q UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends spirv-tools
+          smolv="$RUNNER_TEMP/gt-keyword-bundle-smolv"
+          mkdir "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+          { spirv-val --version; spirv-dis --version; "$RUNNER_TEMP/gt-keyword-bundle-python/bin/python" -m pip show UnityPy | grep '^Version:'; } > gt-keyword-bundle-results/tool-versions.txt
+      - name: Require existing Unity activation inputs and disk budget
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && { [ -z "${UNITY_SERIAL:-}" ] || [ -z "${UNITY_EMAIL:-}" ] || [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo 'GT authored candidate Unity activation unavailable'
+            exit 1
+          fi
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+      - name: Compile actual authored mixed-scope Android Vulkan AssetBundle and observe compiler routes
+        id: unity
+        continue-on-error: true
+        uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-keyword-bundle-project
+          targetPlatform: Android
+          buildMethod: RaftGT.GTKeywordCandidateBundle.Run
+          manualExit: true
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          dockerCpuLimit: 2
+          customParameters: >-
+            -job-worker-count 2 -gtCandidateRunId ${{ env.GT_CANDIDATE_RUN_ID }}
+      - name: Independently decode actual bundle and check exact stage markers and negative controls
+        if: always() && steps.stage.outcome == 'success'
+        env:
+          UNITY_OUTCOME: ${{ steps.unity.outcome }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          project=gt-keyword-bundle-project
+          sudo chown -R "$(id -u):$(id -g)" "$project/ProbeResults" 2>/dev/null || true
+          if [ -f "$project/ProbeResults/unity-raw.json" ] && [ "$(stat -c %s "$project/ProbeResults/unity-raw.json")" -le 8388608 ]; then
+            cp "$project/ProbeResults/unity-raw.json" gt-keyword-bundle-results/
+          fi
+          file="$project/ProbeResults/Private/gt-keyword-candidate"
+          if [ -f "$file" ] && [ "$(stat -c %s "$file")" -le 8388608 ]; then
+            cp "$file" gt-keyword-bundle-results/gt-keyword-candidate.bundle
+          fi
+          code=2; if [ "$UNITY_OUTCOME" = success ]; then code=0; fi
+          "$RUNNER_TEMP/gt-keyword-bundle-python/bin/python" -B -m scripts.gt_keyword_candidate_bundle_probe verify \
+            --project "$project" --out gt-keyword-bundle-results --run-id "$GT_CANDIDATE_RUN_ID" \
+            --decoder "$RUNNER_TEMP/gt-keyword-bundle-smolv/decode" --exit-code "$code"
+      - name: Retain only authored bundle, marker modules, bounded receipts and source tests
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-keyword-candidate-unity-bundle-${{ github.run_id }}
+          path: |
+            gt-keyword-bundle-results/
+            gt-keyword-bundle-test-logs/
+          if-no-files-found: warn
+          retention-days: 14
