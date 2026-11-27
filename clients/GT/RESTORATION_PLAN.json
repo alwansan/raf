@@ -1306,11 +1306,11 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "ff72bf62344db3426aacd056c8d5b59d67374efc",
-    "purpose": "G5 actual authored byte-bound decoder, source/export pixel parity and local document regressions; original acceptance still blocked",
+    "reviewed_remote_head": "d99a05446e2ee33c0165863b1e985b00e898e982",
+    "purpose": "G1/G2 ordered renderer/submesh material identity gate authored regression passed; original renderer and GPU parity unverified",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
-    "index": "clients/GT/sessions/20261127-particle108-local-net-loss/README_AR.md",
+    "index": "clients/GT/sessions/20261127-white-renderer-submesh-routes/README_AR.md",
     "manifest": "clients/GT/sessions/20261126-complete-handoff/MANIFEST.json",
     "historical_manifest_ref": "1a78eb2764d39550f59e2948ae5ed89033c8ab73",
     "missing_local_artifacts": "clients/GT/sessions/20261126-complete-handoff/inventory/KNOWN_MISSING_LOCAL_ARTIFACTS.json",
@@ -1562,9 +1562,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G1-G2-white-renderer-submesh-material-provenance",
+      "id": "G1-G2-white-renderer-submesh-runtime-witness",
       "status": "NEXT_PRODUCTIVE",
-      "next": "Shift the next authored fallback batch to white-object provenance. Review gt_original_mesh_texture_graph.py, gt_verify_original_mesh_export.py, gt_mesh_restoration_priority.py, b03_verify_renderer_material_links.py, b22/b44 scalar/color fidelity, and current historical evidence. Identify one actual gap linking Mesh submesh index ranges/UV vertex layout, ordered Renderer.m_Materials slots and Shader/Material/TexEnv target identity from same-instance trace; implement a fail-closed fix with asymmetric authored geometry/material routing negative controls. Do not claim a white-object repair from isolated mesh or texture counts. Use a source-only test unless a new actual raster experiment is necessary. Particle108 byte-bound source/PNG parity is now diagnostic code, not original acceptance: only bounded decoded RGBA8 mip0 and PNG8; serialized owner parser mocked on authored metadata, source-specific compressed formats, orientation, actual stream manifests and original Unity/GPU parity not verified. A3 still blocked until authorized source provenance verified. All G0-G6 open; no original acquisition, phone or XAPK."
+      "next": "First verify the opt-in renderer-lineage C# composition against the exact pinned public AssetRipper tool source/build (no game inputs, no original/export/package acquisition). Inspect actual scene collection CreateExportPointer semantics and whether component identities are global exportable or unscoped type0; keep latter unresolved and do not modify shared pinned helper. If public tool compile is available, use one source-only compile job, no proprietary inputs. Then add an actual authored Unity Vulkan mesh/submesh raster witness using asymmetric two/three submeshes, persistent imported textures, distinct Material shader/tint/UV0/UV transform and explicit expected draw order; compare swapped material, valid-but-wrong mesh/index route, missing or white texture, UV drift using independent pixel oracle. New Python route gate only verifies selected triangle-list inline index ranges/index bytes and UV descriptors/ordered source-export pointers; it has no original trace, raw vertex/UV samples, color/scalar equivalence or real GPU proof. Source metadata parser is injected in authored tests. If compile unavailable, preserve explicit blocker and pursue authored raster or cross-owner trace scope tests. Historical 4708 geometry matches do not prove renderer identity. A3 remains blocked until verified authorized original source, G0-G6 remain open, no phone or XAPK."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -2109,6 +2109,86 @@
       "original_alpha_loss_proven": false,
       "Android_device": false,
       "XAPK": false
+    },
+    "latest_white_renderer_submesh_routes": {
+      "status": "PASS_AUTHORED_ORDERED_RENDERER_SUBMESH_ROUTES",
+      "run_id": 45943682655,
+      "job_id": 140323418684,
+      "head": "d99a05446e2ee33c0165863b1e985b00e898e982",
+      "conclusion": "success",
+      "guard_run_id": 45943682730,
+      "artifact_id": 15173930747,
+      "archive": "clients/GT/sessions/20261127-white-renderer-submesh-routes/actual-run-45943682655.zip",
+      "archive_bytes": 2777,
+      "archive_sha256": "f0e6b764a48a3a92ff7e80a41fef621f7ee36390cf79c7efd9429abb066caeec",
+      "archive_git_blob": "381818858a15fd8391734dc8af5fceefaf490517",
+      "archive_crc_sha_size_verified_locally": true,
+      "members": {
+        "report.json": {
+          "bytes": 799,
+          "sha256": "0be881043042b4a8e02433cd9c94e59dd1384d037925df63b2e7fcd533aa2a55"
+        },
+        "test_b02_stage_texture_lineage.py.log": {
+          "bytes": 954,
+          "sha256": "cea104dd18ccdfa89f22c00e3f5818e201dc12f1c8c518df93dd0c71c69aa883",
+          "tests": 6
+        },
+        "test_b03_verify_renderer_material_links.py.log": {
+          "bytes": 2556,
+          "sha256": "6ed4e48b4953823369e5cdef9646bf832381fbcd6a3c604bbacda5499caea768",
+          "tests": 17
+        },
+        "test_gt_renderer_submesh_routes.py.log": {
+          "bytes": 2497,
+          "sha256": "bdb579d1e860f6b0a78c981fddb27dec417bbb079a3dfd43bd456a36a61abbee",
+          "tests": 18
+        },
+        "test_gt_verify_original_mesh_export.py.log": {
+          "bytes": 1259,
+          "sha256": "4fa1e34501cc7873993fcc2fc567b180527cc1ff3a5442f97cdd224b1a32258a",
+          "tests": 7
+        }
+      },
+      "total_tests": 48,
+      "new_route_tests": 18,
+      "actual_authored_YAML_and_PNG_fixtures": true,
+      "serialized_source_metadata_authored_in_memory": true,
+      "source_byte_snapshot_and_same_size_mutation_control": true,
+      "old_structural_pass_new_ordered_join_rejects_swapped_materials": true,
+      "submesh_triangle_index_range_and_UV_descriptor_checks": true,
+      "shader_and_texture_target_identity_and_UV_transform_controls": true,
+      "mesh_renderer_and_skinned_renderer_paths_tested": true,
+      "private_same_instance_component_hook_composition_tested": true,
+      "new_CSharp_hook_compiled": false,
+      "vertex_payload_or_UV_samples_verified": false,
+      "shader_program_color_scalar_or_GPU_parity_verified": false,
+      "original_assets_read": false,
+      "white_mesh_repaired": false,
+      "XAPK": false
+    },
+    "latest_white_renderer_submesh_failed_control": {
+      "status": "FAIL_AUTHORED_FIXTURE_ALIASING",
+      "run_id": 45943552013,
+      "job_id": 140323011985,
+      "head": "c104da00d10844505b0e39753a163263f2c40882",
+      "conclusion": "failure",
+      "guard_run_id": 45943552051,
+      "artifact_id": 15173498932,
+      "archive": "clients/GT/sessions/20261127-white-renderer-submesh-routes/failed-run-45943552013.zip",
+      "archive_bytes": 755,
+      "archive_sha256": "9f5f500c7e64e58ac839e39883b1585e55985e86f199ab2ef70d5cb54c17d61c",
+      "archive_git_blob": "d4cb7d1c234a79576a6701e7959c9d5d399d0b9d",
+      "archive_crc_sha_size_verified_locally": true,
+      "members": {
+        "test_gt_renderer_submesh_routes.py.log": {
+          "bytes": 2399,
+          "sha256": "10f84e817f9917a2020eb25742ce89394af8f79d27935e58fc5c58354cba233c"
+        }
+      },
+      "tests_executed": 14,
+      "passed": 13,
+      "failed": 1,
+      "reason": "Authored source and export TexEnv UV nested dict were aliased, so mutation changed both. Corrected by deepcopy plus explicit source invariant; failure retained."
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date."
