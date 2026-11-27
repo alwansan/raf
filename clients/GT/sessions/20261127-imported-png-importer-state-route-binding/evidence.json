@@ -1,0 +1,12 @@
+{
+  "status": "PENDING_SOURCE_IMPLEMENTATION_UNEXECUTED",
+  "starting_head": "d477529faffbf82c8758d2e466943944a98757ba",
+  "prior_run": 45957439789,
+  "prior_guard": 45957440880,
+  "prior_artifact": 15179790908,
+  "original_assets_read": false,
+  "unity_import_verified": false,
+  "xapk": false,
+  "pinned_exporter": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+  "next": "extend actual C# witness, verify enum ABI and schema, execute focused authorized workflow"
+}

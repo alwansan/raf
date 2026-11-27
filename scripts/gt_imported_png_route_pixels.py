@@ -118,7 +118,7 @@ def resolve_requests(root,records,requests):
     return result
 
 
-def importer(meta,ptr):
+def importer_document(meta,ptr):
     """Strict importer schema and trace identity, not Unity import proof."""
     import yaml
     class Loader(yaml.SafeLoader):
@@ -129,6 +129,8 @@ def importer(meta,ptr):
                 need(type(key) in (str,int) and key not in out,"duplicate_png_importer_key")
                 if key=="guid" and isinstance(v,yaml.ScalarNode):
                     v.tag="tag:yaml.org,2002:str"
+                if key=="mipBias" and isinstance(v,yaml.ScalarNode) and v.value=="-0" and v.tag=="tag:yaml.org,2002:int":
+                    v.tag="tag:yaml.org,2002:float"
                 out[key]=self.construct_object(v,deep=deep)
             return out
     try:doc=yaml.load(meta,Loader=Loader)
@@ -143,6 +145,11 @@ def importer(meta,ptr):
     need(type(imp.get("textureShape")) is int and imp["textureShape"]==1 and
          type(imp.get("textureType")) is int and imp["textureType"]==0,
          "unsupported_png_importer_shape_or_type")
+    return imp
+
+
+def importer(meta,ptr):
+    imp=importer_document(meta,ptr)
     settings=imp.get("textureSettings")
     need(type(settings) is dict,"missing_png_importer_sampler_schema")
     try:values=normalize(settings,original=False)
