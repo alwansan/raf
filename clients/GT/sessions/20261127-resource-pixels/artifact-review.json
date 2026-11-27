@@ -1,0 +1,274 @@
+{
+  "Unity_or_compiler_reexecuted_locally": false,
+  "archive_bytes": 4911,
+  "archive_sha256": "f4c4fdd5a55d9745017ada7fcf6a8a34ec41b02d79bed80df3a65bd2e4271624",
+  "compiler_invocations": {
+    "glslangValidator": 14,
+    "spirv-opt": 10,
+    "spirv-val": 14
+  },
+  "execution_attestation_requires_matching_GitHub_run_and_job": true,
+  "first_row_pixels": {
+    "A_linear": [
+      [
+        0.125,
+        0.25,
+        0.5,
+        1.0
+      ],
+      [
+        0.265625,
+        0.34375,
+        0.46875,
+        1.0
+      ],
+      [
+        0.546875,
+        0.34375,
+        0.59375,
+        1.0
+      ],
+      [
+        0.6875,
+        0.25,
+        0.75,
+        1.0
+      ]
+    ],
+    "A_point": [
+      [
+        0.125,
+        0.25,
+        0.5,
+        1.0
+      ],
+      [
+        0.125,
+        0.25,
+        0.5,
+        1.0
+      ],
+      [
+        0.875,
+        0.25,
+        0.75,
+        1.0
+      ],
+      [
+        0.875,
+        0.25,
+        0.75,
+        1.0
+      ]
+    ],
+    "A_point_after_B": [
+      [
+        0.125,
+        0.25,
+        0.5,
+        1.0
+      ],
+      [
+        0.125,
+        0.25,
+        0.5,
+        1.0
+      ],
+      [
+        0.875,
+        0.25,
+        0.75,
+        1.0
+      ],
+      [
+        0.875,
+        0.25,
+        0.75,
+        1.0
+      ]
+    ],
+    "A_repeat": [
+      [
+        0.265625,
+        0.34375,
+        0.46875,
+        1.0
+      ],
+      [
+        0.265625,
+        0.34375,
+        0.46875,
+        1.0
+      ],
+      [
+        0.546875,
+        0.34375,
+        0.59375,
+        1.0
+      ],
+      [
+        0.546875,
+        0.34375,
+        0.59375,
+        1.0
+      ]
+    ],
+    "B_linear": [
+      [
+        0.21875,
+        0.1875,
+        0.75,
+        1.0
+      ],
+      [
+        0.2421875,
+        0.2890625,
+        0.67578125,
+        1.0
+      ],
+      [
+        0.2890625,
+        0.6328125,
+        0.36328125,
+        1.0
+      ],
+      [
+        0.3125,
+        0.875,
+        0.125,
+        1.0
+      ]
+    ],
+    "B_point": [
+      [
+        0.1875,
+        0.1875,
+        0.75,
+        1.0
+      ],
+      [
+        0.1875,
+        0.1875,
+        0.75,
+        1.0
+      ],
+      [
+        0.25,
+        0.875,
+        0.125,
+        1.0
+      ],
+      [
+        0.25,
+        0.875,
+        0.125,
+        1.0
+      ]
+    ],
+    "decoy_as_main": [
+      [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "white_substitute": [
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    ]
+  },
+  "local_numeric_replay": {
+    "XAPK_requested": false,
+    "cases": 8,
+    "combined_sha256": "34cb94b32c382c2fa047eda5eee6032df7fd1eff0ed1c59e5caa11d3fc47f33d",
+    "compiler_sha256": "e04acaec09f5cb3a8e53b9a87c920e00b6dff6f908c6468c70a593ffd5fb6f64",
+    "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+    "max_error": 0.0,
+    "original_game_or_android_pixels_verified": false,
+    "pixels": 128,
+    "probe_sha256": "160faa6cd94dcc691371db905e34193ee1e0a01eb63f2963161f6bad32e55e8e",
+    "raw_receipt_sha256": "d04d775ae2f97e615cf933303f0fdd4a70b7d7bc317b253668d05a5b60df587f",
+    "rgba_components": 512,
+    "run_id": "45934006734-1-e867b31791ca00c58108ce2d3ea3933aee5234a2",
+    "shader_sha256": "bbac74071676cec0867db4d3dfab35c9107475f36e6de8babab129c0c093c473",
+    "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
+    "wrong_binding_comparisons": {
+      "A_linear_versus_A_point": 0.328125,
+      "A_repeat_versus_A_linear": 0.15625,
+      "B_linear_versus_B_point": 0.2421875,
+      "B_point_versus_A_point": 0.625,
+      "decoy_as_main_versus_A_point": 0.875,
+      "white_substitute_versus_A_point": 0.875,
+      "wrong_vertex_uses_fragment_red": 0.09375
+    }
+  },
+  "members": {
+    "combined.hlsl": {
+      "bytes": 596,
+      "sha256": "34cb94b32c382c2fa047eda5eee6032df7fd1eff0ed1c59e5caa11d3fc47f33d"
+    },
+    "compiler.json": {
+      "bytes": 4009,
+      "sha256": "e04acaec09f5cb3a8e53b9a87c920e00b6dff6f908c6468c70a593ffd5fb6f64"
+    },
+    "generated.shader": {
+      "bytes": 1087,
+      "sha256": "bbac74071676cec0867db4d3dfab35c9107475f36e6de8babab129c0c093c473"
+    },
+    "raw.unity.json": {
+      "bytes": 29744,
+      "sha256": "d04d775ae2f97e615cf933303f0fdd4a70b7d7bc317b253668d05a5b60df587f"
+    },
+    "stage.json": {
+      "bytes": 911,
+      "sha256": "a4daf7620ad076b6129084fd9c4a750e03eab8a7d656563b45dedba8c3a3d146"
+    },
+    "verified.json": {
+      "bytes": 1113,
+      "sha256": "780090e5c63d724b25eaed9406a04d6f263f52e538da75b37a097b16bb1b4d29"
+    }
+  },
+  "original_game_pixels_verified": false,
+  "run_id": "45934006734-1-e867b31791ca00c58108ce2d3ea3933aee5234a2"
+}

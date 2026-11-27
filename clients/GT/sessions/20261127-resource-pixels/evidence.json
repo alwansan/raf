@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-27",
+  "starting_head": "26b081408e3c16388b33038885823cc6dcc3821f",
+  "implementation_head": "da2662c19351ebffae7fd5b8920608918738ea4b",
+  "tested_head": "e867b31791ca00c58108ce2d3ea3933aee5234a2",
+  "read_only_lab_head": "f933c4429803583d1ed5fa26e46bb0d3227f2027",
+  "acceptance": {
+    "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
+    "run_id": 45934006734,
+    "job_id": 140292902788,
+    "run_attempt": 1,
+    "head": "e867b31791ca00c58108ce2d3ea3933aee5234a2",
+    "Unity_version": "2021.3.45f2",
+    "backend": "Vulkan",
+    "color_space": "Linear",
+    "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+    "host": "Linux software Vulkan, not Android",
+    "actual_glslang_compilations": 14,
+    "actual_spirv_validations_vulkan11": 14,
+    "normalization_invocations": 10,
+    "stage_resource_records": 4,
+    "unit_tests": 18,
+    "cases": 8,
+    "pixels": 128,
+    "rgba_components": 512,
+    "max_error": 0,
+    "wrong_binding_comparisons": 7,
+    "minimum_wrong_comparison_max_separation": 0.09375,
+    "actual_vertex_and_fragment_texture_sampling": true,
+    "material_named_texture_and_sampler_filter_wrap_verified_on_authored_fixture": true,
+    "shader_sha256": "bbac74071676cec0867db4d3dfab35c9107475f36e6de8babab129c0c093c473",
+    "combined_sha256": "34cb94b32c382c2fa047eda5eee6032df7fd1eff0ed1c59e5caa11d3fc47f33d",
+    "archive": "clients/GT/sessions/20261127-resource-pixels/actual-run-45934006734.zip",
+    "artifact_id": 15169168126,
+    "archive_bytes": 4911,
+    "archive_sha256": "f4c4fdd5a55d9745017ada7fcf6a8a34ec41b02d79bed80df3a65bd2e4271624",
+    "local_review": "clients/GT/sessions/20261127-resource-pixels/artifact-review.json",
+    "local_numeric_replay_matches_runner": true,
+    "original_game_or_Android_pixels_verified": false,
+    "original_assets_read": false,
+    "unrelated_CB_mesh_varying_checks_stubbed": true
+  },
+  "run": {
+    "id": 45934006734,
+    "head": "e867b31791ca00c58108ce2d3ea3933aee5234a2",
+    "attempt": 1,
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-27T03:24:42Z",
+    "updated_at": "2026-11-27T03:27:23Z",
+    "jobs": [
+      {
+        "id": 140292902788,
+        "name": "resource-pixels",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checkout only authored resource probes and source helpers",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install public HLSL and SPIR-V compiler tools",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Test oracle and generate project from verified resource metadata HLSL",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require existing activation inputs and disk budget",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Prepare an ephemeral Unity image with software Vulkan",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Render actual authored metadata-generated texture and sampler shader in Unity Vulkan",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify compiler byte commitments and every material readback pixel",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain only authored generated shader and numeric receipts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Remove only the authored resource test project and image",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Checkout only authored resource probes and source helpers",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 140292902914,
+        "name": "resource-bindings",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 140292903063,
+        "name": "keyword-pixels",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 140292903460,
+        "name": "next23b-receipt",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 140292940483,
+        "name": "synthetic-pixels",
+        "status": "completed",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "guard_run": {
+    "id": 45934006683,
+    "conclusion": "success"
+  },
+  "artifact_expires_at": "2026-12-11T03:27:17Z",
+  "log_review": {
+    "lines": 2514,
+    "targeted_error_counts": {
+      "csharp": 0,
+      "shader": 0,
+      "traceback": 0
+    },
+    "all_errors_excluded": false
+  },
+  "local": {
+    "source_tests_passed": 5,
+    "receipt_mutations_rejected": 9,
+    "archive_test_double_passed": true,
+    "archive_negative_controls_rejected": 4,
+    "prior_local_files_unchanged": 26,
+    "full_clone_verified": false,
+    "Unity_or_compiler_reexecuted_locally": false,
+    "actual_archive_replayed": true
+  },
+  "limits": {
+    "original_assets_acquired": false,
+    "original_runtime_binding_verified": false,
+    "original_game_or_Android_pixels_verified": false,
+    "white_meshes_or_fire_fixed_in_game": false,
+    "G0_G6": "OPEN",
+    "new_XAPK": false,
+    "CB_mesh_varying_checks_stubbed": true,
+    "source_fixture_uses_authored_clip_space_not_original_engine_matrices": true,
+    "white_and_decoy_are_explicit_substitutes_not_missing_original_resources": true
+  },
+  "files": [
+    {
+      "path": "tools/synthetic_material_alpha/resource_register_probe.py",
+      "git_blob_sha": "074dfe98a882b7b4ae0f75f33b63f595a76f8701",
+      "sha256": "fd00f6199c21a1230dba85d78a0550957b19daf595eacb607c6f5ffaa5eb553e"
+    },
+    {
+      "path": "tools/synthetic_material_alpha/resource_pixels.py",
+      "git_blob_sha": "e9f3ba28968f7623d2ed5304287adf1c5ad3a83f",
+      "sha256": "9479d550fc3bc937c76782c9a8e9bcbaae8dc7fb56ef35a05c1d034a258a550c"
+    },
+    {
+      "path": "tools/synthetic_material_alpha/SyntheticResourcePixelValidation.cs",
+      "git_blob_sha": "3b303174ad5d6f6dcd147f457f55f331f7c0cc26",
+      "sha256": "160faa6cd94dcc691371db905e34193ee1e0a01eb63f2963161f6bad32e55e8e"
+    },
+    {
+      "path": "scripts/gt_resource_register_contract.py",
+      "git_blob_sha": "2ee53960250f4512dd4b14dbdc4a17cff066d487"
+    },
+    {
+      "path": ".github/workflows/raft-gt-synthetic-material-alpha.yml",
+      "git_blob_sha": "3dcc796b0931e5900a0e2a9f4517ee23cac0b17a"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-resource-pixels/review_resource_pixels.py",
+      "git_blob_sha": "f3bcbb69483285b9488835691a840f1f52e2e2e8",
+      "sha256": "6fdac08ea0f7294c89a5dbe1f92fcdf5e9617fb55035ded989e9b09339e1c73c"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-resource-pixels/artifact-review.json",
+      "git_blob_sha": "8880a111992dcc182e2a8e4fb58ed7061884a35c",
+      "sha256": "467e5382291f33f672cb3d0a7235953e366ddf97ba31c67e232e4a4913a5fdd7"
+    },
+    {
+      "path": "clients/GT/sessions/20261127-resource-pixels/actual-run-45934006734.zip",
+      "git_blob_sha": "bcdfd222055e432d76fbe4078d3b8e904b0b10c2",
+      "sha256": "f4c4fdd5a55d9745017ada7fcf6a8a34ec41b02d79bed80df3a65bd2e4271624"
+    }
+  ]
+}
