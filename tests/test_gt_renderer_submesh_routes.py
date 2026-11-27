@@ -204,5 +204,11 @@ class OrderedRoutes(unittest.TestCase):
         self.assertIn(b'RAFT_PRIVATE_EXPORT_RENDERER_LINEAGE',result)
         self.assertEqual(result.count(b'CaptureRendererComponents('),2)
         self.assertNotIn(b'RAFT_PRIVATE_EXPORT_RENDERER_LINEAGE',patch_export_lineage.add_mesh_lineage(raw))
+        start=result.index(b"private static void CaptureRendererComponents(")
+        end=result.index(b"private static void Identity(",start)
+        capture=result[start:end]
+        self.assertIn(b"collection.ExportableAssets",capture)
+        self.assertIn(b"if (!collection.Exportable)",capture)
+        self.assertNotIn(b"collection.Assets)",capture)
 
 if __name__=="__main__":unittest.main()

@@ -70,6 +70,14 @@ def add_renderer_lineage(raw):
     capture=MESH_CAPTURE.replace("CaptureMeshes","CaptureRendererComponents").replace('"meshes"','"components"').replace(
         'asset.ClassID != 43','asset.ClassID is not (1 or 23 or 33 or 137)').replace(
         'Identity(json, "source", asset);','json.WriteNumber("class_id", asset.ClassID);\n                Identity(json, "source", asset);')
+    # A collection may contain hidden objects that never enter its YAML.
+    # Only the same enumerable used by the scene/prefab writer is eligible.
+    capture=capture.replace(
+        '            foreach (IUnityObjectBase asset in collection.Assets)',
+        '            if (!collection.Exportable)\n                continue;\n            foreach (IUnityObjectBase asset in collection.ExportableAssets)')
+    capture=capture.replace(
+        '                json.WriteBoolean("exportable", collection.Exportable);',
+        '                json.WriteBoolean("exportable", collection.Exportable);\n                json.WriteString("collection_type", collection.GetType().FullName);')
     return source.replace(anchor,anchor+'''
         string? rendererPath = Environment.GetEnvironmentVariable("RAFT_PRIVATE_EXPORT_RENDERER_LINEAGE");
         if (!string.IsNullOrEmpty(rendererPath))
