@@ -6,6 +6,7 @@ Native placeholder shader documents are replaced only in the isolated project
 by a declared authored adapter with the same GUID/local ID. No shader parity.
 """
 import argparse
+from copy import deepcopy
 from hashlib import sha256
 import json
 import math
@@ -204,6 +205,24 @@ def verify(manifest,receipt,run_id,exit_code):
         original_assets_read=False,source_lower_mip_parity_verified=False,source_normal_GPU_parity_verified=False,
         serialized_swizzle_verified=False,Android_device=False,XAPK=False)
 
+def controls(m,r,run_id):
+    """Falsify the verifier against the actual observed Unity receipt."""
+    cases={}
+    def reject(name,mutation):
+        d=deepcopy(r);mutation(d)
+        try:verify(m,d,run_id,0)
+        except (ValueError,TypeError,KeyError,AssertionError,OverflowError) as e:cases[name]=str(e)
+        else:raise ValueError("V13_control_not_rejected:"+name)
+    reject("wrong_run",lambda d:d.update(run_id="other"))
+    reject("wrong_editor",lambda d:d.update(editor="not_the_pinned_editor"))
+    reject("texture_slot_swap",lambda d:d["routes"][0]["textures"].reverse())
+    reject("material_slot_swap",lambda d:d["routes"][0]["materials"].reverse())
+    reject("mesh_base_vertex_drift",lambda d:d["routes"][0]["base_vertices"].__setitem__(0,999))
+    reject("mip_dimension_drift",lambda d:d["textures"][0]["mips"][0].update(width=99))
+    reject("wrong_normal_readback",lambda d:d["textures"][0]["mips"][0]["normal"].__setitem__(0,9.0))
+    reject("wrong_pixel_file_bytes",lambda d:d["textures"][0]["identity"].update(sha256="0"*64))
+    return cases
+
 def main():
     p=argparse.ArgumentParser();s=p.add_subparsers(dest="cmd",required=True)
     a=s.add_parser("stage")
@@ -220,6 +239,8 @@ def main():
             m=read(a.manifest);r=read(a.receipt)
             need(r.get("manifest_sha256")==digest(a.manifest.read_bytes()),"actual_staged_manifest_sha256")
             result=verify(m,r,a.run_id,a.exit_code)
+            result["actual_receipt_negative_controls"]=controls(m,r,a.run_id)
+            result["actual_receipt_negative_control_count"]=len(result["actual_receipt_negative_controls"])
         except (ValueError,TypeError,KeyError,OSError,AssertionError,OverflowError) as e:
             result=dict(status="INCONCLUSIVE",reason=str(e),actual_Unity_import_verified=False,Android_device=False,XAPK=False)
         write(a.out,result);print(json.dumps(result,sort_keys=True))
