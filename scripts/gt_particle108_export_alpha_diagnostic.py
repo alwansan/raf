@@ -21,6 +21,7 @@ from scripts import t3_original_particle_texture_targets as texture_source
 from scripts.verify_export_lineage import identity, pointer
 from scripts.verify_exported_material_texture_links import GUID, IMAGES, BUILTIN, ZERO, is_texture
 from scripts.gt_next23b_unity_receipt import strict_json, read_snapshot
+from scripts.gt_particle108_source_pixel_parity import decode_original_texture, external_parity
 
 MAX_IMAGE_BYTES = 256 * 1024 * 1024
 MAX_PIXELS = 64 * 1024 * 1024
@@ -399,41 +400,19 @@ def classify_original_local_texture_trace(trace, local_pointers):
             "original_local_Type0_external_GUID_inferred":False}
 
 
-def original_local_type0_source_pixel_alpha(original, private_local_pointers):
-    """Decode ONLY the exact authenticated original local Texture2D28 top mip.
-
-    This reads no same-export image, does not publish source bytes or labels,
-    and cannot establish visual GPU parity. The source owner must match the
-    SHA-pinned original Material/Shader owner before any UnityPy decode.
-    """
-    import UnityPy
-    from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
-    from scripts.w1_stage_zip2_owners import fingerprint
-
+def original_local_type0_source_pixel_alpha(original, private_local_pointers, manifest=None):
+    """Decode exact source bytes; no local export image is inferred."""
     if type(private_local_pointers) is not dict or len(private_local_pointers)!=1:
         raise ValueError("invalid_original_local_Texture2D28_source_pixel_scope")
-    [(original_key,local_ptr)]=list(private_local_pointers.items())
-    if (type(original_key) is not tuple or len(original_key)!=2
-            or original_key[0] not in SHADER_OWNERS
-            or type(original_key[1]) is not int or original_key[1]<=0
-            or type(local_ptr) is not tuple or len(local_ptr)!=3 or local_ptr[2]!=0):
+    [(key,local_ptr)]=list(private_local_pointers.items())
+    if type(local_ptr) is not tuple or len(local_ptr)!=3 or local_ptr[2]!=0:
         raise ValueError("unverified_original_local_Texture2D28_source_identity")
-    owner,pid=original_key
-    path=original/"Raft_Data"/owner
-    if path.is_symlink() or not path.is_file() or fingerprint(path)!=SHADER_OWNERS[owner]:
-        raise ValueError("original_local_Texture2D28_source_owner_SHA_drift")
-    env=UnityPy.load(str(path))
-    matches=[obj for obj in env.file.objects.values() if obj.path_id==pid]
-    if len(matches)!=1 or matches[0].type.name!="Texture2D":
-        raise ValueError("source_original_local_PPtr_not_unique_Texture2D28")
-    texture=matches[0].read()
-    source_image=texture.image
-    if source_image is None:
-        raise ValueError("original_local_Texture2D28_top_mip_image_unavailable")
-    result=alpha_profile(source_image)
+    source_image,kind=decode_original_texture(original,manifest,key)
     return {
         "original_local_Type0_Texture2D28_source_top_mip_alpha_decoded":True,
-        "original_local_Type0_Texture2D28_source_top_mip_alpha_profile":result,
+        "original_local_Type0_Texture2D28_source_top_mip_alpha_profile":alpha_profile(source_image),
+        "original_local_Type0_source_payload_kind":kind,
+        "original_local_Type0_source_payload_byte_binding_verified":True,
         "original_local_Type0_texture_has_exported_image_proof":False,
         "original_local_Type0_original_and_exported_pixels_compared":False,
         "source_original_texture_bytes_or_identifiers_disclosed":False,
@@ -564,7 +543,7 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
     }
     if local_pointers:
         try:
-            source_local_alpha=original_local_type0_source_pixel_alpha(original,local_pointers)
+            source_local_alpha=original_local_type0_source_pixel_alpha(original,local_pointers,manifest)
         except Exception as failure:
             # The original image can depend on a separate verified .resS
             # decoder. An unavailable source mip must remain inconclusive,
@@ -582,10 +561,12 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
     exported = image_meta_index(project / "Assets", set(mapping.values()))
     mark("decode_exported_image_alpha")
     counts, importers = analyze_exported_images(exported, expected_count=len(mapping))
+    mark("compare_byte_bound_source_export_top_mip_pixels")
+    parity = external_parity(original,manifest,selected,routes,exported)
     mark("completed")
     all_proven = provenance["all_selected_texture_targets_independently_traced"]
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "status": PARTIAL_STATUS if local_count else STATUS if all_proven else UNPROVEN_STATUS,
         "source_original_texture2d_sha_verified": True,
         "source_particle_material_to_texture_references": 10,
@@ -608,8 +589,10 @@ def audit(original, manifest, project, trace_path, *, checkpoint=None, trace_met
         "source_to_export_UV_slots_compared": 10,
         "actual_exported_alpha_image_counts": dict(sorted(counts.items())),
         "exported_importer_metadata_numeric_counts": importers,
-        "original_source_texture_pixels_compared": False,
-        "texture_alpha_loss_from_original_proven": False,
+        "original_source_texture_pixels_compared": parity["coordinate_compared_targets"] > 0,
+        "texture_alpha_loss_from_original_proven": parity["alpha_loss_pixels"] > 0,
+        "source_export_byte_bound_top_mip_parity": parity,
+        "all_three_source_export_RGBA8_samples_equal": all_proven and parity["exact_rgba8_targets"] == EXPECTED_TARGETS,
         "correct_runtime_particle_shader_blend_proven": False,
         "android_device_fire_pixels_verified": False,
         "original_source_or_exported_assets_modified": False,
@@ -641,6 +624,7 @@ def main():
         "decode_original_local_type0_Texture2D28_top_mip",
         "locate_exported_TextureImporter_image",
         "decode_exported_image_alpha",
+        "compare_byte_bound_source_export_top_mip_pixels",
         "completed",
     }
     def mark(stage):
