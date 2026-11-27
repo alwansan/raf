@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-material-keyword-pass-route-binding/README_AR.md",
-  "next_action": "Inspect run 45950366186 completion; retain actual receipt or fix failed witness, no new Unity raster.",
+  "next_action": "Close the remaining V4 Texture2D identity-only hole on the SAME Renderer/SubMesh/Material/TexEnv route. Start with strictly bounded native inline RGBA32 Texture2D, explicit width/height/format/mip count/image count and exact payload bytes, then extend only to proved streamed/provider and imported PNG decode cases. Capture actual generated texture metadata and nonuniform RGB/alpha bytes before public exporter; compare actual native YAML with same GUID/anchor (current actual_index retains only texture class/root). Reuse verified_range/gt_mesh_vertex_payload and gt_particle108_source_pixel_parity for source SHA+range proof, t3_decoded_texture_pixel_parity for separately authenticated decoded PNG scope, not filename matching or assumed sRGB/Unity GPU equivalence. Add V4-pass/V5-reject controls for RGB/alpha byte drift, swapped same-size payloads, descriptor/mip drift, unsupported or missing bytes. Do not silently skip non-null unsupported textures or mark null links as payload coverage. Preserve historical V1–V4 regressions and retain public authored evidence. Review B15 sampler separately; do not conflate payload with sampler/import/rendering. A3 remains blocked on verified authorized source; no new original assets, Unity raster without new purpose, phone build or XAPK.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "c5dc812cd3a12539f03c7d6ec2a36e6a409117f1",
+    "reviewed_remote_head": "5f8e7da199e6ed74a1324b318b8546e82b98e4d0",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2220,9 +2220,9 @@
       "original_assets_read": false
     },
     "active_fallback_workstream": {
-      "id": "G1-G2-material-keyword-pass-same-route-state-binding",
-      "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
-      "next": "Inspect run 45950366186 completion; retain actual receipt or fix failed witness, no new Unity raster."
+      "id": "G1-G2-texture-payload-same-route-binding",
+      "status": "NEXT_PRODUCTIVE",
+      "next": "Close the remaining V4 Texture2D identity-only hole on the SAME Renderer/SubMesh/Material/TexEnv route. Start with strictly bounded native inline RGBA32 Texture2D, explicit width/height/format/mip count/image count and exact payload bytes, then extend only to proved streamed/provider and imported PNG decode cases. Capture actual generated texture metadata and nonuniform RGB/alpha bytes before public exporter; compare actual native YAML with same GUID/anchor (current actual_index retains only texture class/root). Reuse verified_range/gt_mesh_vertex_payload and gt_particle108_source_pixel_parity for source SHA+range proof, t3_decoded_texture_pixel_parity for separately authenticated decoded PNG scope, not filename matching or assumed sRGB/Unity GPU equivalence. Add V4-pass/V5-reject controls for RGB/alpha byte drift, swapped same-size payloads, descriptor/mip drift, unsupported or missing bytes. Do not silently skip non-null unsupported textures or mark null links as payload coverage. Preserve historical V1–V4 regressions and retain public authored evidence. Review B15 sampler separately; do not conflate payload with sampler/import/rendering. A3 remains blocked on verified authorized source; no new original assets, Unity raster without new purpose, phone build or XAPK."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -3499,7 +3499,7 @@
       }
     },
     "latest_material_keyword_pass_route_binding": {
-      "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
+      "status": "PASS_AUTHORED_ACTUAL_EXPORT_MATERIAL_KEYWORD_PASS_ROUTE_GATE",
       "base": "96a4508ff79387d08c4a03384ac6e59b136717b8",
       "gate": "G1-G2-material-keyword-pass-same-route-state-binding",
       "session": "clients/GT/sessions/20261127-material-keyword-pass-route-binding/README_AR.md",
@@ -3510,7 +3510,11 @@
       "white_or_fire_fixed": false,
       "Unity_render_executed": false,
       "XAPK": false,
-      "next": "Inspect run 45950366186 completion; retain actual receipt or fix failed witness, no new Unity raster.",
+      "next": {
+        "id": "G1-G2-texture-payload-same-route-binding",
+        "status": "NEXT_PRODUCTIVE",
+        "next": "Close the remaining V4 Texture2D identity-only hole on the SAME Renderer/SubMesh/Material/TexEnv route. Start with strictly bounded native inline RGBA32 Texture2D, explicit width/height/format/mip count/image count and exact payload bytes, then extend only to proved streamed/provider and imported PNG decode cases. Capture actual generated texture metadata and nonuniform RGB/alpha bytes before public exporter; compare actual native YAML with same GUID/anchor (current actual_index retains only texture class/root). Reuse verified_range/gt_mesh_vertex_payload and gt_particle108_source_pixel_parity for source SHA+range proof, t3_decoded_texture_pixel_parity for separately authenticated decoded PNG scope, not filename matching or assumed sRGB/Unity GPU equivalence. Add V4-pass/V5-reject controls for RGB/alpha byte drift, swapped same-size payloads, descriptor/mip drift, unsupported or missing bytes. Do not silently skip non-null unsupported textures or mark null links as payload coverage. Preserve historical V1–V4 regressions and retain public authored evidence. Review B15 sampler separately; do not conflate payload with sampler/import/rendering. A3 remains blocked on verified authorized source; no new original assets, Unity raster without new purpose, phone build or XAPK."
+      },
       "candidate_commit": "7554835216d47442134361329f4d47e0030733da",
       "activation_commit": "c5dc812cd3a12539f03c7d6ec2a36e6a409117f1",
       "run_id": 45950366186,
@@ -3518,7 +3522,130 @@
       "guard_run_id": 45950366211,
       "guard_conclusion": "success",
       "regression_step": "success",
-      "observed_run_status": "in_progress"
+      "observed_run_status": "completed",
+      "success": {
+        "status": "PASS_AUTHORED_ACTUAL_EXPORT_MATERIAL_KEYWORD_PASS_ROUTE_GATE",
+        "run_id": 45950366186,
+        "job_id": 140344542406,
+        "head": "c5dc812cd3a12539f03c7d6ec2a36e6a409117f1",
+        "conclusion": "success",
+        "guard_run_id": 45950366211,
+        "guard_conclusion": "success",
+        "artifact_id": 15176423582,
+        "archive": "clients/GT/sessions/20261127-material-keyword-pass-route-binding/actual-run-45950366186.zip",
+        "archive_bytes": 6823,
+        "archive_sha256": "ddee6be0a205d08a14062ca3ad19c64b92c68811c15b13e5604b467ec5c47b9b",
+        "archive_git_blob": "026938ec51b97179942b0377bb72c1ca4668ab55",
+        "archive_crc_sha_size_verified_locally": true,
+        "public_tool_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+        "actual_public_export_collections": 9,
+        "actual_exported_documents": 13,
+        "actual_native_scene_files": 2,
+        "complete_keyword_bound_renderers": 2,
+        "complete_keyword_bound_submeshes": 4,
+        "complete_value_bound_renderers": 2,
+        "complete_value_bound_submeshes": 4,
+        "complete_vertex_byte_bound_renderers": 2,
+        "complete_vertex_byte_bound_submeshes": 4,
+        "keyword_pass_entries_per_route": {
+          "valid_keyword": 8,
+          "invalid_keyword": 4,
+          "disabled_pass": 4
+        },
+        "unique_materials": 2,
+        "unique_serialized_state_entries": {
+          "valid_keyword": 4,
+          "invalid_keyword": 2,
+          "disabled_pass": 2
+        },
+        "material_value_slots_per_route": {
+          "color": 8,
+          "float": 8,
+          "int": 8
+        },
+        "total_regression_tests": 107,
+        "new_keyword_tests": 25,
+        "counterfactual_count": 22,
+        "V3_pass_V4_reject_controls": 6,
+        "V2_pass_V3_reject_controls": 5,
+        "controls": [
+          "actual_YAML_valid_invalid_bucket_swap",
+          "actual_YAML_valid_keyword_removed",
+          "actual_YAML_valid_keyword_added",
+          "actual_YAML_disabled_pass_drift",
+          "actual_YAML_invalid_keyword_field_missing",
+          "actual_YAML_private_selector_injected"
+        ],
+        "same_route_material_keyword_pass_state_verified": true,
+        "same_route_material_values_verified": true,
+        "same_route_vertex_bytes_verified": true,
+        "active_shader_variant_or_runtime_keyword_scope_verified": false,
+        "shader_property_runtime_semantics_verified": false,
+        "original_assets_read": false,
+        "original_serialized_source_verified": false,
+        "production_auto_exporter_selection": false,
+        "production_renderer_parity_verified": false,
+        "Unity_render_executed": false,
+        "Android_device": false,
+        "XAPK": false,
+        "members": {
+          "report.json": {
+            "bytes": 1598,
+            "sha256": "6c77d55fa97a6b784ed7ce923d83a31e8ff25d2d66da0a53f42eeac757bc3644"
+          },
+          "route-join.json": {
+            "bytes": 6764,
+            "sha256": "498125dd42bb093c7a78d5b6edb5a80020e765cde030274439b28e72a9550289"
+          },
+          "build.json": {
+            "bytes": 576,
+            "sha256": "63d48a4bc3a3d486bc6adc5a9731d53247e77df5c1e6f9cc67aa6e11f3ba7f23"
+          },
+          "test_b03_verify_renderer_material_links.py.log": {
+            "bytes": 2556,
+            "sha256": "6ed4e48b4953823369e5cdef9646bf832381fbcd6a3c604bbacda5499caea768",
+            "tests": 17
+          },
+          "test_gt_material_route_keyword_state.py.log": {
+            "bytes": 2905,
+            "sha256": "5469c482bba4c12bcb182078728ac4a22b1c77e6c9b5da02b8492b865f754d20",
+            "tests": 25
+          },
+          "test_gt_mesh_vertex_payload.py.log": {
+            "bytes": 1881,
+            "sha256": "b9d3e1fe1e3e6761173d5a57798a4c40676f8004e439d666288e66c73a7ba590",
+            "tests": 15
+          },
+          "test_gt_material_route_values.py.log": {
+            "bytes": 2725,
+            "sha256": "d7bd56c8cb709bd45872f963c4c46cbcd329f57f37d38ae4b7192d059226d984",
+            "tests": 22
+          },
+          "test_gt_renderer_submesh_routes.py.log": {
+            "bytes": 3004,
+            "sha256": "d909d4732ef63f542861e92f6068f3509d48dbd405a2527a5b82f396957143b6",
+            "tests": 21
+          },
+          "test_gt_verify_original_mesh_export.py.log": {
+            "bytes": 1259,
+            "sha256": "4fa1e34501cc7873993fcc2fc567b180527cc1ff3a5442f97cdd224b1a32258a",
+            "tests": 7
+          },
+          "tool-smoke.log": {
+            "bytes": 63,
+            "sha256": "3401f42803cdfb44ad34fa812739fe0d1841a9872ad8d8e92ff391d9a353636e"
+          },
+          "witness.log": {
+            "bytes": 41,
+            "sha256": "a783c8e6152c38e3ec8c558dc6a53b37654b470a7d0ca0d40f2b0d4e21c913d7"
+          }
+        },
+        "compiled_files": {
+          "AssetRipper.Export.UnityProjects.dll": "627e3df37dab63de7b35769240e9b75a1a5135a5f43e4ead2b3d1a5f2baf338f",
+          "RaftAuthoredSceneRouteWitness.cs": "a8ba0bbc0966f4238eff63a1d9d84d3f6a96100066db839afccb04da34247da2",
+          "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
+        }
+      }
     }
   }
 }
