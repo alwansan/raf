@@ -1,5 +1,5 @@
 {
-  "status": "CANDIDATE_NOT_EXECUTED",
+  "status": "PYTHON_PASS_AUTHORED_EXPORT_PENDING",
   "base": "7d476f8b5e0862509ab992b3cb5f82a9659be1d6",
   "gate": "G1-G2-texture-payload-same-route-binding",
   "session": "clients/GT/sessions/20261127-texture-payload-route-binding/README_AR.md",
@@ -11,5 +11,13 @@
   "white_or_fire_fixed": false,
   "Unity_render_executed": false,
   "XAPK": false,
-  "next": "Execute focused authored-scene-route-join only; verify real native YAML and preserve raw evidence."
+  "next": "Inspect run 45951495247 completion; retain actual receipt or fix witness. No new Unity raster.",
+  "candidate_commit": "5dbe28cb4c87c476eeeb03a5f936e4e94abfdc9e",
+  "activation_commit": "22b32a3c8f7da45dd6062d4ec8c451d01273c3bc",
+  "run_id": 45951495247,
+  "job_id": 140348154344,
+  "guard_run_id": 45951495211,
+  "guard_conclusion": "success",
+  "regression_step": "success",
+  "observed_run_status": "in_progress"
 }
