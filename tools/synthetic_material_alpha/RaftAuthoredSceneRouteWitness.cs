@@ -84,6 +84,25 @@ public static class RaftAuthoredSceneRouteWitness
         return result;
     }
 
+    // Numeric dimension property names differ among generated versions.
+    // Resolve a concrete field setter, read it back, and reject ambiguity.
+    private static int SetTextureDimension(ITexture2D tex)
+    {
+        var properties=tex.GetType().GetInterfaces().SelectMany(t=>t.GetProperties())
+            .Where(p=>p.CanRead && p.CanWrite &&
+              (p.Name=="TextureDimension_C28" || p.Name=="Dimension_C28" ||
+               p.Name=="TextureDimension_C28E" || p.Name=="Dimension_C28E"))
+            .OrderBy(p=>p.Name.EndsWith("E")?1:0).ToArray();
+        Require(properties.Length>0,"authored_texture_dimension_field_missing");
+        var property=properties[0];
+        object value=property.PropertyType.IsEnum?Enum.ToObject(property.PropertyType,2):
+            Convert.ChangeType(2,property.PropertyType);
+        property.SetValue(tex,value);
+        int captured=Convert.ToInt32(property.GetValue(tex));
+        Require(captured==2,"authored_texture_dimension_capture_drift");
+        return captured;
+    }
+
     private static object Ptr(IPPtr p)=>new {m_FileID=p.FileID,m_PathID=p.PathID};
     private static object Ref(IUnityObjectBase owner,IUnityObjectBase target)
     {
@@ -155,10 +174,20 @@ public static class RaftAuthoredSceneRouteWitness
             var mat=(IMaterial)Add(owner,21,"AuthoredMaterial"+i);
             var shader=(IShader)Add(owner,48,"AuthoredShader"+i);
             var tex=(ITexture2D)Add(texOwner,28,"AuthoredTexture"+i);
-            // Native YAML targets prove object identity only; not usable
-            // shader programs or imported texture pixel parity.
-            tex.Width_C28=2;tex.Height_C28=1;
-            tex.ImageData_C28=new byte[]{(byte)(32+64*i),64,192,255,128,(byte)(96+32*i),32,255};
+            // Two complete mip levels, asymmetric RGB and varying alpha.
+            // These are native serialized bytes, not decoded GPU pixels.
+            tex.Width_C28=2;tex.Height_C28=2;
+            tex.Format_C28E=AssetRipper.SourceGenerated.Enums.TextureFormat.RGBA32;
+            tex.MipCount_C28=2;tex.ImageCount_C28=1;
+            int dimension=SetTextureDimension(tex);
+            tex.ImageData_C28=new byte[]{(byte)(32+64*i),64,192,0,
+                128,(byte)(96+32*i),32,255,18,172,93,127,207,9,55,64,
+                (byte)(90+32*i),66,33,171};
+            if(tex.Has_CompleteImageSize_C28_UInt32()) tex.CompleteImageSize_C28_UInt32=(uint)tex.ImageData_C28.Length;
+            else tex.CompleteImageSize_C28_Int32=tex.ImageData_C28.Length;
+            Require(tex.StreamData_C28 is not null,"authored_texture_stream_field_missing");
+            tex.StreamData_C28!.GetValues(out Utf8String streamPath,out ulong streamOffset,out uint streamSize);
+            Require(streamPath.String=="" && streamOffset==0 && streamSize==0,"authored_texture_not_inline");
             mat.Shader_C21P=shader;
             var props=mat.SavedProperties_C21;
             Require(props.Has_TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5(),"unexpected_authored_texenv_layout");
@@ -224,7 +253,16 @@ public static class RaftAuthoredSceneRouteWitness
                 m_TexEnvs=new object[]{new object[]{"_MainTex",new {m_Texture=Ptr(env.Texture),
                     m_Scale=new {x=env.Scale.X,y=env.Scale.Y},m_Offset=new {x=env.Offset.X,y=env.Offset.Y}}}}
             }}));
-            rows.Add(Row(shader,null));rows.Add(Row(tex,null));
+            rows.Add(Row(shader,null));
+            rows.Add(Row(tex,new Dictionary<string,object>{
+                ["m_Width"]=tex.Width_C28,["m_Height"]=tex.Height_C28,
+                ["m_TextureFormat"]=(int)tex.Format_C28E,["m_MipCount"]=tex.MipCount_C28,
+                ["m_ImageCount"]=tex.ImageCount_C28,["m_TextureDimension"]=dimension,
+                ["m_CompleteImageSize"]=tex.Has_CompleteImageSize_C28_UInt32()?
+                    (long)tex.CompleteImageSize_C28_UInt32:tex.CompleteImageSize_C28_Int32,
+                ["image data"]=tex.ImageData_C28.Select(b=>(int)b).ToArray(),
+                ["m_StreamData"]=new {path=streamPath.String,offset=streamOffset,size=streamSize}
+            }));
         }
         // Independent scene owners with identical PathIDs. Material owners
         // also share a PathID, and dependency order differs across scenes.
@@ -267,7 +305,7 @@ public static class RaftAuthoredSceneRouteWitness
         var externals=owners.ToDictionary(o=>o.Name,o=>o.Dependencies.Skip(1).Select(d=>d?.Name).ToArray());
         // The source contract is captured from generated objects before any
         // export or trace. It is not reconstructed from exported YAML.
-        var source=new {schema_version=4,authored_generated_objects=true,objects=rows,externals,
+        var source=new {schema_version=5,authored_generated_objects=true,objects=rows,externals,
             hidden=hidden.Select(o=>new {owner=o.Collection.Name,path_id=o.PathID,class_id=o.ClassID}).ToArray()};
         File.WriteAllText(Path.Combine(root,"source.json"),JsonSerializer.Serialize(source));
         LibraryConfiguration settings=new();settings.SetProjectSettings(version);

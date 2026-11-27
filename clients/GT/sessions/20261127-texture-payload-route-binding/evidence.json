@@ -1,0 +1,15 @@
+{
+  "status": "CANDIDATE_NOT_EXECUTED",
+  "base": "7d476f8b5e0862509ab992b3cb5f82a9659be1d6",
+  "gate": "G1-G2-texture-payload-same-route-binding",
+  "session": "clients/GT/sessions/20261127-texture-payload-route-binding/README_AR.md",
+  "new_test": "tests/test_gt_texture_route_payload.py",
+  "source_scope": "native inline RGBA32 Texture2D only, explicit descriptors and mip lengths",
+  "original_assets_read": false,
+  "production_renderer_parity_verified": false,
+  "texture_sampler_import_colorspace_or_GPU_verified": false,
+  "white_or_fire_fixed": false,
+  "Unity_render_executed": false,
+  "XAPK": false,
+  "next": "Execute focused authored-scene-route-join only; verify real native YAML and preserve raw evidence."
+}
