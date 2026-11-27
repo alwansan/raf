@@ -367,7 +367,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261127-texture-payload-route-binding/README_AR.md",
-  "next_action": "Retry public native export with bounded serializedVersion handling and retained actual schema receipt.",
+  "next_action": "Inspect retry 45951913485 completion and actual texture-schema.json; retain receipt or correct actual observed schema without assuming missing fields. No new Unity raster.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1964,7 +1964,7 @@
   },
   "current_handoff": {
     "date": "2026-11-27",
-    "reviewed_remote_head": "58baf1f402f85aded299228ec31859ffb343007c",
+    "reviewed_remote_head": "2b2d20067ac1380fde76ea9500147397fcbca571",
     "purpose": "Actual authored public scene YAML export and ordered source-to-export route join passed; advance exact vertex payload binding; original acceptance blocked",
     "restoration_paused": false,
     "restore": "clients/GT/RESTORE_AR.md",
@@ -2221,8 +2221,8 @@
     },
     "active_fallback_workstream": {
       "id": "G1-G2-texture-payload-same-route-binding",
-      "status": "PYTHON_PASS_ACTUAL_EXPORT_SCHEMA_REJECTED_FIX_PENDING",
-      "next": "Retry public native export with bounded serializedVersion handling and retained actual schema receipt."
+      "status": "RETRY_PYTHON_PASS_AUTHORED_EXPORT_PENDING",
+      "next": "Inspect retry 45951913485 completion and actual texture-schema.json; retain receipt or correct actual observed schema without assuming missing fields. No new Unity raster."
     },
     "latest_resource_binding_pixel_run": {
       "status": "PASS_AUTHORED_METADATA_UNITY_VULKAN_PIXELS",
@@ -3648,7 +3648,7 @@
       }
     },
     "latest_texture_payload_route_binding": {
-      "status": "PYTHON_PASS_ACTUAL_EXPORT_SCHEMA_REJECTED_FIX_PENDING",
+      "status": "RETRY_PYTHON_PASS_AUTHORED_EXPORT_PENDING",
       "base": "7d476f8b5e0862509ab992b3cb5f82a9659be1d6",
       "gate": "G1-G2-texture-payload-same-route-binding",
       "session": "clients/GT/sessions/20261127-texture-payload-route-binding/README_AR.md",
@@ -3660,7 +3660,7 @@
       "white_or_fire_fixed": false,
       "Unity_render_executed": false,
       "XAPK": false,
-      "next": "Retry public native export with bounded serializedVersion handling and retained actual schema receipt.",
+      "next": "Inspect retry 45951913485 completion and actual texture-schema.json; retain receipt or correct actual observed schema without assuming missing fields. No new Unity raster.",
       "candidate_commit": "5dbe28cb4c87c476eeeb03a5f936e4e94abfdc9e",
       "activation_commit": "22b32a3c8f7da45dd6062d4ec8c451d01273c3bc",
       "run_id": 45951495247,
@@ -3695,6 +3695,16 @@
           "RaftAuthoredSceneRouteWitness.cs": "71500cfd14d1498c0d4ecd11723680c77dfab18f23cd1df75329dea137eba40b",
           "RaftExportLineage.cs": "006022e2eff83590ae20fb160289d0130d13d4fcc6f264c1872f7f57210526ba"
         }
+      },
+      "schema_fix_commit": "bffe50b8303c1dec9279b3909753e213eb9dc483",
+      "retry": {
+        "run_id": 45951913485,
+        "job_id": 140349492451,
+        "head": "2b2d20067ac1380fde76ea9500147397fcbca571",
+        "guard_run_id": 45951913486,
+        "guard_conclusion": "success",
+        "regression_step": "success",
+        "observed_run_status": "in_progress"
       }
     }
   }
