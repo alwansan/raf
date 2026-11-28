@@ -527,6 +527,16 @@
   "rgba_endpoint_basis_no_endpoint_response": true,
   "rgba_endpoint_basis_original_reference_gate": false,
   "merged_source_abi_context_prepared": true,
-  "merged_source_abi_context_actual_verified": false,
-  "merged_source_abi_context_workflow": ".github/workflows/raft-gt-selected-source-abi.yml"
+  "merged_source_abi_context_actual_verified": true,
+  "merged_source_abi_context_workflow": ".github/workflows/raft-gt-selected-source-abi.yml",
+  "merged_source_abi_context_actual_run": 46153422250,
+  "merged_source_abi_context_actual_job": 141004772361,
+  "merged_source_abi_context_actual_receipt": "clients/GT/sessions/20261128-top-native-bc3-array/actual-46153422250.json",
+  "merged_source_abi_context_exact_declarations": true,
+  "merged_source_abi_context_exact_default_reflection": true,
+  "merged_source_abi_context_external_numeric_names": 21,
+  "merged_source_abi_context_external_textures": 3,
+  "source_stage_provider_probe_prepared": true,
+  "source_stage_provider_probe_actual_verified": false,
+  "source_stage_provider_probe_workflow": ".github/workflows/raft-gt-selected-original-draw.yml"
 }

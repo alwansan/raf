@@ -308,7 +308,7 @@ def run(a,out):
             from tools.gt_top_resource_closure import selected_original_draw as draw
             out["phase"]="guarded_original_draw_stage"
             out["draw_stage"]=draw.prepare(a,out,source,plan,mat,mk,xk,trace,body,mesh,prop,selected[0][1],
-                tree["m_ParsedForm"],passes,(private/"combined-explicit-wrapper.txt").read_text())
+                tree["m_ParsedForm"],passes,(private/"combined-explicit-wrapper.txt").read_text(),provider_rows=rows if a.provider_probe else None)
     out["status"]=STATUS
     out["phase"]="complete_source_ABI_observation"
 
@@ -317,12 +317,14 @@ def main():
     for name in ("original","manifest","project","w1","b02","renderer-trace","plan","out"):
         p.add_argument("--"+name,type=Path,required=True)
     p.add_argument("--audit-merged",action="store_true")
+    p.add_argument("--provider-probe",action="store_true")
     p.add_argument("--draw-private",type=Path)
     p.add_argument("--unity-project",type=Path)
     p.add_argument("--run-id")
     a=p.parse_args()
     if any(x is not None for x in (a.draw_private,a.unity_project,a.run_id)) and not all(x is not None for x in (a.draw_private,a.unity_project,a.run_id)):
         p.error("draw stage arguments must be supplied together")
+    if a.provider_probe and a.draw_private is None:p.error("provider probe requires draw stage")
     out=dict(status="INCONCLUSIVE",phase="same_export_graph",original_shader_draw_verified=False,
              runtime_keyword_selection_verified=False,Unity_execution=False,Android_device=False,
              production=False,XAPK=False,white_mesh_repair_verified=False,private_payload_published=False)

@@ -14,7 +14,8 @@ public static partial class SelectedArrayUnity {
  [Serializable] public class DrawMaterial { public string name,blob,sha256; }
  [Serializable] public class DrawInput {
    public string run_id,shader_path,shader_guid,mesh_path,mesh_guid,vertex_sha,index_sha,array_guid,array_path,array_name,array_sha,selected_property,wrong_guid;
-   public bool tap_available; public string tap_shader_sha; public int tap_expected_properties,tap_source_sample_sites;
+   public bool tap_available,provider_probe; public string tap_shader_sha; public int tap_expected_properties,tap_source_sample_sites;
+   public ProviderRow[] provider_rows;
    public long mesh_id; public int vertex_count,vertex_bytes,index_bytes,index_format,mesh_stride,views,size;
    public int[] sampler; public float mip_bias;
    public DrawAsset[] assets; public DrawSlot[] slots; public DrawNumber[] numbers; public DrawMaterial[] materials;
@@ -30,6 +31,7 @@ public static partial class SelectedArrayUnity {
    public int tap_copied_properties_source,tap_copied_properties_red,tap_copied_properties_green;
    public bool basis_ready; public string basis_phase="not_started",basis_failure_category="";
    public int basis_array_payloads,basis_original_clones,basis_typed_clones,basis_views,basis_site_pairs;
+   public int provider_typed_properties,provider_views,provider_observations;
    public int shader_errors,shader_passes,source_asset_identities,source_asset_bytes_unchanged,source_asset_meta_bytes_unchanged,
       saved_float_runtime_matches,saved_color_runtime_matches,saved_float_runtime_declared,saved_color_runtime_declared,rendered_views;
  }
@@ -153,7 +155,7 @@ public static partial class SelectedArrayUnity {
    var rt=new RenderTexture(cfg.size,cfg.size,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);
    var dummyShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTDrawControl.shader");
    Need(dummyShader!=null&&dummyShader.isSupported);var dummy=new Material(dummyShader);
-   CausalControls causal=null;
+   CausalControls causal=null;Material provider=null;ProviderReceipt providerReceipt=new ProviderReceipt();
    try {
      Need(cfg.views==3&&cfg.size==128&&rt.Create());
      go.layer=30;go.transform.position=-mesh.bounds.center;go.AddComponent<MeshFilter>().sharedMesh=mesh;
@@ -165,7 +167,8 @@ public static partial class SelectedArrayUnity {
      cam.orthographicSize=radius*1.25f;cam.nearClipPlane=Mathf.Max(.001f,radius*.01f);cam.farClipPlane=radius*10+1;
      var light=lightGO.AddComponent<Light>();light.type=LightType.Directional;light.intensity=1;light.color=Color.white;
      light.cullingMask=1<<30;light.shadows=LightShadows.None;lightGO.transform.rotation=Quaternion.Euler(40,25,0);
-     causal=PrepareCausal(cfg,r,mats[1],Directory.GetParent(Application.dataPath).FullName,priv);
+     if(cfg.provider_probe)provider=PrepareProvider(cfg,r,mats[1]);
+     else causal=PrepareCausal(cfg,r,mats[1],Directory.GetParent(Application.dataPath).FullName,priv);
      Vector3[] views={new Vector3(1,1,-2),new Vector3(-2,.7f,-1),new Vector3(0,2,1)};
      string[] cases={"type3","type2","wrong_guid","wrong_fileid"};
      for(int v=0;v<views.Length;v++){
@@ -174,11 +177,13 @@ public static partial class SelectedArrayUnity {
        Capture(cam,rend,null,rt,prefix+"clear.f32");Capture(cam,rend,dummy,rt,prefix+"dummy.f32");
        for(int i=0;i<4;i++)Capture(cam,rend,mats[i],rt,prefix+cases[i]+".f32");
        Capture(cam,rend,mats[1],rt,prefix+"type2_repeat.f32");
-       CausalCapture(cam,rend,rt,causal,r,prefix);
-       CaptureBasis(cam,rend,rt,causal,r,cfg,prefix);
+       if(cfg.provider_probe)providerReceipt.views[v]=CaptureProviderView(cfg,r,cam,rend,rt,provider,v,priv);
+       else { CausalCapture(cam,rend,rt,causal,r,prefix); CaptureBasis(cam,rend,rt,causal,r,cfg,prefix); }
        r.rendered_views++;
      }
+     if(cfg.provider_probe)File.WriteAllText(Path.Combine(priv,"provider-receipt.json"),JsonUtility.ToJson(providerReceipt));
    }finally {
+     if(provider!=null)UnityEngine.Object.DestroyImmediate(provider);
      if(causal!=null)causal.Dispose();
      rt.Release();UnityEngine.Object.DestroyImmediate(rt);UnityEngine.Object.DestroyImmediate(dummy);
      UnityEngine.Object.DestroyImmediate(go);UnityEngine.Object.DestroyImmediate(cameraGO);UnityEngine.Object.DestroyImmediate(lightGO);
