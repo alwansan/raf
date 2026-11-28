@@ -28,12 +28,14 @@ if [[ "$abi" == x86_64 ]]; then
     sudo apt-get install -y --no-install-recommends libpulse0
   fi
   ldd "$qemu" > evidence/qemu-dependencies-after.txt
+  # Raw QEMU ldd does not inherit the emulator launcher's bundled library paths.
+  # Retain diagnostics, but use the supported launcher as the execution gate.
   if grep -F '=> not found' evidence/qemu-dependencies-after.txt; then
-    echo 'Unresolved emulator host library dependencies'
-    exit 2
+    echo 'Raw QEMU loader diagnostic only; checking official emulator launcher'
   fi
 fi
-emulator -version
+phase=emulator-launcher
+emulator -version 2>&1 | tee evidence/emulator-version.txt
 phase=kvm
 test -c /dev/kvm
 if [[ ! -r /dev/kvm || ! -w /dev/kvm ]]; then
