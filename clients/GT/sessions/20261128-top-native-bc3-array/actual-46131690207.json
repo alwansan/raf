@@ -1,0 +1,108 @@
+{
+  "run_id": 46131690207,
+  "job_id": 140938034964,
+  "execution_head": "74c8557d0151ddde70e0dbdd5a6bedf804fb5b59",
+  "conclusion": "success",
+  "actual": {
+    "Android_device": false,
+    "Unity_execution": false,
+    "XAPK": false,
+    "abi": {
+      "constant_buffer_bindings_from_variant": 7,
+      "constant_buffer_layouts_with_shared_members_table": 9,
+      "constant_buffer_named_32bit_lanes": 208,
+      "constant_buffer_named_member_occurrences": 55,
+      "constant_buffer_named_struct_occurrences": 0,
+      "distinct_original_parameter_blobs": 2,
+      "named_constant_buffer_candidate_stages_vulkan11_valid": 2,
+      "named_constant_buffer_reflected_offsets_verified": 55,
+      "named_original_numeric_members_in_distinct_parameter_blobs": 20,
+      "named_original_resource_entries_in_distinct_parameter_blobs": 15,
+      "original_variant_stages_with_cb_bindings": 2,
+      "original_variant_stages_with_parameter_records": 2,
+      "original_variant_stages_with_textures": 1,
+      "original_vertex_fragment_varying_records_matched": 6,
+      "original_vertex_input_semantics_restored": 5,
+      "resource_rebound_stages_verified_spirv_identical_excluding_debug": 2,
+      "translated_constant_buffer_declarations_mapped": 12,
+      "translated_sampler_declarations_mapped_to_source_texture": 7,
+      "translated_texture_declarations_mapped_to_source_name": 8,
+      "vertex_variants_with_verified_mesh_inputs": 1,
+      "vulkan_vertex_fragment_locations_matched": 4
+    },
+    "combined_candidate": {
+      "Unity_compiler_verified": false,
+      "combined_entrypoints_compiled_and_validated": 2,
+      "explicit_single_route_only": true,
+      "merged_binding_offset_parity_verified": false,
+      "runtime_uniform_upload_verified": false
+    },
+    "exact_texenv_slots": 6,
+    "explicit_source_route_keyword_count": 1,
+    "material_member_census": {
+      "declared_property_not_saved": 0,
+      "named_numeric_members": 55,
+      "other_runtime_or_global_name_candidates": 22,
+      "outside_material_texture_declared_properties": 0,
+      "outside_material_texture_undeclared_names": 3,
+      "saved_numeric_name_matches": 28,
+      "saved_texenv_ST_name_matches": 5
+    },
+    "material_values": {
+      "color": 8,
+      "float": 43,
+      "int": 0
+    },
+    "mesh_channel_availability": {
+      "absent_channels": 4,
+      "fewer_declared_lanes": 2,
+      "present_channels": 4,
+      "sufficient_declared_lanes": 2,
+      "unsupported_semantics": 0,
+      "user_inputs": 8
+    },
+    "mesh_channel_layout": {
+      "active_channels": 4,
+      "flagged_inactive_channels": 0,
+      "nonoverlap_full_stride": true,
+      "packed_dimension_flagged_channels": 1,
+      "serialized_channel_bytes_changed": false,
+      "single_stream_stride_bytes": 32,
+      "vertex_count": 940,
+      "vertex_payload_bytes": 30080
+    },
+    "mesh_fields_matched": 10,
+    "mesh_fields_total": 10,
+    "original_shader_draw_verified": false,
+    "original_shader_pointer_unchanged": true,
+    "original_stage_byte_identities_verified": 2,
+    "phase": "complete_source_ABI_observation",
+    "private_payload_published": false,
+    "production": false,
+    "reference_negative_controls_rejected": 3,
+    "reference_repair_byte_difference": 1,
+    "resource_join": {
+      "sampler_declarations": 7,
+      "selected_array_sampler_declarations": 1,
+      "selected_array_texture_declarations": 1,
+      "selected_array_type_matches": 1,
+      "selected_array_type_mismatches": 0,
+      "selected_array_used_by_this_explicit_route": true,
+      "texture_declarations": 8,
+      "texture_names_in_exact_typed_slots": 4,
+      "texture_names_in_material": 5,
+      "texture_names_in_null_slots": 1,
+      "texture_names_outside_material": 3
+    },
+    "runtime_keyword_selection_verified": false,
+    "same_export_exact_graph": true,
+    "status": "OBSERVED_EXACT_SELECTED_SOURCE_ABI_MATERIAL_MESH_JOIN",
+    "texture_plan": {
+      "export_slots": 6,
+      "nonnull_planned": 4,
+      "null_source_slots": 2,
+      "source_slots": 6
+    },
+    "white_mesh_repair_verified": false
+  }
+}

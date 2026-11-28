@@ -139,6 +139,7 @@ def combined_candidate(private, rows, pair, dirs):
     # Historical exact two-entry verifier compiles this merged, name-bound
     # candidate with glslang then validates both Vulkan 1.1 modules.
     verify_entrypoints(wrapper,private,routes=[[[]]])
+    (private/"combined-explicit-wrapper.txt").write_text(wrapper)
     return {"combined_entrypoints_compiled_and_validated":2,
             "explicit_single_route_only":True,"Unity_compiler_verified":False,
             "merged_binding_offset_parity_verified":False,
@@ -296,6 +297,11 @@ def run(a,out):
         out["material_member_census"]=material_member_census(rows,mat,before,tree["m_ParsedForm"])
         out["phase"]="combined_explicit_route_candidate"
         out["combined_candidate"]=combined_candidate(private,rows,pair,dirs)
+        if a.draw_private is not None:
+            from tools.gt_top_resource_closure import selected_original_draw as draw
+            out["phase"]="guarded_original_draw_stage"
+            out["draw_stage"]=draw.prepare(a,out,source,plan,mat,mk,xk,trace,body,mesh,prop,selected[0][1],
+                tree["m_ParsedForm"],passes,(private/"combined-explicit-wrapper.txt").read_text())
     out["status"]=STATUS
     out["phase"]="complete_source_ABI_observation"
 
@@ -303,7 +309,12 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ("original","manifest","project","w1","b02","renderer-trace","plan","out"):
         p.add_argument("--"+name,type=Path,required=True)
+    p.add_argument("--draw-private",type=Path)
+    p.add_argument("--unity-project",type=Path)
+    p.add_argument("--run-id")
     a=p.parse_args()
+    if any(x is not None for x in (a.draw_private,a.unity_project,a.run_id)) and not all(x is not None for x in (a.draw_private,a.unity_project,a.run_id)):
+        p.error("draw stage arguments must be supplied together")
     out=dict(status="INCONCLUSIVE",phase="same_export_graph",original_shader_draw_verified=False,
              runtime_keyword_selection_verified=False,Unity_execution=False,Android_device=False,
              production=False,XAPK=False,white_mesh_repair_verified=False,private_payload_published=False)
@@ -338,7 +349,8 @@ def main():
             "original_921_uniform_in_multiple_buffers",
             "original_921_uniform_incompatible_type",
         }
-        if type(exc) is ABIFailure or (type(exc) is ValueError and str(exc) in fixed):
+        from tools.gt_top_resource_closure.selected_original_draw import StageError
+        if type(exc) in (ABIFailure,StageError) or (type(exc) is ValueError and str(exc) in fixed):
             out["failure_reason"]=str(exc)
     with a.out.open("x") as dest:
         json.dump(out,dest,sort_keys=True,indent=2)

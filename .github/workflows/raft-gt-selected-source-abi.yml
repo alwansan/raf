@@ -1,13 +1,9 @@
 name: GT selected original stage ABI and exact mesh material join (NO PLAYER)
 # Exact packed Mesh channel stride + merged explicit original pair; no Unity or player.
+# Source ABI checkpoint is complete. The selected draw workflow executes the same source gate;
+# keep this standalone workflow available on demand without repeating export on every draw change.
 on:
   workflow_dispatch:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - .github/workflows/raft-gt-selected-source-abi.yml
-      - tools/gt_top_resource_closure/selected_source_abi.py
-      - tools/gt_top_resource_closure/test_selected_source_abi.py
 permissions:
   contents: read
 concurrency:

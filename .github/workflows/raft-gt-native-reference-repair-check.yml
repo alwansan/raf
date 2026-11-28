@@ -9,6 +9,8 @@ on:
       - tools/gt_top_resource_closure/test_selected_array_native.py
       - tools/gt_top_resource_closure/selected_source_abi.py
       - tools/gt_top_resource_closure/test_selected_source_abi.py
+      - tools/gt_top_resource_closure/selected_original_draw.py
+      - tools/gt_top_resource_closure/test_selected_original_draw.py
 permissions:
   contents: read
 jobs:
@@ -31,4 +33,4 @@ jobs:
       - name: Verify source-only narrow reference repair and negative controls
         run: |
           set -euo pipefail
-          python3 -B -m unittest tools.gt_top_resource_closure.test_selected_array_native tools.gt_top_resource_closure.test_selected_source_abi -v
+          python3 -B -m unittest tools.gt_top_resource_closure.test_selected_array_native tools.gt_top_resource_closure.test_selected_source_abi tools.gt_top_resource_closure.test_selected_original_draw -v
