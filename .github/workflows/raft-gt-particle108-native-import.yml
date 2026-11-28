@@ -3,6 +3,9 @@ name: GT original Particle108 native seven-mip Unity Vulkan import (NO PLAYER)
 # Re-materialize only because the safe artifact did not retain raw asset bytes.
 # 46116411253 failed at coarse import gate; preserve basename, private log guard,
 # split every import sub-gate before a new observation. No old-run rerun.
+# 46117064994 measured seven native levels, exact identity/sampler, but only
+# 1/7 alpha levels matched with source sampler. Distinct Load vs inline point
+# vs original sampler observation, calibrated by asymmetric authored mip chain.
 on:
   push:
     branches: [feature/android-native-port]
@@ -320,7 +323,7 @@ jobs:
             -gtNativeRunId ${{ env.GT_RUN_ID }}
             -gtNativeReport /github/workspace/gt-native-import-private/raw.json
             -gtNativePrivate /github/workspace/gt-native-import-private
-      - name: Independently compare actual imported seven mip bytes and explicit Vulkan alpha readbacks
+      - name: Independently compare actual Load point and original sampler alpha across all levels
         if: always() && steps.native_stage.outcome == 'success'
         env:
           UNITY_OUTCOME: ${{ steps.unity.outcome }}

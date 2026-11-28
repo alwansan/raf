@@ -102,7 +102,7 @@ def evaluate(cfg,r,unchanged,exit_code):
         report["unity_step_exit"]=exit_code
         phases=("start","environment","input","private_log_guard","private_stage","refresh","texture_load",
                 "identity_query","importer_kind","descriptor","guid_match","file_id_match","width_height",
-                "mip_count","texture_format","adapter","all_mips","controls","complete")
+                "mip_count","texture_format","adapter","all_mips","calibration","controls","complete")
         if r.get("phase") in phases: report["editor_phase"]=r["phase"]
         category=r.get("failure_category")
         if category in ("InvalidOperationException","ArgumentException","IOException","FileNotFoundException",
@@ -161,6 +161,79 @@ def evaluate(cfg,r,unchanged,exit_code):
         report["reason"]=str(e) if type(e) is ValueError else type(e).__name__
     return report
 
+# This is a distinct observation gate, never a full restoration PASS.
+DIAGNOSTIC="OBSERVED_ORIGINAL_ALPHA_LOAD_POINT_SAMPLER_COMPARISON"
+
+def diagnostic(cfg,r,base):
+    out={"status":"INCONCLUSIVE","original_texture_modified":False,
+         "private_payload_published":False,"full_native_acceptance":False,
+         "android_pixels_verified":False,"black_fire_restored":False}
+    try:
+        need(base.get("unity_step_exit")==0 and r.get("status")=="OBSERVED"
+             and r.get("run_id")==cfg["run_id"] and base.get("private_editor_log_guard_verified") is True
+             and base.get("native_asset_and_meta_unchanged") is True
+             and base.get("backend")=="Vulkan" and base.get("unity_texture_loaded") is True
+             and base.get("imported_guid_matches") is True and base.get("imported_file_id_matches") is True
+             and base.get("imported_descriptor_matches") is True and base.get("imported_sampler_fields_match") is True,
+             "original_import_identity_or_environment")
+        need(r.get("sampler_unchanged_after_draws") is True and r.get("original_texture_rebound") is True,
+             "original_sampler_or_binding_changed")
+        # Explicit Load and inline point must reproduce an independent authored
+        # asymmetric 8x8 chain with distinct levels, including actual wrong-LOD control.
+        cal=r["calibration"];need(len(cal)==4,"calibration_population")
+        cal_errors=[]
+        for i,m in enumerate(cal):
+            size=8>>i;need(m["level"]==i and m["size"]==size,"calibration_level")
+            target=[blend(11+41*i+7*x+3*y) for y in range(size) for x in range(size)]
+            le=alpha_error(m["load_alpha"],target)
+            pe=alpha_error(m["point_alpha"],target)
+            cal_errors.append({"level":i,"texels":size*size,"load_max_error":le,"point_max_error":pe})
+            need(le<=TOL and pe<=TOL,"authored_load_or_point_calibration_failed")
+        wrong=alpha_error(r["calibration_wrong_mip"],[blend(11)])
+        sep=alpha_error(r["calibration_wrong_mip"],[blend(11+41*3)])
+        need(wrong<=TOL and sep>.3,"wrong_mip_control_not_discriminating")
+        controls=base.get("controls",{})
+        need(controls.get("force_zero_error",1)<=TOL and controls.get("force_one_error",1)<=TOL
+             and controls.get("max_wrong_baseline_separation",0)>=.37,"alpha_controls_not_discriminating")
+        out.update(calibration_mips=4,calibration_texels=85,calibration=cal_errors,
+                   wrong_mip_expected_error=wrong,wrong_mip_separation=sep)
+        need(len(cfg["mips"])==len(r["mips"])==7,"original_mip_population")
+        rows=[];load=point=original=agree=texels=0
+        for i,(e,m) in enumerate(zip(cfg["mips"],r["mips"])):
+            size=64>>i
+            need(e["level"]==m["level"]==i and e["size"]==m["size"]==size,"original_mip_level")
+            need(len(e["alpha"])==size*size,"original_source_alpha_population")
+            target=[blend(v) for v in e["alpha"]]
+            le=alpha_error(m["load_alpha"],target)
+            pe=alpha_error(m["point_alpha"],target)
+            oe=alpha_error(m["alpha"],target)
+            lp=alpha_error(m["load_alpha"],m["point_alpha"])
+            load+=le<=TOL;point+=pe<=TOL;original+=oe<=TOL;agree+=lp<=TOL;texels+=size*size
+            rows.append(dict(level=i,size=size,texels=size*size,load_max_error=le,point_max_error=pe,
+                             original_sampler_max_error=oe,load_vs_point_max_error=lp,
+                             load_mismatches=sum(abs(a-b)>TOL for a,b in zip(m["load_alpha"],target)),
+                             point_mismatches=sum(abs(a-b)>TOL for a,b in zip(m["point_alpha"],target))))
+        need(texels==5461,"original_texel_population")
+        if load==point==7 and original<7:
+            interpretation="EXACT_GPU_ALPHA_VIA_LOAD_AND_POINT_ORIGINAL_SAMPLER_DIFFERS"
+        elif load==point==original==7:
+            interpretation="ALL_THREE_GPU_ALPHA_ROUTES_MATCH_SOURCE"
+        elif agree==7 and load<7:
+            interpretation="GPU_LOAD_AND_POINT_AGREE_BUT_SOURCE_ALPHA_DIFFERS"
+        else:
+            interpretation="LOAD_POINT_OR_SOURCE_DISAGREEMENT_UNRESOLVED"
+        out.update(status=DIAGNOSTIC,interpretation=interpretation,original_texels_per_route=texels,
+                   actual_original_alpha_readbacks=3*texels,load_mips_matching_source=load,
+                   point_mips_matching_source=point,original_sampler_mips_matching_source=original,
+                   load_point_agree_mips=agree,mips=rows,
+                   cpu_readback_available=r.get("readable") is True,
+                   source_alpha_gpu_load_exact=load==7,
+                   original_sampler_settings_unchanged=True,
+                   rgba_or_raw_cpu_byte_parity_claimed=False)
+    except (KeyError,TypeError,ValueError,IndexError) as e:
+        out["reason"]=str(e) if type(e) is ValueError else type(e).__name__
+    return out
+
 def verify(project,private,safe,run_id,exit_code):
     result={"status":"INCONCLUSIVE","reason":"receipt_absent","private_payload_published":False,
             "unity_import_verified":False,"android_pixels_verified":False,"black_fire_restored":False,"production":False,"XAPK":False}
@@ -175,11 +248,15 @@ def verify(project,private,safe,run_id,exit_code):
         guard=marker.is_file() and not marker.is_symlink() and marker.read_text().strip()==run_id and (private/"editor.log").is_file()
         raw["private_log_guard"]=raw.get("private_log_guard") is True and guard
         result=evaluate(cfg,raw,unchanged,exit_code)
+        result["alpha_route_diagnostic"]=diagnostic(cfg,raw,result)
+        result["cpu_mip_readback_available"]=raw.get("readable") is True
     except Exception as e:
         result["failure_category"]=type(e).__name__
     dump(safe,result)
     print("GT_NATIVE_MIP_UNITY_RESULT "+json.dumps(result,sort_keys=True))
-    return 0 if result["status"]==PASS else 2
+    # Success means the distinct observation is complete, NOT that the
+    # original native acceptance or Android fire restoration has passed.
+    return 0 if result.get("alpha_route_diagnostic",{}).get("status")==DIAGNOSTIC else 2
 
 def main():
     q=argparse.ArgumentParser();q.add_argument("mode",choices=("stage","verify"))

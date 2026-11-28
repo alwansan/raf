@@ -17,7 +17,7 @@ public static class NativeMipValidation {
  [Serializable] public class Mip {
    public int level,size,cpu_bytes;
    public string cpu_sha256;
-   public float[] alpha;
+   public float[] alpha,load_alpha,point_alpha;
  }
  [Serializable] public class Receipt {
    public string status="INCONCLUSIVE",phase="start",run_id,unity_version,backend,device,color_space,
@@ -27,7 +27,9 @@ public static class NativeMipValidation {
    public float mip_bias;
    public bool native_importer,readable,srgb,texture_loaded,private_log_guard;
    public List<Mip> mips=new List<Mip>();
-   public float[] force_zero,force_one;
+   public List<Mip> calibration=new List<Mip>();
+   public float[] force_zero,force_one,calibration_wrong_mip;
+   public bool sampler_unchanged_after_draws,original_texture_rebound;
  }
  static void Need(bool x) { if(!x) throw new InvalidOperationException("GT native mip gate"); }
  static string Arg(string name) { var a=Environment.GetCommandLineArgs(); int i=Array.IndexOf(a,name); return i>=0 && i+1<a.Length?a[i+1]:""; }
@@ -116,12 +118,40 @@ public static class NativeMipValidation {
        int size=64>>i;var m=new Mip{level=i,size=size};
        // Do not toggle readability, compression, color space, or sampler on the imported asset.
        if(tex.isReadable) { var bytes=tex.GetPixelData<byte>(i).ToArray();m.cpu_bytes=bytes.Length;m.cpu_sha256=Sha(bytes); }
-       m.alpha=Render(cam,renderer,mat,tex,i,size,-1);
+       m.alpha=Render(cam,renderer,mat,tex,i,size,-1,0);
+       m.load_alpha=Render(cam,renderer,mat,tex,i,size,-1,1);
+       m.point_alpha=Render(cam,renderer,mat,tex,i,size,-1,2);
        r.mips.Add(m);
      }
+     r.phase="calibration";
+     // Independent authored RGBA32 mip chain, asymmetric in x/y and
+     // different at every level. Never call Apply or change the original.
+     var cal=new Texture2D(8,8,TextureFormat.RGBA32,true,true);owned.Add(cal);
+     cal.filterMode=FilterMode.Point;cal.wrapMode=TextureWrapMode.Clamp;cal.anisoLevel=1;
+     for(int level=0;level<4;level++) {
+       int size=8>>level;var c=new Color32[size*size];
+       for(int y=0;y<size;y++) for(int x=0;x<size;x++)
+         c[y*size+x]=new Color32(255,255,255,(byte)(11+41*level+7*x+3*y));
+       cal.SetPixels32(c,level);
+     }
+     cal.Apply(false,false);
+     mat.SetTexture("_MainTex",cal);
+     for(int i=0;i<4;i++) {
+       int size=8>>i;
+       r.calibration.Add(new Mip {level=i,size=size,
+         load_alpha=Render(cam,renderer,mat,cal,i,size,-1,1),
+         point_alpha=Render(cam,renderer,mat,cal,i,size,-1,2)});
+     }
+     // Deliberate wrong mip: a single read from mip 0, not the 1x1 mip 3.
+     r.calibration_wrong_mip=Render(cam,renderer,mat,cal,0,1,-1,1);
+     mat.SetTexture("_MainTex",tex);
+     r.original_texture_rebound=mat.GetTexture("_MainTex")==tex;
+     r.sampler_unchanged_after_draws=(int)tex.filterMode==r.filter_mode && tex.anisoLevel==r.aniso &&
+       tex.mipMapBias==r.mip_bias && (int)tex.wrapModeU==r.wrap_u &&
+       (int)tex.wrapModeV==r.wrap_v && (int)tex.wrapModeW==r.wrap_w && tex.isReadable==r.readable;
      r.phase="controls";
-     r.force_zero=Render(cam,renderer,mat,tex,6,1,0);
-     r.force_one=Render(cam,renderer,mat,tex,6,1,1);
+     r.force_zero=Render(cam,renderer,mat,tex,6,1,0,0);
+     r.force_one=Render(cam,renderer,mat,tex,6,1,1,0);
      Need(!ShaderUtil.ShaderHasError(shader));
      r.status="OBSERVED";r.phase="complete";code=0;
    } catch(Exception e) {r.failure_category=e.GetType().Name;}
@@ -134,9 +164,10 @@ public static class NativeMipValidation {
    catch {code=2;}
    EditorApplication.Exit(code);
  }
- static float[] Render(Camera cam,MeshRenderer renderer,Material mat,Texture2D tex,int level,int size,float force) {
+ static float[] Render(Camera cam,MeshRenderer renderer,Material mat,Texture2D tex,int level,int size,float force,int mode) {
    Need(renderer.sharedMaterial==mat && mat.GetTexture("_MainTex")==tex);
    mat.SetFloat("_GTLod",level);mat.SetFloat("_GTForce",force);
+   mat.SetFloat("_GTMode",mode);mat.SetFloat("_GTMipSize",size);
    var rt=new RenderTexture(size,size,0,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);
    var read=new Texture2D(size,size,TextureFormat.RGBAFloat,false,true);
    try {

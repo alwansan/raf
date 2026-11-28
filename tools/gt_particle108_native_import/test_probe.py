@@ -61,4 +61,47 @@ class Tests(unittest.TestCase):
         d=p.evaluate(c,r,True,0)
         self.assertEqual(d["actual_vulkan_mips_equal"],7);self.assertFalse(d["unity_import_verified"])
         self.assertNotEqual(d["status"],p.PASS)
+def diag_fixture():
+    c,r=fixture()
+    r["sampler_unchanged_after_draws"]=True;r["original_texture_rebound"]=True
+    for e,m in zip(c["mips"],r["mips"]):
+        m["load_alpha"]=[p.blend(v) for v in e["alpha"]]
+        m["point_alpha"]=m["load_alpha"][:]
+    r["calibration"]=[]
+    for i in range(4):
+        size=8>>i;a=[p.blend(11+41*i+7*x+3*y) for y in range(size) for x in range(size)]
+        r["calibration"].append(dict(level=i,size=size,load_alpha=a,point_alpha=a[:]))
+    r["calibration_wrong_mip"]=[p.blend(11)]
+    return c,r
+
+class DiagnosticTests(unittest.TestCase):
+    def test_sampler_difference_not_storage_loss(self):
+        c,r=diag_fixture();r["native_importer"]=False;r["importer_kind"]="generic_asset";r["readable"]=False
+        r["mips"][0]["alpha"][0]=.8
+        d=p.diagnostic(c,r,p.evaluate(c,r,True,0))
+        self.assertEqual(d["status"],p.DIAGNOSTIC)
+        self.assertEqual(d["interpretation"],"EXACT_GPU_ALPHA_VIA_LOAD_AND_POINT_ORIGINAL_SAMPLER_DIFFERS")
+        self.assertEqual(d["actual_original_alpha_readbacks"],16383)
+        self.assertFalse(d["full_native_acceptance"])
+    def test_load_point_same_different_source(self):
+        c,r=diag_fixture();r["mips"][0]["load_alpha"][0]=.8;r["mips"][0]["point_alpha"][0]=.8
+        d=p.diagnostic(c,r,p.evaluate(c,r,True,0))
+        self.assertEqual(d["interpretation"],"GPU_LOAD_AND_POINT_AGREE_BUT_SOURCE_ALPHA_DIFFERS")
+    def test_wrong_mip_control_rejected(self):
+        c,r=diag_fixture();r["calibration_wrong_mip"]=[p.blend(134)]
+        self.assertNotEqual(p.diagnostic(c,r,p.evaluate(c,r,True,0))["status"],p.DIAGNOSTIC)
+    def test_asymmetric_calibration_and_mip_drift(self):
+        c,r=diag_fixture();r["calibration"][0]["point_alpha"].reverse()
+        self.assertNotEqual(p.diagnostic(c,r,p.evaluate(c,r,True,0))["status"],p.DIAGNOSTIC)
+    def test_original_sampler_mutation_rejected(self):
+        c,r=diag_fixture();r["sampler_unchanged_after_draws"]=False
+        self.assertNotEqual(p.diagnostic(c,r,p.evaluate(c,r,True,0))["status"],p.DIAGNOSTIC)
+    def test_private_scope_and_unchanged_required(self):
+        c,r=diag_fixture();self.assertNotEqual(p.diagnostic(c,r,p.evaluate(c,r,False,0))["status"],p.DIAGNOSTIC)
+        r["private_log_guard"]=False
+        self.assertNotEqual(p.diagnostic(c,r,p.evaluate(c,r,True,0))["status"],p.DIAGNOSTIC)
+    def test_all_three_routes_and_no_identifiers(self):
+        c,r=diag_fixture();d=p.diagnostic(c,r,p.evaluate(c,r,True,0))
+        self.assertEqual(d["interpretation"],"ALL_THREE_GPU_ALPHA_ROUTES_MATCH_SOURCE")
+        self.assertNotIn("authored",str(d));self.assertNotIn("cpu_sha256",str(d))
 if __name__=="__main__":unittest.main()
