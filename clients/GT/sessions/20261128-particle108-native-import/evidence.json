@@ -1,5 +1,5 @@
 {
-  "status": "NATIVE_MIP_UNITY_ACCEPTANCE_COMMITTED",
+  "status": "NATIVE_MIP_UNITY_ACCEPTANCE_RUNNING",
   "starting_head": "e3dad4cda20e19e23f6dc8269c2331a2cc6c19a0",
   "execution_head": "e5f00a1417e420050158f8f3a62749c3b4540c01",
   "previous_native_export_run": 46115503520,
@@ -33,5 +33,12 @@
   "production": false,
   "player": false,
   "XAPK": false,
-  "next_action": "G5-original-Particle108-native-seven-mip-Unity-Vulkan: actual native export 46115503520/job 140888302528 and lint 46115503472 SUCCESS; 10/10 Material PPtr and UV, native class28 GUID/fileID/meta, 7/7 mip bytes (21844), 6 sampler fields and color/usage. Do not rerun these. New isolated Unity/Vulkan acceptance execution e5f00a1417e420050158f8f3a62749c3b4540c01; prior artifact contains only safe aggregates, so re-materialize exact original pinned graph privately in the new runner as prerequisite. Stage only selected native asset+unchanged meta, verify actual Unity GUID/fileID/format/sampler, 7 CPU mip hashes and explicit Vulkan alpha blend across 5461 texels and two controls. Reconcile new Actions before retry. If blocked by import/format/readability/alpha/disk/editor, retain exact phase and pivot to independent white-mesh Shader48→postvendor GUID fanout or water. No PC-target or sky re-export; Level38 unchanged, all G0–G6 open, 688/786 non-Dummy and 98 Dummy/37 GUID historical unchanged; no production/player/XAPK; CL/lab read-only, BLACK/animation deferred."
+  "next_action": "G5-original-Particle108-native-seven-mip-Unity-Vulkan: Actual 46115503520/job 140888302528 and lint 46115503472 SUCCESS; exact native source bytes 21844, 7/7 mips, 10/10 PPtr and UV, class28 GUID/fileID/meta, six sampler fields and color/usage verified. Do not rerun either. New execution e5f00a1417e420050158f8f3a62749c3b4540c01: Actual 46116411253/job 140891145313 IN_PROGRESS, source-free controls SUCCESS, currently compiling disposable exporter; lint 46116411184 SUCCESS. Prior artifact contains safe aggregates only; new run re-materializes exact source-linked asset in same runner to stage exact native asset+meta. Verify Unity actual GUID/fileID/format/sampler, CPU mip hashes, 5461 alpha texels through explicit LOD Vulkan and two controls; actual result not yet known. Reconcile new run before any retry. If blocked by import/readability/format/alpha/disk/editor, record precise phase and pivot to independent white-mesh Shader48→postvendor GUID fanout or water. No PC-target or sky re-export; Level38 unchanged; G0–G6 open, 688/786 non-Dummy and 98 Dummy/37 GUID historical unchanged; CL/lab read-only, BLACK/animation deferred; no production/player/XAPK.",
+  "run": 46116411253,
+  "job": 140891145313,
+  "run_status": "in_progress",
+  "lint_run": 46116411184,
+  "lint_conclusion": "success",
+  "source_free_controls_passed": true,
+  "latest_observed_step": "Build exact W1 Material21 plus B02 Texture2D28 same-instance optional lineage exporter"
 }
