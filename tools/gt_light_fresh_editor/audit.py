@@ -137,9 +137,11 @@ def validate_world_receipt(r,run_id,commit):
     return True
 
 def verify(x):
-    result=dict(status="INCONCLUSIVE",Unity_import_verified=False,world_transform_verified=False,player_built=False,
+    result=dict(status="INCONCLUSIVE",phase="runner_handoff",Unity_import_verified=False,world_transform_verified=False,player_built=False,
                 XAPK=False,device_pixels_proven=False,full_scene_provider_closure_proven=False,historical_exact_prior_replay_claimed=False)
     try:
+        require(x.handoff_outcome=="success","fresh_runner_ownership_handoff_failed")
+        result["phase"]="stage_commitment"
         s=json.loads(x.raw_stage.read_text());historical=validate_fresh_stage(s)
         stage=json.loads(x.stage_report.read_text());p=x.private
         commit=sha(p/"commitment.json");doc=json.loads((p/"commitment.json").read_text())
@@ -148,16 +150,20 @@ def verify(x):
                 sha(x.raw_stage)==doc["raw_stage"] and doc["scene"]==s["scene_sha256"] and doc["meta"]==s["scene_meta_sha256"],
                 "fresh_commitment_drift")
         prior.validate_same_export(json.loads(x.same_export.read_text()))
+        result["phase"]="private_log_guard"
         require((p/"editor-output-private").read_text().strip()==x.run_id and (p/"editor.log").is_file(),"fresh_private_log_guard")
+        result["phase"]="private_input_identity"
         for name,key in (("PrivateScene.unity","scene"),("PrivateScene.unity.meta","meta"),("expected-private.json","expected"),("expected-world.json","world")):
             require(sha(p/name)==doc[key],"fresh_private_input_changed")
         require(sha(x.dest/"expected-private.json")==doc["expected"],"fresh_editor_manifest_drift")
+        result["phase"]="editor_hierarchy_receipt"
         old.verify(x.dest,x.raw_stage,x.outcome,x.raw_import)
         raw=json.loads(x.raw_import.read_text());result["current_import_receipt"]=raw
         require(prior.validate_editor(raw),"fresh_154_editor_checks_unproven")
+        result["phase"]="world_receipt"
         r=json.loads((p/"world-safe.json").read_text());result["world_receipt"]=r
         validate_world_receipt(r,x.run_id,commit)
-        result.update(status=STATUS,Unity_import_verified=True,matched_objects=42,exact_editor_checks=154,
+        result.update(status=STATUS,phase="complete",Unity_import_verified=True,matched_objects=42,exact_editor_checks=154,
                       world_transform_verified=True,world_matrix_rows=3,world_checks=12,light_owner_active_checks=2,
                       historical_scene_digest_match=historical[0],historical_meta_digest_match=historical[1],
                       current_scene_and_meta_unchanged=True,original_scene_sha256=prior.SOURCE_SHA)
@@ -176,5 +182,6 @@ def main():
         v.add_argument("--"+k,type=Path,required=True)
     for q in (st,v):q.add_argument("--run-id",required=True)
     v.add_argument("--outcome",required=True)
+    v.add_argument("--handoff-outcome",required=True)
     x=p.parse_args();return stage(x) if x.action=="stage" else verify(x)
 if __name__=="__main__":raise SystemExit(main())

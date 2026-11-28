@@ -256,15 +256,45 @@ jobs:
           dockerMemoryLimit: 6g
           dockerCpuLimit: 2
           customParameters: -job-worker-count 2 -gtLightRunId ${{ env.GT_LIGHT_RUN_ID }}
+      - name: Restore runner ownership of private editor output without widening permissions
+        if: always() && steps.import-stage.outcome == 'success'
+        id: editor-handoff
+        run: |
+          set -euo pipefail
+          test -d gt-light-fresh-private && test ! -L gt-light-fresh-private
+          test -d gt-light-exact-import && test ! -L gt-light-exact-import
+          # Docker editor creates private files as its container user.
+          # Transfer only disposable workspace output to the runner owner.
+          sudo chown -hR "$(id -u):$(id -g)" -- gt-light-fresh-private gt-light-exact-import
+          test "$(stat -c %a gt-light-fresh-private)" = 700
+          python3 -B - <<'PY'
+          import json,os,stat
+          from pathlib import Path
+          root=Path("gt-light-fresh-private")
+          project=Path("gt-light-exact-import")
+          checks={}
+          for label,p in (("marker",root/"editor-output-private"),("log",root/"editor.log"),
+                          ("world_receipt",root/"world-safe.json"),("import_receipt",project/"import-safe.json"),
+                          ("editor_manifest",project/"expected-private.json"),
+                          ("editor_scene",project/"Assets/PrivateScene.unity"),
+                          ("editor_meta",project/"Assets/PrivateScene.unity.meta")):
+              exists=p.is_file() and not p.is_symlink()
+              info=p.stat() if exists else None
+              checks[label]={"present":exists,"readable":bool(exists and os.access(p,os.R_OK)),
+                             "owned_by_runner":bool(exists and info.st_uid==os.getuid()),
+                             "private_mode":bool(exists and not stat.S_IMODE(info.st_mode)&0o077)}
+          print("GT_LIGHT_EDITOR_HANDOFF "+json.dumps(checks,sort_keys=True))
+          PY
       - name: Verify actual editor report and unchanged exact scene bytes
         if: always() && steps.import-stage.outcome == 'success'
         env:
           EDITOR_OUTCOME: ${{ steps.unity.outcome }}
+          HANDOFF_OUTCOME: ${{ steps.editor-handoff.outcome }}
         run: |
           set -euo pipefail
           "$RUNNER_TEMP/gt-light-exact-py/bin/python" -B -m tools.gt_light_fresh_editor.audit verify \
             --dest gt-light-exact-import --private gt-light-fresh-private --run-id "$GT_LIGHT_RUN_ID" --same-export "$RUNNER_TEMP/gt-light-exact-safe/same-export.json" --stage-report "$RUNNER_TEMP/gt-light-exact-safe/import-stage.json" --raw-stage "$RUNNER_TEMP/gt-light-exact-safe/import-stage-raw.json" \
-            --raw-import "$RUNNER_TEMP/gt-light-exact-safe/import-raw.json" --outcome "$EDITOR_OUTCOME" --report "$RUNNER_TEMP/gt-light-exact-safe/import.json"
+            --raw-import "$RUNNER_TEMP/gt-light-exact-safe/import-raw.json" --outcome "$EDITOR_OUTCOME" --handoff-outcome "$HANDOFF_OUTCOME" --report "$RUNNER_TEMP/gt-light-exact-safe/import.json"
       - name: Publish ONLY safe aggregate reports
         if: always()
         uses: actions/upload-artifact@v4

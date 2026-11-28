@@ -34,4 +34,18 @@ class FreshControls(unittest.TestCase):
         for k,v in (("run_id","1-3"),("private_guard",False),("world_checks",11),("world_mismatches",1),("light_owner_match",False)):
             x=dict(r);x[k]=v
             with self.assertRaises(Rejected):a.validate_world_receipt(x,"1-2","a"*64)
+    def test_failed_runner_handoff_stops_before_reading_private_data(self):
+        import json
+        from tempfile import TemporaryDirectory
+        from pathlib import Path
+        from types import SimpleNamespace
+        with TemporaryDirectory() as tmp:
+            out=Path(tmp)/"safe.json"
+            x=SimpleNamespace(handoff_outcome="failure",report=out)
+            self.assertEqual(a.verify(x),2)
+            result=json.loads(out.read_text())
+            self.assertEqual(result["reason"],"fresh_runner_ownership_handoff_failed")
+            self.assertEqual(result["phase"],"runner_handoff")
+            self.assertFalse(result["Unity_import_verified"])
+            self.assertFalse(result["world_transform_verified"])
 if __name__=="__main__":unittest.main()
