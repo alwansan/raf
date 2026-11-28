@@ -1,0 +1,187 @@
+{
+  "run_id": 46161249252,
+  "job_id": 141028833579,
+  "execution_head": "0834ba24a3acbd221900670e4fafb6b08f433508",
+  "conclusion": "success_scoped_indexed_pair_editor_vulkan",
+  "stage": {
+    "android_device": false,
+    "indexed_reference_spirv_exact": 4,
+    "original_runtime_kernel_mapping_proven": false,
+    "original_translated_slots": 20,
+    "private_config_sha256": "ae8f25e8b320d134750cc22be6d38c5c453d7762b676e89e1a67fa283ec6ebee",
+    "selected_slots": [
+      6,
+      7,
+      16,
+      17
+    ],
+    "source_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "status": "STAGED_AUTHENTIC_INDEXED_PAIR",
+    "workgroup_x": 512
+  },
+  "actual": {
+    "XAPK": false,
+    "android_device": false,
+    "authentic_slots": [
+      6,
+      7,
+      16,
+      17
+    ],
+    "bindings": 48,
+    "cases": [
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          0,
+          0
+        ],
+        "first_slot": 6,
+        "indexed_written": [
+          1024,
+          1024
+        ],
+        "nonfinite_components": 0,
+        "reference_written": [
+          1024,
+          1024
+        ],
+        "seed": 0,
+        "sentinel_checks": 4
+      },
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          0,
+          0
+        ],
+        "first_slot": 6,
+        "indexed_written": [
+          1024,
+          1024
+        ],
+        "nonfinite_components": 0,
+        "reference_written": [
+          1024,
+          1024
+        ],
+        "seed": 19,
+        "sentinel_checks": 4
+      },
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          0,
+          0
+        ],
+        "first_slot": 16,
+        "indexed_written": [
+          1024,
+          1024
+        ],
+        "nonfinite_components": 0,
+        "reference_written": [
+          1024,
+          1024
+        ],
+        "seed": 0,
+        "sentinel_checks": 4
+      },
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          0,
+          0
+        ],
+        "first_slot": 16,
+        "indexed_written": [
+          1024,
+          1024
+        ],
+        "nonfinite_components": 0,
+        "reference_written": [
+          1024,
+          1024
+        ],
+        "seed": 19,
+        "sentinel_checks": 4
+      }
+    ],
+    "dispatches": 16,
+    "editor_progress": {
+      "editor_native_exit": 0,
+      "last_managed_checkpoint": {
+        "bindings": 0,
+        "dispatches": 0,
+        "first_slot": -1,
+        "operation": "receipt",
+        "pass": -1,
+        "phase": "complete",
+        "seed": -1,
+        "variant": -1
+      },
+      "private_files_present": {
+        "editor-exit-code": true,
+        "editor-output-private": true,
+        "editor-stdout.log": true,
+        "editor.log": true,
+        "progress.json": true,
+        "receipt.json": true
+      },
+      "private_launch_marker_matches": true
+    },
+    "original_fft_numeric_parity_verified": false,
+    "original_game_inputs_verified": false,
+    "original_runtime_kernel_mapping_proven": false,
+    "production": false,
+    "registered_slots": 20,
+    "status": "OBSERVED_INDEXED_FFT_PAIR_EDITOR_VULKAN",
+    "water_rendering_verified": false
+  },
+  "plan_guard_run": 46161249257,
+  "plan_guard_conclusion": "success",
+  "lint_run": 46161249246,
+  "lint_conclusion": "success",
+  "artifact": {
+    "id": 15269561641,
+    "size_bytes": 1112,
+    "github_reported_digest": "sha256:fa9fbd47a6798e0c5b409a955ead478c387a7fc0f290c699ac3a44c0ab74caf9",
+    "independent_zip_download": false
+  }
+}
