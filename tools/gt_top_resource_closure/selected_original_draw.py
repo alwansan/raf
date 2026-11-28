@@ -183,10 +183,15 @@ def prepare(a,out,source,plan,mat,mk,xk,trace,body,mesh_info,prop,edge,parsed,pa
                 private_payload_withheld_until_guard=True,original_game_context=False)
 
 def read_pixels(path,size):
-    need(path.is_file() and not path.is_symlink() and path.stat().st_size==size*size*16,"draw_readback_extent")
-    values=np.fromfile(path,dtype="<f4").reshape(size,size,4)
+    values=read_provider_pixels(path,size)
     need(np.isfinite(values).all(),"draw_readback_nonfinite")
     return values
+
+def read_provider_pixels(path,size):
+    # Transport-only reader: called without finite gate solely by the
+    # provider classifier, which checks raw/encoded IEEE classes separately.
+    need(path.is_file() and not path.is_symlink() and path.stat().st_size==size*size*16,"draw_readback_extent")
+    return np.fromfile(path,dtype="<f4").reshape(size,size,4)
 
 def pixel_summary(pixels):
     # Counts only, never actual RGBA, spatial coordinates or source images.
@@ -313,13 +318,14 @@ def verify(a):
             out["phase"]="independent_source_stage_provider_readback"
             need(r.get("tap_shader_compiled") is True and r.get("tap_shader_errors")==0 and
                  r.get("provider_typed_properties")==cfg["tap_expected_properties"] and
-                 r.get("provider_views")==VIEWS and r.get("provider_observations")==VIEWS*len(cfg["provider_rows"]),
+                 r.get("provider_views")==VIEWS and r.get("provider_observations")==VIEWS*len(cfg["provider_rows"]) and
+                 r.get("provider_class_captures")==VIEWS*(len(cfg["provider_rows"])+2),
                  "provider_editor_capture_incomplete")
             receipt=json.loads((a.private/"provider-receipt.json").read_text())
-            out["provider_observation"]=provider.summarize(cfg,receipt,lambda name:read_pixels(a.private/name,SIZE))
+            out["provider_observation"]=provider.summarize(cfg,receipt,lambda name:read_provider_pixels(a.private/name,SIZE))
             out["status"]=out["provider_observation"]["status"];out["phase"]="complete"
             write_json(a.safe,out);print("GT_SELECTED_ORIGINAL_DRAW "+json.dumps(out,sort_keys=True))
-            return 0
+            return 0 if out["status"]=="OBSERVED_SOURCE_STAGE_PROVIDER_DIAGNOSTIC" else 2
         from tools.gt_top_resource_closure import selected_array_causal as causal
         out["phase"]="independent_causal_readback"
         out["tap_stage_available"]=cfg.get("tap_available") is True

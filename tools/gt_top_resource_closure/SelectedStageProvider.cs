@@ -45,7 +45,7 @@ public static partial class SelectedArrayUnity {
    return e;
  }
  static Material PrepareProvider(DrawInput cfg,DrawReceipt r,Material original){
-   Need(cfg.provider_probe&&r.tap_shader_compiled&&cfg.provider_rows!=null&&cfg.provider_rows.Length>0&&cfg.provider_rows.Length<=192);
+   Need(cfg.provider_probe&&cfg.provider_transport_version==2&&r.tap_shader_compiled&&cfg.provider_rows!=null&&cfg.provider_rows.Length>0&&cfg.provider_rows.Length<=192);
    var shader=UnityEditor.AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTDraw/Diagnostics/ArrayTap.shader");
    Need(shader!=null&&shader.isSupported&&ShaderErrors(shader)==0);
    var actual=original.GetTexture(cfg.selected_property) as Texture2DArray;
@@ -60,11 +60,13 @@ public static partial class SelectedArrayUnity {
    string prefix=Path.Combine(priv,"provider-"+view+"-");
    for(int mode=0;mode<2;mode++){
      TapMode(mat,mode);Capture(camera,renderer,mat,rt,prefix+mode+".f32");
+     TapMode(mat,256+mode);Capture(camera,renderer,mat,rt,prefix+(256+mode)+".f32");r.provider_class_captures++;
    }
    for(int i=0;i<cfg.provider_rows.Length;i++){
      var p=cfg.provider_rows[i];Need(p.mode==i+2);
      TapMode(mat,p.mode);Capture(camera,renderer,mat,rt,prefix+p.mode+".f32");
      v.expected[i]=ExpectedProvider(p,camera,renderer);r.provider_observations++;
+     TapMode(mat,256+p.mode);Capture(camera,renderer,mat,rt,prefix+(256+p.mode)+".f32");r.provider_class_captures++;
    }
    Need(ShaderErrors(mat.shader)==0);r.provider_views++;
    return v;

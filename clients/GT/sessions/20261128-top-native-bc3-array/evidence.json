@@ -538,5 +538,14 @@
   "merged_source_abi_context_external_textures": 3,
   "source_stage_provider_probe_prepared": true,
   "source_stage_provider_probe_actual_verified": false,
-  "source_stage_provider_probe_workflow": ".github/workflows/raft-gt-selected-original-draw.yml"
+  "source_stage_provider_probe_workflow": ".github/workflows/raft-gt-selected-original-draw.yml",
+  "source_stage_provider_probe_actual_run": 46154450430,
+  "source_stage_provider_probe_actual_job": 141007891747,
+  "source_stage_provider_probe_actual_receipt": "clients/GT/sessions/20261128-top-native-bc3-array/actual-46154450430.json",
+  "source_stage_provider_probe_conclusion": "failure_draw_readback_nonfinite",
+  "source_stage_provider_probe_source_rows": 40,
+  "source_stage_provider_probe_editor_complete": true,
+  "source_stage_provider_nonfinite_classifier_prepared": true,
+  "source_stage_provider_nonfinite_classifier_actual_verified": false,
+  "source_stage_provider_nonfinite_classifier_workflow": ".github/workflows/raft-gt-selected-original-draw.yml"
 }

@@ -11,6 +11,10 @@ from tools.gt_top_resource_closure import selected_array_causal as c, selected_m
 
 CAL_A=(.125,.375,.625,1.)
 CAL_B=(.75,.25,.5,.875)
+CLASS_OFFSET=256
+CLASS_CAL_A=(0.,0.,0.,0.)
+CLASS_CAL_B=(0.,.25,.5,.75)
+CLASS_LABELS=("finite","nan","positive_inf","negative_inf")
 MATRIX_PROVIDERS={"unity_ObjectToWorld":"object_to_world","unity_WorldToObject":"world_to_object",
                   "unity_MatrixV":"view","unity_MatrixInvV":"inverse_view",
                   "unity_MatrixVP":"view_projection"}
@@ -91,9 +95,9 @@ def instrument(wrapper,rows):
     field="gt_provider_value"
     vcode=[f"{vret}.{field}=float4(0,0,0,0);"]
     fcode=[f"{lhs}=float4(0.125,0.375,0.625,1.0);",
-           f"if ({c.MODE}==1.0) {lhs}=float4(0.75,0.25,0.5,0.875);"]
+           f"if (fmod({c.MODE},256.0)==1.0) {lhs}=float4(0.75,0.25,0.5,0.875);"]
     for row in rows:
-        cond=f"if ({c.MODE}=={row['mode']}.0)"
+        cond=f"if (fmod({c.MODE},256.0)=={row['mode']}.0)"
         if row["kind"]=="texture_dimensions":
             args=["gt_provider_w","gt_provider_h"]+["gt_provider_d"]*(row["lanes"]==3)
             fcode.append(cond+" { uint "+", ".join(args)+"; "+row["name"]+".GetDimensions("+", ".join(args)+"); "+
@@ -103,12 +107,23 @@ def instrument(wrapper,rows):
             fcode.append(cond+" "+lhs+"="+fm[2]+"."+field+";")
         else:
             fcode.append(cond+" "+lhs+"="+padded(row["expression"],row["lanes"])+";")
+    # Read finite classification from the shader BEFORE output conversion.
+    # The second marker covers all IEEE classes using integer bits directly.
+    fcode.append(f"if ({c.MODE}>=256.0) {{")
+    fcode.append(f"if (fmod({c.MODE},256.0)==1.0) {lhs}=gt_provider_class4(uint4(0x3f800000u,0x7fc00001u,0x7f800000u,0xff800000u));")
+    fcode.append(f"else {lhs}=gt_provider_class4(asuint({lhs})); }}")
     decl=f"\nnointerpolation float4 {field} : TEXCOORD{free};\n"
     edits=[(vi[1],decl),(fi[1],decl),(vpos,"\n"+"\n".join(vcode)+"\n"),(fpos,"\n"+"\n".join(fcode)+"\n")]
     for pos,value in sorted(edits,reverse=True):wrapper=wrapper[:pos]+value+wrapper[pos:]
     anchor="#pragma fragment gt_fs_main\n"
     c.need(wrapper.count(anchor)==1,"provider_pragma_anchor")
-    return wrapper.replace(anchor,anchor+"float "+c.MODE+";\n",1)
+    helper=("float "+c.MODE+";\n"
+            "float gt_provider_class(uint v) { uint e=v&0x7f800000u; uint m=v&0x007fffffu; "
+            "if(e!=0x7f800000u)return 0.0; if(m!=0u)return 0.25; "
+            "return (v&0x80000000u)!=0u ? 0.75 : 0.5; }\n"
+            "float4 gt_provider_class4(uint4 v) { return float4(gt_provider_class(v.x),gt_provider_class(v.y),"
+            "gt_provider_class(v.z),gt_provider_class(v.w)); }\n")
+    return wrapper.replace(anchor,anchor+helper,1)
 
 def stage(root,parsed,passes,wrapper,rows,mat,texenvs,shader_factory):
     from scripts.gt_original_921_shaderlab import verify_entrypoints
@@ -117,7 +132,7 @@ def stage(root,parsed,passes,wrapper,rows,mat,texenvs,shader_factory):
     verify_entrypoints(body,root,routes=[[[]]])
     raw,_=shader_factory(parsed,passes,body,diagnostic=True)
     (root/"array-tap-shader.bytes").write_bytes(raw)
-    return dict(provider_probe=True,tap_available=True,tap_shader_sha=sha256(raw).hexdigest(),
+    return dict(provider_probe=True,provider_transport_version=2,tap_available=True,tap_shader_sha=sha256(raw).hexdigest(),
                 provider_rows=[{k:v for k,v in r.items() if k!="expression"} for r in private])
 
 def finite_uniform(pixels,mask,lanes):
@@ -128,42 +143,93 @@ def finite_uniform(pixels,mask,lanes):
     if not np.allclose(a[:,:lanes],sample,atol=1e-4,rtol=1e-5):return None
     return sample
 
+def raw_classes(a):
+    """Return lane category, not floating values or NaN payloads."""
+    codes=np.zeros(a.shape,dtype=np.uint8)
+    codes[np.isnan(a)]=1;codes[np.isposinf(a)]=2;codes[np.isneginf(a)]=3
+    return codes
+
+def class_image(a):
+    c.need(np.isfinite(a).all(),"provider_class_image_nonfinite")
+    nearest=np.rint(a*4)
+    c.need(np.all((nearest>=0)&(nearest<=3)) and np.all(np.abs(a-nearest/4)<=1e-6),
+           "provider_class_image_invalid_code")
+    return nearest.astype(np.uint8)
+
+def classify_row(raw,encoded,mask,lanes):
+    c.need(raw.shape==encoded.shape and raw.ndim==3 and raw.shape[-1]==4 and
+           raw.shape[:2]==mask.shape and 1<=lanes<=4 and mask.any(),"provider_row_shape")
+    a=raw[mask];b=encoded[mask]
+    x=raw_classes(a);y=class_image(b)
+    result=Counter()
+    result["background_nonfinite_lanes"]=int((~np.isfinite(raw[~mask])).sum())
+    result["foreground_pixels"]=len(a)
+    for i,label in enumerate(CLASS_LABELS):
+        result["raw_"+label+"_lanes"]=int((x[:,:lanes]==i).sum())
+        result["encoded_"+label+"_lanes"]=int((y[:,:lanes]==i).sum())
+    result["raw_encoded_class_mismatch_lanes"]=int((x!=y).sum())
+    result["raw_nonfinite_padding_lanes"]=int((x[:,lanes:]!=0).sum())
+    result["encoded_nonfinite_padding_lanes"]=int((y[:,lanes:]!=0).sum())
+    bad_transport=(result["raw_encoded_class_mismatch_lanes"] or result["background_nonfinite_lanes"])
+    if bad_transport:status="transport_mismatch"
+    elif np.any(y[:,lanes:]!=0):status="invalid_padding"
+    elif np.any(y[:,:lanes]!=0):status="shader_nonfinite"
+    else:
+        val=finite_uniform(raw,mask,lanes)
+        status="finite_uniform" if val is not None else "finite_nonuniform_or_padding"
+    return status,dict(result)
+
 def summarize(cfg,receipt,read):
     rows=cfg["provider_rows"];views=receipt["views"]
-    c.need(len(views)==3 and len(rows)>0 and len(rows)<=192,"provider_population")
+    c.need(cfg.get("provider_transport_version")==2 and len(views)==3 and len(rows)>0 and len(rows)<=192,"provider_population")
     c.need([r["mode"] for r in rows]==list(range(2,len(rows)+2)),"provider_mode_order")
     counts=Counter();observed=[[] for _ in rows];known=[[] for _ in rows]
+    per_row=[Counter() for _ in rows];groups={}
     for view,v in enumerate(views):
         c.need(v["view"]==view and len(v["expected"])==len(rows),"provider_view_schema")
-        a=read(f"provider-{view}-0.f32");b=read(f"provider-{view}-1.f32")
+        def load(mode):return read(f"provider-{view}-{mode}.f32")
+        a,b,ca,cb=(load(m) for m in (0,1,CLASS_OFFSET,CLASS_OFFSET+1))
+        c.need(a.shape==b.shape==ca.shape==cb.shape and a.ndim==3 and a.shape[-1]==4 and
+               all(np.isfinite(z).all() for z in (a,b,ca,cb)),"provider_calibration_schema")
         ma=c.near(a,CAL_A);mb=c.near(b,CAL_B)
-        c.need(ma.any() and np.array_equal(ma,mb),"provider_calibration")
-        counts["calibrated_views"]+=1;counts["calibration_pixels"]+=int(ma.sum())
+        mca=c.near(ca,CLASS_CAL_A);mcb=c.near(cb,CLASS_CAL_B)
+        c.need(ma.any() and np.array_equal(ma,mb) and np.array_equal(ma,mca) and
+               np.array_equal(ma,mcb),"provider_calibration")
+        counts["calibrated_views"]+=1;counts["classification_calibrated_views"]+=1
+        counts["calibration_pixels"]+=int(ma.sum())
         for i,(r,e) in enumerate(zip(rows,v["expected"],strict=True)):
             c.need(e["mode"]==r["mode"],"provider_expected_order")
-            lanes=r["lanes"];p=read(f"provider-{view}-{r['mode']}.f32")
-            val=finite_uniform(p,ma,lanes)
-            counts["lane_observations"]+=1
-            if val is None:counts["nonfinite_or_nonuniform"]+=1;observed[i].append(None);known[i].append(False);continue
-            counts["finite_uniform"]+=1;observed[i].append(val)
+            lanes=r["lanes"];p=load(r["mode"]);encoded=load(CLASS_OFFSET+r["mode"])
+            status,stats=classify_row(p,encoded,ma,lanes)
+            counts["lane_observations"]+=1;counts[status]+=1
+            counts.update(stats);per_row[i][status]+=1;per_row[i].update(stats)
+            key=(r["role"],r["kind"])
+            group=groups.setdefault(key,Counter());group[status]+=1;group["lane_observations"]+=1
+            if e["known"]:
+                expected=np.asarray(e["value"],dtype=np.float64);n=e["compare_lanes"]
+                c.need(expected.shape==(4,) and 1<=n<=lanes and np.isfinite(expected).all(),"provider_expected_value")
+                c.need(r["kind"]!="unresolved","provider_unknown_claim")
+                counts["cpu_expected_observations"]+=1
+            else:counts["unknown_provider_observations"]+=1
+            if status!="finite_uniform":
+                if e["known"]:counts["cpu_expected_unusable_observations"]+=1
+                observed[i].append(None);known[i].append(False);continue
+            val=finite_uniform(p,ma,lanes);c.need(val is not None,"provider_finite_class_inconsistency")
+            observed[i].append(val)
             if r["kind"]=="texture_dimensions":
                 counts["texture_dimension_observations"]+=1
                 if np.all(val>0):counts["texture_positive_dimensions"]+=1
-            if not e["known"]:
-                counts["unknown_provider_observations"]+=1;known[i].append(False);continue
-            expected=np.asarray(e["value"],dtype=np.float64)
-            n=e["compare_lanes"]
-            c.need(expected.shape==(4,) and 1<=n<=lanes and np.isfinite(expected).all(),"provider_expected_value")
-            c.need(r["kind"]!="unresolved","provider_unknown_claim")
+            if not e["known"]:known[i].append(False);continue
             good=bool(np.allclose(val[:n],expected[:n],atol=1e-4,rtol=1e-4))
-            # Negative comparator must actually disagree, not just be a label.
             wrong=expected[:n].copy();wrong[0]+=max(1.,abs(wrong[0])*.5)
             bad=not np.allclose(val[:n],wrong,atol=1e-4,rtol=1e-4)
             counts["cpu_comparable_observations"]+=1
-            counts["cpu_matching_observations" if good and bad else "cpu_mismatching_observations"]+=1
+            verdict="cpu_matching_observations" if good and bad else "cpu_mismatching_observations"
+            counts[verdict]+=1;per_row[i][verdict]+=1;group[verdict]+=1
             if r["kind"]=="texture_dimensions":counts["texture_dimension_cpu_matches"]+=int(good and bad)
             else:counts["engine_numeric_cpu_matches"]+=int(good and bad)
             known[i].append(good and bad)
+    summary=[]
     for i,r in enumerate(rows):
         a=observed[i]
         if all(x is not None for x in a):
@@ -173,9 +239,18 @@ def summarize(cfg,receipt,read):
                 if r["kind"] not in ("unresolved","texture_dimensions") and all(known[i]):
                     counts["verified_view_dependent_engine_numeric_rows"]+=1
         if all(known[i]):counts["all_views_cpu_matching_rows"]+=1
-    c.need(counts["finite_uniform"]>0 and counts["calibrated_views"]==3,"provider_no_readback")
-    return dict(status="OBSERVED_SOURCE_STAGE_PROVIDER_DIAGNOSTIC",
+        summary.append(dict(ordinal=i,stage=r["role"],provider_category=r["kind"],lanes=r["lanes"],
+                            observations=dict(per_row[i])))
+    c.need(counts["lane_observations"]==3*len(rows) and counts["classification_calibrated_views"]==3,"provider_observation_population")
+    # Nonfinite shader values are a diagnosed defect, not a verified upload.
+    # A discrepancy between shader classification and raw transport remains
+    # inconclusive, even if some other rows have usable measurements.
+    transport_ok=counts["transport_mismatch"]==0
+    observed_ok=counts["finite_uniform"]>0 or counts["shader_nonfinite"]>0
+    return dict(status="OBSERVED_SOURCE_STAGE_PROVIDER_DIAGNOSTIC" if transport_ok and observed_ok else "INCONCLUSIVE_PROVIDER_TRANSPORT",
                 source_probe_rows=len(rows),stage_rows=dict(Counter(r["role"] for r in rows)),
                 provider_categories=dict(Counter(r["kind"] for r in rows)),counts=dict(counts),
+                per_stage_category=[dict(stage=k[0],provider_category=k[1],counts=dict(v)) for k,v in sorted(groups.items())],
+                row_observations=summary,nonfinite_classification_transport_verified=transport_ok,
                 original_game_global_resources_verified=False,runtime_uniform_upload_verified=False,
                 white_mesh_repair_verified=False,diagnostic_only=True)

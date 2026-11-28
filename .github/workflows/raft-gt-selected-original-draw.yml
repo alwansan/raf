@@ -1,5 +1,5 @@
 name: GT selected original explicit shader material mesh Vulkan draw (NO PLAYER)
-# Source-stage external numeric and texture provider readback; no RGBA replay or player.
+# Raw provider IEEE classes compared to finite shader-encoded classes; no RGBA replay or player.
 on:
   workflow_dispatch:
   push:
@@ -39,7 +39,7 @@ jobs:
           set -euo pipefail
           python3 -c "import shutil; assert shutil.disk_usage('.').free > 8 * 1024**3"
           python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3 Pillow==12.3.0 numpy==2.2.6
-          python3 -m py_compile tools/gt_top_resource_closure/selected_original_draw.py tools/gt_top_resource_closure/selected_array_causal.py tools/gt_top_resource_closure/selected_array_basis.py
+          python3 -m py_compile tools/gt_top_resource_closure/selected_original_draw.py tools/gt_top_resource_closure/selected_array_causal.py tools/gt_top_resource_closure/selected_array_basis.py tools/gt_top_resource_closure/selected_stage_provider.py
           python3 -B -m unittest discover -s tools/gt_top_resource_closure -p 'test_*.py' -v
           python3 -B -m unittest discover -s tools/gt_top_original_renderer -p 'test_*.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_external_texture_lineage.py' -v
@@ -270,7 +270,7 @@ jobs:
             --unity-project gt-selected-array-project --draw-private gt-selected-array-private \
             --run-id "$GT_ARRAY_RUN_ID"
           rm -rf "$RUNNER_TEMP/b21-original" "$RUNNER_TEMP/b21-private-export" "$RUNNER_TEMP/b21-compiled" zip2-original
-      - name: Observe external source-stage numeric values and texture dimensions
+      - name: Capture provider values and independent shader-side IEEE classifications
         id: array_unity
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
@@ -295,7 +295,7 @@ jobs:
             -force-vulkan -force-device-index 0 -job-worker-count 2
             -gtArrayRunId ${{ env.GT_ARRAY_RUN_ID }}
             -gtArrayPrivate /github/workspace/gt-selected-array-private
-      - name: Compare private GPU provider readback with independently available engine values
+      - name: Classify nonfinite provider lanes and compare only valid CPU GPU rows
         if: always() && steps.array_stage.outcome == 'success'
         env:
           UNITY_OUTCOME: ${{ steps.array_unity.outcome }}

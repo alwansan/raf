@@ -15,7 +15,7 @@ public static partial class SelectedArrayUnity {
  [Serializable] public class DrawInput {
    public string run_id,shader_path,shader_guid,mesh_path,mesh_guid,vertex_sha,index_sha,array_guid,array_path,array_name,array_sha,selected_property,wrong_guid;
    public bool tap_available,provider_probe; public string tap_shader_sha; public int tap_expected_properties,tap_source_sample_sites;
-   public ProviderRow[] provider_rows;
+   public ProviderRow[] provider_rows;public int provider_transport_version;
    public long mesh_id; public int vertex_count,vertex_bytes,index_bytes,index_format,mesh_stride,views,size;
    public int[] sampler; public float mip_bias;
    public DrawAsset[] assets; public DrawSlot[] slots; public DrawNumber[] numbers; public DrawMaterial[] materials;
@@ -31,7 +31,7 @@ public static partial class SelectedArrayUnity {
    public int tap_copied_properties_source,tap_copied_properties_red,tap_copied_properties_green;
    public bool basis_ready; public string basis_phase="not_started",basis_failure_category="";
    public int basis_array_payloads,basis_original_clones,basis_typed_clones,basis_views,basis_site_pairs;
-   public int provider_typed_properties,provider_views,provider_observations;
+   public int provider_typed_properties,provider_views,provider_observations,provider_class_captures;
    public int shader_errors,shader_passes,source_asset_identities,source_asset_bytes_unchanged,source_asset_meta_bytes_unchanged,
       saved_float_runtime_matches,saved_color_runtime_matches,saved_float_runtime_declared,saved_color_runtime_declared,rendered_views;
  }
