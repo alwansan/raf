@@ -18,6 +18,21 @@ export PATH="$root/cmdline-tools/latest/bin:$root/platform-tools:$root/emulator:
 phase=sdk
 image="system-images;android-35;google_apis;$abi"
 sdkmanager "$image" 'platforms;android-35' 'build-tools;35.0.0' platform-tools emulator
+phase=host-dependencies
+if [[ "$abi" == x86_64 ]]; then
+  qemu="$root/emulator/qemu/linux-x86_64/qemu-system-x86_64"
+  test -x "$qemu"
+  ldd "$qemu" > evidence/qemu-dependencies-before.txt
+  if grep -Fq 'libpulse.so.0 => not found' evidence/qemu-dependencies-before.txt; then
+    sudo apt-get update -qq
+    sudo apt-get install -y --no-install-recommends libpulse0
+  fi
+  ldd "$qemu" > evidence/qemu-dependencies-after.txt
+  if grep -F '=> not found' evidence/qemu-dependencies-after.txt; then
+    echo 'Unresolved emulator host library dependencies'
+    exit 2
+  fi
+fi
 emulator -version
 phase=kvm
 test -c /dev/kvm
