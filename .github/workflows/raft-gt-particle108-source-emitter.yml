@@ -1,0 +1,118 @@
+name: GT Particle108 source emitter component and renderer material join (NO PLAYER)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-gt-particle108-source-emitter.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-emitter:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    concurrency:
+      group: raft-particle108-source-emitter-${{ github.ref }}
+      cancel-in-progress: false
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout only verification and exporter helper source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/ExportLineage
+            tools/gt_skybox_binding_calibration
+            tools/gt_skybox_actual_abi
+            tools/gt_particle108_redirect_target
+            tools/gt_particle108_native_mips
+            tools/gt_particle108_native_import
+            tools/gt_particle108_native_route
+      - name: Source-free reciprocal component and owner-scoped pointer controls
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e zip2-original
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          python3 -B -m unittest discover -s tools/gt_particle108_native_route -p test_emitter.py -v
+      - name: Checkout exactly six immutable Raft scenes and six serialized owner sources
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/globalgamemanagers
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets6.assets
+      - name: Select SHA-authentic plain versus split originals exactly
+        run: |
+          set -euo pipefail
+          git -C zip2-original sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/globalgamemanagers' \
+            '/Raft/Raft_Data/globalgamemanagers.assets' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: SHA-stage exact six scenes four Shader owners and two runtime globals
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN
+          from scripts.b04_restore_original_color_settings import ORIGINAL_SIZE,ORIGINAL_SHA256
+          root=Path(os.environ["RUNNER_TEMP"])/"t3-particle-original"
+          pins={"Raft_Data/"+name:value for name,value in PIN.items()}
+          pins.update({"Raft_Data/"+name:SHADER_OWNERS[name] for name in (
+              "resources.assets","sharedassets0.assets",
+              "sharedassets1.assets","sharedassets6.assets","globalgamemanagers.assets")})
+          pins["Raft_Data/globalgamemanagers"]=(ORIGINAL_SIZE,ORIGINAL_SHA256)
+          outcome=stage(Path("zip2-original"),root,pins)
+          assert len(outcome["owners"])==12 and outcome["lfs_used"] is False
+          print("RAFT_T3_ORIGINAL_PARTICLE108_SIX_SCENE_SIX_OWNER_SHA_VERIFIED=true")
+          PY
+      - name: Join exact source selected native material to reciprocal original emitter and render mode
+        run: |
+          set -euo pipefail
+          python3 -B -m tools.gt_particle108_native_route.emitter \
+            --original "$RUNNER_TEMP/t3-particle-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/gt-particle108-emitter-safe.json"
+      - name: Publish only aggregate source observation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-particle108-source-emitter-safe
+          path: ${{ runner.temp }}/gt-particle108-emitter-safe.json
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Clean private original input
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t3-particle-original" zip2-original

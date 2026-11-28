@@ -1,0 +1,248 @@
+{
+  "source": "GitHub Actions aggregate job log",
+  "run": 46136487398,
+  "job": 140952830477,
+  "execution_head": "b00905b2ee8d5b43b8fd6c42ebe2195564fe0f3e",
+  "conclusion": "success",
+  "plan_guard_run": 46136487390,
+  "plan_guard_conclusion": "success",
+  "lint_run": 46136487394,
+  "lint_conclusion": "success",
+  "artifact_id": 15259799513,
+  "artifact_downloaded": false,
+  "actual_report": {
+    "Android_device": false,
+    "XAPK": false,
+    "actual_dummy_alive_after_scene": true,
+    "asset_bytes_unchanged": 4,
+    "asset_identities": 4,
+    "black_fire_restored": false,
+    "calibrated_alpha_effect_cases": 4,
+    "clone_gpu_probe_verified": true,
+    "clone_gpu_probes": [
+      {
+        "clone_alpha_distinguished_from_controls": 45,
+        "level": 0,
+        "mode": "load",
+        "native_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        },
+        "one_alpha_max_error": 0,
+        "one_rgb_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        },
+        "zero_alpha_max_error": 0,
+        "zero_rgb_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        }
+      },
+      {
+        "clone_alpha_distinguished_from_controls": 52,
+        "level": 0,
+        "mode": "sample",
+        "native_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        },
+        "one_alpha_max_error": 0,
+        "one_rgb_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        },
+        "zero_alpha_max_error": 0,
+        "zero_rgb_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        }
+      },
+      {
+        "clone_alpha_distinguished_from_controls": 50,
+        "level": 3,
+        "mode": "load",
+        "native_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        },
+        "one_alpha_max_error": 0,
+        "one_rgb_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        },
+        "zero_alpha_max_error": 0,
+        "zero_rgb_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        }
+      },
+      {
+        "clone_alpha_distinguished_from_controls": 60,
+        "level": 3,
+        "mode": "sample",
+        "native_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        },
+        "one_alpha_max_error": 0,
+        "one_rgb_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        },
+        "zero_alpha_max_error": 0,
+        "zero_rgb_vs_clone": {
+          "exactly_different": 0,
+          "max_error": 0,
+          "over_tolerance": 0
+        }
+      }
+    ],
+    "clone_graphics_format_match": true,
+    "clone_payload_verified": true,
+    "clone_sampler_match": true,
+    "command_material_property_block_verified": true,
+    "companion_source_export_rgba_match": true,
+    "draw_cases": 36,
+    "draw_classification_counts": {
+      "CALIBRATED_SOURCE_ROUTE_ALPHA_EFFECT": 4
+    },
+    "dummy_camera_calibrated_cases": 4,
+    "dummy_camera_submissions": 4,
+    "dummy_direct_calibrated_cases": 4,
+    "dummy_direct_submissions": 4,
+    "dummy_scene_lifetime_verified": true,
+    "dummy_shader_errors": 0,
+    "editor_failure_category": "other",
+    "editor_phase": "complete",
+    "explicit_command_submissions": 28,
+    "independent_alpha_effect_without_dummy_cases": 4,
+    "isolated_explicit_route_alpha_effect_observed": true,
+    "material_identity": true,
+    "material_shader_identity": true,
+    "meta_bytes_unchanged": 4,
+    "native_descriptor": true,
+    "native_identity": true,
+    "native_sampler": true,
+    "numbers_declared": 11,
+    "numbers_match": true,
+    "numbers_matched": 11,
+    "observations": [
+      {
+        "background": 0,
+        "classification": "CALIBRATED_SOURCE_ROUTE_ALPHA_EFFECT",
+        "dummy_direct_marker_pixels": 2304,
+        "dummy_marker_pixels": 2304,
+        "dummy_visible": 2304,
+        "native_visible": 1180,
+        "native_vs_dummy": 2304,
+        "native_vs_exact_clone": 0,
+        "native_vs_one": 1850,
+        "native_vs_repeat": 0,
+        "native_vs_source_block": 0,
+        "native_vs_zero": 1180,
+        "one_vs_clear": 1859,
+        "renderer_native_visible": 1180,
+        "renderer_vs_command": 0,
+        "size": 64,
+        "source_alpha_channel_mask_preserved": true,
+        "zero_vs_clear": 0,
+        "zero_vs_one": 1859
+      },
+      {
+        "background": 1,
+        "classification": "CALIBRATED_SOURCE_ROUTE_ALPHA_EFFECT",
+        "dummy_direct_marker_pixels": 2304,
+        "dummy_marker_pixels": 2304,
+        "dummy_visible": 2304,
+        "native_visible": 1180,
+        "native_vs_dummy": 2304,
+        "native_vs_exact_clone": 0,
+        "native_vs_one": 1850,
+        "native_vs_repeat": 0,
+        "native_vs_source_block": 0,
+        "native_vs_zero": 1180,
+        "one_vs_clear": 1859,
+        "renderer_native_visible": 1180,
+        "renderer_vs_command": 0,
+        "size": 64,
+        "source_alpha_channel_mask_preserved": true,
+        "zero_vs_clear": 0,
+        "zero_vs_one": 1859
+      },
+      {
+        "background": 0,
+        "classification": "CALIBRATED_SOURCE_ROUTE_ALPHA_EFFECT",
+        "dummy_direct_marker_pixels": 9216,
+        "dummy_marker_pixels": 9216,
+        "dummy_visible": 9216,
+        "native_visible": 4710,
+        "native_vs_dummy": 9216,
+        "native_vs_exact_clone": 0,
+        "native_vs_one": 7418,
+        "native_vs_repeat": 0,
+        "native_vs_source_block": 0,
+        "native_vs_zero": 4710,
+        "one_vs_clear": 7459,
+        "renderer_native_visible": 4710,
+        "renderer_vs_command": 0,
+        "size": 128,
+        "source_alpha_channel_mask_preserved": true,
+        "zero_vs_clear": 0,
+        "zero_vs_one": 7459
+      },
+      {
+        "background": 1,
+        "classification": "CALIBRATED_SOURCE_ROUTE_ALPHA_EFFECT",
+        "dummy_direct_marker_pixels": 9216,
+        "dummy_marker_pixels": 9216,
+        "dummy_visible": 9216,
+        "native_visible": 4710,
+        "native_vs_dummy": 9216,
+        "native_vs_exact_clone": 0,
+        "native_vs_one": 7418,
+        "native_vs_repeat": 0,
+        "native_vs_source_block": 0,
+        "native_vs_zero": 4710,
+        "one_vs_clear": 7459,
+        "renderer_native_visible": 4710,
+        "renderer_vs_command": 0,
+        "size": 128,
+        "source_alpha_channel_mask_preserved": true,
+        "zero_vs_clear": 0,
+        "zero_vs_one": 7459
+      }
+    ],
+    "original_emitter_geometry_verified": false,
+    "original_shader_draw_verified": false,
+    "override_blocks_verified": true,
+    "phase": "complete",
+    "postscene_dummy_alive": false,
+    "postscene_dummy_managed_reference_present": true,
+    "prescene_dummy_alive": true,
+    "prescene_material_destroyed_by_scene_transition": true,
+    "private_payload_published": false,
+    "probe_draw_cases": 17,
+    "probe_marker_pixels": 64,
+    "probe_shader_errors": 0,
+    "production": false,
+    "runtime_keyword_selection_verified": false,
+    "shader_errors": 0,
+    "shader_identity": true,
+    "source_material_unchanged_after_draw": true,
+    "status": "OBSERVED_ISOLATED_PARTICLE108_EXPLICIT_ROUTE_ALPHA_EFFECT",
+    "texture_refs": true,
+    "uv_matches": true
+  }
+}
