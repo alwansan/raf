@@ -1,5 +1,5 @@
 {
-  "next_action": "G5-original-Particle108-native-seven-mip-preservation: reconcile Actions for execution b839a0cad1b04c04af1b84db341290f4722d06bc (Actual not yet listed by GitHub for execution SHA; lint not yet listed) before retry. Prior 46113353863 FAILURE target_pathid_not_unique in PC builtin target lookup; all source and same-export checks succeeded, original selected 64x64 RGBA32 (4), 7 unstripped levels, 1 image, dimension2, lightmap0, colorSpace1, 21844 stream bytes, exact processed group zero sprites. No PC or Android target byte/pixel parity and no root-cause claim. New private unique typed original graph admission hashes original full stream; actual configured exporter must first select RedirectExportCollection for both exact processed texture and its zero-sprite group, then narrowly register native YamlStreamedAssetExportCollection wrapper with genuine pointer and group queued. Independently verify actual 5 materials/3 textures/10 PPtr and UV, native class28 GUID/anchor/meta and 7/7 original mip bytes, sampler and colorspace; no PNG regeneration. If PASS, stage same private native asset with source proof for Unity import and actual Vulkan pixel/alpha validation (do not imply original shader or Android device pass). If failure, isolate specific cause; move to independent white-mesh same-export GUID fanout or water if no productive fix. No PC target retry, no sky re-export, no Level38 pin changes; 154 editor proof absent; G0-G6 open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred; no production/player/XAPK.",
+  "next_action": "G5-original-Particle108-native-seven-mip-preservation: first activation b839a0cad1b04c04af1b84db341290f4722d06bc had zero Actions runs, check suites and check runs; no test outcome. Reactivation fb25bd752928c784bd80b62f0de02c4850dcda69 has [Actual 46115503520/job 140888302528] IN_PROGRESS at disposable exporter compilation after all source-free controls passed (new exact native class28/anchor/meta GUID control rejects wrong ID, class, type, duplicate GUID), lint 46115503472/job 140888302239 SUCCESS. Reconcile actual before retry; compiler error codes only on pre-source build failure. Prior PC target failure 46113353863 is unchanged, original 64x64 RGBA32 7 unstripped mip/21844-byte streamed source and zero sprites observed. New admission uses exact original source identity and payload then real configured redirect before narrow native export; if actual passes 10 PPtr/UV plus 7/7 byte and sampler checks, proceed with isolated Unity import and Vulkan validation of the same source-linked native asset, not original Android GPU proof. If no productive fix, independent white-mesh source Shader48-to-postvendor GUID fanout following existing scripts/t3_source_renderer_shader_to_postvendor_export.py and tools/gt_shader_fanout, or water. Do not replay PC target or sky export; Level38 pins unchanged, 154 editor proof absent, G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. CL/lab read-only; BLACK/animation deferred; no production/player/XAPK.",
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
     "status": "OBSERVED_SELECTED_ORIGINAL_LIGHT_HIERARCHIES",
@@ -17222,16 +17222,16 @@
     "artifact_independently_downloaded": false
   },
   "latest_particle108_native_mips": {
-    "status": "ORIGINAL_NATIVE_SEVEN_MIP_CORRECTION_PREPARED",
+    "status": "ORIGINAL_NATIVE_SEVEN_MIP_CORRECTION_RUNNING",
     "starting_head": "b3fa46364412bd694d9c60ec1ef46a50da45fc3b",
     "preparation_commit": "a0fbf08416d9b9372711fd1e85361045a56f1e14",
-    "execution_head": "b839a0cad1b04c04af1b84db341290f4722d06bc",
-    "run": null,
-    "run_status": "not_listed_yet",
+    "execution_head": "fb25bd752928c784bd80b62f0de02c4850dcda69",
+    "run": 46115503520,
+    "run_status": "in_progress",
     "conclusion": null,
-    "lint_run": null,
-    "lint_status": "not_listed_yet",
-    "lint_conclusion": null,
+    "lint_run": 46115503472,
+    "lint_status": "completed",
+    "lint_conclusion": "success",
     "prior_observation_run": 46113353863,
     "expected_source_mip_count": 7,
     "expected_payload_bytes": 21844,
@@ -17242,6 +17242,15 @@
     "production": false,
     "player": false,
     "XAPK": false,
-    "next_action": "G5-original-Particle108-native-seven-mip-preservation: reconcile Actions for execution b839a0cad1b04c04af1b84db341290f4722d06bc (Actual not yet listed by GitHub for execution SHA; lint not yet listed) before retry. Prior 46113353863 FAILURE target_pathid_not_unique in PC builtin target lookup; all source and same-export checks succeeded, original selected 64x64 RGBA32 (4), 7 unstripped levels, 1 image, dimension2, lightmap0, colorSpace1, 21844 stream bytes, exact processed group zero sprites. No PC or Android target byte/pixel parity and no root-cause claim. New private unique typed original graph admission hashes original full stream; actual configured exporter must first select RedirectExportCollection for both exact processed texture and its zero-sprite group, then narrowly register native YamlStreamedAssetExportCollection wrapper with genuine pointer and group queued. Independently verify actual 5 materials/3 textures/10 PPtr and UV, native class28 GUID/anchor/meta and 7/7 original mip bytes, sampler and colorspace; no PNG regeneration. If PASS, stage same private native asset with source proof for Unity import and actual Vulkan pixel/alpha validation (do not imply original shader or Android device pass). If failure, isolate specific cause; move to independent white-mesh same-export GUID fanout or water if no productive fix. No PC target retry, no sky re-export, no Level38 pin changes; 154 editor proof absent; G0-G6 open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred; no production/player/XAPK."
+    "next_action": "G5-original-Particle108-native-seven-mip-preservation: first activation b839a0cad1b04c04af1b84db341290f4722d06bc had zero Actions runs, check suites and check runs; no test outcome. Reactivation fb25bd752928c784bd80b62f0de02c4850dcda69 has [Actual 46115503520/job 140888302528] IN_PROGRESS at disposable exporter compilation after all source-free controls passed (new exact native class28/anchor/meta GUID control rejects wrong ID, class, type, duplicate GUID), lint 46115503472/job 140888302239 SUCCESS. Reconcile actual before retry; compiler error codes only on pre-source build failure. Prior PC target failure 46113353863 is unchanged, original 64x64 RGBA32 7 unstripped mip/21844-byte streamed source and zero sprites observed. New admission uses exact original source identity and payload then real configured redirect before narrow native export; if actual passes 10 PPtr/UV plus 7/7 byte and sampler checks, proceed with isolated Unity import and Vulkan validation of the same source-linked native asset, not original Android GPU proof. If no productive fix, independent white-mesh source Shader48-to-postvendor GUID fanout following existing scripts/t3_source_renderer_shader_to_postvendor_export.py and tools/gt_shader_fanout, or water. Do not replay PC target or sky export; Level38 pins unchanged, 154 editor proof absent, G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. CL/lab read-only; BLACK/animation deferred; no production/player/XAPK.",
+    "activation_initial_head": "b839a0cad1b04c04af1b84db341290f4722d06bc",
+    "activation_initial_run": null,
+    "activation_initial_check_suites": 0,
+    "activation_initial_check_runs": 0,
+    "job": 140888302528,
+    "source_free_controls_passed": true,
+    "source_free_exact_native_identity_negative_controls_passed": true,
+    "lint_job": 140888302239,
+    "latest_observed_step": "Build exact W1 Material21 plus B02 Texture2D28 same-instance optional lineage exporter"
   }
 }
