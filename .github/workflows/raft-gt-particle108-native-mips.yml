@@ -1,5 +1,6 @@
 name: GT original Particle108 exact native seven-mip restoration (NO PLAYER)
 # Corrective native export: prior 46113353863 verified source shape, target lookup inconclusive.
+# Reactivation: b839a0c had no run, check suite or check run; no previous native trial to retry.
 on:
   push:
     branches: [feature/android-native-port]
@@ -37,6 +38,8 @@ jobs:
         run: |
           set -euo pipefail
           test ! -e Raft
+          test ! -e zip2-original
+          python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3
           python3 -B -m unittest discover -s tools/gt_particle108_native_mips -p test_probe.py -v
           python3 -B -m unittest discover -s tools/gt_particle108_redirect_target -p test_audit.py -v
           python3 -B -m unittest discover -s tools/gt_skybox_binding_calibration -p test_probe.py -v
@@ -93,7 +96,9 @@ jobs:
             -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
             --self-contained false -o "$RUNNER_TEMP/t3-particle-compiled" \
             > "$RUNNER_TEMP/t3-private-exporter-build.log" 2>&1; then
-            echo "::error::T3 original source/export tool compilation failed; private tool log not uploaded"
+            echo "::error::T3 original source/export tool compilation failed before original source checkout"
+            # Only compiler error codes, not source paths or arbitrary log content.
+            grep -oE "error (CS|NETSDK|NU|MSB)[0-9]{3,5}" "$RUNNER_TEMP/t3-private-exporter-build.log" | sort | uniq -c || true
             exit 2
           fi
           dotnet "$RUNNER_TEMP/t3-particle-compiled/ExportLineage.dll" --probe-tool > /dev/null

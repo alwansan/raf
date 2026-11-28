@@ -23,4 +23,21 @@ class Controls(unittest.TestCase):
     def test_reject_truncated_or_regenerated_payload(self):
         d=descriptor()|{"m_StreamData":{"path":"","size":0,"offset":0},"image data":bytes(16384)}
         with self.assertRaises(n.Unproven):n.proof(d)
+    def test_exact_native_class_anchor_and_meta(self):
+        import tempfile
+        from pathlib import Path
+        guid="1234567890abcdef1234567890abcdef"
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);assets=root/"Assets";assets.mkdir()
+            asset=assets/"fixture.texture2D";meta=assets/"fixture.texture2D.meta"
+            asset.write_text("%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!28 &2800000\nTexture2D:\n  m_Width: 64\n")
+            meta.write_text("fileFormatVersion: 2\nguid: "+guid+"\nNativeFormatImporter:\n  mainObjectFileID: 2800000\n")
+            self.assertEqual(p.actual_body(root,(2800000,guid,2)),{"m_Width":64})
+            with self.assertRaises(ValueError):p.actual_body(root,(2800001,guid,2))
+            with self.assertRaises(ValueError):p.actual_body(root,(2800000,guid,3))
+            asset.write_text(asset.read_text().replace("!u!28","!u!21"))
+            with self.assertRaises(ValueError):p.actual_body(root,(2800000,guid,2))
+            asset.write_text(asset.read_text().replace("!u!21","!u!28"))
+            (assets/"duplicate.asset.meta").write_text(meta.read_text())
+            with self.assertRaises(ValueError):p.actual_body(root,(2800000,guid,2))
 if __name__=="__main__":unittest.main()
