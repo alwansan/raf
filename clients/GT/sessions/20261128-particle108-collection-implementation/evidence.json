@@ -1,0 +1,32 @@
+{
+  "status": "ORIGINAL_COLLECTION_IMPLEMENTATION_DIAGNOSTIC_RUNNING",
+  "starting_head": "42beabf17baf322392767df91c22100fd0664216",
+  "preparation_commit": "0fa61c15a6841ded6fc891f688b3ab94b355af97",
+  "workflow": ".github/workflows/raft-gt-particle108-collection-implementation.yml",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "prior_original_runs": [
+    42132262184,
+    42134436841,
+    43777398215,
+    43778717548
+  ],
+  "selected_collection_implementation_observed": false,
+  "actual_target_pixels_verified": false,
+  "original_fire_restored": false,
+  "production": false,
+  "player": false,
+  "XAPK": false,
+  "device": false,
+  "next_action": "G5-original-Particle108-collection-implementation: low8/low16 remain indistinguishable after independent 12-row authored calibration replay; do not repeat sky export or infer packing. Reconcile the new isolated original Particle108 collection-implementation workflow: existing exact six-scene/six-owner ZIP2 staging, W1/B02/B21, public pinned exporter and opt-in private concrete nonexportable collection implementation capture joined to selected Texture2D28 and tenth actual Material PPtr. Determine the concrete class, then inspect public selection path and independently authenticated source format/usage/mips/payload and resolved target bytes before any override. No original pixel or black-fire restoration claim; highest-impact white-mesh same-export GUID fanout remains next independent lane. Native sky editor conflicts, nine VS and original register joins open. Level38 pins unchanged, 154 editor proof absent; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
+  "execution_head": "50abd6e26ca0d6ae24d36b2deb98571d17b3d31b",
+  "run": 46112799844,
+  "job": 140879862434,
+  "run_status": "in_progress",
+  "conclusion": null,
+  "lint_run": 46112799740,
+  "lint_job": 140879862152,
+  "lint_status": "in_progress",
+  "lint_conclusion": null,
+  "last_observed_step": "Checkout only verification and exporter helper source",
+  "offline_sky_calibration_replay_controls_pending": true
+}
