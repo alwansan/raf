@@ -30,6 +30,10 @@ jobs:
             abi: x86_64
             probe: vulkan
             artifact: x86_64-vulkan
+          - runner: ubuntu-24.04
+            abi: x86_64
+            probe: video
+            artifact: x86_64-video
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -38,7 +42,7 @@ jobs:
       - name: Boot emulator and test synthetic shader APK
         env:
           EXPECTED_ABI: ${{ matrix.abi }}
-          CAPTURE_VIDEO: ${{ inputs.capture_video }}
+          CAPTURE_VIDEO: ${{ matrix.probe == 'video' || inputs.capture_video == true }}
           VULKAN_PROBE: ${{ matrix.probe == 'vulkan' }}
         run: bash qa/smoke.sh
       - name: Upload diagnostic results only

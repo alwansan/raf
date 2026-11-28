@@ -148,12 +148,7 @@ if [[ "${VULKAN_PROBE:-false}" == true ]]; then
 fi
 if [[ "${CAPTURE_VIDEO:-false}" == true ]]; then
   phase=video
-  adb shell screenrecord --time-limit 10 /data/local/tmp/raft-qa.mp4 &
-  recorder=$!
-  sleep 2
-  adb shell input tap "$x" "$y"
-  wait "$recorder"
-  adb pull /data/local/tmp/raft-qa.mp4 evidence/fixture.mp4
+  bash qa/capture_video.sh "$x" "$y" "$tmp/venv/bin/python"
 fi
 phase=passed
 echo "Synthetic emulator checks passed for $guest"
