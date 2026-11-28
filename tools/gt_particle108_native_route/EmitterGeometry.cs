@@ -15,7 +15,10 @@ public static class NativeMipValidation {
  [Serializable] class Slot {public string name,guid;public long file_id;public float[] uv;}
  [Serializable] class Number {public string name,kind;public float[] value;}
  [Serializable] class Input {public string run_id,shader_path,material_path,texture_path,shader_guid,material_guid,texture_guid,selected_property,raw_sha;public long texture_id;
-   public Asset[] assets;public Slot[] slots;public Number[] numbers;public int[] sampler;public float bias;}
+   public Asset[] assets;public Slot[] slots;public Number[] numbers;public int[] sampler;public float bias;public RouteConfig route_candidate;}
+ [Serializable] class RouteVariant {public int index;public int[] bits;}
+ [Serializable] class RouteConfig {public string[] switches;public int selected;public RouteVariant[] rows;}
+ [Serializable] class RouteReceipt {public int index,submissions;public bool completed,saved_keywords_match,material_properties_match,source_keywords_unchanged;public string phase="start",failure_category="";}
  [Serializable] class Requirement {public string semantic;public int index,mask,used_mask,component_type;}
  [Serializable] class Case {public int index,material_count;public string path,blob,sha;public int[] streams;public bool custom_streams,original_self_active;}
  [Serializable] class Config {public string run_id;public Case[] scenes;public Requirement[] vertex_requirements;}
@@ -369,6 +372,71 @@ public static class NativeMipValidation {
      File.WriteAllText(Path.Combine(priv,"emitter-"+index+"-"+mode+".json"),JsonUtility.ToJson(ev));
    }
  }
+ static bool BitsMatch(Material m,RouteConfig c,RouteVariant v){
+   return c.switches.Length==2&&v.bits.Length==2&&Enumerable.Range(0,2).All(i=>m.IsKeywordEnabled(c.switches[i])==(v.bits[i]==1));
+ }
+ static void SetBits(Material m,RouteConfig c,RouteVariant v){
+   for(int i=0;i<2;i++){if(v.bits[i]==1)m.EnableKeyword(c.switches[i]);else m.DisableKeyword(c.switches[i]);}
+   Need(BitsMatch(m,c,v));
+ }
+ static bool SameRouteProperties(Material a,Material b,Input c){
+   foreach(var s in c.slots){
+     if(!b.HasProperty(s.name)||a.GetTexture(s.name)!=b.GetTexture(s.name)||a.GetTextureScale(s.name)!=b.GetTextureScale(s.name)||a.GetTextureOffset(s.name)!=b.GetTextureOffset(s.name))return false;
+   }
+   foreach(var n in c.numbers)if(a.HasProperty(n.name)){
+     if(!b.HasProperty(n.name))return false;
+     if(n.kind=="float"&&!Eq(a.GetFloat(n.name),b.GetFloat(n.name)))return false;
+     if(n.kind=="color"&&!a.GetColor(n.name).Equals(b.GetColor(n.name)))return false;
+   }
+   return true;
+ }
+ static void RouteDraw(Camera cam,Mesh mesh,Material mat,RenderTexture rt,string file){
+   var clear=new CommandBuffer{name="GT route clear"};var b=new CommandBuffer{name="GT route draw"};
+   try{
+     clear.SetRenderTarget(BuiltinRenderTextureType.CameraTarget);clear.ClearRenderTarget(true,true,cam.backgroundColor);
+     if(mat!=null)b.DrawMesh(mesh,Matrix4x4.identity,mat,0,0);
+     cam.AddCommandBuffer(CameraEvent.BeforeForwardOpaque,clear);cam.AddCommandBuffer(CameraEvent.BeforeForwardAlpha,b);
+     cam.Render();WriteProbePixels(rt,file);
+   }finally{cam.RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque,clear);cam.RemoveCommandBuffer(CameraEvent.BeforeForwardAlpha,b);clear.Release();b.Release();}
+ }
+ static void ProbeRoutes(Mesh mesh,ParticleSystemRenderer ren,Material source,Input input,string priv,int index){
+   var r=new RouteReceipt{index=index};Camera cam=null;RenderTexture rt=null;var owned=new List<Material>();bool enabled=ren.enabled,srgb=GL.sRGBWrite;
+   var originalWords=source.shaderKeywords.OrderBy(x=>x).ToArray();
+   try{
+     var cfg=input.route_candidate;Need(cfg!=null&&cfg.rows.Length==4&&cfg.switches.Length==2);
+     var chosen=cfg.rows.Single(x=>x.index==cfg.selected);
+     r.phase="saved_keywords";r.saved_keywords_match=BitsMatch(source,cfg,chosen);Need(r.saved_keywords_match);
+     r.phase="camera";cam=CameraFor(Vector3.zero);Frame(cam,MeshBounds(mesh));cam.cullingMask=0;ren.enabled=false;
+     rt=new RenderTexture(64,64,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);
+     Need(rt.Create()&&!rt.sRGB&&rt.graphicsFormat==GraphicsFormat.R32G32B32A32_SFloat);
+     cam.targetTexture=rt;cam.backgroundColor=new Color(.125f,.25f,.5f,.25f);GL.sRGBWrite=false;
+     string prefix=Path.Combine(priv,"route-"+index+"-");
+     RouteDraw(cam,mesh,null,rt,prefix+"clear.f32");r.submissions++;
+     // Exact imported original Material, never manually toggle this object.
+     RouteDraw(cam,mesh,source,rt,prefix+"actual.f32");r.submissions++;
+     var marker=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTKeywordDiagnostic/marker.shader");
+     Need(marker!=null&&marker.isSupported&&marker.passCount==1);
+     r.material_properties_match=true;
+     foreach(var row in cfg.rows){
+       r.phase="variant";var explicitShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTKeywordDiagnostic/explicit-"+row.index+".shader");
+       Need(explicitShader!=null&&explicitShader.isSupported&&explicitShader.passCount==1);
+       var routed=new Material(source);owned.Add(routed);SetBits(routed,cfg,row);
+       var reference=new Material(explicitShader);owned.Add(reference);reference.CopyPropertiesFromMaterial(source);
+       var mark=new Material(marker);owned.Add(mark);SetBits(mark,cfg,row);
+       r.material_properties_match&=SameRouteProperties(source,routed,input)&&SameRouteProperties(source,reference,input);Need(r.material_properties_match);
+       RouteDraw(cam,mesh,routed,rt,prefix+"routed-"+row.index+".f32");r.submissions++;
+       RouteDraw(cam,mesh,reference,rt,prefix+"explicit-"+row.index+".f32");r.submissions++;
+       RouteDraw(cam,mesh,mark,rt,prefix+"marker-"+row.index+".f32");r.submissions++;
+     }
+     r.source_keywords_unchanged=BitsMatch(source,cfg,chosen)&&originalWords.SequenceEqual(source.shaderKeywords.OrderBy(x=>x));
+     r.completed=r.submissions==14&&r.source_keywords_unchanged;r.phase="complete";
+   }catch(Exception e){r.failure_category=e.GetType().Name;}
+   finally{
+     ren.enabled=enabled;GL.sRGBWrite=srgb;if(cam!=null){cam.targetTexture=null;UnityEngine.Object.DestroyImmediate(cam.gameObject);}
+     if(rt!=null){rt.Release();UnityEngine.Object.DestroyImmediate(rt);}foreach(var m in owned)if(m!=null)UnityEngine.Object.DestroyImmediate(m);
+     File.WriteAllText(Path.Combine(priv,"route-"+index+".json"),JsonUtility.ToJson(r));
+   }
+ }
  static Bake Measure(ParticleSystem ps,ParticleSystemRenderer ren,Camera cam,Requirement[] req,bool renderBefore=false,string priv=null,int probeIndex=-2,Material drawMaterial=null,string drawMode=null,Input drawInput=null){
    var b=new Bake{particles=ps.particleCount};
    var mesh=new Mesh();RenderTexture rt=null;
@@ -395,7 +463,10 @@ public static class NativeMipValidation {
      foreach(var q in req){if(!Attribute(q,out VertexAttribute va)||!mesh.HasVertexAttribute(va))continue;b.required_present++;
        int mask=q.used_mask!=0?q.used_mask:q.mask, width=0;while(mask>0){width++;mask>>=1;}
        if(mesh.GetVertexAttributeDimension(va)>=width)b.required_width++;}
-     if(priv!=null&&probeIndex>=0&&b.vertices==4&&b.indices==6&&drawMode!="natural")ProbeMesh(mesh,req,priv,probeIndex);
+     if(priv!=null&&probeIndex>=0&&b.vertices==4&&b.indices==6&&drawMode!="natural"){
+       ProbeMesh(mesh,req,priv,probeIndex);
+       if(drawInput!=null&&drawInput.route_candidate!=null)ProbeRoutes(mesh,ren,drawMaterial,drawInput,priv,probeIndex);
+     }
      if(priv!=null&&probeIndex>=0&&drawMaterial!=null&&drawMode!=null&&b.finite&&b.nondegenerate&&b.particles>0&&b.vertices==4*b.particles&&b.indices==6*b.particles)RenderGenerated(ps,ren,mesh,cam,drawMaterial,priv,probeIndex,drawMode,drawInput);
    }catch(Exception e){b.failure_category=e.GetType().Name;}
    finally{cam.targetTexture=null;if(rt!=null){rt.Release();UnityEngine.Object.DestroyImmediate(rt);}UnityEngine.Object.DestroyImmediate(mesh);}

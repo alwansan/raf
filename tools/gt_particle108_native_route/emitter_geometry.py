@@ -273,12 +273,20 @@ def verify(a):
         out["isolated_actual_emitter_original_explicit_route_draw_verified"]=True
         out["phase"]="actual_emitter_alpha_causality"
         need(out["actual_emitter_draw"]["isolated_actual_emitter_alpha_causality_verified"],"actual_emitter_alpha_causality_inconclusive")
-        out.update(status="OBSERVED_ISOLATED_ACTUAL_EMITTER_ALPHA_CAUSALITY",phase="complete")
+        out["isolated_actual_emitter_alpha_causality_verified"]=True
+        input_cfg=json.loads((a.private/"expected.json").read_text())
+        if "route_candidate" in input_cfg:
+            out["phase"]="isolated_saved_keyword_candidate"
+            from tools.gt_particle108_native_route import emitter_keyword_candidate as kc
+            out["keyword_candidate"]=kc.verify(a.private,input_cfg["route_candidate"])
+            need(out["keyword_candidate"]["isolated_saved_keyword_candidate_verified"],"isolated_saved_keyword_candidate_inconclusive")
+            out.update(status="OBSERVED_ISOLATED_SAVED_KEYWORD_CANDIDATE",phase="complete")
+        else:out.update(status="OBSERVED_ISOLATED_ACTUAL_EMITTER_ALPHA_CAUSALITY",phase="complete")
     except Reject as e:out["failure_category"]=str(e)
     except Exception as e:out["failure_type"]=type(e).__name__
     write_json(a.safe,out)
     print("GT_PARTICLE108_EMITTER_GEOMETRY "+json.dumps(out,sort_keys=True))
-    return 0 if out["status"]=="OBSERVED_ISOLATED_ACTUAL_EMITTER_ALPHA_CAUSALITY" else 2
+    return 0 if out["status"] in ("OBSERVED_ISOLATED_ACTUAL_EMITTER_ALPHA_CAUSALITY","OBSERVED_ISOLATED_SAVED_KEYWORD_CANDIDATE") else 2
 if __name__=="__main__":
     p=argparse.ArgumentParser()
     for k in ("project","private","safe"):p.add_argument("--"+k,type=Path,required=True)

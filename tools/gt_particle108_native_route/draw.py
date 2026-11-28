@@ -6,6 +6,7 @@ import argparse
 from hashlib import sha256
 import json
 import math
+import os
 from pathlib import Path
 import struct
 import tempfile
@@ -108,8 +109,12 @@ def stage(a,out,slots,targets,selected,parsed,table,pairs,switches,routes,uses,s
     need(not project.exists() and not private.exists() and a.run_id,"draw_fresh_project")
     private.mkdir(mode=0o700);project.mkdir()
     out["draw_stage_phase"]="selected_original_stage_ABI"
+    route_cfg=None
     with tempfile.TemporaryDirectory(prefix="particle-stage-",dir=private) as td:
-        shader=make_shader(parsed,table,pairs[route_id],Path(td),out)
+        if os.environ.get("GT_PARTICLE_KEYWORD_ROUTED")=="1":
+            from tools.gt_particle108_native_route import emitter_keyword_candidate as kc
+            shader,route_cfg=kc.stage(parsed,table,pairs,switches,routes,route_id,Path(td),project,out,make_shader)
+        else:shader=make_shader(parsed,table,pairs[route_id],Path(td),out)
     assets=[]
     def add(ptr,raw=None):
         fid,g,kind=ptr;path=paths[g]
@@ -162,6 +167,7 @@ def stage(a,out,slots,targets,selected,parsed,table,pairs,switches,routes,uses,s
              sampler=[sampler[k] for k in ("m_FilterMode","m_Aniso","m_WrapU","m_WrapV","m_WrapW")],
              bias=sampler["m_MipBias"],companion_source_export_rgba_match=companion_parity,
              sizes=list(SIZES),backgrounds=BACKGROUNDS,probe_size=PROBE_SIZE,probe_levels=list(PROBE_LEVELS))
+    if route_cfg is not None:cfg["route_candidate"]=route_cfg
     # Private selected VS semantic masks are needed for the separate emitter geometry lane.
     cfg["vertex_requirements"]=[dict(semantic=x["semantic"],index=x["index"],mask=x["mask"],used_mask=x["used_mask"],component_type=x["type"])
          for x in read_original_dxbc_signatures(pairs[route_id][0][0])["input"] if not x["system_value"]]
@@ -175,7 +181,7 @@ def stage(a,out,slots,targets,selected,parsed,table,pairs,switches,routes,uses,s
     for path,data in files.items():
         dst_path=project/path;dst_path.parent.mkdir(parents=True,exist_ok=True);dst_path.write_bytes(data)
     dump(private/"expected.json",cfg);(project/"GTInput.json").write_bytes((private/"expected.json").read_bytes())
-    out["draw_stage"]={"selected_original_explicit_route":True,"source_material_numeric_parity":True,
+    out["draw_stage"]={"selected_original_explicit_route":route_cfg is None,"original_keyword_routed_candidate":route_cfg is not None,"source_material_numeric_parity":True,
                        "actual_export_asset_identities":4,"same_export_texture_slots":2,
                        "source_native_bytes":21844,"source_native_mips":7,
                        "companion_source_export_rgba_match":companion_parity,

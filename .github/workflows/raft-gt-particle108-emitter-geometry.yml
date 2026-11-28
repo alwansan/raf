@@ -248,10 +248,10 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-cross spirv-tools glslang-tools
-      - name: Stage selected original explicit route and exact same-export assets without drawing
+      - name: Stage four original keyword routes with same-export material and private explicit references
         run: |
           set -euo pipefail
-          timeout 1200s python3 -B -m tools.gt_particle108_native_route.probe \
+          GT_PARTICLE_KEYWORD_ROUTED=1 timeout 1200s python3 -B -m tools.gt_particle108_native_route.probe \
             --original "$RUNNER_TEMP/t3-particle-original" \
             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
             --project "$RUNNER_TEMP/t3-particle-export/ExportedProject" \
@@ -305,7 +305,7 @@ jobs:
           echo "$code" > gt-native-import-private/vulkan-preflight-exit.txt
           # Preflight timeout is inconclusive, not a reason to declare GPU success or failure.
           # The actual editor checks the Vulkan backend and float blend/readback support.
-      - name: Preserve preexisting global and indexed property blocks during actual emitter alpha intervention
+      - name: Compare saved keyword candidate against four explicit source routes on generated particle geometry
         id: unity
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
