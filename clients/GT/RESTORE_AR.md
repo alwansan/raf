@@ -1,5 +1,7 @@
 > **استئناف GT — 28 نوفمبر 2026:** اقرأ [قرار المالك](OWNER_DIRECTIVE_RESTORE_FIRST_AR.md)، [الخطة](RESTORATION_PLAN_AR.md)، [RESTORATION_PLAN.json](RESTORATION_PLAN.json)، [state.json](state.json)، [الذاكرة](MEMORY.md) و[سجل الاستعادة السابق](RESTORE_HISTORY_20261128.md). مرجع علي المثبت: [1a78eb276](https://github.com/alwansan/raf/blob/1a78eb2764d39550f59e2948ae5ed89033c8ab73/clients/GT/RESTORE_AR.md).
 
+> **أداة مساعدة اختيارية:** [مختبر Android وفرع الاختبارات](../../docs/ANDROID_EMULATOR_QA_AR.md). نفّذ فحوصك هنا أو استخدم المختبر عند الحاجة للمقارنة والصور والسجلات. استقلال المسارين مستمر، ولا تغيير لبوابات G0–G6 أو شرط XAPK.
+
 ## آخر نتيجة متحققة
 [Actual 46128563088](https://github.com/alwansan/raf/actions/runs/46128563088/job/140928500873) و[lint 46128563099](https://github.com/alwansan/raf/actions/runs/46128563099) ناجحان؛ [Plan Guard 46128563095](https://github.com/alwansan/raf/actions/runs/46128563095) فشل بسبب حجم الملفات قبل الاختبارات. [إيصال آمن](sessions/20261128-top-native-bc3-array/actual-46128563088.json).
 

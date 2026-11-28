@@ -1,3 +1,5 @@
+> **GT — مختبر Android اختياري:** يستطيع فريق الفرع العامل تشغيل فحوصه بنفسه أو استخدام [مختبر المحاكي الجانبي](docs/ANDROID_EMULATOR_QA_AR.md) عند الحاجة، بلا كلمة تفعيل أو اعتماد إلزامي. أبق الاختبارات التجريبية في `qa/android-emulator` وشارك الأدلة بين المسارين. لا تُغلق بها بوابات الاستعادة ولا تحلّ محل اختبار الهاتف أو شروط XAPK.
+
 <!-- GT_CURRENT_SOURCE_WORK_20261128 -->
 > **GT — current restoration:** Use ZIP2 as the original-data reference to the extent needed for restoration. Start with [current GT direction](clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md) and [live restore](clients/GT/RESTORE_AR.md); follow [source reconstruction](docs/ZIP2_SOURCE_PROVIDER.md) and retain exact source fingerprints and technical acceptance evidence. This note is specific to GT on feature/android-native-port.
 
