@@ -1,0 +1,202 @@
+{
+  "run_id": 46159467275,
+  "job_id": 141023309193,
+  "execution_head": "50e8cd0fd799014df96e101e68b4049c00a10d52",
+  "conclusion": "success_scoped_editor_hierarchy_world",
+  "source": {
+    "external_name_unknown": 0,
+    "external_names_in_staged_set": 3,
+    "full_scene_provider_closure_proven": false,
+    "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+    "material_headers": 42,
+    "scene_external_reference_headers": 14,
+    "scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932",
+    "selected_native_objects": 42,
+    "shader_headers": 18,
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "verified_bytes": 18213244,
+    "verified_files": 6
+  },
+  "actual_export": {
+    "actual_export_completed": true,
+    "exit_code": 0,
+    "private_log_bytes": 48632,
+    "private_trace_files_present": 3,
+    "tool_exception_categories": []
+  },
+  "same_export": {
+    "Android_device": false,
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "adjacent_child_transforms": 35,
+    "checks": {
+      "component_owner": 4,
+      "gameobject_activeSelf": 3,
+      "gameobject_component_membership": 4,
+      "light_m_Color": 1,
+      "light_m_Enabled": 1,
+      "light_m_Intensity": 1,
+      "light_m_Range": 1,
+      "light_m_Type": 1,
+      "m_LocalPosition": 3,
+      "m_LocalRotation": 3,
+      "m_LocalScale": 3,
+      "native_class": 42,
+      "ordered_transform_children": 3,
+      "transform_parent": 38
+    },
+    "mapped_objects": 42,
+    "mismatches": {},
+    "private_trace_mapping_matched": true,
+    "raw_assets_published": false,
+    "same_export_hierarchy_parity": true,
+    "scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932",
+    "selected_chain_transforms": 3,
+    "selected_source_gameobjects": 3,
+    "selected_source_lights": 1,
+    "selected_source_objects": 42,
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_export_mapping_proven": true,
+    "status": "PASS_SAME_EXPORT"
+  },
+  "stage_raw": {
+    "import_executed": false,
+    "other_original_assets_staged": 0,
+    "same_export_scene_copy_exact": true,
+    "scene_dependency_closure_claimed": false,
+    "scene_meta_sha256": "8a48b2da07119efd49d36e0611881762e9a160407074c9ef4ca390c8a3dce289",
+    "scene_sha256": "d76a88b3d99d18ac18b9089fc037b270fe440a2ac85256ea6bf675dd0fb84293",
+    "selected_objects": 42,
+    "source_scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932"
+  },
+  "stage": {
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "current_meta_sha256": "8a48b2da07119efd49d36e0611881762e9a160407074c9ef4ca390c8a3dce289",
+    "current_same_instance_commitment_sha256": "14f00269031d05e28aebba87bea9945f803a1763990bcd4173a45a2a615e4bb2",
+    "current_scene_sha256": "d76a88b3d99d18ac18b9089fc037b270fe440a2ac85256ea6bf675dd0fb84293",
+    "full_scene_provider_closure_proven": false,
+    "historical_exact_prior_replay_claimed": false,
+    "historical_meta_digest_match": false,
+    "historical_scene_digest_match": false,
+    "player_built": false,
+    "private_scene_withheld_before_guard": true,
+    "same_export_checks": 108,
+    "selected_objects": 42,
+    "source_scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932",
+    "status": "PASS_FRESH_LEVEL38_SAME_INSTANCE_STAGED",
+    "world_rows_prepared": 3
+  },
+  "handoff": {
+    "editor_manifest": {
+      "owned_by_runner": true,
+      "present": true,
+      "private_mode": false,
+      "readable": true
+    },
+    "editor_meta": {
+      "owned_by_runner": true,
+      "present": true,
+      "private_mode": false,
+      "readable": true
+    },
+    "editor_scene": {
+      "owned_by_runner": true,
+      "present": true,
+      "private_mode": false,
+      "readable": true
+    },
+    "import_receipt": {
+      "owned_by_runner": true,
+      "present": true,
+      "private_mode": false,
+      "readable": true
+    },
+    "log": {
+      "owned_by_runner": true,
+      "present": true,
+      "private_mode": true,
+      "readable": true
+    },
+    "marker": {
+      "owned_by_runner": true,
+      "present": true,
+      "private_mode": true,
+      "readable": true
+    },
+    "world_receipt": {
+      "owned_by_runner": true,
+      "present": true,
+      "private_mode": true,
+      "readable": true
+    }
+  },
+  "actual": {
+    "Unity_import_verified": true,
+    "XAPK": false,
+    "current_import_receipt": {
+      "Unity_import_verified": true,
+      "XAPK": false,
+      "editor_report": {
+        "checks": 154,
+        "matchedObjects": 42,
+        "mismatchCategories": [],
+        "mismatches": 0,
+        "sceneGuidMatched": true,
+        "sceneOpened": true,
+        "status": "PASS"
+      },
+      "editor_step_outcome": "success",
+      "player_built": false,
+      "scene_and_meta_unchanged_after_import": true,
+      "stage": {
+        "import_executed": false,
+        "other_original_assets_staged": 0,
+        "same_export_scene_copy_exact": true,
+        "scene_dependency_closure_claimed": false,
+        "scene_meta_sha256": "8a48b2da07119efd49d36e0611881762e9a160407074c9ef4ca390c8a3dce289",
+        "scene_sha256": "d76a88b3d99d18ac18b9089fc037b270fe440a2ac85256ea6bf675dd0fb84293",
+        "selected_objects": 42,
+        "source_scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932"
+      },
+      "status": "PASS_ISOLATED_IMPORT"
+    },
+    "current_scene_and_meta_unchanged": true,
+    "device_pixels_proven": false,
+    "exact_editor_checks": 154,
+    "full_scene_provider_closure_proven": false,
+    "historical_exact_prior_replay_claimed": false,
+    "historical_meta_digest_match": false,
+    "historical_scene_digest_match": false,
+    "light_owner_active_checks": 2,
+    "matched_objects": 42,
+    "original_scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932",
+    "phase": "complete",
+    "player_built": false,
+    "status": "PASS_FRESH_LEVEL38_SCENE_EDITOR_HIERARCHY_WORLD",
+    "world_checks": 12,
+    "world_matrix_rows": 3,
+    "world_receipt": {
+      "commitment_sha256": "14f00269031d05e28aebba87bea9945f803a1763990bcd4173a45a2a615e4bb2",
+      "light_active_match": true,
+      "light_owner_match": true,
+      "private_guard": true,
+      "run_id": "46159467275-1",
+      "status": "PASS",
+      "world_checks": 12,
+      "world_mismatches": 0,
+      "world_rows": 3
+    },
+    "world_transform_verified": true
+  },
+  "plan_guard_run": 46159467348,
+  "plan_guard_conclusion": "success",
+  "lint_run": 46159467309,
+  "lint_conclusion": "success",
+  "artifact": {
+    "id": 15268229123,
+    "size_bytes": 3978,
+    "github_reported_digest": "sha256:d76dff5abf2c5a9d6572b99b15833f6c736ca5150cf8882da6d4a9e7d03e71f2",
+    "independent_zip_download": false
+  }
+}
