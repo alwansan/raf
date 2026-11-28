@@ -1,5 +1,5 @@
 {
-  "next_action": "Reconcile actual 46122573196/job 140910070908 (in_progress, source-free controls step), lint 46122573162/job 140910070260 SUCCESS and plan guard 46122573062/job 140910069966 in_progress at execution 174ebda47c135e0c011a72f693e9df476fd4bac1; inspect source-free controls and GT_TOP_EXACT_DEPENDENCY_PRESTAGE / GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK. Prior 46121881941 failed step 11 before export (855/118 reselected; no GPU); old add --no-cone rejected by local Git 2.47.3 (exit 129); new set --no-cone retains only pinned manifest and selected exact provider, tested 3/3 locally on authored data. No original resource acquisition success yet. Preserve 4 GiB total/2x provider plus 3 GiB reserve, exact SHA/size and original selected graph. If resource proof succeeds proceed to source-bound shader ABI/isolated Unity Vulkan draw with Dummy and wrong-reference controls; if blocked classify new failure or pivot independently to fire/water, not repeat. All G0–G6 open; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
+  "next_action": "Reconcile actual 46122573196/job 140910070908 (in_progress, source-free controls and tool compilation passed; immutable source checkout step), lint 46122573162/job 140910070260 SUCCESS and plan guard 46122573062/job 140910069966 FAILURE (pre-existing oversized ledger: MAX_JSON=256 KiB, prior plan 861804 bytes and state 870838 bytes; preserve guard and split historical ledger with verification separately) at execution 174ebda47c135e0c011a72f693e9df476fd4bac1; inspect source-free controls and GT_TOP_EXACT_DEPENDENCY_PRESTAGE / GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK. Prior 46121881941 failed step 11 before export (855/118 reselected; no GPU); old add --no-cone rejected by local Git 2.47.3 (exit 129); new set --no-cone retains only pinned manifest and selected exact provider, tested 3/3 locally on authored data. No original resource acquisition success yet. Preserve 4 GiB total/2x provider plus 3 GiB reserve, exact SHA/size and original selected graph. If resource proof succeeds proceed to source-bound shader ABI/isolated Unity Vulkan draw with Dummy and wrong-reference controls; if blocked classify new failure or pivot independently to fire/water, not repeat. All G0–G6 open; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
     "status": "OBSERVED_SELECTED_ORIGINAL_LIGHT_HIERARCHIES",
@@ -18256,7 +18256,7 @@
     "android_device": false,
     "production": false,
     "XAPK": false,
-    "next_action": "Reconcile actual 46122573196/job 140910070908 (in_progress, source-free controls step), lint 46122573162/job 140910070260 SUCCESS and plan guard 46122573062/job 140910069966 in_progress at execution 174ebda47c135e0c011a72f693e9df476fd4bac1; inspect source-free controls and GT_TOP_EXACT_DEPENDENCY_PRESTAGE / GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK. Prior 46121881941 failed step 11 before export (855/118 reselected; no GPU); old add --no-cone rejected by local Git 2.47.3 (exit 129); new set --no-cone retains only pinned manifest and selected exact provider, tested 3/3 locally on authored data. No original resource acquisition success yet. Preserve 4 GiB total/2x provider plus 3 GiB reserve, exact SHA/size and original selected graph. If resource proof succeeds proceed to source-bound shader ABI/isolated Unity Vulkan draw with Dummy and wrong-reference controls; if blocked classify new failure or pivot independently to fire/water, not repeat. All G0–G6 open; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
+    "next_action": "Reconcile actual 46122573196/job 140910070908 (in_progress, source-free controls and tool compilation passed; immutable source checkout step), lint 46122573162/job 140910070260 SUCCESS and plan guard 46122573062/job 140910069966 FAILURE (pre-existing oversized ledger: MAX_JSON=256 KiB, prior plan 861804 bytes and state 870838 bytes; preserve guard and split historical ledger with verification separately) at execution 174ebda47c135e0c011a72f693e9df476fd4bac1; inspect source-free controls and GT_TOP_EXACT_DEPENDENCY_PRESTAGE / GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK. Prior 46121881941 failed step 11 before export (855/118 reselected; no GPU); old add --no-cone rejected by local Git 2.47.3 (exit 129); new set --no-cone retains only pinned manifest and selected exact provider, tested 3/3 locally on authored data. No original resource acquisition success yet. Preserve 4 GiB total/2x provider plus 3 GiB reserve, exact SHA/size and original selected graph. If resource proof succeeds proceed to source-bound shader ABI/isolated Unity Vulkan draw with Dummy and wrong-reference controls; if blocked classify new failure or pivot independently to fire/water, not repeat. All G0–G6 open; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
     "execution_head": "174ebda47c135e0c011a72f693e9df476fd4bac1",
     "run": 46122573196,
     "job": 140910070908,
@@ -18268,7 +18268,15 @@
     "lint_conclusion": "success",
     "plan_guard_run": 46122573062,
     "plan_guard_job": 140910069966,
-    "plan_guard_status": "in_progress",
-    "last_observed_step": "Check disk budget and synthetic original/export parity tests"
+    "plan_guard_status": "completed",
+    "last_observed_step": "Checkout immutable ZIP2 NINE SMALL original serialized providers (no LFS)",
+    "plan_guard_conclusion": "failure",
+    "plan_guard_error": "unsafe_or_oversized_plan_document",
+    "plan_guard_limit_bytes": 262144,
+    "prior_plan_bytes": 861804,
+    "prior_state_bytes": 870838,
+    "plan_guard_modified": false,
+    "source_free_controls_step": "success",
+    "public_tool_compile_step": "success"
   }
 }
