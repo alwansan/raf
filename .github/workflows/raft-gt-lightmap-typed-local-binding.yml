@@ -1,0 +1,53 @@
+name: GT G6 typed local lightmap binding (SOURCE ONLY)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-lightmap-typed-local-binding.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  typed-local-binding:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/gt_lightmap_local_binding/
+            /scripts/b21_scene_lightmap_links.py
+            /tests/test_b21_scene_lightmap_links.py
+      - name: Verify source-only checkout and immutable baseline
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .source-zip2
+          test "$(git hash-object tools/gt_lightmap_local_binding/audit.py)" = 82b23a454cf39781045b3f39a939cdb9b76b30cd
+          test "$(git hash-object tools/gt_lightmap_local_binding/test_audit.py)" = caaa2c3c32f9d7b2cc6519f0a4cd8e795b333ff5
+          test "$(git hash-object scripts/b21_scene_lightmap_links.py)" = 5d8ae71825a16e41962e23dfc3e98b122a2cf001
+          test "$(git hash-object tests/test_b21_scene_lightmap_links.py)" = 4930df4d7bc781e7902fa7a3275a8fbc59182ea8
+          python3 -B -m py_compile tools/gt_lightmap_local_binding/audit.py tools/gt_lightmap_local_binding/test_audit.py
+      - name: Reproduce old presence semantics and verify strict typed admission
+        run: |
+          set -euo pipefail
+          mkdir -p gt-lightmap-receipts
+          git rev-parse HEAD > gt-lightmap-receipts/tested-head.txt
+          python3 -B -m unittest discover -s tests -p test_b21_scene_lightmap_links.py -v 2>&1 | tee gt-lightmap-receipts/b21-regression.txt
+          python3 -B -m unittest discover -s tools/gt_lightmap_local_binding -p test_audit.py -v 2>&1 | tee gt-lightmap-receipts/typed-regression.txt
+          echo 'GT_LIGHTMAP_TYPED_LOCAL_ADMISSION_PASS source_free=true export=false device=false'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gt-lightmap-typed-local-source-free
+          path: gt-lightmap-receipts/
+          retention-days: 14
+          if-no-files-found: warn
