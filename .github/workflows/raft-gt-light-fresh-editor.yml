@@ -1,0 +1,293 @@
+name: GT G6 level38 fresh same-instance editor hierarchy and world transforms (NO PLAYER)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-gt-light-fresh-editor.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-gt-g6-level38-fresh-editor-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-light-exact-editor:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    environment: UNITY_LICENSE
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+      queue: max
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      GT_LIGHT_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+      GT_LIGHT_IMAGE: raft-gt-fresh-light:local
+    steps:
+      - name: Checkout only bounded trace, reader and tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/
+            /tests/test_b21_stage_light_lineage.py
+            /tools/gt_original_light_hierarchy/audit.py
+            /tools/gt_remaining_scene_lighting/audit.py
+            /tools/gt_light_same_export/
+            /tools/gt_light_exact_editor/
+            /tools/gt_light_fresh_editor/
+            /android-port/Experiments/ExportLineage/
+      - name: Authenticate code and run source-free controls before any source checkout
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test "$(git hash-object tools/gt_light_exact_editor/audit.py)" = b7e15a745d323dcff7164fb8f7fa05b9b8402bf9
+          test "$(git hash-object tools/gt_light_exact_editor/test_audit.py)" = 3f6ecfc69672080a83909803a113ee099459283e
+          test "$(git hash-object tools/gt_light_same_export/audit.py)" = d119a5bd0763afb80259c5da9a98df9c3a63194d
+          test "$(git hash-object tools/gt_light_same_export/stage_trace.py)" = 3d5f70e092879090f7e9ac9a3491783d1849518c
+          test "$(git hash-object tools/gt_light_same_export/test_audit.py)" = 8889f05654f39094bfdad23ddb95acd8dc8f3445
+          test "$(git hash-object tools/gt_light_same_export/stage_import.py)" = f0bab003b46b543542005344f3e273c1de164e68
+          test "$(git hash-object tools/gt_light_same_export/PrivateLightImport.cs)" = 68107ab8b4b3c344f6be95c2af18fcfc3c3a6968
+          test "$(git hash-object scripts/b21_stage_light_lineage.py)" = ce27df170592e5dac292c9de74c28f2eccd96d3a
+          test "$(git hash-object scripts/b02_stage_texture_lineage.py)" = a9d678ba03f44b86b6f18149b787e06c8dd1535f
+          test "$(git hash-object android-port/Experiments/ExportLineage/RaftExportLineage.cs)" = 4b84a325bb1766583adb4ba6cfd9a23225f23bb9
+          test "$(git hash-object scripts/patch_export_lineage.py)" = 25de1a42b918d0a3c1d0b5ebe17ec17b7744cd38
+          test "$(git hash-object tools/gt_original_light_hierarchy/audit.py)" = b7a78d4edd86a9c38186e7bb6536c76fa9cb11fa
+          test "$(git hash-object tools/gt_remaining_scene_lighting/audit.py)" = 84133c4b34c1d3b1cda8a2b534676d38c062f1ee
+          mkdir "$RUNNER_TEMP/gt-light-exact-safe" "$RUNNER_TEMP/gt-light-exact-private"
+          python3 -m venv "$RUNNER_TEMP/gt-light-exact-py"
+          py="$RUNNER_TEMP/gt-light-exact-py/bin/python"
+          "$py" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          "$py" -B -m unittest discover -s tests -p test_b21_stage_light_lineage.py -v
+          "$py" -B -m unittest discover -s tools/gt_light_same_export -p test_audit.py -v
+          "$py" -B -m unittest discover -s tools/gt_light_exact_editor -p test_audit.py -v
+          "$py" -B -m unittest discover -s tools/gt_light_fresh_editor -p test_audit.py -v
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 8388608
+      - name: Require existing Unity environment activation separately from disk before original source checkout
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          set +x
+          a=false; d=false
+          if [ -n "$UNITY_LICENSE" ] || { [ -n "$UNITY_SERIAL" ] && [ -n "$UNITY_EMAIL" ] && [ -n "$UNITY_PASSWORD" ]; }; then a=true; fi
+          if test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 16777216; then d=true; fi
+          printf '{"activation_inputs_available":%s,"disk_budget_available":%s}\n' "$a" "$d" > "$RUNNER_TEMP/gt-light-exact-safe/preflight.json"
+          echo "GT_LIGHT_EXACT_EDITOR_PREFLIGHT activation_inputs_available=$a disk_budget_available=$d"
+          test "$a" = true && test "$d" = true
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Prepare private-log editor image before original staging
+        timeout-minutes: 22
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/gt-light-docker"
+          cp tools/gt_light_fresh_editor/private-editor.sh "$RUNNER_TEMP/gt-light-docker/"
+          bash -n "$RUNNER_TEMP/gt-light-docker/private-editor.sh"
+          cat > "$RUNNER_TEMP/gt-light-docker/Dockerfile" <<'DOCKERFILE'
+          FROM unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3
+          USER root
+          RUN command -v unity-editor > /opt/gt-real-unity-editor && test -x "$(cat /opt/gt-real-unity-editor)"
+          COPY private-editor.sh /opt/gt-private-bin/unity-editor
+          RUN chmod 0755 /opt/gt-private-bin/unity-editor
+          ENV PATH=/opt/gt-private-bin:$PATH
+          DOCKERFILE
+          timeout 900s docker pull unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3 > "$RUNNER_TEMP/gt-light-image-pull.log" 2>&1
+          timeout 360s docker build --pull=false --tag "$GT_LIGHT_IMAGE" "$RUNNER_TEMP/gt-light-docker" > "$RUNNER_TEMP/gt-light-image-build.log" 2>&1
+          timeout 45s docker run --rm --entrypoint /bin/bash "$GT_LIGHT_IMAGE" -c 'test "$(command -v unity-editor)" = /opt/gt-private-bin/unity-editor && test -x "$(cat /opt/gt-real-unity-editor)"'
+      - name: Obtain exact public AssetRipperCLI source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: Source
+      - name: Compile temporary optional hierarchy capture and smoke test
+        run: |
+          set -euo pipefail
+          test "$(git -C ar-host rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          p="$RUNNER_TEMP/gt-light-exact-private"
+          python3 -m tools.gt_light_same_export.stage_trace --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --destination "$p/RaftExportLineage.cs"
+          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper "$p/RaftExportLineage.cs"
+          timeout 780s dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$p/compiled" > "$p/compile.log" 2>&1 || { tail -60 "$p/compile.log"; exit 1; }
+          dotnet "$p/compiled/ExportLineage.dll" --probe-tool > /dev/null
+      - name: Read only six exact small original serialized providers
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-light-exact-selected-source
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/level38
+            /Raft/Raft_Data/globalgamemanagers
+            /Raft/Raft_Data/globalgamemanagers.assets
+            /Raft/Raft_Data/sharedassets6.assets
+            /Raft/Raft_Data/sharedassets38.assets
+            /Raft/Raft_Data/sharedassets39.assets
+      - name: Authenticate source and observe selected direct provider references privately
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/gt-light-exact-py/bin/python" -B - <<'PY'
+          import json,os,contextlib
+          from pathlib import Path
+          import UnityPy
+          from tools.gt_light_same_export import audit as a
+          p=Path(os.environ["RUNNER_TEMP"])
+          r=a.authenticate(Path(".gt-light-exact-selected-source").absolute(),p/"gt-light-exact-private/source")
+          root=p/"gt-light-exact-private/source/Raft_Data"
+          with open(os.devnull,"w") as q,contextlib.redirect_stdout(q),contextlib.redirect_stderr(q):
+              env=UnityPy.load(str(root/a.SCENE))
+              model=a.source_model(list(env.file.objects.values()))
+              refs=getattr(env.file,"externals",None)
+              count=len(refs) if isinstance(refs,(list,tuple)) else None
+              resolved=unknown=0
+              for e in refs or []:
+                  name=getattr(e,"path",None)
+                  if not isinstance(name,str) or not name: unknown+=1;continue
+                  name=name.replace("\\","/").rsplit("/",1)[-1]
+                  if name in a.PINS:resolved+=1
+              providers=[o for name in ("globalgamemanagers.assets","sharedassets6.assets","sharedassets38.assets","sharedassets39.assets") for o in UnityPy.load(str(root/name)).objects]
+              mats=sum(o.type.name=="Material" for o in providers)
+              shaders=sum(o.type.name=="Shader" for o in providers)
+          r.update(selected_native_objects=len(model),scene_external_reference_headers=count,external_names_in_staged_set=resolved,
+                   external_name_unknown=unknown,material_headers=mats,shader_headers=shaders,full_scene_provider_closure_proven=False)
+          (p/"gt-light-exact-safe/source.json").write_text(json.dumps(r,sort_keys=True,indent=2)+"\n")
+          print("GT_LIGHT_SOURCE_AUTHENTICATED "+json.dumps(r,sort_keys=True))
+          assert mats>0 and shaders>0
+          PY
+      - name: Execute one actual bounded source export with same-instance private captures
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/gt-light-exact-private/w1.json
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: ${{ runner.temp }}/gt-light-exact-private/b02.json
+          RAFT_PRIVATE_EXPORT_LIGHT_LINEAGE: ${{ runner.temp }}/gt-light-exact-private/hierarchy.json
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-light-exact-private"
+          rc=0
+          timeout 540s dotnet "$p/compiled/ExportLineage.dll" "$p/source" "$p/export" > "$p/export.log" 2>&1 || rc=$?
+          RC="$rc" python3 - <<'PY'
+          import json,os,re
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          p=root/"gt-light-exact-private"
+          raw=(p/"export.log").read_text(errors="replace")
+          r={"exit_code":int(os.environ["RC"]),"actual_export_completed":os.environ["RC"]=="0",
+             "private_trace_files_present":sum((p/x).is_file() for x in ("w1.json","b02.json","hierarchy.json")),
+             "tool_exception_categories":sorted(set(re.findall(r"\b(?:System|AssetRipper)\.[A-Za-z.]+Exception\b",raw))),
+             "private_log_bytes":(p/"export.log").stat().st_size}
+          (root/"gt-light-exact-safe/export.json").write_text(json.dumps(r,sort_keys=True,indent=2)+"\n")
+          print("GT_LIGHT_ACTUAL_EXPORT "+json.dumps(r,sort_keys=True))
+          PY
+          test "$rc" = 0
+          test -s "$RAFT_PRIVATE_EXPORT_LINEAGE" && test -s "$RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE" && test -s "$RAFT_PRIVATE_EXPORT_LIGHT_LINEAGE"
+      - name: Verify original chain to actual same-export GUID/fileID and YAML fields
+        id: same-export
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-light-exact-private"
+          "$RUNNER_TEMP/gt-light-exact-py/bin/python" -B -m tools.gt_light_same_export.audit \
+            --source "$p/source" --project "$p/export/ExportedProject" --trace "$p/hierarchy.json" \
+            --w1 "$p/w1.json" --b02 "$p/b02.json" --output "$RUNNER_TEMP/gt-light-exact-safe/same-export.json"
+      - name: Stage fresh authenticated same-instance scene outside editor Assets
+        id: import-stage
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-light-exact-private"
+          "$RUNNER_TEMP/gt-light-exact-py/bin/python" -B -m tools.gt_light_fresh_editor.audit stage \
+            --source "$p/source" --project "$p/export/ExportedProject" --trace "$p/hierarchy.json" \
+            --w1 "$p/w1.json" --b02 "$p/b02.json" --dest gt-light-exact-import --private gt-light-fresh-private --run-id "$GT_LIGHT_RUN_ID" --same-export "$RUNNER_TEMP/gt-light-exact-safe/same-export.json" \
+            --raw-stage "$RUNNER_TEMP/gt-light-exact-safe/import-stage-raw.json" --report "$RUNNER_TEMP/gt-light-exact-safe/import-stage.json"
+          rm -rf "$p/export" "$p/source" .gt-light-exact-selected-source
+      - name: Check existing editor activation inputs without exposing values
+        id: activation
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          set +x
+          if { [ -n "$UNITY_LICENSE" ] || { [ -n "$UNITY_SERIAL" ] && [ -n "$UNITY_EMAIL" ] && [ -n "$UNITY_PASSWORD" ]; }; } &&
+             test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 16777216; then
+            echo available=true >> "$GITHUB_OUTPUT"
+          else
+            echo available=false >> "$GITHUB_OUTPUT"
+            echo 'GT_LIGHT_ISOLATED_IMPORT activation_or_disk_unavailable=true'
+          fi
+      - name: Observe same actual exported scene in Unity Editor (no Play or player build)
+        id: unity
+        if: steps.activation.outputs.available == 'true'
+        continue-on-error: true
+        uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          customImage: raft-gt-fresh-light:local
+          projectPath: gt-light-exact-import
+          targetPlatform: StandaloneLinux64
+          buildMethod: GTPrivateLightImport.Run
+          manualExit: true
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 6g
+          dockerCpuLimit: 2
+          customParameters: -job-worker-count 2 -gtLightRunId ${{ env.GT_LIGHT_RUN_ID }}
+      - name: Verify actual editor report and unchanged exact scene bytes
+        if: always() && steps.import-stage.outcome == 'success'
+        env:
+          EDITOR_OUTCOME: ${{ steps.unity.outcome }}
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/gt-light-exact-py/bin/python" -B -m tools.gt_light_fresh_editor.audit verify \
+            --dest gt-light-exact-import --private gt-light-fresh-private --run-id "$GT_LIGHT_RUN_ID" --same-export "$RUNNER_TEMP/gt-light-exact-safe/same-export.json" --stage-report "$RUNNER_TEMP/gt-light-exact-safe/import-stage.json" --raw-stage "$RUNNER_TEMP/gt-light-exact-safe/import-stage-raw.json" \
+            --raw-import "$RUNNER_TEMP/gt-light-exact-safe/import-raw.json" --outcome "$EDITOR_OUTCOME" --report "$RUNNER_TEMP/gt-light-exact-safe/import.json"
+      - name: Publish ONLY safe aggregate reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-light-fresh-level38-safe-aggregate
+          path: |
+            ${{ runner.temp }}/gt-light-exact-safe/preflight.json
+            ${{ runner.temp }}/gt-light-exact-safe/source.json
+            ${{ runner.temp }}/gt-light-exact-safe/import-stage-raw.json
+            ${{ runner.temp }}/gt-light-exact-safe/import-raw.json
+            ${{ runner.temp }}/gt-light-exact-safe/export.json
+            ${{ runner.temp }}/gt-light-exact-safe/same-export.json
+            ${{ runner.temp }}/gt-light-exact-safe/import-stage.json
+            ${{ runner.temp }}/gt-light-exact-safe/import.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove only disposable source and private export/editor staging
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -d .gt-light-exact-selected-source/.git; then rm -rf .gt-light-exact-selected-source; fi
+          if test -d "$RUNNER_TEMP/gt-light-exact-private"; then rm -rf "$RUNNER_TEMP/gt-light-exact-private"; fi
+          sudo rm -rf gt-light-exact-import gt-light-fresh-private
+          docker image rm "$GT_LIGHT_IMAGE" >/dev/null 2>&1 || true
+          rm -rf "$RUNNER_TEMP/gt-light-docker"
+          rm -f "$RUNNER_TEMP/gt-light-image-pull.log" "$RUNNER_TEMP/gt-light-image-build.log"
