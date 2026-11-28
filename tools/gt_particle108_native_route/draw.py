@@ -214,10 +214,20 @@ def summarize_probe(rows):
 def probe_pass(row):
     return (all(row[k]["over_tolerance"]==0 for k in ("native_vs_clone","zero_rgb_vs_clone","one_rgb_vs_clone"))
             and row["zero_alpha_max_error"]<=TOL and row["one_alpha_max_error"]<=TOL)
+def alpha_effect_without_dummy(row):
+    # Independent observation, not acceptance of the strict full draw gate.
+    return (row["native_visible"]>0 and row["native_vs_repeat"]==0 and
+            row["native_vs_source_block"]==0 and row["native_vs_exact_clone"]==0 and
+            row["renderer_vs_command"]==0 and row["zero_vs_one"]>0 and
+            row["source_alpha_channel_mask_preserved"])
+def dummy_marker(pixels):
+    marker=np.array([.91,.07,.61,1],dtype=np.float32)
+    return int(np.count_nonzero(np.max(np.abs(pixels-marker),axis=-1)<=TOL))
 def classify_draw(row):
     if not (row["dummy_marker_pixels"]>0 and row["dummy_visible"]>0 and row["native_visible"]>0 and
             row["native_vs_dummy"]>0 and row["native_vs_repeat"]==0 and row["source_alpha_channel_mask_preserved"]):
-        return "COMMAND_DRAW_CONTROL_UNCALIBRATED"
+        return ("DUMMY_CAMERA_EVENT_UNCALIBRATED" if row.get("dummy_direct_marker_pixels",0)>0
+                and row["dummy_marker_pixels"]==0 else "COMMAND_DRAW_CONTROL_UNCALIBRATED")
     if row["native_vs_source_block"]!=0:
         return "SAME_NATIVE_TEXTURE_PROPERTY_BLOCK_CHANGED_DRAW"
     if row["native_vs_exact_clone"]!=0:
@@ -232,25 +242,35 @@ def verify(a):
              isolated_explicit_route_alpha_effect_observed=False,black_fire_restored=False,
              Android_device=False,production=False,XAPK=False,original_emitter_geometry_verified=False,
              runtime_keyword_selection_verified=False,private_payload_published=False,
-             clone_gpu_probe_verified=False,command_material_property_block_verified=False)
+             clone_gpu_probe_verified=False,command_material_property_block_verified=False,
+             independent_alpha_effect_without_dummy_cases=0,dummy_scene_lifetime_verified=False)
     try:
         cfg=json.loads((a.private/"expected.json").read_text())
         need(cfg["run_id"]==a.run_id and cfg==json.loads((a.project/"GTInput.json").read_text()),"draw_run_identity")
         need((a.private/"editor-output-private").read_text().strip()==a.run_id and (a.private/"editor.log").is_file(),"draw_private_log_guard")
         r=json.loads((a.private/"draw-receipt.json").read_text())
         need(r["run_id"]==a.run_id and r["private_log_guard"] is True,"draw_editor_identity")
-        out["editor_phase"]=r.get("phase") if r.get("phase") in ("environment","guard","import","materials","controls","clone_gpu_probe","draw","complete") else "unknown"
+        out["editor_phase"]=r.get("phase") if r.get("phase") in ("environment","guard","import","materials","scene_lifetime_calibration","controls","clone_gpu_probe","draw","complete") else "unknown"
         out["editor_failure_category"]=r.get("failure_category") if r.get("failure_category") in ("InvalidOperationException","ArgumentException","IOException","NullReferenceException","UnityException") else "other"
         flags=("shader_identity","material_identity","material_shader_identity","native_identity","native_descriptor","native_sampler",
                "texture_refs","uv_matches","numbers_match","clone_sampler_match","clone_payload_verified",
-               "clone_graphics_format_match","source_material_unchanged_after_draw","override_blocks_verified")
+               "clone_graphics_format_match","source_material_unchanged_after_draw","override_blocks_verified",
+               "prescene_dummy_alive","actual_dummy_alive_after_scene")
         out.update({k:r.get(k) is True for k in flags})
-        for k in ("asset_identities","asset_bytes_unchanged","meta_bytes_unchanged","shader_errors","numbers_declared","numbers_matched","draw_cases","probe_draw_cases","dummy_shader_errors","probe_shader_errors"):
+        out["postscene_dummy_alive"]=r.get("postscene_dummy_alive") is True
+        out["postscene_dummy_managed_reference_present"]=r.get("postscene_dummy_managed_reference_present") is True
+        out["dummy_scene_lifetime_verified"]=(out["prescene_dummy_alive"] and out["postscene_dummy_managed_reference_present"] and out["actual_dummy_alive_after_scene"])
+        out["prescene_material_destroyed_by_scene_transition"]=(out["dummy_scene_lifetime_verified"] and not out["postscene_dummy_alive"])
+        for k in ("asset_identities","asset_bytes_unchanged","meta_bytes_unchanged","shader_errors","numbers_declared","numbers_matched","draw_cases","probe_draw_cases","dummy_shader_errors","probe_shader_errors",
+                  "dummy_camera_submissions","dummy_direct_submissions","explicit_command_submissions"):
             if type(r.get(k)) is int:out[k]=r[k]
         out["companion_source_export_rgba_match"]=cfg["companion_source_export_rgba_match"]
         need(r["unity_version"]=="2021.3.45f2" and r["backend"]=="Vulkan" and r["color_space"]=="Linear","draw_environment")
         need(a.exit_code==0 and r["status"]=="OBSERVED","draw_editor_incomplete")
         need(all(out[k] for k in flags) and out["asset_identities"]==out["asset_bytes_unchanged"]==out["meta_bytes_unchanged"]==4 and out["shader_errors"]==out["dummy_shader_errors"]==out["probe_shader_errors"]==0,"draw_identity_gate")
+        need(out["dummy_scene_lifetime_verified"] and out["dummy_camera_submissions"]==4 and
+             out["dummy_direct_submissions"]==4 and out["explicit_command_submissions"]==28 and
+             out["draw_cases"]==36 and out["probe_draw_cases"]==17,"draw_submission_population")
         out["phase"]="independent_clone_gpu_probe"
         marker=read_pixels(a.private/"probe-marker.f32",PROBE_SIZE)
         out["probe_marker_pixels"]=int(np.count_nonzero(np.max(np.abs(marker-np.array([.125,.375,.625,1.])),axis=-1)<=TOL))
@@ -267,14 +287,21 @@ def verify(a):
         for size in SIZES:
             for bg in range(BACKGROUNDS):
                 rows={case:read_pixels(a.private/f"draw-{size}-{bg}-{case}.f32",size) for case in CASES}
-                observations.append(dict(size=size,background=bg,**summarize(rows)))
+                direct=read_pixels(a.private/f"direct-{size}-{bg}-dummy.f32",size)
+                observations.append(dict(size=size,background=bg,dummy_direct_marker_pixels=dummy_marker(direct),**summarize(rows)))
         out["observations"]=observations
         for row in observations:row["classification"]=classify_draw(row)
         out["draw_classification_counts"]={k:sum(x["classification"]==k for x in observations) for k in sorted({x["classification"] for x in observations})}
         out["command_material_property_block_verified"]=all(x["native_vs_source_block"]==0 and x["native_visible"]>0 for x in observations)
-        passed=[x for x in observations if x["classification"]=="CALIBRATED_SOURCE_ROUTE_ALPHA_EFFECT"]
+        out["independent_alpha_effect_without_dummy_cases"]=sum(
+            out["clone_gpu_probe_verified"] and alpha_effect_without_dummy(x) for x in observations)
+        out["dummy_direct_calibrated_cases"]=sum(x["dummy_direct_marker_pixels"]>0 for x in observations)
+        out["dummy_camera_calibrated_cases"]=sum(x["dummy_marker_pixels"]>0 for x in observations)
+        passed=[x for x in observations if x["classification"]=="CALIBRATED_SOURCE_ROUTE_ALPHA_EFFECT"
+                and x["dummy_direct_marker_pixels"]>0]
         out["calibrated_alpha_effect_cases"]=len(passed)
         need(out["clone_gpu_probe_verified"],"clone_gpu_texture_control_not_calibrated")
+        need(out["dummy_direct_calibrated_cases"]==len(SIZES)*BACKGROUNDS,"dummy_direct_draw_not_calibrated")
         need(len(passed)==len(SIZES)*BACKGROUNDS,"draw_alpha_causality_not_established")
         out.update(status="OBSERVED_ISOLATED_PARTICLE108_EXPLICIT_ROUTE_ALPHA_EFFECT",phase="complete",
                    isolated_explicit_route_alpha_effect_observed=True)

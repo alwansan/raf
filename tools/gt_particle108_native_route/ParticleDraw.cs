@@ -19,8 +19,9 @@ public static class NativeMipValidation {
    public Asset[] assets;public Slot[] slots;public Number[] numbers;public int[] sampler,sizes,probe_levels;public int backgrounds,probe_size;public float bias;}
  [Serializable] class Receipt {public string run_id,phase="environment",status="INCONCLUSIVE",unity_version,backend,color_space,failure_category="";
    public bool private_log_guard,shader_identity,material_identity,material_shader_identity,native_identity,native_descriptor,native_sampler,
-     texture_refs,uv_matches,numbers_match,clone_sampler_match,clone_payload_verified,clone_graphics_format_match,source_material_unchanged_after_draw,override_blocks_verified;
-   public int asset_identities,asset_bytes_unchanged,meta_bytes_unchanged,shader_errors,numbers_declared,numbers_matched,draw_cases,probe_draw_cases,dummy_shader_errors,probe_shader_errors;}
+     texture_refs,uv_matches,numbers_match,clone_sampler_match,clone_payload_verified,clone_graphics_format_match,source_material_unchanged_after_draw,override_blocks_verified,
+     prescene_dummy_alive,postscene_dummy_alive,postscene_dummy_managed_reference_present,actual_dummy_alive_after_scene;
+   public int asset_identities,asset_bytes_unchanged,meta_bytes_unchanged,shader_errors,numbers_declared,numbers_matched,draw_cases,probe_draw_cases,dummy_shader_errors,probe_shader_errors,dummy_camera_submissions,dummy_direct_submissions,explicit_command_submissions;}
  static void Need(bool x){if(!x)throw new InvalidOperationException("GT particle draw gate");}
  static string Arg(string n){var a=Environment.GetCommandLineArgs();int i=Array.IndexOf(a,n);return i>=0&&i+1<a.Length?a[i+1]:"";}
  static string Sha(byte[] x){using(var h=SHA256.Create())return BitConverter.ToString(h.ComputeHash(x)).Replace("-","").ToLowerInvariant();}
@@ -52,20 +53,35 @@ public static class NativeMipValidation {
        foreach(var p in read.GetPixels()){w.Write(p.r);w.Write(p.g);w.Write(p.b);w.Write(p.a);}
    }finally{RenderTexture.active=old;UnityEngine.Object.DestroyImmediate(read);}
  }
- static void RenderCase(Camera cam,MeshRenderer rend,Mesh mesh,Material original,Material command,MaterialPropertyBlock block,bool rendererPath,RenderTexture rt,string file){
+ static void RenderCase(Camera cam,MeshRenderer rend,Mesh mesh,Material original,Material command,MaterialPropertyBlock block,bool rendererPath,bool expectedCommand,RenderTexture rt,string file){
    // Same imported Material in all original-shader cases. Never assign a
    // cloned Material to the renderer or mutate the imported source asset.
-   Need(rend.sharedMaterial==original);
+   Need(rend.sharedMaterial==original&&mesh!=null&&original!=null);
+   // Do not silently skip a destroyed transient Unity Material.
+   Need(expectedCommand==(command!=null));
+   if(expectedCommand)Need(command.shader!=null&&command.passCount==1&&command.shader.isSupported);
    rend.enabled=rendererPath;
    var buffer=new CommandBuffer{name="GT explicit draw"};
    try{
-     if(command!=null)buffer.DrawMesh(mesh,Matrix4x4.identity,command,0,0,block);
+     if(expectedCommand)buffer.DrawMesh(mesh,Matrix4x4.identity,command,0,0,block);
      cam.AddCommandBuffer(CameraEvent.BeforeForwardAlpha,buffer);
      cam.Render();
      Readback(rt,file);
    }finally{
      cam.RemoveCommandBuffer(CameraEvent.BeforeForwardAlpha,buffer);buffer.Release();rend.enabled=false;
    }
+ }
+ static void DirectDummy(Mesh mesh,Material dummy,RenderTexture rt,Color background,string file){
+   Need(mesh!=null&&dummy!=null&&dummy.shader!=null&&dummy.passCount==1);
+   var buffer=new CommandBuffer{name="GT independent dummy direct"};
+   try{
+     buffer.SetRenderTarget(rt);
+     buffer.SetViewport(new Rect(0,0,rt.width,rt.height));
+     buffer.ClearRenderTarget(true,true,background);
+     buffer.SetViewProjectionMatrices(Matrix4x4.identity,Matrix4x4.identity);
+     buffer.DrawMesh(mesh,Matrix4x4.identity,dummy,0,0);
+     Graphics.ExecuteCommandBuffer(buffer);Readback(rt,file);
+   }finally{buffer.Release();}
  }
  static void ProbeClones(Input c,Receipt r,string priv,Texture2D native,Texture2D exact,Texture2D zero,Texture2D one,List<UnityEngine.Object> owned){
    Need(c.probe_size==8&&c.probe_levels.SequenceEqual(new[]{0,3}));
@@ -143,6 +159,21 @@ public static class NativeMipValidation {
        if(match)r.numbers_matched++;}
      r.numbers_match=r.numbers_declared>0&&r.numbers_declared==r.numbers_matched;
      Need(r.material_identity&&r.material_shader_identity&&r.texture_refs&&r.uv_matches&&r.numbers_match&&mat.GetTexture(c.selected_property)==tex);
+     r.phase="scene_lifetime_calibration";
+     var dummyShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTParticleControl.shader");
+     Need(dummyShader!=null&&dummyShader.isSupported&&dummyShader.passCount==1&&Errors(dummyShader)==0);
+     var transientBeforeScene=new Material(dummyShader);
+     r.prescene_dummy_alive=transientBeforeScene!=null;
+     Need(r.prescene_dummy_alive);
+     EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
+     r.postscene_dummy_alive=transientBeforeScene!=null;
+     r.postscene_dummy_managed_reference_present=!ReferenceEquals(transientBeforeScene,null);
+     if(transientBeforeScene!=null)UnityEngine.Object.DestroyImmediate(transientBeforeScene);
+     // Actual controls are constructed only after the scene transition.
+     Need(mat!=null&&shader!=null&&tex!=null&&dummyShader!=null);
+     var dummy=new Material(dummyShader);owned.Add(dummy);
+     r.actual_dummy_alive_after_scene=dummy!=null&&dummy.shader==dummyShader&&dummy.passCount==1;
+     Need(r.actual_dummy_alive_after_scene);
      r.phase="controls";byte[] raw=File.ReadAllBytes(Path.Combine(priv,"native-rgba.bytes"));Need(raw.Length==21844&&Sha(raw)==c.raw_sha);
      var exact=Clone(c,raw,-1);owned.Add(exact);var zero=Clone(c,raw,0);owned.Add(zero);var one=Clone(c,raw,255);owned.Add(one);
      r.clone_sampler_match=Sampler(exact,c)&&Sampler(zero,c)&&Sampler(one,c);
@@ -152,9 +183,6 @@ public static class NativeMipValidation {
      var srcBlock=Block(c.selected_property,tex);var exactBlock=Block(c.selected_property,exact);var zeroBlock=Block(c.selected_property,zero);var oneBlock=Block(c.selected_property,one);
      r.override_blocks_verified=true;
      r.phase="clone_gpu_probe";ProbeClones(c,r,priv,tex,exact,zero,one,owned);
-     var dummyShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTParticleControl.shader");Need(dummyShader!=null&&dummyShader.isSupported&&dummyShader.passCount==1&&Errors(dummyShader)==0);
-     var dummy=new Material(dummyShader);owned.Add(dummy);
-     EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
      var camera=new GameObject("GT diagnostic camera");owned.Add(camera);var cam=camera.AddComponent<Camera>();cam.enabled=false;
      cam.transform.position=new Vector3(0,0,-2);cam.orthographic=true;cam.orthographicSize=1.1f;cam.aspect=1;cam.nearClipPlane=.1f;cam.farClipPlane=10;cam.clearFlags=CameraClearFlags.SolidColor;cam.allowHDR=true;cam.allowMSAA=false;cam.renderingPath=RenderingPath.Forward;cam.useOcclusionCulling=false;
      var go=new GameObject("GT authored particle surface");owned.Add(go);var mesh=new Mesh();owned.Add(mesh);
@@ -172,11 +200,19 @@ public static class NativeMipValidation {
      MaterialPropertyBlock[] blocks={null,null,null,null,null,srcBlock,exactBlock,zeroBlock,oneBlock};
      foreach(int size in c.sizes){var rt=new RenderTexture(size,size,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);owned.Add(rt);Need(rt.Create()&&!rt.sRGB&&rt.graphicsFormat==GraphicsFormat.R32G32B32A32_SFloat);cam.targetTexture=rt;
        for(int bg=0;bg<c.backgrounds;bg++){
-         cam.backgroundColor=colors[bg];for(int i=0;i<cases.Length;i++){
-           RenderCase(cam,rend,mesh,mat,commands[i],blocks[i],i==2,rt,Path.Combine(priv,"draw-"+size+"-"+bg+"-"+cases[i]+".f32"));r.draw_cases++;
+         cam.backgroundColor=colors[bg];
+         DirectDummy(mesh,dummy,rt,colors[bg],Path.Combine(priv,"direct-"+size+"-"+bg+"-dummy.f32"));
+         r.dummy_direct_submissions++;
+         for(int i=0;i<cases.Length;i++){
+           bool expectedCommand=i!=0&&i!=2;
+           RenderCase(cam,rend,mesh,mat,commands[i],blocks[i],i==2,expectedCommand,rt,Path.Combine(priv,"draw-"+size+"-"+bg+"-"+cases[i]+".f32"));
+           r.draw_cases++;
+           if(expectedCommand)r.explicit_command_submissions++;
+           if(i==1){Need(dummy!=null&&commands[i]==dummy);r.dummy_camera_submissions++;}
          }
        }
        cam.targetTexture=null;rt.Release();}
+     Need(r.dummy_camera_submissions==4&&r.dummy_direct_submissions==4&&r.explicit_command_submissions==28);
      r.shader_errors=Errors(shader);r.dummy_shader_errors=Errors(dummyShader);
      r.source_material_unchanged_after_draw=SourceMaterialUnchanged(c,mat,shader,tex,root)&&Sampler(tex,c);
      Need(r.shader_errors==0&&r.dummy_shader_errors==0&&r.probe_shader_errors==0&&r.source_material_unchanged_after_draw);

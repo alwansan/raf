@@ -27,6 +27,17 @@ class DrawTests(unittest.TestCase):
         self.assertEqual(draw.classify_draw(draw.summarize(rows)),"ISOLATED_COMMAND_ALPHA_EFFECT_RENDERER_BASELINE_DIFFERS")
         rows=self.make_rows();rows["dummy"]=rows["clear"].copy()
         self.assertEqual(draw.classify_draw(draw.summarize(rows)),"COMMAND_DRAW_CONTROL_UNCALIBRATED")
+    def test_alpha_observation_without_dummy_never_passes_strict_gate(self):
+        rows=self.make_rows();rows["dummy"]=rows["clear"].copy()
+        r=draw.summarize(rows)
+        self.assertTrue(draw.alpha_effect_without_dummy(r))
+        self.assertEqual(draw.classify_draw(r),"COMMAND_DRAW_CONTROL_UNCALIBRATED")
+        r["dummy_direct_marker_pixels"]=4
+        self.assertEqual(draw.classify_draw(r),"DUMMY_CAMERA_EVENT_UNCALIBRATED")
+        rows["clone"][0,0,0]=.1
+        self.assertFalse(draw.alpha_effect_without_dummy(draw.summarize(rows)))
+        self.assertEqual(draw.dummy_marker(self.make_rows()["dummy"]),4)
+        self.assertEqual(draw.dummy_marker(rows["clear"]),0)
     def test_independent_clone_gpu_probe_requires_rgb_and_alpha(self):
         exact=np.full((2,2,4),.5,dtype=np.float32)
         zero=exact.copy();zero[...,3]=0
