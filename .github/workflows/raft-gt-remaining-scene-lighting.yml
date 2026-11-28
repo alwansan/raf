@@ -1,0 +1,106 @@
+name: GT G6 remaining original scene lighting census (READ ONLY)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-remaining-scene-lighting.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  remaining-scene-lighting:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only bounded audit tools
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/gt_remaining_scene_lighting/
+      - name: Verify tool blobs and source-free controls before any source checkout
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test "$(git hash-object tools/gt_remaining_scene_lighting/pins.json)" = 5113b42905333c70e7ba2c1aa2cdfc4b0f7f39c1
+          test "$(git hash-object tools/gt_remaining_scene_lighting/audit.py)" = 84133c4b34c1d3b1cda8a2b534676d38c062f1ee
+          test "$(git hash-object tools/gt_remaining_scene_lighting/test_audit.py)" = 4ce5be299141e746aa75de26c21bd51c90f7ec31
+          python3 -B -m unittest discover -s tools/gt_remaining_scene_lighting -p test_audit.py -v
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 2097152
+      - name: Read only 34 remaining scene files at immutable original source commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-lighting-source
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/level6
+            /Raft/Raft_Data/level7
+            /Raft/Raft_Data/level8
+            /Raft/Raft_Data/level9
+            /Raft/Raft_Data/level10
+            /Raft/Raft_Data/level11
+            /Raft/Raft_Data/level12
+            /Raft/Raft_Data/level13
+            /Raft/Raft_Data/level14
+            /Raft/Raft_Data/level15
+            /Raft/Raft_Data/level16
+            /Raft/Raft_Data/level17
+            /Raft/Raft_Data/level18
+            /Raft/Raft_Data/level19
+            /Raft/Raft_Data/level20
+            /Raft/Raft_Data/level21
+            /Raft/Raft_Data/level22
+            /Raft/Raft_Data/level23
+            /Raft/Raft_Data/level24
+            /Raft/Raft_Data/level25
+            /Raft/Raft_Data/level26
+            /Raft/Raft_Data/level27
+            /Raft/Raft_Data/level28
+            /Raft/Raft_Data/level29
+            /Raft/Raft_Data/level30/part-00000
+            /Raft/Raft_Data/level30/part-00001
+            /Raft/Raft_Data/level31
+            /Raft/Raft_Data/level32
+            /Raft/Raft_Data/level33
+            /Raft/Raft_Data/level34/part-00000
+            /Raft/Raft_Data/level34/part-00001
+            /Raft/Raft_Data/level35
+            /Raft/Raft_Data/level36
+            /Raft/Raft_Data/level37
+            /Raft/Raft_Data/level38
+            /Raft/Raft_Data/level39
+      - name: Authenticate source selection and parse actual serialized lighting records
+        run: |
+          set -euo pipefail
+          test "$(git -C .gt-lighting-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(git -C .gt-lighting-source hash-object RAFT_FILE_MANIFEST.tsv)" = 4201fda426d80caba36c275ceaddb440b05c5b4e
+          python3 -m venv "$RUNNER_TEMP/gt-scene-lighting-python"
+          py="$RUNNER_TEMP/gt-scene-lighting-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check UnityPy==1.23.0
+          mkdir -p "$RUNNER_TEMP/gt-scene-lighting-results"
+          "$py" -B tools/gt_remaining_scene_lighting/audit.py --source .gt-lighting-source --pins tools/gt_remaining_scene_lighting/pins.json --output "$RUNNER_TEMP/gt-scene-lighting-results/aggregate.json"
+      - name: Upload only numeric scene aggregate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-remaining-scene-lighting-aggregate
+          path: ${{ runner.temp }}/gt-scene-lighting-results/aggregate.json
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Clean only disposable read-only source checkout
+        if: always()
+        run: |
+          if test -d .gt-lighting-source/.git; then rm -rf .gt-lighting-source; fi
