@@ -1,5 +1,5 @@
 {
-  "next_action": "G3-G6-original-skybox-material-shader-program: actual level24 46093780414 proves exact Skybox Material21 pointer, original provider sharedassets0.assets (115978112 bytes, 3 exact chunks), actual Material YAML, 19/19 ambient fields and null Sun. Do not repeat source census or ambient-only pointer check. Distinct next productive lane: use exact selected Skybox Material to resolve native m_Shader typed class48 and exact same-instance W1 shader GUID/fileID plus actual .shader/.meta, source serialized pass/program availability vs exported Dummy marker and structural programs. Inspect actual selected material's saved property/keyword parity using existing strict comparators where schema supported; record specific program gap and exact fanout for future source-authentic restoration, do not infer shader authenticity from pointer. If source shader owner differs, derive only exact provider, verify catalog/manifest/chunks, no guessed defaults. No raw source/assets/private IDs published, no original mutation, no production/player/XAPK, CL/lab read-only, BLACK/animation deferred; all G0-G6 open and historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged.",
+  "next_action": "G3-G6-original-skybox-material-shader-program: reconcile actual run 46094976432 job 140824146725 and lint 46094976337, read GT_SKYBOX_SHADER_DISCOVER, STAGE, ACTUAL_EXPORT, SAME_EXPORT, actual control counts and tool install outcome. Prior exact Skybox pointer 46093780414 PASS already archived; no ambient-only replay. Verify selected shader provider and source object SHA, actual typed Shader48 -> W1 material shader source/export identity -> actual Material m_Shader -> custom .shader/.meta or engine-only transport; preserve source pass/slot/D3D11 linked counts, actual Dummy/structural status, material property/keyword and scoped fanout counts, exact conditional private recovery successes. If actual custom Dummy has linked original programs and private translation succeeds, next construct source-authentic pass/state/keyword/resource binding wrapper with source-object SHA and existing GUID, not an approximate shader or global patch; do not claim restored until actual integration proof. If builtin transport or other precise blocker, pursue highest-impact remaining original shader/material or FFT/water lane, not another skybox census. No raw original assets/programs/private IDs publication, no original source mutation, no license/protection bypass, only feature/android-native-port, CL/lab read-only, BLACK/animation deferred; no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. Preserve pinned Ali restore.",
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
     "status": "OBSERVED_SELECTED_ORIGINAL_LIGHT_HIERARCHIES",
@@ -8925,6 +8925,12 @@
       "run": 46093780414,
       "evidence": "clients/GT/sessions/20261128-skybox-exact-provider/evidence.json",
       "next_action": "G3-G6-original-skybox-material-shader-program: actual level24 46093780414 proves exact Skybox Material21 pointer, original provider sharedassets0.assets (115978112 bytes, 3 exact chunks), actual Material YAML, 19/19 ambient fields and null Sun. Do not repeat source census or ambient-only pointer check. Distinct next productive lane: use exact selected Skybox Material to resolve native m_Shader typed class48 and exact same-instance W1 shader GUID/fileID plus actual .shader/.meta, source serialized pass/program availability vs exported Dummy marker and structural programs. Inspect actual selected material's saved property/keyword parity using existing strict comparators where schema supported; record specific program gap and exact fanout for future source-authentic restoration, do not infer shader authenticity from pointer. If source shader owner differs, derive only exact provider, verify catalog/manifest/chunks, no guessed defaults. No raw source/assets/private IDs published, no original mutation, no production/player/XAPK, CL/lab read-only, BLACK/animation deferred; all G0-G6 open and historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged."
+    },
+    "latest_original_skybox_shader_program": {
+      "execution_head": "ff1ed449169f0c15751e7d87c7622037852c0178",
+      "run": 46094976432,
+      "evidence": "clients/GT/sessions/20261128-skybox-shader-program/evidence.json",
+      "next_action": "G3-G6-original-skybox-material-shader-program: reconcile actual run 46094976432 job 140824146725 and lint 46094976337, read GT_SKYBOX_SHADER_DISCOVER, STAGE, ACTUAL_EXPORT, SAME_EXPORT, actual control counts and tool install outcome. Prior exact Skybox pointer 46093780414 PASS already archived; no ambient-only replay. Verify selected shader provider and source object SHA, actual typed Shader48 -> W1 material shader source/export identity -> actual Material m_Shader -> custom .shader/.meta or engine-only transport; preserve source pass/slot/D3D11 linked counts, actual Dummy/structural status, material property/keyword and scoped fanout counts, exact conditional private recovery successes. If actual custom Dummy has linked original programs and private translation succeeds, next construct source-authentic pass/state/keyword/resource binding wrapper with source-object SHA and existing GUID, not an approximate shader or global patch; do not claim restored until actual integration proof. If builtin transport or other precise blocker, pursue highest-impact remaining original shader/material or FFT/water lane, not another skybox census. No raw original assets/programs/private IDs publication, no original source mutation, no license/protection bypass, only feature/android-native-port, CL/lab read-only, BLACK/animation deferred; no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. Preserve pinned Ali restore."
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date.",
@@ -11617,5 +11623,163 @@
     ],
     "permanent_log": "clients/GT/sessions/20261128-skybox-exact-provider/actual-selected-results.log",
     "actual_aggregate_path": "clients/GT/sessions/20261128-skybox-exact-provider/actual-aggregate.json"
+  },
+  "latest_original_skybox_shader_program": {
+    "status": "SOURCE_LINKED_SKYBOX_SHADER_PROGRAM_LAUNCHED",
+    "starting_head": "ab1ade46237911f32ec82a9cb3dd7c81927531be",
+    "prior_skybox_reconciliation": "2ecc77de35a1172d4ba17abeceb5bdbce396e946",
+    "prior_skybox_result": {
+      "run": 46093780414,
+      "status": "PASS_EXACT_SKYBOX_SAME_EXPORT",
+      "fields_equal": 19,
+      "source_provider": "sharedassets0.assets",
+      "provider_bytes": 115978112,
+      "verified_chunks": 3,
+      "actual_material_document_verified": true,
+      "evidence": "clients/GT/sessions/20261128-skybox-exact-provider/evidence.json"
+    },
+    "preparation_commits": [
+      "07ff9bfe2d2c7d2803bde5dddd04c1968915fa67",
+      "32a2c05aa7ff80268851c7dc010f11c8baa3cc35"
+    ],
+    "execution_head": "ff1ed449169f0c15751e7d87c7622037852c0178",
+    "run": 46094976432,
+    "job": 140824146725,
+    "run_status": "in_progress",
+    "run_conclusion": null,
+    "lint_run": 46094976337,
+    "lint_job": 140824146891,
+    "lint_conclusion": "success",
+    "source_free_controls_step": "success; actual log counts pending",
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Checkout only independent ambient verifier and existing pinned tools",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Verify pinned source readers and shader program recovery controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Install public translation tools for a proven custom Dummy gap only",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-dotnet@v4",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Obtain exact public AssetRipperCLI source",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Compile temporary class104 capture and smoke test",
+        "status": "in_progress",
+        "conclusion": null
+      },
+      {
+        "name": "Read only level24 and five pinned support providers",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Resolve only exact missing Skybox provider from authenticated native file slot",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Read only one selected additional provider (exact file or ordered chunks)",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Authenticate selected provider Git object and SHA and exact native Material21",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Resolve actual Skybox Material m_Shader exact native provider",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Read only additional exact Shader provider when not already staged",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Authenticate exact selected native Shader48 and provider bytes",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Execute actual bounded shader-linked export with same-instance traces",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Compare original Shader48 to actual ShaderLab and material properties, recover proven Dummy programs privately",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Publish ONLY safe aggregate receipts",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Remove only temporary source and private export",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Obtain exact public AssetRipperCLI source",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Run actions/setup-dotnet@v4",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Checkout only independent ambient verifier and existing pinned tools",
+        "status": "pending",
+        "conclusion": null
+      }
+    ],
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+    "tool_pins": {
+      "audit": "ac3928d0f437e4a4b00ee82eb8cdc0848f55298b",
+      "tests": "4828398f46313efa7a93bbf6b58ab61bd5358ac6",
+      "previous_skybox_resolver": "8986080f354e2e7a096ba3fcbe574d68f2d9691a",
+      "provider_catalog": "41bc2f997dc5c90ddfa43053c82915c5ad7cde7e",
+      "w1_program_decoder": "fce7fe2ac6635f9e67e03ea4aa8ec7b462603352",
+      "w1_stage_link_reader": "087d655e618abb9a8a8e773968af877dd413a0fb",
+      "public_tool": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+    },
+    "scope": "Exact native Skybox Material21 m_Shader -> typed Shader48 source object digest, existing provider or one exact additional provider. Source program slots and linked D3D11 DXBC counts; same-instance W1 source/actual pointer and custom .shader/.meta vs engine transport, exact Dummy/structural diagnostic. Saved colors, scalars, UV/nullness and keyword counts; scoped material document fanout. For proven original linked programs plus actual custom Dummy, privately recover all distinct linked VS/FS codes only if <=32, exact linked bytecode -> Vulkan11 validation -> HLSL -> roundtrip validation. No raw programs, wrapper or install claim; no texture identity or runtime/device equivalence.",
+    "actual_selected_shader_provider": null,
+    "actual_same_export_result": null,
+    "actual_private_program_recovery": null,
+    "original_assets_published": false,
+    "original_assets_modified": false,
+    "production": false,
+    "player": false,
+    "device": false,
+    "XAPK": false,
+    "all_gates_open": true,
+    "next_action": "G3-G6-original-skybox-material-shader-program: reconcile actual run 46094976432 job 140824146725 and lint 46094976337, read GT_SKYBOX_SHADER_DISCOVER, STAGE, ACTUAL_EXPORT, SAME_EXPORT, actual control counts and tool install outcome. Prior exact Skybox pointer 46093780414 PASS already archived; no ambient-only replay. Verify selected shader provider and source object SHA, actual typed Shader48 -> W1 material shader source/export identity -> actual Material m_Shader -> custom .shader/.meta or engine-only transport; preserve source pass/slot/D3D11 linked counts, actual Dummy/structural status, material property/keyword and scoped fanout counts, exact conditional private recovery successes. If actual custom Dummy has linked original programs and private translation succeeds, next construct source-authentic pass/state/keyword/resource binding wrapper with source-object SHA and existing GUID, not an approximate shader or global patch; do not claim restored until actual integration proof. If builtin transport or other precise blocker, pursue highest-impact remaining original shader/material or FFT/water lane, not another skybox census. No raw original assets/programs/private IDs publication, no original source mutation, no license/protection bypass, only feature/android-native-port, CL/lab read-only, BLACK/animation deferred; no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. Preserve pinned Ali restore."
   }
 }
