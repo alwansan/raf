@@ -1,0 +1,2166 @@
+{
+  "run": 46171915719,
+  "job": 141062008295,
+  "head": "b8f16693b62289bd76ef45972244cd53f320708e",
+  "conclusion": "success",
+  "guard": 46171915711,
+  "lint": 46171915697,
+  "artifact_id": 15273179845,
+  "receipt": {
+    "XAPK": false,
+    "all_pair_replay_comparisons_exact": true,
+    "android_device": false,
+    "chain": {
+      "XAPK": false,
+      "android_device": false,
+      "host_device": "deviceName         = llvmpipe (LLVM 20.1.2, 256 bits); driverName         = llvmpipe; driverInfo         = Mesa 25.2.8-0ubuntu0.24.04.5 (LLVM 20.1.2)",
+      "observed_cases": 4,
+      "observed_outputs": 32,
+      "oracle_canary": {
+        "exact_first_pass_pixels": 4096,
+        "exact_native_second_pixels": 4096,
+        "status": "PASS",
+        "wrong_second_detected_lanes": 16384
+      },
+      "original_fft_numeric_parity_verified": false,
+      "original_runtime_kernel_mapping_proven": false,
+      "outputs_per_case": 8,
+      "production": false,
+      "rows": [
+        {
+          "counts": {
+            "bindings": 24,
+            "dispatches": 8,
+            "sentinel_checks": 8,
+            "snapshots": 8
+          },
+          "failure_phase": "",
+          "failure_type": "",
+          "first_slot": 0,
+          "flags": {
+            "injected_gpu_exact": true,
+            "input_gpu_exact": true,
+            "replay_gpu_exact": true,
+            "table_gpu_exact": true,
+            "target_format_exact": true
+          },
+          "indexed_chain_vs_own_replay": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "indexed_vs_standalone_same_cpu_input": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "input_mode": "signed",
+          "outcome": "OBSERVED",
+          "outputs": {
+            "indexed-chain": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed-cpu": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed-replay": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed0": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-chain": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-cpu": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-replay": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone0": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            }
+          },
+          "stage1_indexed_vs_standalone": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "standalone_chain_vs_own_replay": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        },
+        {
+          "counts": {
+            "bindings": 24,
+            "dispatches": 8,
+            "sentinel_checks": 8,
+            "snapshots": 8
+          },
+          "failure_phase": "",
+          "failure_type": "",
+          "first_slot": 0,
+          "flags": {
+            "injected_gpu_exact": true,
+            "input_gpu_exact": true,
+            "replay_gpu_exact": true,
+            "table_gpu_exact": true,
+            "target_format_exact": true
+          },
+          "indexed_chain_vs_own_replay": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "indexed_vs_standalone_same_cpu_input": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "input_mode": "zero",
+          "outcome": "OBSERVED",
+          "outputs": {
+            "indexed-chain": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed-cpu": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed-replay": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed0": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-chain": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-cpu": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-replay": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone0": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            }
+          },
+          "stage1_indexed_vs_standalone": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "standalone_chain_vs_own_replay": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        },
+        {
+          "counts": {
+            "bindings": 24,
+            "dispatches": 8,
+            "sentinel_checks": 8,
+            "snapshots": 8
+          },
+          "failure_phase": "",
+          "failure_type": "",
+          "first_slot": 10,
+          "flags": {
+            "injected_gpu_exact": true,
+            "input_gpu_exact": true,
+            "replay_gpu_exact": true,
+            "table_gpu_exact": true,
+            "target_format_exact": true
+          },
+          "indexed_chain_vs_own_replay": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "indexed_vs_standalone_same_cpu_input": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "input_mode": "signed",
+          "outcome": "OBSERVED",
+          "outputs": {
+            "indexed-chain": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed-cpu": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed-replay": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed0": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-chain": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-cpu": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-replay": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone0": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            }
+          },
+          "stage1_indexed_vs_standalone": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "standalone_chain_vs_own_replay": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        },
+        {
+          "counts": {
+            "bindings": 24,
+            "dispatches": 8,
+            "sentinel_checks": 8,
+            "snapshots": 8
+          },
+          "failure_phase": "",
+          "failure_type": "",
+          "first_slot": 10,
+          "flags": {
+            "injected_gpu_exact": true,
+            "input_gpu_exact": true,
+            "replay_gpu_exact": true,
+            "table_gpu_exact": true,
+            "target_format_exact": true
+          },
+          "indexed_chain_vs_own_replay": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "indexed_vs_standalone_same_cpu_input": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "input_mode": "zero",
+          "outcome": "OBSERVED",
+          "outputs": {
+            "indexed-chain": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed-cpu": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed-replay": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "indexed0": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-chain": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-cpu": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone-replay": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            },
+            "standalone0": {
+              "profile": {
+                "class_counts": [
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0,
+                  4096,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 4096
+              },
+              "vs_cpu": {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            }
+          },
+          "stage1_indexed_vs_standalone": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          "standalone_chain_vs_own_replay": {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        }
+      ],
+      "status": "OBSERVED_FFT_CROSS_BACKEND_LOCALIZATION",
+      "unity_graphics_device_version": "Vulkan 1.1.0 [0x00000001]",
+      "water_rendering_verified": false
+    },
+    "coordinate_control_pixels": 4096,
+    "coordinate_module": {
+      "dispatch_groups": [
+        8,
+        8,
+        1
+      ],
+      "generator": {
+        "tool_id": 8,
+        "tool_version": 6
+      },
+      "module": {
+        "bytes": 2516,
+        "image_status": "observed",
+        "images": [
+          {
+            "access_enum": null,
+            "arrayed": 0,
+            "binding": 0,
+            "depth_enum": 0,
+            "dimension_enum": 1,
+            "format_enum": 0,
+            "multisampled": 0,
+            "sampled_enum": 1,
+            "scalar_bits": 32,
+            "scalar_kind": "float",
+            "set": 0
+          },
+          {
+            "access_enum": null,
+            "arrayed": 0,
+            "binding": 1,
+            "depth_enum": 0,
+            "dimension_enum": 1,
+            "format_enum": 0,
+            "multisampled": 0,
+            "sampled_enum": 1,
+            "scalar_bits": 32,
+            "scalar_kind": "float",
+            "set": 0
+          },
+          {
+            "access_enum": null,
+            "arrayed": 0,
+            "binding": 2,
+            "depth_enum": 0,
+            "dimension_enum": 1,
+            "format_enum": 1,
+            "multisampled": 0,
+            "sampled_enum": 2,
+            "scalar_bits": 32,
+            "scalar_kind": "float",
+            "set": 0
+          }
+        ],
+        "instructions": 140,
+        "local_size": [
+          8,
+          8,
+          1
+        ],
+        "opcode_profile": {
+          "ext": {
+            "Ceil": 0,
+            "Cos": 0,
+            "Exp": 0,
+            "FAbs": 0,
+            "FClamp": 0,
+            "FMax": 0,
+            "FMin": 0,
+            "Floor": 0,
+            "Fma": 0,
+            "Fract": 0,
+            "InverseSqrt": 0,
+            "Log": 0,
+            "Pow": 0,
+            "Sin": 0,
+            "Sqrt": 0
+          },
+          "ops": {
+            "OpBitcast": 8,
+            "OpBitwiseAnd": 0,
+            "OpBitwiseOr": 0,
+            "OpBitwiseXor": 0,
+            "OpConvertFToS": 0,
+            "OpConvertFToU": 0,
+            "OpConvertSToF": 0,
+            "OpConvertUToF": 0,
+            "OpExtInst": 0,
+            "OpFAdd": 0,
+            "OpFDiv": 0,
+            "OpFMul": 0,
+            "OpFSub": 0,
+            "OpImageFetch": 2,
+            "OpImageRead": 0,
+            "OpImageWrite": 1,
+            "OpShiftLeftLogical": 0,
+            "OpShiftRightLogical": 0
+          }
+        },
+        "sha256": "9a960767d293418621ff9dceaffbaaa12006489092cecfcee8a67e67c1f4d6cd",
+        "validator_exit": 0,
+        "version": [
+          1,
+          0
+        ]
+      }
+    },
+    "exact_outputs": 32,
+    "generator_14_modules": 8,
+    "isolated_shard_numeric_parity": true,
+    "managed_resolution": 32,
+    "modules": [
+      {
+        "capture": {
+          "dispatch_groups": [
+            1,
+            64,
+            1
+          ],
+          "generator": {
+            "tool_id": 14,
+            "tool_version": 0
+          },
+          "module": {
+            "bytes": 6044,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 1,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 316,
+            "local_size": [
+              64,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 7,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 53,
+                "OpBitwiseAnd": 4,
+                "OpBitwiseOr": 2,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 7,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 0,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 5,
+                "OpShiftRightLogical": 8
+              }
+            },
+            "sha256": "135a4b5687c788c4486fe21c0aa661c3b2a1270e541c15f3297d936e7a6b8c38",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          }
+        },
+        "slot": 0,
+        "variant": "indexed"
+      },
+      {
+        "capture": {
+          "dispatch_groups": [
+            1,
+            64,
+            1
+          ],
+          "generator": {
+            "tool_id": 14,
+            "tool_version": 0
+          },
+          "module": {
+            "bytes": 6008,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 1,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 316,
+            "local_size": [
+              64,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 7,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 53,
+                "OpBitwiseAnd": 4,
+                "OpBitwiseOr": 2,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 7,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 0,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 5,
+                "OpShiftRightLogical": 8
+              }
+            },
+            "sha256": "e698b23c9f5eed65c8bbf21cfea543d3c9d5cc362483e8e16f9d9cee13d82744",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          }
+        },
+        "slot": 0,
+        "variant": "standalone"
+      },
+      {
+        "capture": {
+          "dispatch_groups": [
+            1,
+            64,
+            1
+          ],
+          "generator": {
+            "tool_id": 14,
+            "tool_version": 0
+          },
+          "module": {
+            "bytes": 5524,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 1,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 294,
+            "local_size": [
+              64,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 6,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 53,
+                "OpBitwiseAnd": 4,
+                "OpBitwiseOr": 2,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 6,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 0,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 5,
+                "OpShiftRightLogical": 8
+              }
+            },
+            "sha256": "0161d9b8a8dedb07a549f75846758cbc96db0da5e84f39ecbd42f0177f3052ee",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          }
+        },
+        "slot": 1,
+        "variant": "indexed"
+      },
+      {
+        "capture": {
+          "dispatch_groups": [
+            1,
+            64,
+            1
+          ],
+          "generator": {
+            "tool_id": 14,
+            "tool_version": 0
+          },
+          "module": {
+            "bytes": 5488,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 1,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 294,
+            "local_size": [
+              64,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 6,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 53,
+                "OpBitwiseAnd": 4,
+                "OpBitwiseOr": 2,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 6,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 0,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 5,
+                "OpShiftRightLogical": 8
+              }
+            },
+            "sha256": "0b8db80ae912e212c85deb816eab63fa2ca42f55d654935783a3d4ad9359c94f",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          }
+        },
+        "slot": 1,
+        "variant": "standalone"
+      },
+      {
+        "capture": {
+          "dispatch_groups": [
+            1,
+            64,
+            1
+          ],
+          "generator": {
+            "tool_id": 14,
+            "tool_version": 0
+          },
+          "module": {
+            "bytes": 7176,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 1,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 376,
+            "local_size": [
+              64,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 4,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 68,
+                "OpBitwiseAnd": 6,
+                "OpBitwiseOr": 6,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 4,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 2,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 7,
+                "OpShiftRightLogical": 12
+              }
+            },
+            "sha256": "97d6426ceb86bbc99b11af4a381302683cda081ae127f69d9868c93a9d2f7817",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          }
+        },
+        "slot": 10,
+        "variant": "indexed"
+      },
+      {
+        "capture": {
+          "dispatch_groups": [
+            1,
+            64,
+            1
+          ],
+          "generator": {
+            "tool_id": 14,
+            "tool_version": 0
+          },
+          "module": {
+            "bytes": 7140,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 1,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 376,
+            "local_size": [
+              64,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 4,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 68,
+                "OpBitwiseAnd": 6,
+                "OpBitwiseOr": 6,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 4,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 2,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 7,
+                "OpShiftRightLogical": 12
+              }
+            },
+            "sha256": "b9bb563d3b51ce67d0880fbfb4f5bdf93810a89d6164bf975fe897ff8ce3bd1c",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          }
+        },
+        "slot": 10,
+        "variant": "standalone"
+      },
+      {
+        "capture": {
+          "dispatch_groups": [
+            1,
+            64,
+            1
+          ],
+          "generator": {
+            "tool_id": 14,
+            "tool_version": 0
+          },
+          "module": {
+            "bytes": 7240,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 1,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 380,
+            "local_size": [
+              64,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 4,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 73,
+                "OpBitwiseAnd": 7,
+                "OpBitwiseOr": 7,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 4,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 1,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 8,
+                "OpShiftRightLogical": 13
+              }
+            },
+            "sha256": "97d62eb82cdc75e0a87b023905dcbf41718265e735f21a92982f7fcc58ad16ee",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          }
+        },
+        "slot": 11,
+        "variant": "indexed"
+      },
+      {
+        "capture": {
+          "dispatch_groups": [
+            1,
+            64,
+            1
+          ],
+          "generator": {
+            "tool_id": 14,
+            "tool_version": 0
+          },
+          "module": {
+            "bytes": 7204,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 1,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 380,
+            "local_size": [
+              64,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 4,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 73,
+                "OpBitwiseAnd": 7,
+                "OpBitwiseOr": 7,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 4,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 1,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 8,
+                "OpShiftRightLogical": 13
+              }
+            },
+            "sha256": "84604ae9e11bd4c0a47b369b80dbbef6db4b3963835f491d21b5c9af53737d33",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          }
+        },
+        "slot": 11,
+        "variant": "standalone"
+      }
+    ],
+    "original_fft_numeric_parity_verified": false,
+    "original_runtime_kernel_mapping_proven": false,
+    "production": false,
+    "registered_kernels": 20,
+    "size": 64,
+    "slots": [
+      0,
+      1,
+      10,
+      11
+    ],
+    "stages": 5,
+    "status": "OBSERVED_INDEXED_DXC_SIZE_SHARD",
+    "validated_modules": 8,
+    "water_rendering_verified": false,
+    "within_tolerance_outputs": 32
+  }
+}
