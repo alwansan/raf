@@ -200,13 +200,22 @@ def run(a,out):
     need(count["billboard_modes_matched"]==count["vertex_stream_bytes_matched"]==12,"billboard_or_stream_mismatch")
     need(count["renderer_fields_declared"]>0 and count["renderer_fields_mismatched"]==0,"renderer_settings_mismatch")
     need(count["module_flags_declared"]>0 and count["module_flags_mismatched"]==0,"particle_module_flag_mismatch")
+    if getattr(a,"geometry_project",None) is not None:
+        from tools.gt_particle108_native_route import emitter_geometry
+        out["phase"]="private_geometry_fixture_stage"
+        out["geometry_stage"]=emitter_geometry.stage(a,private,ptrs,docs)
     out.update(status=STATUS,phase="complete",source_emitter_same_export_verified=True)
 
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--patch-helper",type=Path)
     for k in ("original","manifest","project","w1","b02","emitter","out"):p.add_argument("--"+k,type=Path)
+    p.add_argument("--geometry-project",type=Path)
+    p.add_argument("--geometry-private",type=Path)
+    p.add_argument("--run-id")
     a=p.parse_args()
+    if any(x is not None for x in (a.geometry_project,a.geometry_private,a.run_id)) and not all(x is not None for x in (a.geometry_project,a.geometry_private,a.run_id)):
+        p.error("all geometry arguments required together")
     if a.patch_helper:
         print(json.dumps(patch_helper(a.patch_helper)));return 0
     need(all(getattr(a,k) is not None for k in ("original","manifest","project","w1","b02","emitter","out")),"missing_arguments")

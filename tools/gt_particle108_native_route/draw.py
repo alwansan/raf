@@ -162,6 +162,9 @@ def stage(a,out,slots,targets,selected,parsed,table,pairs,switches,routes,uses,s
              sampler=[sampler[k] for k in ("m_FilterMode","m_Aniso","m_WrapU","m_WrapV","m_WrapW")],
              bias=sampler["m_MipBias"],companion_source_export_rgba_match=companion_parity,
              sizes=list(SIZES),backgrounds=BACKGROUNDS,probe_size=PROBE_SIZE,probe_levels=list(PROBE_LEVELS))
+    # Private selected VS semantic masks are needed for the separate emitter geometry lane.
+    cfg["vertex_requirements"]=[dict(semantic=x["semantic"],index=x["index"],mask=x["mask"],used_mask=x["used_mask"],component_type=x["type"])
+         for x in read_original_dxbc_signatures(pairs[route_id][0][0])["input"] if not x["system_value"]]
     here=Path(__file__).parent
     files={"Assets/Editor/ParticleDraw.cs":(here/"ParticleDraw.cs").read_bytes(),
            "Assets/GTParticleControl.shader":(here/"ParticleControl.shader").read_bytes(),

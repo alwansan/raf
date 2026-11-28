@@ -1,0 +1,42 @@
+{
+  "source": "GitHub Actions aggregate job log",
+  "run": 46138008077,
+  "job": 140957529174,
+  "execution_head": "34c9c787a6c65722cd45715eb2d023d7f2594f9e",
+  "conclusion": "success",
+  "source_controls_passed": 14,
+  "plan_guard_run": 46138008027,
+  "plan_guard_conclusion": "success",
+  "lint_run": 46138008130,
+  "lint_conclusion": "success",
+  "artifact_id": 15260865421,
+  "artifact_reported_sha256": "1174171e568cc8693e6886681e08f625233aa6b62a535b70273ed2dd54fb2a72",
+  "artifact_downloaded": false,
+  "actual_report": {
+    "Android_device": false,
+    "XAPK": false,
+    "black_fire_restored": false,
+    "component_documents": 36,
+    "counts": {
+      "billboard_modes_matched": 12,
+      "material_slots_compared": 24,
+      "module_flags_declared": 108,
+      "module_flags_matched": 108,
+      "ordered_material_lists_matched": 12,
+      "reciprocal_component_matches": 12,
+      "renderer_fields_declared": 192,
+      "renderer_fields_matched": 192,
+      "source_stream_bytes": 48,
+      "vertex_stream_bytes_matched": 12
+    },
+    "native_same_export_verified": true,
+    "original_emitter_geometry_verified": false,
+    "phase": "complete",
+    "private_payload_published": false,
+    "production": false,
+    "runtime_keyword_selection_verified": false,
+    "source_emitter_same_export_verified": true,
+    "source_emitters": 12,
+    "status": "EXACT_PARTICLE108_BILLBOARD_EMITTER_SAME_EXPORT"
+  }
+}
