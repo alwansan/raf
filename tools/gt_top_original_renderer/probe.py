@@ -129,7 +129,7 @@ def actual_docs(project, wanted):
             docs[(guid,fid)] = (cls,data[ROOTS[cls]])
     return docs
 
-def source_candidates(original, shader, material_trace, render_trace):
+def source_candidates(original, shader, material_trace=None, render_trace=None, *, source_only=False):
     import UnityPy
     root = original/"Raft_Data"
     cache = {}
@@ -186,6 +186,10 @@ def source_candidates(original, shader, material_trace, render_trace):
                     continue
                 obj(mesh,"Mesh")
                 keys=((23,scene,o.path_id),(33,scene,filter_id),(21,*m),(43,*mesh))
+                if source_only:
+                    # Original typed identities only; no fabricated export trace.
+                    candidates.append((m,(scene,o.path_id),keys,mats[m][1]))
+                    continue
                 if keys[0] not in render_trace or keys[1] not in render_trace or keys[2] not in material_trace or keys[3] not in render_trace:
                     counts["missing_typed_export_trace"]+=1
                     continue
