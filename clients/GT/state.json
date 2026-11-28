@@ -1,4 +1,179 @@
 {
+  "latest_particle108_retained_alpha_vulkan": {
+    "status": "PASS_ACTUAL_RETAINED_AUTHORED_ALPHA_VULKAN",
+    "starting_head": "de9bcc86ed5988d0d08e5b6e02a314ee7c953124",
+    "preparation_commit": "ff7d6ae419129255346b5cbc47d5fca8a615a704",
+    "execution_head": "652b2c37373299485420b09a106380641cb85bcf",
+    "run": 46086079821,
+    "job": 140795838498,
+    "conclusion": "success",
+    "lint_run": 46086079706,
+    "lint_job": 140795837180,
+    "lint_conclusion": "success",
+    "owner_instruction_date": "2026-11-28",
+    "source_blobs": {
+      "tools/gt_particle108_preserved_alpha_vulkan/PreservedTextureAlpha.shader": "912af323e21f147fed58e8e6390bd67c5d598fb1",
+      "tools/gt_particle108_preserved_alpha_vulkan/PreservedTextureAlphaValidation.cs": "25b982891a38350009c764d1e6be1c3fd5955923",
+      "tools/gt_particle108_preserved_alpha_vulkan/probe.py": "be369edc202d2203a07a7ef47ef28f487a549c49"
+    },
+    "retained_input": {
+      "path": "clients/GT/sessions/20261127-particle108-verified-texture-preservation/actual-preserved-texture-evidence.zip",
+      "sha256": "ae5000e1dd1466dc7531e44a91b1c1274b0939579d4de1524270aa297c92707c",
+      "blob": "921df2881a5322a946d9b4a217437bf96afee806",
+      "bytes": 16667,
+      "entries": 31,
+      "previous_run": 46044376618,
+      "previous_export_reexecuted": false,
+      "new_source_pngs": 0,
+      "material_shader_pointer_adapter_type_2_to_3": true,
+      "texture_meta_and_material_meta_unchanged": true
+    },
+    "actual_report": {
+      "Android_device": false,
+      "XAPK": false,
+      "actual_imported_to_blend_errors": {
+        "821": 3.7165249100468145e-8,
+        "822": 0,
+        "823": 3.7165249100468145e-8,
+        "824": 3.7165249100468145e-8
+      },
+      "actual_material_texture_guid_fileid_matches": 4,
+      "actual_reason": "actual imported material and six raster cases captured",
+      "actual_rendered_pixels": 22,
+      "actual_status": "OBSERVED",
+      "archive_sha256": "ae5000e1dd1466dc7531e44a91b1c1274b0939579d4de1524270aa297c92707c",
+      "backend": "Vulkan",
+      "baseline_source_blend_errors": {
+        "821": 3.7165249100468145e-8,
+        "822": 0,
+        "823": 3.7165249100468145e-8,
+        "824": 3.7165249100468145e-8
+      },
+      "changed_staged_files": [],
+      "controls": {
+        "opaque-821": {
+          "expected_control_error": 0,
+          "rejected_as_correct_baseline": true,
+          "wrong_baseline_error": 0.75
+        },
+        "swap-821-to-822": {
+          "expected_control_error": 0,
+          "rejected_as_correct_baseline": true,
+          "wrong_baseline_error": 0.875
+        }
+      },
+      "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+      "distinct_alpha_pixels": 3,
+      "imported_pixels": 14,
+      "original_assets_read": false,
+      "production": false,
+      "run_id": "46086079821-1-652b2c37373299485420b09a106380641cb85bcf",
+      "source_alpha_mismatches": 0,
+      "source_rgb_pixel_drift": 2,
+      "status": "PASS_ACTUAL_RETAINED_AUTHORED_ALPHA_VULKAN",
+      "unity_step_exit": 0
+    },
+    "independent_check": {
+      "unity_version": "2021.3.45f2",
+      "backend": "Vulkan",
+      "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+      "color_space": "Linear",
+      "render_target": "R32G32B32A32_SFloat",
+      "vulkan_preflight_exit": 0,
+      "observed_image_id": "sha256:2e9d06a0d4130f928fc5f6381041d2dbc0666dba265a3c85e19a7e67cf38e47a",
+      "imported_texture_format": "RGBA32 / R8G8B8A8_UNorm",
+      "actual_alpha_source": "FromInput",
+      "alpha_is_transparency": true,
+      "point_lod0_only": true,
+      "imported_pixels": 14,
+      "exact_alpha_pixels": 14,
+      "exact_rgba_pixels": 12,
+      "rgb_drift_zero_alpha_pixels": [
+        {
+          "authored_path_id": 821,
+          "pixel_index": 3,
+          "source": [
+            255,
+            255,
+            0,
+            0
+          ],
+          "imported": [
+            0,
+            0,
+            255,
+            0
+          ]
+        },
+        {
+          "authored_path_id": 823,
+          "pixel_index": 3,
+          "source": [
+            255,
+            255,
+            0,
+            0
+          ],
+          "imported": [
+            0,
+            0,
+            255,
+            0
+          ]
+        }
+      ],
+      "alpha_is_transparency_cause_proven": false,
+      "filtered_blend_verified": false,
+      "baseline_rendered_pixels": 14,
+      "control_rendered_pixels": 8,
+      "max_baseline_error": 3.7165249100468145e-8,
+      "reference_swap_separation": 0.875,
+      "forced_opaque_separation": 0.75,
+      "raw_receipt_sha256": "e48185737be33d8b0eefdd79010359761f55bc415b4ccc01def2860cd680b42e",
+      "stage_sha256": "3ca85bf49e7b7d23f7b5bf01ffa32867e183d76dcc082815ea9033fb0d4ee9fe",
+      "verified_sha256": "f7ff69e90d6410561ec07584dc82cdfc7d667ba12b4a6f756d1b9a012a0b8277"
+    },
+    "artifacts": [
+      {
+        "id": 15238659082,
+        "name": "gt-retained-alpha-vulkan-receipts",
+        "bytes": 10075,
+        "github_reported_digest": "sha256:66ea52e3806e87d3029b2cc2c4e84a48084c7f3eb0522857c3cac0ea55a3a4fa"
+      }
+    ],
+    "permanent_archive": {
+      "path": "clients/GT/sessions/20261128-particle108-preserved-alpha-vulkan/actual-imported-alpha-vulkan-evidence.zip",
+      "blob": "b10fa18e44da434e6dd194ea80db30f723369c2b",
+      "bytes": 4711,
+      "sha256": "06f9def4b062f5076733b6d02f7234021890affe43b34fd1b502f63aca4ce784",
+      "entries": 7,
+      "uncompressed_bytes": 18153,
+      "log_chunks": 4,
+      "independent_size_sha256_all_member_crc_verified": true,
+      "actual_report_matches_log": true,
+      "independent_imported_alpha_and_22_draw_pixels_recomputed": true,
+      "independent_two_rgb_drifts_zero_alpha": true,
+      "outer_artifact_independently_downloaded": false
+    },
+    "historical_material_census": {
+      "non_dummy": 688,
+      "total": 786,
+      "dummy": 98,
+      "dummy_shader_guid": 37,
+      "new_census": false
+    },
+    "original_assets_read_or_acquired": false,
+    "zip2_or_zip2_ai_authorization_accessed": false,
+    "original_particle108_recovery_proven": false,
+    "original_white_mesh_recovery_proven": false,
+    "original_source_authorization_verified": false,
+    "production_install_allowed": false,
+    "unity_isolated_authored_run": true,
+    "android_device_run": false,
+    "xapk_started": false,
+    "next_action": "G5-retained-ordinary-alpha-transparent-RGB-filtered-blend-cause / G4-G6-independent-water-lighting: owner 28 Nov explicitly authorizes isolated authored/verified-licensed source-only and graphics experiments, prohibits opening/downloading/using zip2 or zip2-ai-authorization or unverified game assets, production/native/XAPK; preserve independent lanes and do not touch CL/lab/BLACK. The exact 46044376618 retained PNG/Material/meta -> Unity imported material GUID/fileID/UV -> actual Vulkan point-sampled blend is now proved in authored scope (46086079821), no re-export; do not repeat it. Actual imported alpha exact 14/14, 3 distinct alpha positions survive, all 14 baseline and 8 control readbacks valid, two RGB-only changes occur at alpha=0 on authored 821/823 (yellow -> blue, alpha unchanged). Not full RGBA parity or proven causal attribution to alphaIsTransparency; point LOD0 blend masks them. If productive, reuse exact retained PNG/material/meta and current raw receipt to isolate the importer cause and actual bilinear sampling/mixed-alpha straight blend across the affected neighbor; compare exact unmodified baseline with one controlled importer-policy change, preserving source bytes, GUID/texture reference and unaffected controls. Distinguish intentional sprite/color dilation from data preservation, no universal policy or original fix; avoid repeating prior DXT5nm normal-map alpha-off test or generic authored alpha cases. Otherwise choose closest genuinely distinct executable independent water/lighting remediation with authored or independently verified licensed inputs only, reviewing G4 FFT seven-pass/row/native-boundary and G6 B21 lighting evidence first, or record precise blocker. Original A3/Particle108 third/NEXT23b/FFT-kernel6/ten runtime groups/G0-G6 still open; no original source acquisition, no production/game/player/device/APK/XAPK. 688/786 non-Dummy, 98 Dummy/37 GUID historical unchanged. Preserve owner latest prohibition and pinned reference.",
+    "session": "clients/GT/sessions/20261128-particle108-preserved-alpha-vulkan/README_AR.md"
+  },
   "latest_particle108_verified_texture_preservation": {
     "status": "PASS_ACTUAL_AUTHORED_VERIFIED_TEXTURE_PRESERVATION",
     "starting_head": "964528228595d55226c1d08b80aa774096d9d89a",
@@ -2778,8 +2953,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261127-particle108-verified-texture-preservation/README_AR.md",
-  "next_action": "G1-G2-G5-authorized-original-PARTICLE108-A3-and-Dummy-fanout: actual scoped native preservation of two approved authored ordinary textures now corrects the demonstrated metadata-cache collision (46044376618; prior causal 46033714513), no new fixtures. Do not repeat that experiment, invent substitute assets, apply the override to real originals just because of name/size or absent image, or activate it globally. The third original Particle108 was nonexportable with exact same-export tenth pointer (42132262184/42134436841), two external image targets plus third source alpha (43777398215/43778717548); these do NOT establish cache collision or actual target pixels. Obtain independently verified rights-holder permission/ownership, scope for storage/CI/port and immutable approved original source manifest/owner/provider lengths/SHA, actual typed class28 owner/PathID/raw object hash, source format/usage/mips and exact provider extent, same invocation collection class/selection reason (reserved engine file vs cache vs sprite vs deleted/other), actual tenth Material PPtr, independently authorized runtime/catalogue target identity/bytes or readback. If and only if actual erroneous metadata-only redirect and supported ordinary RGBA32 single-mip zero-sprite object are proven, admit exact processed instance for private selective native export; otherwise determine original format/usage/appropriate mechanism first, never force an engine or sprite target. Require same-export exact original Material/PPtr/UV/source and recovered RGBA/alpha, preserve unrelated targets, actual importer/render-state/shader and later integrated device proof. In parallel highest priority white meshes: authorized immutable post23 export and typed source Shader48/GUID/Renderer/Material trace, use gt_shader_fanout exact ranking (46036067471), verify source mesh/material/texture/program and protected census before installing. No further repetitive authored batches; if authorized inputs unavailable, record blocker and only make genuinely distinct productive remediation if supported. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. NEXT23b admitted diagnostics only; original 134-program/2312-stage and independent Unity compiler/route join remain open. A3, third Particle108, original FFT/kernel6, ten runtime groups and G0-G6 open. CL/lab read-only, BLACK/animation excluded. No original acquisition without independent authorization, production/native/device/APK/XAPK before integrated closure.",
+  "latest_session": "clients/GT/sessions/20261128-particle108-preserved-alpha-vulkan/README_AR.md",
+  "next_action": "G5-retained-ordinary-alpha-transparent-RGB-filtered-blend-cause / G4-G6-independent-water-lighting: owner 28 Nov explicitly authorizes isolated authored/verified-licensed source-only and graphics experiments, prohibits opening/downloading/using zip2 or zip2-ai-authorization or unverified game assets, production/native/XAPK; preserve independent lanes and do not touch CL/lab/BLACK. The exact 46044376618 retained PNG/Material/meta -> Unity imported material GUID/fileID/UV -> actual Vulkan point-sampled blend is now proved in authored scope (46086079821), no re-export; do not repeat it. Actual imported alpha exact 14/14, 3 distinct alpha positions survive, all 14 baseline and 8 control readbacks valid, two RGB-only changes occur at alpha=0 on authored 821/823 (yellow -> blue, alpha unchanged). Not full RGBA parity or proven causal attribution to alphaIsTransparency; point LOD0 blend masks them. If productive, reuse exact retained PNG/material/meta and current raw receipt to isolate the importer cause and actual bilinear sampling/mixed-alpha straight blend across the affected neighbor; compare exact unmodified baseline with one controlled importer-policy change, preserving source bytes, GUID/texture reference and unaffected controls. Distinguish intentional sprite/color dilation from data preservation, no universal policy or original fix; avoid repeating prior DXT5nm normal-map alpha-off test or generic authored alpha cases. Otherwise choose closest genuinely distinct executable independent water/lighting remediation with authored or independently verified licensed inputs only, reviewing G4 FFT seven-pass/row/native-boundary and G6 B21 lighting evidence first, or record precise blocker. Original A3/Particle108 third/NEXT23b/FFT-kernel6/ten runtime groups/G0-G6 still open; no original source acquisition, no production/game/player/device/APK/XAPK. 688/786 non-Dummy, 98 Dummy/37 GUID historical unchanged. Preserve owner latest prohibition and pinned reference.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -4375,6 +4550,12 @@
     "new_XAPK_requested": false
   },
   "current_handoff": {
+    "latest_particle108_retained_alpha_vulkan": {
+      "execution_head": "652b2c37373299485420b09a106380641cb85bcf",
+      "run": 46086079821,
+      "evidence": "clients/GT/sessions/20261128-particle108-preserved-alpha-vulkan/evidence.json",
+      "next_action": "G5-retained-ordinary-alpha-transparent-RGB-filtered-blend-cause / G4-G6-independent-water-lighting: owner 28 Nov explicitly authorizes isolated authored/verified-licensed source-only and graphics experiments, prohibits opening/downloading/using zip2 or zip2-ai-authorization or unverified game assets, production/native/XAPK; preserve independent lanes and do not touch CL/lab/BLACK. The exact 46044376618 retained PNG/Material/meta -> Unity imported material GUID/fileID/UV -> actual Vulkan point-sampled blend is now proved in authored scope (46086079821), no re-export; do not repeat it. Actual imported alpha exact 14/14, 3 distinct alpha positions survive, all 14 baseline and 8 control readbacks valid, two RGB-only changes occur at alpha=0 on authored 821/823 (yellow -> blue, alpha unchanged). Not full RGBA parity or proven causal attribution to alphaIsTransparency; point LOD0 blend masks them. If productive, reuse exact retained PNG/material/meta and current raw receipt to isolate the importer cause and actual bilinear sampling/mixed-alpha straight blend across the affected neighbor; compare exact unmodified baseline with one controlled importer-policy change, preserving source bytes, GUID/texture reference and unaffected controls. Distinguish intentional sprite/color dilation from data preservation, no universal policy or original fix; avoid repeating prior DXT5nm normal-map alpha-off test or generic authored alpha cases. Otherwise choose closest genuinely distinct executable independent water/lighting remediation with authored or independently verified licensed inputs only, reviewing G4 FFT seven-pass/row/native-boundary and G6 B21 lighting evidence first, or record precise blocker. Original A3/Particle108 third/NEXT23b/FFT-kernel6/ten runtime groups/G0-G6 still open; no original source acquisition, no production/game/player/device/APK/XAPK. 688/786 non-Dummy, 98 Dummy/37 GUID historical unchanged. Preserve owner latest prohibition and pinned reference."
+    },
     "latest_particle108_verified_texture_preservation": {
       "execution_head": "cf6a275c550d2feedae42d9f94bace4f8b159b41",
       "run": 46044376618,
