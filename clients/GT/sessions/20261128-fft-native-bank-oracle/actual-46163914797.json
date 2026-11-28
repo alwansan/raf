@@ -1,0 +1,1032 @@
+{
+  "run": 46163914797,
+  "job": 141037108950,
+  "head": "fcab52d6c6d9e3f5340743b59801e4bf78bc9600",
+  "conclusion": "success",
+  "guard": 46163914653,
+  "lint": 46163914660,
+  "artifact_id": 15270554383,
+  "receipt": {
+    "XAPK": false,
+    "android_device": false,
+    "attempted_captures": 8,
+    "canary": {
+      "exact_first_pass_pixels": 262144,
+      "exact_native_second_pixels": 262144,
+      "status": "PASS",
+      "wrong_second_detected_lanes": 1048576
+    },
+    "native_and_roundtrip_validated_slots": 4,
+    "observed_captures": 8,
+    "original_fft_numeric_parity_verified": false,
+    "original_runtime_kernel_mapping_proven": false,
+    "production": false,
+    "rows": [
+      {
+        "captures": [
+          {
+            "exact_upload": true,
+            "exit_code": 0,
+            "intermediate_barrier": true,
+            "native_roundtrip": [
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              },
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            ],
+            "profiles": [
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              }
+            ],
+            "source_sha256": "3e7a969840748f22ad28c7eee958f9ab21cb418172e00f2067e60fd26587ccca",
+            "status": "observed",
+            "table_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1"
+          },
+          {
+            "exact_upload": true,
+            "exit_code": 0,
+            "intermediate_barrier": true,
+            "native_roundtrip": [
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              },
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            ],
+            "profiles": [
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              }
+            ],
+            "source_sha256": "3e7a969840748f22ad28c7eee958f9ab21cb418172e00f2067e60fd26587ccca",
+            "status": "observed",
+            "table_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1"
+          }
+        ],
+        "first_slot": 6,
+        "input_mode": "signed",
+        "repeat_comparisons": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ]
+      },
+      {
+        "captures": [
+          {
+            "exact_upload": true,
+            "exit_code": 0,
+            "intermediate_barrier": true,
+            "native_roundtrip": [
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              },
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            ],
+            "profiles": [
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              }
+            ],
+            "source_sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+            "status": "observed",
+            "table_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1"
+          },
+          {
+            "exact_upload": true,
+            "exit_code": 0,
+            "intermediate_barrier": true,
+            "native_roundtrip": [
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              },
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            ],
+            "profiles": [
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              }
+            ],
+            "source_sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+            "status": "observed",
+            "table_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1"
+          }
+        ],
+        "first_slot": 6,
+        "input_mode": "zero",
+        "repeat_comparisons": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ]
+      },
+      {
+        "captures": [
+          {
+            "exact_upload": true,
+            "exit_code": 0,
+            "intermediate_barrier": true,
+            "native_roundtrip": [
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              },
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            ],
+            "profiles": [
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              }
+            ],
+            "source_sha256": "3e7a969840748f22ad28c7eee958f9ab21cb418172e00f2067e60fd26587ccca",
+            "status": "observed",
+            "table_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1"
+          },
+          {
+            "exact_upload": true,
+            "exit_code": 0,
+            "intermediate_barrier": true,
+            "native_roundtrip": [
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              },
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            ],
+            "profiles": [
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              }
+            ],
+            "source_sha256": "3e7a969840748f22ad28c7eee958f9ab21cb418172e00f2067e60fd26587ccca",
+            "status": "observed",
+            "table_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1"
+          }
+        ],
+        "first_slot": 16,
+        "input_mode": "signed",
+        "repeat_comparisons": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ]
+      },
+      {
+        "captures": [
+          {
+            "exact_upload": true,
+            "exit_code": 0,
+            "intermediate_barrier": true,
+            "native_roundtrip": [
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              },
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            ],
+            "profiles": [
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              }
+            ],
+            "source_sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+            "status": "observed",
+            "table_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1"
+          },
+          {
+            "exact_upload": true,
+            "exit_code": 0,
+            "intermediate_barrier": true,
+            "native_roundtrip": [
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              },
+              {
+                "class_mismatch": 0,
+                "finite_different": 0,
+                "finite_over_tolerance": 0,
+                "raw_bit_different": 0
+              }
+            ],
+            "profiles": [
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              },
+              {
+                "class_counts": [
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0,
+                  262144,
+                  0,
+                  0,
+                  0
+                ],
+                "written_pixels": 262144
+              }
+            ],
+            "source_sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+            "status": "observed",
+            "table_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1"
+          }
+        ],
+        "first_slot": 16,
+        "input_mode": "zero",
+        "repeat_comparisons": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ]
+      }
+    ],
+    "source_extent": [
+      512,
+      512
+    ],
+    "source_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "source_table_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1",
+    "source_table_texels": 4096,
+    "status": "OBSERVED_NATIVE_FFT_BANK_ORACLE",
+    "table_extent": [
+      512,
+      8
+    ],
+    "water_rendering_verified": false
+  }
+}

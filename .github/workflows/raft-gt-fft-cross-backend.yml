@@ -1,0 +1,152 @@
+name: GT G4 exact cross-backend first-stage and replay localization (NO PLAYER)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-gt-fft-cross-backend.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-gt-fft-indexed-pair-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  isolated-pair:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    environment: UNITY_LICENSE
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      GT_FFT_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+      GT_FFT_IMAGE: raft-gt-fft-bank:local
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tools/gt_fft_indexed_pair
+            tools/gt_fft_source_format_pair
+            tools/gt_fft_bank_numeric
+            tools/gt_fft_native_bank_oracle
+            tools/gt_fft_cross_backend
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Source-free receipt controls
+        run: |
+          set -euo pipefail
+          python3 -B -m unittest discover -s tools/gt_fft_indexed_pair -p test_audit.py -v
+          python3 -B -m unittest discover -s tools/gt_fft_source_format_pair -p test_audit.py -v
+          python3 -B -m unittest discover -s tools/gt_fft_bank_numeric -p test_audit.py -v
+          python3 -B -m unittest discover -s tools/gt_fft_cross_backend -p test_audit.py -v
+          mkdir "$RUNNER_TEMP/gt-fft-bank-safe"
+      - name: Check licensed editor activation and prepare private Vulkan image
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        timeout-minutes: 22
+        run: |
+          set -euo pipefail
+          test -n "$UNITY_LICENSE" || { test -n "$UNITY_SERIAL" && test -n "$UNITY_EMAIL" && test -n "$UNITY_PASSWORD"; }
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+          mkdir "$RUNNER_TEMP/gt-fft-bank-docker"
+          cp tools/gt_fft_bank_numeric/private-editor.sh "$RUNNER_TEMP/gt-fft-bank-docker/"
+          bash -n "$RUNNER_TEMP/gt-fft-bank-docker/private-editor.sh"
+          cat > "$RUNNER_TEMP/gt-fft-bank-docker/Dockerfile" <<'DOCKERFILE'
+          FROM unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3
+          USER root
+          RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb xauth && rm -rf /var/lib/apt/lists/*
+          RUN command -v unity-editor > /opt/gt-real-unity-editor && test -x "$(cat /opt/gt-real-unity-editor)"
+          COPY private-editor.sh /opt/gt-private-bin/unity-editor
+          RUN chmod 0755 /opt/gt-private-bin/unity-editor
+          ENV PATH=/opt/gt-private-bin:$PATH
+          ENV VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+          DOCKERFILE
+          timeout 900s docker pull unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3 > "$RUNNER_TEMP/gt-fft-bank-pull.log" 2>&1
+          timeout 360s docker build --pull=false --tag "$GT_FFT_IMAGE" "$RUNNER_TEMP/gt-fft-bank-docker" > "$RUNNER_TEMP/gt-fft-bank-build.log" 2>&1
+          timeout 45s docker run --rm --entrypoint /bin/bash "$GT_FFT_IMAGE" -c 'test -f "$VK_ICD_FILENAMES" && test "$(command -v unity-editor)" = /opt/gt-private-bin/unity-editor'
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-fft-pair
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Authenticate managed DLL and decompile exact private source
+        run: |
+          set -euo pipefail
+          test "$(git hash-object Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = fc9d4ba920a178fdb89c970d9d772a01051dadc6
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/gt-fft-bank-ilspy"
+          mkdir "$RUNNER_TEMP/gt-fft-bank-managed"
+          timeout 300s "$RUNNER_TEMP/gt-fft-bank-ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/gt-fft-bank-managed" Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/gt-fft-bank-ilspy.log" 2>&1
+      - name: Authenticate original object and stage exact indexed and standalone programs privately
+        id: stage
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools g++ libvulkan-dev mesa-vulkan-drivers vulkan-tools
+          python3 -m venv "$RUNNER_TEMP/gt-fft-bank-py"
+          "$RUNNER_TEMP/gt-fft-bank-py/bin/python" -m pip install --disable-pip-version-check UnityPy==1.25.4
+          "$RUNNER_TEMP/gt-fft-bank-py/bin/python" -m scripts.stage_zip2_fft_owner --zip2-checkout zip2-fft-pair --destination "$RUNNER_TEMP/gt-fft-bank-source/Raft_Data/sharedassets0.assets"
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          "$RUNNER_TEMP/gt-fft-bank-py/bin/python" -B -m tools.gt_fft_cross_backend.audit stage --source "$RUNNER_TEMP/gt-fft-bank-source/Raft_Data" --managed "$RUNNER_TEMP/gt-fft-bank-managed" --project gt-fft-bank-project --private gt-fft-bank-private --run-id "$GT_FFT_RUN_ID" --out "$RUNNER_TEMP/gt-fft-bank-safe/stage.json"
+          rm -rf zip2-fft-pair "$RUNNER_TEMP/gt-fft-bank-source" "$RUNNER_TEMP/gt-fft-bank-managed"
+      - name: Capture Unity Vulkan first stage and exact crossed replays
+        id: unity
+        continue-on-error: true
+        uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          customImage: raft-gt-fft-bank:local
+          projectPath: gt-fft-bank-project
+          targetPlatform: StandaloneLinux64
+          buildMethod: GTIndexedPair.Run
+          manualExit: true
+          enableGpu: true
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 8g
+          dockerCpuLimit: 2
+          customParameters: -force-vulkan -force-device-index 0 -job-worker-count 2 -gtFftRunId ${{ env.GT_FFT_RUN_ID }}
+      - name: Verify private exact-byte commitments and cross-backend stage comparisons
+        if: always() && steps.stage.outcome == 'success'
+        env:
+          EDITOR_OUTCOME: ${{ steps.unity.outcome }}
+        run: |
+          set -euo pipefail
+          test -d gt-fft-bank-private && test ! -L gt-fft-bank-private
+          test -d gt-fft-bank-project && test ! -L gt-fft-bank-project
+          sudo chown -hR "$(id -u):$(id -g)" -- gt-fft-bank-private gt-fft-bank-project
+          test "$(stat -c %a gt-fft-bank-private)" = 700
+          "$RUNNER_TEMP/gt-fft-bank-py/bin/python" -B -m tools.gt_fft_cross_backend.audit verify --project gt-fft-bank-project --private gt-fft-bank-private --stage "$RUNNER_TEMP/gt-fft-bank-safe/stage.json" --run-id "$GT_FFT_RUN_ID" --outcome "$EDITOR_OUTCOME" --out "$RUNNER_TEMP/gt-fft-bank-safe/actual.json"
+      - name: Publish bounded aggregate only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-fft-cross-backend-safe
+          path: ${{ runner.temp }}/gt-fft-bank-safe/*.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove only private experiment staging
+        if: always()
+        run: |
+          sudo rm -rf gt-fft-bank-project gt-fft-bank-private
+          rm -rf zip2-fft-pair "$RUNNER_TEMP/gt-fft-bank-source" "$RUNNER_TEMP/gt-fft-bank-docker"
+          rm -rf "$RUNNER_TEMP/gt-fft-bank-managed" "$RUNNER_TEMP/gt-fft-bank-ilspy"
+          rm -f "$RUNNER_TEMP/gt-fft-bank-ilspy.log" "$RUNNER_TEMP/gt-fft-bank-pull.log" "$RUNNER_TEMP/gt-fft-bank-build.log"
+          docker image rm "$GT_FFT_IMAGE" >/dev/null 2>&1 || true
