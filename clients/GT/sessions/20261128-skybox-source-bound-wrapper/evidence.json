@@ -14,10 +14,10 @@
   "conclusion": null,
   "lint_run": 46102429930,
   "lint_job": 140847638088,
-  "lint_status": "in_progress",
-  "lint_conclusion": null,
-  "last_observed_step": "Checkout only independent ambient verifier and existing pinned tools",
-  "source_free_controls_step": "pending",
+  "lint_status": "completed",
+  "lint_conclusion": "success",
+  "last_observed_step": "Compile temporary class104 capture and smoke test",
+  "source_free_controls_step": "success",
   "tool_blobs": {
     "tools/gt_skybox_shader_wrapper/wrapper.py": "95bcf6e7282b8e500c17e7b2676b13448fcf4ea2",
     "tools/gt_skybox_shader_wrapper/test_wrapper.py": "4dcbdede5c66b0c5c1035b29ab491a6c9b570d5a",
@@ -37,5 +37,112 @@
   "XAPK": false,
   "all_gates_open": true,
   "session": "clients/GT/sessions/20261128-skybox-source-bound-wrapper/README.md",
-  "next_action": "G3-G6-original-skybox-one-pass-source-bound-wrapper: reconcile actual 46102429968 job 140847638482 and lint 46102429930 job 140847638088 (execution 3d3e3550b0ebf224c491617d07e1dbbc89016510). Inspect GT_SKYBOX_SOURCE_BOUND_WRAPPER safe aggregate; distinguish route/layout, original program translation, parameter/mesh/varying binding, combined entrypoint/reflection, and disposable install gates. Only PASS_SOURCE_BOUND_WRAPPER_PRIVATE_SAME_EXPORT with verified exact object SHA, both compiled entries, reflected interfaces and original offsets and five protected file hashes proves this scoped install; still no Unity/game/device proof, no full census change. If precise unsupported schema or binding failure, record it without weakening source contracts; pursue separate highest-impact water/light/mesh/particle lane if blocked. Do not repeat prior source-only census or claim closure. No original raw assets/program publication, no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. CL/lab read-only, BLACK/animation deferred."
+  "next_action": "G3-G6-original-skybox-one-pass-source-bound-wrapper: reconcile actual 46102429968 job 140847638482 and lint 46102429930 job 140847638088 (execution 3d3e3550b0ebf224c491617d07e1dbbc89016510). Inspect GT_SKYBOX_SOURCE_BOUND_WRAPPER safe aggregate; distinguish route/layout, original program translation, parameter/mesh/varying binding, combined entrypoint/reflection, and disposable install gates. Only PASS_SOURCE_BOUND_WRAPPER_PRIVATE_SAME_EXPORT with verified exact object SHA, both compiled entries, reflected interfaces and original offsets and five protected file hashes proves this scoped install; still no Unity/game/device proof, no full census change. If precise unsupported schema or binding failure, record it without weakening source contracts; pursue separate highest-impact water/light/mesh/particle lane if blocked. Do not repeat prior source-only census or claim closure. No original raw assets/program publication, no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. CL/lab read-only, BLACK/animation deferred.",
+  "actual_step_snapshot": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Checkout only independent ambient verifier and existing pinned tools",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Verify pinned source readers and shader program recovery controls",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Install public translation tools for exact private wrapper",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-dotnet@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Obtain exact public AssetRipperCLI source",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Compile temporary class104 capture and smoke test",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "name": "Read only level24 and five pinned support providers",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Resolve only exact missing Skybox provider from authenticated native file slot",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Read only one selected additional provider (exact file or ordered chunks)",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Authenticate selected provider Git object and SHA and exact native Material21",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Resolve actual Skybox Material m_Shader exact native provider",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Read only additional exact Shader provider when not already staged",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Authenticate exact selected native Shader48 and provider bytes",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Execute actual bounded shader-linked export with same-instance traces",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Build and validate one source-bound wrapper, install only into disposable same export",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Publish ONLY safe aggregate receipts",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Remove only temporary source and private export",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Obtain exact public AssetRipperCLI source",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Run actions/setup-dotnet@v4",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Checkout only independent ambient verifier and existing pinned tools",
+      "status": "pending",
+      "conclusion": null
+    }
+  ]
 }
