@@ -6,8 +6,15 @@ phase=setup
 trap 'rc=$?; printf "phase=%s\nexit=%s\n" "$phase" "$rc" > evidence/result.txt; if [[ -n "${emu_pid:-}" ]]; then adb logcat -d -s RaftQaFixture AndroidRuntime > evidence/fixture.log 2>&1 || true; kill "$emu_pid" 2>/dev/null || true; fi' EXIT
 abi=${EXPECTED_ABI:?}
 case "${abi}:$(uname -m)" in x86_64:x86_64|arm64-v8a:aarch64) ;; *) echo "Host ABI mismatch"; exit 2;; esac
-root=${ANDROID_SDK_ROOT:-${ANDROID_HOME:?}}
-export PATH="$root/platform-tools:$root/emulator:$PATH"
+phase=sdk-discovery
+root=${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}
+if [[ ! -d "$root" ]]; then
+  echo "Android SDK unavailable for $(uname -m) at $root"
+  ls -l /dev/kvm || true
+  exit 2
+fi
+export ANDROID_HOME="$root" ANDROID_SDK_ROOT="$root"
+export PATH="$root/cmdline-tools/latest/bin:$root/platform-tools:$root/emulator:$PATH"
 phase=sdk
 image="system-images;android-35;google_apis;$abi"
 sdkmanager "$image" 'platforms;android-35' 'build-tools;35.0.0' platform-tools emulator
@@ -46,7 +53,7 @@ done
 [[ $(adb shell getprop sys.boot_completed | tr -d '\r') == 1 ]]
 guest=$(adb shell getprop ro.product.cpu.abi | tr -d '\r')
 [[ "$guest" == "$abi" ]]
-{ uname -m; adb shell getprop ro.build.version.sdk; adb shell getprop ro.product.cpu.abilist; adb shell wm size; adb shell pm list features | grep -i vulkan || true; } > evidence/device.txt
+{ uname -m; adb shell getprop ro.build.fingerprint; adb shell getprop ro.build.version.sdk; adb shell getprop ro.product.cpu.abilist; adb shell wm size; adb shell pm list features | grep -i vulkan || true; } > evidence/device.txt
 timeout 15 adb shell cmd gpu vkjson > evidence/vulkan-reported.json 2>&1 || true
 adb shell settings put global window_animation_scale 0
 adb shell settings put global transition_animation_scale 0
@@ -55,7 +62,7 @@ adb shell input keyevent KEYCODE_WAKEUP
 adb shell wm dismiss-keyguard
 phase=install
 adb install "$tmp/fixture.apk" | tee evidence/install.txt
-grep -Fx Success evidence/install.txt
+tr -d '\r' < evidence/install.txt | grep -Fx Success
 adb logcat -c
 adb shell am start -W -n org.raft.qa.fixture/.Probe | tee evidence/launch.txt
 grep -qi '^Status: ok' evidence/launch.txt
@@ -91,3 +98,4 @@ if [[ "${CAPTURE_VIDEO:-false}" == true ]]; then
   adb pull /data/local/tmp/raft-qa.mp4 evidence/fixture.mp4
 fi
 phase=passed
+echo "Synthetic emulator checks passed for $guest"
