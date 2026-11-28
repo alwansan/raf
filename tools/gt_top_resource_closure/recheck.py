@@ -8,7 +8,7 @@ from collections import Counter, defaultdict
 import json
 from pathlib import Path
 
-from tools.gt_top_resource_closure import prestage as prep, probe as prior, texture_observation
+from tools.gt_top_resource_closure import prestage as prep, probe as prior, texture_observation, selected_array
 from tools.gt_top_original_renderer import probe as previous
 from tools.gt_shader_fanout import audit
 from scripts import gt_material_route_values as values
@@ -153,6 +153,14 @@ def run(a,report):
             elif cls==187 and path.suffix.lower()==".png":
                 need(key in array_sources,"selected_array_source_metadata_unproven")
                 record.update(texture_observation.array_png_observation(array_sources[key],path,meta,exp[1],kind))
+                if a.repair_selected_array:
+                    matpath=index[mk[0]][0]
+                    mat_before=zip2.fingerprint(matpath)
+                    record["selected_array_repair"]=selected_array.run(source.obj(key,"Texture2DArray"),path,meta,exp[0],exp[1],kind,repair=True)
+                    need(zip2.fingerprint(matpath)==mat_before,"selected_material_changed_during_array_grid_repair")
+                    record["selected_array_repair"]["material_bytes_unchanged"]=True
+                    if record["selected_array_repair"]["private_grid_repair_applied"]:
+                        record["status"]="ARRAY_GRID_REPAIRED_TOP_MIPS_MATCH"
             elif path.suffix.lower() in (".asset",".cubemap",".rendertexture",".mat",".unity",".prefab"):
                 body=prior.document(path,exp[1],cls)
                 root=native.strict_mapping(body)
@@ -162,7 +170,7 @@ def run(a,report):
             else:
                 record.update(status="UNPROVEN",reason="non_Texture2D_importer_identity_not_proven")
         except Exception as exc:
-            record.update(status="UNPROVEN",reason=prior.classify(exc))
+            record.update(status="UNPROVEN",reason=str(exc) if isinstance(exc,selected_array.SelectedArrayError) else prior.classify(exc))
         observed.append(record)
     report["texture_unique_targets"]=len(linked)
     report["texture_results"]=observed
@@ -184,6 +192,8 @@ def main():
     p=argparse.ArgumentParser()
     for name in ("original","manifest","project","w1","b02","renderer-trace","plan","out"):
         p.add_argument("--"+name,type=Path,required=True)
+    p.add_argument("--repair-selected-array",action="store_true",
+                   help="Only in the disposable actual export, after exact source layer parity")
     a=p.parse_args()
     report={"status":"INCONCLUSIVE","phase":"same_instance_join","unity_gpu_pixels_verified":False,
             "white_mesh_repair_verified":False,"full_mip_sampler_ABI_verified":False,

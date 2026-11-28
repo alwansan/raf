@@ -205,7 +205,7 @@ jobs:
           PY
             exit 2
           fi
-      - name: Rejoin original graph with exact typed texture capture and source-declared unpack observation
+      - name: Verify exact selected inline BC3 array layers and repair only source-proven grid
         run: |
           set -euo pipefail
           timeout 1200s python3 -B -m tools.gt_top_resource_closure.recheck \
@@ -216,6 +216,7 @@ jobs:
             --b02 "$RUNNER_TEMP/b21-b02-private.json" \
             --renderer-trace "$RUNNER_TEMP/gt-renderer-private.json" \
             --plan "$RUNNER_TEMP/gt-top-prestage-private.json" \
+            --repair-selected-array \
             --out "$RUNNER_TEMP/gt-top-prestaged-resource-safe.json"
       - name: Publish only aggregate observations
         if: always()

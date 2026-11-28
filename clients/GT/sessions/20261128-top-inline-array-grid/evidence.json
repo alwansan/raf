@@ -1,0 +1,16 @@
+{
+  "status": "EXACT_SELECTED_INLINE_ARRAY_GRID_PREPARED_PENDING_ACTUAL",
+  "starting_head": "e0d0850b0cbc1f467e55562d02f46449353a4880",
+  "prior_actual": 46123244906,
+  "prior_actual_receipt": "clients/GT/sessions/20261128-top-texture-typed-semantics/actual-46123244906.json",
+  "new_authored_test_methods": 3,
+  "tests_executed_in_current_session": false,
+  "all_top_mip_layers_exact": false,
+  "private_grid_repair_applied": false,
+  "full_lower_mip_pixel_equivalence": false,
+  "unity_gpu_pixels_verified": false,
+  "white_mesh_repair_verified": false,
+  "production": false,
+  "XAPK": false,
+  "next_action": "Reconcile the NEW push-triggered selected inline BC3 array grid/layer test at its execution head. Actual 46123244906 SUCCESS: exact selected Mesh 10/10, Material 8 color/43 float, all 6/6 TexEnv+UV (4 nonnull/2 null), four physical targets, all three Texture2D raw or original-enum-declared DXT5nm transform exact at top mip (raw 2/3, semantic 3/3). Class187 exact trace; 1024x1024 depth2, format100, 11 mips, inline 2796256 bytes, stream 0; actual vertical 1024x2048 PNG, shape4, Rows/Columns=0. Distinct next: SHA-authenticated inline BC3 full 22 mip byte ranges, exact per-layer top-mip pixel comparisons via pinned UnityPy decoder, independent Pillow check, pinned upstream slice-major/FlipY/vertical stack, reversed layer/vertical controls. Only if exact both layers and controls distinguish wrong mappings, patch exactly two zero grid digits to rows2/cols1 in disposable export; prove original PNG, GUID, material bytes unchanged. Three new authored tests pending CI. No full lower-mip or actual Unity import claim; next isolated actual Unity class187 import and normal map runtime policy/source-bound shader ABI, then original Mesh/material Vulkan draw only after suitable resources. If blocked retain reason/pivot independent fire or water. Plan guard oversized ledger still separate. G0–G6 open, no production/player/XAPK; CL/lab read-only; BLACK/animation deferred."
+}
