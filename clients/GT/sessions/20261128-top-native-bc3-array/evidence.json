@@ -32,7 +32,7 @@
   "production": false,
   "XAPK": false,
   "private_payload_published": false,
-  "next_action": "G1–G3: Actual 46128563088/job 140928500873 success, lint 46128563099 success; selected native class187 type2 only resolves in isolated authored shader, original type3 and wrong GUID/fileID rejected; 22/22 BC3 ranges exact, 2,796,202 pre/post GPU coordinates exact, UNorm vs CPU 51,734 errors >1/255, sRGB GPU vs transfer of GPU UNorm zero >1/255 but not full equality. Narrow reference repair candidate preserves original shader, exact GUID/fileID, UV and every other byte; source-free controls pending CI. Next bind original Shader48 program/keywords/sampler ABI and exact selected Mesh+Material in isolated draw with Dummy and wrong-reference controls; do not repeat standalone array observation. If blocked, independent fire/water. G0–G6 open, no production/XAPK/device acceptance; Plan Guard migration pending new CI.",
+  "next_action": "G1–G3: Actual 46128563088/job 140928500873 success, lint 46128563099 success; selected native class187 type2 only resolves in isolated authored shader, original type3 and wrong GUID/fileID rejected; 22/22 BC3 ranges exact, 2,796,202 pre/post GPU coordinates exact, UNorm vs CPU 51,734 errors >1/255, sRGB GPU vs transfer of GPU UNorm zero >1/255 but not full equality. Narrow reference repair candidate preserves original shader, exact GUID/fileID, UV and every other byte; source-free controls pending CI. Next bind original Shader48 program/keywords/sampler ABI and exact selected Mesh+Material in isolated draw with Dummy and wrong-reference controls; do not repeat standalone array observation. If blocked, independent fire/water. G0–G6 open, no production/XAPK/device acceptance; Plan Guard 46129561453/job 140931533182 passed at c9b239b4, 11 tests and live links. Lint 46129561451 passed. New source-only repair unit workflow pending; no original shader draw yet.",
   "actual_run": 46128563088,
   "actual_job": 140928500873,
   "actual_run_status": "completed",
@@ -89,5 +89,12 @@
   "sRGB_GPU_transferred_UNorm_errors_over_1_div_255": 0,
   "sRGB_GPU_transferred_UNorm_full_equivalence": false,
   "narrow_reference_repair_candidate_source_only": true,
-  "narrow_reference_repair_tests_verified": false
+  "narrow_reference_repair_tests_verified": false,
+  "ledger_guard_run": 46129561453,
+  "ledger_guard_job": 140931533182,
+  "ledger_guard_conclusion": "success",
+  "ledger_guard_tests": 11,
+  "ledger_guard_execution_head": "c9b239b44c40bd09e99bc0f6435044eebfb4e69d",
+  "ledger_guard_lint": 46129561451,
+  "ledger_guard_lint_conclusion": "success"
 }
