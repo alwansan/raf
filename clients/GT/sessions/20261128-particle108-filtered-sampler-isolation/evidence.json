@@ -1,0 +1,346 @@
+{
+  "status": "PASS_ACTUAL_RETAINED_AUTHORED_ALPHA_EXPLICIT_LINEAR",
+  "starting_head": "2132b6e7cb2833d7826e54d06d816838db8070ff",
+  "preparation_commit": "910aa25b923f5ae62509f17554187263ea357a64",
+  "execution_head": "1dad5a9675bdcb207bf1472475d02d39a616ea6b",
+  "run": 46088382579,
+  "job": 140803246318,
+  "conclusion": "success",
+  "lint_run": 46088382623,
+  "lint_job": 140803245019,
+  "lint_conclusion": "success",
+  "source_blobs": {
+    "shader": "0eb42d46707477f647062bb3e1aa97252e500f73",
+    "cs": "fadbe22a14cb367cd95f9240b3bcf9cd4e7ac676",
+    "py": "9ac0aba317af973263d07cd5396601774558069f"
+  },
+  "actual_report": {
+    "Android_device": false,
+    "XAPK": false,
+    "actual_draws": 30,
+    "actual_import_observations": 8,
+    "actual_reason": "actual baseline and single importer policy counterfactual with explicit sampler, UV and state diagnostics captured",
+    "actual_rendered_pixels": 246,
+    "actual_status": "OBSERVED",
+    "alpha_mismatches": 0,
+    "archive_sha256": "ae5000e1dd1466dc7531e44a91b1c1274b0939579d4de1524270aa297c92707c",
+    "backend": "Vulkan",
+    "baseline_source_drift_pixels": {
+      "821": [
+        3
+      ],
+      "822": [],
+      "823": [
+        3
+      ],
+      "824": []
+    },
+    "center_errors": {
+      "821": 3.7165249100468145e-8,
+      "822": 0,
+      "823": 3.7165249100468145e-8,
+      "824": 3.7165249100468145e-8
+    },
+    "changed_midpoint_coordinates": {
+      "821": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "822": [],
+      "823": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "824": []
+    },
+    "controls": {
+      "alpha-off-opaque": {
+        "baseline_separation": 0.875,
+        "expected_error": 0.0019608139991760254
+      },
+      "alpha-off-swap": {
+        "baseline_separation": 0.875,
+        "expected_error": 0.0019608139991760254
+      },
+      "baseline-opaque": {
+        "baseline_separation": 0.75,
+        "expected_error": 0.0019608139991760254
+      },
+      "baseline-swap": {
+        "baseline_separation": 0.875,
+        "expected_error": 0.0019608139991760254
+      }
+    },
+    "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+    "failed_archive_sha256": "fab546f411b0825884c7150306002cd7695c95547b3dd72901bec8e39530dd3b",
+    "gpu_to_imported_linear_errors": {
+      "alpha-off-821": 0.002211684339186726,
+      "alpha-off-822": 0.0019608139991760254,
+      "alpha-off-823": 0.002211684339186726,
+      "alpha-off-824": 0.002211684339186726,
+      "baseline-821": 0.002211684339186726,
+      "baseline-822": 0.0019608139991760254,
+      "baseline-823": 0.002211684339186726,
+      "baseline-824": 0.002211684339186726
+    },
+    "gpu_to_source_linear_errors": {
+      "alpha-off-821": 0.002211684339186726,
+      "alpha-off-822": 0.0019608139991760254,
+      "alpha-off-823": 0.002211684339186726,
+      "alpha-off-824": 0.002211684339186726,
+      "baseline-821": 0.12598235163034177,
+      "baseline-822": 0.0019608139991760254,
+      "baseline-823": 0.12598235163034177,
+      "baseline-824": 0.002211684339186726
+    },
+    "nearest_negative_separations": {
+      "alpha-off-821": 0.34657442943722594,
+      "alpha-off-822": 0.501960813999176,
+      "alpha-off-823": 0.34657442943722594,
+      "alpha-off-824": 0.34657442943722594,
+      "baseline-821": 0.34657442943722594,
+      "baseline-822": 0.501960813999176,
+      "baseline-823": 0.34657442943722594,
+      "baseline-824": 0.34657442943722594
+    },
+    "original_assets_read": false,
+    "policy_draw_deltas": {
+      "821": 0.1259823441505432,
+      "822": 0,
+      "823": 0.1259823441505432,
+      "824": 0
+    },
+    "prior_sha256": "06f9def4b062f5076733b6d02f7234021890affe43b34fd1b502f63aca4ce784",
+    "production": false,
+    "restored_pixels": 2,
+    "run_id": "46088382579-1-1dad5a9675bdcb207bf1472475d02d39a616ea6b",
+    "sampler_diagnostics": {
+      "alpha-off-explicit-both-off": {
+        "aniso": 0,
+        "corner_weights": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "max_abs_determinant": 0.003921627998352051,
+        "nominal_error": 0.0019608139991760254,
+        "old_failed_draw_error": 0.4469687342643738,
+        "quality": "Disable"
+      },
+      "alpha-off-explicit-default": {
+        "aniso": 1,
+        "corner_weights": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "max_abs_determinant": 0.003921627998352051,
+        "nominal_error": 0.0019608139991760254,
+        "old_failed_draw_error": 0.4469687342643738,
+        "quality": "ForceEnable"
+      },
+      "alpha-off-implicit-aniso-zero": {
+        "aniso": 0,
+        "corner_weights": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "max_abs_determinant": 0.003921627998352051,
+        "nominal_error": 0.0019608139991760254,
+        "old_failed_draw_error": 0.4469687342643738,
+        "quality": "ForceEnable"
+      },
+      "alpha-off-implicit-both-off": {
+        "aniso": 0,
+        "corner_weights": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "max_abs_determinant": 0.003921627998352051,
+        "nominal_error": 0.0019608139991760254,
+        "old_failed_draw_error": 0.4469687342643738,
+        "quality": "Disable"
+      },
+      "alpha-off-implicit-default": {
+        "aniso": 1,
+        "corner_weights": [
+          0.553031325340271,
+          0.22348439693450928,
+          0.2234843373298645,
+          -5.960464477539063e-8
+        ],
+        "max_abs_determinant": 0.049945295315708904,
+        "nominal_error": 0.4469687342643738,
+        "old_failed_draw_error": 0,
+        "quality": "ForceEnable"
+      },
+      "alpha-off-implicit-quality-off": {
+        "aniso": 1,
+        "corner_weights": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "max_abs_determinant": 0.003921627998352051,
+        "nominal_error": 0.0019608139991760254,
+        "old_failed_draw_error": 0.4469687342643738,
+        "quality": "Disable"
+      },
+      "baseline-explicit-both-off": {
+        "aniso": 0,
+        "corner_weights": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "max_abs_determinant": 0.003921627998352051,
+        "nominal_error": 0.0019608139991760254,
+        "old_failed_draw_error": 0.4469687342643738,
+        "quality": "Disable"
+      },
+      "baseline-explicit-default": {
+        "aniso": 1,
+        "corner_weights": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "max_abs_determinant": 0.003921627998352051,
+        "nominal_error": 0.0019608139991760254,
+        "old_failed_draw_error": 0.4469687342643738,
+        "quality": "ForceEnable"
+      },
+      "baseline-implicit-aniso-zero": {
+        "aniso": 0,
+        "corner_weights": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "max_abs_determinant": 0.003921627998352051,
+        "nominal_error": 0.0019608139991760254,
+        "old_failed_draw_error": 0.4469687342643738,
+        "quality": "ForceEnable"
+      },
+      "baseline-implicit-both-off": {
+        "aniso": 0,
+        "corner_weights": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "max_abs_determinant": 0.003921627998352051,
+        "nominal_error": 0.0019608139991760254,
+        "old_failed_draw_error": 0.4469687342643738,
+        "quality": "Disable"
+      },
+      "baseline-implicit-default": {
+        "aniso": 1,
+        "corner_weights": [
+          0.553031325340271,
+          0.22348439693450928,
+          0.2234843373298645,
+          -5.960464477539063e-8
+        ],
+        "max_abs_determinant": 0.049945295315708904,
+        "nominal_error": 0.4469687342643738,
+        "old_failed_draw_error": 0,
+        "quality": "ForceEnable"
+      },
+      "baseline-implicit-quality-off": {
+        "aniso": 1,
+        "corner_weights": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "max_abs_determinant": 0.003921627998352051,
+        "nominal_error": 0.0019608139991760254,
+        "old_failed_draw_error": 0.4469687342643738,
+        "quality": "Disable"
+      }
+    },
+    "status": "PASS_ACTUAL_RETAINED_AUTHORED_ALPHA_EXPLICIT_LINEAR",
+    "unexpected_staged_file_drift": [],
+    "unity_step_exit": 0,
+    "uv_errors": {
+      "alpha-off-821": 0,
+      "alpha-off-822": 0,
+      "alpha-off-823": 0,
+      "alpha-off-824": 0,
+      "baseline-821": 0,
+      "baseline-822": 0,
+      "baseline-823": 0,
+      "baseline-824": 0
+    }
+  },
+  "independent": {
+    "archive_reconstructed_from_actual_5_log_chunks": true,
+    "sha256_size_all_seven_member_crc_verified": true,
+    "actual_report_matches_log": true,
+    "actual_import_alpha_exact": 28,
+    "alpha_off_rgba_exact": 14,
+    "independent_readback_samples_recomputed": 246,
+    "max_main_error": 0.002211684339186726,
+    "max_uv_error": 0,
+    "max_control_error": 0.0019608139991760254,
+    "affected_delta": 0.1259823441505432,
+    "unaffected_delta": 0,
+    "outer_artifact_independently_downloaded": false
+  },
+  "permanent_archive": {
+    "path": "clients/GT/sessions/20261128-particle108-filtered-sampler-isolation/actual-filtered-sampler-evidence.zip",
+    "blob": "0e77a8a4510a09c4e7a0fb244afbe6007c506cf5",
+    "bytes": 7250,
+    "sha256": "0419ca29a0f2669fcf8e87e068bf666b5ff8791ea4b352e42513501d26d4b0ee",
+    "entries": 7,
+    "raw_receipt_sha256": "151d81bc01362b93e543599f8accd69f29c8998d9ee4ed2e91479c5310173b13",
+    "verified_sha256": "af931f03eff3a3afbe50c84ddedd5dafce49e49c0fd0862e040b1d1983b1d9d8",
+    "stage_sha256": "ea8d309665dc4f42b397062217ac3d42b8642b43eb78b68a2d458ae82519acbf"
+  },
+  "outer_artifact": {
+    "id": 15240580664,
+    "bytes": 15121,
+    "github_reported_digest": "sha256:1515b07558a390eefb487ed2bdb271014a27944b231f5ef2d2217e781a4904df"
+  },
+  "original_assets_acquired_or_read": false,
+  "original_particle108_fix": false,
+  "original_white_mesh_fix": false,
+  "production": false,
+  "Android_device": false,
+  "XAPK": false,
+  "next_action": "Do not replay G5 retained ordinary alpha or sampler isolation. Next independent G6 typed local lightmap binding: B21 only counts local pointer presence and in-range indices; distinct typed class and physical settings ambiguity must be established. Source-free isolated tool prepared, test old behavior and stricter controls before claiming PASS; no original assets or runtime claims. For original work follow current owner directive, actual legitimate access/provenance, no production/player/XAPK before integrated G0-G6. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged; original A3, third Particle108, original FFT/kernel6, NEXT23b and ten runtime groups open.",
+  "session": "clients/GT/sessions/20261128-particle108-filtered-sampler-isolation/README_AR.md"
+}
