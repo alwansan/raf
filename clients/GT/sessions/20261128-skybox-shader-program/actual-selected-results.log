@@ -1,0 +1,60 @@
+2026-11-28T01:48:59.1539111Z test_all_fields_equal (test_audit.TestAmbient.test_all_fields_equal) ... ok
+2026-11-28T01:48:59.1540413Z test_collapsed_material_trace (test_audit.TestAmbient.test_collapsed_material_trace) ... ok
+2026-11-28T01:48:59.1541819Z test_drift_fields (test_audit.TestAmbient.test_drift_fields) ... ok
+2026-11-28T01:48:59.1683595Z test_guid_and_class_actual_yaml (test_audit.TestAmbient.test_guid_and_class_actual_yaml) ... ok
+2026-11-28T01:48:59.1684664Z test_missing_material_trace (test_audit.TestAmbient.test_missing_material_trace) ... ok
+2026-11-28T01:48:59.1686467Z test_missing_schema_not_pass (test_audit.TestAmbient.test_missing_schema_not_pass) ... ok
+2026-11-28T01:48:59.1687631Z test_nonexportable_settings (test_audit.TestAmbient.test_nonexportable_settings) ... ok
+2026-11-28T01:48:59.1688942Z test_null_sun_control (test_audit.TestAmbient.test_null_sun_control) ... ok
+2026-11-28T01:48:59.1689688Z test_signed_settings_identity (test_audit.TestAmbient.test_signed_settings_identity) ... ok
+2026-11-28T01:48:59.9276625Z test_stage_preserves_existing_captures (test_audit.TestAmbient.test_stage_preserves_existing_captures) ... ok
+2026-11-28T01:48:59.9277717Z test_typed_material_trace (test_audit.TestAmbient.test_typed_material_trace) ... ok
+2026-11-28T01:48:59.9279133Z test_wrong_instance (test_audit.TestAmbient.test_wrong_instance) ... ok
+2026-11-28T01:48:59.9280117Z test_wrong_settings_owner (test_audit.TestAmbient.test_wrong_settings_owner) ... ok
+2026-11-28T01:48:59.9281667Z Ran 14 tests in 0.774s
+2026-11-28T01:48:59.9282201Z OK
+2026-11-28T01:49:00.1273866Z test_bad_path_injection (test_resolve.TestExactProvider.test_bad_path_injection) ... ok
+2026-11-28T01:49:00.1276785Z test_exact_slot_not_first_name (test_resolve.TestExactProvider.test_exact_slot_not_first_name) ... ok
+2026-11-28T01:49:00.1280611Z test_local_and_null_rejected (test_resolve.TestExactProvider.test_local_and_null_rejected) ... ok
+2026-11-28T01:49:00.1283507Z test_metadata_population (test_resolve.TestExactProvider.test_metadata_population) ... ok
+2026-11-28T01:49:00.1287098Z test_not_staged_is_precise (test_resolve.TestExactProvider.test_not_staged_is_precise) ... ok
+2026-11-28T01:49:00.1290786Z test_pointer_match_and_drift_only_after_actual_material_document (test_resolve.TestExactProvider.test_pointer_match_and_drift_only_after_actual_material_document) ... ok
+2026-11-28T01:49:00.1293238Z test_provider_not_in_catalog (test_resolve.TestExactProvider.test_provider_not_in_catalog) ... ok
+2026-11-28T01:49:00.1296427Z test_slot_out_of_range (test_resolve.TestExactProvider.test_slot_out_of_range) ... ok
+2026-11-28T01:49:00.1299828Z test_split_order_and_sizes (test_resolve.TestExactProvider.test_split_order_and_sizes) ... ok
+2026-11-28T01:49:00.1520754Z test_tree_entry_controls (test_resolve.TestExactProvider.test_tree_entry_controls) ... ok
+2026-11-28T01:49:00.1524237Z test_unknown_external_not_fallback (test_resolve.TestExactProvider.test_unknown_external_not_fallback) ... ok
+2026-11-28T01:49:00.1527144Z test_windows_basename (test_resolve.TestExactProvider.test_windows_basename) ... ok
+2026-11-28T01:49:00.1529158Z Ran 12 tests in 0.026s
+2026-11-28T01:49:00.1529619Z OK
+2026-11-28T01:49:00.2723399Z test_builtin (test_audit.TestSkyboxShader.test_builtin) ... ok
+2026-11-28T01:49:00.2724134Z test_counts_detect_swap_and_extra (test_audit.TestSkyboxShader.test_counts_detect_swap_and_extra) ... ok
+2026-11-28T01:49:00.2725483Z test_dummy_not_program_proof (test_audit.TestSkyboxShader.test_dummy_not_program_proof) ... ok
+2026-11-28T01:49:00.2728956Z test_exact_external_slot (test_audit.TestSkyboxShader.test_exact_external_slot) ... ok
+2026-11-28T01:49:00.2732917Z test_external_missing (test_audit.TestSkyboxShader.test_external_missing) ... ok
+2026-11-28T01:49:00.2733630Z test_keyword_disagreement (test_audit.TestSkyboxShader.test_keyword_disagreement) ... ok
+2026-11-28T01:49:00.2736101Z test_local (test_audit.TestSkyboxShader.test_local) ... ok
+2026-11-28T01:49:00.2736785Z test_missing_program_schema (test_audit.TestSkyboxShader.test_missing_program_schema) ... ok
+2026-11-28T01:49:00.2737952Z test_non_dummy_not_authentic (test_audit.TestSkyboxShader.test_non_dummy_not_authentic) ... ok
+2026-11-28T01:49:00.2739369Z test_null_pointer_not_missing_schema (test_audit.TestSkyboxShader.test_null_pointer_not_missing_schema) ... ok
+2026-11-28T01:49:00.2741196Z test_pointer_types (test_audit.TestSkyboxShader.test_pointer_types) ... ok
+2026-11-28T01:49:00.2742254Z test_program_counts_empty_valid (test_audit.TestSkyboxShader.test_program_counts_empty_valid) ... ok
+2026-11-28T01:49:00.2743279Z test_recovery_budget_no_sampling (test_audit.TestSkyboxShader.test_recovery_budget_no_sampling) ... ok
+2026-11-28T01:49:00.2962298Z test_recovery_distinct_stage_programs_mock (test_audit.TestSkyboxShader.test_recovery_distinct_stage_programs_mock) ... ok
+2026-11-28T01:49:00.2963492Z test_recovery_no_source (test_audit.TestSkyboxShader.test_recovery_no_source) ... ok
+2026-11-28T01:49:00.2964291Z test_trace_identity_not_name (test_audit.TestSkyboxShader.test_trace_identity_not_name) ... ok
+2026-11-28T01:49:00.2967934Z test_unknown_owner (test_audit.TestSkyboxShader.test_unknown_owner) ... ok
+2026-11-28T01:49:00.2969172Z Ran 17 tests in 0.025s
+2026-11-28T01:49:00.2969421Z OK
+2026-11-28T01:49:10.8059766Z glslang-tools	15.1.0-2~ubuntu0.24.04.2
+2026-11-28T01:49:10.8060522Z spirv-cross	2021.01.15+1.3.239.0-1build1
+2026-11-28T01:49:10.8060868Z spirv-tools	2025.1~rc1-1~ubuntu0.24.04.2
+2026-11-28T01:49:10.8061170Z vkd3d-compiler	1.2-15build1
+2026-11-28T01:50:02.0093709Z GT_SKYBOX_DISCOVER {"bytes": 115978112, "full_scene_provider_closure_proven": false, "git_object": "c162118818a1e7377eeee6032d39fac4f977d80f", "kind": "split", "provider": "sharedassets0.assets", "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3", "status": "SELECTED_ONE_PROVIDER"}
+2026-11-28T01:50:06.6489151Z GT_SKYBOX_STAGE {"full_scene_provider_closure_proven": false, "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e", "provider_bytes": 115978112, "provider_git_object": "c162118818a1e7377eeee6032d39fac4f977d80f", "provider_kind": "split", "provider_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3", "selected_additional_providers": 1, "selected_provider": "sharedassets0.assets", "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385", "status": "AUTHENTICATED_TYPED_MATERIAL", "typed_material21_target": true, "verified_chunk_count": 3}
+2026-11-28T01:50:08.9688697Z GT_SKYBOX_SHADER_DISCOVER {"already_staged": true, "provider": "globalgamemanagers.assets", "provider_bytes": 758412, "provider_git_object": "4eabb7cb093ead2f2b0c8f3451dd953a9f5ff0c9", "provider_sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28", "status": "SELECTED_SHADER_PROVIDER"}
+2026-11-28T01:50:13.8356323Z GT_SKYBOX_SHADER_STAGE {"additional_provider_count": 0, "object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9", "provider": "globalgamemanagers.assets", "provider_bytes": 758412, "provider_sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28", "status": "AUTHENTICATED_TYPED_SHADER48", "typed_source_shader48": true}
+2026-11-28T01:50:40.5687849Z GT_SKYBOX_SHADER_ACTUAL_EXPORT {"actual_export_completed": true, "exit_code": 0, "private_log_bytes": 954520, "private_trace_files_present": 3, "tool_exception_categories": []}
+2026-11-28T01:50:47.1802036Z GT_SKYBOX_SHADER_SAME_EXPORT {"Unity_import_verified":false,"XAPK":false,"device_pixels_proven":false,"fanout":{"full_original_project_fanout_proven":false,"same_instance_trace_material_rows":1,"unique_actual_material_documents_matching_shader":1},"full_scene_provider_closure_proven":false,"material_properties":{"colors":{"changed":0,"equal":6,"export":6,"extra":0,"missing":0,"source":6},"disabledShaderPasses":{"equal":true,"export":0,"source":0},"m_InvalidKeywords":{"equal":true,"export":0,"source":0},"m_ValidKeywords":{"equal":true,"export":0,"source":0},"scalars":{"m_Floats":{"changed":0,"equal":20,"export":20,"extra":0,"missing":0,"source":20},"m_Ints":{"changed":0,"equal":0,"export":0,"extra":0,"missing":0,"source":0}},"texenvs":{"nullness":{"changed":0,"equal":0,"export":0,"extra":0,"missing":0,"source":0},"texture_identity_or_pixels_proven":false,"uv":{"changed":0,"equal":0,"export":0,"extra":0,"missing":0,"source":0}}},"original_assets_mutated":false,"original_assets_published":false,"private_source_program_recovery":{"attempted":2,"hlsl_recovered":2,"numeric_or_visual_equivalence":false,"private_output_published":false,"roundtrip_vulkan11_valid":2,"selected_distinct_stage_programs":2,"shaderlab_installed":false,"status":"ALL_LINKED_PROGRAMS_RECOVERED_AND_ROUNDTRIP_VALID","vulkan11_valid":2},"program":{"active_subshader_runtime_verified":false,"actual_shaderlab_meta_verified":true,"all_passes_programmed":true,"all_subshaders_programmed":true,"dummy_marker":true,"no_subprograms_marker":false,"pass_braces_balanced":true,"pass_count":1,"passes_with_complete_program":1,"program_authenticity_proven":false,"status":"ORIGINAL_PROGRAMS_PRESENT_EXPORTED_DUMMY","subshader_pass_counts":[1],"subshader_programmed_pass_counts":[1],"unknown_exporter_marker":false},"same_export_shader_pointer_proven":true,"selected_shader_provider":"globalgamemanagers.assets","shader_installed":false,"source_commit":"15964ea8f246b6e076ce26b60931ee2e1a9a2385","source_programs":{"distinct_linked_dxbc":2,"fragment_slots":1,"linked_d3d11_stage_slots":2,"other_stage_slots":0,"source_d3d11_table_count":1,"source_passes":1,"source_program_schema_complete":true,"source_subshaders":1,"unlinked_d3d11_stage_slots":0,"vertex_slots":1},"source_shader_object_sha256":"ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9","status":"OBSERVED_SHADER_PROGRAM_GAP","typed_source_shader48":true}
+2026-11-28T01:50:48.6406816Z Artifact gt-skybox-shader-level24-safe-aggregate.zip successfully finalized. Artifact ID 15242507285
+2026-11-28T01:50:48.6408266Z Artifact gt-skybox-shader-level24-safe-aggregate has been successfully uploaded! Final size is 2997 bytes. Artifact ID is 15242507285

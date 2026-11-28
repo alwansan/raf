@@ -4653,7 +4653,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261128-particle108-preserved-alpha-vulkan/README_AR.md",
-  "next_action": "G3-G6-original-skybox-material-shader-program: reconcile actual run 46094976432 job 140824146725 and lint 46094976337, read GT_SKYBOX_SHADER_DISCOVER, STAGE, ACTUAL_EXPORT, SAME_EXPORT, actual control counts and tool install outcome. Prior exact Skybox pointer 46093780414 PASS already archived; no ambient-only replay. Verify selected shader provider and source object SHA, actual typed Shader48 -> W1 material shader source/export identity -> actual Material m_Shader -> custom .shader/.meta or engine-only transport; preserve source pass/slot/D3D11 linked counts, actual Dummy/structural status, material property/keyword and scoped fanout counts, exact conditional private recovery successes. If actual custom Dummy has linked original programs and private translation succeeds, next construct source-authentic pass/state/keyword/resource binding wrapper with source-object SHA and existing GUID, not an approximate shader or global patch; do not claim restored until actual integration proof. If builtin transport or other precise blocker, pursue highest-impact remaining original shader/material or FFT/water lane, not another skybox census. No raw original assets/programs/private IDs publication, no original source mutation, no license/protection bypass, only feature/android-native-port, CL/lab read-only, BLACK/animation deferred; no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. Preserve pinned Ali restore.",
+  "next_action": "G3-G6-original-skybox-one-pass-source-bound-wrapper: actual 46094976432 proven custom Dummy in actual export, typed native Shader48 from globalgamemanagers.assets, object SHA256 ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9, one SubShader/one pass/one VS and FS, two linked original DXBC both recovered and SPIRV roundtrip valid, 6 colors/20 floats exact, no texenvs/keyword entries. Do not repeat unbound diagnosis. Construct precise source-state/property/name wrapper using same object SHA, exact single permutation, original serialized parameter layouts and DXBC mesh/varying semantics; validate both bound entrypoints and real interface, preserve GUID/meta/material/scene, install only into disposable same-instance export if verified, explicit no Unity/device or production claim. If source contract/compile is unsupported, preserve exact stage/category, no guessed defaults. No original raw assets/program publication or source mutation. No production/player/XAPK; CL/lab read-only BLACK/animation deferred; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -9582,7 +9582,7 @@
       "execution_head": "ff1ed449169f0c15751e7d87c7622037852c0178",
       "run": 46094976432,
       "evidence": "clients/GT/sessions/20261128-skybox-shader-program/evidence.json",
-      "next_action": "G3-G6-original-skybox-material-shader-program: reconcile actual run 46094976432 job 140824146725 and lint 46094976337, read GT_SKYBOX_SHADER_DISCOVER, STAGE, ACTUAL_EXPORT, SAME_EXPORT, actual control counts and tool install outcome. Prior exact Skybox pointer 46093780414 PASS already archived; no ambient-only replay. Verify selected shader provider and source object SHA, actual typed Shader48 -> W1 material shader source/export identity -> actual Material m_Shader -> custom .shader/.meta or engine-only transport; preserve source pass/slot/D3D11 linked counts, actual Dummy/structural status, material property/keyword and scoped fanout counts, exact conditional private recovery successes. If actual custom Dummy has linked original programs and private translation succeeds, next construct source-authentic pass/state/keyword/resource binding wrapper with source-object SHA and existing GUID, not an approximate shader or global patch; do not claim restored until actual integration proof. If builtin transport or other precise blocker, pursue highest-impact remaining original shader/material or FFT/water lane, not another skybox census. No raw original assets/programs/private IDs publication, no original source mutation, no license/protection bypass, only feature/android-native-port, CL/lab read-only, BLACK/animation deferred; no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. Preserve pinned Ali restore."
+      "next_action": "G3-G6-original-skybox-one-pass-source-bound-wrapper: actual 46094976432 proven custom Dummy in actual export, typed native Shader48 from globalgamemanagers.assets, object SHA256 ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9, one SubShader/one pass/one VS and FS, two linked original DXBC both recovered and SPIRV roundtrip valid, 6 colors/20 floats exact, no texenvs/keyword entries. Do not repeat unbound diagnosis. Construct precise source-state/property/name wrapper using same object SHA, exact single permutation, original serialized parameter layouts and DXBC mesh/varying semantics; validate both bound entrypoints and real interface, preserve GUID/meta/material/scene, install only into disposable same-instance export if verified, explicit no Unity/device or production claim. If source contract/compile is unsupported, preserve exact stage/category, no guessed defaults. No original raw assets/program publication or source mutation. No production/player/XAPK; CL/lab read-only BLACK/animation deferred; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged."
     }
   },
   "v9_importer_state_checkpoint": {
@@ -12276,7 +12276,7 @@
     "actual_aggregate_path": "clients/GT/sessions/20261128-skybox-exact-provider/actual-aggregate.json"
   },
   "latest_original_skybox_shader_program": {
-    "status": "SOURCE_LINKED_SKYBOX_SHADER_PROGRAM_LAUNCHED",
+    "status": "ACTUAL_ORIGINAL_SKYBOX_DUMMY_GAP_CONFIRMED_2_OF_2_PRIVATE_PROGRAMS_RECOVERED",
     "starting_head": "ab1ade46237911f32ec82a9cb3dd7c81927531be",
     "prior_skybox_reconciliation": "2ecc77de35a1172d4ba17abeceb5bdbce396e946",
     "prior_skybox_result": {
@@ -12296,12 +12296,12 @@
     "execution_head": "ff1ed449169f0c15751e7d87c7622037852c0178",
     "run": 46094976432,
     "job": 140824146725,
-    "run_status": "in_progress",
-    "run_conclusion": null,
+    "run_status": "completed",
+    "run_conclusion": "success",
     "lint_run": 46094976337,
     "lint_job": 140824146891,
     "lint_conclusion": "success",
-    "source_free_controls_step": "success; actual log counts pending",
+    "source_free_controls_step": "43/43 actual tests (14+12+17)",
     "steps": [
       {
         "name": "Set up job",
@@ -12335,78 +12335,93 @@
       },
       {
         "name": "Compile temporary class104 capture and smoke test",
-        "status": "in_progress",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Read only level24 and five pinned support providers",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Resolve only exact missing Skybox provider from authenticated native file slot",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Read only one selected additional provider (exact file or ordered chunks)",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Authenticate selected provider Git object and SHA and exact native Material21",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Resolve actual Skybox Material m_Shader exact native provider",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Read only additional exact Shader provider when not already staged",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "skipped"
       },
       {
         "name": "Authenticate exact selected native Shader48 and provider bytes",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Execute actual bounded shader-linked export with same-instance traces",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Compare original Shader48 to actual ShaderLab and material properties, recover proven Dummy programs privately",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Publish ONLY safe aggregate receipts",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Remove only temporary source and private export",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Read only one selected additional provider (exact file or ordered chunks)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Read only level24 and five pinned support providers",
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Post Obtain exact public AssetRipperCLI source",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Post Run actions/setup-dotnet@v4",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Post Checkout only independent ambient verifier and existing pinned tools",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success"
       }
     ],
     "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -12421,9 +12436,150 @@
       "public_tool": "036098ab525a3f9f693dc101edeb21faad4d32d8"
     },
     "scope": "Exact native Skybox Material21 m_Shader -> typed Shader48 source object digest, existing provider or one exact additional provider. Source program slots and linked D3D11 DXBC counts; same-instance W1 source/actual pointer and custom .shader/.meta vs engine transport, exact Dummy/structural diagnostic. Saved colors, scalars, UV/nullness and keyword counts; scoped material document fanout. For proven original linked programs plus actual custom Dummy, privately recover all distinct linked VS/FS codes only if <=32, exact linked bytecode -> Vulkan11 validation -> HLSL -> roundtrip validation. No raw programs, wrapper or install claim; no texture identity or runtime/device equivalence.",
-    "actual_selected_shader_provider": null,
-    "actual_same_export_result": null,
-    "actual_private_program_recovery": null,
+    "actual_selected_shader_provider": {
+      "already_staged": true,
+      "provider": "globalgamemanagers.assets",
+      "provider_bytes": 758412,
+      "provider_git_object": "4eabb7cb093ead2f2b0c8f3451dd953a9f5ff0c9",
+      "provider_sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28",
+      "status": "SELECTED_SHADER_PROVIDER"
+    },
+    "actual_same_export_result": {
+      "Unity_import_verified": false,
+      "XAPK": false,
+      "device_pixels_proven": false,
+      "fanout": {
+        "full_original_project_fanout_proven": false,
+        "same_instance_trace_material_rows": 1,
+        "unique_actual_material_documents_matching_shader": 1
+      },
+      "full_scene_provider_closure_proven": false,
+      "material_properties": {
+        "colors": {
+          "changed": 0,
+          "equal": 6,
+          "export": 6,
+          "extra": 0,
+          "missing": 0,
+          "source": 6
+        },
+        "disabledShaderPasses": {
+          "equal": true,
+          "export": 0,
+          "source": 0
+        },
+        "m_InvalidKeywords": {
+          "equal": true,
+          "export": 0,
+          "source": 0
+        },
+        "m_ValidKeywords": {
+          "equal": true,
+          "export": 0,
+          "source": 0
+        },
+        "scalars": {
+          "m_Floats": {
+            "changed": 0,
+            "equal": 20,
+            "export": 20,
+            "extra": 0,
+            "missing": 0,
+            "source": 20
+          },
+          "m_Ints": {
+            "changed": 0,
+            "equal": 0,
+            "export": 0,
+            "extra": 0,
+            "missing": 0,
+            "source": 0
+          }
+        },
+        "texenvs": {
+          "nullness": {
+            "changed": 0,
+            "equal": 0,
+            "export": 0,
+            "extra": 0,
+            "missing": 0,
+            "source": 0
+          },
+          "texture_identity_or_pixels_proven": false,
+          "uv": {
+            "changed": 0,
+            "equal": 0,
+            "export": 0,
+            "extra": 0,
+            "missing": 0,
+            "source": 0
+          }
+        }
+      },
+      "original_assets_mutated": false,
+      "original_assets_published": false,
+      "private_source_program_recovery": {
+        "attempted": 2,
+        "hlsl_recovered": 2,
+        "numeric_or_visual_equivalence": false,
+        "private_output_published": false,
+        "roundtrip_vulkan11_valid": 2,
+        "selected_distinct_stage_programs": 2,
+        "shaderlab_installed": false,
+        "status": "ALL_LINKED_PROGRAMS_RECOVERED_AND_ROUNDTRIP_VALID",
+        "vulkan11_valid": 2
+      },
+      "program": {
+        "active_subshader_runtime_verified": false,
+        "actual_shaderlab_meta_verified": true,
+        "all_passes_programmed": true,
+        "all_subshaders_programmed": true,
+        "dummy_marker": true,
+        "no_subprograms_marker": false,
+        "pass_braces_balanced": true,
+        "pass_count": 1,
+        "passes_with_complete_program": 1,
+        "program_authenticity_proven": false,
+        "status": "ORIGINAL_PROGRAMS_PRESENT_EXPORTED_DUMMY",
+        "subshader_pass_counts": [
+          1
+        ],
+        "subshader_programmed_pass_counts": [
+          1
+        ],
+        "unknown_exporter_marker": false
+      },
+      "same_export_shader_pointer_proven": true,
+      "selected_shader_provider": "globalgamemanagers.assets",
+      "shader_installed": false,
+      "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "source_programs": {
+        "distinct_linked_dxbc": 2,
+        "fragment_slots": 1,
+        "linked_d3d11_stage_slots": 2,
+        "other_stage_slots": 0,
+        "source_d3d11_table_count": 1,
+        "source_passes": 1,
+        "source_program_schema_complete": true,
+        "source_subshaders": 1,
+        "unlinked_d3d11_stage_slots": 0,
+        "vertex_slots": 1
+      },
+      "source_shader_object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9",
+      "status": "OBSERVED_SHADER_PROGRAM_GAP",
+      "typed_source_shader48": true
+    },
+    "actual_private_program_recovery": {
+      "attempted": 2,
+      "hlsl_recovered": 2,
+      "numeric_or_visual_equivalence": false,
+      "private_output_published": false,
+      "roundtrip_vulkan11_valid": 2,
+      "selected_distinct_stage_programs": 2,
+      "shaderlab_installed": false,
+      "status": "ALL_LINKED_PROGRAMS_RECOVERED_AND_ROUNDTRIP_VALID",
+      "vulkan11_valid": 2
+    },
     "original_assets_published": false,
     "original_assets_modified": false,
     "production": false,
@@ -12431,6 +12587,48 @@
     "device": false,
     "XAPK": false,
     "all_gates_open": true,
-    "next_action": "G3-G6-original-skybox-material-shader-program: reconcile actual run 46094976432 job 140824146725 and lint 46094976337, read GT_SKYBOX_SHADER_DISCOVER, STAGE, ACTUAL_EXPORT, SAME_EXPORT, actual control counts and tool install outcome. Prior exact Skybox pointer 46093780414 PASS already archived; no ambient-only replay. Verify selected shader provider and source object SHA, actual typed Shader48 -> W1 material shader source/export identity -> actual Material m_Shader -> custom .shader/.meta or engine-only transport; preserve source pass/slot/D3D11 linked counts, actual Dummy/structural status, material property/keyword and scoped fanout counts, exact conditional private recovery successes. If actual custom Dummy has linked original programs and private translation succeeds, next construct source-authentic pass/state/keyword/resource binding wrapper with source-object SHA and existing GUID, not an approximate shader or global patch; do not claim restored until actual integration proof. If builtin transport or other precise blocker, pursue highest-impact remaining original shader/material or FFT/water lane, not another skybox census. No raw original assets/programs/private IDs publication, no original source mutation, no license/protection bypass, only feature/android-native-port, CL/lab read-only, BLACK/animation deferred; no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. Preserve pinned Ali restore."
+    "next_action": "G3-G6-original-skybox-one-pass-source-bound-wrapper: actual 46094976432 proven custom Dummy in actual export, typed native Shader48 from globalgamemanagers.assets, object SHA256 ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9, one SubShader/one pass/one VS and FS, two linked original DXBC both recovered and SPIRV roundtrip valid, 6 colors/20 floats exact, no texenvs/keyword entries. Do not repeat unbound diagnosis. Construct precise source-state/property/name wrapper using same object SHA, exact single permutation, original serialized parameter layouts and DXBC mesh/varying semantics; validate both bound entrypoints and real interface, preserve GUID/meta/material/scene, install only into disposable same-instance export if verified, explicit no Unity/device or production claim. If source contract/compile is unsupported, preserve exact stage/category, no guessed defaults. No original raw assets/program publication or source mutation. No production/player/XAPK; CL/lab read-only BLACK/animation deferred; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged.",
+    "reconciliation_head": "a1b071351b00c93d5dc61156c0a1946496dbd65f",
+    "actual_shader_stage": {
+      "additional_provider_count": 0,
+      "object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9",
+      "provider": "globalgamemanagers.assets",
+      "provider_bytes": 758412,
+      "provider_sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28",
+      "status": "AUTHENTICATED_TYPED_SHADER48",
+      "typed_source_shader48": true
+    },
+    "actual_export": {
+      "actual_export_completed": true,
+      "exit_code": 0,
+      "private_log_bytes": 954520,
+      "private_trace_files_present": 3,
+      "tool_exception_categories": []
+    },
+    "actual_tool_versions": {
+      "glslang-tools": "15.1.0-2~ubuntu0.24.04.2",
+      "spirv-cross": "2021.01.15+1.3.239.0-1build1",
+      "spirv-tools": "2025.1~rc1-1~ubuntu0.24.04.2",
+      "vkd3d-compiler": "1.2-15build1"
+    },
+    "independent_check": {
+      "same_prior_skybox_provider_receipts": true,
+      "provider_pin_match": true,
+      "distinct_linked_dxbc": 2,
+      "stage_slot_count": 2,
+      "material_colors": 6,
+      "material_floats": 20,
+      "all_selected_material_property_counts_reconciled": true,
+      "outer_artifact_independently_downloaded": false
+    },
+    "outer_artifact": [
+      {
+        "id": 15242507285,
+        "bytes": 2997,
+        "github_reported_digest": "sha256:09e8ab68c7ee85d9fc31c2f3ba06c1404662c0363e36d09b031dfe12c59420c0"
+      }
+    ],
+    "permanent_log": "clients/GT/sessions/20261128-skybox-shader-program/actual-selected-results.log",
+    "actual_aggregate_path": "clients/GT/sessions/20261128-skybox-shader-program/actual-aggregate.json"
   }
 }

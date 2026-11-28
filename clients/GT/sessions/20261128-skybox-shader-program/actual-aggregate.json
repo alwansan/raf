@@ -1,0 +1,180 @@
+{
+  "skybox_discover": {
+    "bytes": 115978112,
+    "full_scene_provider_closure_proven": false,
+    "git_object": "c162118818a1e7377eeee6032d39fac4f977d80f",
+    "kind": "split",
+    "provider": "sharedassets0.assets",
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "status": "SELECTED_ONE_PROVIDER"
+  },
+  "skybox_stage": {
+    "full_scene_provider_closure_proven": false,
+    "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+    "provider_bytes": 115978112,
+    "provider_git_object": "c162118818a1e7377eeee6032d39fac4f977d80f",
+    "provider_kind": "split",
+    "provider_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "selected_additional_providers": 1,
+    "selected_provider": "sharedassets0.assets",
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "status": "AUTHENTICATED_TYPED_MATERIAL",
+    "typed_material21_target": true,
+    "verified_chunk_count": 3
+  },
+  "shader_discover": {
+    "already_staged": true,
+    "provider": "globalgamemanagers.assets",
+    "provider_bytes": 758412,
+    "provider_git_object": "4eabb7cb093ead2f2b0c8f3451dd953a9f5ff0c9",
+    "provider_sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28",
+    "status": "SELECTED_SHADER_PROVIDER"
+  },
+  "shader_stage": {
+    "additional_provider_count": 0,
+    "object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9",
+    "provider": "globalgamemanagers.assets",
+    "provider_bytes": 758412,
+    "provider_sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28",
+    "status": "AUTHENTICATED_TYPED_SHADER48",
+    "typed_source_shader48": true
+  },
+  "export": {
+    "actual_export_completed": true,
+    "exit_code": 0,
+    "private_log_bytes": 954520,
+    "private_trace_files_present": 3,
+    "tool_exception_categories": []
+  },
+  "same_export": {
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "device_pixels_proven": false,
+    "fanout": {
+      "full_original_project_fanout_proven": false,
+      "same_instance_trace_material_rows": 1,
+      "unique_actual_material_documents_matching_shader": 1
+    },
+    "full_scene_provider_closure_proven": false,
+    "material_properties": {
+      "colors": {
+        "changed": 0,
+        "equal": 6,
+        "export": 6,
+        "extra": 0,
+        "missing": 0,
+        "source": 6
+      },
+      "disabledShaderPasses": {
+        "equal": true,
+        "export": 0,
+        "source": 0
+      },
+      "m_InvalidKeywords": {
+        "equal": true,
+        "export": 0,
+        "source": 0
+      },
+      "m_ValidKeywords": {
+        "equal": true,
+        "export": 0,
+        "source": 0
+      },
+      "scalars": {
+        "m_Floats": {
+          "changed": 0,
+          "equal": 20,
+          "export": 20,
+          "extra": 0,
+          "missing": 0,
+          "source": 20
+        },
+        "m_Ints": {
+          "changed": 0,
+          "equal": 0,
+          "export": 0,
+          "extra": 0,
+          "missing": 0,
+          "source": 0
+        }
+      },
+      "texenvs": {
+        "nullness": {
+          "changed": 0,
+          "equal": 0,
+          "export": 0,
+          "extra": 0,
+          "missing": 0,
+          "source": 0
+        },
+        "texture_identity_or_pixels_proven": false,
+        "uv": {
+          "changed": 0,
+          "equal": 0,
+          "export": 0,
+          "extra": 0,
+          "missing": 0,
+          "source": 0
+        }
+      }
+    },
+    "original_assets_mutated": false,
+    "original_assets_published": false,
+    "private_source_program_recovery": {
+      "attempted": 2,
+      "hlsl_recovered": 2,
+      "numeric_or_visual_equivalence": false,
+      "private_output_published": false,
+      "roundtrip_vulkan11_valid": 2,
+      "selected_distinct_stage_programs": 2,
+      "shaderlab_installed": false,
+      "status": "ALL_LINKED_PROGRAMS_RECOVERED_AND_ROUNDTRIP_VALID",
+      "vulkan11_valid": 2
+    },
+    "program": {
+      "active_subshader_runtime_verified": false,
+      "actual_shaderlab_meta_verified": true,
+      "all_passes_programmed": true,
+      "all_subshaders_programmed": true,
+      "dummy_marker": true,
+      "no_subprograms_marker": false,
+      "pass_braces_balanced": true,
+      "pass_count": 1,
+      "passes_with_complete_program": 1,
+      "program_authenticity_proven": false,
+      "status": "ORIGINAL_PROGRAMS_PRESENT_EXPORTED_DUMMY",
+      "subshader_pass_counts": [
+        1
+      ],
+      "subshader_programmed_pass_counts": [
+        1
+      ],
+      "unknown_exporter_marker": false
+    },
+    "same_export_shader_pointer_proven": true,
+    "selected_shader_provider": "globalgamemanagers.assets",
+    "shader_installed": false,
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_programs": {
+      "distinct_linked_dxbc": 2,
+      "fragment_slots": 1,
+      "linked_d3d11_stage_slots": 2,
+      "other_stage_slots": 0,
+      "source_d3d11_table_count": 1,
+      "source_passes": 1,
+      "source_program_schema_complete": true,
+      "source_subshaders": 1,
+      "unlinked_d3d11_stage_slots": 0,
+      "vertex_slots": 1
+    },
+    "source_shader_object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9",
+    "status": "OBSERVED_SHADER_PROGRAM_GAP",
+    "typed_source_shader48": true
+  },
+  "tool_versions": {
+    "glslang-tools": "15.1.0-2~ubuntu0.24.04.2",
+    "spirv-cross": "2021.01.15+1.3.239.0-1build1",
+    "spirv-tools": "2025.1~rc1-1~ubuntu0.24.04.2",
+    "vkd3d-compiler": "1.2-15build1"
+  }
+}
