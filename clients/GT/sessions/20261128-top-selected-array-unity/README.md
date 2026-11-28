@@ -1,3 +1,7 @@
+# Latest reconciliation — 28 November 2026
+
+Actual [46124837879](https://github.com/alwansan/raf/actions/runs/46124837879/job/140917048122) completed successfully as observation, not repair. BC7 replaced source BC3; 403900/369258 top-mip RGBA coordinates exceed 1/255. [Safe receipt](actual-46124837879.json). See [native BC3 follow-up](../20261128-top-native-bc3-array/README.md). Historical launch record follows.
+
 # Same-export selected array — actual isolated Unity import and full top-mip Load
 
 ## GT G1–G3 — selected original inline BC3 grid repaired; isolated Unity array import/Load next (28 نوفمبر 2026)

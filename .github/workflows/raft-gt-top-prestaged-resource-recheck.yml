@@ -1,5 +1,5 @@
 name: GT top exact prestaged original resource recheck (NO PLAYER)
-# Distinct original resource closure; private selection replay is a prerequisite only.
+# Native selected class187 BC3 full-mip observation; previous BC7 PNG import is not repeated.
 on:
   workflow_dispatch:
   push:
@@ -221,7 +221,7 @@ jobs:
             --plan "$RUNNER_TEMP/gt-top-prestage-private.json" \
             --repair-selected-array \
             --out "$RUNNER_TEMP/gt-top-prestaged-resource-safe.json"
-      - name: Stage only the selected source-proven repaired array outside Unity Assets
+      - name: Stage exact selected original BC3 blocks and authored calibration outside Unity Assets
         id: array_stage
         run: |
           set -euo pipefail
@@ -236,7 +236,7 @@ jobs:
             --receipt "$RUNNER_TEMP/gt-top-prestaged-resource-safe.json" \
             --out "$RUNNER_TEMP/gt-selected-array-unity-safe.json" \
             --unity-project gt-selected-array-project --private gt-selected-array-private \
-            --run-id "$GT_ARRAY_RUN_ID"
+            --run-id "$GT_ARRAY_RUN_ID" --native-bc3
           rm -rf "$RUNNER_TEMP/b21-original" "$RUNNER_TEMP/b21-private-export" "$RUNNER_TEMP/b21-compiled" zip2-original
       - name: Prepare licensed editor software Vulkan image with private log guard
         run: |
@@ -260,7 +260,7 @@ jobs:
           DOCKERFILE
           timeout 480s docker build --quiet --tag "$GT_ARRAY_IMAGE" "$RUNNER_TEMP/gt-selected-array-docker" > gt-selected-array-private/image-id.txt
           docker run --rm --entrypoint /bin/bash "$GT_ARRAY_IMAGE" -c 'test -f "$VK_ICD_FILENAMES" && test "$(command -v unity-editor)" = /opt/gt-private-bin/unity-editor'
-      - name: Import exact selected array and read both original top mip layers on Vulkan
+      - name: Save reload native class187 BC3 and read every mip on Vulkan
         id: array_unity
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
@@ -285,7 +285,7 @@ jobs:
             -force-vulkan -force-device-index 0 -job-worker-count 2
             -gtArrayRunId ${{ env.GT_ARRAY_RUN_ID }}
             -gtArrayPrivate /github/workspace/gt-selected-array-private
-      - name: Independently compare actual imported array GPU coordinates to original source pixels
+      - name: Independently compare all native compressed ranges and Vulkan mip coordinates
         if: always() && steps.array_stage.outcome == 'success'
         env:
           UNITY_OUTCOME: ${{ steps.array_unity.outcome }}
@@ -294,19 +294,19 @@ jobs:
           sudo chown -R "$(id -u):$(id -g)" gt-selected-array-private gt-selected-array-project
           code=1
           if [ "$UNITY_OUTCOME" = success ]; then code=0; fi
-          python3 -B -m tools.gt_top_resource_closure.selected_array_unity verify \
+          python3 -B -m tools.gt_top_resource_closure.selected_array_native \
             --unity-project gt-selected-array-project --private gt-selected-array-private \
-            --safe "$RUNNER_TEMP/gt-selected-array-unity-safe.json" --run-id "$GT_ARRAY_RUN_ID" --exit-code "$code"
+            --safe "$RUNNER_TEMP/gt-selected-array-native-safe.json" --run-id "$GT_ARRAY_RUN_ID" --exit-code "$code"
       - name: Publish only aggregate observations
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gt-top-prestaged-resource-safe
+          name: gt-top-native-bc3-array-safe
           path: |
             ${{ runner.temp }}/gt-top-prestage-safe.json
             ${{ runner.temp }}/gt-top-prestaged-resource-safe.json
             ${{ runner.temp }}/t3-shader-parity-safe.json
-            ${{ runner.temp }}/gt-selected-array-unity-safe.json
+            ${{ runner.temp }}/gt-selected-array-native-safe.json
           retention-days: 14
           if-no-files-found: warn
       - name: Remove private source export and traces

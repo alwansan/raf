@@ -1,0 +1,76 @@
+{
+  "Android_device": false,
+  "GPU_row_orientation": "bottom_first",
+  "XAPK": false,
+  "actual_GPU_coordinates": 2097152,
+  "actual_GPU_observation": true,
+  "actual_GUID_fileID_preserved": true,
+  "actual_Unity_import_verified": true,
+  "actual_dimensions": [
+    1024,
+    1024,
+    2
+  ],
+  "actual_format": "BC7",
+  "actual_graphics_format": "RGBA_BC7_SRGB",
+  "actual_imported_meta_bytes_unchanged": true,
+  "actual_importer_mipmap_enabled": true,
+  "actual_importer_readable": true,
+  "actual_mip_count": 11,
+  "actual_mip_count_matches_source": true,
+  "actual_srgb": true,
+  "actual_srgb_matches_source": true,
+  "all_top_mip_GPU_RGBA_within_1e_5": false,
+  "authored_calibration_texels": 32,
+  "correct_layer_order_lower_error": true,
+  "editor_phase": "complete",
+  "full_lower_mip_pixel_equivalence": false,
+  "original_shader_draw_verified": false,
+  "per_layer": [
+    {
+      "RGBA_mismatches_over_1_div_255": 403900,
+      "RGBA_mismatches_over_2_div_255": 375038,
+      "alpha_mismatches_over_1e_5": 44973,
+      "coordinates": 1048576,
+      "max_RGB_abs_error": 1,
+      "max_alpha_abs_error": 0.13725492358207703,
+      "rgb_mismatches_over_1e_5": 423782
+    },
+    {
+      "RGBA_mismatches_over_1_div_255": 369258,
+      "RGBA_mismatches_over_2_div_255": 321813,
+      "alpha_mismatches_over_1e_5": 177638,
+      "coordinates": 1048576,
+      "max_RGB_abs_error": 1,
+      "max_alpha_abs_error": 0.2666666507720947,
+      "rgb_mismatches_over_1e_5": 417188
+    }
+  ],
+  "phase": "complete",
+  "private_payload_published": false,
+  "production": false,
+  "reversed_layer_control": [
+    {
+      "RGBA_mismatches_over_1_div_255": 1002107,
+      "RGBA_mismatches_over_2_div_255": 1000661,
+      "alpha_mismatches_over_1e_5": 674322,
+      "coordinates": 1048576,
+      "max_RGB_abs_error": 1,
+      "max_alpha_abs_error": 1,
+      "rgb_mismatches_over_1e_5": 937812
+    },
+    {
+      "RGBA_mismatches_over_1_div_255": 1000562,
+      "RGBA_mismatches_over_2_div_255": 999215,
+      "alpha_mismatches_over_1e_5": 672536,
+      "coordinates": 1048576,
+      "max_RGB_abs_error": 1,
+      "max_alpha_abs_error": 1,
+      "rgb_mismatches_over_1e_5": 938094
+    }
+  ],
+  "source_mip_count": 11,
+  "source_srgb": true,
+  "status": "OBSERVED_ACTUAL_SELECTED_ARRAY_IMPORT_AND_VULKAN_LOAD",
+  "white_mesh_repair_verified": false
+}
