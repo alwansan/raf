@@ -1,0 +1,56 @@
+{
+  "run_id": 46130201775,
+  "job_id": 140933443625,
+  "execution_head": "fb2f43bae92fa320e5dc5721de3c5ee89169a295",
+  "conclusion": "failure",
+  "prestage": {
+    "XAPK": false,
+    "additional_provider_bytes": 1779131136,
+    "additional_providers_staged": 1,
+    "all_nonnull_texture_sources_typed": true,
+    "all_selected_texture_dependencies_prepared": true,
+    "export_performed": false,
+    "gpu_verified": false,
+    "original_scope_candidates": 855,
+    "phase": "complete",
+    "production": false,
+    "selected_material_eligible_renderers": 118,
+    "selected_mesh_stream_prepared": true,
+    "selected_mesh_stream_provider_bytes": 1779131136,
+    "selected_mesh_stream_range_bytes": 30080,
+    "status": "GT_TOP_EXACT_DEPENDENCY_PRESTAGED",
+    "texture_dependency_counts": {
+      "inline_or_nonstream_targets": 1,
+      "nonnull": 4,
+      "null": 2,
+      "source_class_187": 1,
+      "source_class_28": 3,
+      "stream_targets_prepared": 3
+    }
+  },
+  "actual": {
+    "Android_device": false,
+    "Unity_execution": false,
+    "XAPK": false,
+    "failure_type": "ValueError",
+    "material_values": {
+      "color": 8,
+      "float": 43,
+      "int": 0
+    },
+    "mesh_fields_matched": 10,
+    "mesh_fields_total": 10,
+    "original_shader_draw_verified": false,
+    "phase": "mesh_and_material",
+    "private_payload_published": false,
+    "production": false,
+    "runtime_keyword_selection_verified": false,
+    "same_export_exact_graph": true,
+    "status": "INCONCLUSIVE",
+    "white_mesh_repair_verified": false
+  },
+  "diagnostic": {
+    "inferred_not_logged_exception_reason": "selected_texenv_names_drift",
+    "source_nonnull_only_plan": true
+  }
+}

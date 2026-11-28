@@ -20,9 +20,27 @@ from scripts.t3_original_921_dxbc_semantic_join import read_original_dxbc_signat
 
 STATUS = "OBSERVED_EXACT_SELECTED_SOURCE_ABI_MATERIAL_MESH_JOIN"
 
+class ABIFailure(ValueError):
+    """Only fixed source-owned diagnostic codes raised via require()."""
+
 def require(ok, code):
     if not ok:
-        raise ValueError(code)
+        raise ABIFailure(code)
+
+def verify_texture_plan(before, after, planned):
+    """Prestage records non-null source targets only; nulls stay explicit.
+    Require identical source/export property sets, all non-null plans and
+    no extra/null target records. The caller still checks exact PPtr and UV
+    for every slot (including nulls) via recheck.exact_slot().
+    """
+    require(type(planned) is dict, "selected_texture_plan_schema")
+    require(set(before)==set(after), "selected_texenv_names_drift")
+    nonnull={name for name, (ptr, _) in before.items() if ptr[1]}
+    require(set(planned)==nonnull, "selected_nonnull_texture_plan_drift")
+    require(all(type(v) is dict and v.get("stream_ready") is True
+                for v in planned.values()), "selected_texture_plan_not_prepared")
+    return {"source_slots":len(before),"export_slots":len(after),
+            "nonnull_planned":len(nonnull),"null_source_slots":len(before)-len(nonnull)}
 
 def vertex_channel_observation(signature, channels):
     """Report channel availability, not runtime binding or default fill."""
@@ -102,17 +120,20 @@ def run(a,out):
     out["material_values"]=values.compare(mat,actual)
     before=normalize_texenvs(mat["m_SavedProperties"]["m_TexEnvs"])
     after=normalize_texenvs(actual["m_SavedProperties"]["m_TexEnvs"],exported=True)
-    require(set(before)==set(after)==set(plan["texture_targets"]),"selected_texenv_names_drift")
+    out["phase"]="texture_plan_schema"
+    out["texture_plan"]=verify_texture_plan(before,after,plan["texture_targets"])
+    out["phase"]="exact_texenv_pointer_UV_join"
     typed={}
     selected=[]
     for prop in before:
-        edge=recheck.exact_slot(before[prop],after[prop],plan["material"][0],mk[0],source,trace,plan["texture_targets"][prop])
+        edge=recheck.exact_slot(before[prop],after[prop],plan["material"][0],mk[0],source,trace,plan["texture_targets"].get(prop))
         typed[prop]=None if edge is None else edge[3]
         if edge is not None and edge[3]==187:
             selected.append((prop,edge))
     require(len(selected)==1,"selected_array_slot_not_unique")
     prop,(_,exp,kind,cls)=selected[0]
     out["exact_texenv_slots"]=len(typed)
+    out["phase"]="source_preserving_native_reference_candidate"
     require(cls==187 and kind==3 and exp[1]==18700000,"selected_reference_anchor")
     repaired=selected_material_reference.repair_native_reference(body,prop,exp[0],exp[1],kind)
     rejected=0
@@ -159,6 +180,7 @@ def run(a,out):
             dirs[ident]=role
             sources.append((folder/"private.hlsl").read_text())
         out["original_stage_byte_identities_verified"]=len(dirs)
+        out["phase"]="source_parameter_constant_buffer_sampler_varying_ABI"
         out["abi"]=stage_parameter_records([pair],[],passes,table,private,dirs)
         rows=json.loads((private/"original-private-parameter-records.json").read_text())["stage_records"]
         require([r["stage"] for r in rows]==[1,0],"source_ABI_stage_order")
@@ -182,6 +204,27 @@ def main():
         run(a,out)
     except Exception as exc:
         out["failure_type"]=type(exc).__name__
+        # Only fixed own codes, or an explicit whitelist of existing ABI
+        # guard codes. Never relay arbitrary exception text or private names.
+        fixed={
+            "original_921_vertex_fragment_varying_mismatch",
+            "original_921_mesh_input_candidate_compile_failed",
+            "original_921_mesh_input_candidate_spirv_invalid",
+            "original_921_vulkan_varying_type_or_location_mismatch",
+            "original_921_varying_candidate_compile_failed",
+            "original_921_varying_candidate_spirv_invalid",
+            "original_resource_rebound_changed_spirv",
+            "original_resource_rebound_compile_failed",
+            "original_resource_rebound_spirv_invalid",
+            "original_texture_or_sampler_binding_ambiguous",
+            "named_constant_buffer_candidate_compile_failed",
+            "named_constant_buffer_candidate_spirv_invalid",
+            "named_constant_buffer_reflection_failed",
+            "invalid_original_parameter_blob_index",
+            "selected_material_reference_diagnostic_anchor",
+        }
+        if type(exc) is ABIFailure or (type(exc) is ValueError and str(exc) in fixed):
+            out["failure_reason"]=str(exc)
     with a.out.open("x") as dest:
         json.dump(out,dest,sort_keys=True,indent=2)
         dest.write("\n")

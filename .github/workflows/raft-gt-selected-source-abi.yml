@@ -1,11 +1,13 @@
 name: GT selected original stage ABI and exact mesh material join (NO PLAYER)
-# Source-bound explicit route ABI observation only; no Unity or player.
+# Correct non-null prestage schema while retaining explicit null PPtr/UV checks; no Unity or player.
 on:
   workflow_dispatch:
   push:
     branches: [feature/android-native-port]
     paths:
       - .github/workflows/raft-gt-selected-source-abi.yml
+      - tools/gt_top_resource_closure/selected_source_abi.py
+      - tools/gt_top_resource_closure/test_selected_source_abi.py
 permissions:
   contents: read
 concurrency:
