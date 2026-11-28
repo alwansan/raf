@@ -1,0 +1,27 @@
+{
+  "status": "ORIGINAL_EXPORT_GUID_FANOUT_RUNNING",
+  "starting_head": "da99603042685c92be285e946b31b5477b94225f",
+  "execution_head": "456723328683946f7629978d140d8b5bc49a8bdb",
+  "run": 46118609795,
+  "job": 140897893396,
+  "run_status": "in_progress",
+  "conclusion": null,
+  "lint_run": 46118609688,
+  "lint_conclusion": "success",
+  "source_free_controls_prepared": 7,
+  "source_free_controls_passed": true,
+  "latest_observed_step": "Compile SHA-pinned optional W1+B02+B21 exporter in disposable public checkout",
+  "source_scope": "immutable six original scenes and six serialized owners; bounded private same-instance postvendor export",
+  "source_to_export_renderer_assignment_parity": false,
+  "original_shader_program_restored": false,
+  "white_mesh_pixels_verified": false,
+  "android_pixels_verified": false,
+  "production": false,
+  "XAPK": false,
+  "next_action": "G1–G3 white-mesh exact original Shader48→actual exported Renderer/Material GUID fanout: 456723328683946f7629978d140d8b5bc49a8bdb; Actual 46118609795/job 140897893396 IN_PROGRESS; lint 46118609688 COMPLETED SUCCESS. Current step: Compile SHA-pinned optional W1+B02+B21 exporter in disposable public checkout. Source-free controls SUCCESS. New distinct bounded six-scene/six-owner original export using existing SHA staging, W1/B02 and three vendor restorers as prerequisites; join authenticated 21-source/1633-slot priority queue to exact GUID fanout on same actual project using tools/gt_shader_fanout/source_join.py, audit.py. Separate source slot population from actual exported scene/prefab/other material/Renderer documents; classify joint, missing and outside-selected-source populations, compare top priority exact GUID without exposing identifiers. Reconcile new run before retry. Do not claim source renderer assignment parity, actual program equivalence or white-pixel repair from census. Prior G5 46117813183/job 140895450566 and lint 46117813215 SUCCESS: 16383 actual alpha reads, Load and point 7/7 each zero mismatches, original sampler 1/7, calibration 4/4 and wrong-LOD/forced-alpha controls pass. GPU alpha stored; full RGBA/CPU parity unobserved (isReadable=false), generic AssetImporter, original shader/device/black-fire restoration unproved; no repeated native texture diagnostics. No PC target/sky replay; Level38 pins unchanged; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged, all G0–G6 open; CL/lab read-only, BLACK/animation deferred; no production/player/XAPK.",
+  "previous_native_alpha_actual": {
+    "run": 46117813183,
+    "job": 140895450566,
+    "result_path": "clients/GT/sessions/20261128-particle108-native-import/actual-46117813183.json"
+  }
+}

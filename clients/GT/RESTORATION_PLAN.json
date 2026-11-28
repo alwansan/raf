@@ -1,5 +1,5 @@
 {
-  "next_action": "G5-original-Particle108-native-alpha-route-diagnostic: Actual 46117064994/job 140893146463 FAILURE full acceptance but Unity completed, private guard true, exact basename/asset/meta, GUID/fileID, descriptor 64x64 RGBA32 7 mips and all six sampler settings matched. Generic AssetImporter API, sRGB graphics format, isReadable=false so CPU mip hashes UNOBSERVED not proven mismatch. Original sampler Vulkan measured 5461 alpha texels, 1/7 levels matched, 3718 mismatches, controls pass. Do not rerun old jobs. New b1f3506f1a90a000844f56df0a83e53e9f6b89fc: Actual 46117813183/job 140895450566 IN_PROGRESS (source-free controls and disposable exporter compilation SUCCESS); lint 46117813215 COMPLETED SUCCESS. Compare actual Texture2D.Load (integer texel/mip), independent inline point clamp and unchanged source sampler for all 5461 texels each; calibrate asymmetric authored 8x8 four-level chain with wrong-mip negative control, retain strict old full acceptance separately. Diagnostic workflow success only means valid route comparison, NOT full import or fire repair. Preserve exact original asset and sampler, no forced readability or production change. Reconcile new run before further work. If Load and point match 7/7 while original sampler differs, preserve storage evidence and investigate actual shader/sampler route only if materially productive; if blocked without productive correction, pivot independent original white-mesh Shader48 source→postvendor exact GUID fanout or water. Do not replay PC target/sky, Level38 pins unchanged, all G0–G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged, CL/lab read-only, BLACK/animation deferred, no production/player/XAPK.",
+  "next_action": "G1–G3 white-mesh exact original Shader48→actual exported Renderer/Material GUID fanout: 456723328683946f7629978d140d8b5bc49a8bdb; Actual 46118609795/job 140897893396 IN_PROGRESS; lint 46118609688 COMPLETED SUCCESS. Current step: Compile SHA-pinned optional W1+B02+B21 exporter in disposable public checkout. Source-free controls SUCCESS. New distinct bounded six-scene/six-owner original export using existing SHA staging, W1/B02 and three vendor restorers as prerequisites; join authenticated 21-source/1633-slot priority queue to exact GUID fanout on same actual project using tools/gt_shader_fanout/source_join.py, audit.py. Separate source slot population from actual exported scene/prefab/other material/Renderer documents; classify joint, missing and outside-selected-source populations, compare top priority exact GUID without exposing identifiers. Reconcile new run before retry. Do not claim source renderer assignment parity, actual program equivalence or white-pixel repair from census. Prior G5 46117813183/job 140895450566 and lint 46117813215 SUCCESS: 16383 actual alpha reads, Load and point 7/7 each zero mismatches, original sampler 1/7, calibration 4/4 and wrong-LOD/forced-alpha controls pass. GPU alpha stored; full RGBA/CPU parity unobserved (isReadable=false), generic AssetImporter, original shader/device/black-fire restoration unproved; no repeated native texture diagnostics. No PC target/sky replay; Level38 pins unchanged; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged, all G0–G6 open; CL/lab read-only, BLACK/animation deferred; no production/player/XAPK.",
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
     "status": "OBSERVED_SELECTED_ORIGINAL_LIGHT_HIERARCHIES",
@@ -17290,7 +17290,7 @@
     }
   },
   "latest_particle108_native_import": {
-    "status": "NATIVE_ALPHA_ROUTE_DIAGNOSTIC_RUNNING",
+    "status": "PASS_GPU_ALPHA_STORAGE_DIAGNOSTIC_ONLY_FULL_NATIVE_ACCEPTANCE_OPEN",
     "starting_head": "6bfd315bc4775941dc45d316f8619559f819874e",
     "execution_head": "b1f3506f1a90a000844f56df0a83e53e9f6b89fc",
     "previous_native_export_run": 46115503520,
@@ -17324,14 +17324,14 @@
     "production": false,
     "player": false,
     "XAPK": false,
-    "next_action": "G5-original-Particle108-native-alpha-route-diagnostic: Actual 46117064994/job 140893146463 FAILURE full acceptance but Unity completed, private guard true, exact basename/asset/meta, GUID/fileID, descriptor 64x64 RGBA32 7 mips and all six sampler settings matched. Generic AssetImporter API, sRGB graphics format, isReadable=false so CPU mip hashes UNOBSERVED not proven mismatch. Original sampler Vulkan measured 5461 alpha texels, 1/7 levels matched, 3718 mismatches, controls pass. Do not rerun old jobs. New b1f3506f1a90a000844f56df0a83e53e9f6b89fc: Actual 46117813183/job 140895450566 IN_PROGRESS (source-free controls and disposable exporter compilation SUCCESS); lint 46117813215 COMPLETED SUCCESS. Compare actual Texture2D.Load (integer texel/mip), independent inline point clamp and unchanged source sampler for all 5461 texels each; calibrate asymmetric authored 8x8 four-level chain with wrong-mip negative control, retain strict old full acceptance separately. Diagnostic workflow success only means valid route comparison, NOT full import or fire repair. Preserve exact original asset and sampler, no forced readability or production change. Reconcile new run before further work. If Load and point match 7/7 while original sampler differs, preserve storage evidence and investigate actual shader/sampler route only if materially productive; if blocked without productive correction, pivot independent original white-mesh Shader48 source→postvendor exact GUID fanout or water. Do not replay PC target/sky, Level38 pins unchanged, all G0–G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged, CL/lab read-only, BLACK/animation deferred, no production/player/XAPK.",
+    "next_action": "Preserve seven-level GPU alpha storage observation; do not replay. Continue original shader/sampler/material integration only on a materially productive route; pivot to independent exact source-to-export GUID fanout now.",
     "run": 46117813183,
     "job": 140895450566,
-    "run_status": "in_progress",
+    "run_status": "completed",
     "lint_run": 46117813215,
     "lint_conclusion": "success",
     "source_free_controls_passed": true,
-    "latest_observed_step": "Checkout exactly six immutable Raft scenes and six serialized owner sources",
+    "latest_observed_step": "completed",
     "prior_failed_run": {
       "execution_head": "e5f00a1417e420050158f8f3a62749c3b4540c01",
       "run": 46116411253,
@@ -17372,7 +17372,7 @@
       "causal_import_failure_not_proven": true,
       "unity_automatic_log_contained_original_name_and_export_guid": true
     },
-    "conclusion": null,
+    "conclusion": "success",
     "prior_corrective_actual": {
       "execution_head": "0fd64ec1fda9ac4a0e1b28cf9eb47c35cc43a124",
       "run": 46117064994,
@@ -17490,6 +17490,274 @@
         "digest_independently_downloaded": false
       },
       "cpu_readback_unavailable_not_proven_mismatch": true
+    },
+    "actual_report": {
+      "XAPK": false,
+      "actual_height": 64,
+      "actual_importer_kind": "generic_asset",
+      "actual_mip_count": 7,
+      "actual_srgb": true,
+      "actual_texture_format": "RGBA32",
+      "actual_texture_graphics_format": "R8G8B8A8_SRGB",
+      "actual_vulkan_mips_equal": 1,
+      "actual_width": 64,
+      "alpha_route_diagnostic": {
+        "actual_original_alpha_readbacks": 16383,
+        "android_pixels_verified": false,
+        "black_fire_restored": false,
+        "calibration": [
+          {
+            "level": 0,
+            "load_max_error": 2.524432013428779e-8,
+            "point_max_error": 2.524432013428779e-8,
+            "texels": 64
+          },
+          {
+            "level": 1,
+            "load_max_error": 2.0686317880880267e-8,
+            "point_max_error": 2.0686317880880267e-8,
+            "texels": 16
+          },
+          {
+            "level": 2,
+            "load_max_error": 4.2775098019198765e-8,
+            "point_max_error": 4.2775098019198765e-8,
+            "texels": 4
+          },
+          {
+            "level": 3,
+            "load_max_error": 6.3110801029608865e-9,
+            "point_max_error": 6.3110801029608865e-9,
+            "texels": 1
+          }
+        ],
+        "calibration_mips": 4,
+        "calibration_texels": 85,
+        "cpu_readback_available": false,
+        "full_native_acceptance": false,
+        "interpretation": "EXACT_GPU_ALPHA_VIA_LOAD_AND_POINT_ORIGINAL_SAMPLER_DIFFERS",
+        "load_mips_matching_source": 7,
+        "load_point_agree_mips": 7,
+        "mips": [
+          {
+            "level": 0,
+            "load_max_error": 8.41477337809593e-8,
+            "load_mismatches": 0,
+            "load_vs_point_max_error": 0,
+            "original_sampler_max_error": 0.01717597246170044,
+            "point_max_error": 8.41477337809593e-8,
+            "point_mismatches": 0,
+            "size": 64,
+            "texels": 4096
+          },
+          {
+            "level": 1,
+            "load_max_error": 8.555019603839753e-8,
+            "load_mismatches": 0,
+            "load_vs_point_max_error": 0,
+            "original_sampler_max_error": 0.02446642412858846,
+            "point_max_error": 8.555019603839753e-8,
+            "point_mismatches": 0,
+            "size": 32,
+            "texels": 1024
+          },
+          {
+            "level": 2,
+            "load_max_error": 6.521449369412124e-8,
+            "load_mismatches": 0,
+            "load_vs_point_max_error": 0,
+            "original_sampler_max_error": 0.04998956287608425,
+            "point_max_error": 6.521449369412124e-8,
+            "point_mismatches": 0,
+            "size": 16,
+            "texels": 256
+          },
+          {
+            "level": 3,
+            "load_max_error": 5.329356467242974e-8,
+            "load_mismatches": 0,
+            "load_vs_point_max_error": 0,
+            "original_sampler_max_error": 0.10341856479644773,
+            "point_max_error": 5.329356467242974e-8,
+            "point_mismatches": 0,
+            "size": 8,
+            "texels": 64
+          },
+          {
+            "level": 4,
+            "load_max_error": 2.384185793236071e-8,
+            "load_mismatches": 0,
+            "load_vs_point_max_error": 0,
+            "original_sampler_max_error": 0.1354889357791227,
+            "point_max_error": 2.384185793236071e-8,
+            "point_mismatches": 0,
+            "size": 4,
+            "texels": 16
+          },
+          {
+            "level": 5,
+            "load_max_error": 2.3140626803641595e-8,
+            "load_mismatches": 0,
+            "load_vs_point_max_error": 0,
+            "original_sampler_max_error": 0.007480942501741306,
+            "point_max_error": 2.3140626803641595e-8,
+            "point_mismatches": 0,
+            "size": 2,
+            "texels": 4
+          },
+          {
+            "level": 6,
+            "load_max_error": 7.713542249376815e-9,
+            "load_mismatches": 0,
+            "load_vs_point_max_error": 0,
+            "original_sampler_max_error": 7.713542249376815e-9,
+            "point_max_error": 7.713542249376815e-9,
+            "point_mismatches": 0,
+            "size": 1,
+            "texels": 1
+          }
+        ],
+        "original_sampler_mips_matching_source": 1,
+        "original_sampler_settings_unchanged": true,
+        "original_texels_per_route": 5461,
+        "original_texture_modified": false,
+        "point_mips_matching_source": 7,
+        "private_payload_published": false,
+        "rgba_or_raw_cpu_byte_parity_claimed": false,
+        "source_alpha_gpu_load_exact": true,
+        "status": "OBSERVED_ORIGINAL_ALPHA_LOAD_POINT_SAMPLER_COMPARISON",
+        "wrong_mip_expected_error": 1.2972775631503453e-8,
+        "wrong_mip_separation": 0.36176469290957725
+      },
+      "android_pixels_verified": false,
+      "backend": "Vulkan",
+      "black_fire_restored": false,
+      "controls": {
+        "force_one_error": 0,
+        "force_zero_error": 0,
+        "max_wrong_baseline_separation": 0.6294117647058823
+      },
+      "cpu_mip_readback_available": false,
+      "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+      "editor_phase": "complete",
+      "export_basename_preserved": true,
+      "export_stem_matches_serialized_name": true,
+      "imported_cpu_mips_equal": 0,
+      "imported_descriptor_matches": true,
+      "imported_file_id_matches": true,
+      "imported_guid_matches": true,
+      "imported_sampler_fields_match": true,
+      "mips": [
+        {
+          "alpha_max_error": 0.01717597246170044,
+          "alpha_mismatches": 2625,
+          "cpu_byte_match": false,
+          "level": 0,
+          "size": 64,
+          "texels": 4096
+        },
+        {
+          "alpha_max_error": 0.02446642412858846,
+          "alpha_mismatches": 782,
+          "cpu_byte_match": false,
+          "level": 1,
+          "size": 32,
+          "texels": 1024
+        },
+        {
+          "alpha_max_error": 0.04998956287608425,
+          "alpha_mismatches": 229,
+          "cpu_byte_match": false,
+          "level": 2,
+          "size": 16,
+          "texels": 256
+        },
+        {
+          "alpha_max_error": 0.10341856479644773,
+          "alpha_mismatches": 64,
+          "cpu_byte_match": false,
+          "level": 3,
+          "size": 8,
+          "texels": 64
+        },
+        {
+          "alpha_max_error": 0.1354889357791227,
+          "alpha_mismatches": 16,
+          "cpu_byte_match": false,
+          "level": 4,
+          "size": 4,
+          "texels": 16
+        },
+        {
+          "alpha_max_error": 0.007480942501741306,
+          "alpha_mismatches": 2,
+          "cpu_byte_match": false,
+          "level": 5,
+          "size": 2,
+          "texels": 4
+        },
+        {
+          "alpha_max_error": 7.713542249376815e-9,
+          "alpha_mismatches": 0,
+          "cpu_byte_match": false,
+          "level": 6,
+          "size": 1,
+          "texels": 1
+        }
+      ],
+      "native_asset_and_meta_unchanged": true,
+      "native_importer_type_matches": false,
+      "original_alpha_texels_checked": 5461,
+      "original_shader_verified": false,
+      "player": false,
+      "private_editor_log_guard_verified": true,
+      "private_payload_published": false,
+      "production": false,
+      "readable": false,
+      "reason": "vulkan_original_alpha_mismatch",
+      "source_native_bytes": 21844,
+      "source_native_mips": 7,
+      "source_serialized_color_space": 1,
+      "status": "INCONCLUSIVE",
+      "unity_import_verified": false,
+      "unity_step_exit": 0,
+      "unity_texture_loaded": true
+    },
+    "artifact": {
+      "id": 15252043437,
+      "bytes": 3785,
+      "digest": "sha256:b404d70fe376601d83581db0335ab5d341403fd9f8c5d591d539a4d12f6b0e07",
+      "digest_independently_downloaded": false
+    },
+    "alpha_source_gpu_direct_match": true,
+    "alpha_source_gpu_point_match": true,
+    "full_native_acceptance": false
+  },
+  "latest_original_export_guid_fanout": {
+    "status": "ORIGINAL_EXPORT_GUID_FANOUT_RUNNING",
+    "starting_head": "da99603042685c92be285e946b31b5477b94225f",
+    "execution_head": "456723328683946f7629978d140d8b5bc49a8bdb",
+    "run": 46118609795,
+    "job": 140897893396,
+    "run_status": "in_progress",
+    "conclusion": null,
+    "lint_run": 46118609688,
+    "lint_conclusion": "success",
+    "source_free_controls_prepared": 7,
+    "source_free_controls_passed": true,
+    "latest_observed_step": "Compile SHA-pinned optional W1+B02+B21 exporter in disposable public checkout",
+    "source_scope": "immutable six original scenes and six serialized owners; bounded private same-instance postvendor export",
+    "source_to_export_renderer_assignment_parity": false,
+    "original_shader_program_restored": false,
+    "white_mesh_pixels_verified": false,
+    "android_pixels_verified": false,
+    "production": false,
+    "XAPK": false,
+    "next_action": "G1–G3 white-mesh exact original Shader48→actual exported Renderer/Material GUID fanout: 456723328683946f7629978d140d8b5bc49a8bdb; Actual 46118609795/job 140897893396 IN_PROGRESS; lint 46118609688 COMPLETED SUCCESS. Current step: Compile SHA-pinned optional W1+B02+B21 exporter in disposable public checkout. Source-free controls SUCCESS. New distinct bounded six-scene/six-owner original export using existing SHA staging, W1/B02 and three vendor restorers as prerequisites; join authenticated 21-source/1633-slot priority queue to exact GUID fanout on same actual project using tools/gt_shader_fanout/source_join.py, audit.py. Separate source slot population from actual exported scene/prefab/other material/Renderer documents; classify joint, missing and outside-selected-source populations, compare top priority exact GUID without exposing identifiers. Reconcile new run before retry. Do not claim source renderer assignment parity, actual program equivalence or white-pixel repair from census. Prior G5 46117813183/job 140895450566 and lint 46117813215 SUCCESS: 16383 actual alpha reads, Load and point 7/7 each zero mismatches, original sampler 1/7, calibration 4/4 and wrong-LOD/forced-alpha controls pass. GPU alpha stored; full RGBA/CPU parity unobserved (isReadable=false), generic AssetImporter, original shader/device/black-fire restoration unproved; no repeated native texture diagnostics. No PC target/sky replay; Level38 pins unchanged; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged, all G0–G6 open; CL/lab read-only, BLACK/animation deferred; no production/player/XAPK.",
+    "previous_native_alpha_actual": {
+      "run": 46117813183,
+      "job": 140895450566,
+      "result_path": "clients/GT/sessions/20261128-particle108-native-import/actual-46117813183.json"
     }
   }
 }
