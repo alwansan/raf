@@ -1,0 +1,1512 @@
+{
+  "source": "GitHub Actions verified job steps and safe aggregate log",
+  "run": 46145192075,
+  "job": 140979599439,
+  "execution_head": "66b9147a03727e72154b44d832b8728baae06252",
+  "conclusion": "failure",
+  "source_free_tests_passed": 45,
+  "plan_guard_run": 46145192078,
+  "plan_guard_conclusion": "success",
+  "lint_run": 46145192082,
+  "lint_conclusion": "success",
+  "artifact_id": 15262844565,
+  "artifact_reported_sha256": "5af23370d523f8f6332165143ced79a1a645e00e12a860a2ad1173515f18bc80",
+  "artifact_downloaded": false,
+  "clone_verified_modes": 24,
+  "frame_failed_paths": 48,
+  "draw_submissions": 0,
+  "editor_safe_summary": {
+    "Android_device": false,
+    "XAPK": false,
+    "authored_empty_one_particle_control_verified": true,
+    "black_fire_restored": false,
+    "calibration_cases_measured": 16,
+    "counts": {
+      "active_stream_cases": 12,
+      "billboard_cases": 12,
+      "custom_stream_cases": 0,
+      "custom_stream_match_cases": 0,
+      "direct_live_but_empty_cases": 0,
+      "empty_cases": 12,
+      "exact_serialized_active_stream_cases": 12,
+      "explicit_one_particle_billboard_cases": 12,
+      "imported_emitter_cases": 12,
+      "material_identity_cases": 12,
+      "roundtrip_exposed_state_equal_cases": 12,
+      "roundtrip_one_particle_billboard_cases": 12,
+      "roundtrip_recovered_empty_direct_cases": 0,
+      "scene_bytes_unchanged_cases": 12,
+      "signature_attribute_presence_cases": 12,
+      "signature_attribute_width_cases": 0,
+      "spontaneous_simulation_nonempty_cases": 12
+    },
+    "editor_exit_code": 0,
+    "editor_failure_category": "other",
+    "editor_phase": "complete",
+    "editor_row_count": 12,
+    "emitted_state_roundtrip_control_passes": 2,
+    "failure_category": "actual_emitter_draw_inconclusive",
+    "import_counters": {
+      "asset_identities": 4,
+      "assets_written": 4,
+      "numeric_declared": 11,
+      "numeric_matched": 11,
+      "numeric_saved": 32,
+      "numeric_undeclared": 21,
+      "scenes_imported": 12,
+      "scenes_written": 12,
+      "shader_errors": 0,
+      "slots_declared": 2,
+      "slots_matched": 2,
+      "uv_matched": 2
+    },
+    "import_flags": {
+      "control_verified": true,
+      "material_shader_match": true,
+      "native_descriptor": true,
+      "native_identity": true,
+      "native_sampler": true,
+      "resources_bytes_match": true,
+      "shader_supported": true,
+      "source_assets_unchanged": true
+    },
+    "independently_selected_method": 5,
+    "isolated_exported_emitter_generated_geometry_verified": true,
+    "manual_seed_control_passes": 2,
+    "natural_burst_control_passes": 2,
+    "original_emitter_geometry_verified": false,
+    "phase": "actual_emitter_original_route_draw",
+    "private_payload_published": false,
+    "production": false,
+    "roundtrip_diagnostic_only": true,
+    "runtime_keyword_selection_verified": false,
+    "same_emitted_state_roundtrip_geometry_observed": true,
+    "source_asset_identity_count": 4,
+    "source_assets_unchanged": true,
+    "status": "INCONCLUSIVE"
+  },
+  "draw_safe_report": {
+    "Android_device": false,
+    "XAPK": false,
+    "actual_emitter_alpha_only_intervention": true,
+    "alpha_counts": {
+      "forced_baked_alpha_verified": 0,
+      "forced_renderer_alpha_verified": 0,
+      "natural_baked_alpha_verified": 0,
+      "natural_renderer_alpha_verified": 0
+    },
+    "black_fire_restored": false,
+    "cases": [
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 0,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 0,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 1,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 1,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 2,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 2,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 3,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 3,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 4,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 4,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 5,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 5,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 6,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 6,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 7,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 7,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 8,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 8,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 9,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 9,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 10,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 10,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 11,
+        "indices": 18,
+        "mode": "natural",
+        "particles": 3,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 12
+      },
+      {
+        "clone_payload_and_sampler_verified": true,
+        "index": 11,
+        "indices": 6,
+        "mode": "forced",
+        "particles": 1,
+        "paths": [
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "renderer",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          },
+          {
+            "alpha_path_verified": false,
+            "backgrounds": [
+              {
+                "background": 0,
+                "failure_type": "DrawError"
+              },
+              {
+                "background": 1,
+                "failure_type": "DrawError"
+              }
+            ],
+            "blocks_restored": false,
+            "completed": false,
+            "failure_category": "InvalidOperationException",
+            "material_restored": false,
+            "override_submissions": 0,
+            "particles_unchanged": false,
+            "path": "baked",
+            "path_verified": false,
+            "phase": "frame",
+            "streams_unchanged": false,
+            "submissions": 0
+          }
+        ],
+        "vertices": 4
+      }
+    ],
+    "clone_verified_modes": 24,
+    "counts": {
+      "forced_baked_verified": 0,
+      "forced_renderer_verified": 0,
+      "natural_baked_verified": 0,
+      "natural_renderer_verified": 0
+    },
+    "explicit_camera_clear_and_direct_reference": true,
+    "failures": [],
+    "isolated_actual_emitter_alpha_causality_verified": false,
+    "isolated_actual_emitter_original_explicit_route_draw_verified": false,
+    "observed_emitter_modes": 24,
+    "original_full_scene_draw_verified": false,
+    "original_mesh_payload_modified": false,
+    "production": false,
+    "renderer_framed_from_live_world_particles": true,
+    "runtime_keyword_selection_verified": false,
+    "separate_diagnostic_camera_framing": true
+  }
+}

@@ -22,7 +22,7 @@ public static class NativeMipValidation {
  [Serializable] class Bake {public int particles,particles_read,positive_size_lifetime,vertices=-1,indices=-1,submeshes=-1,required_present,required_width;public bool finite,nondegenerate,bake_completed;public string failure_category="";}
  [Serializable] class ProbeLane {public int index,width,format;public Vector4[] cpu;}
  [Serializable] class ProbeData {public int index,vertices,indices;public ProbeLane[] lanes;public bool completed;public string failure_category="";}
- [Serializable] class RenderPath {public string path,phase="start",failure_category="";public int submissions;public bool completed,material_restored,streams_unchanged,particles_unchanged,blocks_restored;public int override_submissions;}
+ [Serializable] class RenderPath {public string path,phase="start",failure_category="";public int submissions;public bool completed,material_restored,streams_unchanged,particles_unchanged,blocks_restored,initial_has_block,initial_global_empty,initial_selected_override,block_snapshot_taken;public int override_submissions,initial_indexed_nonempty,initial_indexed_selected_overrides;}
  [Serializable] class RenderEvidence {public int index,particles,vertices,indices;public string mode;public bool clone_payload_verified,clone_format_sampler_verified;public RenderPath[] paths;}
  [Serializable] class ControlCase {public int material_kind,method;public Bake empty,one,before_roundtrip;public bool roundtrip_state_equal;public string failure_category="";}
  [Serializable] class Row {public int index,empty_vertices=-1,empty_particles=-1,natural_particles,natural_vertices;
@@ -220,18 +220,56 @@ public static class NativeMipValidation {
    }
    return pos==raw.Length;
  }
+ // Snapshots are never edited. Unity does not expose arbitrary MPB enumeration:
+ // restore the original objects and check public texture/empty state plus pixels.
+ sealed class BlockSnapshot {
+   public readonly MaterialPropertyBlock global;
+   public readonly MaterialPropertyBlock[] indexed;
+   public readonly bool has;
+   public BlockSnapshot(ParticleSystemRenderer ren,int count){
+     has=ren.HasPropertyBlock();global=new MaterialPropertyBlock();ren.GetPropertyBlock(global);
+     indexed=new MaterialPropertyBlock[count];
+     for(int i=0;i<count;i++){indexed[i]=new MaterialPropertyBlock();ren.GetPropertyBlock(indexed[i],i);}
+   }
+   public bool Matches(ParticleSystemRenderer ren,string property){
+     var now=new MaterialPropertyBlock();ren.GetPropertyBlock(now);
+     if(now.isEmpty!=global.isEmpty||now.GetTexture(property)!=global.GetTexture(property))return false;
+     for(int i=0;i<indexed.Length;i++){
+       now.Clear();ren.GetPropertyBlock(now,i);
+       if(now.isEmpty!=indexed[i].isEmpty||now.GetTexture(property)!=indexed[i].GetTexture(property))return false;
+     }
+     // HasPropertyBlock may reflect engine-generated state even when the public
+     // blocks are empty; report that separately and preserve exposed contents.
+     return true;
+   }
+   public void Restore(ParticleSystemRenderer ren){
+     ren.SetPropertyBlock(global.isEmpty?null:global);
+     for(int i=0;i<indexed.Length;i++)if(!indexed[i].isEmpty)ren.SetPropertyBlock(indexed[i],i);
+   }
+   public void Apply(ParticleSystemRenderer ren,string property,Texture target){
+     var work=new MaterialPropertyBlock();ren.GetPropertyBlock(work);
+     work.SetTexture(property,target);ren.SetPropertyBlock(work);
+     var check=new MaterialPropertyBlock();ren.GetPropertyBlock(check);Need(check.GetTexture(property)==target);
+     // A nonempty indexed block takes precedence over the global block.
+     for(int i=0;i<indexed.Length;i++)if(!indexed[i].isEmpty){
+       work=new MaterialPropertyBlock();ren.GetPropertyBlock(work,i);
+       work.SetTexture(property,target);ren.SetPropertyBlock(work,i);
+       check.Clear();ren.GetPropertyBlock(check,i);Need(check.GetTexture(property)==target);
+     }
+   }
+ }
  static void RenderEmitterCase(Camera cam,ParticleSystemRenderer ren,Mesh mesh,Material original,Material marker,
-                               Material[] mats,bool rendererPath,string kind,RenderTexture rt,string path,MaterialPropertyBlock block,string property,Texture target){
+                               Material[] mats,bool rendererPath,string kind,RenderTexture rt,string path,MaterialPropertyBlock block,string property,Texture target,BlockSnapshot snapshot){
    var b=new CommandBuffer{name="GT generated billboard draw"};
    var clear=new CommandBuffer{name="GT explicit linear camera clear"};bool installed=false;
    try{
-     Need(ren.sharedMaterials.SequenceEqual(mats)&&mats.All(x=>x==original)&&!ren.HasPropertyBlock());
+     Need(ren.sharedMaterials.SequenceEqual(mats)&&mats.All(x=>x==original)&&snapshot.Matches(ren,property));
      Need((block!=null)==(target!=null));
      if(block!=null)Need(block.GetTexture(property)==target&&original.HasProperty(property));
      ren.enabled=rendererPath&&kind!="clear";
      if(rendererPath&&kind=="marker")ren.sharedMaterials=mats.Select(x=>marker).ToArray();
      if(rendererPath&&block!=null){
-       ren.SetPropertyBlock(block);installed=true;var check=new MaterialPropertyBlock();ren.GetPropertyBlock(check);Need(check.GetTexture(property)==target);
+       installed=true;snapshot.Apply(ren,property,target);
      }
      if(!rendererPath&&kind!="clear")b.DrawMesh(mesh,Matrix4x4.identity,kind=="marker"?marker:original,0,0,block);
      // Camera background color may be converted by the editor. Use an explicit
@@ -245,8 +283,9 @@ public static class NativeMipValidation {
    }finally{
      cam.RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque,clear);clear.Release();
      cam.RemoveCommandBuffer(CameraEvent.BeforeForwardAlpha,b);b.Release();
-     if(installed)ren.SetPropertyBlock(null);
-     ren.sharedMaterials=mats;ren.enabled=true;
+     ren.sharedMaterials=mats;
+     if(installed)snapshot.Restore(ren);
+     ren.enabled=true;
    }
  }
  static RenderPath RenderPathCases(ParticleSystem ps,ParticleSystemRenderer ren,Mesh mesh,Camera cam,Material original,
@@ -256,15 +295,25 @@ public static class NativeMipValidation {
    var before=new ParticleSystem.Particle[ps.particleCount];
    var oldPos=cam.transform.position;float oldSize=cam.orthographicSize,oldNear=cam.nearClipPlane,oldFar=cam.farClipPlane,oldAspect=cam.aspect;
    int oldMask=cam.cullingMask;Color oldColor=cam.backgroundColor;bool oldEnabled=ren.enabled,oldHdr=cam.allowHDR,oldMsaa=cam.allowMSAA;
-   RenderTexture rt=null;bool srgb=GL.sRGBWrite;
+   RenderTexture rt=null;bool srgb=GL.sRGBWrite;BlockSnapshot snapshot=null;
    try{
-     r.phase="frame";
+     r.phase="particle_state";
      Need(before.Length>0&&before.Length<=256&&ps.GetParticles(before)==before.Length&&mats.Length==2&&mats.All(x=>x==original));
-     Need(original!=null&&marker!=null&&original.shader!=marker.shader&&original.passCount==1&&marker.passCount==1);
-     Need(!ren.HasPropertyBlock()&&textures.Length==4&&original.GetTexture(input.selected_property)==textures[0]);
-     Frame(cam,rendererPath?LiveWorldBounds(ps,before):MeshBounds(mesh));
+     r.phase="material_state";Need(original!=null&&marker!=null&&original.shader!=marker.shader&&original.passCount==1&&marker.passCount==1);
+     r.phase="texture_state";Need(textures.Length==4&&original.GetTexture(input.selected_property)==textures[0]);
+     r.phase="block_snapshot";snapshot=new BlockSnapshot(ren,mats.Length);r.block_snapshot_taken=true;
+     r.initial_has_block=snapshot.has;r.initial_global_empty=snapshot.global.isEmpty;
+     r.initial_selected_override=snapshot.global.GetTexture(input.selected_property)!=null;
+     r.initial_indexed_nonempty=snapshot.indexed.Count(x=>!x.isEmpty);
+     r.initial_indexed_selected_overrides=snapshot.indexed.Count(x=>x.GetTexture(input.selected_property)!=null);
+     Need(snapshot.Matches(ren,input.selected_property));
+     // A saved explicit override of this same property to a different texture is
+     // a real distinct baseline, not permission to overwrite original state.
+     r.phase="source_block_identity";
+     Need((!r.initial_selected_override||snapshot.global.GetTexture(input.selected_property)==textures[0])&&snapshot.indexed.All(x=>x.GetTexture(input.selected_property)==null||x.GetTexture(input.selected_property)==textures[0]));
+     r.phase="frame";Frame(cam,rendererPath?LiveWorldBounds(ps,before):MeshBounds(mesh));
      cam.cullingMask=rendererPath?1<<ren.gameObject.layer:0;
-     rt=new RenderTexture(64,64,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);
+     r.phase="target";rt=new RenderTexture(64,64,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);
      Need(rt.Create()&&!rt.sRGB&&rt.graphicsFormat==GraphicsFormat.R32G32B32A32_SFloat);
      cam.targetTexture=rt;GL.sRGBWrite=false;
      var backgrounds=new[]{new Color(.125f,.25f,.5f,.25f),new Color(.625f,.375f,.125f,.75f)};
@@ -275,16 +324,16 @@ public static class NativeMipValidation {
          r.phase=kind;var names=new[]{"source","clone","zero","one"};int ti=Array.IndexOf(names,kind);
          Texture2D target=ti<0?null:textures[ti];MaterialPropertyBlock block=null;
          if(target!=null){block=new MaterialPropertyBlock();block.SetTexture(input.selected_property,target);Need(block.GetTexture(input.selected_property)==target);}
-         RenderEmitterCase(cam,ren,mesh,original,marker,mats,rendererPath,kind,rt,Path.Combine(priv,"emitter-"+index+"-"+mode+"-"+r.path+"-"+bg+"-"+kind+".f32"),block,input.selected_property,target);
+         RenderEmitterCase(cam,ren,mesh,original,marker,mats,rendererPath,kind,rt,Path.Combine(priv,"emitter-"+index+"-"+mode+"-"+r.path+"-"+bg+"-"+kind+".f32"),block,input.selected_property,target,snapshot);
          r.submissions++;if(block!=null)r.override_submissions++;
-         Need(!ren.HasPropertyBlock()&&original.GetTexture(input.selected_property)==textures[0]);
+         Need(snapshot.Matches(ren,input.selected_property)&&original.GetTexture(input.selected_property)==textures[0]);
        }
      }
      r.phase="post_draw";
      r.material_restored=ren.sharedMaterials.SequenceEqual(mats);
      var afterStreams=new List<ParticleSystemVertexStream>();ren.GetActiveVertexStreams(afterStreams);
      r.streams_unchanged=streams.SequenceEqual(afterStreams);r.particles_unchanged=ParticleStateEqual(ps,before);
-     r.blocks_restored=!ren.HasPropertyBlock()&&original.GetTexture(input.selected_property)==textures[0];
+     r.blocks_restored=snapshot.Matches(ren,input.selected_property)&&original.GetTexture(input.selected_property)==textures[0];
      r.completed=r.submissions==20&&r.override_submissions==8&&r.blocks_restored&&r.material_restored&&r.streams_unchanged&&r.particles_unchanged;
      r.phase="complete";
    }catch(Exception e){r.failure_category=e.GetType().Name;}

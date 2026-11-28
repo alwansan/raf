@@ -13,7 +13,7 @@ MARKER=np.array([.91,.07,.61,1.])
 PATHS=("renderer","baked")
 MODES=("natural","forced")
 CASES=("reference","clear","native","repeat","marker","source","clone","zero","one","restored")
-PHASES=("start","frame","reference","clear","native","repeat","marker","source","clone","zero","one","restored","post_draw","complete")
+PHASES=("start","particle_state","material_state","texture_state","block_snapshot","source_block_identity","frame","target","reference","clear","native","repeat","marker","source","clone","zero","one","restored","post_draw","complete")
 EXCEPTIONS=("","InvalidOperationException","ArgumentException","IOException","NullReferenceException","UnityException")
 class Reject(ValueError):pass
 def need(ok,code):
@@ -79,7 +79,11 @@ def inspect(root,index,mode,expected):
                   submissions=r.get("submissions") if type(r.get("submissions")) is int and 0<=r["submissions"]<=20 else 0,
                   completed=r.get("completed") is True,material_restored=r.get("material_restored") is True,
                   streams_unchanged=r.get("streams_unchanged") is True,particles_unchanged=r.get("particles_unchanged") is True,
-                  blocks_restored=r.get("blocks_restored") is True,
+                  blocks_restored=r.get("blocks_restored") is True,block_snapshot_taken=r.get("block_snapshot_taken") is True,
+                  initial_has_block=r.get("initial_has_block") is True,initial_global_empty=r.get("initial_global_empty") is True,
+                  initial_selected_override=r.get("initial_selected_override") is True,
+                  initial_indexed_nonempty=r.get("initial_indexed_nonempty") if type(r.get("initial_indexed_nonempty")) is int and 0<=r["initial_indexed_nonempty"]<=2 else -1,
+                  initial_indexed_selected_overrides=r.get("initial_indexed_selected_overrides") if type(r.get("initial_indexed_selected_overrides")) is int and 0<=r["initial_indexed_selected_overrides"]<=2 else -1,
                   override_submissions=r.get("override_submissions") if type(r.get("override_submissions")) is int and 0<=r["override_submissions"]<=8 else 0,
                   backgrounds=[])
         for bg in range(2):
@@ -89,7 +93,7 @@ def inspect(root,index,mode,expected):
             except Exception as e:
                 safe["backgrounds"].append(dict(background=bg,failure_type=type(e).__name__))
         safe["path_verified"]=(safe["submissions"]==20 and all(safe[k] for k in ("completed","material_restored","streams_unchanged","particles_unchanged")) and all(x.get("calibrated_original_rgb_observed") is True for x in safe["backgrounds"]))
-        safe["alpha_path_verified"]=(safe["path_verified"] and clone_ok and safe["blocks_restored"] and safe["override_submissions"]==8 and all(x.get("calibrated_actual_alpha_effect") is True for x in safe["backgrounds"]))
+        safe["alpha_path_verified"]=(safe["path_verified"] and clone_ok and safe["block_snapshot_taken"] and safe["blocks_restored"] and safe["override_submissions"]==8 and all(x.get("calibrated_actual_alpha_effect") is True for x in safe["backgrounds"]))
         result.append(safe)
     return dict(index=index,mode=mode,particles=n,vertices=4*n,indices=6*n,clone_payload_and_sampler_verified=clone_ok,paths=result)
 
@@ -110,5 +114,5 @@ def verify(root,rows):
                 observed_emitter_modes=len(results),counts=counts,cases=results,failures=failures,
                 separate_diagnostic_camera_framing=True,renderer_framed_from_live_world_particles=True,
                 explicit_camera_clear_and_direct_reference=True,original_full_scene_draw_verified=False,
-                original_mesh_payload_modified=False,actual_emitter_alpha_only_intervention=True,runtime_keyword_selection_verified=False,
+                original_mesh_payload_modified=False,actual_emitter_alpha_only_intervention=True,preexisting_mpb_snapshot_preserved=True,opaque_mpb_byte_equality_verified=False,runtime_keyword_selection_verified=False,
                 black_fire_restored=False,Android_device=False,production=False,XAPK=False)
