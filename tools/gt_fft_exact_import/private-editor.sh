@@ -6,7 +6,7 @@ target=0
 run_id=
 log_index=-1
 log_count=0
-for ((i=0;i<#{args[@]};i++)); do
+for ((i=0;i<${#args[@]};i++)); do
   case "${args[i],,}" in
     -executemethod) if [[ "${args[i+1]:-}" == GTFFTImport.Run ]]; then target=1; fi;;
     -logfile) log_count=$((log_count+1));log_index=$((i+1));;
