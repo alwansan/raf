@@ -1,0 +1,114 @@
+name: GT Skybox authored Unity stage selection and binding differential (NO PLAYER)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-gt-skybox-compiler-differential.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-gt-skybox-compiler-differential-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  compiler-differential:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    environment: UNITY_LICENSE
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+      queue: max
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout authored probe and existing decoder only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/
+            /tools/gt_skybox_compiler_differential/
+      - name: Run source-free controls and stage authored isolated project
+        id: stage
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          python3 -B -m unittest discover -s tools/gt_skybox_compiler_differential -p test_probe.py -v
+          python3 -B -m tools.gt_skybox_compiler_differential.probe stage --dest gt-stage-probe
+          mkdir "$RUNNER_TEMP/gt-stage-probe-safe"
+      - name: Prepare existing public Vulkan decoding toolchain
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/gt-stage-probe-py"
+          "$RUNNER_TEMP/gt-stage-probe-py/bin/python" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends spirv-tools
+          smolv="$RUNNER_TEMP/gt-stage-probe-smolv"
+          mkdir "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+      - name: Check existing Unity activation and disk separately
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          set +x
+          a=false; d=false
+          if [ -n "$UNITY_LICENSE" ] || { [ -n "$UNITY_SERIAL" ] && [ -n "$UNITY_EMAIL" ] && [ -n "$UNITY_PASSWORD" ]; }; then a=true; fi
+          if test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 16777216; then d=true; fi
+          printf '{"activation_inputs_available":%s,"disk_budget_available":%s}\n' "$a" "$d" > "$RUNNER_TEMP/gt-stage-probe-safe/preflight.json"
+          test "$a" = true && test "$d" = true
+      - name: Execute five independent authored shader bundle compiler cases
+        id: unity
+        continue-on-error: true
+        uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-stage-probe
+          targetPlatform: Android
+          buildMethod: GTStageProbe.Run
+          manualExit: true
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 8g
+          dockerCpuLimit: 2
+          customParameters: -job-worker-count 2 -logFile /github/workspace/gt-stage-probe/editor-private.log
+      - name: Decode actual Vulkan entrypoints and distinguish compiler failures
+        if: always() && steps.stage.outcome == 'success'
+        env:
+          EDITOR_OUTCOME: ${{ steps.unity.outcome }}
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/gt-stage-probe-py/bin/python" -B -m tools.gt_skybox_compiler_differential.probe verify \
+            --dest gt-stage-probe --decoder "$RUNNER_TEMP/gt-stage-probe-smolv/decode" \
+            --outcome "$EDITOR_OUTCOME" --report "$RUNNER_TEMP/gt-stage-probe-safe/aggregate.json"
+      - name: Publish only bounded aggregate diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-skybox-compiler-differential-safe
+          path: |
+            ${{ runner.temp }}/gt-stage-probe-safe/preflight.json
+            ${{ runner.temp }}/gt-stage-probe-safe/aggregate.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove only the authored disposable project
+        if: always()
+        run: |
+          if test -f gt-stage-probe/authored-sha.json; then sudo rm -rf gt-stage-probe; fi
