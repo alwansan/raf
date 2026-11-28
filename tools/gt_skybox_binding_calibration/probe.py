@@ -168,6 +168,29 @@ def inspect(bundle,case,decoder):
             result["stages"][stage]=rows
     return result
 
+def complete_observed_views(cases):
+    """Evaluate nested per-view rows; empty or partial reports cannot pass."""
+    require(set(cases)==set(CASES),"calibration_case_set")
+    rows=[]
+    for case in CASES:
+        stages=cases[case]["stages"]
+        require(set(stages)==set(MEMBERS),"calibration_stage_set")
+        for stage_rows in stages.values():
+            require(isinstance(stage_rows,list) and bool(stage_rows),"calibration_empty_stage")
+            for row in stage_rows:
+                require(set(row["views"])==set(VIEWS),"calibration_view_set")
+                rows.append(row)
+    complete=[]
+    for view in VIEWS:
+        if all(r["views"][view]["numeric"]["unique_descriptor_offset_type"]==
+               r["views"][view]["numeric"]["expected"] and
+               r["views"][view]["texture_sampler"]["all_sample_pairs_accounted"] is True and
+               r["views"][view]["texture_sampler"]["independently_used_sample_pairs"]==
+               r["views"][view]["texture_sampler"]["expected"]
+               for r in rows):
+            complete.append(view)
+    return complete
+
 def verify(dest,decoder,outcome,report):
     result=dict(status="INCONCLUSIVE",editor_outcome=outcome,cases={},original_runtime_abi_verified=False,
                 original_shader_verified=False,device_pixels=False,player_built=False,XAPK=False,
@@ -187,13 +210,7 @@ def verify(dest,decoder,outcome,report):
             try:result["cases"][case]=inspect(bundle,case,decoder)
             except Exception as e:result["cases"][case]={"reason":str(e) if isinstance(e,ValueError) and str(e) in {"sample_operand_descriptor_unresolved","sampled_image_operand_unresolved","duplicate_descriptor_coordinate"} else type(e).__name__}
         require(outcome=="success" and all("stages" in x for x in result["cases"].values()),"actual_calibration_missing")
-        complete=[]
-        for view in VIEWS:
-            if all(r["numeric"]["unique_descriptor_offset_type"]==r["numeric"]["expected"] and
-                   r["texture_sampler"]["all_sample_pairs_accounted"] and
-                   r["texture_sampler"]["independently_used_sample_pairs"]==r["texture_sampler"]["expected"]
-                   for x in result["cases"].values() for rows in x["stages"].values() for r in rows):
-                complete.append(view)
+        complete=complete_observed_views(result["cases"])
         result["complete_observed_views"]=complete
         result["ambiguous_complete_views"]=len(complete)>1
         result["status"]="OBSERVED_AUTHORED_METADATA_CALIBRATION_PENDING_GENERALIZATION"

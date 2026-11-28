@@ -1,4 +1,6 @@
 import struct
+import json
+from pathlib import Path
 import unittest
 from tools.gt_skybox_binding_calibration import probe as p
 def ins(op,*a):return [(1+len(a))*65536+op,*a]
@@ -46,4 +48,25 @@ class Control(unittest.TestCase):
         meta={"groups":{"C":{"members":{"a":16,"b":16}}},"buffers":{"C":2}}
         u={"kind":"ubos","set":0,"binding":2,"members":[{"offset":16,"type":"vec4"}]}
         self.assertEqual(p.numeric_profile({"a":"vec4","b":"vec4"},meta,[u],"direct")["non_injective"],2)
+    def retained_actual(self):
+        return json.loads(Path(__file__).with_name("actual-46111849176.json").read_text())
+    def test_actual_failed_report_nested_views(self):
+        r=self.retained_actual()
+        self.assertEqual(r["status"],"INCONCLUSIVE")
+        self.assertEqual(r["reason"],"KeyError")
+        self.assertEqual(p.complete_observed_views(r["cases"]),["low8","low16"])
+    def test_actual_wrong_sample_pair_is_not_complete(self):
+        r=self.retained_actual()["cases"]
+        r["calibration_a"]["stages"]["fs"][0]["views"]["low8"]["texture_sampler"]["independently_used_sample_pairs"]=2
+        self.assertEqual(p.complete_observed_views(r),["low16"])
+    def test_actual_missing_view_rejected(self):
+        r=self.retained_actual()["cases"]
+        del r["calibration_b"]["stages"]["fs"][0]["views"]["low8"]
+        with self.assertRaisesRegex(ValueError,"calibration_view_set"):
+            p.complete_observed_views(r)
+    def test_actual_missing_stage_rejected(self):
+        r=self.retained_actual()["cases"]
+        r["calibration_b"]["stages"]["vs"]=[]
+        with self.assertRaisesRegex(ValueError,"calibration_empty_stage"):
+            p.complete_observed_views(r)
 if __name__=="__main__":unittest.main()

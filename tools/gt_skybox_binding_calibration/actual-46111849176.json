@@ -1,0 +1,1184 @@
+{
+  "XAPK": false,
+  "cases": {
+    "calibration_a": {
+      "fragment_table_fallback": true,
+      "stages": {
+        "fs": [
+          {
+            "actual_sample_pair_count": 3,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "9e85ac47e8a2ad0f4ce2daf8864802d827a4529e987fd37043b55cf8f52217ce",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          },
+          {
+            "actual_sample_pair_count": 3,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "9e85ac47e8a2ad0f4ce2daf8864802d827a4529e987fd37043b55cf8f52217ce",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          },
+          {
+            "actual_sample_pair_count": 3,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "9e85ac47e8a2ad0f4ce2daf8864802d827a4529e987fd37043b55cf8f52217ce",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          }
+        ],
+        "vs": [
+          {
+            "actual_sample_pair_count": 0,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "4a362e59daeb8e9eed6626c124750b782557b08330e7b9f91723c3453c4ab5e4",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          },
+          {
+            "actual_sample_pair_count": 0,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "4a362e59daeb8e9eed6626c124750b782557b08330e7b9f91723c3453c4ab5e4",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          },
+          {
+            "actual_sample_pair_count": 0,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "4a362e59daeb8e9eed6626c124750b782557b08330e7b9f91723c3453c4ab5e4",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "calibration_b": {
+      "fragment_table_fallback": true,
+      "stages": {
+        "fs": [
+          {
+            "actual_sample_pair_count": 3,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "2f48c8cb950a3be50b6f58509ac904d4211cd9f46cfa5125b4d10326e002329f",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          },
+          {
+            "actual_sample_pair_count": 3,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "2f48c8cb950a3be50b6f58509ac904d4211cd9f46cfa5125b4d10326e002329f",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          },
+          {
+            "actual_sample_pair_count": 3,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "2f48c8cb950a3be50b6f58509ac904d4211cd9f46cfa5125b4d10326e002329f",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": false,
+                  "distinct_type_pairs": 0,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 3,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 3,
+                  "expected": 3,
+                  "independently_used_sample_pairs": 3,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          }
+        ],
+        "vs": [
+          {
+            "actual_sample_pair_count": 0,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "d569a2a8e4ed9a5e74bad4b70bad96a49df4dea9388d630d0965ae16f2ed9ccb",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          },
+          {
+            "actual_sample_pair_count": 0,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "d569a2a8e4ed9a5e74bad4b70bad96a49df4dea9388d630d0965ae16f2ed9ccb",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          },
+          {
+            "actual_sample_pair_count": 0,
+            "debug_names": {
+              "op_member_name": 0,
+              "op_name": 1
+            },
+            "module_sha256": "d569a2a8e4ed9a5e74bad4b70bad96a49df4dea9388d630d0965ae16f2ed9ccb",
+            "variant_blob_decoded": true,
+            "views": {
+              "direct": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "high8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 2,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 0
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low16": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              },
+              "low8": {
+                "numeric": {
+                  "expected": 2,
+                  "missing_or_ambiguous": 0,
+                  "named_serialized": 2,
+                  "non_injective": 0,
+                  "unique_descriptor_offset_type": 2
+                },
+                "texture_sampler": {
+                  "all_sample_pairs_accounted": true,
+                  "distinct_type_pairs": 0,
+                  "expected": 0,
+                  "independently_used_sample_pairs": 0,
+                  "missing_or_ambiguous": 0,
+                  "non_injective": 0
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "device_pixels": false,
+  "editor_outcome": "success",
+  "global_index_packing_rule_proven": false,
+  "independent_calibration_only": true,
+  "original_runtime_abi_verified": false,
+  "original_shader_verified": false,
+  "player_built": false,
+  "reason": "KeyError",
+  "status": "INCONCLUSIVE"
+}
