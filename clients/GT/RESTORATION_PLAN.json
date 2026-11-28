@@ -1,5 +1,5 @@
 {
-  "next_action": "G6-original-skybox-exact-provider: reconcile actual 46093780414 job 140820429850 and lint 46093780398; read actual GT_SKYBOX_DISCOVER, GT_SKYBOX_STAGE, GT_SKYBOX_ACTUAL_EXPORT and GT_SKYBOX_SAME_EXPORT plus control counts; cross-check selected one provider against pinned catalog Git object/SHA/size and ordered chunks, actual Material21, exact same-export scene/material document and pointer, 19 fields and null Sun regression. If selected provider outside supported bounded catalog or class/trace/actual-document incomplete, preserve exact unknown (do not infer lost asset). If actual proven material pointer drift with typed target and real document, repair precisely in temporary export with same GUID/meta and independent negative controls; otherwise move to next productive shader/material/water issue, not ambient-only census. Original bytes/traces not published; no source mutation, no license/protection bypass, CL/lab read-only, BLACK/animation deferred, no production/player/XAPK, all G0-G6 open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. Retain pinned Ali restore.",
+  "next_action": "G3-G6-original-skybox-material-shader-program: actual level24 46093780414 proves exact Skybox Material21 pointer, original provider sharedassets0.assets (115978112 bytes, 3 exact chunks), actual Material YAML, 19/19 ambient fields and null Sun. Do not repeat source census or ambient-only pointer check. Distinct next productive lane: use exact selected Skybox Material to resolve native m_Shader typed class48 and exact same-instance W1 shader GUID/fileID plus actual .shader/.meta, source serialized pass/program availability vs exported Dummy marker and structural programs. Inspect actual selected material's saved property/keyword parity using existing strict comparators where schema supported; record specific program gap and exact fanout for future source-authentic restoration, do not infer shader authenticity from pointer. If source shader owner differs, derive only exact provider, verify catalog/manifest/chunks, no guessed defaults. No raw source/assets/private IDs published, no original mutation, no production/player/XAPK, CL/lab read-only, BLACK/animation deferred; all G0-G6 open and historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged.",
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
     "status": "OBSERVED_SELECTED_ORIGINAL_LIGHT_HIERARCHIES",
@@ -8924,7 +8924,7 @@
       "execution_head": "56ac4b47086e07d94bfc45f1f3e8998af463a515",
       "run": 46093780414,
       "evidence": "clients/GT/sessions/20261128-skybox-exact-provider/evidence.json",
-      "next_action": "G6-original-skybox-exact-provider: reconcile actual 46093780414 job 140820429850 and lint 46093780398; read actual GT_SKYBOX_DISCOVER, GT_SKYBOX_STAGE, GT_SKYBOX_ACTUAL_EXPORT and GT_SKYBOX_SAME_EXPORT plus control counts; cross-check selected one provider against pinned catalog Git object/SHA/size and ordered chunks, actual Material21, exact same-export scene/material document and pointer, 19 fields and null Sun regression. If selected provider outside supported bounded catalog or class/trace/actual-document incomplete, preserve exact unknown (do not infer lost asset). If actual proven material pointer drift with typed target and real document, repair precisely in temporary export with same GUID/meta and independent negative controls; otherwise move to next productive shader/material/water issue, not ambient-only census. Original bytes/traces not published; no source mutation, no license/protection bypass, CL/lab read-only, BLACK/animation deferred, no production/player/XAPK, all G0-G6 open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. Retain pinned Ali restore."
+      "next_action": "G3-G6-original-skybox-material-shader-program: actual level24 46093780414 proves exact Skybox Material21 pointer, original provider sharedassets0.assets (115978112 bytes, 3 exact chunks), actual Material YAML, 19/19 ambient fields and null Sun. Do not repeat source census or ambient-only pointer check. Distinct next productive lane: use exact selected Skybox Material to resolve native m_Shader typed class48 and exact same-instance W1 shader GUID/fileID plus actual .shader/.meta, source serialized pass/program availability vs exported Dummy marker and structural programs. Inspect actual selected material's saved property/keyword parity using existing strict comparators where schema supported; record specific program gap and exact fanout for future source-authentic restoration, do not infer shader authenticity from pointer. If source shader owner differs, derive only exact provider, verify catalog/manifest/chunks, no guessed defaults. No raw source/assets/private IDs published, no original mutation, no production/player/XAPK, CL/lab read-only, BLACK/animation deferred; all G0-G6 open and historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged."
     }
   },
   "historical_rows_notice": "Existing workstream schema/counters preserve earlier stage snapshots; current_handoff and linked session are authoritative for latest limitations. No success inferred from changed update date.",
@@ -11365,7 +11365,7 @@
     "actual_aggregate_path": "clients/GT/sessions/20261128-ambient-same-export/actual-aggregate.json"
   },
   "latest_original_skybox_exact_provider": {
-    "status": "EXACT_SKYBOX_PROVIDER_SAME_EXPORT_LAUNCHED",
+    "status": "PASS_ACTUAL_EXACT_SKYBOX_SAME_EXPORT",
     "starting_head": "dc3d5b786c97a08758c7a524b92e74e6ab848a40",
     "prior_ambient_reconciliation": "ab0a2fcf7dc6c664e68da1c9cb9000ea9fc8a81e",
     "prior_ambient_result": {
@@ -11384,12 +11384,12 @@
     "execution_head": "56ac4b47086e07d94bfc45f1f3e8998af463a515",
     "run": 46093780414,
     "job": 140820429850,
-    "run_status": "in_progress",
-    "run_conclusion": null,
+    "run_status": "completed",
+    "run_conclusion": "success",
     "lint_run": 46093780398,
     "lint_job": 140820429455,
     "lint_conclusion": "success",
-    "source_free_controls_step": "success; actual log counts pending",
+    "source_free_controls_step": "26/26 actual tests passed (14 ambient + 12 resolver)",
     "steps": [
       {
         "name": "Set up job",
@@ -11418,63 +11418,78 @@
       },
       {
         "name": "Compile temporary class104 capture and smoke test",
-        "status": "in_progress",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Read only level24 and five pinned support providers",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Resolve only exact missing Skybox provider from authenticated native file slot",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Read only one selected additional provider (exact file or ordered chunks)",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Authenticate selected provider Git object and SHA and exact native Material21",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Execute one changed seven-provider actual export with same-instance private traces",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Compare exact authenticated skybox Material to actual same-export scene and Material YAML",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Publish ONLY safe aggregate receipts",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Remove only temporary source and private export",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Read only one selected additional provider (exact file or ordered chunks)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Read only level24 and five pinned support providers",
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Post Obtain exact public AssetRipperCLI source",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Post Run actions/setup-dotnet@v4",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
       },
       {
         "name": "Post Checkout only independent ambient verifier and existing pinned tools",
-        "status": "pending",
-        "conclusion": null
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success"
       }
     ],
     "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -11491,12 +11506,81 @@
       "split": 3,
       "max_selected_extra_bytes": 134217728,
       "selected_extra_providers": 1,
-      "actual_provider": null,
+      "actual_provider": "sharedassets0.assets",
       "full_scene_provider_closure_proven": false
     },
-    "actual_same_export_result": null,
-    "actual_discovery": null,
-    "actual_stage": null,
+    "actual_same_export_result": {
+      "Unity_import_verified": false,
+      "XAPK": false,
+      "device_pixels_proven": false,
+      "fields": {
+        "field_mismatches": [],
+        "field_unknown": {},
+        "fields_checked": [
+          "m_AmbientSkyColor",
+          "m_AmbientEquatorColor",
+          "m_AmbientGroundColor",
+          "m_SubtractiveShadowColor",
+          "m_FogColor",
+          "m_AmbientIntensity",
+          "m_FogDensity",
+          "m_LinearFogStart",
+          "m_LinearFogEnd",
+          "m_ReflectionIntensity",
+          "m_HaloStrength",
+          "m_FlareStrength",
+          "m_FlareFadeSpeed",
+          "m_AmbientMode",
+          "m_FogMode",
+          "m_DefaultReflectionMode",
+          "m_DefaultReflectionResolution",
+          "m_ReflectionBounces",
+          "m_Fog"
+        ],
+        "fields_equal": 19,
+        "fields_in_scope": 19
+      },
+      "full_scene_provider_closure_proven": false,
+      "original_assets_mutated": false,
+      "original_assets_published": false,
+      "same_export_settings_identity_proven": true,
+      "scene_sha256": "6a06f3e95da765e89ded81c13837cd3de5844969c131ea02e59c38dbda22fc5d",
+      "selected_provider": "sharedassets0.assets",
+      "skybox": {
+        "actual_material_document_verified": true,
+        "same_export_trace_matched": true,
+        "status": "MATCH_TYPED_ACTUAL_MATERIAL",
+        "typed_source_material": true
+      },
+      "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "status": "PASS_EXACT_SKYBOX_SAME_EXPORT",
+      "sun": {
+        "status": "MATCH_NULL"
+      }
+    },
+    "actual_discovery": {
+      "bytes": 115978112,
+      "full_scene_provider_closure_proven": false,
+      "git_object": "c162118818a1e7377eeee6032d39fac4f977d80f",
+      "kind": "split",
+      "provider": "sharedassets0.assets",
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+      "status": "SELECTED_ONE_PROVIDER"
+    },
+    "actual_stage": {
+      "full_scene_provider_closure_proven": false,
+      "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+      "provider_bytes": 115978112,
+      "provider_git_object": "c162118818a1e7377eeee6032d39fac4f977d80f",
+      "provider_kind": "split",
+      "provider_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+      "selected_additional_providers": 1,
+      "selected_provider": "sharedassets0.assets",
+      "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "status": "AUTHENTICATED_TYPED_MATERIAL",
+      "typed_material21_target": true,
+      "verified_chunk_count": 3
+    },
     "original_assets_published": false,
     "original_assets_modified": false,
     "production": false,
@@ -11504,6 +11588,34 @@
     "device": false,
     "XAPK": false,
     "all_gates_open": true,
-    "next_action": "G6-original-skybox-exact-provider: reconcile actual 46093780414 job 140820429850 and lint 46093780398; read actual GT_SKYBOX_DISCOVER, GT_SKYBOX_STAGE, GT_SKYBOX_ACTUAL_EXPORT and GT_SKYBOX_SAME_EXPORT plus control counts; cross-check selected one provider against pinned catalog Git object/SHA/size and ordered chunks, actual Material21, exact same-export scene/material document and pointer, 19 fields and null Sun regression. If selected provider outside supported bounded catalog or class/trace/actual-document incomplete, preserve exact unknown (do not infer lost asset). If actual proven material pointer drift with typed target and real document, repair precisely in temporary export with same GUID/meta and independent negative controls; otherwise move to next productive shader/material/water issue, not ambient-only census. Original bytes/traces not published; no source mutation, no license/protection bypass, CL/lab read-only, BLACK/animation deferred, no production/player/XAPK, all G0-G6 open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. Retain pinned Ali restore."
+    "next_action": "G3-G6-original-skybox-material-shader-program: actual level24 46093780414 proves exact Skybox Material21 pointer, original provider sharedassets0.assets (115978112 bytes, 3 exact chunks), actual Material YAML, 19/19 ambient fields and null Sun. Do not repeat source census or ambient-only pointer check. Distinct next productive lane: use exact selected Skybox Material to resolve native m_Shader typed class48 and exact same-instance W1 shader GUID/fileID plus actual .shader/.meta, source serialized pass/program availability vs exported Dummy marker and structural programs. Inspect actual selected material's saved property/keyword parity using existing strict comparators where schema supported; record specific program gap and exact fanout for future source-authentic restoration, do not infer shader authenticity from pointer. If source shader owner differs, derive only exact provider, verify catalog/manifest/chunks, no guessed defaults. No raw source/assets/private IDs published, no original mutation, no production/player/XAPK, CL/lab read-only, BLACK/animation deferred; all G0-G6 open and historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged.",
+    "reconciliation_head": "ab1ade46237911f32ec82a9cb3dd7c81927531be",
+    "actual_export": {
+      "actual_export_completed": true,
+      "exit_code": 0,
+      "private_log_bytes": 954513,
+      "private_trace_files_present": 3,
+      "tool_exception_categories": []
+    },
+    "independent_check": {
+      "catalog_blob": "41bc2f997dc5c90ddfa43053c82915c5ad7cde7e",
+      "provider_bytes_match": true,
+      "chunk_sizes_sum": 115978112,
+      "chunk_order_verified": true,
+      "actual_typed_material": true,
+      "unique_fields": 19,
+      "all_fields_equal": true,
+      "full_scene_provider_closure_proven": false,
+      "outer_artifact_independently_downloaded": false
+    },
+    "outer_artifact": [
+      {
+        "id": 15242396586,
+        "bytes": 1825,
+        "github_reported_digest": "sha256:5d47226997dedff55b1253dfbde3068becc05e0c360b4847d16b33242164a5ef"
+      }
+    ],
+    "permanent_log": "clients/GT/sessions/20261128-skybox-exact-provider/actual-selected-results.log",
+    "actual_aggregate_path": "clients/GT/sessions/20261128-skybox-exact-provider/actual-aggregate.json"
   }
 }

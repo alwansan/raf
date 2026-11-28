@@ -1,0 +1,36 @@
+2026-11-28T01:34:46.5911426Z test_all_fields_equal (test_audit.TestAmbient.test_all_fields_equal) ... ok
+2026-11-28T01:34:46.5912086Z test_collapsed_material_trace (test_audit.TestAmbient.test_collapsed_material_trace) ... ok
+2026-11-28T01:34:46.5912650Z test_drift_fields (test_audit.TestAmbient.test_drift_fields) ... ok
+2026-11-28T01:34:46.6014677Z test_guid_and_class_actual_yaml (test_audit.TestAmbient.test_guid_and_class_actual_yaml) ... ok
+2026-11-28T01:34:46.6015353Z test_missing_material_trace (test_audit.TestAmbient.test_missing_material_trace) ... ok
+2026-11-28T01:34:46.6015955Z test_missing_schema_not_pass (test_audit.TestAmbient.test_missing_schema_not_pass) ... ok
+2026-11-28T01:34:46.6016438Z test_nonexportable_settings (test_audit.TestAmbient.test_nonexportable_settings) ... ok
+2026-11-28T01:34:46.6016893Z test_null_sun_control (test_audit.TestAmbient.test_null_sun_control) ... ok
+2026-11-28T01:34:46.6017538Z test_signed_settings_identity (test_audit.TestAmbient.test_signed_settings_identity) ... ok
+2026-11-28T01:34:47.1543502Z test_stage_preserves_existing_captures (test_audit.TestAmbient.test_stage_preserves_existing_captures) ... ok
+2026-11-28T01:34:47.1544381Z test_typed_material_trace (test_audit.TestAmbient.test_typed_material_trace) ... ok
+2026-11-28T01:34:47.1544952Z test_wrong_instance (test_audit.TestAmbient.test_wrong_instance) ... ok
+2026-11-28T01:34:47.1545915Z test_wrong_settings_owner (test_audit.TestAmbient.test_wrong_settings_owner) ... ok
+2026-11-28T01:34:47.1546945Z Ran 14 tests in 0.564s
+2026-11-28T01:34:47.1547188Z OK
+2026-11-28T01:34:47.2992608Z test_bad_path_injection (test_resolve.TestExactProvider.test_bad_path_injection) ... ok
+2026-11-28T01:34:47.2993974Z test_exact_slot_not_first_name (test_resolve.TestExactProvider.test_exact_slot_not_first_name) ... ok
+2026-11-28T01:34:47.2994953Z test_local_and_null_rejected (test_resolve.TestExactProvider.test_local_and_null_rejected) ... ok
+2026-11-28T01:34:47.2997292Z test_metadata_population (test_resolve.TestExactProvider.test_metadata_population) ... ok
+2026-11-28T01:34:47.2999494Z test_not_staged_is_precise (test_resolve.TestExactProvider.test_not_staged_is_precise) ... ok
+2026-11-28T01:34:47.3002496Z test_pointer_match_and_drift_only_after_actual_material_document (test_resolve.TestExactProvider.test_pointer_match_and_drift_only_after_actual_material_document) ... ok
+2026-11-28T01:34:47.3003957Z test_provider_not_in_catalog (test_resolve.TestExactProvider.test_provider_not_in_catalog) ... ok
+2026-11-28T01:34:47.3006255Z test_slot_out_of_range (test_resolve.TestExactProvider.test_slot_out_of_range) ... ok
+2026-11-28T01:34:47.3008359Z test_split_order_and_sizes (test_resolve.TestExactProvider.test_split_order_and_sizes) ... ok
+2026-11-28T01:34:47.3544657Z test_tree_entry_controls (test_resolve.TestExactProvider.test_tree_entry_controls) ... ok
+2026-11-28T01:34:47.3545541Z test_unknown_external_not_fallback (test_resolve.TestExactProvider.test_unknown_external_not_fallback) ... ok
+2026-11-28T01:34:47.3547759Z test_windows_basename (test_resolve.TestExactProvider.test_windows_basename) ... ok
+2026-11-28T01:34:47.3549444Z Ran 12 tests in 0.056s
+2026-11-28T01:34:47.3549975Z OK
+2026-11-28T01:34:48.5248080Z GT_AMBIENT_HELPER_SHA256=36322e6ba305c8a6327c3f5e7546add2b2d4909dd134c251166cdd093e21cfd8
+2026-11-28T01:35:24.2228598Z GT_SKYBOX_DISCOVER {"bytes": 115978112, "full_scene_provider_closure_proven": false, "git_object": "c162118818a1e7377eeee6032d39fac4f977d80f", "kind": "split", "provider": "sharedassets0.assets", "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3", "status": "SELECTED_ONE_PROVIDER"}
+2026-11-28T01:35:27.7838695Z GT_SKYBOX_STAGE {"full_scene_provider_closure_proven": false, "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e", "provider_bytes": 115978112, "provider_git_object": "c162118818a1e7377eeee6032d39fac4f977d80f", "provider_kind": "split", "provider_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3", "selected_additional_providers": 1, "selected_provider": "sharedassets0.assets", "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385", "status": "AUTHENTICATED_TYPED_MATERIAL", "typed_material21_target": true, "verified_chunk_count": 3}
+2026-11-28T01:35:44.6083095Z GT_SKYBOX_ACTUAL_EXPORT {"actual_export_completed": true, "exit_code": 0, "private_log_bytes": 954513, "private_trace_files_present": 3, "tool_exception_categories": []}
+2026-11-28T01:35:46.2734494Z GT_SKYBOX_SAME_EXPORT {"Unity_import_verified":false,"XAPK":false,"device_pixels_proven":false,"fields":{"field_mismatches":[],"field_unknown":{},"fields_checked":["m_AmbientSkyColor","m_AmbientEquatorColor","m_AmbientGroundColor","m_SubtractiveShadowColor","m_FogColor","m_AmbientIntensity","m_FogDensity","m_LinearFogStart","m_LinearFogEnd","m_ReflectionIntensity","m_HaloStrength","m_FlareStrength","m_FlareFadeSpeed","m_AmbientMode","m_FogMode","m_DefaultReflectionMode","m_DefaultReflectionResolution","m_ReflectionBounces","m_Fog"],"fields_equal":19,"fields_in_scope":19},"full_scene_provider_closure_proven":false,"original_assets_mutated":false,"original_assets_published":false,"same_export_settings_identity_proven":true,"scene_sha256":"6a06f3e95da765e89ded81c13837cd3de5844969c131ea02e59c38dbda22fc5d","selected_provider":"sharedassets0.assets","skybox":{"actual_material_document_verified":true,"same_export_trace_matched":true,"status":"MATCH_TYPED_ACTUAL_MATERIAL","typed_source_material":true},"source_commit":"15964ea8f246b6e076ce26b60931ee2e1a9a2385","status":"PASS_EXACT_SKYBOX_SAME_EXPORT","sun":{"status":"MATCH_NULL"}}
+2026-11-28T01:35:47.3707978Z Artifact gt-skybox-level24-safe-aggregate.zip successfully finalized. Artifact ID 15242396586
+2026-11-28T01:35:47.3708716Z Artifact gt-skybox-level24-safe-aggregate has been successfully uploaded! Final size is 1825 bytes. Artifact ID is 15242396586

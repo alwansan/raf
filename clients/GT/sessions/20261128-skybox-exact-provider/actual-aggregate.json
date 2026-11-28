@@ -1,0 +1,81 @@
+{
+  "discover": {
+    "bytes": 115978112,
+    "full_scene_provider_closure_proven": false,
+    "git_object": "c162118818a1e7377eeee6032d39fac4f977d80f",
+    "kind": "split",
+    "provider": "sharedassets0.assets",
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "status": "SELECTED_ONE_PROVIDER"
+  },
+  "stage": {
+    "full_scene_provider_closure_proven": false,
+    "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+    "provider_bytes": 115978112,
+    "provider_git_object": "c162118818a1e7377eeee6032d39fac4f977d80f",
+    "provider_kind": "split",
+    "provider_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "selected_additional_providers": 1,
+    "selected_provider": "sharedassets0.assets",
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "status": "AUTHENTICATED_TYPED_MATERIAL",
+    "typed_material21_target": true,
+    "verified_chunk_count": 3
+  },
+  "export": {
+    "actual_export_completed": true,
+    "exit_code": 0,
+    "private_log_bytes": 954513,
+    "private_trace_files_present": 3,
+    "tool_exception_categories": []
+  },
+  "same_export": {
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "device_pixels_proven": false,
+    "fields": {
+      "field_mismatches": [],
+      "field_unknown": {},
+      "fields_checked": [
+        "m_AmbientSkyColor",
+        "m_AmbientEquatorColor",
+        "m_AmbientGroundColor",
+        "m_SubtractiveShadowColor",
+        "m_FogColor",
+        "m_AmbientIntensity",
+        "m_FogDensity",
+        "m_LinearFogStart",
+        "m_LinearFogEnd",
+        "m_ReflectionIntensity",
+        "m_HaloStrength",
+        "m_FlareStrength",
+        "m_FlareFadeSpeed",
+        "m_AmbientMode",
+        "m_FogMode",
+        "m_DefaultReflectionMode",
+        "m_DefaultReflectionResolution",
+        "m_ReflectionBounces",
+        "m_Fog"
+      ],
+      "fields_equal": 19,
+      "fields_in_scope": 19
+    },
+    "full_scene_provider_closure_proven": false,
+    "original_assets_mutated": false,
+    "original_assets_published": false,
+    "same_export_settings_identity_proven": true,
+    "scene_sha256": "6a06f3e95da765e89ded81c13837cd3de5844969c131ea02e59c38dbda22fc5d",
+    "selected_provider": "sharedassets0.assets",
+    "skybox": {
+      "actual_material_document_verified": true,
+      "same_export_trace_matched": true,
+      "status": "MATCH_TYPED_ACTUAL_MATERIAL",
+      "typed_source_material": true
+    },
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "status": "PASS_EXACT_SKYBOX_SAME_EXPORT",
+    "sun": {
+      "status": "MATCH_NULL"
+    }
+  }
+}
