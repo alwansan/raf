@@ -19,7 +19,7 @@ public static class GTIndexedPair {
  }
  [Serializable] public class Receipt {
    public string status="INCONCLUSIVE",phase="environment",run_id,config_sha256,failure_type;
-   public bool private_guard,vulkan,private_source_hashes_match,bundle_vulkan_only,bundle_built,bundle_loaded;public int bundle_count;public string[] bundle_sha256=new string[5];
+   public bool private_guard,vulkan,private_source_hashes_match,bundle_vulkan_only,bundle_built,bundle_loaded;public int bundle_count,bundle_crc_verified,bundle_opened,bundle_named,bundle_typed,bundle_distinct,bundle_load_step,bundle_asset_count=-1,bundle_load_index=-1;public string[] bundle_sha256=new string[5];
    public int registration_count,class_control_pixels;public bool class_control_verified;public string class_control_sha256;public Case[] cases=new Case[4];public string graphics_device_version,graphics_device_name,graphics_device_vendor;public int coordinate_control_pixels;public bool coordinate_control_verified;
  }
  [Serializable] public class Progress {public string run_id,phase,operation;public int first_slot=-1,seed=-1,pass=-1,variant=-1,bindings,dispatches;}
@@ -244,11 +244,12 @@ public static class GTIndexedPair {
  static ComputeShader[] BuildAndLoadBundles(Config m,Receipt r){
    var paths=new string[5];paths[0]="Assets/Private/indexed.compute";
    for(int i=0;i<4;i++)paths[i+1]="Assets/Private/"+m.rows[i].file;
-   var builds=new AssetBundleBuild[5];
+   var builds=new AssetBundleBuild[5];var imported=new ComputeShader[5];var aliases=new string[5];
    for(int i=0;i<5;i++){
      var s=AssetDatabase.LoadAssetAtPath<ComputeShader>(paths[i]);Need(s!=null);
      foreach(var e in ShaderUtil.GetComputeShaderMessages(s))Need(e.severity.ToString()!="Error");
-     builds[i]=new AssetBundleBuild{assetBundleName="fft-"+i,assetNames=new[]{paths[i]}};
+     imported[i]=s;aliases[i]="gtfft-"+i;
+     builds[i]=new AssetBundleBuild{assetBundleName="fft-"+i,assetNames=new[]{paths[i]},addressableNames=new[]{aliases[i]}};
    }
    const BuildTarget platform=BuildTarget.StandaloneLinux64;
    PlayerSettings.SetUseDefaultGraphicsAPIs(platform,false);
@@ -271,12 +272,17 @@ public static class GTIndexedPair {
    Mark("private_import","bundle_load");
    var loaded=new ComputeShader[5];
    for(int i=0;i<5;i++){
-     bundles[i]=AssetBundle.LoadFromFile(Path.Combine(dir,"fft-"+i));Need(bundles[i]!=null);
-     var entries=bundles[i].GetAllAssetNames();
-     Need(entries.Length==1&&entries[0]==paths[i].ToLowerInvariant());
-     loaded[i]=bundles[i].LoadAsset<ComputeShader>(entries[0]);Need(loaded[i]!=null);
+     r.bundle_load_index=i;r.bundle_load_step=1;r.bundle_asset_count=-1;
+     string file=Path.Combine(dir,"fft-"+i);
+     Need(Sha(file)==r.bundle_sha256[i]&&BuildPipeline.GetCRCForAssetBundle(file,out uint crc));
+     r.bundle_crc_verified++;r.bundle_load_step=2;
+     bundles[i]=AssetBundle.LoadFromFile(file,crc);Need(bundles[i]!=null);r.bundle_opened++;
+     r.bundle_load_step=3;var entries=bundles[i].GetAllAssetNames();r.bundle_asset_count=entries.Length;
+     Need(entries.Length==1&&String.Equals(entries[0],aliases[i],StringComparison.Ordinal));r.bundle_named++;
+     r.bundle_load_step=4;loaded[i]=bundles[i].LoadAsset<ComputeShader>(aliases[i]);Need(loaded[i]!=null);r.bundle_typed++;
+     r.bundle_load_step=5;Need(loaded[i].GetInstanceID()!=imported[i].GetInstanceID());r.bundle_distinct++;
    }
-   r.bundle_loaded=true;return loaded;
+   r.bundle_load_step=6;r.bundle_loaded=true;return loaded;
  }
  public static void Run(){
    var r=new Receipt();try{

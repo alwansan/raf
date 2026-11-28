@@ -9,13 +9,14 @@ import struct
 import subprocess
 import tempfile
 from tools.gt_fft_half_image_format import audit as half
+from tools.gt_fft_typed_dxc import audit as typed
 from tools.gt_fft_live_module import audit as live
 from tools.gt_fft_compiler_directive import audit as directive
 from scripts.probe_directx_shader_bridge import inspect
 from scripts.probe_fft_spirv_images import image_resource_contracts
 from scripts.probe_fft_variant_table import EXPECTED_FFT_WORKGROUP_X_BY_COMPILED_SLOT
 
-FORMATS=half.FORMATS
+FORMATS={**half.FORMATS,"RGFloat":typed.FORMATS["RGFloat"]}
 STATUS="OBSERVED_COMPUTE_BUNDLE_ADMISSION"
 STAGED="STAGED_COMPUTE_BUNDLE_ADMISSION"
 need=half.need
@@ -125,7 +126,7 @@ def bundle_inventory(private,decoder,fmt):
                 record["all_routes_decoded"]=all(row["decoded_modules"]==1 for row in record["rows"])
                 record["decoded_modules"]=sum(row["decoded_modules"] for row in record["rows"])
                 record["all_routes_expected_storage"]=record["all_routes_decoded"] and all(
-                    next(x for x in row["module_candidates"][0]["module"]["images"] if x["sampled_enum"]==2)["format_enum"]==half.ENUMS[fmt][0] for row in record["rows"])
+                    next(x for x in row["module_candidates"][0]["module"]["images"] if x["sampled_enum"]==2)["format_enum"]==(typed.TYPES[fmt][1] if fmt=="RGFloat" else half.ENUMS[fmt][0]) for row in record["rows"])
             except Exception as e:
                 record["failure_type"]=type(e).__name__
                 if isinstance(e,ValueError) and re.fullmatch(r"[a-z_]+",str(e)):record["failure_reason"]=str(e)
@@ -142,14 +143,25 @@ def join_captures(reports,receipt,fmt):
         matched=[r for r in bundle["rows"] if r["slot"]==slot]
         need(len(matched)==1,"serialized_slot")
         mod=matched[0]["module_candidates"][0]["module"]
-        need(mod["sha256"]==cap["baseline"]["sha256"]==half.PINS[fmt][f"{variant}-{slot}"],"serialized_live_sha")
-        rows.append(dict(bundle_index=bundle["bundle_index"],slot=slot,variant=variant,serialized_sha256=mod["sha256"],
-                         actual_before_sha256=cap["baseline"]["sha256"],actual_after_sha256=cap["capture"]["module"]["sha256"]))
-    need(len(rows)==8,"capture_population")
+        if fmt=="RGFloat":
+            need(mod["sha256"]==cap["capture"]["module"]["sha256"],"serialized_live_sha")
+            rows.append(dict(bundle_index=bundle["bundle_index"],slot=slot,variant=variant,serialized_sha256=mod["sha256"],
+                             actual_captured_sha256=cap["capture"]["module"]["sha256"],replacement=False))
+        else:
+            need(mod["sha256"]==cap["baseline"]["sha256"]==half.PINS[fmt][f"{variant}-{slot}"],"serialized_live_sha")
+            rows.append(dict(bundle_index=bundle["bundle_index"],slot=slot,variant=variant,serialized_sha256=mod["sha256"],
+                             actual_before_sha256=cap["baseline"]["sha256"],actual_after_sha256=cap["capture"]["module"]["sha256"]))
+    need(len(rows)==8 and {(x["slot"],x["variant"]) for x in rows}=={(s,v) for s in SLOTS for v in ("indexed","standalone")},"capture_population")
     return rows
 
+def bundle_load_fields(r):
+    # Strictly bounded authored fields only; no raw asset names or log text.
+    bounds={"bundle_load_index":(-1,4),"bundle_load_step":(0,6),"bundle_asset_count":(-1,1024)}
+    bounds.update({k:(0,5) for k in ("bundle_crc_verified","bundle_opened","bundle_named","bundle_typed","bundle_distinct")})
+    return {k:r[k] for k,(a,b) in bounds.items() if type(r.get(k)) is int and a<=r[k]<=b}
+
 def stage(src,managed,project,private,run_id,fmt):
-    result=half.stage(src,managed,project,private,run_id,fmt)
+    result=(typed if fmt=="RGFloat" else half).stage(src,managed,project,private,run_id,fmt)
     editor=project/"Assets/Editor/IndexedPair.cs"
     editor.write_text(half.replace(Path(__file__).with_name("IndexedPair.cs").read_text(),"__FORMAT__",fmt))
     result.update(status=STAGED,editor_sha=sha(editor))
@@ -157,16 +169,22 @@ def stage(src,managed,project,private,run_id,fmt):
 
 def verify(project,private,s,run_id,outcome,fmt,decoder):
     need(s["status"]==STAGED,"stage")
-    receipt=dict(s,status=half.STAGED)
+    backend=typed if fmt=="RGFloat" else half
+    receipt=dict(s,status=backend.STAGED)
     r=json.loads((private/"receipt.json").read_text())
     need(r["bundle_built"] is True and r["bundle_loaded"] is True and r["bundle_vulkan_only"] is True and r["bundle_count"]==5,"editor_bundle")
+    fields=bundle_load_fields(r)
+    need(fields==dict(bundle_load_index=4,bundle_load_step=6,bundle_asset_count=1,bundle_crc_verified=5,bundle_opened=5,bundle_named=5,bundle_typed=5,bundle_distinct=5),"bundle_load_identity")
     reports=bundle_inventory(private,decoder,fmt)
     need([x["bundle_sha256"] for x in reports]==r["bundle_sha256"],"bundle_commitment")
-    observed=half.verify(project,private,receipt,run_id,outcome,fmt)
+    if fmt=="RGFloat":
+        need(not (private/"half-map.txt").exists(),"replacement_map_absent")
+    observed=backend.verify(project,private,receipt,run_id,outcome,fmt)
     need(observed["isolated_format_numeric_parity"] and observed["exact_outputs"]==16,"bundle_numeric_parity")
     joins=join_captures(reports,observed,fmt)
     return dict(status=STATUS,format=fmt,actual_bundle_loaded=True,serialized_modules=24,registered_kernels=20,
-                bundle_inventory=reports,serialized_live_joins=joins,half_diagnostic=observed,
+                bundle_inventory=reports,serialized_live_joins=joins,bundle_load_fields=fields,
+                runtime_replacement_used=(fmt!="RGFloat"),direct_serialized_execution_verified=(fmt=="RGFloat"),numeric_evidence=observed,
                 exact_outputs=16,actual_descriptor_resource_mapping_verified=False,original_runtime_kernel_mapping_proven=False,
                 serialized_patch_verified=False,original_fft_numeric_parity_verified=False,water_rendering_verified=False,android_device=False,production=False,XAPK=False)
 
@@ -192,6 +210,7 @@ def main():
                 r=json.loads((a.private/"receipt.json").read_text())
                 for key in ("bundle_built","bundle_loaded","bundle_vulkan_only","bundle_count"):
                     if type(r.get(key)) in (bool,int):result[key]=r[key]
+                if r.get("run_id")==a.run_id:result["bundle_load_fields"]=bundle_load_fields(r)
             except Exception:pass
             trace=a.private/"vktrace";result["observed_modules"]=[]
             for label in live.LABELS:

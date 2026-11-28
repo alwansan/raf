@@ -1,4 +1,4 @@
-name: GT G4 serialized compute bundle admission and loaded half parity (NO PLAYER)
+name: GT G4 serialized compute bundle direct RGFloat parity (NO PLAYER)
 on:
   push:
     branches: [feature/android-native-port]
@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        format: [RGHalf, ARGBHalf]
+        format: [RGFloat]
     timeout-minutes: 70
     environment: UNITY_LICENSE
     env:
@@ -72,7 +72,8 @@ jobs:
           test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
           mkdir "$RUNNER_TEMP/gt-fft-bank-docker"
           cp tools/gt_fft_live_module/{private-editor.sh,layer.cpp,VkLayer_GT_fft_capture.json,smoke.cpp,smoke.comp} "$RUNNER_TEMP/gt-fft-bank-docker/"
-          cp tools/gt_fft_half_image_format/layer.cpp "$RUNNER_TEMP/gt-fft-bank-docker/layer.cpp"
+          cp tools/gt_fft_typed_dxc/layer.cpp "$RUNNER_TEMP/gt-fft-bank-docker/layer.cpp"
+          # Typed capture guard only; no pipeline replacement or half-map.
           bash -n "$RUNNER_TEMP/gt-fft-bank-docker/private-editor.sh"
           cat > "$RUNNER_TEMP/gt-fft-bank-docker/Dockerfile" <<'DOCKERFILE'
           FROM unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3
@@ -157,7 +158,7 @@ jobs:
           test -n "$VK_DRIVER_FILES"
           "$RUNNER_TEMP/gt-fft-bank-py/bin/python" -B -m tools.gt_fft_compute_bundle.audit stage --format "$GT_FFT_FORMAT" --source "$RUNNER_TEMP/gt-fft-bank-source/Raft_Data" --managed "$RUNNER_TEMP/gt-fft-bank-managed" --project gt-fft-bank-project --private gt-fft-bank-private --run-id "$GT_FFT_RUN_ID" --out "$RUNNER_TEMP/gt-fft-bank-safe/stage.json"
           rm -rf zip2-fft-pair "$RUNNER_TEMP/gt-fft-bank-source" "$RUNNER_TEMP/gt-fft-bank-managed"
-      - name: Execute all chained and independent cases with source-only directive
+      - name: Execute bundle-loaded RGFloat chained cases without module replacement
         id: unity
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
@@ -179,7 +180,7 @@ jobs:
           dockerMemoryLimit: 8g
           dockerCpuLimit: 2
           customParameters: -force-vulkan -force-device-index 0 -job-worker-count 2 -gtFftRunId ${{ env.GT_FFT_RUN_ID }}
-      - name: Verify live modules, indexed registration and chained numeric parity
+      - name: Verify exact serialized-to-live module joins and chained numeric parity
         if: always() && steps.stage.outcome == 'success'
         env:
           EDITOR_OUTCOME: ${{ steps.unity.outcome }}

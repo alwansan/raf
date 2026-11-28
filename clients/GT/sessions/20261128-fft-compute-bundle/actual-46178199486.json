@@ -1,0 +1,55 @@
+{
+  "status": "INCONCLUSIVE",
+  "run": 46178199486,
+  "head": "23b0967281ba097cfb29206395ae726db323ad31",
+  "guard": {
+    "run": 46178199427,
+    "conclusion": "success"
+  },
+  "lint": {
+    "run": 46178199362,
+    "conclusion": "success"
+  },
+  "formats": [
+    {
+      "format": "ARGBHalf",
+      "job": 141081588658,
+      "conclusion": "failure",
+      "bundle_built": true,
+      "bundle_count": 5,
+      "serialized_modules": 24,
+      "all_routes_decoded": true,
+      "all_expected_storage": true,
+      "bundle_loaded": false,
+      "registered_slots": 0,
+      "dispatches": 0,
+      "captures": 0,
+      "native_exit": 2,
+      "managed_checkpoint": null,
+      "failure_reason": "editor_bundle"
+    },
+    {
+      "format": "RGHalf",
+      "job": 141081588874,
+      "conclusion": "failure",
+      "bundle_built": true,
+      "bundle_count": 5,
+      "serialized_modules": 24,
+      "all_routes_decoded": true,
+      "all_expected_storage": true,
+      "bundle_loaded": false,
+      "registered_slots": 0,
+      "dispatches": 0,
+      "captures": 0,
+      "native_exit": 2,
+      "managed_checkpoint": null,
+      "failure_reason": "editor_bundle"
+    }
+  ],
+  "scope": "safe aggregates from job logs only",
+  "water_rendering_verified": false,
+  "original_runtime_kernel_mapping_proven": false,
+  "production": false,
+  "android_device": false,
+  "XAPK": false
+}
