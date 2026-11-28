@@ -1,0 +1,27 @@
+{
+  "source": "GitHub Actions verified job steps and sanitized log",
+  "run": 46138852502,
+  "job": 140960097560,
+  "execution_head": "0e012e4f8ea78795ab845a42ef4df6659436efe4",
+  "conclusion": "failure",
+  "source_free_emitter_tests_passed": 20,
+  "plan_guard_run": 46138852454,
+  "plan_guard_conclusion": "success",
+  "lint_run": 46138852478,
+  "lint_conclusion": "success",
+  "artifact_id": 15260643425,
+  "artifact_reported_sha256": "b81d92120185ca7bde18c68202f389d2c910e5378fb5f3d835df06c94b033437",
+  "artifact_downloaded": false,
+  "verified_failure": {
+    "stage": "Stage selected original explicit route and exact same-export assets without drawing",
+    "type": "ModuleNotFoundError",
+    "module": "numpy",
+    "native_export_step": "success",
+    "fixture_stage": "skipped",
+    "editor_stage": "skipped",
+    "geometry_verified": false,
+    "Android_device": false,
+    "production": false,
+    "XAPK": false
+  }
+}

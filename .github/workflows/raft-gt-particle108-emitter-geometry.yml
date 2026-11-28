@@ -47,9 +47,11 @@ jobs:
           set -euo pipefail
           test ! -e Raft
           test ! -e zip2-original
-          python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3
-          python3 -B -m unittest discover -s tools/gt_particle108_native_route -p 'test_emitter*.py' -v
-          python3 -B -m unittest discover -s tools/gt_particle108_native_route -p test_probe.py -v
+          python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3 numpy==2.2.6 Pillow==12.3.0
+          # Fail early on missing sparse-checkout modules or dependencies before exporting originals.
+          python3 -B -c 'import numpy, PIL, yaml; from tools.gt_particle108_native_route import draw, emitter_export, emitter_geometry; assert numpy.__version__ == "2.2.6" and PIL.__version__ == "12.3.0" and yaml.__version__ == "6.0.3"; print("GT_EMITTER_GEOMETRY_IMPORT_PREFLIGHT=true")'
+          python3 -m py_compile tools/gt_particle108_native_route/draw.py tools/gt_particle108_native_route/probe.py tools/gt_particle108_native_route/emitter_export.py tools/gt_particle108_native_route/emitter_geometry.py
+          python3 -B -m unittest discover -s tools/gt_particle108_native_route -p 'test_*.py' -v
           python3 -B -m unittest discover -s tools/gt_particle108_native_import -p test_probe.py -v
           python3 -B -m unittest discover -s tools/gt_particle108_native_mips -p test_probe.py -v
           python3 -B -m unittest discover -s tools/gt_particle108_redirect_target -p test_audit.py -v
