@@ -1,6 +1,6 @@
 {
   "latest_top_native_bc3_array": {
-    "status": "NATIVE_BC3_FULL_MIP_EXPERIMENT_PREPARED",
+    "status": "NATIVE_BC3_FULL_MIP_ACTUAL_RUN_LAUNCHED",
     "starting_head": "e3970623d3890cc434aedd35845f5c3cad0f6783",
     "source_code_head": "77e72b8b1911df3a0c0e97deb2ebdf7708ea464a",
     "prior_actual": 46124837879,
@@ -23,7 +23,7 @@
     "native_mip_ranges_expected": 22,
     "native_GPU_coordinates_expected": 2796202,
     "local_independent_authored_DDS_fixture_pass": true,
-    "committed_unittests_executed": false,
+    "committed_unittests_executed": true,
     "native_actual_Unity_verified": false,
     "native_all_22_ranges_exact": false,
     "native_GPU_observation": false,
@@ -33,7 +33,22 @@
     "production": false,
     "XAPK": false,
     "private_payload_published": false,
-    "next_action": "G1–G3: reconcile next push-triggered isolated native BC3 selected array run (workflow raft-gt-top-prestaged-resource-recheck.yml). Prior Actual 46124837879/job 140917048122 SUCCESS as observation ONLY: Unity imported class187 1024x1024x2, 11 mips, same GUID/fileID and sRGB, BC7 instead of BC3; GPU top mip 2097152 coordinates, RGBA >1/255 mismatch 403900/369258; not parity. Lint 46124837947 success; Plan Guard 46124837907 failure unsafe_or_oversized_plan_document, unchanged. New lane must stage only exact same-export source BC3 bytes privately (22 ranges, 2796256 bytes), create native Texture2DArray via DXT5 SetPixelData and Apply(false,false), preserve native class187/GUID/fileID and name after reload, independently read back each compressed range and every GPU mip coordinate using Vulkan Load. Authored asymmetric BC3 control fixes orientation and distinguishes wrong layer/mip/rows; authored Material PPtr tests original type with wrong GUID control. Keep byte identity, GPU errors, and original shader binding separate; no threshold as closure. If native serialization/format or pointer fails, retain specific phase and pivot to original shader ABI or independent fire/water. No original shader draw, Android, production or XAPK; G0–G6 open. No raw asset publication; CL/lab read-only; BLACK/animation deferred."
+    "next_action": "G1–G3: reconcile Actual 46125643964/job 140919523729 (in_progress; Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout), lint 46125643979/job 140919523581 (completed/success), Plan Guard 46125643969/job 140919523471 (completed/failure) at execution efb0aa4002b1ed929b62c10a1763c89551fa070d. Prior Actual 46124837879/job 140917048122 SUCCESS as observation ONLY: Unity imported class187 1024x1024x2, 11 mips, same GUID/fileID and sRGB, BC7 instead of BC3; GPU top mip 2097152 coordinates, RGBA >1/255 mismatch 403900/369258; not parity. Lint 46124837947 success; Plan Guard 46124837907 failure unsafe_or_oversized_plan_document, unchanged. New lane must stage only exact same-export source BC3 bytes privately (22 ranges, 2796256 bytes), create native Texture2DArray via DXT5 SetPixelData and Apply(false,false), preserve native class187/GUID/fileID and name after reload, independently read back each compressed range and every GPU mip coordinate using Vulkan Load. Authored asymmetric BC3 control fixes orientation and distinguishes wrong layer/mip/rows; authored Material PPtr tests original type with wrong GUID control. Keep byte identity, GPU errors, and original shader binding separate; no threshold as closure. If native serialization/format or pointer fails, retain specific phase and pivot to original shader ABI or independent fire/water. No original shader draw, Android, production or XAPK; G0–G6 open. No raw asset publication; CL/lab read-only; BLACK/animation deferred.",
+    "execution_head": "efb0aa4002b1ed929b62c10a1763c89551fa070d",
+    "actual_run": 46125643964,
+    "actual_job": 140919523729,
+    "actual_run_status": "in_progress",
+    "actual_conclusion": null,
+    "actual_active_step": "Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout",
+    "new_lint_run": 46125643979,
+    "new_lint_job": 140919523581,
+    "new_lint_conclusion": "success",
+    "new_plan_guard_run": 46125643969,
+    "new_plan_guard_job": 140919523471,
+    "new_plan_guard_status": "completed",
+    "new_plan_guard_conclusion": "failure",
+    "new_plan_guard_validation_step": "failure",
+    "source_free_controls_step": "completed/success"
   },
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
@@ -4689,7 +4704,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261128-skybox-binding-calibration/README.md",
-  "next_action": "G1–G3: reconcile next push-triggered isolated native BC3 selected array run (workflow raft-gt-top-prestaged-resource-recheck.yml). Prior Actual 46124837879/job 140917048122 SUCCESS as observation ONLY: Unity imported class187 1024x1024x2, 11 mips, same GUID/fileID and sRGB, BC7 instead of BC3; GPU top mip 2097152 coordinates, RGBA >1/255 mismatch 403900/369258; not parity. Lint 46124837947 success; Plan Guard 46124837907 failure unsafe_or_oversized_plan_document, unchanged. New lane must stage only exact same-export source BC3 bytes privately (22 ranges, 2796256 bytes), create native Texture2DArray via DXT5 SetPixelData and Apply(false,false), preserve native class187/GUID/fileID and name after reload, independently read back each compressed range and every GPU mip coordinate using Vulkan Load. Authored asymmetric BC3 control fixes orientation and distinguishes wrong layer/mip/rows; authored Material PPtr tests original type with wrong GUID control. Keep byte identity, GPU errors, and original shader binding separate; no threshold as closure. If native serialization/format or pointer fails, retain specific phase and pivot to original shader ABI or independent fire/water. No original shader draw, Android, production or XAPK; G0–G6 open. No raw asset publication; CL/lab read-only; BLACK/animation deferred.",
+  "next_action": "G1–G3: reconcile Actual 46125643964/job 140919523729 (in_progress; Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout), lint 46125643979/job 140919523581 (completed/success), Plan Guard 46125643969/job 140919523471 (completed/failure) at execution efb0aa4002b1ed929b62c10a1763c89551fa070d. Prior Actual 46124837879/job 140917048122 SUCCESS as observation ONLY: Unity imported class187 1024x1024x2, 11 mips, same GUID/fileID and sRGB, BC7 instead of BC3; GPU top mip 2097152 coordinates, RGBA >1/255 mismatch 403900/369258; not parity. Lint 46124837947 success; Plan Guard 46124837907 failure unsafe_or_oversized_plan_document, unchanged. New lane must stage only exact same-export source BC3 bytes privately (22 ranges, 2796256 bytes), create native Texture2DArray via DXT5 SetPixelData and Apply(false,false), preserve native class187/GUID/fileID and name after reload, independently read back each compressed range and every GPU mip coordinate using Vulkan Load. Authored asymmetric BC3 control fixes orientation and distinguishes wrong layer/mip/rows; authored Material PPtr tests original type with wrong GUID control. Keep byte identity, GPU errors, and original shader binding separate; no threshold as closure. If native serialization/format or pointer fails, retain specific phase and pivot to original shader ABI or independent fire/water. No original shader draw, Android, production or XAPK; G0–G6 open. No raw asset publication; CL/lab read-only; BLACK/animation deferred.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
