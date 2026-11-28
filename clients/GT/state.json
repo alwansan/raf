@@ -4653,7 +4653,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261128-skybox-binding-calibration/README.md",
-  "next_action": "Reconcile G1–G3 top original resource closure actual 46120955031/job 140905121481 (in_progress/pending; last observed step: Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout) and lint 46120954879/job 140905120694 (completed/success) at execution 79ce219dba6132b9cee6236c8b1ffe2425a8fa4a. Prior 46120268225 SUCCESS: 855 exact graphs, selected Material 118 eligible renderers, three saved keywords and two valid source stage translations for explicit context. New observation distinguishes ten Mesh fields, binary32 material values, TexEnv pointer/UV, unique linked texture top-mip RGBA parity and bounded provider bytes. Workflow success means observation, not closure. On result, retain each exact mismatch or missing provider/format, correct verified cause only; if closure proven, next stage exact material/geometry and original source-bound shader ABI for actual isolated Unity Vulkan draw with Dummy/wrong-reference controls. Do not replay fanout or original route translation alone. No production/player/XAPK; Level38 pins unchanged, CL/lab read-only, BLACK/animation deferred, G0–G6 open.",
+  "next_action": "Stage the exact previously selected source graph's dependency owners and full pinned stream providers before AssetRipper export, not after. Source-only preflight must reproduce 855 eligible original graphs, top Material 118; private exact source identity retained across new export. Budget from immutable manifest, bounded free disk and exact source extents. Trace all supported typed texture classes; inspect actual target metadata and native documents after export. Compare selected source geometry/values and Texture2D pixel parity, report non-Texture2D separately. No separate census/route translation replay; no GPU/device acceptance; G0–G6 open. Level38 unchanged; CL/lab read-only; BLACK/animation deferred; no production/player/XAPK.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -18747,18 +18747,18 @@
     "actual_result_path": "clients/GT/sessions/20261128-top-original-renderer-program/actual-46120268225.json"
   },
   "latest_top_original_resource_closure": {
-    "status": "TOP_ORIGINAL_RESOURCE_CLOSURE_DIAGNOSTIC_STARTED",
+    "status": "TOP_ORIGINAL_RESOURCE_CLOSURE_DIAGNOSTIC_WITH_BLOCKERS",
     "starting_head": "843faa1c811f9b0dc6b0771d1135db2918586cce",
     "execution_head": "79ce219dba6132b9cee6236c8b1ffe2425a8fa4a",
     "run": 46120955031,
     "job": 140905121481,
-    "run_status": "in_progress",
-    "conclusion": null,
+    "run_status": "completed",
+    "conclusion": "success",
     "lint_run": 46120954879,
     "lint_job": 140905120694,
     "lint_status": "completed",
     "lint_conclusion": "success",
-    "last_observed_step": "Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout",
+    "last_observed_step": "Complete job",
     "source_free_controls_step": "success",
     "prior_actual": 46120268225,
     "prior_exact_graphs": 855,
@@ -18767,7 +18767,7 @@
     "new_source_free_control_methods": 7,
     "private_stream_acquisition_cap_bytes": 536870912,
     "serialized_mesh_fields_match": false,
-    "serialized_material_values_match": false,
+    "serialized_material_values_match": true,
     "all_saved_TexEnv_edges_and_UV_match": false,
     "all_linked_Texture2D_top_mips_match": false,
     "bounded_mesh_material_texture_top_mip_closure": false,
@@ -18777,6 +18777,74 @@
     "android_device": false,
     "production": false,
     "XAPK": false,
-    "next_action": "Reconcile G1–G3 top original resource closure actual 46120955031/job 140905121481 (in_progress/pending; last observed step: Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout) and lint 46120954879/job 140905120694 (completed/success) at execution 79ce219dba6132b9cee6236c8b1ffe2425a8fa4a. Prior 46120268225 SUCCESS: 855 exact graphs, selected Material 118 eligible renderers, three saved keywords and two valid source stage translations for explicit context. New observation distinguishes ten Mesh fields, binary32 material values, TexEnv pointer/UV, unique linked texture top-mip RGBA parity and bounded provider bytes. Workflow success means observation, not closure. On result, retain each exact mismatch or missing provider/format, correct verified cause only; if closure proven, next stage exact material/geometry and original source-bound shader ABI for actual isolated Unity Vulkan draw with Dummy/wrong-reference controls. Do not replay fanout or original route translation alone. No production/player/XAPK; Level38 pins unchanged, CL/lab read-only, BLACK/animation deferred, G0–G6 open."
+    "next_action": "Stage the exact previously selected source graph's dependency owners and full pinned stream providers before AssetRipper export, not after. Source-only preflight must reproduce 855 eligible original graphs, top Material 118; private exact source identity retained across new export. Budget from immutable manifest, bounded free disk and exact source extents. Trace all supported typed texture classes; inspect actual target metadata and native documents after export. Compare selected source geometry/values and Texture2D pixel parity, report non-Texture2D separately. No separate census/route translation replay; no GPU/device acceptance; G0–G6 open. Level38 unchanged; CL/lab read-only; BLACK/animation deferred; no production/player/XAPK.",
+    "source_free_tests": 207,
+    "actual": {
+      "XAPK": false,
+      "all_linked_Texture2D_top_mips_match": false,
+      "all_saved_TexEnv_edges_and_UV_match": false,
+      "android_device": false,
+      "bounded_mesh_material_texture_top_mip_closure": false,
+      "full_mip_sampler_importer_or_shader_ABI_closure_verified": false,
+      "material_values": {
+        "counts": {
+          "color": 8,
+          "float": 43,
+          "int": 0
+        },
+        "status": "MATCH"
+      },
+      "mesh": {
+        "reason": "selected_stream_budget_exceeded",
+        "status": "UNPROVEN"
+      },
+      "phase": "complete_resource_observation",
+      "private_extra_source_stream_bytes": 0,
+      "private_extra_source_stream_count": 0,
+      "production": false,
+      "selected_exact_graph_reproduced": true,
+      "selected_material_eligible_source_renderers": 118,
+      "serialized_material_values_match": true,
+      "serialized_mesh_fields_match": false,
+      "status": "GT_TOP_ORIGINAL_RENDERER_RESOURCE_CLOSURE_DIAGNOSTIC",
+      "texture_slots": {
+        "counts": {
+          "nonnull_slots_with_exact_typed_trace_and_UV": 3,
+          "null_slots_matched": 2,
+          "slot_texture_source_trace_unavailable": 1
+        },
+        "export": 6,
+        "extra": 0,
+        "missing": 0,
+        "source": 6
+      },
+      "texture_top_mip_results": [
+        {
+          "reason": "traced_texture_asset_missing",
+          "status": "UNPROVEN"
+        },
+        {
+          "reason": "traced_texture_asset_missing",
+          "status": "UNPROVEN"
+        },
+        {
+          "reason": "traced_texture_asset_missing",
+          "status": "UNPROVEN"
+        }
+      ],
+      "texture_top_mip_status_counts": {
+        "UNPROVEN": 3
+      },
+      "texture_unique_targets": 3,
+      "unity_gpu_pixels_verified": false,
+      "white_mesh_repair_verified": false
+    },
+    "artifact": {
+      "id": 15253272543,
+      "size": 1978,
+      "digest": "sha256:31abb4301193f9be01cb247d2be5c300496bc1c2c954974c4aaa5367d9544fe1",
+      "archive_independently_downloaded": false
+    },
+    "actual_result_path": "clients/GT/sessions/20261128-top-resource-closure/actual-46120955031.json"
   }
 }
