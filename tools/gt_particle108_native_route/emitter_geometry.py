@@ -133,6 +133,8 @@ def stage(a,private,ptrs,docs):
     target=project/"Assets/Editor/ParticleDraw.cs"
     need(target.is_file(),"editor_fixture_anchor")
     target.write_bytes((Path(__file__).parent/"EmitterGeometry.cs").read_bytes())
+    from tools.gt_particle108_native_route import emitter_vertex_lanes as vl
+    (project/"Assets/GTEmitterLaneProbe.shader").write_text(vl.shader(cfg["vertex_requirements"]),encoding="utf-8")
     return dict(fixtures=12,exact_component_documents=24,original_local_transform_retained=12,
                 original_parent_hierarchy_retained=False,fixture_self_activated=True,dependency_pointers_admitted=True,
                 source_signature_requirements=len(cfg["vertex_requirements"]),authored_quad_used=False)
@@ -212,7 +214,7 @@ def row_observation(r):
                  streams_match=x.get("streams_match") is True,
                  failure_category=x.get("failure_category") if x.get("failure_category") in SAFE_EXCEPTIONS else "other") for x in rows if type(x.get("index")) is int and 0<=x["index"]<12]
 
-IMPORT_PHASES=("guard","asset_staging","asset_refresh","asset_identity","shader_load","material_texture_load","material_contract","material_identity","texture_descriptor_sampler","texture_refs_uv","numeric_properties","scene_staging","scene_refresh","calibration","geometry","post_geometry_asset_contract","complete")
+IMPORT_PHASES=("guard","asset_staging","asset_refresh","asset_identity","shader_load","material_texture_load","material_contract","material_identity","texture_descriptor_sampler","texture_refs_uv","numeric_properties","scene_staging","scene_refresh","calibration","vertex_lane_control","geometry","post_geometry_asset_contract","complete")
 IMPORT_COUNTERS=("asset_identities","assets_written","scenes_written","scenes_imported","shader_errors","slots_declared","slots_matched","uv_matched","numeric_saved","numeric_declared","numeric_matched","numeric_undeclared")
 IMPORT_FLAGS=("shader_supported","material_shader_match","native_identity","native_descriptor","native_sampler","resources_bytes_match","control_verified","source_assets_unchanged")
 
@@ -258,12 +260,17 @@ def verify(a):
         need(all(count.get(k)==12 for k in ("imported_emitter_cases","material_identity_cases","billboard_cases","active_stream_cases","empty_cases","explicit_one_particle_billboard_cases","scene_bytes_unchanged_cases")),"original_fixture_geometry_population")
         need(count.get("custom_stream_cases")==count.get("custom_stream_match_cases"),"custom_stream_runtime_mismatch")
         # Attribute width and spontaneous emission are intentionally separately measured, not inferred from a successful bake.
-        out.update(status=STATUS,phase="complete",isolated_exported_emitter_generated_geometry_verified=True)
+        out["isolated_exported_emitter_generated_geometry_verified"]=True
+        out["phase"]="gpu_vertex_lane_readback"
+        from tools.gt_particle108_native_route import emitter_vertex_lanes as vl
+        out["vertex_lane_probe"]=vl.verify(a.private,cfg["vertex_requirements"],r.get("lane_control_completed") is True)
+        need(out["vertex_lane_probe"]["gpu_vertex_lane_probe_verified"],"gpu_vertex_lane_probe_inconclusive")
+        out.update(status="OBSERVED_ISOLATED_EMITTER_GPU_VERTEX_INPUT_LANES",phase="complete")
     except Reject as e:out["failure_category"]=str(e)
     except Exception as e:out["failure_type"]=type(e).__name__
     write_json(a.safe,out)
     print("GT_PARTICLE108_EMITTER_GEOMETRY "+json.dumps(out,sort_keys=True))
-    return 0 if out["status"]==STATUS else 2
+    return 0 if out["status"]=="OBSERVED_ISOLATED_EMITTER_GPU_VERTEX_INPUT_LANES" else 2
 if __name__=="__main__":
     p=argparse.ArgumentParser()
     for k in ("project","private","safe"):p.add_argument("--"+k,type=Path,required=True)

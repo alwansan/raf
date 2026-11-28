@@ -20,12 +20,14 @@ public static class NativeMipValidation {
  [Serializable] class Case {public int index,material_count;public string path,blob,sha;public int[] streams;public bool custom_streams,original_self_active;}
  [Serializable] class Config {public string run_id;public Case[] scenes;public Requirement[] vertex_requirements;}
  [Serializable] class Bake {public int particles,particles_read,positive_size_lifetime,vertices=-1,indices=-1,submeshes=-1,required_present,required_width;public bool finite,nondegenerate,bake_completed;public string failure_category="";}
+ [Serializable] class ProbeLane {public int index,width,format;public Vector4[] cpu;}
+ [Serializable] class ProbeData {public int index,vertices,indices;public ProbeLane[] lanes;public bool completed;public string failure_category="";}
  [Serializable] class ControlCase {public int material_kind,method;public Bake empty,one,before_roundtrip;public bool roundtrip_state_equal;public string failure_category="";}
  [Serializable] class Row {public int index,empty_vertices=-1,empty_particles=-1,natural_particles,natural_vertices;
    public bool imported,materials_match,billboard,active_streams_read,streams_match,scene_bytes_unchanged;public Bake forced,natural,roundtrip;public bool roundtrip_state_equal;public int direct_method=-1;public string failure_category="";}
  [Serializable] class Receipt {public string run_id,phase="guard",status="INCONCLUSIVE",unity_version,backend,failure_category="";
    public bool private_log_guard,control_verified,source_assets_unchanged,shader_supported,material_shader_match,native_identity,native_descriptor,native_sampler,resources_bytes_match;
-   public int asset_identities,assets_written,scenes_written,scenes_imported,shader_errors=-1,slots_declared,slots_matched,uv_matched,numeric_saved,numeric_declared,numeric_matched,numeric_undeclared;public Row[] rows;public ControlCase[] calibration_cases;public int selected_calibration_method=-1;}
+   public int asset_identities,assets_written,scenes_written,scenes_imported,shader_errors=-1,slots_declared,slots_matched,uv_matched,numeric_saved,numeric_declared,numeric_matched,numeric_undeclared;public Row[] rows;public ControlCase[] calibration_cases;public bool lane_control_completed;public int selected_calibration_method=-1;}
  static void Need(bool x){if(!x)throw new InvalidOperationException("GT emitter geometry gate");}
  static string Arg(string n){var a=Environment.GetCommandLineArgs();int i=Array.IndexOf(a,n);return i>=0&&i+1<a.Length?a[i+1]:"";}
  static string Sha(byte[] x){using(var h=SHA256.Create())return BitConverter.ToString(h.ComputeHash(x)).Replace("-","").ToLowerInvariant();}
@@ -70,7 +72,77 @@ public static class NativeMipValidation {
    if(q.semantic=="TEXCOORD"&&q.index>=0&&q.index<=7){a=(VertexAttribute)((int)VertexAttribute.TexCoord0+q.index);return true;}
    return false;
  }
- static Bake Measure(ParticleSystem ps,ParticleSystemRenderer ren,Camera cam,Requirement[] req,bool renderBefore=false){
+ static Vector4[] CpuValues(Mesh m,VertexAttribute a){
+   if(a==VertexAttribute.Position)return m.vertices.Select(v=>new Vector4(v.x,v.y,v.z,0)).ToArray();
+   if(a==VertexAttribute.Normal)return m.normals.Select(v=>new Vector4(v.x,v.y,v.z,0)).ToArray();
+   if(a==VertexAttribute.Tangent)return m.tangents;
+   if(a==VertexAttribute.Color)return m.colors.Select(v=>new Vector4(v.r,v.g,v.b,v.a)).ToArray();
+   int index=(int)a-(int)VertexAttribute.TexCoord0;Need(index>=0&&index<8);
+   var uv=new List<Vector4>();m.GetUVs(index,uv);return uv.ToArray();
+ }
+ static void WriteProbePixels(RenderTexture rt,string file){
+   var old=RenderTexture.active;var t=new Texture2D(rt.width,rt.height,TextureFormat.RGBAFloat,false,true);
+   try{RenderTexture.active=rt;t.ReadPixels(new Rect(0,0,rt.width,rt.height),0,0,false);
+     using(var w=new BinaryWriter(new FileStream(file,FileMode.CreateNew,FileAccess.Write)))
+       foreach(var p in t.GetPixels()){w.Write(p.r);w.Write(p.g);w.Write(p.b);w.Write(p.a);}
+   }finally{RenderTexture.active=old;UnityEngine.Object.DestroyImmediate(t);}
+ }
+ static ProbeData ProbeMesh(Mesh mesh,Requirement[] req,string priv,int index){
+   var p=new ProbeData{index=index,vertices=mesh.vertexCount,indices=mesh.subMeshCount>0?(int)mesh.GetIndexCount(0):0};
+   Material m=null;RenderTexture rt=null;bool srgb=GL.sRGBWrite;
+   try{
+     Need(p.vertices==4&&p.indices==6&&req.Length==3);
+     var shader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTEmitterLaneProbe.shader");
+     Need(shader!=null&&shader.isSupported&&shader.passCount==1&&ShaderUtil.GetShaderMessages(shader).All(x=>x.severity.ToString()!="Error"));
+     var lanes=new List<ProbeLane>();
+     for(int i=0;i<req.Length;i++){
+       Need(Attribute(req[i],out VertexAttribute a)&&mesh.HasVertexAttribute(a));
+       int width=mesh.GetVertexAttributeDimension(a);
+       var cpu=CpuValues(mesh,a);Need(cpu.Length==p.vertices&&width>=1&&width<=4);
+       lanes.Add(new ProbeLane{index=i,width=width,format=(int)mesh.GetVertexAttributeFormat(a),cpu=cpu});
+     }
+     p.lanes=lanes.ToArray();m=new Material(shader);
+     rt=new RenderTexture(16,16,0,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);
+     Need(rt.Create()&&!rt.sRGB&&rt.graphicsFormat==GraphicsFormat.R32G32B32A32_SFloat);
+     GL.sRGBWrite=false;
+     // No modification of source mesh vertices, channel formats or indices.
+     // The probe vertex shader places existing vertices by ID on screen.
+     for(int i=-1;i<req.Length;i++){
+       var b=new CommandBuffer{name="GT emitter input diagnostic"};
+       try{
+         var props=new MaterialPropertyBlock();props.SetFloat("_GTInputIndex",i);
+         b.SetRenderTarget(rt);b.SetViewport(new Rect(0,0,16,16));
+         b.ClearRenderTarget(false,true,new Color(-19,-23,-29,-31));
+         b.SetViewProjectionMatrices(Matrix4x4.identity,Matrix4x4.identity);
+         b.DrawMesh(mesh,Matrix4x4.identity,m,0,0,props);
+         Graphics.ExecuteCommandBuffer(b);
+         WriteProbePixels(rt,Path.Combine(priv,"lane-"+index+"-"+i+".f32"));
+       }finally{b.Release();}
+     }
+     p.completed=true;
+   }catch(Exception e){p.failure_category=e.GetType().Name;}
+   finally{
+     GL.sRGBWrite=srgb;
+     if(rt!=null){rt.Release();UnityEngine.Object.DestroyImmediate(rt);}
+     if(m!=null)UnityEngine.Object.DestroyImmediate(m);
+     File.WriteAllText(Path.Combine(priv,"lane-"+index+".json"),JsonUtility.ToJson(p));
+   }
+   return p;
+ }
+ static bool ProbeControl(Requirement[] req,string priv){
+   var m=new Mesh();
+   try{
+     // Known authored diagnostic only, distinct from the 12 real meshes.
+     m.vertices=new[]{new Vector3(.125f,.25f,.375f),new Vector3(.5f,.625f,.75f),new Vector3(.875f,.125f,.25f),new Vector3(.375f,.5f,.625f)};
+     m.colors=Enumerable.Repeat(new Color(.25f,.5f,.75f,1f),4).ToArray();
+     m.normals=Enumerable.Repeat(new Vector3(.125f,.25f,.5f),4).ToArray();
+     m.tangents=Enumerable.Repeat(new Vector4(.125f,.25f,.5f,1f),4).ToArray();
+     for(int i=0;i<8;i++)m.SetUVs(i,new List<Vector2>{new Vector2(.125f,.25f),new Vector2(.375f,.5f),new Vector2(.625f,.75f),new Vector2(.875f,1f)});
+     m.triangles=new[]{0,1,2,2,1,3};
+     return ProbeMesh(m,req,priv,-1).completed;
+   }finally{UnityEngine.Object.DestroyImmediate(m);}
+ }
+ static Bake Measure(ParticleSystem ps,ParticleSystemRenderer ren,Camera cam,Requirement[] req,bool renderBefore=false,string priv=null,int probeIndex=-2){
    var b=new Bake{particles=ps.particleCount};
    var mesh=new Mesh();RenderTexture rt=null;
    try {
@@ -96,6 +168,7 @@ public static class NativeMipValidation {
      foreach(var q in req){if(!Attribute(q,out VertexAttribute va)||!mesh.HasVertexAttribute(va))continue;b.required_present++;
        int mask=q.used_mask!=0?q.used_mask:q.mask, width=0;while(mask>0){width++;mask>>=1;}
        if(mesh.GetVertexAttributeDimension(va)>=width)b.required_width++;}
+     if(priv!=null&&probeIndex>=0&&b.vertices==4&&b.indices==6)ProbeMesh(mesh,req,priv,probeIndex);
    }catch(Exception e){b.failure_category=e.GetType().Name;}
    finally{cam.targetTexture=null;if(rt!=null){rt.Release();UnityEngine.Object.DestroyImmediate(rt);}UnityEngine.Object.DestroyImmediate(mesh);}
    return b;
@@ -168,7 +241,7 @@ public static class NativeMipValidation {
    finally{if(cam!=null)UnityEngine.Object.DestroyImmediate(cam.gameObject);if(go!=null)UnityEngine.Object.DestroyImmediate(go);}
    return row;
  }
- static Row Observe(Case item,Input c,Config cfg,Material mat,string root,int method){
+ static Row Observe(Case item,Input c,Config cfg,Material mat,string root,int method,string priv){
    var row=new Row{index=item.index,direct_method=method};Camera cam=null;
    try{
      var scene=EditorSceneManager.OpenScene(item.path,OpenSceneMode.Single);
@@ -184,7 +257,7 @@ public static class NativeMipValidation {
      var zero=Measure(ps,ren,cam,cfg.vertex_requirements,method==3);row.empty_particles=zero.bake_completed?zero.particles:-1;row.empty_vertices=zero.bake_completed?zero.vertices:-1;
      ps.Simulate(1f,false,true,true);row.natural=Measure(ps,ren,cam,cfg.vertex_requirements);
      row.natural_particles=row.natural.particles;row.natural_vertices=row.natural.vertices;
-     EmitOne(ps,method);row.forced=Measure(ps,ren,cam,cfg.vertex_requirements,method==3);
+     EmitOne(ps,method);row.forced=Measure(ps,ren,cam,cfg.vertex_requirements,method==3,priv,item.index);
      if(row.forced.particles==1){
        row.roundtrip_state_equal=Roundtrip(ps);
        row.roundtrip=Measure(ps,ren,cam,cfg.vertex_requirements);
@@ -256,8 +329,9 @@ public static class NativeMipValidation {
        r.control_verified=r.selected_calibration_method>=0;
      }finally{if(marker!=null)UnityEngine.Object.DestroyImmediate(marker);}
      // Never promote manual seed or roundtrip to ordinary emission proof.
+     r.phase="vertex_lane_control";r.lane_control_completed=ProbeControl(cfg.vertex_requirements,priv);
      r.phase="geometry";int method=r.control_verified?r.selected_calibration_method:0;
-     r.rows=cfg.scenes.Select(x=>Observe(x,c,cfg,mat,root,method)).ToArray();
+     r.rows=cfg.scenes.Select(x=>Observe(x,c,cfg,mat,root,method,priv)).ToArray();
      r.phase="post_geometry_asset_contract";r.source_assets_unchanged=AssetsSame(c,root)&&MaterialSame(c,mat,shader,tex,r);
      r.phase="complete";r.status="OBSERVED";code=0;
    }catch(Exception e){r.failure_category=e.GetType().Name;}
