@@ -167,7 +167,7 @@ jobs:
           print(f'RAFT_B21_SMALL_EXPORT_GRAPH materials={materials} shaders={shaders} sourceLights=2')
           assert materials>0 and shaders>0, 'Bounded source lacks exporter required graph; do not attempt empty export'
           PY
-      - name: Stage only exact selected source Mesh and texture dependencies before export
+      - name: Stage exact selected Mesh and texture providers with corrected non-cone set
         run: |
           set -euo pipefail
           timeout 1800s python3 -B -m tools.gt_top_resource_closure.prestage \

@@ -4653,7 +4653,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261128-skybox-binding-calibration/README.md",
-  "next_action": "Reconcile actual 46121881941/job 140907974513 (in_progress/pending; last observed step Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout) and lint 46121881919/job 140907974013 (completed/success) at execution 0867a7dd56ca8720ebdada5230c06bd6b0f363b1. Prior actual 46120955031: 8 color/43 float exact; 5/6 TexEnv pointer and UV (2 null); three missing physical texture assets; Mesh stream exceeds old 512 MiB. New distinct causal test stages exact private selected source graph's providers before actual export with 4 GiB cap, free-disk guard, authenticated SHA/size, typed 28/84/89/117/187 trace. Inspect GT_TOP_EXACT_DEPENDENCY_PRESTAGE and GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK safe receipts; report concrete source provider or physical/typed/pixel differences. Do not infer closure from workflow success. If verified mesh/resources, stage source-bound shader ABI and actual isolated Unity Vulkan draw, Dummy/wrong-reference controls. If specific non-Texture2D or importer/mismatch remains, address actual cause or pivot independent fire or water, no census or program-only replay. All G0–G6 open; CL/lab read-only; Level38 pins unchanged; BLACK/animation deferred; no production/player/XAPK.",
+  "next_action": "Reconcile the NEW push-triggered GT top exact prestaged original resource recheck workflow at the corrected commit; locate run by head SHA and inspect source-free controls and GT_TOP_EXACT_DEPENDENCY_PRESTAGE / GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK. Prior 46121881941 failed step 11 before export (855/118 reselected; no GPU); old add --no-cone rejected by local Git 2.47.3 (exit 129); new set --no-cone retains only pinned manifest and selected exact provider, tested 3/3 locally on authored data. No original resource acquisition success yet. Preserve 4 GiB total/2x provider plus 3 GiB reserve, exact SHA/size and original selected graph. If resource proof succeeds proceed to source-bound shader ABI/isolated Unity Vulkan draw with Dummy and wrong-reference controls; if blocked classify new failure or pivot independently to fire/water, not repeat. All G0–G6 open; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -18848,18 +18848,18 @@
     "actual_result_path": "clients/GT/sessions/20261128-top-resource-closure/actual-46120955031.json"
   },
   "latest_top_exact_prestaged_resource_recheck": {
-    "status": "TOP_EXACT_PRESTAGED_RESOURCE_RECHECK_STARTED",
+    "status": "TOP_EXACT_PRESTAGED_RESOURCE_RECHECK_FAILED_BEFORE_EXPORT",
     "starting_head": "2c3eec71d1a81c687d9f9fcac59ae976c46adf8b",
     "execution_head": "0867a7dd56ca8720ebdada5230c06bd6b0f363b1",
     "run": 46121881941,
     "job": 140907974513,
-    "run_status": "in_progress",
-    "conclusion": null,
+    "run_status": "completed",
+    "conclusion": "failure",
     "lint_run": 46121881919,
     "lint_job": 140907974013,
     "lint_status": "completed",
     "lint_conclusion": "success",
-    "last_observed_step": "Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout",
+    "last_observed_step": "Stage only exact selected source Mesh and texture dependencies before export",
     "source_free_controls_step": "success",
     "prior_actual": 46120955031,
     "prior_material_color_matches": 8,
@@ -18887,6 +18887,26 @@
     "android_device": false,
     "production": false,
     "XAPK": false,
-    "next_action": "Reconcile actual 46121881941/job 140907974513 (in_progress/pending; last observed step Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout) and lint 46121881919/job 140907974013 (completed/success) at execution 0867a7dd56ca8720ebdada5230c06bd6b0f363b1. Prior actual 46120955031: 8 color/43 float exact; 5/6 TexEnv pointer and UV (2 null); three missing physical texture assets; Mesh stream exceeds old 512 MiB. New distinct causal test stages exact private selected source graph's providers before actual export with 4 GiB cap, free-disk guard, authenticated SHA/size, typed 28/84/89/117/187 trace. Inspect GT_TOP_EXACT_DEPENDENCY_PRESTAGE and GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK safe receipts; report concrete source provider or physical/typed/pixel differences. Do not infer closure from workflow success. If verified mesh/resources, stage source-bound shader ABI and actual isolated Unity Vulkan draw, Dummy/wrong-reference controls. If specific non-Texture2D or importer/mismatch remains, address actual cause or pivot independent fire or water, no census or program-only replay. All G0–G6 open; CL/lab read-only; Level38 pins unchanged; BLACK/animation deferred; no production/player/XAPK."
+    "next_action": "Reconcile the NEW push-triggered GT top exact prestaged original resource recheck workflow at the corrected commit; locate run by head SHA and inspect source-free controls and GT_TOP_EXACT_DEPENDENCY_PRESTAGE / GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK. Prior 46121881941 failed step 11 before export (855/118 reselected; no GPU); old add --no-cone rejected by local Git 2.47.3 (exit 129); new set --no-cone retains only pinned manifest and selected exact provider, tested 3/3 locally on authored data. No original resource acquisition success yet. Preserve 4 GiB total/2x provider plus 3 GiB reserve, exact SHA/size and original selected graph. If resource proof succeeds proceed to source-bound shader ABI/isolated Unity Vulkan draw with Dummy and wrong-reference controls; if blocked classify new failure or pivot independently to fire/water, not repeat. All G0–G6 open; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
+    "failure_category": "selected_dependency_sparse_checkout_failed",
+    "original_scope_candidates": 855,
+    "selected_material_eligible_renderers": 118
+  },
+  "latest_top_sparse_provider_fix": {
+    "status": "SPARSE_PROVIDER_CLI_CORRECTED_PENDING_ACTUAL",
+    "starting_head": "7866e5c25103dfa7a05ca1c3be663be0efb4883a",
+    "prior_failed_run": 46121881941,
+    "prior_failure_receipt": "clients/GT/sessions/20261128-top-prestaged-resource-recheck/actual-46121881941.json",
+    "new_test_methods": 3,
+    "local_tests_passed": 3,
+    "source_identity_changed": false,
+    "original_data_staged_in_new_run": false,
+    "new_export_completed": false,
+    "unity_gpu_pixels_verified": false,
+    "white_mesh_repair_verified": false,
+    "android_device": false,
+    "production": false,
+    "XAPK": false,
+    "next_action": "Reconcile the NEW push-triggered GT top exact prestaged original resource recheck workflow at the corrected commit; locate run by head SHA and inspect source-free controls and GT_TOP_EXACT_DEPENDENCY_PRESTAGE / GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK. Prior 46121881941 failed step 11 before export (855/118 reselected; no GPU); old add --no-cone rejected by local Git 2.47.3 (exit 129); new set --no-cone retains only pinned manifest and selected exact provider, tested 3/3 locally on authored data. No original resource acquisition success yet. Preserve 4 GiB total/2x provider plus 3 GiB reserve, exact SHA/size and original selected graph. If resource proof succeeds proceed to source-bound shader ABI/isolated Unity Vulkan draw with Dummy and wrong-reference controls; if blocked classify new failure or pivot independently to fire/water, not repeat. All G0–G6 open; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred."
   }
 }

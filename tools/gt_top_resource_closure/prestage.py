@@ -19,6 +19,7 @@ from scripts import gt_particle108_source_pixel_parity as pixels
 from scripts.b05_verify_material_texenv_bindings import normalize_texenvs
 from tools.gt_top_original_renderer import probe as previous
 from tools.gt_top_resource_closure import probe as prior
+from tools.gt_top_resource_closure import sparse_checkout
 
 CAP=4*1024**3
 RESERVE=3*1024**3
@@ -68,10 +69,10 @@ class Source(prior.Source):
             need(zip2.fingerprint(path)==(rec[1],rec[2]),"existing_selected_dependency_not_original")
             return
         plan_budget(rec[1],self.total,shutil.disk_usage(self.a.original).free)
-        pattern="/Raft/"+rel+("/*" if rec[0]=="split" else "")
-        cp=subprocess.run(["git","-C",str(self.a.manifest.parent),"sparse-checkout","add","--no-cone","--",pattern],
-                          stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=600,check=False)
-        need(cp.returncode==0,"selected_dependency_sparse_checkout_failed")
+        try:
+            sparse_checkout.select_provider(self.a.manifest.parent,rel,rec[0])
+        except sparse_checkout.SparseFailure as exc:
+            raise prior.Blocked(str(exc)) from None
         zip2.stage(self.a.manifest.parent,self.extra,[rel],byte_budget=CAP)
         staged=self.extra/"Raft"/rel
         # Same runner filesystem. Exclusion rather than overwriting originals.
