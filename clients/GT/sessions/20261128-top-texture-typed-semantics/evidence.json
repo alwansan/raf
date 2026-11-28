@@ -1,0 +1,18 @@
+{
+  "status": "EXACT_TYPED_TEXTURE_SEMANTICS_PREPARED_PENDING_ACTUAL",
+  "starting_head": "b78297e17b5a2b0244d0db17d98c70a73511f04d",
+  "prior_actual": 46122573196,
+  "prior_actual_receipt": "clients/GT/sessions/20261128-top-prestaged-resource-recheck/actual-46122573196.json",
+  "typed_trace_class_writer_corrected": true,
+  "source_declared_unpack_diagnostic": true,
+  "selected_array_source_geometry_diagnostic": true,
+  "new_authored_test_methods": 4,
+  "tests_executed_in_current_session": false,
+  "raw_texture_RGBA_match": false,
+  "array_layer_pixels_verified": false,
+  "unity_gpu_pixels_verified": false,
+  "white_mesh_repair_verified": false,
+  "production": false,
+  "XAPK": false,
+  "next_action": "Reconcile the NEW push-triggered exact original typed texture/semantic observation at its execution head. Actual 46122573196 succeeded with exact selected original 855/118 graph, verified one 1779131136-byte provider, Mesh 10/10 fields (940 vertices/30080 vertex bytes/5760 index bytes), Material 8 color/43 float exact, three physical Texture2D targets, two raw RGBA matches and one raw mismatch; fourth nonnull source class187 typed but trace unavailable. Code inspection found B02 extension broadened the filter but hardcoded class_id=28; correct writer to asset.ClassID without changing shared exporter or GUID. Check selected class187 source geometry/payload presence, exact typed same-instance pointer and actual PNG/importer grid if present; never claim array pixel parity from metadata. Observe source-declared DXT5nm usage and exact pinned AssetRipper UnpackNormal equivalence only if authorized by original source enums; preserve raw mismatch independently. Four new authored tests; pending actual. If source missing payload or semantic/grid failure, retain specific blockers; if verified source and suitable resources, continue to original shader ABI and isolated Unity/Vulkan draw with Dummy/wrong-reference controls, not premature GPU acceptance. If blocked pivot independent fire/water. Plan guard size issue remains separate. No production/player/XAPK; all G0–G6 open; CL/lab read-only; BLACK/animation deferred."
+}

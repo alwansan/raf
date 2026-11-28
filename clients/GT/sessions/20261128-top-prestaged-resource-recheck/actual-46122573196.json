@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "status": "OBSERVED_ORIGINAL_EXACT_PRESTAGED_RESOURCES_WITH_REMAINING_TEXTURE_BLOCKERS",
+  "execution_head": "174ebda47c135e0c011a72f693e9df476fd4bac1",
+  "run": 46122573196,
+  "job": 140910070908,
+  "conclusion": "success",
+  "lint_run": 46122573162,
+  "lint_conclusion": "success",
+  "artifact_id": 15254660692,
+  "artifact_bytes": 1470,
+  "artifact_digest_reported_by_github": "sha256:8304578e1b5052ed5e70087e471bb083c5a07c4132621e3a5ac26ca456df7a56",
+  "artifact_downloaded": false,
+  "prestage": {
+    "XAPK": false,
+    "additional_provider_bytes": 1779131136,
+    "additional_providers_staged": 1,
+    "all_nonnull_texture_sources_typed": true,
+    "all_selected_texture_dependencies_prepared": true,
+    "export_performed": false,
+    "gpu_verified": false,
+    "original_scope_candidates": 855,
+    "phase": "complete",
+    "production": false,
+    "selected_material_eligible_renderers": 118,
+    "selected_mesh_stream_prepared": true,
+    "selected_mesh_stream_provider_bytes": 1779131136,
+    "selected_mesh_stream_range_bytes": 30080,
+    "status": "GT_TOP_EXACT_DEPENDENCY_PRESTAGED",
+    "texture_dependency_counts": {
+      "inline_or_nonstream_targets": 1,
+      "nonnull": 4,
+      "null": 2,
+      "source_class_187": 1,
+      "source_class_28": 3,
+      "stream_targets_prepared": 3
+    }
+  },
+  "recheck": {
+    "XAPK": false,
+    "all_linked_Texture2D_top_mips_match": false,
+    "all_nonnull_texture_payloads_verified": false,
+    "all_saved_TexEnv_edges_and_UV_match": false,
+    "android_device": false,
+    "bounded_mesh_material_texture_top_mip_closure": false,
+    "full_mip_sampler_ABI_verified": false,
+    "material_values": {
+      "counts": {
+        "color": 8,
+        "float": 43,
+        "int": 0
+      },
+      "status": "MATCH"
+    },
+    "mesh": {
+      "bind_pose_signed_zero_only": 0,
+      "different_geometry_fields": [],
+      "export_index_bytes": 5760,
+      "export_vertex_bytes": 30080,
+      "geometry_fields": 10,
+      "matched_geometry_fields": 10,
+      "source_index_bytes": 5760,
+      "source_stream_used": true,
+      "source_submesh_count": 1,
+      "source_vertex_bytes": 30080,
+      "source_vertex_count": 940,
+      "status": "MATCH"
+    },
+    "phase": "complete",
+    "physical_texture_targets_present": 3,
+    "production": false,
+    "selected_exact_original_graph_rejoined": true,
+    "serialized_material_values_match": true,
+    "serialized_mesh_fields_match": true,
+    "status": "GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK",
+    "texture_results": [
+      {
+        "alpha_mismatch_pixels": 4194034,
+        "class": 28,
+        "dimensions_match": true,
+        "export_storage": "png",
+        "physical_target_present": true,
+        "pixel_coordinates_compared": 4194304,
+        "rgb_mismatch_pixels": 4194304,
+        "source_payload_bytes": 5592432,
+        "source_storage": "stream",
+        "status": "MISMATCH"
+      },
+      {
+        "alpha_mismatch_pixels": 0,
+        "class": 28,
+        "dimensions_match": true,
+        "export_storage": "png",
+        "physical_target_present": true,
+        "pixel_coordinates_compared": 4194304,
+        "rgb_mismatch_pixels": 0,
+        "source_payload_bytes": 5592432,
+        "source_storage": "stream",
+        "status": "MATCH"
+      },
+      {
+        "alpha_mismatch_pixels": 0,
+        "class": 28,
+        "dimensions_match": true,
+        "export_storage": "png",
+        "physical_target_present": true,
+        "pixel_coordinates_compared": 4194304,
+        "rgb_mismatch_pixels": 0,
+        "source_payload_bytes": 2796216,
+        "source_storage": "stream",
+        "status": "MATCH"
+      }
+    ],
+    "texture_slots": {
+      "counts": {
+        "class_28_slots": 3,
+        "nonnull_exact_typed_pointer_and_UV": 3,
+        "null_slots_matched": 2,
+        "slot_typed_texture_trace_unavailable": 1
+      },
+      "export": 6,
+      "extra": 0,
+      "missing": 0,
+      "source": 6
+    },
+    "texture_status_counts": {
+      "MATCH": 2,
+      "MISMATCH": 1
+    },
+    "texture_unique_targets": 3,
+    "unity_gpu_pixels_verified": false,
+    "white_mesh_repair_verified": false
+  }
+}

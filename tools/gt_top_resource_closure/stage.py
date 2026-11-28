@@ -10,7 +10,10 @@ def render(base):
     text=base_render(base).decode("utf-8")
     if text.count(ANCHOR)!=1:
         raise ValueError("unreviewed_private_texture_capture_anchor")
-    return text.replace(ANCHOR,REPLACE).encode("utf-8")
+    class_anchor='json.WriteNumber("class_id", 28);'
+    if text.count(class_anchor)!=1:
+        raise ValueError("unreviewed_private_texture_class_writer")
+    return text.replace(ANCHOR,REPLACE).replace(class_anchor,'json.WriteNumber("class_id", asset.ClassID);').encode("utf-8")
 
 def main():
     p=argparse.ArgumentParser()

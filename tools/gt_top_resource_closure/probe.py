@@ -201,7 +201,7 @@ def mesh_check(source,key,export_path,export_fid):
             "source_stream_used":bool(size),"source_vertex_count":before["vertex_count"],
             "source_submesh_count":len(before["submesh_ranges"])}
 
-def texture_check(source,key,path,meta,fid,kind):
+def texture_check(source,key,path,meta,fid,kind, *, semantic_observation=False):
     tex=source.obj(key,"Texture2D").read()
     stream=getattr(tex,"m_StreamData",None)
     folder=source.a.original/"Raft_Data"
@@ -221,13 +221,21 @@ def texture_check(source,key,path,meta,fid,kind):
     else:
         raise Blocked("unsupported_export_texture_storage")
     result=pixels.compare_pixels(before,after)
-    return {"status":"MATCH" if result["rgba8_samples_equal"] else "MISMATCH",
+    observation={"status":"MATCH" if result["rgba8_samples_equal"] else "MISMATCH",
             "source_storage":storage,"export_storage":export_kind,
             "source_payload_bytes":len(payload),
             "pixel_coordinates_compared":result["pixel_coordinates_compared"],
             "alpha_mismatch_pixels":result["alpha_mismatch_pixels"],
             "rgb_mismatch_pixels":result["rgb_mismatch_pixels"],
             "dimensions_match":result["dimensions_match"]}
+    if semantic_observation:
+        from tools.gt_top_resource_closure import texture_observation
+        try:
+            tree=source.obj(key,"Texture2D").read_typetree(check_read=False)
+            observation["source_declared_export_semantics"]=texture_observation.semantic_observation(tree,before,after,result)
+        except Exception as exc:
+            observation["source_declared_export_semantics"]={"status":"UNPROVEN","reason":classify(exc)}
+    return observation
 
 def run(a,report):
     selected,rr,tt,sg=select(a)

@@ -8,7 +8,7 @@ from collections import Counter, defaultdict
 import json
 from pathlib import Path
 
-from tools.gt_top_resource_closure import prestage as prep, probe as prior
+from tools.gt_top_resource_closure import prestage as prep, probe as prior, texture_observation
 from tools.gt_top_original_renderer import probe as previous
 from tools.gt_shader_fanout import audit
 from scripts import gt_material_route_values as values
@@ -114,7 +114,17 @@ def run(a,report):
     after=normalize_texenvs(actual["m_SavedProperties"]["m_TexEnvs"],exported=True)
     rows=Counter()
     linked={}
+    array_sources={}
     for prop in sorted(before.keys()&after.keys()):
+        planned=plan["texture_targets"].get(prop)
+        if planned is not None and planned["class"]==187:
+            try:
+                ptr=before[prop][0]
+                key=source.resolve(plan["material"][0],{"m_FileID":ptr[0],"m_PathID":ptr[1]})
+                need(key==tuple(planned["key"]),"private_texture_plan_identity_drift")
+                array_sources[key]=texture_observation.array_source(source.obj(key,"Texture2DArray").read_typetree(check_read=False))
+            except Exception as exc:
+                rows["array_source_"+prior.classify(exc)]+=1
         try:
             value=exact_slot(before[prop],after[prop],plan["material"][0],mk[0],source,trace,
                              plan["texture_targets"].get(prop))
@@ -129,6 +139,7 @@ def run(a,report):
             rows["slot_"+prior.classify(exc)]+=1
     report["texture_slots"]={"source":len(before),"export":len(after),"missing":len(before.keys()-after.keys()),
                              "extra":len(after.keys()-before.keys()),"counts":dict(rows)}
+    report["selected_array_source_observations"]=list(array_sources.values())
     targets=prior.file_index(a.project,{v[0][0] for v in linked.values()})
     observed=[]
     for key,(exp,kind,cls) in sorted(linked.items()):
@@ -138,7 +149,10 @@ def run(a,report):
             path,meta=targets[exp[0]]
             if cls==28:
                 need(kind==0 or audit.registry.is_texture(path,meta,exp[1]),"typed_Texture2D_target_not_proven")
-                record.update(prior.texture_check(source,key,path,meta,exp[1],kind))
+                record.update(prior.texture_check(source,key,path,meta,exp[1],kind,semantic_observation=True))
+            elif cls==187 and path.suffix.lower()==".png":
+                need(key in array_sources,"selected_array_source_metadata_unproven")
+                record.update(texture_observation.array_png_observation(array_sources[key],path,meta,exp[1],kind))
             elif path.suffix.lower() in (".asset",".cubemap",".rendertexture",".mat",".unity",".prefab"):
                 body=prior.document(path,exp[1],cls)
                 root=native.strict_mapping(body)

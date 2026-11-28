@@ -35,7 +35,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -c "import shutil; assert shutil.disk_usage('.').free > 8 * 1024**3"
-          python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3
+          python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3 Pillow==12.3.0
           python3 -B -m unittest discover -s tools/gt_top_resource_closure -p 'test_*.py' -v
           python3 -B -m unittest discover -s tools/gt_top_original_renderer -p 'test_*.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_external_texture_lineage.py' -v
@@ -205,7 +205,7 @@ jobs:
           PY
             exit 2
           fi
-      - name: Rejoin exact prestaged original graph and compare actual resources
+      - name: Rejoin original graph with exact typed texture capture and source-declared unpack observation
         run: |
           set -euo pipefail
           timeout 1200s python3 -B -m tools.gt_top_resource_closure.recheck \
