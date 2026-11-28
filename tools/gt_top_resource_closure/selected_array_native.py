@@ -127,6 +127,27 @@ def gpu_summary(actual,expected,mode):
               sum(x["RGBA_mismatches_over_2_div_255"] for x in wrong),
             "all_mip_GPU_RGBA_within_1e_5":all(x["rgb_mismatches_over_1e_5"]==0 and x["alpha_mismatches_over_1e_5"]==0 for x in correct)}
 
+def read_reference_cases(rows):
+    from tools.gt_top_resource_closure.selected_material_reference import CASES
+    if not isinstance(rows,list) or len(rows)!=4 or [x.get("name") for x in rows]!=list(CASES):
+        return {"status":"INCONCLUSIVE_CASES_MISSING"}
+    flags=("material_loaded","shader_matches","has_property","serialized_texture_matches","runtime_texture_matches","source_yaml_unchanged")
+    cases={row["name"]:{k:row.get(k) is True for k in flags} for row in rows}
+    def base(row): return all(row[k] for k in ("material_loaded","shader_matches","has_property","source_yaml_unchanged"))
+    good=[key for key,row in cases.items() if base(row) and row["runtime_texture_matches"] and row["serialized_texture_matches"]]
+    negative=all(base(cases[k]) and not cases[k]["runtime_texture_matches"] and not cases[k]["serialized_texture_matches"] for k in ("wrong_guid","wrong_fileid"))
+    return {"status":"OBSERVED" if all(base(x) for x in cases.values()) else "INCONCLUSIVE_IMPORT",
+            "cases":cases,"both_negative_controls_rejected":negative,
+            "native_type2_only_resolves":negative and good==["type2"],
+            "original_type3_resolves":negative and "type3" in good,
+            "positive_cases":good}
+
+def srgb_transfer(x):
+    y=x.copy()
+    rgb=y[...,:3]
+    y[...,:3]=np.where(rgb<=0.04045,rgb/12.92,((rgb+0.055)/1.055)**2.4)
+    return y
+
 def verify(a):
     result={"status":"INCONCLUSIVE","native_class187_identity":False,
             "native_all_22_ranges_exact":False,"actual_GPU_observation":False,
@@ -197,6 +218,26 @@ def verify(a):
         summary=gpu_summary(actual,decoded(src,1024,1024,2,11),mode)
         result.update(status="OBSERVED_NATIVE_BC3_ARRAY_ALL_MIPS",actual_GPU_observation=True,
                       actual_GPU_coordinates=summary["coordinates"],**{k:v for k,v in summary.items() if k!="coordinates"})
+        # Compare actual per-coordinate float bytes, not just error totals.
+        presave=[old.readback(root/("pre-mip-%d.f32"%m),2,max(1,1024>>m),max(1,1024>>m)) for m in range(11)]
+        result["presave_postsave_GPU_exact_coordinates"]=sum(int(np.count_nonzero(np.all(x==y,axis=-1))) for x,y in zip(presave,actual,strict=True))
+        result["selected_material_reference_differential"]=read_reference_cases(r.get("selected_material_cases"))
+        if r.get("unorm_raw_written") is True:
+            result["unorm_all_22_ranges_exact"]=raw_matches(src,(root/"unorm.bc3.bytes").read_bytes(),1024,1024,2,11)==22
+        if result.get("unorm_all_22_ranges_exact") is True and r.get("unorm_gpu_written") is True:
+            linear=[old.readback(root/("unorm-%d.f32"%m),2,max(1,1024>>m),max(1,1024>>m)) for m in range(11)]
+            need(all(np.isfinite(x).all() and np.min(x)>=-1e-5 and np.max(x)<=1+1e-5 for x in linear),"unorm_samples_invalid")
+            # Independent CPU UNorm reference: use raw BC3 DDS decoding without
+            # sRGB transfer; keep GPU->GPU sRGB and CPU->UNorm errors distinct.
+            cpu=[[] for _ in range(11)]
+            for layer,m,off,size in ranges(1024,1024,2,11):
+                img=layout.dds_bc3(src[off:off+size],max(1,1024>>m),max(1,1024>>m))
+                cpu[m].append(np.asarray(img,dtype=np.float32)/255)
+            cpu=[np.stack(x) for x in cpu]
+            result["unorm_GPU_vs_CPU"]=gpu_summary(linear,cpu,mode)
+            # Orient already-GPU-indexed values only once: both arrays are in
+            # the same actual GPU order, not Pillow's coordinate order.
+            result["srgb_GPU_vs_transferred_unorm_GPU"]=gpu_summary(actual,[srgb_transfer(x) for x in linear],"raw_first")
     except Exception as exc:
         result["reason"]=str(exc) if isinstance(exc,old.Failure) else type(exc).__name__
     old.write(a.safe,result)

@@ -14,6 +14,8 @@ public static class SelectedArrayUnity {
    public string run_id,asset_path,guid,native_payload_sha256,calibration_sha256,source_name;
    public long file_id;
    public int native_payload_bytes,source_ref_type,native_mip_ranges,source_graphics_format;
+   public string material_property,reference_shader_guid,reference_wrong_guid,material_shader_hash;
+   public string[] material_variant_hashes;
  }
  [Serializable] public class Receipt {
    public string status="INCONCLUSIVE",phase="environment",run_id,unity_version,backend,color_space,guid,failure_category;
@@ -22,7 +24,10 @@ public static class SelectedArrayUnity {
    public bool private_log_guard,native_importer,srgb,name_matches,reference_probe,wrong_reference_rejected;
    public bool presave_raw_written,presave_gpu_written,calibration_written,authored_reload_raw_written,authored_reload_gpu_written;
    public Transfer original_transfer=new Transfer(),authored_transfer=new Transfer();
+   public RefCase[] selected_material_cases;
+   public bool unorm_raw_written,unorm_gpu_written;
  }
+ [Serializable] public class RefCase { public string name; public bool material_loaded,shader_matches,has_property,serialized_texture_matches,runtime_texture_matches,source_yaml_unchanged; public string failure_category=""; }
  [Serializable] public class Transfer {
    public string phase="not_started",failure_category="";
    public bool scratch_id_matches,scratch_name_matches,meta_guid_anchor,meta_written,
@@ -34,9 +39,9 @@ public static class SelectedArrayUnity {
  static string Arg(string name) { var a=Environment.GetCommandLineArgs(); int i=Array.IndexOf(a,name);return i>=0&&i+1<a.Length?a[i+1]:""; }
  static string Sha(byte[] raw) { using(var h=SHA256.Create()) return BitConverter.ToString(h.ComputeHash(raw)).Replace("-","").ToLowerInvariant(); }
  static int MipBytes(int w,int h,int m) { return checked(((Math.Max(1,w>>m)+3)/4)*((Math.Max(1,h>>m)+3)/4)*16); }
- static Texture2DArray Make(byte[] raw,int w,int h,int d,int n,string name) {
-   var tex=new Texture2DArray(w,h,d,TextureFormat.DXT5,true,false);
-   Need(tex.mipmapCount==n && (int)tex.graphicsFormat==100 && tex.isReadable);
+ static Texture2DArray Make(byte[] raw,int w,int h,int d,int n,string name,bool linear=false) {
+   var tex=new Texture2DArray(w,h,d,TextureFormat.DXT5,true,linear);
+   Need(tex.mipmapCount==n && (int)tex.graphicsFormat==(linear?101:100) && tex.isReadable);
    tex.name=name;
    int cursor=0;
    for(int l=0;l<d;l++) for(int m=0;m<n;m++) {
@@ -100,6 +105,55 @@ public static class SelectedArrayUnity {
    AssetDatabase.ImportAsset(rel,ImportAssetOptions.ForceSynchronousImport|ImportAssetOptions.ForceUpdate);
    loaded=AssetDatabase.LoadAssetAtPath<Material>(rel);
    r.reference_probe=positive&&r.wrong_reference_rejected&&loaded!=null&&Match(loaded.GetTexture("_GTArray"),cfg);
+ }
+ static void SelectedMaterialReferences(Input cfg,Receipt r,string root,string privateRoot) {
+   string[] names={"type3","type2","wrong_guid","wrong_fileid"};
+   r.selected_material_cases=new RefCase[4];
+   for(int i=0;i<4;i++) r.selected_material_cases[i]=new RefCase{name=names[i]};
+   Need(cfg.material_variant_hashes!=null&&cfg.material_variant_hashes.Length==4&&Regex.IsMatch(cfg.material_property,"^[A-Za-z_][A-Za-z0-9_]{0,127}$"));
+   Need(Regex.IsMatch(cfg.reference_shader_guid,"^[0-9a-f]{32}$")&&Regex.IsMatch(cfg.reference_wrong_guid,"^[0-9a-f]{32}$"));
+   Need(String.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(cfg.reference_shader_guid))&&String.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(cfg.reference_wrong_guid)));
+   const string folder="Assets/GTReferenceDifferential";
+   Directory.CreateDirectory(Path.Combine(root,folder));
+   string shaderRel=folder+"/probe.shader",shaderPath=Path.Combine(root,shaderRel);
+   byte[] shaderBytes=File.ReadAllBytes(Path.Combine(privateRoot,"material-probe-shader.bytes"));
+   Need(Sha(shaderBytes)==cfg.material_shader_hash);
+   File.WriteAllBytes(shaderPath,shaderBytes);
+   File.WriteAllText(shaderPath+".meta","fileFormatVersion: 2\nguid: "+cfg.reference_shader_guid+"\nShaderImporter:\n  externalObjects: {}\n  defaultTextures: []\n  nonModifiableTextures: []\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n");
+   AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+   var shader=AssetDatabase.LoadAssetAtPath<Shader>(shaderRel);
+   Need(shader!=null&&AssetDatabase.TryGetGUIDAndLocalFileIdentifier(shader,out string sg,out long si)&&sg==cfg.reference_shader_guid&&si==4800000);
+   for(int i=0;i<4;i++) {
+     var row=r.selected_material_cases[i];
+     try {
+       string rel=folder+"/"+names[i]+".mat",path=Path.Combine(root,rel);
+       byte[] raw=File.ReadAllBytes(Path.Combine(privateRoot,"material-"+names[i]+".bytes"));
+       Need(Sha(raw)==cfg.material_variant_hashes[i]&&!File.Exists(path));
+       File.WriteAllBytes(path,raw);
+       AssetDatabase.ImportAsset(rel,ImportAssetOptions.ForceSynchronousImport|ImportAssetOptions.ForceUpdate);
+       var loaded=AssetDatabase.LoadAssetAtPath<Material>(rel);
+       row.material_loaded=loaded!=null;
+       row.source_yaml_unchanged=Sha(File.ReadAllBytes(path))==Sha(raw);
+       if(loaded==null) continue;
+       row.shader_matches=loaded.shader==shader;
+       row.has_property=loaded.HasProperty(cfg.material_property);
+       if(row.has_property) row.runtime_texture_matches=Match(loaded.GetTexture(cfg.material_property),cfg);
+       var so=new SerializedObject(loaded);
+       var entries=so.FindProperty("m_SavedProperties.m_TexEnvs");
+       if(entries!=null&&entries.isArray) {
+         int count=0;
+         for(int e=0;e<entries.arraySize;e++){
+           var entry=entries.GetArrayElementAtIndex(e);
+           var name=entry.FindPropertyRelative("first");
+           var ptr=entry.FindPropertyRelative("second.m_Texture");
+           if(name!=null&&ptr!=null&&name.propertyType==SerializedPropertyType.String&&name.stringValue==cfg.material_property){
+             count++;row.serialized_texture_matches=Match(ptr.objectReferenceValue,cfg);
+           }
+         }
+         if(count!=1) row.serialized_texture_matches=false;
+       }
+     } catch(Exception e){row.failure_category=e.GetType().Name;}
+   }
  }
  static Texture2DArray TransferNative(Texture2DArray tex,string root,string scratch,string target,string guid,long fileID,
      string name,int w,int h,int d,int n,Transfer t) {
@@ -228,6 +282,15 @@ public static class SelectedArrayUnity {
      for(int m=0;m<11;m++) Read(cs,tex,m,Path.Combine(privateRoot,"mip-"+m+".f32"));
      r.phase="reference";
      try {ProbeReference(tex,cfg,r,root);} catch(Exception) {r.reference_probe=false;}
+     try {SelectedMaterialReferences(cfg,r,root,privateRoot);} catch(Exception) {}
+     r.phase="unorm_differential";
+     Texture2DArray linear=null;
+     try {
+       linear=Make(raw,1024,1024,2,11,"GT BC3 UNorm control",true);
+       Raw(linear,Path.Combine(privateRoot,"unorm.bc3.bytes"));r.unorm_raw_written=true;
+       for(int m=0;m<11;m++) Read(cs,linear,m,Path.Combine(privateRoot,"unorm-"+m+".f32"));
+       r.unorm_gpu_written=true;
+     } catch(Exception) {} finally {if(linear!=null) UnityEngine.Object.DestroyImmediate(linear);}
      r.phase="complete";r.status="OBSERVED";code=0;
    } catch(Exception e) {r.failure_category=e.GetType().Name;}
    finally {

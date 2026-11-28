@@ -41,4 +41,20 @@ class NativeArrayTests(unittest.TestCase):
         self.assertIs(record["accepted"],False)
         self.assertIs(record["loaded_array"],True)
         self.assertNotIn("guid",record)
+    def test_reference_controls_require_both_native_object_and_runtime_matches(self):
+        def row(name,match):
+            return {"name":name,"material_loaded":True,"shader_matches":True,"has_property":True,
+                    "source_yaml_unchanged":True,"serialized_texture_matches":match,"runtime_texture_matches":match}
+        rows=[row("type3",False),row("type2",True),row("wrong_guid",False),row("wrong_fileid",False)]
+        self.assertTrue(n.read_reference_cases(rows)["native_type2_only_resolves"])
+        rows[3]["runtime_texture_matches"]=True
+        self.assertFalse(n.read_reference_cases(rows)["native_type2_only_resolves"])
+    def test_reference_variants_only_change_the_intended_slot(self):
+        from tools.gt_top_resource_closure import selected_material_reference as m
+        guid="1234567890abcdef1234567890abcdef"
+        body="\nMaterial:\n  m_Shader: {fileID: 4800000, guid: 0123456789abcdef0123456789abcdef, type: 3}\n  m_SavedProperties:\n    m_TexEnvs:\n    - _GT:\n        m_Texture: {fileID: 18700000, guid: "+guid+", type: 3}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n"
+        variants=m.make_variants(body,"_GT",guid,18700000,3)
+        self.assertEqual(sum(a!=b for a,b in zip(variants["type2"],variants["type3"],strict=True)),1)
+        self.assertIn("fileID: 18700001",variants["wrong_fileid"])
+        with self.assertRaises(ValueError):m.make_variants(body,"_Wrong",guid,18700000,3)
 if __name__=="__main__": unittest.main()

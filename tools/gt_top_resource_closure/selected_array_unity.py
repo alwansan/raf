@@ -86,6 +86,8 @@ def stage(a):
         from tools.gt_top_resource_closure import selected_array_native
         cfg["asset_path"]="Assets/GTSource/"+path.with_suffix(".asset").name
         selected_array_native.stage_native(raw,a.private,cfg,tree,kind)
+        from tools.gt_top_resource_closure import selected_material_reference
+        selected_material_reference.stage(a.private,cfg,prior.document(actual_path,mk[1],21),prop,exp[0],exp[1],kind,mk[1])
     write(a.private/"expected.json",cfg)
     here=Path(__file__).parent
     editor="SelectedArrayNative.cs" if getattr(a,"native_bc3",False) else "SelectedArrayUnity.cs"
