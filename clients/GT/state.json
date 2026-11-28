@@ -4653,7 +4653,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261128-particle108-preserved-alpha-vulkan/README_AR.md",
-  "next_action": "G3-G6-skybox-offset-differential: reconcile actual 46103341931 job 140850499278 and lint 46103341906 job 140850499185 (execution 1f109dcf7e47e970bf81ce55002eccddecf15066). Prior actual 46102429968 failed only after 45/45 original per-stage offsets, 7/7 original varyings and 2/2 DXBC translation; exact failure named_constant_buffer_offset_mismatch after merging; no install. Inspect GT_SKYBOX_OFFSET_DIFFERENTIAL for source global overlap, per-stage wrong/missing/relocated owner offsets, isolated original layout profiles, strict 45 offsets and 10 named resource identities, 2 entrypoints and 6 invalid stage macro controls, actual same-export protected files. Only PASS_STAGE_ISOLATED_SOURCE_BOUND_WRAPPER_PRIVATE_SAME_EXPORT proves scoped private install. Static macro selection is not Unity compiler or runtime proof. If blocked, preserve exact phase/category without weakening source contracts and take an independent useful water/mesh/fire/light lane; no repeated source-only census. No production/player/XAPK, original asset/program publication, no G0-G6 closure; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred.",
+  "next_action": "G3-G6-skybox-source-register-join: reconcile actual 46104139224 job 140852975579 and lint 46104139214 job 140852975399 (execution 47a23ce6df52c3abf06b274f706a594fde215f06). Prior actual 46103341931 proved 67 controls, relocated one shared global member per stage in combined wrapper, exclusive stages restore 45/45 offsets, 10/10 named resource matches and 6/6 invalid macros rejected, then failed strict absolute interface equality; no install. Inspect GT_SKYBOX_SOURCE_REGISTER_JOIN actual per-side original register identity and type, reversible explicit pinned diagnostic, actual attribute-free producer/consumer location join for all 7 original DXBC varying registers, mesh and fragment outputs, optional source-derived producer ordering, 45 original offsets and 10 resource matches. Distinguish actual consistent location renumbering from original absolute location equality; never accept equal-type wrong-register substitution or extra compiled active input. Only PASS_SOURCE_REGISTER_JOIN_PRIVATE_SAME_EXPORT with private install and protected file SHA proofs is scoped temporary installation, not Unity/production/device or interpolation/pixel proof. If blocked record phase and prioritize independent mesh/material/fire/water/light lane rather than repeated skybox census; no XAPK or production/player; all G0-G6 remain open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -12836,7 +12836,7 @@
     }
   },
   "latest_original_skybox_offset_differential": {
-    "status": "ACTUAL_OFFSET_DIFFERENTIAL_IN_PROGRESS_UNRECONCILED",
+    "status": "ACTUAL_STAGE_ISOLATED_OFFSETS_PASS_INTERFACE_UNRESOLVED",
     "starting_head": "c21a20c3656d2743d2853ff51fdb308c8d7c6ce1",
     "execution_head": "1f109dcf7e47e970bf81ce55002eccddecf15066",
     "branch": "feature/android-native-port",
@@ -12847,16 +12847,129 @@
     "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "run": 46103341931,
     "job": 140850499278,
-    "run_status": "in_progress",
-    "conclusion": null,
+    "run_status": "completed",
+    "conclusion": "failure",
     "lint_run": 46103341906,
     "lint_job": 140850499185,
-    "lint_status": "in_progress",
-    "lint_conclusion": null,
+    "lint_status": "completed",
+    "lint_conclusion": "success",
     "source_free_controls_authored_new": 11,
-    "source_free_controls_actual": null,
-    "last_observed_step": "Checkout only independent ambient verifier and existing pinned tools",
-    "actual_report": null,
+    "source_free_controls_actual": 67,
+    "last_observed_step": "Compile temporary class104 capture and smoke test",
+    "actual_report": {
+      "Unity_import_verified": false,
+      "XAPK": false,
+      "all_gates_open": true,
+      "bound_stage_counts": {
+        "constant_buffer_bindings_from_variant": 0,
+        "constant_buffer_layouts_with_shared_members_table": 5,
+        "constant_buffer_named_32bit_lanes": 216,
+        "constant_buffer_named_member_occurrences": 45,
+        "constant_buffer_named_struct_occurrences": 0,
+        "distinct_original_parameter_blobs": 2,
+        "named_constant_buffer_candidate_stages_vulkan11_valid": 2,
+        "named_constant_buffer_reflected_offsets_verified": 45,
+        "named_original_numeric_members_in_distinct_parameter_blobs": 0,
+        "named_original_resource_entries_in_distinct_parameter_blobs": 0,
+        "original_variant_stages_with_cb_bindings": 0,
+        "original_variant_stages_with_parameter_records": 2,
+        "original_variant_stages_with_textures": 0,
+        "original_vertex_fragment_varying_records_matched": 7,
+        "original_vertex_input_semantics_restored": 1,
+        "resource_rebound_stages_verified_spirv_identical_excluding_debug": 2,
+        "translated_constant_buffer_declarations_mapped": 5,
+        "translated_sampler_declarations_mapped_to_source_texture": 5,
+        "translated_texture_declarations_mapped_to_source_name": 5,
+        "vertex_variants_with_verified_mesh_inputs": 1,
+        "vulkan_vertex_fragment_locations_matched": 7
+      },
+      "combined_original_layout_profile": {
+        "fs": {
+          "absent_from_all_blocks": 0,
+          "ambiguous_other_block": 0,
+          "exact_owner_offset": 29,
+          "expected_blocks": 1,
+          "expected_members": 30,
+          "found_in_other_block": 1,
+          "found_in_other_block_same_offset": 0,
+          "matched_blocks": 1,
+          "missing_from_owner": 1,
+          "strict_failure": "named_constant_buffer_offset_mismatch",
+          "strict_original_offsets_pass": false,
+          "wrong_owner_offset": 0
+        },
+        "vs": {
+          "absent_from_all_blocks": 0,
+          "ambiguous_other_block": 0,
+          "exact_owner_offset": 14,
+          "expected_blocks": 4,
+          "expected_members": 15,
+          "found_in_other_block": 1,
+          "found_in_other_block_same_offset": 0,
+          "matched_blocks": 4,
+          "missing_from_owner": 1,
+          "strict_failure": "named_constant_buffer_offset_mismatch",
+          "strict_original_offsets_pass": false,
+          "wrong_owner_offset": 0
+        }
+      },
+      "device_pixels_proven": false,
+      "isolated_original_layout_profile": {
+        "fs": {
+          "absent_from_all_blocks": 0,
+          "ambiguous_other_block": 0,
+          "exact_owner_offset": 30,
+          "expected_blocks": 1,
+          "expected_members": 30,
+          "found_in_other_block": 0,
+          "found_in_other_block_same_offset": 0,
+          "matched_blocks": 1,
+          "missing_from_owner": 0,
+          "named_resources_verified": 10,
+          "rejected_invalid_stage_macro_sets": 3,
+          "strict_original_offsets": 30,
+          "strict_original_offsets_pass": true,
+          "wrong_owner_offset": 0
+        },
+        "vs": {
+          "absent_from_all_blocks": 0,
+          "ambiguous_other_block": 0,
+          "exact_owner_offset": 15,
+          "expected_blocks": 4,
+          "expected_members": 15,
+          "found_in_other_block": 0,
+          "found_in_other_block_same_offset": 0,
+          "matched_blocks": 4,
+          "missing_from_owner": 0,
+          "named_resources_verified": 0,
+          "rejected_invalid_stage_macro_sets": 3,
+          "strict_original_offsets": 15,
+          "strict_original_offsets_pass": true,
+          "wrong_owner_offset": 0
+        }
+      },
+      "original_assets_mutated": false,
+      "original_assets_published": false,
+      "original_object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9",
+      "phase": "stage_isolated_wrapper_compile_and_reflection",
+      "prior_merge_failure": "named_constant_buffer_offset_mismatch",
+      "prior_merge_phase": "combined_wrapper_compile_and_interface",
+      "private_wrapper_installed": false,
+      "production": false,
+      "reason": "skybox_final_interface_differs_from_source_bound_stage",
+      "same_export_binding_verified": true,
+      "source_global_name_overlap": {
+        "same_original_global_name_across_stages": 1,
+        "shared_global_names_different_offsets": 0,
+        "shared_global_names_same_offsets": 1
+      },
+      "source_layout": {
+        "empty_keyword_routes": 1,
+        "original_properties": 0,
+        "render_states": 1
+      },
+      "status": "INCONCLUSIVE"
+    },
     "private_wrapper_install_proven": false,
     "tool_blobs": {
       "tools/gt_skybox_offset_differential/audit.py": "de84a2fc07532f8063c336e81f733e52a2c51b55",
@@ -12874,6 +12987,169 @@
     "XAPK": false,
     "all_gates_open": true,
     "session": "clients/GT/sessions/20261128-skybox-offset-differential/README.md",
-    "next_action": "G3-G6-skybox-offset-differential: reconcile actual 46103341931 job 140850499278 and lint 46103341906 job 140850499185 (execution 1f109dcf7e47e970bf81ce55002eccddecf15066). Prior actual 46102429968 failed only after 45/45 original per-stage offsets, 7/7 original varyings and 2/2 DXBC translation; exact failure named_constant_buffer_offset_mismatch after merging; no install. Inspect GT_SKYBOX_OFFSET_DIFFERENTIAL for source global overlap, per-stage wrong/missing/relocated owner offsets, isolated original layout profiles, strict 45 offsets and 10 named resource identities, 2 entrypoints and 6 invalid stage macro controls, actual same-export protected files. Only PASS_STAGE_ISOLATED_SOURCE_BOUND_WRAPPER_PRIVATE_SAME_EXPORT proves scoped private install. Static macro selection is not Unity compiler or runtime proof. If blocked, preserve exact phase/category without weakening source contracts and take an independent useful water/mesh/fire/light lane; no repeated source-only census. No production/player/XAPK, original asset/program publication, no G0-G6 closure; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred."
+    "next_action": "G3-G6-skybox-source-register-join: determine whether original DXBC register identity survives actual compiled location renumbering, compare exact pinned reference, attribute-free wrapper and optional original producer field order; keep all 45 offsets/10 resources/7 original register identities and six stage selector negative controls. Install only actual verified source-bound attribute-free candidate.",
+    "source_free_controls_step": "success",
+    "actual_step_snapshot": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Checkout only independent ambient verifier and existing pinned tools",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Verify pinned source readers and shader program recovery controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Install public translation tools for exact private wrapper",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-dotnet@v4",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Obtain exact public AssetRipperCLI source",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Compile temporary class104 capture and smoke test",
+        "status": "in_progress",
+        "conclusion": null
+      },
+      {
+        "name": "Read only level24 and five pinned support providers",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Resolve only exact missing Skybox provider from authenticated native file slot",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Read only one selected additional provider (exact file or ordered chunks)",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Authenticate selected provider Git object and SHA and exact native Material21",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Resolve actual Skybox Material m_Shader exact native provider",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Read only additional exact Shader provider when not already staged",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Authenticate exact selected native Shader48 and provider bytes",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Execute actual bounded shader-linked export with same-instance traces",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Compare failed combined offsets against stage-isolated wrapper; conditional disposable install",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Publish ONLY safe aggregate receipts",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Remove only temporary source and private export",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Obtain exact public AssetRipperCLI source",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Run actions/setup-dotnet@v4",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Checkout only independent ambient verifier and existing pinned tools",
+        "status": "pending",
+        "conclusion": null
+      }
+    ],
+    "source_free_controls_breakdown": [
+      14,
+      12,
+      17,
+      13,
+      11
+    ],
+    "actual_aggregate_path": "clients/GT/sessions/20261128-skybox-offset-differential/actual-aggregate.json",
+    "actual_selected_log_path": "clients/GT/sessions/20261128-skybox-offset-differential/actual-selected-results.log",
+    "artifact": {
+      "id": 15246298780,
+      "digest": "sha256:8aff613e1e857bbf71cad3eb5cd843d7f764538efc310ad694d0d2fc1a85fc41",
+      "independently_downloaded": false
+    }
+  },
+  "latest_original_skybox_source_register_join": {
+    "status": "ACTUAL_SOURCE_REGISTER_JOIN_IN_PROGRESS_UNRECONCILED",
+    "starting_head": "691eb2311c7c303cf147f12ffffc3738dd8ccc95",
+    "execution_head": "47a23ce6df52c3abf06b274f706a594fde215f06",
+    "branch": "feature/android-native-port",
+    "prior_actual_run": 46103341931,
+    "prior_lint_run": 46103341906,
+    "prior_actual_failure": "skybox_final_interface_differs_from_source_bound_stage",
+    "original_object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9",
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "run": 46104139224,
+    "job": 140852975579,
+    "run_status": "in_progress",
+    "conclusion": null,
+    "lint_run": 46104139214,
+    "lint_job": 140852975399,
+    "lint_status": "in_progress",
+    "lint_conclusion": null,
+    "source_free_controls_authored_new": 12,
+    "source_free_controls_actual": null,
+    "last_observed_step": "Checkout only independent ambient verifier and existing pinned tools",
+    "actual_report": null,
+    "private_wrapper_install_proven": false,
+    "tool_blobs": {
+      "tools/gt_skybox_source_register_join/audit.py": "ba3844b8668c1f4a98b600aee00795e8f4114238",
+      "tools/gt_skybox_source_register_join/test_audit.py": "dd79e61c8b87eb9e13e5588a83a3da39999684bf",
+      ".github/workflows/raft-gt-skybox-source-register-join.yml": "e569c141a34c7be1d6f36b2a9aac45cb4690fce9"
+    },
+    "local_checkout_visible": false,
+    "local_work_overwritten": false,
+    "original_assets_mutated": false,
+    "original_assets_published": false,
+    "Unity_import_verified": false,
+    "device": false,
+    "production": false,
+    "player": false,
+    "XAPK": false,
+    "all_gates_open": true,
+    "session": "clients/GT/sessions/20261128-skybox-source-register-join/README.md",
+    "next_action": "G3-G6-skybox-source-register-join: reconcile actual 46104139224 job 140852975579 and lint 46104139214 job 140852975399 (execution 47a23ce6df52c3abf06b274f706a594fde215f06). Prior actual 46103341931 proved 67 controls, relocated one shared global member per stage in combined wrapper, exclusive stages restore 45/45 offsets, 10/10 named resource matches and 6/6 invalid macros rejected, then failed strict absolute interface equality; no install. Inspect GT_SKYBOX_SOURCE_REGISTER_JOIN actual per-side original register identity and type, reversible explicit pinned diagnostic, actual attribute-free producer/consumer location join for all 7 original DXBC varying registers, mesh and fragment outputs, optional source-derived producer ordering, 45 original offsets and 10 resource matches. Distinguish actual consistent location renumbering from original absolute location equality; never accept equal-type wrong-register substitution or extra compiled active input. Only PASS_SOURCE_REGISTER_JOIN_PRIVATE_SAME_EXPORT with private install and protected file SHA proofs is scoped temporary installation, not Unity/production/device or interpolation/pixel proof. If blocked record phase and prioritize independent mesh/material/fire/water/light lane rather than repeated skybox census; no XAPK or production/player; all G0-G6 remain open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred."
   }
 }
