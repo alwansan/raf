@@ -1,0 +1,184 @@
+name: GT G6 level24 exact missing Skybox provider same-export (NO PLAYER)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-gt-skybox-same-export.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-gt-g6-level24-skybox-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  skybox-same-export:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only independent ambient verifier and existing pinned tools
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/
+            /tools/gt_original_light_hierarchy/audit.py
+            /tools/gt_remaining_scene_lighting/audit.py
+            /tools/gt_light_same_export/audit.py
+            /tools/gt_light_same_export/stage_trace.py
+            /tools/gt_ambient_same_export/
+            /tools/gt_skybox_exact_provider/
+            /android-port/Experiments/ExportLineage/
+      - name: Verify reviewed code and run unchanged ambient plus exact provider controls
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test "$(git hash-object tools/gt_skybox_exact_provider/resolve.py)" = 8986080f354e2e7a096ba3fcbe574d68f2d9691a
+          test "$(git hash-object tools/gt_skybox_exact_provider/test_resolve.py)" = e561b3e972534bed4993e7f95deef3ae8022ab8a
+          test "$(git hash-object tools/gt_skybox_exact_provider/provider-catalog.json)" = 41bc2f997dc5c90ddfa43053c82915c5ad7cde7e
+          test "$(git hash-object tools/gt_ambient_same_export/audit.py)" = 1485a9ad7bd60d2d8d8fcb21e75ff64f2ca23737
+          test "$(git hash-object tools/gt_ambient_same_export/stage_trace.py)" = 7c204d8ad6cbbeb10167f22bd352bd9d4d4beb8c
+          test "$(git hash-object tools/gt_ambient_same_export/test_audit.py)" = a057d81547d8786f231efced5a2477e1c9c1fe21
+          test "$(git hash-object tools/gt_light_same_export/audit.py)" = d119a5bd0763afb80259c5da9a98df9c3a63194d
+          test "$(git hash-object tools/gt_light_same_export/stage_trace.py)" = 3d5f70e092879090f7e9ac9a3491783d1849518c
+          test "$(git hash-object scripts/w1_stage_zip2_owners.py)" = 9ae972de1b478ceda51f56cce33d6111a8c72229
+          test "$(git hash-object scripts/b21_compare_export_lights.py)" = 1246ca47b7cd4dd8a3a933c843de973a2d95fc34
+          test "$(git hash-object scripts/b21_stage_light_lineage.py)" = ce27df170592e5dac292c9de74c28f2eccd96d3a
+          test "$(git hash-object scripts/b02_stage_texture_lineage.py)" = a9d678ba03f44b86b6f18149b787e06c8dd1535f
+          test "$(git hash-object scripts/patch_export_lineage.py)" = 25de1a42b918d0a3c1d0b5ebe17ec17b7744cd38
+          test "$(git hash-object android-port/Experiments/ExportLineage/RaftExportLineage.cs)" = 4b84a325bb1766583adb4ba6cfd9a23225f23bb9
+          test "$(git hash-object android-port/Experiments/ExportLineage/Program.cs)" = aed1e144574b12dd4ddf0fdc71a3cf28ee9d878d
+          test "$(git hash-object tools/gt_original_light_hierarchy/audit.py)" = b7a78d4edd86a9c38186e7bb6536c76fa9cb11fa
+          test "$(git hash-object tools/gt_remaining_scene_lighting/audit.py)" = 84133c4b34c1d3b1cda8a2b534676d38c062f1ee
+          mkdir "$RUNNER_TEMP/gt-skybox-safe" "$RUNNER_TEMP/gt-skybox-private"
+          python3 -m venv "$RUNNER_TEMP/gt-skybox-py"
+          py="$RUNNER_TEMP/gt-skybox-py/bin/python"
+          "$py" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          "$py" -B -m unittest discover -s tools/gt_ambient_same_export -p test_audit.py -v
+          "$py" -B -m unittest discover -s tools/gt_skybox_exact_provider -p test_resolve.py -v
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 8388608
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Obtain exact public AssetRipperCLI source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: Source
+      - name: Compile temporary class104 capture and smoke test
+        run: |
+          set -euo pipefail
+          test "$(git -C ar-host rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          p="$RUNNER_TEMP/gt-skybox-private"
+          python3 -m tools.gt_ambient_same_export.stage_trace --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --destination "$p/RaftExportLineage.cs"
+          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper "$p/RaftExportLineage.cs"
+          timeout 780s dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$p/compiled" > "$p/compile.log" 2>&1 || { tail -60 "$p/compile.log"; exit 1; }
+          dotnet "$p/compiled/ExportLineage.dll" --probe-tool > /dev/null
+      - name: Read only level24 and five pinned support providers
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-skybox-selected-source
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/level24
+            /Raft/Raft_Data/globalgamemanagers
+            /Raft/Raft_Data/globalgamemanagers.assets
+            /Raft/Raft_Data/sharedassets6.assets
+            /Raft/Raft_Data/sharedassets24.assets
+            /Raft/Raft_Data/sharedassets25.assets
+      - name: Resolve only exact missing Skybox provider from authenticated native file slot
+        id: select
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-skybox-private"
+          "$RUNNER_TEMP/gt-skybox-py/bin/python" -B -m tools.gt_skybox_exact_provider.resolve discover \
+            --source .gt-skybox-selected-source --destination "$p/source" --plan "$p/provider-plan.json" \
+            --report "$RUNNER_TEMP/gt-skybox-safe/discover.json"
+      - name: Read only one selected additional provider (exact file or ordered chunks)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-skybox-extra-source
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: ${{ steps.select.outputs.paths }}
+      - name: Authenticate selected provider Git object and SHA and exact native Material21
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-skybox-private"
+          "$RUNNER_TEMP/gt-skybox-py/bin/python" -B -m tools.gt_skybox_exact_provider.resolve stage \
+            --source .gt-skybox-extra-source --destination "$p/source" --plan "$p/provider-plan.json" \
+            --report "$RUNNER_TEMP/gt-skybox-safe/stage.json"
+      - name: Execute one changed seven-provider actual export with same-instance private traces
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/gt-skybox-private/w1.json
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: ${{ runner.temp }}/gt-skybox-private/b02.json
+          RAFT_PRIVATE_EXPORT_AMBIENT_LINEAGE: ${{ runner.temp }}/gt-skybox-private/ambient.json
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-skybox-private"
+          rc=0
+          timeout 540s dotnet "$p/compiled/ExportLineage.dll" "$p/source" "$p/export" > "$p/export.log" 2>&1 || rc=$?
+          RC="$rc" python3 - <<'PY'
+          import json,os,re
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"]);p=root/"gt-skybox-private"
+          raw=(p/"export.log").read_text(errors="replace")
+          r={"exit_code":int(os.environ["RC"]),"actual_export_completed":os.environ["RC"]=="0",
+             "private_trace_files_present":sum((p/x).is_file() for x in ("w1.json","b02.json","ambient.json")),
+             "tool_exception_categories":sorted(set(re.findall(r"\b(?:System|AssetRipper)\.[A-Za-z.]+Exception\b",raw))),
+             "private_log_bytes":(p/"export.log").stat().st_size}
+          (root/"gt-skybox-safe/export.json").write_text(json.dumps(r,sort_keys=True,indent=2)+"\n")
+          print("GT_SKYBOX_ACTUAL_EXPORT "+json.dumps(r,sort_keys=True))
+          PY
+          test "$rc" = 0
+          test -s "$RAFT_PRIVATE_EXPORT_LINEAGE" && test -s "$RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE" && test -s "$RAFT_PRIVATE_EXPORT_AMBIENT_LINEAGE"
+      - name: Compare exact authenticated skybox Material to actual same-export scene and Material YAML
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-skybox-private"
+          "$RUNNER_TEMP/gt-skybox-py/bin/python" -B -m tools.gt_skybox_exact_provider.resolve compare \
+            --destination "$p/source" --plan "$p/provider-plan.json" --project "$p/export/ExportedProject" \
+            --trace "$p/ambient.json" --w1 "$p/w1.json" --b02 "$p/b02.json" \
+            --report "$RUNNER_TEMP/gt-skybox-safe/same-export.json"
+      - name: Publish ONLY safe aggregate receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-skybox-level24-safe-aggregate
+          path: |
+            ${{ runner.temp }}/gt-skybox-safe/discover.json
+            ${{ runner.temp }}/gt-skybox-safe/stage.json
+            ${{ runner.temp }}/gt-skybox-safe/export.json
+            ${{ runner.temp }}/gt-skybox-safe/same-export.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove only temporary source and private export
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -d .gt-skybox-selected-source/.git; then rm -rf .gt-skybox-selected-source; fi
+          if test -d .gt-skybox-extra-source/.git; then rm -rf .gt-skybox-extra-source; fi
+          if test -d "$RUNNER_TEMP/gt-skybox-private"; then rm -rf "$RUNNER_TEMP/gt-skybox-private"; fi
