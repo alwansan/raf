@@ -38,12 +38,12 @@
   "android_device": false,
   "production": false,
   "XAPK": false,
-  "next_action": "Reconcile the NEW push-triggered GT top exact prestaged original resource recheck workflow at the corrected commit; locate run by head SHA and inspect source-free controls and GT_TOP_EXACT_DEPENDENCY_PRESTAGE / GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK. Prior 46121881941 failed step 11 before export (855/118 reselected; no GPU); old add --no-cone rejected by local Git 2.47.3 (exit 129); new set --no-cone retains only pinned manifest and selected exact provider, tested 3/3 locally on authored data. No original resource acquisition success yet. Preserve 4 GiB total/2x provider plus 3 GiB reserve, exact SHA/size and original selected graph. If resource proof succeeds proceed to source-bound shader ABI/isolated Unity Vulkan draw with Dummy and wrong-reference controls; if blocked classify new failure or pivot independently to fire/water, not repeat. All G0–G6 open; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
+  "next_action": "Reconcile actual 46122573196/job 140910070908 (in_progress, source-free controls step), lint 46122573162/job 140910070260 SUCCESS and plan guard 46122573062/job 140910069966 in_progress at execution 174ebda47c135e0c011a72f693e9df476fd4bac1; inspect source-free controls and GT_TOP_EXACT_DEPENDENCY_PRESTAGE / GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK. Prior 46121881941 failed step 11 before export (855/118 reselected; no GPU); old add --no-cone rejected by local Git 2.47.3 (exit 129); new set --no-cone retains only pinned manifest and selected exact provider, tested 3/3 locally on authored data. No original resource acquisition success yet. Preserve 4 GiB total/2x provider plus 3 GiB reserve, exact SHA/size and original selected graph. If resource proof succeeds proceed to source-bound shader ABI/isolated Unity Vulkan draw with Dummy and wrong-reference controls; if blocked classify new failure or pivot independently to fire/water, not repeat. All G0–G6 open; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
   "failure_category": "selected_dependency_sparse_checkout_failed",
   "original_scope_candidates": 855,
   "selected_material_eligible_renderers": 118,
   "corrected_sparse_provider": {
-    "status": "SPARSE_PROVIDER_CLI_CORRECTED_PENDING_ACTUAL",
+    "status": "SPARSE_PROVIDER_CLI_CORRECTED_ACTUAL_STARTED",
     "starting_head": "7866e5c25103dfa7a05ca1c3be663be0efb4883a",
     "prior_failed_run": 46121881941,
     "prior_failure_receipt": "clients/GT/sessions/20261128-top-prestaged-resource-recheck/actual-46121881941.json",
@@ -57,6 +57,19 @@
     "android_device": false,
     "production": false,
     "XAPK": false,
-    "next_action": "Reconcile the NEW push-triggered GT top exact prestaged original resource recheck workflow at the corrected commit; locate run by head SHA and inspect source-free controls and GT_TOP_EXACT_DEPENDENCY_PRESTAGE / GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK. Prior 46121881941 failed step 11 before export (855/118 reselected; no GPU); old add --no-cone rejected by local Git 2.47.3 (exit 129); new set --no-cone retains only pinned manifest and selected exact provider, tested 3/3 locally on authored data. No original resource acquisition success yet. Preserve 4 GiB total/2x provider plus 3 GiB reserve, exact SHA/size and original selected graph. If resource proof succeeds proceed to source-bound shader ABI/isolated Unity Vulkan draw with Dummy and wrong-reference controls; if blocked classify new failure or pivot independently to fire/water, not repeat. All G0–G6 open; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred."
+    "next_action": "Reconcile actual 46122573196/job 140910070908 (in_progress, source-free controls step), lint 46122573162/job 140910070260 SUCCESS and plan guard 46122573062/job 140910069966 in_progress at execution 174ebda47c135e0c011a72f693e9df476fd4bac1; inspect source-free controls and GT_TOP_EXACT_DEPENDENCY_PRESTAGE / GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK. Prior 46121881941 failed step 11 before export (855/118 reselected; no GPU); old add --no-cone rejected by local Git 2.47.3 (exit 129); new set --no-cone retains only pinned manifest and selected exact provider, tested 3/3 locally on authored data. No original resource acquisition success yet. Preserve 4 GiB total/2x provider plus 3 GiB reserve, exact SHA/size and original selected graph. If resource proof succeeds proceed to source-bound shader ABI/isolated Unity Vulkan draw with Dummy and wrong-reference controls; if blocked classify new failure or pivot independently to fire/water, not repeat. All G0–G6 open; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
+    "execution_head": "174ebda47c135e0c011a72f693e9df476fd4bac1",
+    "run": 46122573196,
+    "job": 140910070908,
+    "run_status": "in_progress",
+    "conclusion": null,
+    "lint_run": 46122573162,
+    "lint_job": 140910070260,
+    "lint_status": "completed",
+    "lint_conclusion": "success",
+    "plan_guard_run": 46122573062,
+    "plan_guard_job": 140910069966,
+    "plan_guard_status": "in_progress",
+    "last_observed_step": "Check disk budget and synthetic original/export parity tests"
   }
 }
