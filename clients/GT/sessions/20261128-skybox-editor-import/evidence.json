@@ -20,7 +20,7 @@
   "lint_conclusion": "success",
   "source_free_controls_authored_new": 11,
   "source_free_controls_actual": null,
-  "last_observed_step": "Checkout only independent ambient verifier and existing pinned tools",
+  "last_observed_step": "Compile temporary class104 capture and smoke test",
   "actual_report": null,
   "tool_blobs": {
     "tools/gt_skybox_editor_import/stage.py": "cdc8511483f774fcdd202905855a00feedea67c8",
@@ -41,5 +41,128 @@
   "XAPK": false,
   "all_gates_open": true,
   "session": "clients/GT/sessions/20261128-skybox-editor-import/README.md",
-  "next_action": "G3-G6-skybox-editor-import: reconcile actual 46104962432 job 140855532972 and lint 46104962399 job 140855531669 (execution 2891544fe2a9e4daa7f85d7d4e6ac8f2112e8a13). Actual 46104139224 SUCCESS, 79 controls, all 7 original register identities linked at actual consistent renumbered locations, 45 offsets, 10 resources, 6 invalid stage macros rejected, private installation 5 protected files unchanged, candidate SHA256 06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c. Inspect GT_SKYBOX_EDITOR_STAGE and GT_SKYBOX_EDITOR_IMPORT, prior digest replay, actual material GUID/localID/shader reference, 6 colors and 20 floats binary32, 0 int/TexEnv and 0 authored properties, one pass, Vulkan-only Android editor asset bundle, zero shader errors, four unchanged staged file hashes. Only PASS_EXACT_SKYBOX_ANDROID_VULKAN_BUNDLE proves scoped editor import and compilation. No scene import, original engine/runtime texture uniform bindings, raster/pixels/device or player proof; no production/XAPK. If blocked preserve exact cause and advance independent mesh/material/fire/water/light lane without repeating successful source-only skybox work. All G0-G6 remain open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged, CL/lab read-only BLACK/animation deferred."
+  "next_action": "G3-G6-skybox-editor-import: reconcile actual 46104962432 job 140855532972 and lint 46104962399 job 140855531669 (execution 2891544fe2a9e4daa7f85d7d4e6ac8f2112e8a13). Actual 46104139224 SUCCESS, 79 controls, all 7 original register identities linked at actual consistent renumbered locations, 45 offsets, 10 resources, 6 invalid stage macros rejected, private installation 5 protected files unchanged, candidate SHA256 06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c. Inspect GT_SKYBOX_EDITOR_STAGE and GT_SKYBOX_EDITOR_IMPORT, prior digest replay, actual material GUID/localID/shader reference, 6 colors and 20 floats binary32, 0 int/TexEnv and 0 authored properties, one pass, Vulkan-only Android editor asset bundle, zero shader errors, four unchanged staged file hashes. Only PASS_EXACT_SKYBOX_ANDROID_VULKAN_BUNDLE proves scoped editor import and compilation. No scene import, original engine/runtime texture uniform bindings, raster/pixels/device or player proof; no production/XAPK. If blocked preserve exact cause and advance independent mesh/material/fire/water/light lane without repeating successful source-only skybox work. All G0-G6 remain open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged, CL/lab read-only BLACK/animation deferred.",
+  "source_free_controls_step": "success",
+  "actual_step_snapshot": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Checkout only independent ambient verifier and existing pinned tools",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Verify pinned source readers and shader program recovery controls",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Install public translation tools for exact private wrapper",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-dotnet@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Obtain exact public AssetRipperCLI source",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Compile temporary class104 capture and smoke test",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "name": "Read only level24 and five pinned support providers",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Resolve only exact missing Skybox provider from authenticated native file slot",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Read only one selected additional provider (exact file or ordered chunks)",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Authenticate selected provider Git object and SHA and exact native Material21",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Resolve actual Skybox Material m_Shader exact native provider",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Read only additional exact Shader provider when not already staged",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Authenticate exact selected native Shader48 and provider bytes",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Execute actual bounded shader-linked export with same-instance traces",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Replay exact verified candidate and stage actual same-export shader/material",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Check existing Unity activation and remaining disk",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Compile isolated exact original shader/material as Android Vulkan asset bundle only",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Verify bounded editor receipt, prior digest and exact staged file hashes",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Publish ONLY safe aggregate receipts",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Remove only temporary source and private export",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Obtain exact public AssetRipperCLI source",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Run actions/setup-dotnet@v4",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Checkout only independent ambient verifier and existing pinned tools",
+      "status": "pending",
+      "conclusion": null
+    }
+  ]
 }
