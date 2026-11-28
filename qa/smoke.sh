@@ -154,5 +154,9 @@ if [[ "${ARM_TRANSLATION_PROBE:-false}" == true || "${ARM_VULKAN_PROBE:-false}" 
   phase=arm64-translation
   bash qa/arm_probe.sh "$root" "$tmp"
 fi
+if [[ "${ARM_SPLIT_PROBE:-false}" == true ]]; then
+  phase=arm64-split-install
+  bash qa/split_probe.sh "$root" "$tmp"
+fi
 phase=passed
 echo "Synthetic emulator checks passed for $guest"
