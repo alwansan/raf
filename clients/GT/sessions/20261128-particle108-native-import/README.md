@@ -18,3 +18,5 @@ Starting HEAD `13f290de946dd117601840ac9f0f13e7501502e0` verified; no local chec
 
 ---
 
+
+**Corrective Actual checkpoint:** [46117064994/job 140893146463](https://github.com/alwansan/raf/actions/runs/46117064994/job/140893146463) IN_PROGRESS; source-free controls SUCCESS, current disposable exporter compilation. [Lint 46117064991](https://github.com/alwansan/raf/actions/runs/46117064991) SUCCESS. No new Unity import or Vulkan pixel result yet. Reconcile this run before retry.
