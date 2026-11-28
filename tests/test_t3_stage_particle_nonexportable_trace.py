@@ -36,6 +36,9 @@ class DisposableTexture2DTrace(unittest.TestCase):
         self.assertEqual(changed.count(b'nonExportableSourceObjects.Add((asset, collection.GetType().FullName ?? collection.GetType().Name));'),1)
         self.assertNotIn(b'nonExportableSourceObjects.Add(asset);',changed)
         self.assertEqual(changed.count(b'json.WriteString("collection_implementation"'),1)
+        self.assertEqual(changed.count(b'json.WriteBoolean("same_texture_sprite_group"'),1)
+        self.assertEqual(changed.count(b'json.WriteNumber("sprite_group_count"'),1)
+        self.assertNotIn(b'same_texture_sprite_group',baseline)
         self.assertEqual(changed.count(b'container.CreateExportPointer(asset)'),1)
         self.assertEqual(changed.count(b'if (!collection.Exportable)'),baseline.count(b'if (!collection.Exportable)'))
         with self.assertRaisesRegex(ValueError,"anchor_drift"):

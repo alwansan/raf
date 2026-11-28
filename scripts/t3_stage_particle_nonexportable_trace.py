@@ -94,7 +94,7 @@ def annotate_collection_implementation(source:bytes)->bytes:
         ("foreach (IUnityObjectBase asset in nonExportableSourceObjects)",
          "foreach (var (asset, collectionImplementation) in nonExportableSourceObjects)"),
         ('            Identity(json, "source", asset);\n            // A private, read-only diagnostic',
-         '            Identity(json, "source", asset);\n            json.WriteString("collection_implementation", collectionImplementation);\n            // A private, read-only diagnostic'),
+         '            Identity(json, "source", asset);\n            json.WriteString("collection_implementation", collectionImplementation);\n            var spriteGroup = asset.MainAsset as AssetRipper.Processing.Textures.SpriteInformationObject;\n            json.WriteBoolean("same_texture_sprite_group", spriteGroup is not null && ReferenceEquals(spriteGroup.Texture, asset));\n            json.WriteNumber("sprite_group_count", spriteGroup?.Sprites.Count ?? -1);\n            // A private, read-only diagnostic'),
     )
     text=source.decode("utf8")
     for old,new in replacements:
