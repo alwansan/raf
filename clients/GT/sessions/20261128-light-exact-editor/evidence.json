@@ -20,11 +20,11 @@
   "conclusion": null,
   "lint_run": 46105747057,
   "lint_job": 140857968861,
-  "lint_status": "in_progress",
-  "lint_conclusion": null,
+  "lint_status": "completed",
+  "lint_conclusion": "success",
   "source_free_controls_authored_new": 12,
   "source_free_controls_actual": null,
-  "last_observed_step": "Checkout only bounded trace, reader and tests",
+  "last_observed_step": "Post Read only six exact small original serialized providers",
   "actual_report": null,
   "tool_blobs": {
     "tools/gt_light_exact_editor/audit.py": "b7e15a745d323dcff7164fb8f7fa05b9b8402bf9",
@@ -43,5 +43,114 @@
   "XAPK": false,
   "all_gates_open": true,
   "session": "clients/GT/sessions/20261128-light-exact-editor/README.md",
-  "next_action": "G6-level38-exact-editor: reconcile actual 46105747109 job 140857970292 and lint 46105747057 job 140857968861, execution a29afeda77edfc7c01e8fdad91f7ed43e541b582. Previous light same-export 46092186730 passed 42 identities/108 field checks; editor skipped due combined activation/disk condition. New workflow uses existing UNITY_LICENSE environment, separate preflight flags, exact previous scene SHA 2a62ecdd103b3bbbca5c9c68bd6c50d47087f09402205344e1e204504254b915 and meta SHA da046194178ee77a2153222d5e2decfdcd52eafa56887dc47f6949173bc9fe15. Require 42 editor objects and all 154 checks (108 prior + 42 presence + 3 activeInHierarchy + 1 isActiveAndEnabled), no mismatches, exact unchanged scene/meta; no rendering/device or full provider closure. Skybox actual 46104962432 identity/values pass but compilation failed: one stage-selector error, two GLSL same-name explicit uniform binding conflicts, Vulkan 0 internal programs despite 6588-byte bundle. Do not repeat successful skybox static or import identity checks alone. Future independent source-free Unity stage selection / uniform binding probe must resolve both compiler issues with authentic register/offset/resource semantics, nonzero actual Vulkan programs and no errors. No player, production or XAPK; all G0-G6 open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred."
+  "next_action": "G6-level38-exact-editor: reconcile actual 46105747109 job 140857970292 and lint 46105747057 job 140857968861, execution a29afeda77edfc7c01e8fdad91f7ed43e541b582. Previous light same-export 46092186730 passed 42 identities/108 field checks; editor skipped due combined activation/disk condition. New workflow uses existing UNITY_LICENSE environment, separate preflight flags, exact previous scene SHA 2a62ecdd103b3bbbca5c9c68bd6c50d47087f09402205344e1e204504254b915 and meta SHA da046194178ee77a2153222d5e2decfdcd52eafa56887dc47f6949173bc9fe15. Require 42 editor objects and all 154 checks (108 prior + 42 presence + 3 activeInHierarchy + 1 isActiveAndEnabled), no mismatches, exact unchanged scene/meta; no rendering/device or full provider closure. Skybox actual 46104962432 identity/values pass but compilation failed: one stage-selector error, two GLSL same-name explicit uniform binding conflicts, Vulkan 0 internal programs despite 6588-byte bundle. Do not repeat successful skybox static or import identity checks alone. Future independent source-free Unity stage selection / uniform binding probe must resolve both compiler issues with authentic register/offset/resource semantics, nonzero actual Vulkan programs and no errors. No player, production or XAPK; all G0-G6 open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred.",
+  "source_free_controls_step": "success",
+  "preflight_step": "success",
+  "actual_step_snapshot": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Checkout only bounded trace, reader and tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Authenticate code and run source-free controls before any source checkout",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Require existing Unity environment activation separately from disk before original source checkout",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-dotnet@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Obtain exact public AssetRipperCLI source",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Compile temporary optional hierarchy capture and smoke test",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Read only six exact small original serialized providers",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Authenticate source and observe selected direct provider references privately",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Execute one actual bounded source export with same-instance private captures",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Verify original chain to actual same-export GUID/fileID and YAML fields",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Stage exact scene and meta only in isolated editor project",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "name": "Check existing editor activation inputs without exposing values",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Observe same actual exported scene in Unity Editor (no Play or player build)",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Verify actual editor report and unchanged exact scene bytes",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Publish ONLY safe aggregate reports",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Remove only disposable source and private export/editor staging",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Read only six exact small original serialized providers",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "name": "Post Obtain exact public AssetRipperCLI source",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Run actions/setup-dotnet@v4",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Checkout only bounded trace, reader and tests",
+      "status": "pending",
+      "conclusion": null
+    }
+  ]
 }
