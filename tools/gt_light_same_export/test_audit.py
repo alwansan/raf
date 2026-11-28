@@ -74,3 +74,16 @@ class TestSameExport(unittest.TestCase):
         self.assertEqual(out.count('json.WriteString("export_instance", exportInstance);'),3)
         self.assertEqual(out.count("FileMode.CreateNew"),3)
         with self.assertRaises(ValueError):stage_trace.render(raw+b"\n// drift")
+
+    def test_actual_yaml_guid_and_duplicate_field(self):
+        from tempfile import TemporaryDirectory
+        with TemporaryDirectory() as td:
+            root=Path(td);assets=root/"Assets";assets.mkdir()
+            scene=assets/"scene.unity";meta=assets/"scene.unity.meta"
+            meta.write_text("guid: "+GUID+"\n")
+            scene.write_text("%YAML 1.1\n--- !u!4 &-123\nTransform:\n  m_Father: {fileID: 0}\n")
+            self.assertEqual(a.yaml_docs(root,GUID,{-123}),{-123:(4,{"m_Father":{"fileID":0}})})
+            scene.write_text("%YAML 1.1\n--- !u!4 &-123\nTransform:\n  m_Father: {fileID: 0}\n  m_Father: {fileID: 1}\n")
+            with self.assertRaisesRegex(a.Rejected,"duplicate_yaml_field"):a.yaml_docs(root,GUID,{-123})
+            (assets/"other.unity.meta").write_text("guid: "+GUID+"\n")
+            with self.assertRaisesRegex(a.Rejected,"duplicate_export_guid"):a.yaml_docs(root,GUID,{-123})

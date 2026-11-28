@@ -240,11 +240,12 @@ def run(a):
             model=source_model(list(env.file.objects.values()))
         phase="same_export_trace"
         m=trace_map(model,*[read_trace(p) for p in (a.trace,a.w1,a.b02)])
-        result["source_export_mapping_proven"]=True
+        result["private_trace_mapping_matched"]=True
         phase="actual_scene_yaml"
         docs=yaml_docs(a.project,next(iter(m.values()))[0],{k[1] for k in m.values()})
         phase="compare"
         result.update(compare(model,m,docs))
+        result["source_export_mapping_proven"]=not result["mismatches"].get("native_class",0)
         result["status"]="PASS_SAME_EXPORT" if result["same_export_hierarchy_parity"] else "FAIL_FIELD_DRIFT"
     except Rejected as e:
         result.update(status="INCONCLUSIVE",phase=phase,reason=str(e))
