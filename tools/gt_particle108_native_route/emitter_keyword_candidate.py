@@ -86,8 +86,19 @@ def classify(clear,actual,rows,selected):
     ok=clear_ok and selected_delta==0 and different(actual,clear)>0 and all(x["marker_verified"] and x["routed_explicit_difference_pixels"]==0 and x["routed_alpha_preserved"] for x in data)
     return dict(clear_verified=clear_ok,selected_saved_material_delta_pixels=selected_delta,selected_visible_pixels=different(actual,clear),
                 selected_distinct_alternatives=alternatives,cases=data,route_probe_verified=bool(ok))
-PHASES=("start","configuration","saved_keywords","camera","clear","actual","marker_shader","routed_material","routed_draw","reference_shader","reference_properties","reference_draw","marker_keywords","marker_draw","post_draw","complete","permutation_incomplete")
+PHASES=("start","configuration","saved_keywords","camera","clear","actual","marker_shader",routed_material","routed_keywords","routed_draw","reference_shader","reference_properties","reference_draw","marker_keywords","marker_draw","post_draw","complete","permutation_incomplete")
 EXCEPTIONS=("","InvalidOperationException","ArgumentException","IOException","NullReferenceException","UnityException","IndexOutOfRangeException")
+KEYWORD_CATEGORIES=("instancing","fog","soft_particles","stereo","lighting","unity_reserved","other")
+def safe_attempt(x):
+    if type(x) is not dict:return None
+    masks=("expected_mask","before_string_mask","before_local_mask","after_string_mask","after_local_mask","after_enabled_list_mask","global_mask")
+    out={k:x[k] if type(x.get(k)) is int and 0<=x[k]<=3 else -1 for k in masks}
+    out["declared"]=x["declared"] if type(x.get("declared")) is int and 0<=x["declared"]<=2 else -1
+    out["attempted"]=x.get("attempted") is True
+    out["failure_category"]=x.get("failure_category") if x.get("failure_category") in EXCEPTIONS else "other"
+    out["matched"]=bool(x.get("matched") is True and out["attempted"] and out["failure_category"]=="" and out["declared"]==2 and out["expected_mask"]>=0 and
+        out["after_string_mask"]==out["after_local_mask"]==out["after_enabled_list_mask"]==out["expected_mask"])
+    return out
 def safe_receipt(j,index):
     need(type(j) is dict and j.get("index")==index,"receipt_identity")
     def bounded(x,k,lo,hi):
@@ -100,16 +111,27 @@ def safe_receipt(j,index):
     counts=("source_declared_switches","source_enabled_switches","source_expected_enabled_switches","source_local_bit_matches","source_string_bit_matches","source_overridable_switches","source_global_enabled_switches","source_global_override_conflicts")
     out=dict(index=index,**state(j),submissions=bounded(j,"submissions",0,14),marker_shader_errors=bounded(j,"marker_shader_errors",-1,1000),
              **{k:j.get(k) is True for k in flags},**{k:bounded(j,k,0,2) for k in counts})
+    cats=j.get("switch_categories")
+    out["switch_categories"]=[v if v in KEYWORD_CATEGORIES else "other" for v in cats] if type(cats) is list and len(cats)==2 else []
+    out["source_instancing_enabled"]=j.get("source_instancing_enabled") is True
     variants=j.get("variants")
     if type(variants) is not list:variants=[]
     need(len(variants)<=4 and all(type(x) is dict and type(x.get("index")) is int and 0<=x["index"]<4 for x in variants)
          and len({x["index"] for x in variants})==len(variants),"variant_receipt_population")
-    vf=("completed","routed_bits_match","marker_bits_match","copy_properties_match","reference_properties_match","routed_properties_match","typed_copy_needed")
+    vf=("completed","routed_bits_match","marker_bits_match","copy_properties_match","reference_properties_match","routed_properties_match","typed_copy_needed","routed_drawn","reference_drawn","marker_drawn")
     out["variants"]=[dict(index=x["index"],**state(x),submissions=bounded(x,"submissions",0,3),
                            reference_shader_errors=bounded(x,"reference_shader_errors",-1,1000),
                            marker_shader_errors=bounded(x,"marker_shader_errors",-1,1000),**{k:x.get(k) is True for k in vf}) for x in variants]
+    for raw,v in zip(variants,out["variants"]):
+        for role in ("routed","reference","marker"):
+            phase=raw.get(role+"_phase")
+            failure=raw.get(role+"_failure")
+            v[role+"_phase"]=phase if phase in PHASES else "other"
+            v[role+"_failure"]=failure if failure in EXCEPTIONS else "other"
+        for role in ("routed","marker"):
+            v[role+"_keyword_attempt"]=safe_attempt(raw.get(role+"_keyword_attempt"))
     out["strict_editor_receipt"]=bool(all(out[k] for k in flags) and out["submissions"]==14 and out["source_declared_switches"]==out["source_local_bit_matches"]==out["source_string_bit_matches"]==2
-         and out["source_global_override_conflicts"]==0 and len(variants)==4 and all(x["completed"] and x["submissions"]==3 and x["routed_bits_match"] and x["marker_bits_match"] and x["reference_properties_match"] and x["routed_properties_match"] and x["reference_shader_errors"]==x["marker_shader_errors"]==0 for x in out["variants"]))
+         and out["source_global_override_conflicts"]==0 and len(out["switch_categories"])==2 and len(variants)==4 and all(x["completed"] and x["submissions"]==3 and x["routed_bits_match"] and x["marker_bits_match"] and x["reference_properties_match"] and x["routed_properties_match"] and x["reference_shader_errors"]==x["marker_shader_errors"]==0 and all(x[role+"_drawn"] for role in ("routed","reference","marker")) and all(x[role+"_keyword_attempt"] is not None and x[role+"_keyword_attempt"]["matched"] for role in ("routed","marker")) for x in out["variants"]))
     return out
 
 def verify(root,cfg):
@@ -127,16 +149,24 @@ def verify(root,cfg):
             except Exception:pass
             for v in rec["variants"]:
                 n=v["index"];p=dict(index=n)
-                try:
-                    x=r(f"routed-{n}");p["routed_pixels_read"]=True
+                images={}
+                for role in ("routed","explicit","marker"):
+                    try:images[role]=r(f"{role}-{n}");p[role+"_pixels_read"]=True
+                    except Exception as e:p[role+"_readback_failure_type"]=type(e).__name__
+                if "routed" in images:
+                    x=images["routed"]
                     if clear is not None:p["visible_pixels"]=different(x,clear)
                     if actual is not None:p["actual_difference_pixels"]=different(x,actual)
-                    y=r(f"explicit-{n}");p["routed_explicit_difference_pixels"]=different(x,y)
-                    m=r(f"marker-{n}");col=np.array([(n+1)/8,.375,.625,1]);p["marker_pixels"]=int((np.max(np.abs(m-col),axis=-1)<=TOL).sum())
-                except Exception as e:p["readback_failure_type"]=type(e).__name__
+                    if "explicit" in images:p["routed_explicit_difference_pixels"]=different(x,images["explicit"])
+                if "explicit" in images and clear is not None:p["explicit_visible_pixels"]=different(images["explicit"],clear)
+                if "marker" in images:
+                    col=np.array([(n+1)/8,.375,.625,1]);p["marker_pixels"]=int((np.max(np.abs(images["marker"]-col),axis=-1)<=TOL).sum())
                 partial.append(p)
             rec["partial_readbacks"]=partial
-            if not rec["strict_editor_receipt"]:
+            # Independently bind each measured mask to the private source-derived route table.
+            expected={x["index"]:x["bits"][0]+2*x["bits"][1] for x in cfg["rows"]}
+            rec["route_masks_match"]=len(rec["variants"])==4 and all(v[role+"_keyword_attempt"] is not None and v[role+"_keyword_attempt"]["expected_mask"]==expected[v["index"]] for v in rec["variants"] for role in ("routed","marker"))
+            if not rec["strict_editor_receipt"] or not rec["route_masks_match"]:
                 failures.append(dict(index=i,reason="editor_route_receipt",phase=rec["phase"]));continue
             result=classify(r("clear"),r("actual"),{n:(r(f"routed-{n}"),r(f"explicit-{n}"),r(f"marker-{n}")) for n in range(4)},selected)
             results.append(dict(index=i,**result))
