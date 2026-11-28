@@ -1,0 +1,88 @@
+name: GT G4 exact source table native DXBC Vulkan bank oracle (NO UNITY OR PLAYER)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-gt-fft-native-bank-oracle.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-gt-fft-native-bank-oracle-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  isolated-pair:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      GT_FFT_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tools/gt_fft_indexed_pair
+            tools/gt_fft_source_format_pair
+            tools/gt_fft_native_bank_oracle
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Source-free receipt controls
+        run: |
+          set -euo pipefail
+          python3 -B -m unittest discover -s tools/gt_fft_indexed_pair -p test_audit.py -v
+          python3 -B -m unittest discover -s tools/gt_fft_source_format_pair -p test_audit.py -v
+          mkdir "$RUNNER_TEMP/gt-fft-native-bank-safe"
+      - name: Install CPU Vulkan and execute independent exact two-pass canary
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends g++ libvulkan-dev mesa-vulkan-drivers vulkan-tools vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          python3 -B -m unittest discover -s tools/gt_fft_native_bank_oracle -p test_audit.py -v
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          python3 -B -m tools.gt_fft_native_bank_oracle.audit --canary-only --out "$RUNNER_TEMP/gt-fft-native-bank-safe/canary.json"
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-fft-pair
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Authenticate managed DLL and decompile exact private source
+        run: |
+          set -euo pipefail
+          test "$(git hash-object Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = fc9d4ba920a178fdb89c970d9d772a01051dadc6
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/gt-fft-native-bank-ilspy"
+          mkdir "$RUNNER_TEMP/gt-fft-native-bank-managed"
+          timeout 300s "$RUNNER_TEMP/gt-fft-native-bank-ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/gt-fft-native-bank-managed" Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/gt-fft-native-bank-ilspy.log" 2>&1
+      - name: Compare exact native DXBC and HLSL paired programs with source table and repeated real CPU Vulkan dispatch
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          python3 -m venv "$RUNNER_TEMP/gt-fft-native-bank-py"
+          "$RUNNER_TEMP/gt-fft-native-bank-py/bin/python" -m pip install --disable-pip-version-check UnityPy==1.25.4
+          "$RUNNER_TEMP/gt-fft-native-bank-py/bin/python" -m scripts.stage_zip2_fft_owner --zip2-checkout zip2-fft-pair --destination "$RUNNER_TEMP/gt-fft-native-bank-source/Raft_Data/sharedassets0.assets"
+          "$RUNNER_TEMP/gt-fft-native-bank-py/bin/python" -B -m tools.gt_fft_native_bank_oracle.audit --source "$RUNNER_TEMP/gt-fft-native-bank-source/Raft_Data" --managed "$RUNNER_TEMP/gt-fft-native-bank-managed" --run-id "$GT_FFT_RUN_ID" --out "$RUNNER_TEMP/gt-fft-native-bank-safe/actual.json"
+      - name: Publish bounded aggregate only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-fft-native-bank-oracle-safe
+          path: ${{ runner.temp }}/gt-fft-native-bank-safe/*.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove private source staging
+        if: always()
+        run: |
+          rm -rf zip2-fft-pair "$RUNNER_TEMP/gt-fft-native-bank-source" "$RUNNER_TEMP/gt-fft-native-bank-managed" "$RUNNER_TEMP/gt-fft-native-bank-ilspy"
+          rm -f "$RUNNER_TEMP/gt-fft-native-bank-ilspy.log"

@@ -1,0 +1,1966 @@
+{
+  "run_id": 46163015087,
+  "job_id": 141034314743,
+  "execution_head": "0fc6fbdb991301a7cfeb5af69ef1677b8e698c2c",
+  "conclusion": "success_scoped_bank_ieee_diagnostic",
+  "stage": {
+    "android_device": false,
+    "authored_input_modes": [
+      "signed",
+      "zero",
+      "positive",
+      "zero_ba",
+      "zero_alpha",
+      "zero_blue"
+    ],
+    "class_control_sha256": "7d12601427ad594d5adab26f4eb51b0b313458a4dc978440a54413c41cfbfe7a",
+    "exact_derived_table_body_executed": true,
+    "game_runtime_bank_mapping_verified": false,
+    "indexed_reference_spirv_exact": 4,
+    "original_runtime_kernel_mapping_proven": false,
+    "original_translated_slots": 20,
+    "private_config_sha256": "c31e492ffa44f4954dcdbc3ef9355839422a2d41c7586022994c6c157926ca6f",
+    "selected_slots": [
+      6,
+      7,
+      16,
+      17
+    ],
+    "source_bank_relation": {
+      "bank_to_high_precision": "other",
+      "bank_to_two_channels": "direct",
+      "base_high_precision_parameter": 1,
+      "base_two_channels_parameter": 2,
+      "caller_fourth_to_two_channels": "direct",
+      "fourth_to_base": [
+        "other",
+        "other",
+        "direct",
+        "other"
+      ]
+    },
+    "source_cache_extent": [
+      512,
+      512
+    ],
+    "source_format_modes": [
+      "RGHalf",
+      "RGFloat",
+      "ARGBHalf",
+      "ARGBFloat"
+    ],
+    "source_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "source_opcode_profiles": [
+      {
+        "native": {
+          "ext": {
+            "Ceil": 0,
+            "Cos": 0,
+            "Exp": 0,
+            "FAbs": 0,
+            "FClamp": 0,
+            "FMax": 0,
+            "FMin": 0,
+            "Floor": 0,
+            "Fma": 7,
+            "Fract": 0,
+            "InverseSqrt": 0,
+            "Log": 0,
+            "Pow": 0,
+            "Sin": 0,
+            "Sqrt": 0
+          },
+          "ops": {
+            "OpBitcast": 43,
+            "OpBitwiseAnd": 4,
+            "OpBitwiseOr": 0,
+            "OpBitwiseXor": 0,
+            "OpConvertFToS": 0,
+            "OpConvertFToU": 2,
+            "OpConvertSToF": 0,
+            "OpConvertUToF": 0,
+            "OpExtInst": 7,
+            "OpFAdd": 0,
+            "OpFDiv": 0,
+            "OpFMul": 0,
+            "OpFSub": 0,
+            "OpImageFetch": 3,
+            "OpImageRead": 0,
+            "OpImageWrite": 1,
+            "OpShiftLeftLogical": 3,
+            "OpShiftRightLogical": 8
+          }
+        },
+        "roundtrip": {
+          "ext": {
+            "Ceil": 0,
+            "Cos": 0,
+            "Exp": 0,
+            "FAbs": 0,
+            "FClamp": 0,
+            "FMax": 0,
+            "FMin": 0,
+            "Floor": 0,
+            "Fma": 7,
+            "Fract": 0,
+            "InverseSqrt": 0,
+            "Log": 0,
+            "Pow": 0,
+            "Sin": 0,
+            "Sqrt": 0
+          },
+          "ops": {
+            "OpBitcast": 58,
+            "OpBitwiseAnd": 2,
+            "OpBitwiseOr": 2,
+            "OpBitwiseXor": 0,
+            "OpConvertFToS": 0,
+            "OpConvertFToU": 2,
+            "OpConvertSToF": 0,
+            "OpConvertUToF": 0,
+            "OpExtInst": 7,
+            "OpFAdd": 0,
+            "OpFDiv": 0,
+            "OpFMul": 0,
+            "OpFSub": 0,
+            "OpImageFetch": 3,
+            "OpImageRead": 0,
+            "OpImageWrite": 1,
+            "OpShiftLeftLogical": 5,
+            "OpShiftRightLogical": 8
+          }
+        },
+        "slot": 6
+      },
+      {
+        "native": {
+          "ext": {
+            "Ceil": 0,
+            "Cos": 0,
+            "Exp": 0,
+            "FAbs": 0,
+            "FClamp": 0,
+            "FMax": 0,
+            "FMin": 0,
+            "Floor": 0,
+            "Fma": 6,
+            "Fract": 0,
+            "InverseSqrt": 0,
+            "Log": 0,
+            "Pow": 0,
+            "Sin": 0,
+            "Sqrt": 0
+          },
+          "ops": {
+            "OpBitcast": 43,
+            "OpBitwiseAnd": 4,
+            "OpBitwiseOr": 0,
+            "OpBitwiseXor": 0,
+            "OpConvertFToS": 0,
+            "OpConvertFToU": 2,
+            "OpConvertSToF": 0,
+            "OpConvertUToF": 0,
+            "OpExtInst": 6,
+            "OpFAdd": 0,
+            "OpFDiv": 0,
+            "OpFMul": 0,
+            "OpFSub": 0,
+            "OpImageFetch": 3,
+            "OpImageRead": 0,
+            "OpImageWrite": 1,
+            "OpShiftLeftLogical": 3,
+            "OpShiftRightLogical": 8
+          }
+        },
+        "roundtrip": {
+          "ext": {
+            "Ceil": 0,
+            "Cos": 0,
+            "Exp": 0,
+            "FAbs": 0,
+            "FClamp": 0,
+            "FMax": 0,
+            "FMin": 0,
+            "Floor": 0,
+            "Fma": 6,
+            "Fract": 0,
+            "InverseSqrt": 0,
+            "Log": 0,
+            "Pow": 0,
+            "Sin": 0,
+            "Sqrt": 0
+          },
+          "ops": {
+            "OpBitcast": 58,
+            "OpBitwiseAnd": 2,
+            "OpBitwiseOr": 2,
+            "OpBitwiseXor": 0,
+            "OpConvertFToS": 0,
+            "OpConvertFToU": 2,
+            "OpConvertSToF": 0,
+            "OpConvertUToF": 0,
+            "OpExtInst": 6,
+            "OpFAdd": 0,
+            "OpFDiv": 0,
+            "OpFMul": 0,
+            "OpFSub": 0,
+            "OpImageFetch": 3,
+            "OpImageRead": 0,
+            "OpImageWrite": 1,
+            "OpShiftLeftLogical": 5,
+            "OpShiftRightLogical": 8
+          }
+        },
+        "slot": 7
+      },
+      {
+        "native": {
+          "ext": {
+            "Ceil": 0,
+            "Cos": 0,
+            "Exp": 0,
+            "FAbs": 0,
+            "FClamp": 0,
+            "FMax": 0,
+            "FMin": 0,
+            "Floor": 0,
+            "Fma": 4,
+            "Fract": 0,
+            "InverseSqrt": 0,
+            "Log": 0,
+            "Pow": 0,
+            "Sin": 0,
+            "Sqrt": 0
+          },
+          "ops": {
+            "OpBitcast": 60,
+            "OpBitwiseAnd": 12,
+            "OpBitwiseOr": 0,
+            "OpBitwiseXor": 0,
+            "OpConvertFToS": 0,
+            "OpConvertFToU": 2,
+            "OpConvertSToF": 0,
+            "OpConvertUToF": 0,
+            "OpExtInst": 4,
+            "OpFAdd": 0,
+            "OpFDiv": 0,
+            "OpFMul": 2,
+            "OpFSub": 0,
+            "OpImageFetch": 3,
+            "OpImageRead": 0,
+            "OpImageWrite": 1,
+            "OpShiftLeftLogical": 3,
+            "OpShiftRightLogical": 12
+          }
+        },
+        "roundtrip": {
+          "ext": {
+            "Ceil": 0,
+            "Cos": 0,
+            "Exp": 0,
+            "FAbs": 0,
+            "FClamp": 0,
+            "FMax": 0,
+            "FMin": 0,
+            "Floor": 0,
+            "Fma": 4,
+            "Fract": 0,
+            "InverseSqrt": 0,
+            "Log": 0,
+            "Pow": 0,
+            "Sin": 0,
+            "Sqrt": 0
+          },
+          "ops": {
+            "OpBitcast": 83,
+            "OpBitwiseAnd": 6,
+            "OpBitwiseOr": 6,
+            "OpBitwiseXor": 0,
+            "OpConvertFToS": 0,
+            "OpConvertFToU": 2,
+            "OpConvertSToF": 0,
+            "OpConvertUToF": 0,
+            "OpExtInst": 4,
+            "OpFAdd": 0,
+            "OpFDiv": 0,
+            "OpFMul": 2,
+            "OpFSub": 0,
+            "OpImageFetch": 3,
+            "OpImageRead": 0,
+            "OpImageWrite": 1,
+            "OpShiftLeftLogical": 9,
+            "OpShiftRightLogical": 12
+          }
+        },
+        "slot": 16
+      },
+      {
+        "native": {
+          "ext": {
+            "Ceil": 0,
+            "Cos": 0,
+            "Exp": 0,
+            "FAbs": 0,
+            "FClamp": 0,
+            "FMax": 0,
+            "FMin": 0,
+            "Floor": 0,
+            "Fma": 4,
+            "Fract": 0,
+            "InverseSqrt": 0,
+            "Log": 0,
+            "Pow": 0,
+            "Sin": 0,
+            "Sqrt": 0
+          },
+          "ops": {
+            "OpBitcast": 64,
+            "OpBitwiseAnd": 14,
+            "OpBitwiseOr": 0,
+            "OpBitwiseXor": 0,
+            "OpConvertFToS": 0,
+            "OpConvertFToU": 2,
+            "OpConvertSToF": 0,
+            "OpConvertUToF": 0,
+            "OpExtInst": 4,
+            "OpFAdd": 0,
+            "OpFDiv": 0,
+            "OpFMul": 1,
+            "OpFSub": 0,
+            "OpImageFetch": 3,
+            "OpImageRead": 0,
+            "OpImageWrite": 1,
+            "OpShiftLeftLogical": 3,
+            "OpShiftRightLogical": 13
+          }
+        },
+        "roundtrip": {
+          "ext": {
+            "Ceil": 0,
+            "Cos": 0,
+            "Exp": 0,
+            "FAbs": 0,
+            "FClamp": 0,
+            "FMax": 0,
+            "FMin": 0,
+            "Floor": 0,
+            "Fma": 4,
+            "Fract": 0,
+            "InverseSqrt": 0,
+            "Log": 0,
+            "Pow": 0,
+            "Sin": 0,
+            "Sqrt": 0
+          },
+          "ops": {
+            "OpBitcast": 88,
+            "OpBitwiseAnd": 7,
+            "OpBitwiseOr": 7,
+            "OpBitwiseXor": 0,
+            "OpConvertFToS": 0,
+            "OpConvertFToU": 2,
+            "OpConvertSToF": 0,
+            "OpConvertUToF": 0,
+            "OpExtInst": 4,
+            "OpFAdd": 0,
+            "OpFDiv": 0,
+            "OpFMul": 1,
+            "OpFSub": 0,
+            "OpImageFetch": 3,
+            "OpImageRead": 0,
+            "OpImageWrite": 1,
+            "OpShiftLeftLogical": 10,
+            "OpShiftRightLogical": 13
+          }
+        },
+        "slot": 17
+      }
+    ],
+    "source_resolution": 256,
+    "source_selector_formula_authenticated": true,
+    "source_stages": 8,
+    "source_table": {
+      "half_exact_address_lanes": 8192,
+      "half_quantized_components": 16384,
+      "integer_address_lanes": 8192,
+      "table_float_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1",
+      "table_half_sha256": "d93fd79177719e034c4e29e4a8f4f398aefec161745ee084ec485bd36d40fdcd",
+      "table_texels": 4096
+    },
+    "status": "STAGED_FFT_BANK_IEEE_DIAGNOSTIC",
+    "workgroup_x": 512
+  },
+  "actual": {
+    "XAPK": false,
+    "android_device": false,
+    "cases": [
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          0,
+          0
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          512,
+          0
+        ],
+        "failure_type": "",
+        "finite_different": [
+          1536,
+          0
+        ],
+        "finite_over_tolerance": [
+          0,
+          0
+        ],
+        "first_slot": 6,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "signed",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 0,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          1536,
+          0
+        ],
+        "reference_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          0,
+          0
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          512,
+          512
+        ],
+        "failure_type": "",
+        "finite_different": [
+          1536,
+          2048
+        ],
+        "finite_over_tolerance": [
+          0,
+          0
+        ],
+        "first_slot": 6,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "zero",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 0,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          1536,
+          2048
+        ],
+        "reference_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          0,
+          0
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          0,
+          512
+        ],
+        "failure_type": "",
+        "finite_different": [
+          0,
+          2048
+        ],
+        "finite_over_tolerance": [
+          0,
+          0
+        ],
+        "first_slot": 6,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "positive",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 0,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          0,
+          2048
+        ],
+        "reference_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          0,
+          0
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          512,
+          512
+        ],
+        "failure_type": "",
+        "finite_different": [
+          1536,
+          2048
+        ],
+        "finite_over_tolerance": [
+          0,
+          0
+        ],
+        "first_slot": 6,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "zero_ba",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 0,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          1536,
+          2048
+        ],
+        "reference_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          0,
+          0
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          0,
+          512
+        ],
+        "failure_type": "",
+        "finite_different": [
+          0,
+          2048
+        ],
+        "finite_over_tolerance": [
+          0,
+          0
+        ],
+        "first_slot": 6,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "zero_alpha",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 0,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          0,
+          2048
+        ],
+        "reference_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          0,
+          0
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          512,
+          512
+        ],
+        "failure_type": "",
+        "finite_different": [
+          1536,
+          2048
+        ],
+        "finite_over_tolerance": [
+          0,
+          0
+        ],
+        "first_slot": 6,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "zero_blue",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 0,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          1536,
+          2048
+        ],
+        "reference_class_counts": [
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0,
+          262144,
+          0,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          250880,
+          251392
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          10240,
+          10240
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          66048,
+          66048
+        ],
+        "failure_type": "",
+        "finite_different": [
+          238592,
+          239616
+        ],
+        "finite_over_tolerance": [
+          10752,
+          13824
+        ],
+        "first_slot": 16,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "signed",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 721920,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          489472,
+          491008
+        ],
+        "reference_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          0,
+          0
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          3584
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          0,
+          5632
+        ],
+        "failure_type": "",
+        "finite_different": [
+          0,
+          12800
+        ],
+        "finite_over_tolerance": [
+          0,
+          5120
+        ],
+        "first_slot": 16,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "zero",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 470784,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          0,
+          12800
+        ],
+        "reference_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          0,
+          0
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          5376,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          8448,
+          0
+        ],
+        "failure_type": "",
+        "finite_different": [
+          16896,
+          0
+        ],
+        "finite_over_tolerance": [
+          6144,
+          0
+        ],
+        "first_slot": 16,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "positive",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 470784,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          16896,
+          0
+        ],
+        "reference_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          250880,
+          0
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          10240,
+          3584
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          66048,
+          5632
+        ],
+        "failure_type": "",
+        "finite_different": [
+          238592,
+          12800
+        ],
+        "finite_over_tolerance": [
+          10752,
+          5120
+        ],
+        "first_slot": 16,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "zero_ba",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 596224,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          489472,
+          12800
+        ],
+        "reference_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          250880,
+          0
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          8448,
+          3584
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          63232,
+          5632
+        ],
+        "failure_type": "",
+        "finite_different": [
+          232960,
+          12800
+        ],
+        "finite_over_tolerance": [
+          8704,
+          5120
+        ],
+        "first_slot": 16,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "zero_alpha",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 596224,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          483840,
+          12800
+        ],
+        "reference_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "class_mismatch": [
+          250880,
+          251392
+        ],
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          10240,
+          10240
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          66048,
+          66048
+        ],
+        "failure_type": "",
+        "finite_different": [
+          238592,
+          239616
+        ],
+        "finite_over_tolerance": [
+          10752,
+          13824
+        ],
+        "first_slot": 16,
+        "format": "ARGBFloat",
+        "gpu_vs_native_class_mismatch": [
+          0,
+          0
+        ],
+        "indexed_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "input_gpu_exact": true,
+        "input_mode": "zero_blue",
+        "native_vs_converted_class_mismatch": [
+          0,
+          0
+        ],
+        "nonfinite_components": 721920,
+        "outcome": "OBSERVED",
+        "raw_bit_different": [
+          489472,
+          491008
+        ],
+        "reference_class_counts": [
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203776,
+          58368,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0,
+          203008,
+          59136,
+          0,
+          0
+        ],
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      }
+    ],
+    "class_control_pixels": 262144,
+    "class_control_verified": true,
+    "editor_progress": {
+      "editor_native_exit": 0,
+      "last_managed_checkpoint": {
+        "bindings": 0,
+        "dispatches": 0,
+        "first_slot": -1,
+        "operation": "receipt",
+        "pass": -1,
+        "phase": "complete",
+        "seed": -1,
+        "variant": -1
+      },
+      "private_files_present": {
+        "editor-exit-code": true,
+        "editor-output-private": true,
+        "editor-stdout.log": true,
+        "editor.log": true,
+        "progress.json": true,
+        "receipt.json": true
+      },
+      "private_launch_marker_matches": true
+    },
+    "observed_cases": 12,
+    "original_fft_numeric_parity_verified": false,
+    "original_game_inputs_verified": false,
+    "original_runtime_kernel_mapping_proven": false,
+    "production": false,
+    "status": "OBSERVED_FFT_BANK_IEEE_NUMERIC_DIAGNOSTIC",
+    "total_class_mismatch_lanes": 1506304,
+    "total_nonfinite_lane_observations": 5649408,
+    "water_rendering_verified": false
+  },
+  "plan_guard_run": 46163015051,
+  "plan_guard_conclusion": "success",
+  "lint_run": 46163015055,
+  "lint_conclusion": "success",
+  "artifact": {
+    "id": 15270119834,
+    "size_bytes": 2606,
+    "github_reported_digest": "sha256:9b44900b4f65b5d8c87f41af3cf9dfa91ff10ff27fa818de14a5bd5ee9792353",
+    "independent_zip_download": false
+  }
+}
