@@ -1,0 +1,36 @@
+{
+  "status": "INCONCLUSIVE",
+  "head": "ad04606a4f726991001c0e4ffc28ff0b0aa6d3bc",
+  "run": 46180948795,
+  "job": 141090113193,
+  "guard": {
+    "run": 46180948847,
+    "conclusion": "success"
+  },
+  "lint": {
+    "run": 46180948837,
+    "conclusion": "success"
+  },
+  "format": "RGFloat",
+  "separate_build_verified": true,
+  "clean_load_process": true,
+  "bundle_count": 5,
+  "serialized_modules": 24,
+  "authored_control_built": true,
+  "authored_control_opened": false,
+  "authored_control_step": 2,
+  "platform_incompatible": true,
+  "archive_open": false,
+  "crc_mismatch": false,
+  "already_loaded": false,
+  "original_bundles_opened": 0,
+  "registered_slots": 0,
+  "dispatches": 0,
+  "captures": 0,
+  "native_exit": 2,
+  "unity_bundle_loaded": false,
+  "water_rendering_verified": false,
+  "android_device": false,
+  "production": false,
+  "XAPK": false
+}
