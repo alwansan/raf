@@ -1,0 +1,30 @@
+{
+  "XAPK": false,
+  "android_pixels_verified": false,
+  "black_fire_restored": false,
+  "color_space_and_usage_equal": true,
+  "material_texture_pptr_matches": 10,
+  "material_uv_matches": 10,
+  "mip_bytes_equal": 21844,
+  "mip_lengths": [
+    16384,
+    4096,
+    1024,
+    256,
+    64,
+    16,
+    4
+  ],
+  "mip_levels_equal": 7,
+  "native_importer_meta_identity_verified": true,
+  "private_ids_or_payload_disclosed": false,
+  "production": false,
+  "same_export_instance": true,
+  "selected_materials": 5,
+  "selected_native_class28_asset": true,
+  "selected_texture_targets": 3,
+  "source_owner_and_stream_SHA_verified": true,
+  "source_sampler_fields_equal": 6,
+  "status": "EXACT_ORIGINAL_PARTICLE108_NATIVE_SEVEN_MIP_EXPORT",
+  "unity_import_verified": false
+}
