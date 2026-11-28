@@ -1,0 +1,53 @@
+{
+  "status": "RUN_IN_PROGRESS_NOT_YET_PROVEN",
+  "starting_head": "cd5fff9ced87747ccb8165ee0fa6f61fbf525cc8",
+  "preparation_commit": "a2119f93e1950364edaf939c17fc7be1cbdf0d47",
+  "execution_head": "5923b12ad20b6cfcbc550582aa325a3bb46a5c31",
+  "run": 46090251018,
+  "job": 140809243262,
+  "lint_run": 46090250885,
+  "lint_job": 140809243217,
+  "lint_conclusion": "success",
+  "last_observed_step": "Authenticate source selection and parse actual serialized lighting records",
+  "tool_checkout": "success",
+  "source_free_controls_step": "success",
+  "source_checkout": "success",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "manifest_git_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+  "source_blobs": {
+    "pins.json": "5113b42905333c70e7ba2c1aa2cdfc4b0f7f39c1",
+    "audit.py": "84133c4b34c1d3b1cda8a2b534676d38c062f1ee",
+    "test_audit.py": "4ce5be299141e746aa75de26c21bd51c90f7ec31"
+  },
+  "source_selection": {
+    "from_level": 6,
+    "to_level": 39,
+    "selected_scenes": 34,
+    "plain": 32,
+    "split": 2,
+    "bytes": 227216276,
+    "pinned_manifest_and_git_directory_metadata_cross_checked": true,
+    "source_files_checkout_completed": true,
+    "actual_byte_sha_and_parser_results": null
+  },
+  "prior_verified": {
+    "run": 41921259677,
+    "job": 126894149096,
+    "source_scenes": 6,
+    "unassigned_renderer_indices": 1497,
+    "baked_lightmap_entries": 0,
+    "actual_log_rechecked": true,
+    "owner_run": 41931942755,
+    "owner_job": 126930752491,
+    "owner_run_success": true,
+    "matched_light_owners": 2
+  },
+  "original_source_mutated": false,
+  "raw_original_source_published": false,
+  "source_export_mapping_proven": false,
+  "device_pixels_proven": false,
+  "production": false,
+  "XAPK": false,
+  "next_action": "Read actual 46090251018 job 140809243262 result and exact GT_REMAINING_SCENE_LIGHTING aggregate, compare all 34 SHA/size/kind pins, per-scene completeness and aggregate counts (including unknowns), archive only safe aggregate/log selections; never claim absence when decode incomplete. If result is partial, preserve unknowns and correct only a demonstrated reader/transport failure. Combine historical level0..5 counts only for like-for-like coverage, not a rerun or same-export claim. Prior two Light values and owner parity proven historically; no repeat. If maps/assigned slots found, pursue typed source-to-export and importer links for selected real case; otherwise prioritize Light transform/hierarchy and ambient/quality or other material/shader causes. Current owner directive permits source read within legitimate access; no source mutations, protections bypass, secrets, raw original publication, or production/player/APK/XAPK. Only feature/android-native-port; CL/lab/BLACK untouched; G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged.",
+  "session": "clients/GT/sessions/20261128-remaining-scene-lighting/README_AR.md"
+}
