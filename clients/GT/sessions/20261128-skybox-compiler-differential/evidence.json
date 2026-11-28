@@ -1,24 +1,75 @@
 {
-  "status": "ACTUAL_AUTHORED_DIFFERENTIAL_CI_OBSERVED",
-  "starting_head": "63a2c5e3f204d53dadf203485dfd66365ff108be",
-  "execution_head": "83c61d6c0db959090d06b3282e151253eaf8a81d",
+  "status": "REVISION_PUSHED_ACTUAL_PENDING_RECONCILIATION",
+  "starting_head": "5f89d51f8cffe1fca73e0da8a3f3036f1ada50bb",
+  "execution_head": "750b4144d4cd2f9af2fb9ef92e695ec5733562e6",
   "branch": "feature/android-native-port",
-  "prior_skybox_run": 46104962432,
-  "prior_light_run": 46105747109,
-  "run": 46107345497,
+  "previous_actual": {
+    "status": "INCONCLUSIVE_NATIVE_COMPILER_OBSERVED_DECODE_NOT_EXECUTED",
+    "run": 46107345497,
+    "job": 140862945529,
+    "lint_run": 46107345414,
+    "lint_conclusion": "success",
+    "execution_head": "83c61d6c0db959090d06b3282e151253eaf8a81d",
+    "conclusion": "failure",
+    "source_free_tests_passed": 7,
+    "editor_step": "success",
+    "decoder_step": "failure",
+    "actual_report": {
+      "XAPK": false,
+      "authored_source_unchanged": true,
+      "cases": {},
+      "device_pixels": false,
+      "editor_outcome": "success",
+      "original_shader_verified": false,
+      "player_built": false,
+      "reason": "FileNotFoundError",
+      "status": "INCONCLUSIVE"
+    },
+    "program_counts": {
+      "common": [
+        3,
+        1
+      ],
+      "guard_common": [
+        3,
+        1
+      ],
+      "split_registers": [
+        3,
+        1
+      ],
+      "guard_different_registers": [
+        3,
+        1
+      ],
+      "negative_error": [
+        0,
+        0
+      ]
+    },
+    "negative_error_seen_in_native_log": true,
+    "source_guard_errors_in_native_log": 0,
+    "shared_uniform_explicit_binding_conflicts_in_native_log": 0,
+    "decoded_programs_verified": false,
+    "missing_path_proven": false,
+    "artifact": 15247879836
+  },
+  "run": 46107935993,
   "run_status": "in_progress",
   "conclusion": null,
-  "lint_run": 46107345414,
-  "lint_status": "completed",
-  "lint_conclusion": "success",
+  "lint_run": 46107935976,
+  "lint_status": "in_progress",
+  "lint_conclusion": null,
   "cases": [
     "common",
     "guard_common",
     "split_registers",
     "guard_different_registers",
+    "guard_entries",
+    "guard_entries_offset",
     "negative_error"
   ],
-  "authored_tests": 7,
+  "authored_tests": 9,
   "actual_results": null,
   "source_free": true,
   "original_shader_verified": false,
@@ -26,5 +77,5 @@
   "player": false,
   "XAPK": false,
   "device": false,
-  "next_action": "G3-G6-skybox-compiler-differential: reconcile actual dedicated CI for 83c61d6c0db959090d06b3282e151253eaf8a81d. Inspect five authored cases, stage-selection errors, explicit shared-uniform binding conflicts, decoded Vulkan vertex/fragment programs and SPIR-V validation. A passing authored matrix does not establish original register/offset/name equivalence. If viable, build a strict original candidate preserving 45 offsets, 10 resources, seven varying register identities, original shader state and runtime binding identities; require actual nonzero Vulkan programs and no errors. Level38 exact prior scene/meta digest mismatch archived; do not repin or weaken, no editor 154 proof. If blocked pursue independent white meshes/fire/water. No production/player/XAPK; all G0-G6 remain open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred."
+  "next_action": "G3-G6-skybox-compiler-differential-v2: reconcile actual 46107935993 on execution 750b4144d4cd2f9af2fb9ef92e695ec5733562e6, lint 46107935976 in_progress . Inspect seven authored cases, explicit input presence and per-case Unity receipt, actual bundle SHA256 matches, decoded vertex/fragment entrypoints and spirv-val, independent native per-case logs. Prior actual 46107345497 had 3/1 Vulkan programs in four positive authored cases and 0/0 with deliberate sentinel, but independent decode did not run due FileNotFoundError; missing path unproven. V2 isolates full exclusive entrypoints and register/packoffset mismatch; scoped decoded-baseline result is not native-log corroboration or original shader proof. Keep original 45 offsets, 10 resources, 7 varying register joins and runtime names; no repinning Level38, no editor 154 proof. If compiler path blocked, continue independent meshes/fire/water. No production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. CL/lab read-only, BLACK/animation deferred."
 }
