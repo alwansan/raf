@@ -155,7 +155,14 @@ def prepare(a,out,source,plan,mat,mk,xk,trace,body,mesh_info,prop,edge,parsed,pa
         out["tap_stage"]={k:v for k,v in tap.items() if k!="tap_shader_sha"}
     else:
         from tools.gt_top_resource_closure import selected_stage_provider as provider
-        if getattr(a,"probe_context",False):
+        if getattr(a,"pass_context",False):
+            from tools.gt_top_resource_closure import selected_forward_context as forward
+            tap=forward.stage(root,parsed,passes,wrapper,provider_rows,mat,before,source_shader)
+            out["provider_stage"]={"prepared":True,"source_probe_rows":len(tap["provider_rows"]),
+                                   "source_tag_already_canonical":tap["source_tag_already_canonical"],
+                                   "source_light_semantics":[r["semantic"] for r in tap["provider_rows"]],
+                                   "original_game_context":False,"private_names_published":False}
+        elif getattr(a,"probe_context",False):
             from tools.gt_top_resource_closure import selected_probe_context as context
             tap=context.stage(root,parsed,passes,wrapper,provider_rows,mat,before,source_shader)
             out["source_probe_context"]=context.source_context(source,plan)
@@ -179,6 +186,7 @@ def prepare(a,out,source,plan,mat,mk,xk,trace,body,mesh_info,prop,edge,parsed,pa
            "Assets/Editor/SelectedArrayCausal.cs":(here/"SelectedArrayCausal.cs").read_bytes(),
            "Assets/Editor/SelectedStageProvider.cs":(here/"SelectedStageProvider.cs").read_bytes(),
            "Assets/Editor/SelectedProbeContext.cs":(here/"SelectedProbeContext.cs").read_bytes(),
+           "Assets/Editor/SelectedForwardContext.cs":(here/"SelectedForwardContext.cs").read_bytes(),
            "Assets/GTSelectedArray.compute":(here/"GTSelectedArray.compute").read_bytes(),
            "Assets/GTDrawControl.shader":b'Shader "Hidden/GTDrawControl" {\nSubShader {\nPass {\nCull Off\nZWrite On\nCGPROGRAM\n#pragma vertex vert\n#pragma fragment frag\n#include "UnityCG.cginc"\nfloat4 vert(float4 v:POSITION):SV_POSITION{return UnityObjectToClipPos(v);}\nfloat4 frag():SV_Target{return float4(0.91,0.07,0.61,1);}\nENDCG\n} } Fallback Off }\n',
            "Packages/manifest.json":b'{"dependencies":{}}\n',
@@ -323,6 +331,15 @@ def verify(a):
         need(imports_ok,"draw_exact_import_or_reference_identity_not_established")
         out["original_reference_pixel_gate_passed"]=out["same_view_all_draw_controls_pass"]>0
         out["isolated_source_candidate_draw_observed"]=out["original_reference_pixel_gate_passed"]
+        if cfg.get("pass_context") is True:
+            from tools.gt_top_resource_closure import selected_forward_context as forward
+            out["phase"]="independent_forward_pass_context"
+            need(r.get("tap_shader_compiled") is True and r.get("tap_shader_errors")==0,"forward_context_tap")
+            receipt=json.loads((a.private/"pass-context-receipt.json").read_text())
+            out["forward_context_observation"]=forward.summarize(cfg,receipt,lambda name:read_pixels(a.private/name,SIZE))
+            out["status"]=out["forward_context_observation"]["status"];out["phase"]="complete"
+            write_json(a.safe,out);print("GT_SELECTED_ORIGINAL_DRAW "+json.dumps(out,sort_keys=True))
+            return 0 if out["status"]=="OBSERVED_FORWARD_PASS_CONTEXT" else 2
         if cfg.get("probe_context") is True:
             from tools.gt_top_resource_closure import selected_probe_context as context
             out["phase"]="independent_probe_context_readback"

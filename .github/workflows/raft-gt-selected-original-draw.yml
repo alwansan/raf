@@ -1,5 +1,5 @@
 name: GT selected original explicit shader material mesh Vulkan draw (NO PLAYER)
-# Targeted previous nonfinite source rows and reversible actual authored reflection-probe context; no player.
+# Source pass tag spelling vs canonical ForwardBase and real light provider control; no player.
 on:
   workflow_dispatch:
   push:
@@ -39,7 +39,7 @@ jobs:
           set -euo pipefail
           python3 -c "import shutil; assert shutil.disk_usage('.').free > 8 * 1024**3"
           python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3 Pillow==12.3.0 numpy==2.2.6
-          python3 -m py_compile tools/gt_top_resource_closure/selected_original_draw.py tools/gt_top_resource_closure/selected_array_causal.py tools/gt_top_resource_closure/selected_array_basis.py tools/gt_top_resource_closure/selected_stage_provider.py tools/gt_top_resource_closure/selected_probe_context.py
+          python3 -m py_compile tools/gt_top_resource_closure/selected_original_draw.py tools/gt_top_resource_closure/selected_array_causal.py tools/gt_top_resource_closure/selected_array_basis.py tools/gt_top_resource_closure/selected_stage_provider.py tools/gt_top_resource_closure/selected_probe_context.py tools/gt_top_resource_closure/selected_forward_context.py
           python3 -B -m unittest discover -s tools/gt_top_resource_closure -p 'test_*.py' -v
           python3 -B -m unittest discover -s tools/gt_top_original_renderer -p 'test_*.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_external_texture_lineage.py' -v
@@ -258,7 +258,7 @@ jobs:
         id: array_stage
         run: |
           set -euo pipefail
-          timeout 1200s python3 -B -m tools.gt_top_resource_closure.selected_source_abi --provider-probe --probe-context \
+          timeout 1200s python3 -B -m tools.gt_top_resource_closure.selected_source_abi --provider-probe --pass-context \
             --original "$RUNNER_TEMP/b21-original" \
             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
             --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
@@ -270,7 +270,7 @@ jobs:
             --unity-project gt-selected-array-project --draw-private gt-selected-array-private \
             --run-id "$GT_ARRAY_RUN_ID"
           rm -rf "$RUNNER_TEMP/b21-original" "$RUNNER_TEMP/b21-private-export" "$RUNNER_TEMP/b21-compiled" zip2-original
-      - name: Compare baseline local reflection probes and restored isolated context
+      - name: Compare raw and canonical source pass with reversible directional light context
         id: array_unity
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
@@ -295,7 +295,7 @@ jobs:
             -force-vulkan -force-device-index 0 -job-worker-count 2
             -gtArrayRunId ${{ env.GT_ARRAY_RUN_ID }}
             -gtArrayPrivate /github/workspace/gt-selected-array-private
-      - name: Verify engine-selected local probes source semantic rows and reversible final color
+      - name: Verify actual light uniform controls and raw canonical final color differences
         if: always() && steps.array_stage.outcome == 'success'
         env:
           UNITY_OUTCOME: ${{ steps.array_unity.outcome }}

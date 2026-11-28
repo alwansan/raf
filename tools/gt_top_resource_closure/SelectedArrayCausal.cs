@@ -76,14 +76,14 @@ public static partial class SelectedArrayUnity {
  static bool VectorBits(Vector4 a,Vector4 b) {
    return FloatBits(a.x,b.x)&&FloatBits(a.y,b.y)&&FloatBits(a.z,b.z)&&FloatBits(a.w,b.w);
  }
- static Material TypedTapClone(Material source,Shader shader,Texture2DArray tex,string prop,int expected,out int copied) {
+ static Material TypedTapClone(Material source,Shader shader,Texture2DArray tex,string prop,int expected,out int copied,bool diagnostic=true) {
    copied=0;
    // Construct directly on the target shader; do not rely on shader-switch
    // CopyPropertiesFromMaterial to transfer typed values or keyword state.
    var m=new Material(shader);
    try {
      var ss=source.shader;
-     Need(ss.GetPropertyCount()==expected&&shader.GetPropertyCount()==expected+1);
+     Need(ss.GetPropertyCount()==expected&&shader.GetPropertyCount()==expected+(diagnostic?1:0));
      Need(source.HasProperty(prop)&&m.HasProperty(prop)&&!source.HasProperty("_GTSelectedTapMode"));
      for(int i=0;i<ss.GetPropertyCount();i++){
        string name=ss.GetPropertyName(i);int j=shader.FindPropertyIndex(name);
@@ -110,7 +110,7 @@ public static partial class SelectedArrayUnity {
      Need(copied==expected&&m.GetTexture(prop)==tex);
      m.renderQueue=source.renderQueue;m.enableInstancing=source.enableInstancing;
      Need(m.renderQueue==source.renderQueue&&m.enableInstancing==source.enableInstancing);
-     TapMode(m,2);
+     if(diagnostic)TapMode(m,2);
      return m;
    }catch{UnityEngine.Object.DestroyImmediate(m);throw;}
  }

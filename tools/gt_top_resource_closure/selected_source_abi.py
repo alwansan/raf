@@ -319,6 +319,7 @@ def main():
     p.add_argument("--audit-merged",action="store_true")
     p.add_argument("--provider-probe",action="store_true")
     p.add_argument("--probe-context",action="store_true")
+    p.add_argument("--pass-context",action="store_true")
     p.add_argument("--draw-private",type=Path)
     p.add_argument("--unity-project",type=Path)
     p.add_argument("--run-id")
@@ -326,7 +327,8 @@ def main():
     if any(x is not None for x in (a.draw_private,a.unity_project,a.run_id)) and not all(x is not None for x in (a.draw_private,a.unity_project,a.run_id)):
         p.error("draw stage arguments must be supplied together")
     if a.provider_probe and a.draw_private is None:p.error("provider probe requires draw stage")
-    if a.probe_context and not a.provider_probe:p.error("probe context requires provider probe")
+    if (a.probe_context or a.pass_context) and not a.provider_probe:p.error("context requires provider probe")
+    if a.probe_context and a.pass_context:p.error("contexts are exclusive")
     out=dict(status="INCONCLUSIVE",phase="same_export_graph",original_shader_draw_verified=False,
              runtime_keyword_selection_verified=False,Unity_execution=False,Android_device=False,
              production=False,XAPK=False,white_mesh_repair_verified=False,private_payload_published=False)

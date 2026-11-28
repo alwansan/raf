@@ -564,6 +564,21 @@
   ],
   "source_stage_provider_transport_mismatch": 0,
   "probe_context_prepared": true,
-  "probe_context_actual_verified": false,
-  "probe_context_workflow": ".github/workflows/raft-gt-selected-original-draw.yml"
+  "probe_context_actual_verified": true,
+  "probe_context_workflow": ".github/workflows/raft-gt-selected-original-draw.yml",
+  "probe_context_actual_run": 46156916426,
+  "probe_context_actual_job": 141015491947,
+  "probe_context_actual_receipt": "clients/GT/sessions/20261128-top-native-bc3-array/actual-46156916426.json",
+  "probe_context_conclusion": "success_diagnostic_only_no_response",
+  "probe_context_selected_local_counts": [
+    1,
+    1,
+    1
+  ],
+  "probe_context_finite_response_rows": 0,
+  "probe_context_final_responsive_views": 0,
+  "probe_context_restored_target_rows": 5,
+  "forward_pass_context_prepared": true,
+  "forward_pass_context_actual_verified": false,
+  "forward_pass_context_workflow": ".github/workflows/raft-gt-selected-original-draw.yml"
 }
