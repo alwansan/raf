@@ -1,0 +1,20 @@
+{
+  "XAPK": false,
+  "actual_vulkan_mips_equal": 0,
+  "android_pixels_verified": false,
+  "black_fire_restored": false,
+  "editor_phase": "import",
+  "imported_cpu_mips_equal": 0,
+  "native_asset_and_meta_unchanged": true,
+  "original_alpha_texels_checked": 0,
+  "original_shader_verified": false,
+  "player": false,
+  "private_payload_published": false,
+  "production": false,
+  "reason": "editor_receipt_not_successful",
+  "source_native_bytes": 21844,
+  "source_native_mips": 7,
+  "status": "INCONCLUSIVE",
+  "unity_import_verified": false,
+  "unity_step_exit": 1
+}
