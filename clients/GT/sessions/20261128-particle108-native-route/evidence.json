@@ -1,0 +1,20 @@
+{
+  "status": "SOURCE_NATIVE_ROUTE_JOIN_PREPARED",
+  "starting_head": "530bfe54d1b06df816ee07d4d283210d6aa4df64",
+  "workflow": ".github/workflows/raft-gt-particle108-native-route.yml",
+  "previous_native_import_run": 46117813183,
+  "previous_native_import_job": 140895450566,
+  "expected_native_mip_levels": 7,
+  "expected_native_bytes": 21844,
+  "expected_materials": 5,
+  "expected_slots": 10,
+  "expected_original_routes": 4,
+  "expected_stages": 8,
+  "actual_verified": false,
+  "original_shader_draw_verified": false,
+  "black_fire_restored": false,
+  "Android_device": false,
+  "production": false,
+  "XAPK": false,
+  "next_action": "G1–G3 checkpoint: Actual 46133315975/job 140943060123 editor completed; exact red/green in-memory authored BC3 overrides bound and source override identical to saved on 3/3 views, red vs green exactly zero pixel differences. Source sample tap prepared (3 sites, external compile), Unity tap_shader_compiled false with 0 recorded errors and zero tap views; no verified causal classification, original reference gate remains false. Preserve evidence; do not rerun unchanged draw. All 15 source tests, guard 46133316064, lint 46133315946 passed. Pivot to independent G5 Particle108: prior 46117813183 proves seven mip alpha storage via Load/point; new source-only route join uses exact native 21844 bytes/7 mips and same-instance 5 Materials/10 PPtr+UV; link original four paired stages' sampled texture/sampler operands to variant-specific parameter blobs and each saved Material route; distinguish invalid exported keywords, actual Shader48 GUID pointer and selected native resource sampled vs unused, no guessed route 0. No duplicate GPU alpha readback. Continue actual source-bound shader and material sampling based on result, retain white-mesh open and no production/XAPK/device claims. G0–G6 open."
+}

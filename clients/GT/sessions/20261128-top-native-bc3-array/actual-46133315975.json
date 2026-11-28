@@ -1,0 +1,269 @@
+{
+  "run_id": 46133315975,
+  "job_id": 140943060123,
+  "execution_head": "4d2f2ab395399c72956003639be8a44e42202f08",
+  "conclusion": "failure",
+  "source_stage": {
+    "Android_device": false,
+    "Unity_execution": false,
+    "XAPK": false,
+    "abi": {
+      "constant_buffer_bindings_from_variant": 7,
+      "constant_buffer_layouts_with_shared_members_table": 9,
+      "constant_buffer_named_32bit_lanes": 208,
+      "constant_buffer_named_member_occurrences": 55,
+      "constant_buffer_named_struct_occurrences": 0,
+      "distinct_original_parameter_blobs": 2,
+      "named_constant_buffer_candidate_stages_vulkan11_valid": 2,
+      "named_constant_buffer_reflected_offsets_verified": 55,
+      "named_original_numeric_members_in_distinct_parameter_blobs": 20,
+      "named_original_resource_entries_in_distinct_parameter_blobs": 15,
+      "original_variant_stages_with_cb_bindings": 2,
+      "original_variant_stages_with_parameter_records": 2,
+      "original_variant_stages_with_textures": 1,
+      "original_vertex_fragment_varying_records_matched": 6,
+      "original_vertex_input_semantics_restored": 5,
+      "resource_rebound_stages_verified_spirv_identical_excluding_debug": 2,
+      "translated_constant_buffer_declarations_mapped": 12,
+      "translated_sampler_declarations_mapped_to_source_texture": 7,
+      "translated_texture_declarations_mapped_to_source_name": 8,
+      "vertex_variants_with_verified_mesh_inputs": 1,
+      "vulkan_vertex_fragment_locations_matched": 4
+    },
+    "combined_candidate": {
+      "Unity_compiler_verified": false,
+      "combined_entrypoints_compiled_and_validated": 2,
+      "explicit_single_route_only": true,
+      "merged_binding_offset_parity_verified": false,
+      "runtime_uniform_upload_verified": false
+    },
+    "draw_stage": {
+      "explicit_pass_only": true,
+      "material_cases": 4,
+      "original_game_context": false,
+      "private_payload_withheld_until_guard": true,
+      "source_properties": 35,
+      "staged_Texture2D": 3,
+      "staged_exact_shader_GUID": true,
+      "staged_mesh": true,
+      "staged_native_BC3": true
+    },
+    "draw_stage_phase": "source_material_variants",
+    "exact_texenv_slots": 6,
+    "explicit_source_route_keyword_count": 1,
+    "material_member_census": {
+      "declared_property_not_saved": 0,
+      "named_numeric_members": 55,
+      "other_runtime_or_global_name_candidates": 22,
+      "outside_material_texture_declared_properties": 0,
+      "outside_material_texture_undeclared_names": 3,
+      "saved_numeric_name_matches": 28,
+      "saved_texenv_ST_name_matches": 5
+    },
+    "material_values": {
+      "color": 8,
+      "float": 43,
+      "int": 0
+    },
+    "mesh_channel_availability": {
+      "absent_channels": 4,
+      "fewer_declared_lanes": 2,
+      "present_channels": 4,
+      "sufficient_declared_lanes": 2,
+      "unsupported_semantics": 0,
+      "user_inputs": 8
+    },
+    "mesh_channel_layout": {
+      "active_channels": 4,
+      "flagged_inactive_channels": 0,
+      "nonoverlap_full_stride": true,
+      "packed_dimension_flagged_channels": 1,
+      "serialized_channel_bytes_changed": false,
+      "single_stream_stride_bytes": 32,
+      "vertex_count": 940,
+      "vertex_payload_bytes": 30080
+    },
+    "mesh_fields_matched": 10,
+    "mesh_fields_total": 10,
+    "original_shader_draw_verified": false,
+    "original_shader_pointer_unchanged": true,
+    "original_stage_byte_identities_verified": 2,
+    "phase": "complete_source_ABI_observation",
+    "private_payload_published": false,
+    "production": false,
+    "reference_negative_controls_rejected": 3,
+    "reference_repair_byte_difference": 1,
+    "resource_join": {
+      "sampler_declarations": 7,
+      "selected_array_sampler_declarations": 1,
+      "selected_array_texture_declarations": 1,
+      "selected_array_type_matches": 1,
+      "selected_array_type_mismatches": 0,
+      "selected_array_used_by_this_explicit_route": true,
+      "texture_declarations": 8,
+      "texture_names_in_exact_typed_slots": 4,
+      "texture_names_in_material": 5,
+      "texture_names_in_null_slots": 1,
+      "texture_names_outside_material": 3
+    },
+    "runtime_keyword_selection_verified": false,
+    "same_export_exact_graph": true,
+    "status": "OBSERVED_EXACT_SELECTED_SOURCE_ABI_MATERIAL_MESH_JOIN",
+    "tap_stage": {
+      "tap_available": true,
+      "tap_source_sample_sites": 3,
+      "tap_stage_status": "PREPARED"
+    },
+    "texture_plan": {
+      "export_slots": 6,
+      "nonnull_planned": 4,
+      "null_source_slots": 2,
+      "source_slots": 6
+    },
+    "white_mesh_repair_verified": false
+  },
+  "actual": {
+    "XAPK": false,
+    "all_four_nonnull_type2": true,
+    "all_material_YAML_unchanged": true,
+    "all_six_serialized_UV_type2": true,
+    "android_device": false,
+    "array_causal_diagnostic_verified": false,
+    "array_identity": true,
+    "array_raw_bytes_match": true,
+    "array_sampler_match": true,
+    "authored_array_overrides_bound": true,
+    "authored_dummy_visible": true,
+    "candidate_distinguished_from_dummy_views": 3,
+    "candidate_visible_views": 3,
+    "causal_classification": {
+      "calibrated_tap_views": 0,
+      "diagnostic_only": true,
+      "original_authored_substitution_responsive_views": 0,
+      "original_game_global_resources_verified": false,
+      "override_source_matches_saved_views": 3,
+      "status": "INCONCLUSIVE_SAMPLE_CAUSALITY"
+    },
+    "causal_override_views": 3,
+    "causal_tap_views": 0,
+    "causal_views": [
+      {
+        "original_red_vs_green": {
+          "different_over_1_div_255": 0,
+          "exactly_different": 0
+        },
+        "override_source_vs_saved": {
+          "different_over_1_div_255": 0,
+          "exactly_different": 0
+        },
+        "tap_calibrated": false
+      },
+      {
+        "original_red_vs_green": {
+          "different_over_1_div_255": 0,
+          "exactly_different": 0
+        },
+        "override_source_vs_saved": {
+          "different_over_1_div_255": 0,
+          "exactly_different": 0
+        },
+        "tap_calibrated": false
+      },
+      {
+        "original_red_vs_green": {
+          "different_over_1_div_255": 0,
+          "exactly_different": 0
+        },
+        "override_source_vs_saved": {
+          "different_over_1_div_255": 0,
+          "exactly_different": 0
+        },
+        "tap_calibrated": false
+      }
+    ],
+    "editor_phase": "complete",
+    "failure_reason": "draw_reference_and_causal_diagnostic_inconclusive",
+    "failure_type": "StageError",
+    "isolated_source_candidate_draw_observed": false,
+    "material_shader_identity": true,
+    "merged_binding_offset_parity_verified": false,
+    "mesh_descriptor_match": true,
+    "mesh_identity": true,
+    "mesh_index_bytes_match": true,
+    "mesh_vertex_bytes_match": true,
+    "original_game_draw_verified": false,
+    "original_game_global_resources_verified": false,
+    "original_reference_gate_failure": "draw_reference_pixel_differential_not_established",
+    "original_reference_pixel_gate_passed": false,
+    "original_shader_draw_verified": false,
+    "phase": "independent_causal_readback",
+    "private_payload_published": false,
+    "production": false,
+    "reference_controls_expected": true,
+    "reference_pixel_differential_views": 0,
+    "rendered_views": 3,
+    "repeat_deterministic_views": 3,
+    "runtime_keyword_selection_verified": false,
+    "same_view_all_draw_controls_pass": 0,
+    "saved_color_runtime_declared": 5,
+    "saved_color_runtime_matches": 5,
+    "saved_float_runtime_declared": 24,
+    "saved_float_runtime_matches": 24,
+    "shader_errors": 0,
+    "shader_identity": true,
+    "shader_passes": 1,
+    "shader_supported": true,
+    "source_asset_bytes_unchanged": 5,
+    "source_asset_identities": 5,
+    "source_asset_meta_bytes_unchanged": 5,
+    "status": "INCONCLUSIVE",
+    "tap_shader_compiled": false,
+    "tap_shader_errors": 0,
+    "tap_stage_available": true,
+    "views": [
+      {
+        "candidate_near_black_pixels": 173,
+        "candidate_near_magenta_pixels": 0,
+        "candidate_near_white_pixels": 0,
+        "dummy_vs_clear": 2678,
+        "type2_repeat_difference": 0,
+        "type2_vs_clear": 2678,
+        "type2_vs_dummy": 2678,
+        "type2_vs_type3": 0,
+        "type2_vs_type3_exact_different_pixels": 0,
+        "type2_vs_wrong_fileid": 0,
+        "type2_vs_wrong_guid": 0,
+        "type3_vs_clear": 2678
+      },
+      {
+        "candidate_near_black_pixels": 44,
+        "candidate_near_magenta_pixels": 0,
+        "candidate_near_white_pixels": 0,
+        "dummy_vs_clear": 2192,
+        "type2_repeat_difference": 0,
+        "type2_vs_clear": 2192,
+        "type2_vs_dummy": 2192,
+        "type2_vs_type3": 0,
+        "type2_vs_type3_exact_different_pixels": 0,
+        "type2_vs_wrong_fileid": 0,
+        "type2_vs_wrong_guid": 0,
+        "type3_vs_clear": 2192
+      },
+      {
+        "candidate_near_black_pixels": 238,
+        "candidate_near_magenta_pixels": 0,
+        "candidate_near_white_pixels": 0,
+        "dummy_vs_clear": 4736,
+        "type2_repeat_difference": 0,
+        "type2_vs_clear": 4736,
+        "type2_vs_dummy": 4736,
+        "type2_vs_type3": 0,
+        "type2_vs_type3_exact_different_pixels": 0,
+        "type2_vs_wrong_fileid": 0,
+        "type2_vs_wrong_guid": 0,
+        "type3_vs_clear": 4736
+      }
+    ],
+    "white_mesh_repair_verified": false
+  }
+}
