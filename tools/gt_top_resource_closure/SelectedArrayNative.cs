@@ -138,7 +138,8 @@ public static class SelectedArrayUnity {
      AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
      AssetDatabase.ImportAsset(cfg.asset_path,ImportAssetOptions.ForceSynchronousImport|ImportAssetOptions.ForceUpdate);
      tex=AssetDatabase.LoadAssetAtPath<Texture2DArray>(cfg.asset_path);
-     Need(Match(tex,cfg)&&AssetDatabase.TryGetGUIDAndLocalFileIdentifier(tex,out string guid,out long id));
+     Need(Match(tex,cfg));
+     Need(AssetDatabase.TryGetGUIDAndLocalFileIdentifier(tex,out string guid,out long id));
      r.guid=guid;r.file_id=id;r.native_importer=AssetImporter.GetAtPath(cfg.asset_path)?.GetType().Name=="NativeFormatImporter";
      r.name_matches=tex.name==cfg.source_name;r.width=tex.width;r.height=tex.height;r.depth=tex.depth;r.mip_count=tex.mipmapCount;
      r.graphics_format=(int)tex.graphicsFormat;r.srgb=GraphicsFormatUtility.IsSRGBFormat(tex.graphicsFormat);
