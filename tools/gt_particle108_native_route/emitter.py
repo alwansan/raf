@@ -38,7 +38,8 @@ def select_material(slots,selected):
     need(len(found)==1,"native_material_not_unique")
     return found
 
-def census(root,manifest):
+def census(root,manifest,*,private_rows=None):
+    need(private_rows is None or (type(private_rows) is dict and not private_rows),"private_emitter_rows_outparam")
     import UnityPy
     slots,targets={},{}
     scope=source.run(root,manifest,private_material_texenvs=slots,private_local_texture_targets=targets)
@@ -96,6 +97,10 @@ def census(root,manifest):
             pt=file.objects[ps[1]].read_typetree(check_read=False)
             need(resolve_pointer(name,ext,pt["m_GameObject"])==go,"emitter_owner_backlink")
             stats["reciprocal_emitter_links"]+=1
+            if private_rows is not None:
+                key=(name,obj.path_id)
+                need(key not in private_rows,"duplicate_private_renderer")
+                private_rows[key]=dict(renderer=t,particle=pt,particle_key=ps,go_key=go,materials=mats,selected_materials=chosen)
             mode=t.get("m_RenderMode")
             need(type(mode) is int and 0<=mode<=16,"renderer_mode_unclassified")
             modes[str(mode)]+=1

@@ -1,0 +1,265 @@
+name: GT Particle108 actual billboard emitter same-export component and stream parity (NO PLAYER)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-gt-particle108-emitter-same-export.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  particle108-native-mips:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    concurrency:
+      group: raft-particle108-emitter-same-export-${{ github.ref }}
+      cancel-in-progress: false
+      queue: max
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      DOTNET_PROCESSOR_COUNT: '2'
+    steps:
+      - name: Checkout only verification and exporter helper source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/ExportLineage
+            tools/gt_skybox_binding_calibration
+            tools/gt_skybox_actual_abi
+            tools/gt_particle108_redirect_target
+            tools/gt_particle108_native_mips
+            tools/gt_particle108_native_import
+            tools/gt_particle108_native_route
+      - name: Run source-free exact source-vs-export and immutable resource contract controls
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e zip2-original
+          python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3
+          python3 -B -m unittest discover -s tools/gt_particle108_native_route -p 'test_emitter*.py' -v
+          python3 -B -m unittest discover -s tools/gt_particle108_native_route -p test_probe.py -v
+          python3 -B -m unittest discover -s tools/gt_particle108_native_import -p test_probe.py -v
+          python3 -B -m unittest discover -s tools/gt_particle108_native_mips -p test_probe.py -v
+          python3 -B -m unittest discover -s tools/gt_particle108_redirect_target -p test_audit.py -v
+          python3 -B -m unittest discover -s tools/gt_skybox_binding_calibration -p test_probe.py -v
+          python3 -m py_compile scripts/t3_particle_same_export_bindings.py scripts/t3_original_particle_material_texenv.py scripts/t3_particle108_shaderlab_export_quality.py
+          # Source class21 Materials have exactly three valid original
+          # owner files; the fourth SHA-authenticated owner is Shader48 only.
+          python3 -m unittest discover -s tests -p 'test_t3_particle_same_export_bindings.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_sameexport_values.py' -v
+          # The absent-Shader48 negative control retains valid W1 Material21
+          # and B02 Texture2D28 same-instance rows; it must not fail at setup.
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_shaderlab_export_quality.py' -v
+          # A single source Texture2D may feed several Material TexEnv slots;
+          # count original object/slot multiplicities independently.
+          python3 -m unittest discover -s tests -p 'test_t3_stage_particle_nonexportable_trace.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_shader_state.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_material_texenv.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_texture_targets.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_stream_provider.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_stream_extent_guard.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_same_export_material_texenv.py' -v
+          python3 -c "import shutil; assert shutil.disk_usage('.').free > 9*1024**3"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Checkout immutable public AssetRipper source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            Source
+      - name: Build exact W1 Material21 plus B02 Texture2D28 same-instance optional lineage exporter
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t3-particle-helpers"
+          python3 -m scripts.b21_stage_light_lineage \
+            --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs \
+            --destination "$RUNNER_TEMP/t3-particle-helpers/RaftExportLineage.cs"
+          python3 -m scripts.t3_stage_particle_nonexportable_trace \
+            --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs \
+            --staged-helper "$RUNNER_TEMP/t3-particle-helpers/RaftExportLineage.cs" \
+            --capture-collection-implementation
+          python3 -B -m tools.gt_particle108_native_route.emitter_export --patch-helper "$RUNNER_TEMP/t3-particle-helpers/RaftExportLineage.cs"
+          python3 -m scripts.patch_export_lineage \
+            --tool-source ar-host \
+            --helper "$RUNNER_TEMP/t3-particle-helpers/RaftExportLineage.cs"
+          python3 -B -m tools.gt_particle108_native_mips.probe patch \
+            --tool ar-host --source tools/gt_particle108_native_mips/RaftGTNativeMipExporter.cs
+          if ! timeout 780s dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/t3-particle-compiled" \
+            > "$RUNNER_TEMP/t3-private-exporter-build.log" 2>&1; then
+            echo "::error::T3 original source/export tool compilation failed before original source checkout"
+            # Only compiler error codes, not source paths or arbitrary log content.
+            grep -oE "error (CS|NETSDK|NU|MSB)[0-9]{3,5}" "$RUNNER_TEMP/t3-private-exporter-build.log" | sort | uniq -c || true
+            exit 2
+          fi
+          dotnet "$RUNNER_TEMP/t3-particle-compiled/ExportLineage.dll" --probe-tool > /dev/null
+      - name: Checkout exactly six immutable Raft scenes and six serialized owner sources
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/globalgamemanagers
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets6.assets
+      - name: Select SHA-authentic plain versus split originals exactly
+        run: |
+          set -euo pipefail
+          git -C zip2-original sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/globalgamemanagers' \
+            '/Raft/Raft_Data/globalgamemanagers.assets' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: SHA-stage exact six scenes four Shader owners and two runtime globals
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN
+          from scripts.b04_restore_original_color_settings import ORIGINAL_SIZE,ORIGINAL_SHA256
+          root=Path(os.environ["RUNNER_TEMP"])/"t3-particle-original"
+          pins={"Raft_Data/"+name:value for name,value in PIN.items()}
+          pins.update({"Raft_Data/"+name:SHADER_OWNERS[name] for name in (
+              "resources.assets","sharedassets0.assets",
+              "sharedassets1.assets","sharedassets6.assets","globalgamemanagers.assets")})
+          pins["Raft_Data/globalgamemanagers"]=(ORIGINAL_SIZE,ORIGINAL_SHA256)
+          outcome=stage(Path("zip2-original"),root,pins)
+          assert len(outcome["owners"])==12 and outcome["lfs_used"] is False
+          print("RAFT_T3_ORIGINAL_PARTICLE108_SIX_SCENE_SIX_OWNER_SHA_VERIFIED=true")
+          PY
+      - name: Inspect source original typed particle Material and Texture graph and privately choose one external image provider
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          python3 -m scripts.t3_original_particle_texture_targets \
+            --original "$RUNNER_TEMP/t3-particle-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-particle-safe-source.json" \
+            --private-plan "$RUNNER_TEMP/t3-private-source-stream-plan.json"
+          test -s "$RUNNER_TEMP/t3-private-source-stream-plan.json"
+          test "$(stat -c '%a' "$RUNNER_TEMP/t3-private-source-stream-plan.json")" = 600
+      - name: Reconstruct the single original .resS provider with full SHA and read three real source image ranges
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_original_particle_stream_provider \
+            --private-plan "$RUNNER_TEMP/t3-private-source-stream-plan.json" \
+            --zip2 zip2-original \
+            --original "$RUNNER_TEMP/t3-particle-original" \
+            --out "$RUNNER_TEMP/t3-particle-safe-source-bytes.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-particle-safe-source-bytes.json").read_text())
+          assert d["status"]=="ZIP2_SHA_ORIGINAL_PARTICLE108_THREE_IMAGE_STREAM_RANGES_READ"
+          assert d["selected_original_Texture2D28_stream_ranges_read"]==3
+          assert d["selected_external_stream_provider_size_and_SHA256_verified"] is True
+          assert d["same_instance_exported_texture_guid_or_Android_pixels_verified"] is False
+          print("RAFT_T3_PARTICLE_SAMEEXPORT_SOURCE_STREAM_AUTHENTIC=true")
+          PY
+      - name: Independently admit the exact original seven-mip source from authenticated graph and stream
+        run: |
+          set -euo pipefail
+          python3 -B -m tools.gt_particle108_native_mips.probe prepare \
+            --original "$RUNNER_TEMP/t3-particle-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --approval "$RUNNER_TEMP/gt-native-mip-private-approval.json" \
+            --out "$RUNNER_TEMP/gt-native-mip-safe-approval.json"
+          test "$(stat -c '%a' "$RUNNER_TEMP/gt-native-mip-private-approval.json")" = 600
+      - name: Export bounded original graph with exact scoped native texture correction and W1 B02 traces
+        env:
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/t3-particle-w1-private.json
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: ${{ runner.temp }}/t3-particle-b02-private.json
+          RAFT_PRIVATE_EXPORT_EMITTER_LINEAGE: ${{ runner.temp }}/gt-particle-emitter-private.json
+          RAFT_GT_NATIVE_MIP_APPROVAL: ${{ runner.temp }}/gt-native-mip-private-approval.json
+        run: |
+          set -euo pipefail
+          if ! timeout 900s dotnet "$RUNNER_TEMP/t3-particle-compiled/ExportLineage.dll" \
+            "$RUNNER_TEMP/t3-particle-original" \
+            "$RUNNER_TEMP/t3-particle-export" \
+            > "$RUNNER_TEMP/t3-particle-private-export.log" 2>&1; then
+            python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          result={"schema_version":1,"status":"INCONCLUSIVE",
+              "phase":"bounded_actual_source_export",
+              "w1_trace_created":(root/"t3-particle-w1-private.json").is_file(),
+              "b02_trace_created":(root/"t3-particle-b02-private.json").is_file(),
+              "actual_unity_export_ready":False,
+              "android_pixels_verified":False}
+          (root/"t3-particle-safe-export-result.json").write_text(json.dumps(result,sort_keys=True)+"\n")
+          print("T3_PARTICLE_EXPORT_INCONCLUSIVE "+json.dumps(result,sort_keys=True))
+          PY
+            exit 2
+          fi
+          grep -Fxq "GT_NATIVE_MIP_EXACT_SOURCE_REDIRECT_ADMITTED=true" "$RUNNER_TEMP/t3-particle-private-export.log"
+          echo "GT_NATIVE_MIP_EXACT_SOURCE_REDIRECT_ADMITTED=true"
+          test -s "$RAFT_PRIVATE_EXPORT_LINEAGE"
+          test -s "$RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE"
+          test -d "$RUNNER_TEMP/t3-particle-export/ExportedProject/Assets"
+      - name: Verify selected original billboard emitter components and streams in the same export
+        run: |
+          set -euo pipefail
+          python3 -B -m tools.gt_particle108_native_route.emitter_export \
+            --original "$RUNNER_TEMP/t3-particle-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/t3-particle-export/ExportedProject" \
+            --w1 "$RUNNER_TEMP/t3-particle-w1-private.json" \
+            --b02 "$RUNNER_TEMP/t3-particle-b02-private.json" \
+            --emitter "$RUNNER_TEMP/gt-particle-emitter-private.json" \
+            --out "$RUNNER_TEMP/gt-particle-emitter-export-safe.json"
+      - name: Publish only aggregate observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-particle108-emitter-same-export-safe
+          path: |
+            ${{ runner.temp }}/t3-particle-safe-source.json
+            ${{ runner.temp }}/t3-particle-safe-source-bytes.json
+            ${{ runner.temp }}/gt-native-mip-safe-approval.json
+            ${{ runner.temp }}/gt-particle-emitter-export-safe.json
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Clean private original, export and lineage
+        if: always()
+        run: |
+          rm -f "$RUNNER_TEMP/gt-particle-emitter-private.json"
+          rm -rf "$RUNNER_TEMP/t3-particle-original" "$RUNNER_TEMP/t3-particle-export" "$RUNNER_TEMP/t3-particle-compiled" "$RUNNER_TEMP/t3-particle-helpers" zip2-original
+          rm -f "$RUNNER_TEMP/t3-particle-w1-private.json" "$RUNNER_TEMP/t3-particle-b02-private.json" "$RUNNER_TEMP/t3-particle-light-private.json" "$RUNNER_TEMP/t3-private-source-stream-plan.json" "$RUNNER_TEMP/gt-native-mip-private-approval.json" "$RUNNER_TEMP/t3-particle-private-export.log" "$RUNNER_TEMP/t3-private-exporter-build.log"
