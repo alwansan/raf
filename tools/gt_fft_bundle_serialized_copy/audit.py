@@ -49,23 +49,25 @@ def object_inventory(path,slots,index):
     other=sorted((int(o.path_id),o.type.name,digest(o.get_raw_data())) for o in objs if o is not obj)
     return int(obj.path_id),obj.get_raw_data(),other,modules
 
-def patch_bundles(private,work,fmt,build):
+def patch_bundles(private,work,fmt,build,selected=SLOTS,pins=None):
+    if pins is None:pins=half.PINS[fmt]
+    need(len(selected)==4 and len(set(selected))==4 and set(pins)=={f'{v}-{s}' for s in selected for v in ('indexed','standalone')},"selected_pins")
     before_dir=private/"compiled-bundles";after_dir=work/"patched-bundles";after_dir.mkdir()
     modules={};rows=[]
     for index in range(5):
         path=before_dir/f"fft-{index}"
         need(path.is_file() and not path.is_symlink() and sha(path)==build["bundle_sha256"][index],"bundle_commitment")
         raw=path.read_bytes();need(0<len(raw)<=64*1024*1024 and raw.startswith(b"UnityFS\0"),"bundle_extent")
-        slots=list(range(20)) if index==0 else [SLOTS[index-1]]
+        slots=list(range(20)) if index==0 else [selected[index-1]]
         pid,original,other,old=object_inventory(path,slots,index)
         expected_obj=original;expected_archive=raw;desired=dict(old);changes=[]
         for slot in slots:
             group=EXPECTED_FFT_WORKGROUP_X_BY_COMPILED_SLOT[slot]
             prior=bundle.validate_module(old[slot],work,group)
             need(next(x for x in prior["images"] if x["sampled_enum"]==2)["format_enum"]==half.ENUMS[fmt][0],"before_storage")
-            if slot not in SLOTS:continue
+            if slot not in selected:continue
             label=("indexed" if index==0 else "standalone")+f"-{slot}"
-            need(prior["sha256"]==half.PINS[fmt][label],"before_live_pin")
+            need(prior["sha256"]==pins[label],"before_live_pin")
             patched,word=half.patch_image_format(old[slot],fmt)
             offsets=one_word_offsets(old[slot],patched,word)
             expected_obj=unique_replace(expected_obj,old[slot],patched)
@@ -81,7 +83,7 @@ def patch_bundles(private,work,fmt,build):
         for slot in slots:
             group=EXPECTED_FFT_WORKGROUP_X_BY_COMPILED_SLOT[slot]
             after=bundle.validate_module(new[slot],work,group)
-            if slot in SLOTS:
+            if slot in selected:
                 label=("indexed" if index==0 else "standalone")+f"-{slot}"
                 need(next(x for x in after["images"] if x["sampled_enum"]==2)["format_enum"]==half.ENUMS[fmt][1],"after_storage")
                 target=work/(label+".spv");target.write_bytes(new[slot]);modules[label]=target
@@ -104,11 +106,18 @@ def resource_contract(module,source,table,target):
     need(sorted(bindings)==[0,1,2],"descriptor_bindings")
     return entries[0]["name"],bindings
 
-def render_host(text,contracts):
+def render_host(text,contracts,size=512,stages=8):
     # Four unchanged SPIR-V programs with reflected entrypoints and bindings.
     need(len(contracts)==4 and len({x[1][2] for x in contracts})==1,"storage_layout")
     storage=contracts[0][1][2]
     s=half.render_host(text);r=half.replace
+    if size!=512:
+        from tools.gt_fft_size_matrix import audit as matrix
+        need(matrix.dimensions(size)[0]==stages,"size_stages")
+        s=r(s,"dispatchGroupY==512",f"dispatchGroupY=={size}")
+        s=r(s,"require(w==512 && h==512",f"require(w=={size} && h=={size}")
+        s=r(s,"size_t(w)*(i?8:h)",f"size_t(w)*(i?{stages}:h)")
+        s=r(s,"uint32_t texH=t==1?8:h;",f"uint32_t texH=t==1?{stages}:h;")
     s=r(s,"enabled.shaderStorageImageWriteWithoutFormat=VK_TRUE;",
         'enabled.shaderStorageImageWriteWithoutFormat=VK_TRUE;\n    require(features.shaderStorageImageExtendedFormats==VK_TRUE,"Extended storage format");\n    enabled.shaderStorageImageExtendedFormats=VK_TRUE;')
     s=r(s,"bindings[i].descriptorType=i<2?VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:",f"bindings[i].descriptorType=i!={storage}?VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:")

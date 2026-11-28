@@ -1,0 +1,372 @@
+{
+  "run": 46181732395,
+  "job": 141092589326,
+  "head": "e4d2d055089a8aa38b2c9b4e5ab6601d1ab1887b",
+  "conclusion": "success",
+  "guard": 46181732271,
+  "lint": 46181732261,
+  "receipt": {
+    "XAPK": false,
+    "android_device": false,
+    "direct_native_dispatch_verified": true,
+    "exact_outputs": 16,
+    "format": "ARGBHalf",
+    "numeric_cases": [
+      {
+        "bindings": [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ]
+        ],
+        "mode": "signed",
+        "outputs": [
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          }
+        ],
+        "slot": 6
+      },
+      {
+        "bindings": [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ]
+        ],
+        "mode": "zero",
+        "outputs": [
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          }
+        ],
+        "slot": 6
+      },
+      {
+        "bindings": [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ]
+        ],
+        "mode": "signed",
+        "outputs": [
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          }
+        ],
+        "slot": 16
+      },
+      {
+        "bindings": [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ]
+        ],
+        "mode": "zero",
+        "outputs": [
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          }
+        ],
+        "slot": 16
+      }
+    ],
+    "one_word_modules": 8,
+    "patched_archive_roundtrip": true,
+    "platform_check_modified": false,
+    "production": false,
+    "records": [
+      {
+        "bytes": 139984,
+        "changed_bytes": 4,
+        "changes": [
+          {
+            "after_sha": "7c2c6bf52a7e6f769b23dfdb774ca1f1d306290b4f50cff40ef65157b9cf9440",
+            "before_sha": "453df94664de8c840ce170a56a4a3bffd06ef422db622c10e3a9e462ec6a918f",
+            "changed_bytes": 1,
+            "label": "indexed-6",
+            "slot": 6,
+            "word": 233
+          },
+          {
+            "after_sha": "2d183d6d600546950ea4906141bc1e3d051b7d385e414e2bb7352f4673de7033",
+            "before_sha": "fe2444f22e3449da185db9d69ed3f36ad166e060534b771ee6c8d8e692be3390",
+            "changed_bytes": 1,
+            "label": "indexed-7",
+            "slot": 7,
+            "word": 230
+          },
+          {
+            "after_sha": "9ef235f6ce28ffe6c9d8128b02ef143bed7080e4fde352c78aa616ce46c22889",
+            "before_sha": "c427f7ea65e223533b6c4bba3eb73aeadd40b4ca1674921887cea99b0aca9116",
+            "changed_bytes": 1,
+            "label": "indexed-16",
+            "slot": 16,
+            "word": 251
+          },
+          {
+            "after_sha": "4dafed1fb25745128a9f89820073fb447dc814aaf9a7dea20bbd56972ce5f464",
+            "before_sha": "a061fabcb33a54c8fc82b8bffd504fa66a955f30e0df6528d7a6ffe35f78afce",
+            "changed_bytes": 1,
+            "label": "indexed-17",
+            "slot": 17,
+            "word": 251
+          }
+        ],
+        "index": 0,
+        "original_sha": "4cd467d80fb76529f1bcb92823affe203934f2436a76dd8b9c485a4dd59931eb",
+        "other_objects_unchanged": 0,
+        "patched_sha": "191c8ac1e660eedef8460300ee6a436000349c4d50da0646263716e37439359f",
+        "serialized_programs": 20
+      },
+      {
+        "bytes": 11680,
+        "changed_bytes": 1,
+        "changes": [
+          {
+            "after_sha": "747efe7e949e25c39360832303597834bb0c2cc8479377294e87516b66387dc5",
+            "before_sha": "603131440ab8d589188e68e81aadd58bcbd1f9140668100152dd69a1d73898b6",
+            "changed_bytes": 1,
+            "label": "standalone-6",
+            "slot": 6,
+            "word": 224
+          }
+        ],
+        "index": 1,
+        "original_sha": "9ad034b40b2b1f0a4f19a95836e62b8682dce01f6d6eec34c54c5412c86a9125",
+        "other_objects_unchanged": 0,
+        "patched_sha": "adcc2ae9b6c424da2f196428084d82a664135d69b678ee4b054cf98294a9ebfe",
+        "serialized_programs": 1
+      },
+      {
+        "bytes": 11168,
+        "changed_bytes": 1,
+        "changes": [
+          {
+            "after_sha": "83f3a5afa1e42d14e29a80b695e16341e633e14d67490c3f910ff913f207bb08",
+            "before_sha": "69b3b31d43f4f8bac9bb5ac85a1ff1beee6e5cc27cb34b79b592603b27425427",
+            "changed_bytes": 1,
+            "label": "standalone-7",
+            "slot": 7,
+            "word": 221
+          }
+        ],
+        "index": 2,
+        "original_sha": "5b64085065c7f9b0f1a56c21810e2cd1d255fb862003940b1e376c9cd45195f0",
+        "other_objects_unchanged": 0,
+        "patched_sha": "6c43dc640dd07b505e410ff439dc34607dec503ee786d7d20e9bf744347a7cc6",
+        "serialized_programs": 1
+      },
+      {
+        "bytes": 12848,
+        "changed_bytes": 1,
+        "changes": [
+          {
+            "after_sha": "f0b7e2b03ac46961ce3a17789c0fef29d9c5acd0eacadd9d9f229b7dddee4bd8",
+            "before_sha": "835a6305b39217df9ec3818741f4559e47f6a4f3e043bca25f942a3f7e79d871",
+            "changed_bytes": 1,
+            "label": "standalone-16",
+            "slot": 16,
+            "word": 242
+          }
+        ],
+        "index": 3,
+        "original_sha": "50d708dbc16010e1975312fc5c9013250d4a462d2a2b4af8e19a252ed9254032",
+        "other_objects_unchanged": 0,
+        "patched_sha": "0ef01e3f1540bda6f7b7b5df449b2b4f1ca3b07c2ef052aad03ba406c4c1ecb1",
+        "serialized_programs": 1
+      },
+      {
+        "bytes": 12928,
+        "changed_bytes": 1,
+        "changes": [
+          {
+            "after_sha": "c8c12c4e19b876f47fb5d371b06a198aca7e4456913c636c29a8ac6a9c324b0b",
+            "before_sha": "abb004e74422b68771d59b944142a9a4b689ed82fd628fd93b0fd5b55c3014e7",
+            "changed_bytes": 1,
+            "label": "standalone-17",
+            "slot": 17,
+            "word": 242
+          }
+        ],
+        "index": 4,
+        "original_sha": "d104db567c6117f346bd7423a31b298b5e2fd94bee635bc85c2e67054c27c567",
+        "other_objects_unchanged": 0,
+        "patched_sha": "85f05bab7870ccd82c9113b42b29fdffa47a7feac281e5520378a5883b2a4949",
+        "serialized_programs": 1
+      }
+    ],
+    "runtime_replacement": false,
+    "serialized_modules": 24,
+    "status": "OBSERVED_SERIALIZED_COPY_NATIVE_EXECUTION",
+    "unchanged_modules": 16,
+    "unity_bundle_loaded": false,
+    "water_rendering_verified": false
+  }
+}
