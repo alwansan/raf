@@ -33,3 +33,5 @@ Starting HEAD `6bfd315bc4775941dc45d316f8619559f819874e` verified; no local chec
 
 ---
 
+
+**Direct alpha route diagnostic checkpoint:** [Actual 46117813183/job 140895450566](https://github.com/alwansan/raf/actions/runs/46117813183/job/140895450566) IN_PROGRESS; source-free controls and disposable exporter compilation SUCCESS; current original source checkout. [Lint 46117813215](https://github.com/alwansan/raf/actions/runs/46117813215) SUCCESS. No new Load/point measurements yet. Reconcile this distinct observation before any retry.
