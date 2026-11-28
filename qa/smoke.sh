@@ -117,7 +117,11 @@ phase=install
 adb install "$tmp/fixture.apk" | tee evidence/install.txt
 tr -d '\r' < evidence/install.txt | grep -Fx Success
 adb logcat -c
-adb shell am start -W -n org.raft.qa.fixture/.Probe | tee evidence/launch.txt
+launch_args=()
+if [[ "${CAPTURE_VIDEO:-false}" == true ]]; then
+  launch_args=(--ez capture_video true)
+fi
+adb shell am start -W -n org.raft.qa.fixture/.Probe "${launch_args[@]}" | tee evidence/launch.txt
 grep -qi '^Status: ok' evidence/launch.txt
 wait_frame() {
   for i in {1..25}; do

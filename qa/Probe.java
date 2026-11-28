@@ -16,6 +16,10 @@ public final class Probe extends Activity implements GLSurfaceView.Renderer {
     private GLSurfaceView surface;
     private int program;
     private boolean flipped;
+    private boolean videoMode;
+    private boolean frameReported;
+    private boolean reportedFlip;
+    private int viewportWidth, viewportHeight;
     private static final String TAG = "RaftQaFixture";
     private final FloatBuffer quad = ByteBuffer.allocateDirect(32)
         .order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -26,7 +30,9 @@ public final class Probe extends Activity implements GLSurfaceView.Renderer {
         surface = new GLSurfaceView(this);
         surface.setEGLContextClientVersion(2);
         surface.setRenderer(this);
-        surface.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        videoMode = getIntent().getBooleanExtra("capture_video", false);
+        surface.setRenderMode(videoMode ? GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                                        : GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         surface.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 v.performClick();
@@ -66,6 +72,8 @@ public final class Probe extends Activity implements GLSurfaceView.Renderer {
             + " GL_VENDOR=" + GLES20.glGetString(GLES20.GL_VENDOR));
     }
     @Override public void onSurfaceChanged(GL10 ignored, int w, int h) {
+        viewportWidth = w;
+        viewportHeight = h;
         GLES20.glViewport(0, 0, w, h);
     }
     @Override public void onDrawFrame(GL10 ignored) {
@@ -74,8 +82,24 @@ public final class Probe extends Activity implements GLSurfaceView.Renderer {
         GLES20.glEnableVertexAttribArray(0);
         GLES20.glVertexAttribPointer(0, 2, GLES20.GL_FLOAT, false, 0, quad);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+        if (videoMode && viewportWidth > 0 && viewportHeight > 0) {
+            // Keep the encoder receiving changing frames even while both measured
+            // color regions are static. This marker cannot touch the sampled row.
+            int tick = (int)(android.os.SystemClock.elapsedRealtime() / 125L % 4L);
+            GLES20.glEnable(GLES20.GL_SCISSOR_TEST);
+            GLES20.glScissor(0, 0, Math.min(16, viewportWidth),
+                             Math.min(16, viewportHeight));
+            GLES20.glClearColor((tick & 1) != 0 ? 1f : 0f,
+                                (tick & 2) != 0 ? 1f : 0f, 1f, 1f);
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+            GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
+        }
         int error = GLES20.glGetError();
         if (error != GLES20.GL_NO_ERROR) throw new IllegalStateException("GLES error: " + error);
-        Log.i(TAG, flipped ? "FRAME_FLIPPED" : "FRAME_BASELINE");
+        if (!videoMode || !frameReported || reportedFlip != flipped) {
+            Log.i(TAG, flipped ? "FRAME_FLIPPED" : "FRAME_BASELINE");
+            frameReported = true;
+            reportedFlip = flipped;
+        }
     }
 }
