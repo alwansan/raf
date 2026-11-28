@@ -20,8 +20,16 @@ jobs:
         include:
           - runner: ubuntu-24.04
             abi: x86_64
+            probe: gles
+            artifact: x86_64
           - runner: ubuntu-24.04-arm
             abi: arm64-v8a
+            probe: gles
+            artifact: arm64-v8a
+          - runner: ubuntu-24.04
+            abi: x86_64
+            probe: vulkan
+            artifact: x86_64-vulkan
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -31,12 +39,13 @@ jobs:
         env:
           EXPECTED_ABI: ${{ matrix.abi }}
           CAPTURE_VIDEO: ${{ inputs.capture_video }}
+          VULKAN_PROBE: ${{ matrix.probe == 'vulkan' }}
         run: bash qa/smoke.sh
       - name: Upload diagnostic results only
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: raft-emulator-${{ matrix.abi }}
+          name: raft-emulator-${{ matrix.artifact }}
           path: evidence/
           retention-days: 7
           if-no-files-found: error

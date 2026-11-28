@@ -141,6 +141,11 @@ adb exec-out screencap -p > evidence/tapped.png
 "$tmp/venv/bin/python" qa/check_pixels.py
 grep -F 'GL_RENDERER=' "$tmp/frame.log" > evidence/gles-renderer.txt
 grep -Fq TOUCH_ACCEPTED "$tmp/frame.log"
+printf 'gles=passed\nabi=%s\n' "$guest" > evidence/gles-result.txt
+if [[ "${VULKAN_PROBE:-false}" == true ]]; then
+  phase=vulkan-transfer-readback
+  bash qa/vulkan_probe.sh "$root" "$tmp"
+fi
 if [[ "${CAPTURE_VIDEO:-false}" == true ]]; then
   phase=video
   adb shell screenrecord --time-limit 10 /data/local/tmp/raft-qa.mp4 &
