@@ -1,0 +1,44 @@
+{
+  "status": "RUN_IN_PROGRESS_NOT_YET_PROVEN",
+  "starting_head": "26541714e856b9725ca66e1c2c71fbfc104ad725",
+  "prior_checkpoint": "3841ec844cdfed0e71d8de411d851710ac62552e",
+  "preparation_commit": "339bf40cff29a1c3fe912aa41d17807f0ac40a88",
+  "execution_head": "308492e0b5fc28b5696ce672d80cfe58ab258269",
+  "run": 46091060299,
+  "job": 140811795755,
+  "lint_run": 46091060202,
+  "lint_job": 140811795373,
+  "lint_conclusion": "success",
+  "last_observed_step": "Authenticate each source scene and observe actual Light hierarchy",
+  "tool_checkout": "success",
+  "source_free_controls_step": "success",
+  "source_checkout": "success",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_blobs": {
+    "tools/gt_original_light_hierarchy/audit.py": "b7a78d4edd86a9c38186e7bb6536c76fa9cb11fa",
+    "tools/gt_original_light_hierarchy/test_audit.py": "0f293d259af54c55d725b68d6babe3170a719dd6",
+    "tools/gt_remaining_scene_lighting/audit.py": "84133c4b34c1d3b1cda8a2b534676d38c062f1ee",
+    "tools/gt_remaining_scene_lighting/pins.json": "5113b42905333c70e7ba2c1aa2cdfc4b0f7f39c1"
+  },
+  "selection": {
+    "levels": [
+      24,
+      30,
+      38
+    ],
+    "source_bytes": 73417104,
+    "prior_actual_lights": 117,
+    "prior_actual_enabled": 110,
+    "prior_actual_disabled": 7
+  },
+  "original_source_mutated": false,
+  "raw_original_source_published": false,
+  "source_export_mapping_proven": false,
+  "runtime_world_transform_observed": false,
+  "runtime_active_hierarchy_observed": false,
+  "device_pixels_proven": false,
+  "production": false,
+  "XAPK": false,
+  "next_action": "Verify actual 46091060299 job 140811795755 and GT_ORIGINAL_LIGHT_HIERARCHY aggregate, check exact three source pins/population vs prior 46090251018; validate counter sums and depth histograms, preserve unresolved causes and actual test log. If GameObject bool explains prior UNKNOWN, distinguish self vs hierarchy vs component enabled, finite local TRS and composed quaternion direction vs runtime. If actual schema differs, repair the precise evidence-backed parser issue without masking unknowns. Then use highest-impact actual source Light/Transform/ambient or material/shader discrepancy in same-export identity rather than repeating source census or previously proven two-Light value/owner scope. Current owner direction governs; only feature/android-native-port; no source mutation, raw game assets publication, protection bypass, production/player/XAPK, CL/lab/BLACK changes. All G0-G6 remain open.",
+  "session": "clients/GT/sessions/20261128-original-light-hierarchy/README_AR.md"
+}
