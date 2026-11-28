@@ -1,5 +1,5 @@
 {
-  "next_action": "G3-G6-Skybox-binding-calibration: reconcile actual 46111849176 on execution fe9ed9008b56132da536e262672f9f77357d7310, lint 46111849133 completed success. Prior 46111121179 SUCCESS observation: 125 controls, 6/6 metadata stage rows; low8 and low16 identical in every bucket, 36/45 unique numeric descriptor/offset/shape candidates (6/15 VS,30/30 FS), 23 preserved source offset and 13 relocated, 9 VS unresolved; FS 10/10 candidate resources, direct/high16 zero, high8 ambiguous/no complete resources. Both actual SPIR-V modules OpName=7, OpMemberName=0 and SHA identical to prior 46110226563; original register join unresolved, native 2 pre-bundle uniform conflicts remain. New independent authored calibration uses distinct source texture dimensions (2D/cube/3D), two contrasting register/offset/declaration arrangements, named constants and actual sampled-image operands. Compare every direct/packed index view in both actual bundles/stages/buckets; distinguish equal counts from actual image/sampler pair links. If low8 and low16 indistinguishable, record ambiguity, do not adopt global index rule. If informative, resolve 9 original VS mismatches by shape/type/actual byte accesses and exact original varying register proof; otherwise move independent white meshes/fire/water instead of repeating original export. Native editor error, original runtime ABI and pixels remain separate. Level38 exact prior pins unchanged; no 154 editor proof. No production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only; BLACK/animation deferred.",
+  "next_action": "G5-original-Particle108-collection-implementation: low8/low16 remain indistinguishable after independent 12-row authored calibration replay; do not repeat sky export or infer packing. Reconcile the new isolated original Particle108 collection-implementation workflow: existing exact six-scene/six-owner ZIP2 staging, W1/B02/B21, public pinned exporter and opt-in private concrete nonexportable collection implementation capture joined to selected Texture2D28 and tenth actual Material PPtr. Determine the concrete class, then inspect public selection path and independently authenticated source format/usage/mips/payload and resolved target bytes before any override. No original pixel or black-fire restoration claim; highest-impact white-mesh same-export GUID fanout remains next independent lane. Native sky editor conflicts, nine VS and original register joins open. Level38 pins unchanged, 154 editor proof absent; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
     "status": "OBSERVED_SELECTED_ORIGINAL_LIGHT_HIERARCHIES",
@@ -15477,7 +15477,7 @@
     "artifact_independently_downloaded": false
   },
   "latest_skybox_binding_calibration": {
-    "status": "AUTHORED_BINDING_CALIBRATION_PUSHED_PENDING",
+    "status": "ACTUAL_AUTHORED_CALIBRATION_FAILURE_RECONCILED_AMBIGUOUS",
     "starting_head": "94fe39cd402e317fa1798560c83a841f1d2d827c",
     "execution_head": "fe9ed9008b56132da536e262672f9f77357d7310",
     "branch": "feature/android-native-port",
@@ -16949,8 +16949,8 @@
       "artifact_independently_downloaded": false
     },
     "run": 46111849176,
-    "run_status": "in_progress",
-    "conclusion": null,
+    "run_status": "completed",
+    "conclusion": "failure",
     "lint_run": 46111849133,
     "lint_status": "completed",
     "lint_conclusion": "success",
@@ -16962,6 +16962,76 @@
     "player": false,
     "XAPK": false,
     "device": false,
-    "next_action": "G3-G6-Skybox-binding-calibration: reconcile actual 46111849176 on execution fe9ed9008b56132da536e262672f9f77357d7310, lint 46111849133 completed success. Prior 46111121179 SUCCESS observation: 125 controls, 6/6 metadata stage rows; low8 and low16 identical in every bucket, 36/45 unique numeric descriptor/offset/shape candidates (6/15 VS,30/30 FS), 23 preserved source offset and 13 relocated, 9 VS unresolved; FS 10/10 candidate resources, direct/high16 zero, high8 ambiguous/no complete resources. Both actual SPIR-V modules OpName=7, OpMemberName=0 and SHA identical to prior 46110226563; original register join unresolved, native 2 pre-bundle uniform conflicts remain. New independent authored calibration uses distinct source texture dimensions (2D/cube/3D), two contrasting register/offset/declaration arrangements, named constants and actual sampled-image operands. Compare every direct/packed index view in both actual bundles/stages/buckets; distinguish equal counts from actual image/sampler pair links. If low8 and low16 indistinguishable, record ambiguity, do not adopt global index rule. If informative, resolve 9 original VS mismatches by shape/type/actual byte accesses and exact original varying register proof; otherwise move independent white meshes/fire/water instead of repeating original export. Native editor error, original runtime ABI and pixels remain separate. Level38 exact prior pins unchanged; no 154 editor proof. No production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only; BLACK/animation deferred."
+    "next_action": "G5-original-Particle108-collection-implementation: low8/low16 remain indistinguishable after independent 12-row authored calibration replay; do not repeat sky export or infer packing. Reconcile the new isolated original Particle108 collection-implementation workflow: existing exact six-scene/six-owner ZIP2 staging, W1/B02/B21, public pinned exporter and opt-in private concrete nonexportable collection implementation capture joined to selected Texture2D28 and tenth actual Material PPtr. Determine the concrete class, then inspect public selection path and independently authenticated source format/usage/mips/payload and resolved target bytes before any override. No original pixel or black-fire restoration claim; highest-impact white-mesh same-export GUID fanout remains next independent lane. Native sky editor conflicts, nine VS and original register joins open. Level38 pins unchanged, 154 editor proof absent; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
+    "job": 140876900010,
+    "editor_outcome": "success",
+    "failure_reason": "KeyError",
+    "root_cause": "final evaluator reads numeric and texture_sampler directly from row instead of row.views[view]",
+    "actual_cases": 2,
+    "actual_rows": 12,
+    "expected_numeric": 24,
+    "expected_sample_pairs": 18,
+    "profiles": {
+      "direct": {
+        "rows_complete": 0,
+        "numeric": 0,
+        "pairs": 0
+      },
+      "low8": {
+        "rows_complete": 12,
+        "numeric": 24,
+        "pairs": 18
+      },
+      "low16": {
+        "rows_complete": 12,
+        "numeric": 24,
+        "pairs": 18
+      },
+      "high8": {
+        "rows_complete": 0,
+        "numeric": 12,
+        "pairs": 0
+      },
+      "high16": {
+        "rows_complete": 0,
+        "numeric": 0,
+        "pairs": 0
+      }
+    },
+    "complete_observed_views": [
+      "low8",
+      "low16"
+    ],
+    "ambiguous_complete_views": true,
+    "global_index_packing_rule_proven": false,
+    "artifact_id": 15249867958,
+    "artifact_github_reported_sha256": "bbfe0dced750ed0ceb7c8741e9585851d38ea19d7959300b079196f52ff694d9",
+    "artifact_independently_downloaded": false,
+    "retained_actual_report": "tools/gt_skybox_binding_calibration/actual-46111849176.json",
+    "report_blob": "9d9642b7f59a21780e8d74a9b8bd12b615da9bc9",
+    "correction_commit": "b86e62effa96eafe153e2fee34f998928cd7ea67",
+    "new_regression_controls": 4,
+    "correction_test_status": "pending isolated workflow"
+  },
+  "latest_particle108_collection_implementation": {
+    "status": "ORIGINAL_COLLECTION_IMPLEMENTATION_DIAGNOSTIC_PREPARED",
+    "starting_head": "42beabf17baf322392767df91c22100fd0664216",
+    "preparation_commit": "0fa61c15a6841ded6fc891f688b3ab94b355af97",
+    "workflow": ".github/workflows/raft-gt-particle108-collection-implementation.yml",
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "prior_original_runs": [
+      42132262184,
+      42134436841,
+      43777398215,
+      43778717548
+    ],
+    "selected_collection_implementation_observed": false,
+    "actual_target_pixels_verified": false,
+    "original_fire_restored": false,
+    "production": false,
+    "player": false,
+    "XAPK": false,
+    "device": false,
+    "next_action": "G5-original-Particle108-collection-implementation: low8/low16 remain indistinguishable after independent 12-row authored calibration replay; do not repeat sky export or infer packing. Reconcile the new isolated original Particle108 collection-implementation workflow: existing exact six-scene/six-owner ZIP2 staging, W1/B02/B21, public pinned exporter and opt-in private concrete nonexportable collection implementation capture joined to selected Texture2D28 and tenth actual Material PPtr. Determine the concrete class, then inspect public selection path and independently authenticated source format/usage/mips/payload and resolved target bytes before any override. No original pixel or black-fire restoration claim; highest-impact white-mesh same-export GUID fanout remains next independent lane. Native sky editor conflicts, nine VS and original register joins open. Level38 pins unchanged, 154 editor proof absent; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred."
   }
 }
