@@ -1,0 +1,1996 @@
+{
+  "run": 46177311114,
+  "job": 141078822702,
+  "head": "6f85d2b5cba07b0a1af34cc6f7ff185c40605127",
+  "conclusion": "success",
+  "guard": 46177310917,
+  "lint": 46177310937,
+  "artifact_id": 15275754608,
+  "stage": {
+    "android_device": false,
+    "baseline_pins": {
+      "indexed-16": "c427f7ea65e223533b6c4bba3eb73aeadd40b4ca1674921887cea99b0aca9116",
+      "indexed-17": "a061fabcb33a54c8fc82b8bffd504fa66a955f30e0df6528d7a6ffe35f78afce",
+      "indexed-6": "453df94664de8c840ce170a56a4a3bffd06ef422db622c10e3a9e462ec6a918f",
+      "indexed-7": "fe2444f22e3449da185db9d69ed3f36ad166e060534b771ee6c8d8e692be3390",
+      "standalone-16": "835a6305b39217df9ec3818741f4559e47f6a4f3e043bca25f942a3f7e79d871",
+      "standalone-17": "abb004e74422b68771d59b944142a9a4b689ed82fd628fd93b0fd5b55c3014e7",
+      "standalone-6": "603131440ab8d589188e68e81aadd58bcbd1f9140668100152dd69a1d73898b6",
+      "standalone-7": "69b3b31d43f4f8bac9bb5ac85a1ff1beee6e5cc27cb34b79b592603b27425427"
+    },
+    "coordinate_sha": "bd28b9f73ae2d15d092cc86cb88214a78c0a245e6398d397e6b6ead1a8c40e39",
+    "editor_sha": "f7c8b342897516ad2a176b9ea029d6f8d732ab90a077b4f33f180fbc122468a2",
+    "exact_derived_table_body_executed": true,
+    "format": "ARGBHalf",
+    "game_runtime_bank_mapping_verified": false,
+    "half_map_sha": "f5a0d274fb83bad7442b4311e2646f8db345011042601fd40c1f35f95d4ac026",
+    "indexed_reference_spirv_exact": 4,
+    "oracle_canary": {
+      "pixels": 262144,
+      "status": "PASS",
+      "wrong_program_lanes": 1048576
+    },
+    "oracle_commitments": {
+      "cpu-16-signed-p0.raw": "41952104b39a7fced045330fc4ee410d808e25f3e8f40cc3e486b3ace38036a6",
+      "cpu-16-signed-p1.raw": "faf481f36839965bfec7f07b831c8d77d14d6ca60081437302bc988ba1627f24",
+      "cpu-16-zero-p0.raw": "5647f05ec18958947d32874eeb788fa396a05d0bab7c1b71f112ceb7e9b31eee",
+      "cpu-16-zero-p1.raw": "5647f05ec18958947d32874eeb788fa396a05d0bab7c1b71f112ceb7e9b31eee",
+      "cpu-6-signed-p0.raw": "23535b5b1fd49b8dd971ab455fa4f77dd6560c6d4e27762d23c4a495e9eebb07",
+      "cpu-6-signed-p1.raw": "9e366ab4af2bc028667ec75e1ded5aa83b8bc620e5eb8c479def968932ae3441",
+      "cpu-6-zero-p0.raw": "5647f05ec18958947d32874eeb788fa396a05d0bab7c1b71f112ceb7e9b31eee",
+      "cpu-6-zero-p1.raw": "5647f05ec18958947d32874eeb788fa396a05d0bab7c1b71f112ceb7e9b31eee",
+      "source-signed.rgba32f": "3e7a969840748f22ad28c7eee958f9ab21cb418172e00f2067e60fd26587ccca",
+      "source-zero.rgba32f": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8"
+    },
+    "oracle_exact_outputs": 8,
+    "oracle_module_pins": {
+      "6": {
+        "native": "523880e471e2cef84fa2f425213f0ef8fa5f9002fe9e3e2ba525521dc9f36463",
+        "restored": "ef7b701ce2306d4848572e69f0e57330f125a787d5cdcd12309bc8ce471ed958"
+      },
+      "7": {
+        "native": "168ddd60a1c9e74f90406d385a2b89c466d616b745e99dd160af93720fbeb7b4",
+        "restored": "ec802ed2538de10ab0a592a7c8a043fead9d8483bf1442d5360cbdc9cb151557"
+      },
+      "16": {
+        "native": "2b04a6347227395acc9744cf9077bba6ca2d973202e6aa457c94926809e4687b",
+        "restored": "779203d0e94d4cde15d9d5f06af329003b5309a4ca03f0b370d878c79385a8bb"
+      },
+      "17": {
+        "native": "cdd7e194080764bcac62f8fbdc846be7d5ce33e68859781680a0208a536116bb",
+        "restored": "5d381d34bfa550c6c78faf1cf2df3975aadafc3fdd5d97aeab42a56ff5c804f6"
+      }
+    },
+    "original_runtime_kernel_mapping_proven": false,
+    "original_translated_slots": 20,
+    "private_config_sha256": "a171514532feded1de6e12e629da7c2663b2f9deb9b22aff2e7996f8495c8132",
+    "selected_slots": [
+      6,
+      7,
+      16,
+      17
+    ],
+    "source_cache_extent": [
+      512,
+      512
+    ],
+    "source_format_modes": [
+      "RGHalf",
+      "RGFloat",
+      "ARGBHalf",
+      "ARGBFloat"
+    ],
+    "source_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "source_records": [
+      {
+        "candidate_sha": "513f77683f3de6cdd65a8828c0b4eeaf0fe2d4d9f20ac0e023718f3db67d45e4",
+        "count": 20,
+        "name": "indexed.compute",
+        "original_sha": "94dc4000274106ae4bb2830beab88fbbbe7621fca3c750d805e5e5f185bdc8c4"
+      },
+      {
+        "candidate_sha": "37c17ac4f5707de0c0b60bd09b5d9e1e38bd8abca5c09bed8418abf0d84fdff9",
+        "count": 1,
+        "name": "reference-6.compute",
+        "original_sha": "6a1f8592de08c71ff242c11dda8b040723f718e95cc802b2f2c51ebf20be3bd4"
+      },
+      {
+        "candidate_sha": "8d2aefec909aba76ecbfe7fc3cc6a6966eeece9e43b04d966ae84ffa92e90b2f",
+        "count": 1,
+        "name": "reference-7.compute",
+        "original_sha": "786e5fd71d3e2989e7e8c338e64f7472bff6d7382a1d270f8234881eade6bbea"
+      },
+      {
+        "candidate_sha": "858facbeb6937439efe212bc75e981ee0b850a5b06ce2f0f4968589083b0687d",
+        "count": 1,
+        "name": "reference-16.compute",
+        "original_sha": "3b798dcfcac8216f8896ed4a8a6b1b0767de63eb3a154db8bf737b5858caa332"
+      },
+      {
+        "candidate_sha": "f979d85fb838e14a1b6b25a85ef1b0978011d10851660937eae2a06293e8f895",
+        "count": 1,
+        "name": "reference-17.compute",
+        "original_sha": "2a44db8b7907146a37c85a2eda12c1d4c4aa0f2d54cb179d448fc9cf09dac87f"
+      }
+    ],
+    "source_resolution": 256,
+    "source_selector_formula_authenticated": true,
+    "source_stages": 8,
+    "source_table": {
+      "half_exact_address_lanes": 8192,
+      "half_quantized_components": 16384,
+      "integer_address_lanes": 8192,
+      "table_float_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1",
+      "table_half_sha256": "d93fd79177719e034c4e29e4a8f4f398aefec161745ee084ec485bd36d40fdcd",
+      "table_texels": 4096
+    },
+    "status": "STAGED_HALF_IMAGE_FORMAT_INTERVENTION",
+    "storage_enum_pair": [
+      1,
+      2
+    ],
+    "table_native_sha": "4014d74468986685069bd2c47b675c7b6c6ad40a5d9e106df61e18ada78ea4ed",
+    "workgroup_x": 512
+  },
+  "receipt": {
+    "XAPK": false,
+    "actual_descriptor_resource_mapping_verified": false,
+    "actual_enabled_extended_storage_feature": true,
+    "android_device": false,
+    "component_bits": 16,
+    "diagnostic_layer_only": true,
+    "exact_outputs": 16,
+    "format": "ARGBHalf",
+    "generator_14_modules": 8,
+    "isolated_format_numeric_parity": true,
+    "modules": [
+      {
+        "baseline": {
+          "bytes": 6116,
+          "image_status": "observed",
+          "images": [
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 0,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 1,
+              "multisampled": 0,
+              "sampled_enum": 2,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 1,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 2,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            }
+          ],
+          "instructions": 320,
+          "local_size": [
+            512,
+            1,
+            1
+          ],
+          "opcode_profile": {
+            "ext": {
+              "Ceil": 0,
+              "Cos": 0,
+              "Exp": 0,
+              "FAbs": 0,
+              "FClamp": 0,
+              "FMax": 0,
+              "FMin": 0,
+              "Floor": 0,
+              "Fma": 7,
+              "Fract": 0,
+              "InverseSqrt": 0,
+              "Log": 0,
+              "Pow": 0,
+              "Sin": 0,
+              "Sqrt": 0
+            },
+            "ops": {
+              "OpBitcast": 53,
+              "OpBitwiseAnd": 4,
+              "OpBitwiseOr": 2,
+              "OpBitwiseXor": 0,
+              "OpConvertFToS": 0,
+              "OpConvertFToU": 2,
+              "OpConvertSToF": 0,
+              "OpConvertUToF": 0,
+              "OpExtInst": 7,
+              "OpFAdd": 0,
+              "OpFDiv": 0,
+              "OpFMul": 0,
+              "OpFSub": 0,
+              "OpImageFetch": 3,
+              "OpImageRead": 0,
+              "OpImageWrite": 1,
+              "OpShiftLeftLogical": 5,
+              "OpShiftRightLogical": 8
+            }
+          },
+          "sha256": "453df94664de8c840ce170a56a4a3bffd06ef422db622c10e3a9e462ec6a918f",
+          "validator_exit": 0,
+          "version": [
+            1,
+            0
+          ]
+        },
+        "capture": {
+          "dispatch_groups": [
+            1,
+            512,
+            1
+          ],
+          "module": {
+            "bytes": 6116,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 2,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 320,
+            "local_size": [
+              512,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 7,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 53,
+                "OpBitwiseAnd": 4,
+                "OpBitwiseOr": 2,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 7,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 0,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 5,
+                "OpShiftRightLogical": 8
+              }
+            },
+            "sha256": "7c2c6bf52a7e6f769b23dfdb774ca1f1d306290b4f50cff40ef65157b9cf9440",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          },
+          "specialization_bytes": 0,
+          "specialization_entries": 0
+        },
+        "changed_words": 1,
+        "entry_unchanged": true,
+        "generator": {
+          "tool_id": 14,
+          "tool_version": 0
+        },
+        "slot": 6,
+        "variant": "indexed",
+        "word_index": 233
+      },
+      {
+        "baseline": {
+          "bytes": 6080,
+          "image_status": "observed",
+          "images": [
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 0,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 1,
+              "multisampled": 0,
+              "sampled_enum": 2,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 1,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 2,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            }
+          ],
+          "instructions": 320,
+          "local_size": [
+            512,
+            1,
+            1
+          ],
+          "opcode_profile": {
+            "ext": {
+              "Ceil": 0,
+              "Cos": 0,
+              "Exp": 0,
+              "FAbs": 0,
+              "FClamp": 0,
+              "FMax": 0,
+              "FMin": 0,
+              "Floor": 0,
+              "Fma": 7,
+              "Fract": 0,
+              "InverseSqrt": 0,
+              "Log": 0,
+              "Pow": 0,
+              "Sin": 0,
+              "Sqrt": 0
+            },
+            "ops": {
+              "OpBitcast": 53,
+              "OpBitwiseAnd": 4,
+              "OpBitwiseOr": 2,
+              "OpBitwiseXor": 0,
+              "OpConvertFToS": 0,
+              "OpConvertFToU": 2,
+              "OpConvertSToF": 0,
+              "OpConvertUToF": 0,
+              "OpExtInst": 7,
+              "OpFAdd": 0,
+              "OpFDiv": 0,
+              "OpFMul": 0,
+              "OpFSub": 0,
+              "OpImageFetch": 3,
+              "OpImageRead": 0,
+              "OpImageWrite": 1,
+              "OpShiftLeftLogical": 5,
+              "OpShiftRightLogical": 8
+            }
+          },
+          "sha256": "603131440ab8d589188e68e81aadd58bcbd1f9140668100152dd69a1d73898b6",
+          "validator_exit": 0,
+          "version": [
+            1,
+            0
+          ]
+        },
+        "capture": {
+          "dispatch_groups": [
+            1,
+            512,
+            1
+          ],
+          "module": {
+            "bytes": 6080,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 2,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 320,
+            "local_size": [
+              512,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 7,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 53,
+                "OpBitwiseAnd": 4,
+                "OpBitwiseOr": 2,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 7,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 0,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 5,
+                "OpShiftRightLogical": 8
+              }
+            },
+            "sha256": "747efe7e949e25c39360832303597834bb0c2cc8479377294e87516b66387dc5",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          },
+          "specialization_bytes": 0,
+          "specialization_entries": 0
+        },
+        "changed_words": 1,
+        "entry_unchanged": true,
+        "generator": {
+          "tool_id": 14,
+          "tool_version": 0
+        },
+        "slot": 6,
+        "variant": "standalone",
+        "word_index": 224
+      },
+      {
+        "baseline": {
+          "bytes": 5596,
+          "image_status": "observed",
+          "images": [
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 0,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 1,
+              "multisampled": 0,
+              "sampled_enum": 2,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 1,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 2,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            }
+          ],
+          "instructions": 298,
+          "local_size": [
+            512,
+            1,
+            1
+          ],
+          "opcode_profile": {
+            "ext": {
+              "Ceil": 0,
+              "Cos": 0,
+              "Exp": 0,
+              "FAbs": 0,
+              "FClamp": 0,
+              "FMax": 0,
+              "FMin": 0,
+              "Floor": 0,
+              "Fma": 6,
+              "Fract": 0,
+              "InverseSqrt": 0,
+              "Log": 0,
+              "Pow": 0,
+              "Sin": 0,
+              "Sqrt": 0
+            },
+            "ops": {
+              "OpBitcast": 53,
+              "OpBitwiseAnd": 4,
+              "OpBitwiseOr": 2,
+              "OpBitwiseXor": 0,
+              "OpConvertFToS": 0,
+              "OpConvertFToU": 2,
+              "OpConvertSToF": 0,
+              "OpConvertUToF": 0,
+              "OpExtInst": 6,
+              "OpFAdd": 0,
+              "OpFDiv": 0,
+              "OpFMul": 0,
+              "OpFSub": 0,
+              "OpImageFetch": 3,
+              "OpImageRead": 0,
+              "OpImageWrite": 1,
+              "OpShiftLeftLogical": 5,
+              "OpShiftRightLogical": 8
+            }
+          },
+          "sha256": "fe2444f22e3449da185db9d69ed3f36ad166e060534b771ee6c8d8e692be3390",
+          "validator_exit": 0,
+          "version": [
+            1,
+            0
+          ]
+        },
+        "capture": {
+          "dispatch_groups": [
+            1,
+            512,
+            1
+          ],
+          "module": {
+            "bytes": 5596,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 2,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 298,
+            "local_size": [
+              512,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 6,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 53,
+                "OpBitwiseAnd": 4,
+                "OpBitwiseOr": 2,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 6,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 0,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 5,
+                "OpShiftRightLogical": 8
+              }
+            },
+            "sha256": "2d183d6d600546950ea4906141bc1e3d051b7d385e414e2bb7352f4673de7033",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          },
+          "specialization_bytes": 0,
+          "specialization_entries": 0
+        },
+        "changed_words": 1,
+        "entry_unchanged": true,
+        "generator": {
+          "tool_id": 14,
+          "tool_version": 0
+        },
+        "slot": 7,
+        "variant": "indexed",
+        "word_index": 230
+      },
+      {
+        "baseline": {
+          "bytes": 5560,
+          "image_status": "observed",
+          "images": [
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 0,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 1,
+              "multisampled": 0,
+              "sampled_enum": 2,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 1,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 2,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            }
+          ],
+          "instructions": 298,
+          "local_size": [
+            512,
+            1,
+            1
+          ],
+          "opcode_profile": {
+            "ext": {
+              "Ceil": 0,
+              "Cos": 0,
+              "Exp": 0,
+              "FAbs": 0,
+              "FClamp": 0,
+              "FMax": 0,
+              "FMin": 0,
+              "Floor": 0,
+              "Fma": 6,
+              "Fract": 0,
+              "InverseSqrt": 0,
+              "Log": 0,
+              "Pow": 0,
+              "Sin": 0,
+              "Sqrt": 0
+            },
+            "ops": {
+              "OpBitcast": 53,
+              "OpBitwiseAnd": 4,
+              "OpBitwiseOr": 2,
+              "OpBitwiseXor": 0,
+              "OpConvertFToS": 0,
+              "OpConvertFToU": 2,
+              "OpConvertSToF": 0,
+              "OpConvertUToF": 0,
+              "OpExtInst": 6,
+              "OpFAdd": 0,
+              "OpFDiv": 0,
+              "OpFMul": 0,
+              "OpFSub": 0,
+              "OpImageFetch": 3,
+              "OpImageRead": 0,
+              "OpImageWrite": 1,
+              "OpShiftLeftLogical": 5,
+              "OpShiftRightLogical": 8
+            }
+          },
+          "sha256": "69b3b31d43f4f8bac9bb5ac85a1ff1beee6e5cc27cb34b79b592603b27425427",
+          "validator_exit": 0,
+          "version": [
+            1,
+            0
+          ]
+        },
+        "capture": {
+          "dispatch_groups": [
+            1,
+            512,
+            1
+          ],
+          "module": {
+            "bytes": 5560,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 2,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 298,
+            "local_size": [
+              512,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 6,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 53,
+                "OpBitwiseAnd": 4,
+                "OpBitwiseOr": 2,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 6,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 0,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 5,
+                "OpShiftRightLogical": 8
+              }
+            },
+            "sha256": "83f3a5afa1e42d14e29a80b695e16341e633e14d67490c3f910ff913f207bb08",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          },
+          "specialization_bytes": 0,
+          "specialization_entries": 0
+        },
+        "changed_words": 1,
+        "entry_unchanged": true,
+        "generator": {
+          "tool_id": 14,
+          "tool_version": 0
+        },
+        "slot": 7,
+        "variant": "standalone",
+        "word_index": 221
+      },
+      {
+        "baseline": {
+          "bytes": 7280,
+          "image_status": "observed",
+          "images": [
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 0,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 1,
+              "multisampled": 0,
+              "sampled_enum": 2,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 1,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 2,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            }
+          ],
+          "instructions": 382,
+          "local_size": [
+            512,
+            1,
+            1
+          ],
+          "opcode_profile": {
+            "ext": {
+              "Ceil": 0,
+              "Cos": 0,
+              "Exp": 0,
+              "FAbs": 0,
+              "FClamp": 0,
+              "FMax": 0,
+              "FMin": 0,
+              "Floor": 0,
+              "Fma": 4,
+              "Fract": 0,
+              "InverseSqrt": 0,
+              "Log": 0,
+              "Pow": 0,
+              "Sin": 0,
+              "Sqrt": 0
+            },
+            "ops": {
+              "OpBitcast": 68,
+              "OpBitwiseAnd": 6,
+              "OpBitwiseOr": 6,
+              "OpBitwiseXor": 0,
+              "OpConvertFToS": 0,
+              "OpConvertFToU": 2,
+              "OpConvertSToF": 0,
+              "OpConvertUToF": 0,
+              "OpExtInst": 4,
+              "OpFAdd": 0,
+              "OpFDiv": 0,
+              "OpFMul": 2,
+              "OpFSub": 0,
+              "OpImageFetch": 3,
+              "OpImageRead": 0,
+              "OpImageWrite": 1,
+              "OpShiftLeftLogical": 7,
+              "OpShiftRightLogical": 12
+            }
+          },
+          "sha256": "c427f7ea65e223533b6c4bba3eb73aeadd40b4ca1674921887cea99b0aca9116",
+          "validator_exit": 0,
+          "version": [
+            1,
+            0
+          ]
+        },
+        "capture": {
+          "dispatch_groups": [
+            1,
+            512,
+            1
+          ],
+          "module": {
+            "bytes": 7280,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 2,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 382,
+            "local_size": [
+              512,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 4,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 68,
+                "OpBitwiseAnd": 6,
+                "OpBitwiseOr": 6,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 4,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 2,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 7,
+                "OpShiftRightLogical": 12
+              }
+            },
+            "sha256": "9ef235f6ce28ffe6c9d8128b02ef143bed7080e4fde352c78aa616ce46c22889",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          },
+          "specialization_bytes": 0,
+          "specialization_entries": 0
+        },
+        "changed_words": 1,
+        "entry_unchanged": true,
+        "generator": {
+          "tool_id": 14,
+          "tool_version": 0
+        },
+        "slot": 16,
+        "variant": "indexed",
+        "word_index": 251
+      },
+      {
+        "baseline": {
+          "bytes": 7244,
+          "image_status": "observed",
+          "images": [
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 0,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 1,
+              "multisampled": 0,
+              "sampled_enum": 2,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 1,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 2,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            }
+          ],
+          "instructions": 382,
+          "local_size": [
+            512,
+            1,
+            1
+          ],
+          "opcode_profile": {
+            "ext": {
+              "Ceil": 0,
+              "Cos": 0,
+              "Exp": 0,
+              "FAbs": 0,
+              "FClamp": 0,
+              "FMax": 0,
+              "FMin": 0,
+              "Floor": 0,
+              "Fma": 4,
+              "Fract": 0,
+              "InverseSqrt": 0,
+              "Log": 0,
+              "Pow": 0,
+              "Sin": 0,
+              "Sqrt": 0
+            },
+            "ops": {
+              "OpBitcast": 68,
+              "OpBitwiseAnd": 6,
+              "OpBitwiseOr": 6,
+              "OpBitwiseXor": 0,
+              "OpConvertFToS": 0,
+              "OpConvertFToU": 2,
+              "OpConvertSToF": 0,
+              "OpConvertUToF": 0,
+              "OpExtInst": 4,
+              "OpFAdd": 0,
+              "OpFDiv": 0,
+              "OpFMul": 2,
+              "OpFSub": 0,
+              "OpImageFetch": 3,
+              "OpImageRead": 0,
+              "OpImageWrite": 1,
+              "OpShiftLeftLogical": 7,
+              "OpShiftRightLogical": 12
+            }
+          },
+          "sha256": "835a6305b39217df9ec3818741f4559e47f6a4f3e043bca25f942a3f7e79d871",
+          "validator_exit": 0,
+          "version": [
+            1,
+            0
+          ]
+        },
+        "capture": {
+          "dispatch_groups": [
+            1,
+            512,
+            1
+          ],
+          "module": {
+            "bytes": 7244,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 2,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 382,
+            "local_size": [
+              512,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 4,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 68,
+                "OpBitwiseAnd": 6,
+                "OpBitwiseOr": 6,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 4,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 2,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 7,
+                "OpShiftRightLogical": 12
+              }
+            },
+            "sha256": "f0b7e2b03ac46961ce3a17789c0fef29d9c5acd0eacadd9d9f229b7dddee4bd8",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          },
+          "specialization_bytes": 0,
+          "specialization_entries": 0
+        },
+        "changed_words": 1,
+        "entry_unchanged": true,
+        "generator": {
+          "tool_id": 14,
+          "tool_version": 0
+        },
+        "slot": 16,
+        "variant": "standalone",
+        "word_index": 242
+      },
+      {
+        "baseline": {
+          "bytes": 7364,
+          "image_status": "observed",
+          "images": [
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 0,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 1,
+              "multisampled": 0,
+              "sampled_enum": 2,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 1,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 2,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            }
+          ],
+          "instructions": 387,
+          "local_size": [
+            512,
+            1,
+            1
+          ],
+          "opcode_profile": {
+            "ext": {
+              "Ceil": 0,
+              "Cos": 0,
+              "Exp": 0,
+              "FAbs": 0,
+              "FClamp": 0,
+              "FMax": 0,
+              "FMin": 0,
+              "Floor": 0,
+              "Fma": 4,
+              "Fract": 0,
+              "InverseSqrt": 0,
+              "Log": 0,
+              "Pow": 0,
+              "Sin": 0,
+              "Sqrt": 0
+            },
+            "ops": {
+              "OpBitcast": 73,
+              "OpBitwiseAnd": 7,
+              "OpBitwiseOr": 7,
+              "OpBitwiseXor": 0,
+              "OpConvertFToS": 0,
+              "OpConvertFToU": 2,
+              "OpConvertSToF": 0,
+              "OpConvertUToF": 0,
+              "OpExtInst": 4,
+              "OpFAdd": 0,
+              "OpFDiv": 0,
+              "OpFMul": 1,
+              "OpFSub": 0,
+              "OpImageFetch": 3,
+              "OpImageRead": 0,
+              "OpImageWrite": 1,
+              "OpShiftLeftLogical": 8,
+              "OpShiftRightLogical": 13
+            }
+          },
+          "sha256": "a061fabcb33a54c8fc82b8bffd504fa66a955f30e0df6528d7a6ffe35f78afce",
+          "validator_exit": 0,
+          "version": [
+            1,
+            0
+          ]
+        },
+        "capture": {
+          "dispatch_groups": [
+            1,
+            512,
+            1
+          ],
+          "module": {
+            "bytes": 7364,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 2,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 387,
+            "local_size": [
+              512,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 4,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 73,
+                "OpBitwiseAnd": 7,
+                "OpBitwiseOr": 7,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 4,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 1,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 8,
+                "OpShiftRightLogical": 13
+              }
+            },
+            "sha256": "4dafed1fb25745128a9f89820073fb447dc814aaf9a7dea20bbd56972ce5f464",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          },
+          "specialization_bytes": 0,
+          "specialization_entries": 0
+        },
+        "changed_words": 1,
+        "entry_unchanged": true,
+        "generator": {
+          "tool_id": 14,
+          "tool_version": 0
+        },
+        "slot": 17,
+        "variant": "indexed",
+        "word_index": 251
+      },
+      {
+        "baseline": {
+          "bytes": 7328,
+          "image_status": "observed",
+          "images": [
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 0,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 1,
+              "multisampled": 0,
+              "sampled_enum": 2,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 1,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            },
+            {
+              "access_enum": null,
+              "arrayed": 0,
+              "binding": 2,
+              "depth_enum": 2,
+              "dimension_enum": 1,
+              "format_enum": 0,
+              "multisampled": 0,
+              "sampled_enum": 1,
+              "scalar_bits": 32,
+              "scalar_kind": "float",
+              "set": 0
+            }
+          ],
+          "instructions": 387,
+          "local_size": [
+            512,
+            1,
+            1
+          ],
+          "opcode_profile": {
+            "ext": {
+              "Ceil": 0,
+              "Cos": 0,
+              "Exp": 0,
+              "FAbs": 0,
+              "FClamp": 0,
+              "FMax": 0,
+              "FMin": 0,
+              "Floor": 0,
+              "Fma": 4,
+              "Fract": 0,
+              "InverseSqrt": 0,
+              "Log": 0,
+              "Pow": 0,
+              "Sin": 0,
+              "Sqrt": 0
+            },
+            "ops": {
+              "OpBitcast": 73,
+              "OpBitwiseAnd": 7,
+              "OpBitwiseOr": 7,
+              "OpBitwiseXor": 0,
+              "OpConvertFToS": 0,
+              "OpConvertFToU": 2,
+              "OpConvertSToF": 0,
+              "OpConvertUToF": 0,
+              "OpExtInst": 4,
+              "OpFAdd": 0,
+              "OpFDiv": 0,
+              "OpFMul": 1,
+              "OpFSub": 0,
+              "OpImageFetch": 3,
+              "OpImageRead": 0,
+              "OpImageWrite": 1,
+              "OpShiftLeftLogical": 8,
+              "OpShiftRightLogical": 13
+            }
+          },
+          "sha256": "abb004e74422b68771d59b944142a9a4b689ed82fd628fd93b0fd5b55c3014e7",
+          "validator_exit": 0,
+          "version": [
+            1,
+            0
+          ]
+        },
+        "capture": {
+          "dispatch_groups": [
+            1,
+            512,
+            1
+          ],
+          "module": {
+            "bytes": 7328,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 2,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 387,
+            "local_size": [
+              512,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 4,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 73,
+                "OpBitwiseAnd": 7,
+                "OpBitwiseOr": 7,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 4,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 1,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 8,
+                "OpShiftRightLogical": 13
+              }
+            },
+            "sha256": "c8c12c4e19b876f47fb5d371b06a198aca7e4456913c636c29a8ac6a9c324b0b",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          },
+          "specialization_bytes": 0,
+          "specialization_entries": 0
+        },
+        "changed_words": 1,
+        "entry_unchanged": true,
+        "generator": {
+          "tool_id": 14,
+          "tool_version": 0
+        },
+        "slot": 17,
+        "variant": "standalone",
+        "word_index": 242
+      }
+    ],
+    "observed_outputs": 16,
+    "original_fft_numeric_parity_verified": false,
+    "original_runtime_kernel_mapping_proven": false,
+    "production": false,
+    "registered_kernels": 20,
+    "rows": [
+      {
+        "mode": "signed",
+        "outputs": {
+          "indexed-chain": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "indexed0": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "standalone-chain": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "standalone0": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          }
+        },
+        "slot": 6
+      },
+      {
+        "mode": "zero",
+        "outputs": {
+          "indexed-chain": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "indexed0": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "standalone-chain": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "standalone0": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          }
+        },
+        "slot": 6
+      },
+      {
+        "mode": "signed",
+        "outputs": {
+          "indexed-chain": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "indexed0": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "standalone-chain": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "standalone0": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          }
+        },
+        "slot": 16
+      },
+      {
+        "mode": "zero",
+        "outputs": {
+          "indexed-chain": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "indexed0": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "standalone-chain": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          },
+          "standalone0": {
+            "component_bits": 16,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 1048576,
+            "written_pixels": 262144
+          }
+        },
+        "slot": 16
+      }
+    ],
+    "status": "OBSERVED_HALF_IMAGE_FORMAT_INTERVENTION",
+    "storage_enum_pair": [
+      1,
+      2
+    ],
+    "stored_lanes": 4,
+    "validated_one_word_modules": 8,
+    "water_rendering_verified": false
+  }
+}
