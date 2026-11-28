@@ -239,7 +239,7 @@ jobs:
           PY
           test "$rc" = 0
           test -s "$RAFT_PRIVATE_EXPORT_LINEAGE" && test -s "$RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE" && test -s "$RAFT_PRIVATE_EXPORT_AMBIENT_LINEAGE"
-      - name: Replay exact verified candidate and stage actual same-export shader/material
+      - name: Replay exact candidate and capture stage-labelled original ABI reference
         run: |
           set -euo pipefail
           p="$RUNNER_TEMP/gt-skybox-editor-private"

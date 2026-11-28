@@ -1,0 +1,95 @@
+{
+  "status": "FAILED_PRIVATE_REFERENCE_CAPTURE_BEFORE_UNITY",
+  "run": 46109543319,
+  "job": 140869770421,
+  "execution_head": "88e945f082f358cb9049917869d18a37d0d1914e",
+  "conclusion": "failure",
+  "lint_run": 46109543287,
+  "lint_conclusion": "success",
+  "source_controls_passed": 108,
+  "source_shader_authentication": {
+    "additional_provider_count": 0,
+    "object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9",
+    "provider": "globalgamemanagers.assets",
+    "provider_bytes": 758412,
+    "provider_sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28",
+    "status": "AUTHENTICATED_TYPED_SHADER48",
+    "typed_source_shader48": true
+  },
+  "actual_export": {
+    "actual_export_completed": true,
+    "exit_code": 0,
+    "private_log_bytes": 954520,
+    "private_trace_files_present": 3,
+    "tool_exception_categories": []
+  },
+  "same_export_stage": {
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "candidate_sha256": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+    "exact_same_export_files": {
+      "Assets/Original.mat": "41f801006b1d609eba701b01a872312fbb7086e5edbb7321eff37957a4928dee",
+      "Assets/Original.mat.meta": "88ed2899823cf55fb560bfc94d168cd3aeec3f7da3f93da7b09f2d279848a90a",
+      "Assets/Original.shader": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+      "Assets/Original.shader.meta": "3157f417d9801d9f2f9ca7d6474b235c5c0e1dafa00dd042bd643a044f03857b"
+    },
+    "original_assets_published": false,
+    "original_scene_reference_proven_statically": true,
+    "phase": "complete",
+    "player_built": false,
+    "prior_static_wrapper_digest_reproduced": true,
+    "protected_export_files_unchanged": 5,
+    "scene_import_staged": false,
+    "source_color_slots": 6,
+    "source_float_slots": 20,
+    "source_int_slots": 0,
+    "source_texenv_slots": 0,
+    "status": "PASS_EXACT_SKYBOX_EDITOR_STAGING"
+  },
+  "compiler_control_stage": {
+    "XAPK": false,
+    "candidate_sha256": "0c3571b1db0de5b2fbffbfc352a55a632424d8a31a29c83ed2ff5e0df66d836f",
+    "exact_reversible_body_unchanged": true,
+    "expected_manifest_sha256": "dac575920bc17fbb4e451f478891c9d301f88553c56e355888e87ebed32979ff",
+    "files": {
+      "Assets/Original.mat": "41f801006b1d609eba701b01a872312fbb7086e5edbb7321eff37957a4928dee",
+      "Assets/Original.mat.meta": "88ed2899823cf55fb560bfc94d168cd3aeec3f7da3f93da7b09f2d279848a90a",
+      "Assets/Original.shader": "0c3571b1db0de5b2fbffbfc352a55a632424d8a31a29c83ed2ff5e0df66d836f",
+      "Assets/Original.shader.meta": "3157f417d9801d9f2f9ca7d6474b235c5c0e1dafa00dd042bd643a044f03857b"
+    },
+    "one_dxc_pragma_removed": true,
+    "original_shader_verified": false,
+    "original_static_named_resources": 10,
+    "original_static_offsets": 45,
+    "original_static_varying_registers": 7,
+    "player_built": false,
+    "prior_exact_sha256": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+    "protected_original_export_files": 5,
+    "status": "PASS_EXACT_SOURCE_BODY_COMPILER_CONTROL_STAGED",
+    "unchanged_material_and_metas": 3
+  },
+  "reference_capture": {
+    "original_shader_verified": false,
+    "reason": "ValueError",
+    "status": "INCONCLUSIVE"
+  },
+  "unity_started": false,
+  "actual_abi_comparison_executed": false,
+  "code_review_defect": {
+    "expected_filename": "abi-reference-{stage}.spv",
+    "erroneous_reader": "{stage}-abi-reference.spv",
+    "cause_of_logged_value_error_confirmed": false
+  },
+  "cross_export_file_digest_comparison": {
+    "prior_run": 46108809138,
+    "current_run": 46109543319,
+    "matching_count": 1,
+    "changed_count": 3,
+    "source_candidate_digest_same": true,
+    "cross_export_reason_unproven": true,
+    "per_export_staging_integrity_preserved": true
+  },
+  "artifact_id": 15248652525,
+  "artifact_github_reported_sha256": "e60d4d68fdc709829d0d983d26beb46b8b6c731471870f1f4e8efb986df58ac6",
+  "artifact_independently_downloaded": false
+}

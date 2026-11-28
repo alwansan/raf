@@ -1,6 +1,43 @@
 import unittest
+import tempfile
+from pathlib import Path
 from tools.gt_skybox_actual_abi import audit as a
 class Controls(unittest.TestCase):
+    def test_read_compiler_output_label_first(self):
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)
+            for stage in ("vs","fs"):(p/("abi-reference-"+stage+".spv")).write_bytes(b"fixture")
+            seen=[]
+            def reader(path):
+                seen.append(path.name)
+                return {"entryPoints":[{"name":"gt_vs_main" if path.stem.endswith("-vs") else "gt_fs_main"}]}
+            self.assertEqual(len(a.read_compiled_reference(p,a.REFERENCE_LABEL,reader)),2)
+            self.assertEqual(seen,["abi-reference-vs.spv","abi-reference-fs.spv"])
+    def test_reversed_output_names_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)
+            for stage in ("vs","fs"):(p/(stage+"-abi-reference.spv")).write_bytes(b"fixture")
+            with self.assertRaisesRegex(ValueError,"source_abi_reference_file_missing"):
+                a.read_compiled_reference(p,a.REFERENCE_LABEL,lambda _:None)
+    def test_stage_identity_required(self):
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)
+            for stage in ("vs","fs"):(p/("abi-reference-"+stage+".spv")).write_bytes(b"fixture")
+            with self.assertRaisesRegex(ValueError,"source_abi_reference_stage_identity"):
+                a.read_compiled_reference(p,a.REFERENCE_LABEL,lambda _:{"entryPoints":[{"name":"gt_fs_main"}]})
+    def test_descriptor_different_name_same_slot(self):
+        def r(name):return {"separate_images":[{"name":name,"type":"texture2D","set":0,"binding":2}]}
+        result=a.descriptor_profile(r("original"),r("other"))
+        self.assertEqual(result["shared_different_name_or_kind_shape"],1)
+        self.assertEqual(result["shared_exact_name_kind_shape"],0)
+    def test_descriptor_duplicate_slot_not_overwritten(self):
+        item={"name":"tex","type":"texture2D","set":0,"binding":2}
+        left={"separate_images":[item,item]}
+        right={"separate_images":[item]}
+        result=a.descriptor_profile(left,right)
+        self.assertEqual(result["vertex_duplicate_slots"],1)
+        self.assertEqual(result["shared_ambiguous_slots"],1)
+        self.assertEqual(result["shared_exact_name_kind_shape"],0)
     def test_exact_map(self):
         self.assertTrue(a.map_profile({"x":4},{"x":4})["exact_map"])
     def test_name_not_offset(self):

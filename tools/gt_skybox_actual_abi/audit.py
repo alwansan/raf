@@ -20,46 +20,77 @@ from scripts.t3_spirv_interface_name_drift import read_reflection
 CANDIDATE="0c3571b1db0de5b2fbffbfc352a55a632424d8a31a29c83ed2ff5e0df66d836f"
 CAPTURE="PASS_PRIVATE_SOURCE_ABI_CAPTURE"
 OBSERVED="OBSERVED_ACTUAL_ABI_COMPARISON_PENDING_RUNTIME_AND_NATIVE_LOG"
+REFERENCE_LABEL="abi-reference"
+SAFE_CAPTURE_ERRORS={"pinned_compiler_control_required","original_object_sha","independent_source_candidate_digest","original_static_reference_regression","source_population","packet_exists","source_abi_reference_file_missing","source_abi_reference_stage_identity","source_abi_reference_label","private_spirv_input_outside_bounded_size","missing_or_unsafe_private_spirv_reflection_input","private_spirv_interface_reflection_unavailable","private_spirv_interface_reflection_invalid_json"}
 
 def output(report,data,marker):
     report.write_text(json.dumps(data,sort_keys=True,indent=2)+"\n")
     print(marker+" "+json.dumps(data,sort_keys=True))
 
+def safe_reason(exc):
+    if isinstance(exc,ValueError) and str(exc) in SAFE_CAPTURE_ERRORS:
+        return str(exc)
+    return w.error_category(exc)
+
+def read_compiled_reference(private,label,reader=read_reflection):
+    c.require(label==REFERENCE_LABEL,"source_abi_reference_label")
+    reflections=[]
+    for stage,_,_,entry in d.STAGES:
+        path=private/(label+"-"+stage+".spv")
+        c.require(path.is_file() and not path.is_symlink() and path.stat().st_size>0,
+                  "source_abi_reference_file_missing")
+        ref=reader(path)
+        c.require([p.get("name") for p in ref.get("entryPoints",[])]==[entry],
+                  "source_abi_reference_stage_identity")
+        reflections.append(ref)
+    return reflections
+
 def capture(x):
-    r=dict(status="INCONCLUSIVE",original_shader_verified=False)
+    r=dict(status="INCONCLUSIVE",phase="pinned_control",original_shader_verified=False)
     try:
         s=json.loads(x.control_stage.read_text())
         c.require(s["status"]==c.STAGE and s["candidate_sha256"]==CANDIDATE and
                   c.digest(x.dest/"Assets/Original.shader")==CANDIDATE,"pinned_compiler_control_required")
+        r["phase"]="authenticated_source_object"
         with open(os.devnull,"w") as quiet,contextlib.redirect_stdout(quiet),contextlib.redirect_stderr(quiet):
             _,_,_,sh,sha=prior.source_shader(x.destination/"Raft_Data",
                     json.loads(x.skybox_plan.read_text()),json.loads(x.plan.read_text()))
             c.require(sha==w.OBJECT_SHA,"original_object_sha")
             with tempfile.TemporaryDirectory(prefix="gt-skybox-source-abi-",dir=x.destination.parent) as td:
                 private=Path(td)
+                r["phase"]="source_abi_prepare"
                 layout,body,layouts,named,signatures=join.prepare(sh,private,{})
+                r["phase"]="independent_candidate_digest"
                 raw=w.attach(layout,body).encode("utf-8")
                 c.require(c.hash_bytes(raw)==c.ORIGINAL_SHA and c.hash_bytes(c.remove_dxc(raw))==CANDIDATE,
                           "independent_source_candidate_digest")
+                r["candidate_replayed"]=True
+                r["phase"]="source_bound_baseline"
                 v,f,mesh,vo,fi=join.baseline(private,signatures)
                 refs=[v,f]
                 static={}
-                c.require(join.compile_body(body,private,"abi-reference",layouts,named,(v,f,mesh,vo,fi),static),
+                r["phase"]="source_bound_reference_compile"
+                c.require(join.compile_body(body,private,REFERENCE_LABEL,layouts,named,(v,f,mesh,vo,fi),static),
                           "original_static_reference_regression")
                 c.require(static["original_offsets"]==45 and static["named_resources"]==10 and
                           static["join"]["all_original_registers_linked"],"source_population")
+                r.update(source_static_offsets=static["original_offsets"],source_static_resources=static["named_resources"],source_static_registers_joined=static["join"]["original_registers_joined_at_same_actual_location"])
+                r["phase"]="read_exact_compiler_output_paths"
+                static_refs=read_compiled_reference(private,REFERENCE_LABEL)
+                r["reference_stage_files_read"]=len(static_refs)
+                r["phase"]="write_private_reference_packet"
                 packet=dict(candidate_sha256=CANDIDATE,source_object_sha256=sha,layouts=layouts,
                             named_resources=[n["source_texture_sampler_bindings"] for n in named],
                             refs=refs,mesh=mesh,vo=vo,fi=fi,
-                            static_refs=[read_reflection(private/(stage+"-abi-reference.spv")) for stage in ("vs","fs")])
+                            static_refs=static_refs)
                 c.require(not x.packet.exists(),"packet_exists")
                 x.packet.write_text(json.dumps(packet,sort_keys=True))
                 x.packet.chmod(0o600)
-        r.update(status=CAPTURE,reference_packet_sha256=c.digest(x.packet),
+        r.update(status=CAPTURE,phase="complete",reference_packet_sha256=c.digest(x.packet),
                  original_object_sha256=sha,original_static_offsets=45,
                  original_static_named_resources=10,original_varying_registers=7,
                  candidate_sha256=CANDIDATE)
-    except Exception as e:r["reason"]=w.error_category(e)
+    except Exception as e:r["reason"]=safe_reason(e)
     output(x.report,r,"GT_SKYBOX_ACTUAL_ABI_CAPTURE")
     return 0 if r["status"]==CAPTURE else 2
 
@@ -149,12 +180,43 @@ def compare_stage(expected,actual,layouts,stage,original):
     row["reflected_ubo_count"]=len(actual.get("ubos",[]))
     return row
 
+def descriptor_map(reflection):
+    out={}
+    for kind in ("ubos",*d.RESOURCE_KINDS):
+        for item in reflection.get(kind,[]):
+            if "set" not in item or "binding" not in item:
+                continue
+            key=(item["set"],item["binding"])
+            c.require(all(type(n) is int and n>=0 for n in key),"descriptor_coordinate")
+            if kind=="ubos":
+                fields=reflection["types"][item["type"]]["members"]
+                shape=tuple((m["name"],m["offset"],m.get("type"),tuple(m.get("array",[])),
+                             m.get("array_stride"),m.get("matrix_stride"),bool(m.get("row_major",False))) for m in fields)
+                typ="ubo"
+            else:
+                shape=tuple(item.get("array",[]));typ=item["type"]
+            out.setdefault(key,[]).append((kind,item["name"],typ,shape))
+    return out
+
+def descriptor_profile(v,f):
+    left,right=descriptor_map(v),descriptor_map(f)
+    shared=set(left)&set(right)
+    one=[k for k in shared if len(left[k])==len(right[k])==1]
+    return dict(vertex_slots=len(left),fragment_slots=len(right),shared_slots=len(shared),
+                vertex_duplicate_slots=sum(len(x)>1 for x in left.values()),
+                fragment_duplicate_slots=sum(len(x)>1 for x in right.values()),
+                shared_exact_name_kind_shape=sum(left[k][0]==right[k][0] for k in one),
+                shared_different_name_or_kind_shape=sum(left[k][0]!=right[k][0] for k in one),
+                shared_ambiguous_slots=len(shared)-len(one))
+
 def compare_pair(v,f,packet):
     vo={int(k):tuple(a) for k,a in packet["vo"].items()}
     fi={int(k):tuple(a) for k,a in packet["fi"].items()}
     out=dict(mesh_input_location_type=map_profile(w.interface(packet["mesh"],"inputs"),w.interface(v,"inputs")),
              fragment_output_location_type=map_profile(w.interface(packet["refs"][1],"outputs"),w.interface(f,"outputs")))
     out["actual_location_type_link"]=map_profile(w.interface(f,"inputs"),w.interface(v,"outputs"))
+    try:out["cross_stage_descriptor_profile"]=descriptor_profile(v,f)
+    except Exception as e:out["cross_stage_descriptor_profile"]={"observed":False,"reason":w.error_category(e)}
     try:
         out["original_register_join"]=join.join(join.reflected_registers(v,"outputs","o"),
                                 join.reflected_registers(f,"inputs","v"),vo,fi)
