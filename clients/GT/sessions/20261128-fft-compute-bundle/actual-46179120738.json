@@ -1,0 +1,46 @@
+{
+  "status": "INCONCLUSIVE",
+  "head": "4820ed59bdba5823f6815173db330aa699f89ec3",
+  "run": 46179120738,
+  "job": 141085477844,
+  "format": "RGFloat",
+  "conclusion": "failure",
+  "guard": {
+    "run": 46179097054,
+    "conclusion": "success"
+  },
+  "lint": {
+    "run": 46179120729,
+    "conclusion": "success"
+  },
+  "source_free_controls": "success",
+  "bundle_built": true,
+  "bundle_count": 5,
+  "serialized_modules": 24,
+  "storage_enum": 6,
+  "bundle_load_fields": {
+    "bundle_asset_count": -1,
+    "bundle_crc_verified": 1,
+    "bundle_distinct": 0,
+    "bundle_load_index": 0,
+    "bundle_load_step": 2,
+    "bundle_named": 0,
+    "bundle_opened": 0,
+    "bundle_typed": 0
+  },
+  "registered_slots": 0,
+  "captures": 0,
+  "dispatches": 0,
+  "native_exit": 2,
+  "earlier_attempt": {
+    "run": 46179097156,
+    "job": 141084375196,
+    "native_exit": 1,
+    "managed_receipt_present": false
+  },
+  "runtime_replacement": false,
+  "water_rendering_verified": false,
+  "android_device": false,
+  "production": false,
+  "XAPK": false
+}

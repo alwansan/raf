@@ -20,15 +20,18 @@ public static class GTIndexedPair {
  [Serializable] public class Receipt {
    public string status="INCONCLUSIVE",phase="environment",run_id,config_sha256,failure_type;
    public bool private_guard,vulkan,private_source_hashes_match,bundle_vulkan_only,bundle_built,bundle_loaded;public int bundle_count,bundle_crc_verified,bundle_opened,bundle_named,bundle_typed,bundle_distinct,bundle_load_step,bundle_asset_count=-1,bundle_load_index=-1;public string[] bundle_sha256=new string[5];
+   public bool bundle_build_process,bundle_clean_load_process,bundle_control_built,bundle_control_opened,bundle_control_loaded;public string bundle_control_sha256;public int bundle_control_step,bundle_source_absent;
    public int registration_count,class_control_pixels;public bool class_control_verified;public string class_control_sha256;public Case[] cases=new Case[4];public string graphics_device_version,graphics_device_name,graphics_device_vendor;public int coordinate_control_pixels;public bool coordinate_control_verified;
  }
  [Serializable] public class Progress {public string run_id,phase,operation;public int first_slot=-1,seed=-1,pass=-1,variant=-1,bindings,dispatches;}
  static Progress progress;
+ static bool building;
+ static ComputeShader bundleControl;
  static void Mark(string phase,string operation,int first=-1,int seed=-1,int pass=-1,int variant=-1,int binds=0,int dispatches=0){
    if(progress==null)return;
    progress.phase=phase;progress.operation=operation;progress.first_slot=first;progress.seed=seed;progress.pass=pass;
    progress.variant=variant;progress.bindings=binds;progress.dispatches=dispatches;
-   string file=Path.Combine(Priv,"progress.json"),tmp=file+".tmp";
+   string file=Path.Combine(Priv,building?"bundle-build-progress.json":"progress.json"),tmp=file+".tmp";
    File.WriteAllText(tmp,JsonUtility.ToJson(progress));
    if(File.Exists(file))File.Replace(tmp,file,null);else File.Move(tmp,file);
  }
@@ -226,7 +229,7 @@ public static class GTIndexedPair {
      for(int i=0;i<source.Length;i++)Need(aa[i]==source[i]);
      for(int i=0;i<table.Length;i++)Need(bb[i]==table[i]);
      output=Target(RenderTextureFormat.ARGBFloat,Expected("ARGBFloat"));
-     var shader=AssetDatabase.LoadAssetAtPath<ComputeShader>("Assets/Editor/Coordinate.compute");Need(shader!=null&&shader.HasKernel("Coordinate"));
+     var shader=bundleControl;Need(shader!=null&&shader.HasKernel("Coordinate"));
      int k0=shader.FindKernel("Coordinate");shader.GetKernelThreadGroupSizes(k0,out uint tx,out uint ty,out uint tz);Need(tx==8&&ty==8&&tz==1);
      shader.SetTexture(k0,"InputTex",a);shader.SetTexture(k0,"TableTex",b);shader.SetTexture(k0,"OutputTex",output);
      uint[] actual;BeginCapture("control",Size/8,Size/8);
@@ -236,22 +239,30 @@ public static class GTIndexedPair {
        int k=(y*Size+x)*4,j=((y%Stages)*Size+x)*4;
        Need(actual[k]==source[k]&&actual[k+1]==source[k+1]&&actual[k+2]==table[j+2]&&actual[k+3]==table[j+3]);
      }
-     foreach(var e in ShaderUtil.GetComputeShaderMessages(shader))Need(e.severity.ToString()!="Error");
      receipt.coordinate_control_pixels=Count;receipt.coordinate_control_verified=true;
    }finally{Dispose(a);Dispose(b);Dispose(output);}
  }
  static AssetBundle[] bundles=new AssetBundle[5];
- static ComputeShader[] BuildAndLoadBundles(Config m,Receipt r){
+ static AssetBundle controlBundle;
+ static string ProjectName(){return Path.GetFileName(Path.GetDirectoryName(Application.dataPath));}
+ static string[] Paths(Config m){
    var paths=new string[5];paths[0]="Assets/Private/indexed.compute";
    for(int i=0;i<4;i++)paths[i+1]="Assets/Private/"+m.rows[i].file;
-   var builds=new AssetBundleBuild[5];var imported=new ComputeShader[5];var aliases=new string[5];
+   return paths;
+ }
+ static void BuildBundles(Config m,Receipt r){
+   var paths=Paths(m);var builds=new AssetBundleBuild[6];
    for(int i=0;i<5;i++){
      var s=AssetDatabase.LoadAssetAtPath<ComputeShader>(paths[i]);Need(s!=null);
      foreach(var e in ShaderUtil.GetComputeShaderMessages(s))Need(e.severity.ToString()!="Error");
-     imported[i]=s;aliases[i]="gtfft-"+i;
-     builds[i]=new AssetBundleBuild{assetBundleName="fft-"+i,assetNames=new[]{paths[i]},addressableNames=new[]{aliases[i]}};
+     builds[i]=new AssetBundleBuild{assetBundleName="fft-"+i,assetNames=new[]{paths[i]},addressableNames=new[]{"gtfft-"+i}};
    }
+   const string control="Assets/Private/BundleCoordinate.compute";
+   var authored=AssetDatabase.LoadAssetAtPath<ComputeShader>(control);Need(authored!=null);
+   foreach(var e in ShaderUtil.GetComputeShaderMessages(authored))Need(e.severity.ToString()!="Error");
+   builds[5]=new AssetBundleBuild{assetBundleName="fft-control",assetNames=new[]{control},addressableNames=new[]{"gtfft-control"}};
    const BuildTarget platform=BuildTarget.StandaloneLinux64;
+   Need(EditorUserBuildSettings.activeBuildTarget==platform);
    PlayerSettings.SetUseDefaultGraphicsAPIs(platform,false);
    PlayerSettings.SetGraphicsAPIs(platform,new[]{GraphicsDeviceType.Vulkan});
    var apis=PlayerSettings.GetGraphicsAPIs(platform);Need(apis.Length==1&&apis[0]==GraphicsDeviceType.Vulkan);
@@ -261,43 +272,82 @@ public static class GTIndexedPair {
    var manifest=BuildPipeline.BuildAssetBundles(dir,builds,
        BuildAssetBundleOptions.UncompressedAssetBundle|BuildAssetBundleOptions.StrictMode|BuildAssetBundleOptions.ForceRebuildAssetBundle,platform);
    Need(manifest!=null);
-   var names=manifest.GetAllAssetBundles();Need(names.Length==5);
-   for(int i=0;i<5;i++){
-     string name="fft-"+i;Need(Array.IndexOf(names,name)>=0);
+   var names=manifest.GetAllAssetBundles();Need(names.Length==6);
+   for(int i=0;i<6;i++){
+     string name=i==5?"fft-control":"fft-"+i;Need(Array.IndexOf(names,name)>=0);
+     Need(manifest.GetAllDependencies(name).Length==0);
      var file=Path.Combine(dir,name);
      Need(File.Exists(file)&&new FileInfo(file).Length>0&&new FileInfo(file).Length<=64*1024*1024);
-     r.bundle_sha256[i]=Sha(file);r.bundle_count++;
+     if(i==5){r.bundle_control_sha256=Sha(file);r.bundle_control_built=true;}
+     else{r.bundle_sha256[i]=Sha(file);r.bundle_count++;}
    }
    r.bundle_built=true;
-   Mark("private_import","bundle_load");
+ }
+ static ComputeShader[] LoadBundles(Config m,Receipt r){
+   Need(ProjectName()=="gt-fft-bundle-load-project"&&!Directory.Exists(Path.Combine(Application.dataPath,"Private")));
+   Need(EditorUserBuildSettings.activeBuildTarget==BuildTarget.StandaloneLinux64);
+   Need(!AssetBundle.GetAllLoadedAssetBundles().GetEnumerator().MoveNext());
+   r.bundle_clean_load_process=true;
+   string dir=Path.Combine(Priv,"compiled-bundles");var paths=Paths(m);
+   r.bundle_control_step=1;
+   string controlFile=Path.Combine(dir,"fft-control");Need(Sha(controlFile)==r.bundle_control_sha256);
+   Need(BuildPipeline.GetCRCForAssetBundle(controlFile,out uint controlCrc));
+   r.bundle_control_step=2;controlBundle=AssetBundle.LoadFromFile(controlFile,controlCrc);Need(controlBundle!=null);r.bundle_control_opened=true;
+   r.bundle_control_step=3;var controlNames=controlBundle.GetAllAssetNames();Need(controlNames.Length==1&&controlNames[0]=="gtfft-control");
+   r.bundle_control_step=4;bundleControl=controlBundle.LoadAsset<ComputeShader>("gtfft-control");Need(bundleControl!=null);r.bundle_control_loaded=true;
+   r.bundle_control_step=5;
    var loaded=new ComputeShader[5];
    for(int i=0;i<5;i++){
      r.bundle_load_index=i;r.bundle_load_step=1;r.bundle_asset_count=-1;
+     Need(AssetDatabase.LoadAssetAtPath<ComputeShader>(paths[i])==null);r.bundle_source_absent++;
      string file=Path.Combine(dir,"fft-"+i);
      Need(Sha(file)==r.bundle_sha256[i]);Need(BuildPipeline.GetCRCForAssetBundle(file,out uint crc));
      r.bundle_crc_verified++;r.bundle_load_step=2;
      bundles[i]=AssetBundle.LoadFromFile(file,crc);Need(bundles[i]!=null);r.bundle_opened++;
      r.bundle_load_step=3;var entries=bundles[i].GetAllAssetNames();r.bundle_asset_count=entries.Length;
-     Need(entries.Length==1&&String.Equals(entries[0],aliases[i],StringComparison.Ordinal));r.bundle_named++;
-     r.bundle_load_step=4;loaded[i]=bundles[i].LoadAsset<ComputeShader>(aliases[i]);Need(loaded[i]!=null);r.bundle_typed++;
-     r.bundle_load_step=5;Need(loaded[i].GetInstanceID()!=imported[i].GetInstanceID());r.bundle_distinct++;
+     string alias="gtfft-"+i;Need(entries.Length==1&&String.Equals(entries[0],alias,StringComparison.Ordinal));r.bundle_named++;
+     r.bundle_load_step=4;loaded[i]=bundles[i].LoadAsset<ComputeShader>(alias);Need(loaded[i]!=null);r.bundle_typed++;
+     r.bundle_load_step=5;Need(loaded[i].GetInstanceID()!=bundleControl.GetInstanceID());
+     for(int j=0;j<i;j++)Need(loaded[i].GetInstanceID()!=loaded[j].GetInstanceID());
+     r.bundle_distinct++;
    }
    r.bundle_load_step=6;r.bundle_loaded=true;return loaded;
  }
+ static Config ReadConfig(Receipt r){
+   string cfg=Path.Combine(Priv,"config.json");r.config_sha256=Sha(cfg);var m=JsonUtility.FromJson<Config>(File.ReadAllText(cfg));
+   Need(m.run_id==r.run_id&&m.object_sha=="9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"&&m.rows.Length==4);
+   int[] slots={6,7,16,17};for(int i=0;i<4;i++)Need(m.rows[i].slot==slots[i]&&m.rows[i].group==512);
+   return m;
+ }
  public static void Run(){
-   var r=new Receipt();try{
-     r.run_id=Arg("-gtFftRunId");
-     Need(Application.isBatchMode&&Application.unityVersion=="2021.3.45f2"&&File.ReadAllText(Path.Combine(Priv,"editor-output-private")).Trim()==r.run_id);
-     r.private_guard=true;progress=new Progress{run_id=r.run_id};Mark("environment","managed_entry");
+   var r=new Receipt();building=Array.IndexOf(Environment.GetCommandLineArgs(),"-gtFftBuildOnly")>=0;
+   try{
+     string id=Arg("-gtFftRunId");r.run_id=id;
+     Need(Application.isBatchMode&&Application.unityVersion=="2021.3.45f2"&&File.ReadAllText(Path.Combine(Priv,building?"bundle-build-marker":"editor-output-private")).Trim()==id);
+     if(!building){
+       string prior=Path.Combine(Priv,"bundle-build-receipt.json");Need(File.Exists(prior));
+       r=JsonUtility.FromJson<Receipt>(File.ReadAllText(prior));
+       Need(r!=null&&r.run_id==id&&r.status=="BUILT"&&r.bundle_build_process&&r.bundle_built&&r.bundle_count==5&&r.bundle_control_built&&r.private_source_hashes_match&&r.bundle_vulkan_only);
+       r.status="INCONCLUSIVE";r.failure_type=null;
+     }
+     r.private_guard=true;progress=new Progress{run_id=id};Mark("environment","managed_entry");
      r.vulkan=SystemInfo.graphicsDeviceType==GraphicsDeviceType.Vulkan;
      Need(r.vulkan&&SystemInfo.supportsComputeShaders&&SystemInfo.supportsAsyncGPUReadback);
-     r.phase="private_import";Mark("private_import","copy");
-     string cfg=Path.Combine(Priv,"config.json");r.config_sha256=Sha(cfg);var m=JsonUtility.FromJson<Config>(File.ReadAllText(cfg));
-     Need(m.run_id==r.run_id&&m.object_sha=="9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"&&m.rows.Length==4);
-     Directory.CreateDirectory(Path.Combine(Application.dataPath,"Private"));Copy("indexed.compute",m.indexed_sha);
-     int[] slots={6,7,16,17};for(int i=0;i<4;i++){Need(m.rows[i].slot==slots[i]&&m.rows[i].group==512);Copy(m.rows[i].file,m.rows[i].sha256);}
-     Mark("private_import","refresh");AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-     Mark("private_import","load_indexed");var loaded=BuildAndLoadBundles(m,r);var shader=loaded[0];Need(shader!=null);
+     r.phase="private_import";string priorHash=r.config_sha256;var m=ReadConfig(r);
+     if(building){
+       Need(ProjectName()=="gt-fft-bank-project");r.bundle_build_process=true;
+       Mark("private_import","copy");
+       Directory.CreateDirectory(Path.Combine(Application.dataPath,"Private"));Copy("indexed.compute",m.indexed_sha);
+       foreach(var row in m.rows)Copy(row.file,row.sha256);
+       File.Copy(Path.Combine(Application.dataPath,"Editor","Coordinate.compute"),Path.Combine(Application.dataPath,"Private","BundleCoordinate.compute"));
+       Mark("private_import","refresh");AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+       BuildBundles(m,r);
+       Need(Sha(Path.Combine(Application.dataPath,"Private","indexed.compute"))==m.indexed_sha);
+       foreach(var row in m.rows)Need(Sha(Path.Combine(Application.dataPath,"Private",row.file))==row.sha256);
+       r.private_source_hashes_match=true;r.status="BUILT";Mark("complete","receipt");
+     }else{
+     Need(priorHash==r.config_sha256);
+     Mark("private_import","load_indexed");var loaded=LoadBundles(m,r);var shader=loaded[0];Need(shader!=null);
      Mark("private_import","register");for(int i=0;i<20;i++){
        string n="RaftFftSlot"+i.ToString("00");Need(shader.HasKernel(n)&&shader.FindKernel(n)==i);
        shader.GetKernelThreadGroupSizes(i,out uint x,out uint y,out uint z);Need(x==(64u<<(i%10/2))&&y==1&&z==1);r.registration_count++;
@@ -312,13 +362,15 @@ public static class GTIndexedPair {
      r.phase="paired_dispatch";int index=0;
      foreach(int offset in new[]{0,2})foreach(string mode in new[]{"signed","zero"}){r.cases[index]=Pair(shader,refs,m,offset,mode);Need(r.cases[index].outcome=="OBSERVED");index++;}
      r.phase="identity";Mark("identity","validate");
-     Need(Sha(Path.Combine(Application.dataPath,"Private","indexed.compute"))==m.indexed_sha);
-     foreach(var row in m.rows)Need(Sha(Path.Combine(Application.dataPath,"Private",row.file))==row.sha256);
-     Need(r.bundle_loaded&&r.bundle_count==5);
+     Need(!Directory.Exists(Path.Combine(Application.dataPath,"Private"))&&Sha(Path.Combine(Priv,"indexed.compute"))==m.indexed_sha);
+     foreach(var row in m.rows)Need(Sha(Path.Combine(Priv,row.file))==row.sha256);
+     Need(r.bundle_loaded&&r.bundle_count==5&&r.bundle_control_loaded&&r.bundle_source_absent==5);
      r.private_source_hashes_match=true;r.phase="complete";r.status="PASS";Mark("complete","receipt");
-   }catch(Exception e){r.failure_type=e.GetType().Name;}
+     }
+   }catch(Exception e){if(r==null)r=new Receipt();r.status="INCONCLUSIVE";r.failure_type=e.GetType().Name;}
    foreach(var b in bundles)if(b!=null)b.Unload(true);
-   File.WriteAllText(Path.Combine(Priv,"receipt.json"),JsonUtility.ToJson(r));
-   EditorApplication.Exit(r.status=="PASS"?0:2);
+   if(controlBundle!=null)controlBundle.Unload(true);
+   File.WriteAllText(Path.Combine(Priv,building?"bundle-build-receipt.json":"receipt.json"),JsonUtility.ToJson(r));
+   EditorApplication.Exit(r.status==(building?"BUILT":"PASS")?0:2);
  }
 }

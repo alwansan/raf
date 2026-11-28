@@ -1,4 +1,4 @@
-name: GT G4 serialized compute bundle direct RGFloat parity (NO PLAYER)
+name: GT G4 clean editor bundle direct RGFloat parity (NO PLAYER)
 on:
   push:
     branches: [feature/android-native-port]
@@ -73,7 +73,8 @@ jobs:
           mkdir "$RUNNER_TEMP/gt-fft-bank-docker"
           cp tools/gt_fft_live_module/{private-editor.sh,layer.cpp,VkLayer_GT_fft_capture.json,smoke.cpp,smoke.comp} "$RUNNER_TEMP/gt-fft-bank-docker/"
           cp tools/gt_fft_typed_dxc/layer.cpp "$RUNNER_TEMP/gt-fft-bank-docker/layer.cpp"
-          # Typed capture guard only; no pipeline replacement or half-map. CRC is checked before opening each bundle.
+          # Typed capture guard only; no pipeline replacement or half-map.
+          cp tools/gt_fft_compute_bundle/private-editor.sh "$RUNNER_TEMP/gt-fft-bank-docker/private-editor.sh"
           bash -n "$RUNNER_TEMP/gt-fft-bank-docker/private-editor.sh"
           cat > "$RUNNER_TEMP/gt-fft-bank-docker/Dockerfile" <<'DOCKERFILE'
           FROM unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3
@@ -157,9 +158,11 @@ jobs:
           export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
           test -n "$VK_DRIVER_FILES"
           "$RUNNER_TEMP/gt-fft-bank-py/bin/python" -B -m tools.gt_fft_compute_bundle.audit stage --format "$GT_FFT_FORMAT" --source "$RUNNER_TEMP/gt-fft-bank-source/Raft_Data" --managed "$RUNNER_TEMP/gt-fft-bank-managed" --project gt-fft-bank-project --private gt-fft-bank-private --run-id "$GT_FFT_RUN_ID" --out "$RUNNER_TEMP/gt-fft-bank-safe/stage.json"
+          test ! -e gt-fft-bundle-load-project && test ! -e gt-fft-bank-project/Assets/Private
+          cp -a gt-fft-bank-project gt-fft-bundle-load-project
           rm -rf zip2-fft-pair "$RUNNER_TEMP/gt-fft-bank-source" "$RUNNER_TEMP/gt-fft-bank-managed"
-      - name: Execute bundle-loaded RGFloat chained cases without module replacement
-        id: unity
+      - name: Build private Vulkan bundles in separate editor process
+        id: bundle_build
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
         env:
@@ -179,6 +182,29 @@ jobs:
           allowDirtyBuild: true
           dockerMemoryLimit: 8g
           dockerCpuLimit: 2
+          customParameters: -force-vulkan -force-device-index 0 -job-worker-count 2 -gtFftRunId ${{ env.GT_FFT_RUN_ID }} -gtFftBuildOnly
+      - name: Execute bundle-loaded RGFloat chained cases in clean editor without module replacement
+        if: steps.bundle_build.outcome == 'success'
+        id: unity
+        continue-on-error: true
+        uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          customImage: raft-gt-fft-bank:local
+          projectPath: gt-fft-bundle-load-project
+          targetPlatform: StandaloneLinux64
+          buildMethod: GTIndexedPair.Run
+          manualExit: true
+          enableGpu: true
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 8g
+          dockerCpuLimit: 2
           customParameters: -force-vulkan -force-device-index 0 -job-worker-count 2 -gtFftRunId ${{ env.GT_FFT_RUN_ID }}
       - name: Verify exact serialized-to-live module joins and chained numeric parity
         if: always() && steps.stage.outcome == 'success'
@@ -188,7 +214,8 @@ jobs:
           set -euo pipefail
           test -d gt-fft-bank-private && test ! -L gt-fft-bank-private
           test -d gt-fft-bank-project && test ! -L gt-fft-bank-project
-          sudo chown -hR "$(id -u):$(id -g)" -- gt-fft-bank-private gt-fft-bank-project
+          test -d gt-fft-bundle-load-project && test ! -L gt-fft-bundle-load-project
+          sudo chown -hR "$(id -u):$(id -g)" -- gt-fft-bank-private gt-fft-bank-project gt-fft-bundle-load-project
           test "$(stat -c %a gt-fft-bank-private)" = 700
           "$RUNNER_TEMP/gt-fft-bank-py/bin/python" -B -m tools.gt_fft_compute_bundle.audit verify --decoder "$RUNNER_TEMP/gt-fft-bundle-smolv/decode" --format "$GT_FFT_FORMAT" --project gt-fft-bank-project --private gt-fft-bank-private --stage "$RUNNER_TEMP/gt-fft-bank-safe/stage.json" --run-id "$GT_FFT_RUN_ID" --outcome "$EDITOR_OUTCOME" --out "$RUNNER_TEMP/gt-fft-bank-safe/actual.json"
       - name: Publish bounded aggregate only
@@ -202,7 +229,7 @@ jobs:
       - name: Remove only private experiment staging
         if: always()
         run: |
-          sudo rm -rf gt-fft-bank-project gt-fft-bank-private
+          sudo rm -rf gt-fft-bank-project gt-fft-bundle-load-project gt-fft-bank-private
           rm -rf zip2-fft-pair "$RUNNER_TEMP/gt-fft-bank-source" "$RUNNER_TEMP/gt-fft-bank-docker"
           rm -rf "$RUNNER_TEMP/gt-fft-bank-managed" "$RUNNER_TEMP/gt-fft-bank-ilspy" "$RUNNER_TEMP/gt-fft-layer-smoke"
           rm -f "$RUNNER_TEMP/gt-fft-bank-ilspy.log" "$RUNNER_TEMP/gt-fft-bank-pull.log" "$RUNNER_TEMP/gt-fft-bank-build.log"

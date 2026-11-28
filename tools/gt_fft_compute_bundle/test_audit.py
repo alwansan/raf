@@ -1,4 +1,6 @@
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from tools.gt_fft_compute_bundle import audit as a
 class BundleTests(unittest.TestCase):
     def test_byte_fields(self):
@@ -31,4 +33,15 @@ class BundleTests(unittest.TestCase):
         with self.assertRaises(ValueError):a.join_captures(reports,receipt,"RGFloat")
     def test_bounded_load_fields(self):
         self.assertEqual(a.bundle_load_fields({"bundle_load_index":2,"bundle_load_step":4,"bundle_opened":3,"bundle_named":True,"bundle_asset_count":100000,"raw_error":"private"}),{"bundle_load_index":2,"bundle_load_step":4,"bundle_opened":3})
+    def test_log_categories_only(self):
+        with TemporaryDirectory() as root:
+            p=Path(root)
+            (p/"editor.log").write_text("private token example\nUnable to open archive file: private-path\nCRC mismatch")
+            result=a.log_categories(p)
+            self.assertTrue(result["editor.log"]["archive_open"])
+            self.assertTrue(result["editor.log"]["crc_mismatch"])
+            self.assertNotIn("private-path",str(result))
+    def test_missing_build_receipt_rejected(self):
+        with TemporaryDirectory() as root:
+            with self.assertRaises(ValueError):a.build_receipt(Path(root),"run")
 if __name__=="__main__":unittest.main()

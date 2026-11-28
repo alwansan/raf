@@ -156,9 +156,35 @@ def join_captures(reports,receipt,fmt):
 
 def bundle_load_fields(r):
     # Strictly bounded authored fields only; no raw asset names or log text.
-    bounds={"bundle_load_index":(-1,4),"bundle_load_step":(0,6),"bundle_asset_count":(-1,1024)}
+    bounds={"bundle_load_index":(-1,4),"bundle_load_step":(0,6),"bundle_asset_count":(-1,1024),"bundle_control_step":(0,5),"bundle_source_absent":(0,5)}
     bounds.update({k:(0,5) for k in ("bundle_crc_verified","bundle_opened","bundle_named","bundle_typed","bundle_distinct")})
     return {k:r[k] for k,(a,b) in bounds.items() if type(r.get(k)) is int and a<=r[k]<=b}
+
+def log_categories(private):
+    # Bounded classification only. Do not export raw editor messages.
+    tags={"crc_mismatch":r"crc mismatch|crc.*does not match",
+          "already_loaded":r"another assetbundle.*same files|assetbundle.*already loaded",
+          "platform_incompatible":r"assetbundle.*(?:not compatible|incompatible|wrong platform|different platform)",
+          "archive_open":r"unable to open archive file|failed to open archive",
+          "invalid_bundle":r"not a valid assetbundle|invalid assetbundle",
+          "editor_unsupported":r"assetbundle.*(?:not supported|not allowed).*editor"}
+    out={}
+    for name in ("bundle-build.log","editor.log","editor-stdout.log"):
+        p=private/name
+        if p.is_file() and not p.is_symlink():
+            with p.open("rb") as stream:
+                stream.seek(max(0,p.stat().st_size-8*1024*1024))
+                raw=stream.read().decode("utf-8",errors="replace")
+            out[name]={k:bool(re.search(v,raw,re.I)) for k,v in tags.items()}
+    return out
+
+def build_receipt(private,run_id):
+    path=private/"bundle-build-receipt.json";marker=private/"bundle-build-marker";ex=private/"bundle-build-exit-code"
+    need(all(p.is_file() and not p.is_symlink() and p.stat().st_size<65536 for p in (path,marker,ex)),"build_receipt_present")
+    r=json.loads(path.read_text())
+    need(marker.read_text().strip()==run_id and ex.read_text().strip()=="0" and r["run_id"]==run_id and r["status"]=="BUILT","build_process_identity")
+    need(r["bundle_build_process"] is True and r["bundle_built"] is True and r["bundle_control_built"] is True and r["bundle_vulkan_only"] is True and r["private_source_hashes_match"] is True and r["bundle_count"]==5 and len(r["bundle_sha256"])==5,"build_population")
+    return r
 
 def stage(src,managed,project,private,run_id,fmt):
     result=(typed if fmt=="RGFloat" else half).stage(src,managed,project,private,run_id,fmt)
@@ -171,10 +197,16 @@ def verify(project,private,s,run_id,outcome,fmt,decoder):
     need(s["status"]==STAGED,"stage")
     backend=typed if fmt=="RGFloat" else half
     receipt=dict(s,status=backend.STAGED)
+    build=build_receipt(private,run_id)
+    load_project=project.parent/"gt-fft-bundle-load-project"
+    need(not (load_project/"Assets/Private").exists() and sha(load_project/"Assets/Editor/IndexedPair.cs")==s["editor_sha"] and sha(load_project/"Assets/Editor/Coordinate.compute")==s["coordinate_sha"],"clean_load_project")
     r=json.loads((private/"receipt.json").read_text())
     need(r["bundle_built"] is True and r["bundle_loaded"] is True and r["bundle_vulkan_only"] is True and r["bundle_count"]==5,"editor_bundle")
     fields=bundle_load_fields(r)
-    need(fields==dict(bundle_load_index=4,bundle_load_step=6,bundle_asset_count=1,bundle_crc_verified=5,bundle_opened=5,bundle_named=5,bundle_typed=5,bundle_distinct=5),"bundle_load_identity")
+    need(fields==dict(bundle_load_index=4,bundle_load_step=6,bundle_asset_count=1,bundle_crc_verified=5,bundle_opened=5,bundle_named=5,bundle_typed=5,bundle_distinct=5,bundle_control_step=5,bundle_source_absent=5),"bundle_load_identity")
+    need(r["bundle_clean_load_process"] is True and r["bundle_control_opened"] is True and r["bundle_control_loaded"] is True and r["bundle_build_process"] is True,"clean_process_identity")
+    need(build["config_sha256"]==r["config_sha256"]==s["private_config_sha256"] and build["bundle_sha256"]==r["bundle_sha256"] and build["bundle_control_sha256"]==r["bundle_control_sha256"]==sha(private/"compiled-bundles/fft-control"),"separate_process_commitments")
+    need(sha(project/"Assets/Private/BundleCoordinate.compute")==s["coordinate_sha"],"authored_bundle_source")
     reports=bundle_inventory(private,decoder,fmt)
     need([x["bundle_sha256"] for x in reports]==r["bundle_sha256"],"bundle_commitment")
     if fmt=="RGFloat":
@@ -185,6 +217,7 @@ def verify(project,private,s,run_id,outcome,fmt,decoder):
     return dict(status=STATUS,format=fmt,actual_bundle_loaded=True,serialized_modules=24,registered_kernels=20,
                 bundle_inventory=reports,serialized_live_joins=joins,bundle_load_fields=fields,
                 runtime_replacement_used=(fmt!="RGFloat"),direct_serialized_execution_verified=(fmt=="RGFloat"),numeric_evidence=observed,
+                separate_clean_editor_verified=True,authored_bundle_control_verified=True,
                 exact_outputs=16,actual_descriptor_resource_mapping_verified=False,original_runtime_kernel_mapping_proven=False,
                 serialized_patch_verified=False,original_fft_numeric_parity_verified=False,water_rendering_verified=False,android_device=False,production=False,XAPK=False)
 
@@ -204,13 +237,21 @@ def main():
         if isinstance(e,ValueError) and re.fullmatch(r"[a-z_]+",str(e)):result["failure_reason"]=str(e)
         if a.action=="verify":
             result.update(directive.failure_receipt(a.private,a.run_id))
+            result["bundle_log_categories"]=log_categories(a.private)
+            try:
+                build=build_receipt(a.private,a.run_id)
+                result["separate_build_verified"]=True;result["built_bundle_count"]=build["bundle_count"]
+            except Exception:result["separate_build_verified"]=False
             try:result["bundle_inventory"]=bundle_inventory(a.private,a.decoder,a.format)
             except Exception:pass
             try:
                 r=json.loads((a.private/"receipt.json").read_text())
                 for key in ("bundle_built","bundle_loaded","bundle_vulkan_only","bundle_count"):
                     if type(r.get(key)) in (bool,int):result[key]=r[key]
-                if r.get("run_id")==a.run_id:result["bundle_load_fields"]=bundle_load_fields(r)
+                if r.get("run_id")==a.run_id:
+                    result["bundle_load_fields"]=bundle_load_fields(r)
+                    for k in ("bundle_build_process","bundle_clean_load_process","bundle_control_built","bundle_control_opened","bundle_control_loaded"):
+                        if type(r.get(k)) is bool:result[k]=r[k]
             except Exception:pass
             trace=a.private/"vktrace";result["observed_modules"]=[]
             for label in live.LABELS:
