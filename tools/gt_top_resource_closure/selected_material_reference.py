@@ -10,6 +10,28 @@ CASES=("type3","type2","wrong_guid","wrong_fileid")
 def require(ok):
     if not ok: raise ValueError("selected_material_reference_diagnostic_anchor")
 
+
+def repair_native_reference(body, prop, guid, fid, kind):
+    """Change only the proven class187 PPtr type; never install assets."""
+    require(re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,127}", prop) is not None)
+    require(re.fullmatch(r"[0-9a-f]{32}", guid) is not None)
+    require(fid == 18700000 and kind == 3)
+    original = native.strict_mapping(body)["Material"]
+    before = normalize_texenvs(original["m_SavedProperties"]["m_TexEnvs"], exported=True)
+    require(prop in before and before[prop][0] == (fid, guid, kind))
+    pattern = r"(?m)^(\s*m_Texture: \{fileID: 18700000, guid: " + guid + r", type: )3(\}[^\S\n]*)$"
+    require(len(re.findall(pattern, body)) == 1)
+    candidate = re.sub(pattern, lambda m: m[1] + "2" + m[2], body)
+    require(len(candidate.encode()) == len(body.encode()))
+    require(sum(a != b for a, b in zip(candidate.encode(), body.encode(), strict=True)) == 1)
+    after_doc = native.strict_mapping(candidate)["Material"]
+    after = normalize_texenvs(after_doc["m_SavedProperties"]["m_TexEnvs"], exported=True)
+    expected = dict(before)
+    expected[prop] = ((fid, guid, 2), before[prop][1])
+    require(after == expected and after_doc["m_Shader"] == original["m_Shader"])
+    return candidate
+
+
 def make_variants(body,prop,guid,fid,kind):
     require(re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,127}",prop) is not None)
     require(re.fullmatch(r"[0-9a-f]{32}",guid) is not None and guid not in (SHADER_GUID,WRONG_GUID))
@@ -28,6 +50,7 @@ def make_variants(body,prop,guid,fid,kind):
     ptr_pattern=r"(?m)^(\s*m_Texture: )\{fileID: 18700000, guid: "+guid+r", type: 3\}([ \t]*)$"
     require(len(re.findall(ptr_pattern,base))==1)
     cases={"type3":(fid,guid,3),"type2":(fid,guid,2),"wrong_guid":(fid,WRONG_GUID,2),"wrong_fileid":(fid+1,guid,2)}
+    repaired=repair_native_reference(body,prop,guid,fid,kind)
     results={}
     for case,(f,g,k) in cases.items():
         value=re.sub(ptr_pattern,lambda m:m[1]+f"{{fileID: {f}, guid: {g}, type: {k}}}"+m[2],base)
@@ -44,6 +67,7 @@ def make_variants(body,prop,guid,fid,kind):
         require(restored_doc==original)
         results[case]=value
     require(sum(x!=y for x,y in zip(results["type3"],results["type2"],strict=True))==1)
+    require(results["type2"] == re.sub(shader_pattern, lambda m:m[1]+"{fileID: 4800000, guid: "+SHADER_GUID+", type: 3}"+m[2], repaired))
     return results
 
 def stage(root,cfg,body,prop,guid,fid,kind,material_fid):

@@ -6,6 +6,7 @@ on:
       - clients/GT/RESTORATION_PLAN.json
       - clients/GT/RESTORATION_PLAN_AR.md
       - clients/GT/state.json
+      - clients/GT/ledger/**
       - clients/GT/RESTORE_AR.md
       - clients/GT/MEMORY.md
       - clients/GT/SUMMARY_AR.md

@@ -53,6 +53,11 @@ class NativeArrayTests(unittest.TestCase):
         from tools.gt_top_resource_closure import selected_material_reference as m
         guid="1234567890abcdef1234567890abcdef"
         body="\nMaterial:\n  m_Shader: {fileID: 4800000, guid: 0123456789abcdef0123456789abcdef, type: 3}\n  m_SavedProperties:\n    m_TexEnvs:\n    - _GT:\n        m_Texture: {fileID: 18700000, guid: "+guid+", type: 3}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n"
+        repaired=m.repair_native_reference(body,"_GT",guid,18700000,3)
+        self.assertEqual(repaired,body.replace("guid: "+guid+", type: 3","guid: "+guid+", type: 2"))
+        self.assertIn("m_Shader: {fileID: 4800000, guid: 0123456789abcdef0123456789abcdef, type: 3}",repaired)
+        with self.assertRaises(ValueError):m.repair_native_reference(body,"_Wrong",guid,18700000,3)
+        with self.assertRaises(ValueError):m.repair_native_reference(body,"_GT",guid,18700000,2)
         variants=m.make_variants(body,"_GT",guid,18700000,3)
         self.assertEqual(sum(a!=b for a,b in zip(variants["type2"],variants["type3"],strict=True)),1)
         self.assertIn("fileID: 18700001",variants["wrong_fileid"])

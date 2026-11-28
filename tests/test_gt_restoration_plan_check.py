@@ -127,5 +127,46 @@ class GTRestorationLedgerTests(unittest.TestCase):
             self.verify(plan=plan)
 
 
+    def test_sharded_ledger_retains_history_and_rejects_invalid_parts(self):
+        import hashlib
+        import tempfile
+        from scripts.gt_restoration_plan_check import MAX_JSON
+        self.assertIn("current_handoff", self.plan)
+        self.assertIn("current_handoff", self.state)
+        self.assertLessEqual(PLAN.stat().st_size, MAX_JSON)
+        self.assertLessEqual(STATE.stat().st_size, MAX_JSON)
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "ledger").mkdir()
+            name = "ledger/20261128-common-01.json"
+            part = root / name
+            def manifest(data):
+                payload = json.dumps(data).encode()
+                part.write_bytes(payload)
+                return {"path": name, "keys": sorted(data),
+                        "blob_sha": hashlib.sha1(b"blob " + str(len(payload)).encode()
+                                                  + b"\0" + payload).hexdigest()}
+            doc = root / "state.json"
+            def read(entry):
+                doc.write_text(json.dumps({"live": 1, "ledger_parts": [entry]}), encoding="utf-8")
+                return _read(doc)
+            entry = manifest({"historic": {"proof": 2}})
+            self.assertEqual(read(entry), {"live": 1, "historic": {"proof": 2}})
+            with self.assertRaisesRegex(ValueError, "duplicate_key"):
+                read(manifest({"live": 2}))
+            entry = manifest({"historic": 2})
+            with self.assertRaisesRegex(ValueError, "keys_mismatch"):
+                read({**entry, "keys": ["other"]})
+            with self.assertRaisesRegex(ValueError, "blob_mismatch"):
+                read({**entry, "blob_sha": "0"*40})
+            with self.assertRaisesRegex(ValueError, "invalid_ledger_part"):
+                read({**entry, "path": "../escape.json"})
+            part.write_bytes(b"x" * (MAX_JSON + 1))
+            with self.assertRaisesRegex(ValueError, "oversized"):
+                read(entry)
+            part.unlink()
+            with self.assertRaisesRegex(ValueError, "unsafe"):
+                read(entry)
+
 if __name__ == "__main__":
     unittest.main()

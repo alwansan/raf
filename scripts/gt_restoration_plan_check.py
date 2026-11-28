@@ -214,7 +214,7 @@ def check(plan: dict, state: dict, device: dict) -> dict:
             "native_build_latest_result_unverified": milestones["M1"]["status"] != "complete"}
 
 
-def _read(path: Path):
+def _read_bounded(path: Path):
     if (not path.is_file() or path.is_symlink()
             or not 0 < path.stat().st_size <= MAX_JSON):
         raise ValueError("unsafe_or_oversized_plan_document")
@@ -225,9 +225,52 @@ def _read(path: Path):
                 raise ValueError("duplicate_json_key")
             data[key] = value
         return data
-    return json.loads(path.read_text(encoding="utf-8"),
-                      object_pairs_hook=no_duplicate_keys)
+    raw = path.read_bytes()
+    if not 0 < len(raw) <= MAX_JSON:
+        raise ValueError("unsafe_or_oversized_plan_document")
+    return json.loads(raw.decode("utf-8"), object_pairs_hook=no_duplicate_keys), raw
 
+
+def _read(path: Path):
+    """Read a complete logical ledger; preserve legacy single-file readers."""
+    value, _ = _read_bounded(path)
+    if not isinstance(value, dict) or "ledger_parts" not in value:
+        return value
+    import hashlib
+    parts = value.pop("ledger_parts")
+    if not isinstance(parts, list) or not 1 <= len(parts) <= 32:
+        raise ValueError("invalid_ledger_parts")
+    directory = path.parent / "ledger"
+    if directory.is_symlink() or not directory.is_dir():
+        raise ValueError("unsafe_ledger_directory")
+    seen_paths = set()
+    for entry in parts:
+        if not isinstance(entry, dict) or set(entry) != {"path", "blob_sha", "keys"}:
+            raise ValueError("invalid_ledger_part")
+        name, sha, keys = entry["path"], entry["blob_sha"], entry["keys"]
+        if (not isinstance(name, str)
+                or re.fullmatch(r"ledger/[0-9]{8}-(common|plan|state)-[0-9]{2}\.json", name) is None
+                or name in seen_paths
+                or not isinstance(sha, str)
+                or re.fullmatch(r"[0-9a-f]{40}", sha) is None
+                or not isinstance(keys, list) or not keys
+                or any(not isinstance(k, str) or not k for k in keys)
+                or keys != sorted(set(keys))
+                or "ledger_parts" in keys):
+            raise ValueError("invalid_ledger_part")
+        seen_paths.add(name)
+        part, payload = _read_bounded(path.parent / name)
+        actual_sha = hashlib.sha1(
+            b"blob " + str(len(payload)).encode("ascii") + b"\0" + payload
+        ).hexdigest()
+        if actual_sha != sha:
+            raise ValueError("ledger_part_blob_mismatch")
+        if not isinstance(part, dict) or sorted(part) != keys:
+            raise ValueError("ledger_part_keys_mismatch")
+        if value.keys() & part.keys():
+            raise ValueError("ledger_part_duplicate_key")
+        value.update(part)
+    return value
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
