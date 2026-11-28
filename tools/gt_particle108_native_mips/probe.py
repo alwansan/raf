@@ -87,7 +87,7 @@ def actual_body(project,ptr):
     matches=[]
     for meta in (project/"Assets").rglob("*.meta"):
         need(not meta.is_symlink(),"linked_export_meta")
-        raw=pixels.bounded_snapshot(meta,256*1024).decode("utf8-sig")
+        raw=pixels.bounded_snapshot(meta,256*1024).decode("utf-8-sig")
         if guid in {g.lower() for g in b05.GUID.findall(raw)}:
             need(len(b05.GUID.findall(raw))==1,"ambiguous_texture_meta")
             data=strict_mapping(raw)
@@ -96,7 +96,7 @@ def actual_body(project,ptr):
                  "native_meta_identity_mismatch")
             matches.append(meta.with_suffix(""))
     need(len(matches)==1 and matches[0].suffix in (".texture2D",".asset"),"native_texture_asset_not_unique")
-    text=pixels.bounded_snapshot(matches[0],256*1024).decode("utf8-sig")
+    text=pixels.bounded_snapshot(matches[0],256*1024).decode("utf-8-sig")
     headers=list(b05.ALL_HEADER.finditer(text))
     need(len(headers)==1,"native_texture_document_not_unique")
     h=b05.DOCUMENT_HEADER.fullmatch(headers[0].group())
