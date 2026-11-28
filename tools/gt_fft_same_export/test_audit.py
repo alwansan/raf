@@ -14,4 +14,19 @@ class Controls(unittest.TestCase):
     def test_duplicate_and_extra(self):
         for body in [self.body+b"  computeArray: []\n",self.body+b"  - {fileID: 0}\n"]:
             with self.assertRaises(ValueError):a.verify_field(body,self.field,(7200000,self.guid,"2"))
+    def test_helper_composition(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from scripts import b21_stage_light_lineage as l
+        from scripts import patch_export_lineage as p
+        with TemporaryDirectory() as tmp:
+            path=Path(tmp)/"helper.cs"
+            base=Path("android-port/Experiments/ExportLineage/RaftExportLineage.cs").read_bytes()
+            path.write_bytes(l.render(base))
+            a.patch_helper(path)
+            text=p.add_compute_lineage(path.read_bytes()).decode()
+            self.assertIn("asset.ClassID != 114 || asset.PathID != 23172",text)
+            self.assertIn("includeComputeObjects && asset.ClassID == 72",text)
+            self.assertEqual(text.count("CaptureFftComponent("),2)
+            self.assertEqual(text.count('json.WriteString("export_instance", exportInstance);'),3)
 if __name__=="__main__":unittest.main()

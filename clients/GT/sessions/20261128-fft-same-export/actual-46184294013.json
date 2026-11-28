@@ -1,0 +1,24 @@
+{
+  "run": 46184294013,
+  "job": 141100606164,
+  "head": "cef87c5aed7c29c8bf7bf0d0c76ea29dd425502d",
+  "conclusion": "failure",
+  "guard": {
+    "run": 46184293966,
+    "conclusion": "success"
+  },
+  "lint": {
+    "run": 46184293973,
+    "conclusion": "success"
+  },
+  "source_free_tests_passed": 17,
+  "missing_test_file": "tests/test_gt_stage_indexed_fft_candidate.py",
+  "unittest_discovery_tests": 0,
+  "exit_code": 5,
+  "original_export_attempted": false,
+  "actual_unity_import_verified": false,
+  "water_rendering_verified": false,
+  "production": false,
+  "android_device": false,
+  "XAPK": false
+}

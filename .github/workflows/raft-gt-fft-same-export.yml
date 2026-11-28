@@ -38,6 +38,7 @@ jobs:
           python3 -B -m unittest discover -s tools/gt_fft_same_export -p 'test_*.py' -v
           python3 -m unittest discover -s tests -p test_verify_original_fft_array_provenance.py -v
           python3 -m unittest discover -s tests -p test_b21_stage_light_lineage.py -v
+          test -f tests/test_gt_stage_indexed_fft_candidate.py
           python3 -m unittest discover -s tests -p test_gt_stage_indexed_fft_candidate.py -v
       - uses: actions/setup-dotnet@v4
         with:
