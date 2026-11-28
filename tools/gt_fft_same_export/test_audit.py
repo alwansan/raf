@@ -29,4 +29,30 @@ class Controls(unittest.TestCase):
             self.assertIn("includeComputeObjects && asset.ClassID == 72",text)
             self.assertEqual(text.count("CaptureFftComponent("),2)
             self.assertEqual(text.count('json.WriteString("export_instance", exportInstance);'),3)
+    def test_workflow_trace_environment(self):
+        import re
+        from pathlib import Path
+        import yaml
+        workflow=yaml.safe_load(Path(".github/workflows/raft-gt-fft-same-export.yml").read_text())
+        steps=next(iter(workflow["jobs"].values()))["steps"]
+        step=next(x for x in steps if x.get("name","").startswith("Run one bounded genuine"))
+        used=set(re.findall(r"\$(RAFT_PRIVATE_EXPORT_[A-Z_]+)",step["run"]))
+        self.assertEqual(used,{"RAFT_PRIVATE_EXPORT_LINEAGE","RAFT_PRIVATE_EXPORT_FFT_COMPONENT_LINEAGE","RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE"})
+        self.assertLessEqual(used,set(step["env"]))
+    def test_export_status_keeps_actual_trace_boundary(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        import json
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp);project=root/"project";(project/"Assets").mkdir(parents=True)
+            paths=[root/k for k in ("w1","component","texture")]
+            for p in paths:p.write_text(json.dumps({"schema_version":1,"export_instance":"a"*32,"objects":[]}))
+            log=root/"log";log.write_text("fixture")
+            s=a.export_status(0,project,*paths,log)
+            self.assertTrue(s["actual_export_completed"])
+            self.assertEqual(s["source_compute_trace_rows"],0)
+            paths[1].unlink()
+            s=a.export_status(0,project,*paths,log)
+            self.assertTrue(s["exporter_returned_zero"])
+            self.assertFalse(s["actual_export_completed"])
 if __name__=="__main__":unittest.main()

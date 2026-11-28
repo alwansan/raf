@@ -29,6 +29,7 @@ jobs:
             tests
             config
             tools/gt_fft_same_export
+            .github/workflows/raft-gt-fft-same-export.yml
             Raft/Raft_Data/Managed
       - name: Source-free pointer identity and managed provenance controls
         run: |
@@ -156,27 +157,20 @@ jobs:
           RAFT_PRIVATE_EXPORT_COMPUTE_LINEAGE: "1"
         run: |
           set -euo pipefail
-          if timeout 540s dotnet "$RUNNER_TEMP/b21-compiled/ExportLineage.dll" \
+          set +e
+          timeout 540s dotnet "$RUNNER_TEMP/b21-compiled/ExportLineage.dll" \
                "$RUNNER_TEMP/b21-original" "$RUNNER_TEMP/b21-private-export" \
-               > "$RUNNER_TEMP/b21-original-export-private.log" 2>&1; then
-            test -s "$RAFT_PRIVATE_EXPORT_LINEAGE"
-            test -s "$RAFT_PRIVATE_EXPORT_LIGHT_LINEAGE"
-            echo 'RAFT_B21_BOUNDED_GAME_EXPORT_COMPLETED=true'
-          else
-            python3 - <<'PY'
-          import os,json,re
-          from pathlib import Path
-          root=Path(os.environ['RUNNER_TEMP'])
-          raw=(root/'b21-original-export-private.log').read_text(errors='replace')
-          report={'actual_export_completed':False,'tool_exception_categories':sorted(set(re.findall(r'\b(?:System|AssetRipper)\.[A-Za-z.]+Exception\b',raw))),
-                  'trace_w1_created':(root/'b21-w1-private.json').is_file(),
-                  'trace_light_created':(root/'b21-light-private.json').is_file(),
-                  'private_log_bytes':len(raw.encode()),'android_render_executed':False}
-          (root/'t3-shader-parity-safe.json').write_text(json.dumps(report,sort_keys=True))
-          print('RAFT_B21_BOUNDED_EXPORT_INCONCLUSIVE '+json.dumps(report,sort_keys=True))
-          PY
-            exit 2
-          fi
+               > "$RUNNER_TEMP/b21-original-export-private.log" 2>&1
+          rc=$?
+          set -e
+          python3 -B -m tools.gt_fft_same_export.audit \
+            --export-status "$rc" \
+            --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
+            --w1 "$RAFT_PRIVATE_EXPORT_LINEAGE" \
+            --component-trace "$RAFT_PRIVATE_EXPORT_FFT_COMPONENT_LINEAGE" \
+            --texture-trace "$RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE" \
+            --export-log "$RUNNER_TEMP/b21-original-export-private.log" \
+            --out "$RUNNER_TEMP/gt-fft-same-export-phase-safe.json"
       - name: Verify exact original water component array and same-export diagnostic candidate GUID
         run: |
           set -euo pipefail
@@ -192,7 +186,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gt-fft-same-export-safe
-          path: ${{ runner.temp }}/gt-fft-same-export-safe.json
+          path: |
+            ${{ runner.temp }}/gt-fft-same-export-safe.json
+            ${{ runner.temp }}/gt-fft-same-export-phase-safe.json
           if-no-files-found: warn
           retention-days: 14
       - name: Clean private original export and traces

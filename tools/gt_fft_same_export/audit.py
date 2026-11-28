@@ -156,11 +156,48 @@ def run(source,managed,project,w1,component_trace,work):
         actual_unity_import_verified=False,original_runtime_kernel_mapping_proven=False,all_four_format_runtime_selection_verified=False,
         android_device=False,water_rendering_verified=False,production=False,XAPK=False)
 
+def export_status(rc,project,w1,component,texture,log):
+    # Publish only bounded observations. Private source paths, trace IDs,
+    # exported GUIDs and raw exporter messages must not leave the runner.
+    paths={"w1":w1,"component":component,"texture":texture}
+    report=dict(exporter_exit=rc,exporter_returned_zero=rc==0,trace_exists={},trace_rows={},trace_instances_equal=False,
+                source_compute_trace_rows=0,source_component_trace_rows=0,export_assets_present=(project/"Assets").is_dir(),
+                actual_export_completed=False,android_device=False,production=False,XAPK=False)
+    if log.is_file() and not log.is_symlink():
+        report["private_log_bytes"]=log.stat().st_size
+        with log.open("rb") as stream:
+            raw=stream.read(16*1024*1024).decode("utf-8",errors="replace")
+        report["tool_exception_categories"]=sorted(set(re.findall(r"\b(?:System|AssetRipper)\.[A-Za-z.]+Exception\b",raw)))[:32]
+    loaded={}
+    for key,p in paths.items():
+        report["trace_exists"][key]=p.is_file() and not p.is_symlink() and 0<p.stat().st_size<=40*1024*1024
+        if report["trace_exists"][key]:
+            try:
+                v=json.loads(p.read_text())
+                if v.get("schema_version")==1 and re.fullmatch(r"[a-f0-9]{32}",v.get("export_instance","")):
+                    loaded[key]=v
+                    for field in ("objects","textures"):
+                        if type(v.get(field)) is list:report["trace_rows"][key]=len(v[field]);break
+            except (ValueError,TypeError,AttributeError):pass
+    report["trace_instances_equal"]=len(loaded)==3 and len({v["export_instance"] for v in loaded.values()})==1
+    for key,cls,src,counter in (("w1",72,(original.OWNER,original.FFT_PATH_ID),"source_compute_trace_rows"),("component",114,(original.OWNER,original.COMPONENT_PATH_ID),"source_component_trace_rows")):
+        if key in loaded:
+            try:report[counter]=sum(v.get("class_id")==cls and identity(v["source"])==src for v in loaded[key]["objects"])
+            except (KeyError,ValueError,TypeError,AttributeError):pass
+    report["actual_export_completed"]=rc==0 and report["trace_instances_equal"] and report["export_assets_present"]
+    return report
+
 def main():
     p=argparse.ArgumentParser();p.add_argument("--patch-helper",type=Path)
+    p.add_argument("--export-status",type=int);p.add_argument("--texture-trace",type=Path);p.add_argument("--export-log",type=Path)
     for k in ("source","managed","project","w1","component-trace","out"):p.add_argument("--"+k,type=Path)
     a=p.parse_args()
     if a.patch_helper:patch_helper(a.patch_helper);return 0
+    if a.export_status is not None:
+        report=export_status(a.export_status,a.project,a.w1,a.component_trace,a.texture_trace,a.export_log)
+        a.out.write_text(json.dumps(report,sort_keys=True)+"\n")
+        print("GT_FFT_SAME_EXPORT_PHASE "+json.dumps(report,sort_keys=True))
+        return 0 if report["actual_export_completed"] else 2
     result=dict(status="INCONCLUSIVE",actual_unity_import_verified=False,water_rendering_verified=False,android_device=False,production=False,XAPK=False)
     try:
         with tempfile.TemporaryDirectory(prefix="gt-fft-same-export-",dir=a.project.parent) as work:

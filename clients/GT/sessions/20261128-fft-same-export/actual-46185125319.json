@@ -1,0 +1,31 @@
+{
+  "run": 46185125319,
+  "job": 141103206939,
+  "head": "9c1998aa3bbfe4bcf7cf6d889f314d2225d02505",
+  "conclusion": "failure",
+  "guard": {
+    "run": 46185125273,
+    "conclusion": "success"
+  },
+  "lint": {
+    "run": 46185125292,
+    "conclusion": "success"
+  },
+  "source_free_tests_passed": 22,
+  "exporter_build_completed": true,
+  "authenticated_serialized_providers": 12,
+  "managed_providers_original": 152,
+  "managed_providers_staged": 151,
+  "unexpected_duplicate_identities": 0,
+  "exporter_command_returned_zero_observed_by_then_branch": true,
+  "post_export_shell_error": "RAFT_PRIVATE_EXPORT_LIGHT_LINEAGE unbound variable",
+  "exit_code": 1,
+  "export_trace_instance_verified": false,
+  "actual_export_completed_verified": false,
+  "original_array_guid_verified": false,
+  "actual_unity_import_verified": false,
+  "water_rendering_verified": false,
+  "production": false,
+  "android_device": false,
+  "XAPK": false
+}
