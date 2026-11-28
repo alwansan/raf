@@ -14,7 +14,7 @@ public static partial class SelectedArrayUnity {
  [Serializable] public class DrawMaterial { public string name,blob,sha256; }
  [Serializable] public class DrawInput {
    public string run_id,shader_path,shader_guid,mesh_path,mesh_guid,vertex_sha,index_sha,array_guid,array_path,array_name,array_sha,selected_property,wrong_guid;
-   public bool tap_available; public string tap_shader_sha;
+   public bool tap_available; public string tap_shader_sha; public int tap_expected_properties;
    public long mesh_id; public int vertex_count,vertex_bytes,index_bytes,index_format,mesh_stride,views,size;
    public int[] sampler; public float mip_bias;
    public DrawAsset[] assets; public DrawSlot[] slots; public DrawNumber[] numbers; public DrawMaterial[] materials;
@@ -24,9 +24,10 @@ public static partial class SelectedArrayUnity {
    public bool private_log_guard,shader_identity,shader_supported,mesh_identity,mesh_vertex_bytes_match,mesh_index_bytes_match,mesh_descriptor_match,
       array_identity,array_raw_bytes_match,array_sampler_match,material_shader_identity,reference_controls_expected,all_four_nonnull_type2,
       all_six_serialized_UV_type2,all_material_YAML_unchanged;
-   public bool authored_array_overrides_bound,tap_shader_compiled;
-   public string tap_failure_category="";
-   public int causal_override_views,causal_tap_views,tap_shader_errors;
+   public bool authored_array_overrides_bound,tap_shader_compiled,tap_imported,tap_shader_supported,tap_materials_ready;
+   public string tap_failure_category="",tap_phase="not_started";
+   public int causal_override_views,causal_tap_views,tap_shader_errors=-1,tap_shader_passes;
+   public int tap_copied_properties_source,tap_copied_properties_red,tap_copied_properties_green;
    public int shader_errors,shader_passes,source_asset_identities,source_asset_bytes_unchanged,source_asset_meta_bytes_unchanged,
       saved_float_runtime_matches,saved_color_runtime_matches,saved_float_runtime_declared,saved_color_runtime_declared,rendered_views;
  }
@@ -182,7 +183,7 @@ public static partial class SelectedArrayUnity {
  }
  public static void Run(){
    var r=new DrawReceipt{run_id=Arg("-gtArrayRunId"),unity_version=Application.unityVersion,backend=SystemInfo.graphicsDeviceType.ToString(),color_space=QualitySettings.activeColorSpace.ToString()};
-   string priv=Arg("-gtArrayPrivate");int code=2;
+   string priv=Arg("-gtArrayPrivate");int code=2;bool priorAsync=ShaderUtil.allowAsyncCompilation;
    try {
      Need(Application.isBatchMode&&r.unity_version=="2021.3.45f2"&&SystemInfo.graphicsDeviceType==GraphicsDeviceType.Vulkan&&
        QualitySettings.activeColorSpace==ColorSpace.Linear&&SystemInfo.supports2DArrayTextures&&SystemInfo.SupportsTextureFormat(TextureFormat.DXT5));
@@ -191,6 +192,7 @@ public static partial class SelectedArrayUnity {
      string root=Directory.GetParent(Application.dataPath).FullName;
      string json=File.ReadAllText(Path.Combine(root,"GTInput.json"));Need(json==File.ReadAllText(Path.Combine(priv,"expected.json")));
      var cfg=JsonUtility.FromJson<DrawInput>(json);Need(cfg!=null&&cfg.run_id==r.run_id);
+     ShaderUtil.allowAsyncCompilation=false;
      r.phase="source_assets";ImportExact(cfg,root,priv,r);
      var shader=AssetDatabase.LoadAssetAtPath<Shader>(cfg.shader_path);Need(shader!=null);
      r.shader_identity=ObjectId(shader,cfg.shader_guid,4800000);r.shader_supported=shader.isSupported;r.shader_passes=shader.passCount;r.shader_errors=ShaderErrors(shader);
@@ -212,6 +214,7 @@ public static partial class SelectedArrayUnity {
      r.array_sampler_match=(int)transferred.filterMode==cfg.sampler[0]&&transferred.anisoLevel==cfg.sampler[1]&&
         (int)transferred.wrapModeU==cfg.sampler[2]&&(int)transferred.wrapModeV==cfg.sampler[3]&&(int)transferred.wrapModeW==cfg.sampler[4]&&FloatBits(transferred.mipMapBias,cfg.mip_bias);
      r.phase="materials";var mats=DrawMaterials(cfg,root,priv,shader,r);
+     ImportTap(cfg,r,root,priv);
      r.phase="mesh";var mesh=AssetDatabase.LoadAssetAtPath<Mesh>(cfg.mesh_path);Need(mesh!=null);ObserveMesh(mesh,cfg,r);
      r.phase="render";DrawViews(cfg,r,mesh,mats,priv);
      r.shader_errors=ShaderErrors(shader);
@@ -219,6 +222,7 @@ public static partial class SelectedArrayUnity {
      r.phase="complete";r.status="OBSERVED";code=0;
    }catch(Exception e){r.failure_category=e.GetType().Name;}
    finally{
+     ShaderUtil.allowAsyncCompilation=priorAsync;
      if(r.private_log_guard)File.WriteAllText(Path.Combine(priv,"draw-receipt.json"),JsonUtility.ToJson(r));
      EditorApplication.Exit(code);
    }

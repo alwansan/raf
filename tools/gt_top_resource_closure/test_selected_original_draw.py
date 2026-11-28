@@ -71,4 +71,17 @@ ENDHLSL"""
         drift=c.summarize(dict(rows,override_source=fill(c.GREEN)),base,True)
         self.assertEqual(c.classify([drift])["status"],"INCONCLUSIVE_SAMPLE_CAUSALITY")
 
+    def test_tap_import_success_is_not_capture_admission(self):
+        cfg={"tap_available":True,"tap_expected_properties":35}
+        r=dict(tap_imported=True,tap_shader_supported=True,tap_shader_compiled=True,tap_materials_ready=True,
+               tap_phase="capture_complete",tap_failure_category="",tap_shader_errors=0,tap_shader_passes=1,
+               tap_copied_properties_source=35,tap_copied_properties_red=35,tap_copied_properties_green=35,causal_tap_views=3)
+        self.assertTrue(d.tap_observation(cfg,r)["tap_capture_admitted"])
+        for changed in (dict(tap_materials_ready=False,tap_phase="typed_green_clone",tap_failure_category="InvalidOperationException"),
+                        dict(tap_copied_properties_red=34),dict(tap_shader_errors=1),dict(causal_tap_views=2),
+                        dict(tap_phase="unexpected_raw_value"),dict(tap_failure_category="private unexpected text")):
+            self.assertFalse(d.tap_observation(cfg,dict(r,**changed))["tap_capture_admitted"])
+        self.assertEqual(d.tap_observation(cfg,dict(r,tap_failure_category="private unexpected text"))["tap_failure_category"],"other")
+        self.assertFalse(d.tap_observation(dict(cfg,tap_available=False),r)["tap_capture_admitted"])
+
 if __name__=="__main__":unittest.main()

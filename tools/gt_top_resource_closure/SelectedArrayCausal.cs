@@ -38,6 +38,68 @@ public static partial class SelectedArrayUnity {
    mat.SetTexture(prop,tex);Need(mat.GetTexture(prop)==tex);
    return mat;
  }
+ static void ImportTap(DrawInput cfg,DrawReceipt r,string root,string priv) {
+   if(!cfg.tap_available)return;
+   try {
+     r.tap_phase="verify_private_bytes";
+     byte[] raw=File.ReadAllBytes(Path.Combine(priv,"array-tap-shader.bytes"));Need(Sha(raw)==cfg.tap_shader_sha);
+     string rel="Assets/GTDraw/Diagnostics/ArrayTap.shader",dst=AssetPath(root,rel);
+     Directory.CreateDirectory(Path.GetDirectoryName(dst));Need(!File.Exists(dst));File.WriteAllBytes(dst,raw);
+     r.tap_phase="import_shader";
+     AssetDatabase.ImportAsset(rel,ImportAssetOptions.ForceSynchronousImport|ImportAssetOptions.ForceUpdate);
+     var shader=AssetDatabase.LoadAssetAtPath<Shader>(rel);
+     r.tap_imported=shader!=null;Need(r.tap_imported);
+     r.tap_phase="validate_shader";
+     r.tap_shader_errors=ShaderErrors(shader);r.tap_shader_supported=shader.isSupported;r.tap_shader_passes=shader.passCount;
+     Need(r.tap_shader_supported&&r.tap_shader_passes==1&&r.tap_shader_errors==0);
+     r.tap_shader_compiled=true;r.tap_phase="shader_ready";
+   }catch(Exception e){r.tap_failure_category=e.GetType().Name;}
+ }
+ static bool VectorBits(Vector4 a,Vector4 b) {
+   return FloatBits(a.x,b.x)&&FloatBits(a.y,b.y)&&FloatBits(a.z,b.z)&&FloatBits(a.w,b.w);
+ }
+ static Material TypedTapClone(Material source,Shader shader,Texture2DArray tex,string prop,int expected,out int copied) {
+   copied=0;
+   // Construct directly on the target shader; do not rely on shader-switch
+   // CopyPropertiesFromMaterial to transfer typed values or keyword state.
+   var m=new Material(shader);
+   try {
+     var ss=source.shader;
+     Need(ss.GetPropertyCount()==expected&&shader.GetPropertyCount()==expected+1);
+     Need(source.HasProperty(prop)&&m.HasProperty(prop)&&!source.HasProperty("_GTSelectedTapMode"));
+     for(int i=0;i<ss.GetPropertyCount();i++){
+       string name=ss.GetPropertyName(i);int j=shader.FindPropertyIndex(name);
+       Need(j>=0&&ss.GetPropertyType(i)==shader.GetPropertyType(j));
+       switch(ss.GetPropertyType(i).ToString()){
+         case "Texture":
+           Need(ss.GetPropertyTextureDimension(i)==shader.GetPropertyTextureDimension(j));
+           Texture target=name==prop?tex:source.GetTexture(name);
+           m.SetTexture(name,target);
+           m.SetTextureScale(name,source.GetTextureScale(name));m.SetTextureOffset(name,source.GetTextureOffset(name));
+           Need(m.GetTexture(name)==target&&
+                m.GetTextureScale(name)==source.GetTextureScale(name)&&m.GetTextureOffset(name)==source.GetTextureOffset(name));
+           break;
+         case "Color":
+           m.SetColor(name,source.GetColor(name));Need(VectorBits(m.GetColor(name),source.GetColor(name)));break;
+         case "Vector":
+           m.SetVector(name,source.GetVector(name));Need(VectorBits(m.GetVector(name),source.GetVector(name)));break;
+         case "Float":case "Range":
+           m.SetFloat(name,source.GetFloat(name));Need(FloatBits(m.GetFloat(name),source.GetFloat(name)));break;
+         default:throw new InvalidOperationException("GT typed tap property schema");
+       }
+       copied++;
+     }
+     Need(copied==expected&&m.GetTexture(prop)==tex);
+     m.renderQueue=source.renderQueue;m.enableInstancing=source.enableInstancing;
+     Need(m.renderQueue==source.renderQueue&&m.enableInstancing==source.enableInstancing);
+     TapMode(m,2);
+     return m;
+   }catch{UnityEngine.Object.DestroyImmediate(m);throw;}
+ }
+ static void TapMode(Material m,float mode) {
+   Need(m!=null&&m.HasProperty("_GTSelectedTapMode"));
+   m.SetFloat("_GTSelectedTapMode",mode);Need(FloatBits(m.GetFloat("_GTSelectedTapMode"),mode));
+ }
  static CausalControls PrepareCausal(DrawInput cfg,DrawReceipt r,Material original,string root,string priv) {
    var cc=new CausalControls();
    try{
@@ -47,20 +109,21 @@ public static partial class SelectedArrayUnity {
      cc.red=ArrayClone(original,original.shader,cc.redArray,cfg.selected_property);
      cc.green=ArrayClone(original,original.shader,cc.greenArray,cfg.selected_property);
      r.authored_array_overrides_bound=true;
-     if(cfg.tap_available){
+     if(r.tap_shader_compiled){
        try{
-         byte[] raw=File.ReadAllBytes(Path.Combine(priv,"array-tap-shader.bytes"));Need(Sha(raw)==cfg.tap_shader_sha);
-         string rel="Assets/GTDraw/Diagnostics/ArrayTap.shader",dst=AssetPath(root,rel);
-         Directory.CreateDirectory(Path.GetDirectoryName(dst));Need(!File.Exists(dst));File.WriteAllBytes(dst,raw);
-         AssetDatabase.ImportAsset(rel,ImportAssetOptions.ForceSynchronousImport|ImportAssetOptions.ForceUpdate);
-         cc.tap=AssetDatabase.LoadAssetAtPath<Shader>(rel);
-         r.tap_shader_errors=cc.tap==null?-1:ShaderErrors(cc.tap);
-         Need(cc.tap!=null&&cc.tap.isSupported&&cc.tap.passCount==1&&r.tap_shader_errors==0);
-         cc.tapSource=ArrayClone(original,cc.tap,actual,cfg.selected_property);
-         cc.tapRed=ArrayClone(original,cc.tap,cc.redArray,cfg.selected_property);
-         cc.tapGreen=ArrayClone(original,cc.tap,cc.greenArray,cfg.selected_property);
-         Need(cc.tapSource.HasProperty("_GTSelectedTapMode")&&cc.tapRed.HasProperty("_GTSelectedTapMode")&&cc.tapGreen.HasProperty("_GTSelectedTapMode"));
-         r.tap_shader_compiled=true;
+         r.tap_phase="load_imported_shader";
+         cc.tap=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTDraw/Diagnostics/ArrayTap.shader");
+         Need(cc.tap!=null&&cc.tap.isSupported&&cc.tap.passCount==1&&ShaderErrors(cc.tap)==0);
+         r.tap_phase="typed_source_clone";
+         cc.tapSource=TypedTapClone(original,cc.tap,actual,cfg.selected_property,cfg.tap_expected_properties,out int sourceCount);
+         r.tap_copied_properties_source=sourceCount;
+         r.tap_phase="typed_red_clone";
+         cc.tapRed=TypedTapClone(original,cc.tap,cc.redArray,cfg.selected_property,cfg.tap_expected_properties,out int redCount);
+         r.tap_copied_properties_red=redCount;
+         r.tap_phase="typed_green_clone";
+         cc.tapGreen=TypedTapClone(original,cc.tap,cc.greenArray,cfg.selected_property,cfg.tap_expected_properties,out int greenCount);
+         r.tap_copied_properties_green=greenCount;
+         r.tap_materials_ready=true;r.tap_phase="materials_ready";
        }catch(Exception e){r.tap_failure_category=e.GetType().Name;}
      }
      return cc;
@@ -71,18 +134,18 @@ public static partial class SelectedArrayUnity {
    Capture(cam,rend,cc.red,rt,prefix+"override_red.f32");
    Capture(cam,rend,cc.green,rt,prefix+"override_green.f32");
    r.causal_override_views++;
-   if(r.tap_shader_compiled){
+   if(r.tap_materials_ready){
      try{
-       string mode="_GTSelectedTapMode";
-       cc.tapSource.SetFloat(mode,2);
+       r.tap_phase="capture_calibration";
+       TapMode(cc.tapSource,2);
        Capture(cam,rend,cc.tapSource,rt,prefix+"tap_cal.f32");
        var mats=new[]{cc.tapSource,cc.tapRed,cc.tapGreen};string[] names={"source","red","green"};
        for(int i=0;i<3;i++){
-         mats[i].SetFloat(mode,0);Capture(cam,rend,mats[i],rt,prefix+"tap_hit_"+names[i]+".f32");
-         mats[i].SetFloat(mode,1);Capture(cam,rend,mats[i],rt,prefix+"tap_"+names[i]+".f32");
+         r.tap_phase="capture_hit";TapMode(mats[i],0);Capture(cam,rend,mats[i],rt,prefix+"tap_hit_"+names[i]+".f32");
+         r.tap_phase="capture_sample";TapMode(mats[i],1);Capture(cam,rend,mats[i],rt,prefix+"tap_"+names[i]+".f32");
        }
-       r.causal_tap_views++;
-     }catch(Exception e){r.tap_failure_category=e.GetType().Name;}
+       r.causal_tap_views++;r.tap_phase="capture_complete";
+     }catch(Exception e){r.tap_failure_category=e.GetType().Name;r.tap_materials_ready=false;}
    }
  }
 }

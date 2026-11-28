@@ -152,6 +152,7 @@ def prepare(a,out,source,plan,mat,mk,xk,trace,body,mesh_info,prop,edge,parsed,pa
     from tools.gt_top_resource_closure import selected_array_causal as causal
     tap=causal.stage_tap(root,parsed,passes,wrapper,prop,source_shader)
     cfg.update(tap)
+    cfg["tap_expected_properties"]=prop_count
     out["tap_stage"]={k:v for k,v in tap.items() if k!="tap_shader_sha"}
     here=Path(__file__).parent
     prior=(here/"SelectedArrayNative.cs").read_text()
@@ -200,6 +201,30 @@ def pixel_summary(pixels):
                 type2_vs_type3=difference(pixels["type2"],pixels["type3"]),
                 type2_vs_wrong_guid=difference(pixels["type2"],pixels["wrong_guid"]),
                 type2_vs_wrong_fileid=difference(pixels["type2"],pixels["wrong_fileid"]))
+
+TAP_PHASES=frozenset(("not_started","verify_private_bytes","import_shader","validate_shader","shader_ready",
+                      "load_imported_shader","typed_source_clone","typed_red_clone","typed_green_clone",
+                      "materials_ready","capture_calibration","capture_hit","capture_sample","capture_complete"))
+TAP_FAILURES=frozenset(("","InvalidOperationException","IOException","FileNotFoundException",
+                        "ArgumentException","UnityException","NullReferenceException","MissingReferenceException"))
+def tap_observation(cfg,r):
+    # Separate actual editor import from material creation and pixel measurement.
+    expected=cfg.get("tap_expected_properties")
+    need(type(expected) is int and 0<expected<=1000,"tap_expected_property_schema")
+    out={k:r.get(k) is True for k in ("tap_imported","tap_shader_supported","tap_shader_compiled","tap_materials_ready")}
+    out["tap_phase"]=r.get("tap_phase") if r.get("tap_phase") in TAP_PHASES else "unknown"
+    out["tap_failure_category"]=r.get("tap_failure_category") if r.get("tap_failure_category") in TAP_FAILURES else "other"
+    for k in ("tap_shader_errors","tap_shader_passes","tap_copied_properties_source","tap_copied_properties_red","tap_copied_properties_green","causal_tap_views"):
+        v=r.get(k)
+        need(type(v) is int and -1<=v<=10000,"tap_counter_schema")
+        out[k]=v
+    out["tap_expected_properties"]=expected
+    out["tap_typed_copy_verified"]=all(out[k]==expected for k in ("tap_copied_properties_source","tap_copied_properties_red","tap_copied_properties_green"))
+    out["tap_capture_admitted"]=(cfg.get("tap_available") is True and all(out[k] for k in
+         ("tap_imported","tap_shader_supported","tap_shader_compiled","tap_materials_ready","tap_typed_copy_verified"))
+         and out["tap_shader_errors"]==0 and out["tap_shader_passes"]==1 and out["causal_tap_views"]==VIEWS
+         and out["tap_phase"]=="capture_complete" and out["tap_failure_category"]=="")
+    return out
 
 def verify(a):
     out=dict(status="INCONCLUSIVE",phase="editor_receipt",original_game_draw_verified=False,
@@ -250,14 +275,12 @@ def verify(a):
         from tools.gt_top_resource_closure import selected_array_causal as causal
         out["phase"]="independent_causal_readback"
         out["tap_stage_available"]=cfg.get("tap_available") is True
-        out["tap_shader_compiled"]=r.get("tap_shader_compiled") is True
+        out.update(tap_observation(cfg,r))
         out["authored_array_overrides_bound"]=r.get("authored_array_overrides_bound") is True
         out["causal_override_views"]=r.get("causal_override_views",0)
-        out["causal_tap_views"]=r.get("causal_tap_views",0)
-        out["tap_shader_errors"]=r.get("tap_shader_errors",0)
         need(out["authored_array_overrides_bound"] and out["causal_override_views"]==VIEWS,
              "causal_override_draw_incomplete")
-        tap=(out["tap_shader_compiled"] and out["causal_tap_views"]==VIEWS and out["tap_shader_errors"]==0)
+        tap=out["tap_capture_admitted"]
         diagnostics=[]
         for v in range(VIEWS):
             pixels={case:read_pixels(a.private/f"view-{v}-{case}.f32",SIZE)
