@@ -20,9 +20,9 @@ public static class NativeMipValidation {
  [Serializable] class Case {public int index,material_count;public string path,blob,sha;public int[] streams;public bool custom_streams,original_self_active;}
  [Serializable] class Config {public string run_id;public Case[] scenes;public Requirement[] vertex_requirements;}
  [Serializable] class Bake {public int particles,particles_read,positive_size_lifetime,vertices=-1,indices=-1,submeshes=-1,required_present,required_width;public bool finite,nondegenerate,bake_completed;public string failure_category="";}
- [Serializable] class ControlCase {public int material_kind,method;public Bake empty,one;public string failure_category="";}
+ [Serializable] class ControlCase {public int material_kind,method;public Bake empty,one,before_roundtrip;public bool roundtrip_state_equal;public string failure_category="";}
  [Serializable] class Row {public int index,empty_vertices=-1,empty_particles=-1,natural_particles,natural_vertices;
-   public bool imported,materials_match,billboard,active_streams_read,streams_match,scene_bytes_unchanged;public Bake forced;public string failure_category="";}
+   public bool imported,materials_match,billboard,active_streams_read,streams_match,scene_bytes_unchanged;public Bake forced,natural,roundtrip;public bool roundtrip_state_equal;public int direct_method=-1;public string failure_category="";}
  [Serializable] class Receipt {public string run_id,phase="guard",status="INCONCLUSIVE",unity_version,backend,failure_category="";
    public bool private_log_guard,control_verified,source_assets_unchanged,shader_supported,material_shader_match,native_identity,native_descriptor,native_sampler,resources_bytes_match;
    public int asset_identities,assets_written,scenes_written,scenes_imported,shader_errors=-1,slots_declared,slots_matched,uv_matched,numeric_saved,numeric_declared,numeric_matched,numeric_undeclared;public Row[] rows;public ControlCase[] calibration_cases;public int selected_calibration_method=-1;}
@@ -118,12 +118,29 @@ public static class NativeMipValidation {
    if(method==2){
      ps.Simulate(0f,false,true,true);ps.Clear(false);ps.Emit(1);return;
    }
+   if(method==5){
+     ps.Play(false);ps.Clear(false);ps.Emit(1);ps.Simulate(1f/60f,false,false,false);ps.Pause(false);return;
+   }
    // Seeded particle is a diagnostic of BakeMesh independent of Emit; never
    // admit it as proof of original emitter generation.
    Need(method==4);
    ps.Play(false);ps.Clear(false);ps.Pause(false);
    var p=new ParticleSystem.Particle{position=Vector3.zero,startLifetime=10f,remainingLifetime=10f,startSize=1f,startColor=new Color32(255,255,255,255),randomSeed=1};
    ps.SetParticles(new[]{p},1);
+ }
+ static bool SameParticleState(ParticleSystem.Particle a,ParticleSystem.Particle b){
+   return a.position.Equals(b.position)&&a.velocity.Equals(b.velocity)&&a.axisOfRotation.Equals(b.axisOfRotation)
+     &&a.rotation3D.Equals(b.rotation3D)&&a.angularVelocity3D.Equals(b.angularVelocity3D)
+     &&a.startSize3D.Equals(b.startSize3D)&&a.startColor.Equals(b.startColor)&&Eq(a.startLifetime,b.startLifetime)
+     &&Eq(a.remainingLifetime,b.remainingLifetime)&&a.randomSeed==b.randomSeed;
+ }
+ static bool Roundtrip(ParticleSystem ps){
+   if(ps.particleCount!=1)return false;
+   var emitted=new ParticleSystem.Particle[1];if(ps.GetParticles(emitted)!=1)return false;
+   // Pass exactly the returned array without editing any particle field.
+   var before=emitted[0];ps.SetParticles(emitted,1);
+   var reread=new ParticleSystem.Particle[1];
+   return ps.particleCount==1&&ps.GetParticles(reread)==1&&SameParticleState(before,reread[0]);
  }
  static ControlCase Control(Material mat,Requirement[] req,int materialKind,int method){
    var row=new ControlCase{material_kind=materialKind,method=method};
@@ -138,13 +155,21 @@ public static class NativeMipValidation {
      var em=ps.emission;em.enabled=false;var sh=ps.shape;sh.enabled=false;
      ps.Stop(false,ParticleSystemStopBehavior.StopEmittingAndClear);
      row.empty=Measure(ps,ren,cam,req,method==3);
-     EmitOne(ps,method);row.one=Measure(ps,ren,cam,req,method==3);
+     if(method==6){
+       EmitOne(ps,0);row.before_roundtrip=Measure(ps,ren,cam,req);
+       row.roundtrip_state_equal=Roundtrip(ps);
+     }else if(method==7){
+       em.enabled=true;em.rateOverTime=0f;em.rateOverDistance=0f;
+       em.SetBursts(new[]{new ParticleSystem.Burst(.05f,(short)1)});
+       ps.Simulate(.2f,false,true,false);
+     }else EmitOne(ps,method);
+     row.one=Measure(ps,ren,cam,req,method==3);
    }catch(Exception e){row.failure_category=e.GetType().Name;}
    finally{if(cam!=null)UnityEngine.Object.DestroyImmediate(cam.gameObject);if(go!=null)UnityEngine.Object.DestroyImmediate(go);}
    return row;
  }
  static Row Observe(Case item,Input c,Config cfg,Material mat,string root,int method){
-   var row=new Row{index=item.index};Camera cam=null;
+   var row=new Row{index=item.index,direct_method=method};Camera cam=null;
    try{
      var scene=EditorSceneManager.OpenScene(item.path,OpenSceneMode.Single);
      var roots=scene.GetRootGameObjects().Where(x=>x.GetComponent<ParticleSystem>()!=null).ToArray();
@@ -157,9 +182,13 @@ public static class NativeMipValidation {
      // Diagnostic fixture activation and explicit emission do not represent original gameplay.
      ren.enabled=true;ps.Stop(false,ParticleSystemStopBehavior.StopEmittingAndClear);
      var zero=Measure(ps,ren,cam,cfg.vertex_requirements,method==3);row.empty_particles=zero.bake_completed?zero.particles:-1;row.empty_vertices=zero.bake_completed?zero.vertices:-1;
-     ps.Simulate(1f,false,true,true);var natural=Measure(ps,ren,cam,cfg.vertex_requirements);
-     row.natural_particles=natural.particles;row.natural_vertices=natural.vertices;
+     ps.Simulate(1f,false,true,true);row.natural=Measure(ps,ren,cam,cfg.vertex_requirements);
+     row.natural_particles=row.natural.particles;row.natural_vertices=row.natural.vertices;
      EmitOne(ps,method);row.forced=Measure(ps,ren,cam,cfg.vertex_requirements,method==3);
+     if(row.forced.particles==1){
+       row.roundtrip_state_equal=Roundtrip(ps);
+       row.roundtrip=Measure(ps,ren,cam,cfg.vertex_requirements);
+     }
      row.scene_bytes_unchanged=Sha(File.ReadAllBytes(Path.Combine(root,item.path)))==item.sha;
    }catch(Exception e){row.failure_category=e.GetType().Name;}
    finally{if(cam!=null)UnityEngine.Object.DestroyImmediate(cam.gameObject);}
@@ -219,15 +248,16 @@ public static class NativeMipValidation {
      var marker=new Material(markerShader);
      try{
        var cases=new List<ControlCase>();
-       for(int k=0;k<2;k++)for(int m=0;m<5;m++){cases.Add(Control(k==0?mat:marker,cfg.vertex_requirements,k,m));r.calibration_cases=cases.ToArray();}
-       for(int m=0;m<4;m++){
+       for(int k=0;k<2;k++)for(int m=0;m<8;m++){cases.Add(Control(k==0?mat:marker,cfg.vertex_requirements,k,m));r.calibration_cases=cases.ToArray();}
+       foreach(int m in new[]{0,1,2,3,5}){
          var both=cases.Where(x=>x.method==m).ToArray();
          if(both.Length==2&&both.All(x=>Empty(x.empty)&&One(x.one))){r.selected_calibration_method=m;break;}
        }
        r.control_verified=r.selected_calibration_method>=0;
      }finally{if(marker!=null)UnityEngine.Object.DestroyImmediate(marker);}
-     Need(r.control_verified);
-     r.phase="geometry";r.rows=cfg.scenes.Select(x=>Observe(x,c,cfg,mat,root,r.selected_calibration_method)).ToArray();
+     // Never promote manual seed or roundtrip to ordinary emission proof.
+     r.phase="geometry";int method=r.control_verified?r.selected_calibration_method:0;
+     r.rows=cfg.scenes.Select(x=>Observe(x,c,cfg,mat,root,method)).ToArray();
      r.phase="post_geometry_asset_contract";r.source_assets_unchanged=AssetsSame(c,root)&&MaterialSame(c,mat,shader,tex,r);
      r.phase="complete";r.status="OBSERVED";code=0;
    }catch(Exception e){r.failure_category=e.GetType().Name;}

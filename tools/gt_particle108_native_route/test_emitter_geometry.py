@@ -40,6 +40,20 @@ class GeometryTests(unittest.TestCase):
         self.assertEqual(r["manual_seed_control_passes"],2)
         cases[7]["one"]=dict(b,vertices=0)
         self.assertEqual(calibration_observation({"calibration_cases":cases})["independently_selected_method"],-1)
+    def test_roundtrip_is_not_ordinary_emit(self):
+        z=dict(bake_completed=True,particles=0,particles_read=0,vertices=0,indices=0)
+        b=dict(bake_completed=True,particles=1,particles_read=1,positive_size_lifetime=1,vertices=4,indices=6,finite=True,nondegenerate=True)
+        empty=dict(b,vertices=0,indices=0)
+        rows=[dict(material_kind=k,method=m,empty=z,one=b if m in (4,6,7) else empty,before_roundtrip=empty,roundtrip_state_equal=True) for k in (0,1) for m in range(8)]
+        r=calibration_observation({"calibration_cases":rows})
+        self.assertEqual(r["independently_selected_method"],-1)
+        self.assertEqual(r["emitted_state_roundtrip_control_passes"],2)
+        self.assertEqual(r["natural_burst_control_passes"],2)
+        rows[6]["roundtrip_state_equal"]=False
+        self.assertEqual(calibration_observation({"calibration_cases":rows})["emitted_state_roundtrip_control_passes"],1)
+        for x in rows:
+            if x["method"]==5:x["one"]=b
+        self.assertEqual(calibration_observation({"calibration_cases":rows})["independently_selected_method"],5)
     def test_empty_control_requires_actual_bake(self):
         self.assertFalse(valid_empty(dict(particles=0,particles_read=0,vertices=0,indices=0)))
     def test_duplicate_control_rejected(self):

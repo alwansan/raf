@@ -154,20 +154,25 @@ def safe_bake(b):
 
 def calibration_observation(r):
     rows=r.get("calibration_cases")
-    if type(rows) is not list or len(rows)>10:return dict(calibration_cases=[],calibration_cases_measured=0,independently_selected_method=-1)
+    if type(rows) is not list or len(rows)>16:return dict(calibration_cases=[],calibration_cases_measured=0,independently_selected_method=-1)
     seen=set();safe=[];passed=set()
     for x in rows:
-        need(type(x) is dict and type(x.get("material_kind")) is int and x["material_kind"] in (0,1) and type(x.get("method")) is int and 0<=x["method"]<=4,"calibration_case_schema")
+        need(type(x) is dict and type(x.get("material_kind")) is int and x["material_kind"] in (0,1) and type(x.get("method")) is int and 0<=x["method"]<=7,"calibration_case_schema")
         key=(x["material_kind"],x["method"])
         need(key not in seen,"duplicate_calibration_case");seen.add(key)
         zero=safe_bake(x.get("empty"));one=safe_bake(x.get("one"))
         ok=valid_empty(zero) and valid_bake(one)
+        before=safe_bake(x.get("before_roundtrip"))
+        preserved=x.get("roundtrip_state_equal") is True
+        if key[1]==6:ok=ok and preserved and type(before) is dict and before.get("particles")==1 and before.get("particles_read")==1
         if ok:passed.add(key)
-        safe.append(dict(material_kind=key[0],method=key[1],empty=zero,one=one,passed=ok,
+        safe.append(dict(material_kind=key[0],method=key[1],empty=zero,one=one,passed=ok,before_roundtrip=before,roundtrip_state_equal=preserved,
             failure_category=x.get("failure_category") if x.get("failure_category") in SAFE_EXCEPTIONS else "other"))
-    selected=next((m for m in range(4) if (0,m) in passed and (1,m) in passed),-1)
+    selected=next((m for m in (0,1,2,3,5) if (0,m) in passed and (1,m) in passed),-1)
     return dict(calibration_cases=safe,calibration_cases_measured=len(safe),independently_selected_method=selected,
-                manual_seed_control_passes=sum((k,4) in passed for k in (0,1)))
+                manual_seed_control_passes=sum((k,4) in passed for k in (0,1)),
+                emitted_state_roundtrip_control_passes=sum((k,6) in passed for k in (0,1)),
+                natural_burst_control_passes=sum((k,7) in passed for k in (0,1)))
 
 def summarize(cfg,r):
     need(r.get("run_id")==cfg["run_id"] and r.get("private_log_guard") is True,"receipt_run_identity")
@@ -187,11 +192,25 @@ def summarize(cfg,r):
         out["empty_cases"]+=int(x.get("empty_vertices")==0 and x.get("empty_particles")==0)
         out["spontaneous_simulation_nonempty_cases"]+=int(x.get("natural_particles",0)>0 and x.get("natural_vertices",0)>0)
         out["explicit_one_particle_billboard_cases"]+=int(valid_bake(x.get("forced")))
+        out["direct_live_but_empty_cases"]+=int(type(x.get("forced")) is dict and x["forced"].get("particles")==1 and x["forced"].get("vertices")==0)
+        out["roundtrip_exposed_state_equal_cases"]+=int(x.get("roundtrip_state_equal") is True)
+        out["roundtrip_one_particle_billboard_cases"]+=int(x.get("roundtrip_state_equal") is True and valid_bake(x.get("roundtrip")))
+        out["roundtrip_recovered_empty_direct_cases"]+=int(type(x.get("forced")) is dict and x["forced"].get("vertices")==0 and x.get("roundtrip_state_equal") is True and valid_bake(x.get("roundtrip")))
         b=x.get("forced") or {}
         out["signature_attribute_presence_cases"]+=int(b.get("required_present")==req)
         out["signature_attribute_width_cases"]+=int(b.get("required_width")==req)
         out["scene_bytes_unchanged_cases"]+=int(x.get("scene_bytes_unchanged") is True)
     return dict(out)
+
+def row_observation(r):
+    rows=r.get("rows")
+    if type(rows) is not list or len(rows)>12:return []
+    return [dict(index=x["index"],direct_method=x.get("direct_method") if x.get("direct_method") in (0,1,2,3,5) else -1,
+                 direct=safe_bake(x.get("forced")),natural=safe_bake(x.get("natural")),roundtrip=safe_bake(x.get("roundtrip")),
+                 roundtrip_state_equal=x.get("roundtrip_state_equal") is True,
+                 imported=x.get("imported") is True,materials_match=x.get("materials_match") is True,
+                 streams_match=x.get("streams_match") is True,
+                 failure_category=x.get("failure_category") if x.get("failure_category") in SAFE_EXCEPTIONS else "other") for x in rows if type(x.get("index")) is int and 0<=x["index"]<12]
 
 IMPORT_PHASES=("guard","asset_staging","asset_refresh","asset_identity","shader_load","material_texture_load","material_contract","material_identity","texture_descriptor_sampler","texture_refs_uv","numeric_properties","scene_staging","scene_refresh","calibration","geometry","post_geometry_asset_contract","complete")
 IMPORT_COUNTERS=("asset_identities","assets_written","scenes_written","scenes_imported","shader_errors","slots_declared","slots_matched","uv_matched","numeric_saved","numeric_declared","numeric_matched","numeric_undeclared")
@@ -217,6 +236,7 @@ def verify(a):
         r=json.loads((a.private/"geometry-receipt.json").read_text())
         out.update(import_observation(cfg,r))
         out.update(calibration_observation(r))
+        out["row_observations"]=row_observation(r)
         # Retain the actual failing import predicate and partial counters even
         # when no emitter rows exist. Never replace it with a population error.
         out["editor_exit_code"]=a.exit_code
@@ -228,8 +248,10 @@ def verify(a):
         out["authored_empty_one_particle_control_verified"]=r.get("control_verified") is True
         out["source_assets_unchanged"]=r.get("source_assets_unchanged") is True
         out["source_asset_identity_count"]=r.get("asset_identities")
-        need(a.exit_code==0 and r.get("status")=="OBSERVED" and out["authored_empty_one_particle_control_verified"],"editor_or_bake_control")
-        need(out["calibration_cases_measured"]==10 and 0<=out["independently_selected_method"]<4 and out["independently_selected_method"]==r.get("selected_calibration_method"),"independent_calibration_method")
+        out["roundtrip_diagnostic_only"]=True
+        out["same_emitted_state_roundtrip_geometry_observed"]=(out["emitted_state_roundtrip_control_passes"]==2 and count.get("roundtrip_one_particle_billboard_cases",0)>0)
+        need(a.exit_code==0 and r.get("status")=="OBSERVED" and out["authored_empty_one_particle_control_verified"],"ordinary_emission_control_unavailable")
+        need(out["calibration_cases_measured"]==16 and out["independently_selected_method"] in (0,1,2,3,5) and out["independently_selected_method"]==r.get("selected_calibration_method"),"independent_calibration_method")
         need(out["source_assets_unchanged"] and out["source_asset_identity_count"]==4,"asset_identity")
         ic=out["import_counters"];fl=out["import_flags"]
         need(all(fl.get(k) is True for k in IMPORT_FLAGS) and ic.get("assets_written")==4 and ic.get("scenes_written")==ic.get("scenes_imported")==12 and ic.get("shader_errors")==0 and ic.get("slots_declared")==ic.get("slots_matched")==ic.get("uv_matched")==2 and ic.get("numeric_declared")==ic.get("numeric_matched")==11 and ic.get("numeric_saved")==ic.get("numeric_declared")+ic.get("numeric_undeclared"),"resource_contract")
