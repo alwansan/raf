@@ -37,9 +37,9 @@ jobs:
         run: |
           set -euo pipefail
           test ! -e Raft
-          test "$(git hash-object tools/gt_light_same_export/audit.py)" = 131135ab32e58a7a59247a30bfa17c083db1d304
+          test "$(git hash-object tools/gt_light_same_export/audit.py)" = d119a5bd0763afb80259c5da9a98df9c3a63194d
           test "$(git hash-object tools/gt_light_same_export/stage_trace.py)" = 3d5f70e092879090f7e9ac9a3491783d1849518c
-          test "$(git hash-object tools/gt_light_same_export/test_audit.py)" = 1a66bf3c2a1142a05082c79dff8c4ec1559dc527
+          test "$(git hash-object tools/gt_light_same_export/test_audit.py)" = 8889f05654f39094bfdad23ddb95acd8dc8f3445
           test "$(git hash-object tools/gt_light_same_export/stage_import.py)" = f0bab003b46b543542005344f3e273c1de164e68
           test "$(git hash-object tools/gt_light_same_export/PrivateLightImport.cs)" = 68107ab8b4b3c344f6be95c2af18fcfc3c3a6968
           test "$(git hash-object scripts/b21_stage_light_lineage.py)" = ce27df170592e5dac292c9de74c28f2eccd96d3a
