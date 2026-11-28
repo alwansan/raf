@@ -8,6 +8,7 @@ import android.widget.TextView;
 public final class ArmProbe extends Activity {
     private static final String TAG = "RaftQaArm";
     private static native int transform(int input);
+    private static native int runVulkan();
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -22,5 +23,17 @@ public final class ArmProbe extends Activity {
         text.setText(message);
         setContentView(text);
         Log.i(TAG, message);
+        if (getIntent().getBooleanExtra("vulkan", false)) {
+            new Thread(() -> {
+                int rc = runVulkan();
+                if (rc != 0) {
+                    Log.e(TAG, "ARM64_VULKAN_FAIL rc=" + rc);
+                    return;
+                }
+                String result = "ARM64_VULKAN_PASS pixels=32";
+                Log.i(TAG, result);
+                runOnUiThread(() -> text.setText(result));
+            }, "arm64-vulkan-probe").start();
+        }
     }
 }

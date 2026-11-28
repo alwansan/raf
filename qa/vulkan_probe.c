@@ -5,6 +5,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef RAFT_ANDROID_JNI_LOG
+#include <android/log.h>
+/* Preserve the exact readback messages inside an Android app process. */
+#define printf(...) __android_log_print(ANDROID_LOG_INFO, "RaftQaArmVk", __VA_ARGS__)
+#define fprintf(stream, ...) __android_log_print(ANDROID_LOG_ERROR, "RaftQaArmVk", __VA_ARGS__)
+#define puts(message) __android_log_print(ANDROID_LOG_INFO, "RaftQaArmVk", "%s", message)
+#endif
+
 #define VK(call) do { VkResult r = (call); if (r != VK_SUCCESS) { \
     fprintf(stderr, "%s failed: %d\n", #call, (int)r); return 1; } } while (0)
 #define REQUIRE(test) do { if (!(test)) { fprintf(stderr, "Failed: %s\n", #test); return 1; } } while (0)
@@ -34,8 +42,12 @@ static void image_barrier(VkCommandBuffer cb, VkImage image,
     vkCmdPipelineBarrier(cb, from, to, 0, 0, NULL, 0, NULL, 1, &b);
 }
 
+#ifdef RAFT_ANDROID_JNI_LOG
+int raft_vulkan_probe_main(void) {
+#else
 int main(void) {
     setvbuf(stdout, NULL, _IOLBF, 0);
+#endif
     VkApplicationInfo app = { .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
         .pApplicationName = "RAFT synthetic Vulkan probe", .apiVersion = VK_API_VERSION_1_0 };
     VkInstanceCreateInfo ic = { .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,

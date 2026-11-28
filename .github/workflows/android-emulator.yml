@@ -38,6 +38,10 @@ jobs:
             abi: x86_64
             probe: arm64-translation
             artifact: x86_64-arm64-translation
+          - runner: ubuntu-24.04
+            abi: x86_64
+            probe: arm64-vulkan
+            artifact: x86_64-arm64-vulkan
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -49,6 +53,7 @@ jobs:
           CAPTURE_VIDEO: ${{ matrix.probe == 'video' || inputs.capture_video == true }}
           VULKAN_PROBE: ${{ matrix.probe == 'vulkan' }}
           ARM_TRANSLATION_PROBE: ${{ matrix.probe == 'arm64-translation' }}
+          ARM_VULKAN_PROBE: ${{ matrix.probe == 'arm64-vulkan' }}
         run: bash qa/smoke.sh
       - name: Upload diagnostic results only
         if: always()
