@@ -1,0 +1,15 @@
+#pragma kernel Classify
+Texture2D<float4> InputTex;
+RWStructuredBuffer<uint> Classes;
+uint ClassOf(uint b) {
+    if ((b & 0x7f800000u) != 0x7f800000u) return 0u;
+    if ((b & 0x007fffffu) != 0u) return 1u;
+    return (b & 0x80000000u) == 0u ? 2u : 3u;
+}
+[numthreads(8,8,1)]
+void Classify(uint3 id:SV_DispatchThreadID) {
+    uint4 v=asuint(InputTex.Load(int3(id.xy,0)));
+    uint p=(id.y*512u+id.x)*4u;
+    Classes[p]=ClassOf(v.x);Classes[p+1u]=ClassOf(v.y);
+    Classes[p+2u]=ClassOf(v.z);Classes[p+3u]=ClassOf(v.w);
+}

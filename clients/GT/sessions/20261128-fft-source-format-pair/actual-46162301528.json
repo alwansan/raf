@@ -1,0 +1,358 @@
+{
+  "run_id": 46162301528,
+  "job_id": 141032090039,
+  "execution_head": "4f09b7e7b180423d387386c033d39cfbae8de638",
+  "conclusion": "success_observation_four_finite_four_nonfinite",
+  "stage": {
+    "android_device": false,
+    "exact_derived_table_body_executed": true,
+    "game_runtime_bank_mapping_verified": false,
+    "indexed_reference_spirv_exact": 4,
+    "original_runtime_kernel_mapping_proven": false,
+    "original_translated_slots": 20,
+    "private_config_sha256": "1360749df832b0de16c3df27cb2508492afecb139fc20e440dd4c85f0ebc6df3",
+    "selected_slots": [
+      6,
+      7,
+      16,
+      17
+    ],
+    "source_cache_extent": [
+      512,
+      512
+    ],
+    "source_format_modes": [
+      "RGHalf",
+      "RGFloat",
+      "ARGBHalf",
+      "ARGBFloat"
+    ],
+    "source_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "source_resolution": 256,
+    "source_selector_formula_authenticated": true,
+    "source_stages": 8,
+    "source_table": {
+      "half_exact_address_lanes": 8192,
+      "half_quantized_components": 16384,
+      "integer_address_lanes": 8192,
+      "table_float_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1",
+      "table_half_sha256": "d93fd79177719e034c4e29e4a8f4f398aefec161745ee084ec485bd36d40fdcd",
+      "table_texels": 4096
+    },
+    "status": "STAGED_SOURCE_DX11_TABLE_FORMAT_MATRIX",
+    "workgroup_x": 512
+  },
+  "actual": {
+    "XAPK": false,
+    "all_eight_full_coverage_matching": false,
+    "android_device": false,
+    "cases": [
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          0,
+          0
+        ],
+        "failure_type": "",
+        "first_slot": 6,
+        "format": "RGHalf",
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "nonfinite_components": 0,
+        "outcome": "OBSERVED",
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          0,
+          0
+        ],
+        "failure_type": "",
+        "first_slot": 6,
+        "format": "RGFloat",
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "nonfinite_components": 0,
+        "outcome": "OBSERVED",
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          0,
+          0
+        ],
+        "failure_type": "",
+        "first_slot": 6,
+        "format": "ARGBHalf",
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "nonfinite_components": 0,
+        "outcome": "OBSERVED",
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          0,
+          0
+        ],
+        "failure_type": "",
+        "first_slot": 6,
+        "format": "ARGBFloat",
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "nonfinite_components": 0,
+        "outcome": "OBSERVED",
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          67584,
+          67584
+        ],
+        "failure_type": "",
+        "first_slot": 16,
+        "format": "RGHalf",
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "nonfinite_components": 270336,
+        "outcome": "OBSERVED",
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          768,
+          10240
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          71424,
+          81920
+        ],
+        "failure_type": "",
+        "first_slot": 16,
+        "format": "RGFloat",
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "nonfinite_components": 270336,
+        "outcome": "OBSERVED",
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          0,
+          0
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          67584,
+          67584
+        ],
+        "failure_type": "",
+        "first_slot": 16,
+        "format": "ARGBHalf",
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "nonfinite_components": 540672,
+        "outcome": "OBSERVED",
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      },
+      {
+        "bindings": 12,
+        "coverage_mismatch": [
+          0,
+          0
+        ],
+        "different_over_tolerance": [
+          7680,
+          7680
+        ],
+        "dispatches": 4,
+        "exact_different": [
+          78336,
+          78336
+        ],
+        "failure_type": "",
+        "first_slot": 16,
+        "format": "ARGBFloat",
+        "indexed_written": [
+          262144,
+          262144
+        ],
+        "nonfinite_components": 540672,
+        "outcome": "OBSERVED",
+        "reference_written": [
+          262144,
+          262144
+        ],
+        "seed": 19,
+        "sentinel_checks": 4,
+        "table_gpu_exact": true,
+        "target_format_exact": true
+      }
+    ],
+    "editor_progress": {
+      "editor_native_exit": 0,
+      "last_managed_checkpoint": {
+        "bindings": 0,
+        "dispatches": 0,
+        "first_slot": -1,
+        "operation": "receipt",
+        "pass": -1,
+        "phase": "complete",
+        "seed": -1,
+        "variant": -1
+      },
+      "private_files_present": {
+        "editor-exit-code": true,
+        "editor-output-private": true,
+        "editor-stdout.log": true,
+        "editor.log": true,
+        "progress.json": true,
+        "receipt.json": true
+      },
+      "private_launch_marker_matches": true
+    },
+    "full_coverage_cases": 8,
+    "matching_cases": 4,
+    "observed_cases": 8,
+    "original_fft_numeric_parity_verified": false,
+    "original_game_inputs_verified": false,
+    "original_runtime_kernel_mapping_proven": false,
+    "production": false,
+    "registered_slots": 20,
+    "status": "OBSERVED_SOURCE_TABLE_FFT_FORMAT_MATRIX",
+    "water_rendering_verified": false
+  },
+  "plan_guard_run": 46162301332,
+  "plan_guard_conclusion": "success",
+  "lint_run": 46162301355,
+  "lint_conclusion": "success",
+  "artifact": {
+    "id": 15269689373,
+    "size_bytes": 1597,
+    "github_reported_digest": "sha256:5f5a93b1ffa35a83fe483063b3b4b496b9d5f7c306d41c5a03c214ccbeb71608",
+    "independent_zip_download": false
+  }
+}
