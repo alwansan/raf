@@ -1,0 +1,365 @@
+{
+  "run": 46183331398,
+  "job": 141097614850,
+  "head": "8ff669a97e6f889b7a916683a22d4f874234d5ab",
+  "conclusion": "success",
+  "guard": 46183331167,
+  "lint": 46183331152,
+  "stage": {
+    "oracle_control": {
+      "exact_control_outputs": 4,
+      "wrong_pass_rejected": true
+    },
+    "oracle_exact_outputs": 8,
+    "source_records": [
+      {
+        "count": 20,
+        "name": "indexed.compute",
+        "original_sha": "94dc4000274106ae4bb2830beab88fbbbe7621fca3c750d805e5e5f185bdc8c4",
+        "typed_sha": "a94dffa0e4c1c02f01c3c1c1814f3839df5cc75f555120987376e43d31b3ad03"
+      },
+      {
+        "count": 1,
+        "name": "reference-2.compute",
+        "original_sha": "ad6ccfa84553aa3a078e08ab1ba3c2755e374b7d481a02341e5605e130f654c7",
+        "typed_sha": "861af9b85fbd714a9b8c24dd7b8a2c735dcfe53d4f406067d9e6fe3cedb45381"
+      },
+      {
+        "count": 1,
+        "name": "reference-3.compute",
+        "original_sha": "2ecc80a53e4838f6e21df6f461076b9e6ec983f89e23723f00ea60ba058cc7eb",
+        "typed_sha": "240942e93974b06ff0da8f3ce151c9ec76fea40c8f5a7f7124351bf13d4e4825"
+      },
+      {
+        "count": 1,
+        "name": "reference-12.compute",
+        "original_sha": "206a220e34fbff58497144e5def5de81872644eb61fed9375ec0ce1045ab0fa3",
+        "typed_sha": "51d40449e5082d007c8a0838c024bf42d1a53c9e83faaf1f4236896ad13ee546"
+      },
+      {
+        "count": 1,
+        "name": "reference-13.compute",
+        "original_sha": "7cfca9e4580e164b5897d4440908a7feeff8588b8f7340e3877b0e0766eb48a4",
+        "typed_sha": "88f2105a667a494e60410d6a01f64c1445cdd7d5f2a4802fea44860ede1e53e4"
+      }
+    ]
+  },
+  "receipt": {
+    "XAPK": false,
+    "android_device": false,
+    "baseline_module_pins": {
+      "indexed-12": "b16a614981bcaed88b73fafa3e310b7c37ce3f4cfb460d126ea37e88c3ecb1e9",
+      "indexed-13": "833271ac058493fb640f3117135a94afa7da9741136702755f864bf221d0ff3e",
+      "indexed-2": "464bf6dc33b74d9559b61ccb5e4f15691fd6a54b6755e9433d7addf0ad9e700a",
+      "indexed-3": "9e1a071dd25e4c7c9c00395ca0d9d35d17f03e62ab161fbb78b81396166a18e2",
+      "standalone-12": "0fd2caae52017133f63c289053c47a854451b1b224c930e20adf0d3229f85e3e",
+      "standalone-13": "43a820732fcea8735adf5ed6bc52e824d8b7c64b8814d2310c3f9a0025eaf23d",
+      "standalone-2": "51e1575d79cf9fbedb3b2642c7c131cfcd8e8ba64af07e2600063bf7dfb5b1d3",
+      "standalone-3": "f88757a95e518bc5546644d4860cabedd04a8d2dfe47147cc6f465d004bc469d"
+    },
+    "baseline_records": [
+      {
+        "bundle_sha": "a64a13796c030f73614a01eafc9463c6ac41cda8b96efb22d8c06d4bdafb22b0",
+        "index": 0,
+        "object_sha": "c5ea6df476ee439c98fce12623282814f5b13bdcdfe0c6713ede723ce4249a02",
+        "serialized_programs": 20
+      },
+      {
+        "bundle_sha": "32a9df011fc0187421ac296d1b029c4d0687c5cb2585f6b714d0620d81b97c42",
+        "index": 1,
+        "object_sha": "711ebc55bc822c103a02d27bce82b6bfcafdc1ba75810509428755cf632f684e",
+        "serialized_programs": 1
+      },
+      {
+        "bundle_sha": "64a311232c6220ce0170c03adb5f176febd520b9a63f416bd53a0775201b75c0",
+        "index": 2,
+        "object_sha": "7fee83cfe42e7e280e4e7bf8d030cabe30b9d9a15a4213140b1737344d34b455",
+        "serialized_programs": 1
+      },
+      {
+        "bundle_sha": "472354a87751dbd49b8bad7d0cbf56ffd37981fb901806aad5a2416507470eed",
+        "index": 3,
+        "object_sha": "c2f008f2fc9b927c17e93e79e001bf905e232d13f153548a8b0598439019cbc3",
+        "serialized_programs": 1
+      },
+      {
+        "bundle_sha": "b0cae7664cab623dc8c0f5f3e831160403da23c5cdea13a99d311a01c8e50593",
+        "index": 4,
+        "object_sha": "68a4596b58b06d643222e608caff234618114a98a7ed9cef6ed4f81bcaadab49",
+        "serialized_programs": 1
+      }
+    ],
+    "direct_native_dispatch_verified": true,
+    "exact_outputs": 16,
+    "format": "RGFloat",
+    "numeric_cases": [
+      {
+        "bindings": [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ]
+        ],
+        "mode": "signed",
+        "outputs": [
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          }
+        ],
+        "slot": 2
+      },
+      {
+        "bindings": [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ]
+        ],
+        "mode": "zero",
+        "outputs": [
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          }
+        ],
+        "slot": 2
+      },
+      {
+        "bindings": [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ]
+        ],
+        "mode": "signed",
+        "outputs": [
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          }
+        ],
+        "slot": 12
+      },
+      {
+        "bindings": [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            0
+          ]
+        ],
+        "mode": "zero",
+        "outputs": [
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          },
+          {
+            "component_bits": 32,
+            "nonfinite_lanes": 0,
+            "raw_bit_different": 0,
+            "stored_lanes": 32768,
+            "written_pixels": 16384
+          }
+        ],
+        "slot": 12
+      }
+    ],
+    "one_word_modules": 0,
+    "patched_archive_roundtrip": false,
+    "production": false,
+    "records": [
+      {
+        "bundle_sha": "a64a13796c030f73614a01eafc9463c6ac41cda8b96efb22d8c06d4bdafb22b0",
+        "index": 0,
+        "object_sha": "c5ea6df476ee439c98fce12623282814f5b13bdcdfe0c6713ede723ce4249a02",
+        "serialized_programs": 20
+      },
+      {
+        "bundle_sha": "32a9df011fc0187421ac296d1b029c4d0687c5cb2585f6b714d0620d81b97c42",
+        "index": 1,
+        "object_sha": "711ebc55bc822c103a02d27bce82b6bfcafdc1ba75810509428755cf632f684e",
+        "serialized_programs": 1
+      },
+      {
+        "bundle_sha": "64a311232c6220ce0170c03adb5f176febd520b9a63f416bd53a0775201b75c0",
+        "index": 2,
+        "object_sha": "7fee83cfe42e7e280e4e7bf8d030cabe30b9d9a15a4213140b1737344d34b455",
+        "serialized_programs": 1
+      },
+      {
+        "bundle_sha": "472354a87751dbd49b8bad7d0cbf56ffd37981fb901806aad5a2416507470eed",
+        "index": 3,
+        "object_sha": "c2f008f2fc9b927c17e93e79e001bf905e232d13f153548a8b0598439019cbc3",
+        "serialized_programs": 1
+      },
+      {
+        "bundle_sha": "b0cae7664cab623dc8c0f5f3e831160403da23c5cdea13a99d311a01c8e50593",
+        "index": 4,
+        "object_sha": "68a4596b58b06d643222e608caff234618114a98a7ed9cef6ed4f81bcaadab49",
+        "serialized_programs": 1
+      }
+    ],
+    "serialized_modules": 24,
+    "serialized_pin_scope": "same_run_build_not_live_capture",
+    "size": 128,
+    "source_reversal_verified": true,
+    "status": "OBSERVED_HALF_SERIALIZED_SIZE",
+    "unchanged_modules": 24,
+    "unity_bundle_loaded": false,
+    "water_rendering_verified": false
+  }
+}
