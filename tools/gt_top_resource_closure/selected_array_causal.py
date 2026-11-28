@@ -39,15 +39,15 @@ def instrument(wrapper,prop):
     decl=re.findall(r"\bTexture2DArray\s*<\s*float4\s*>\s+"+ident+r"\s*;",code)
     need(len(decl)==1,"tap_array_declaration_anchor")
     calls=list(re.finditer(r"\b"+ident+r"\s*\.\s*([A-Za-z_]\w*)\s*\(",code))
-    need(0<len(calls)<=64,"tap_sample_population")
+    need(0<len(calls)<=8,"tap_sample_population")
     spans=[]
     for m in calls:
-        need(m[1] in ("Sample","SampleLevel","SampleBias","SampleGrad","Load","Gather","GatherRed","GatherGreen","GatherBlue","GatherAlpha"),"tap_unsupported_array_method")
+        need(m[1] in ("Sample","SampleLevel","SampleBias","SampleGrad","Load"),"tap_unsupported_array_method")
         end=matching(code,m.end()-1,"(",")")+1
         need(not spans or m.start()>=spans[-1][1],"tap_nested_array_call")
         spans.append((m.start(),end))
-    for lo,hi in reversed(spans):
-        wrapper=wrapper[:lo]+"GTSelectedTapCapture("+wrapper[lo:hi]+")"+wrapper[hi:]
+    for site,(lo,hi) in reversed(list(enumerate(spans))):
+        wrapper=wrapper[:lo]+"GTSelectedTapCapture("+wrapper[lo:hi]+","+str(site)+".0)"+wrapper[hi:]
     code=mask_noncode(wrapper)
     entries=list(re.finditer(r"\b([A-Za-z_]\w*)\s+gt_fs_main\s*\([^;{}]*\)\s*(?::\s*SV_Target0?)?\s*\{",code))
     need(len(entries)==1,"tap_fragment_entry_anchor")
@@ -68,16 +68,21 @@ def instrument(wrapper,prop):
         fields=re.findall(r"\bfloat4\s+([A-Za-z_]\w*)\s*:\s*SV_Target0?\s*;",structures[0][1],re.I)
         need(len(fields)==1 and len(re.findall(r":\s*SV_Target\d*",structures[0][1],re.I))==1,"tap_fragment_target_anchor")
         lhs=ret[1]+"."+fields[0]
-    value=("("+MODE+">1.5 ? float4(0.125,0.375,0.625,1.0) : "
-           "("+MODE+"<0.5 ? (gt_selected_tap_hit>0.5 ? float4(0.25,0.5,0.75,1.0) : float4(0.75,0.5,0.25,1.0)) : "
-           "(gt_selected_tap_hit>0.5 ? gt_selected_tap_value : float4(0.75,0.5,0.25,1.0))))")
+    # 0/1/2 retain prior hit/value/calibration behavior. For site i, 3+2i
+    # shows only its hit marker and 4+2i its sample. Other samples execute
+    # unmodified and can no longer overwrite the selected site.
+    marker="(gt_selected_tap_hit>0.5 ? float4(0.25,0.5,0.75,1.0) : float4(0.75,0.5,0.25,1.0))"
+    sample="(gt_selected_tap_hit>0.5 ? gt_selected_tap_value : float4(0.75,0.5,0.25,1.0))"
+    value=("("+MODE+"==2.0 ? float4(0.125,0.375,0.625,1.0) : "
+           "(("+MODE+"==0.0 || ("+MODE+">=3.0 && fmod("+MODE+"-3.0,2.0)==0.0)) ? "
+           +marker+" : "+sample+"))")
     body=(" \n gt_selected_tap_hit=0.0; gt_selected_tap_value=float4(0,0,0,0);\n"+
           body[:ret.start()]+lhs+"="+value+";\n"+body[ret.start():])
     wrapper=wrapper[:start+1]+body+wrapper[end:]
     anchor="#pragma fragment gt_fs_main\n"
     need(wrapper.count(anchor)==1,"tap_pragma_anchor")
     helper=("float "+MODE+";\nstatic float4 gt_selected_tap_value;\nstatic float gt_selected_tap_hit;\n"
-            "float4 GTSelectedTapCapture(float4 v) { gt_selected_tap_value=v; gt_selected_tap_hit=1.0; return v; }\n")
+            "float4 GTSelectedTapCapture(float4 v,float site) { if ("+MODE+"<3.0 || floor(("+MODE+"-3.0)/2.0)==site) { gt_selected_tap_value=v; gt_selected_tap_hit=1.0; } return v; }\n")
     wrapper=wrapper.replace(anchor,anchor+helper,1)
     return wrapper,len(spans)
 

@@ -14,7 +14,7 @@ public static partial class SelectedArrayUnity {
  [Serializable] public class DrawMaterial { public string name,blob,sha256; }
  [Serializable] public class DrawInput {
    public string run_id,shader_path,shader_guid,mesh_path,mesh_guid,vertex_sha,index_sha,array_guid,array_path,array_name,array_sha,selected_property,wrong_guid;
-   public bool tap_available; public string tap_shader_sha; public int tap_expected_properties;
+   public bool tap_available; public string tap_shader_sha; public int tap_expected_properties,tap_source_sample_sites;
    public long mesh_id; public int vertex_count,vertex_bytes,index_bytes,index_format,mesh_stride,views,size;
    public int[] sampler; public float mip_bias;
    public DrawAsset[] assets; public DrawSlot[] slots; public DrawNumber[] numbers; public DrawMaterial[] materials;
@@ -28,6 +28,8 @@ public static partial class SelectedArrayUnity {
    public string tap_failure_category="",tap_phase="not_started";
    public int causal_override_views,causal_tap_views,tap_shader_errors=-1,tap_shader_passes;
    public int tap_copied_properties_source,tap_copied_properties_red,tap_copied_properties_green;
+   public bool basis_ready; public string basis_phase="not_started",basis_failure_category="";
+   public int basis_array_payloads,basis_original_clones,basis_typed_clones,basis_views,basis_site_pairs;
    public int shader_errors,shader_passes,source_asset_identities,source_asset_bytes_unchanged,source_asset_meta_bytes_unchanged,
       saved_float_runtime_matches,saved_color_runtime_matches,saved_float_runtime_declared,saved_color_runtime_declared,rendered_views;
  }
@@ -173,6 +175,7 @@ public static partial class SelectedArrayUnity {
        for(int i=0;i<4;i++)Capture(cam,rend,mats[i],rt,prefix+cases[i]+".f32");
        Capture(cam,rend,mats[1],rt,prefix+"type2_repeat.f32");
        CausalCapture(cam,rend,rt,causal,r,prefix);
+       CaptureBasis(cam,rend,rt,causal,r,cfg,prefix);
        r.rendered_views++;
      }
    }finally {

@@ -45,8 +45,8 @@ gt_fs_Out gt_fs_main(float3 uv) {
 ENDHLSL"""
         tap,n=c.instrument(source,"_Array")
         self.assertEqual(n,2)
-        self.assertIn("GTSelectedTapCapture(_Array.Sample(sampler_Array,float3(1,2,0)))",tap)
-        self.assertIn("GTSelectedTapCapture(_Array.SampleLevel(sampler_Array,uv,0))",tap)
+        self.assertIn("GTSelectedTapCapture(_Array.Sample(sampler_Array,float3(1,2,0)),0.0)",tap)
+        self.assertIn("GTSelectedTapCapture(_Array.SampleLevel(sampler_Array,uv,0),1.0)",tap)
         self.assertIn("// _Array.Sample(sampler_Array, xyz) is only a comment",tap)
         self.assertIn("result.color=("+c.MODE,tap)
         self.assertIn("return result;",tap)

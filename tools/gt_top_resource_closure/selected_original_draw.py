@@ -226,6 +226,35 @@ def tap_observation(cfg,r):
          and out["tap_phase"]=="capture_complete" and out["tap_failure_category"]=="")
     return out
 
+def basis_observation(cfg,r,read):
+    from tools.gt_top_resource_closure import selected_array_basis as basis
+    n=cfg.get("tap_source_sample_sites")
+    need(type(n) is int and 1<=n<=8,"basis_site_schema")
+    phases={"not_started","prepare","raw_endpoint","original_clone","typed_clone","ready",
+            "original_draw","site_calibration","site_hit","site_sample","complete"}
+    out=dict(basis_ready=r.get("basis_ready") is True,
+             basis_phase=r.get("basis_phase") if r.get("basis_phase") in phases else "unknown",
+             basis_failure_category=r.get("basis_failure_category") if r.get("basis_failure_category") in TAP_FAILURES else "other")
+    for k in ("basis_array_payloads","basis_original_clones","basis_typed_clones","basis_views","basis_site_pairs"):
+        x=r.get(k)
+        need(type(x) is int and 0<=x<=10000,"basis_counter")
+        out[k]=x
+    out["basis_capture_admitted"]=(out["basis_ready"] and out["basis_phase"]=="complete" and
+        out["basis_failure_category"]=="" and all(out[k]==10 for k in
+        ("basis_array_payloads","basis_original_clones","basis_typed_clones")) and
+        out["basis_views"]==VIEWS and out["basis_site_pairs"]==VIEWS*10*n)
+    if not out["basis_capture_admitted"]:return out
+    rows=[]
+    for view in range(VIEWS):
+        def load(m,s):return read("view-"+str(view)+"-basis-"+str(m)+"-"+s+".f32")
+        final={m:load(m,"final") for m in basis.MASKS}
+        cal={m:load(m,"cal") for m in basis.MASKS}
+        sites=[{m:(load(m,"hit-"+str(i)),load(m,"sample-"+str(i))) for m in basis.MASKS} for i in range(n)]
+        rows.append(basis.summarize(final,cal,sites))
+    out["basis_observations"]=rows
+    out["basis_classification"]=basis.classify(rows,n)
+    return out
+
 def verify(a):
     out=dict(status="INCONCLUSIVE",phase="editor_receipt",original_game_draw_verified=False,
              original_shader_draw_verified=False,isolated_source_candidate_draw_observed=False,
@@ -289,18 +318,18 @@ def verify(a):
         out["causal_views"]=diagnostics
         out["causal_classification"]=causal.classify(diagnostics)
         out["array_causal_diagnostic_verified"]=out["causal_classification"]["status"]!="INCONCLUSIVE_SAMPLE_CAUSALITY"
-        if out["original_reference_pixel_gate_passed"]:
-            out.update(status="OBSERVED_ISOLATED_SOURCE_CANDIDATE_DRAW",phase="complete")
-        else:
+        if not out["original_reference_pixel_gate_passed"]:
             out["original_reference_gate_failure"]="draw_reference_pixel_differential_not_established"
-            need(out["array_causal_diagnostic_verified"],"draw_reference_and_causal_diagnostic_inconclusive")
-            out.update(status="OBSERVED_ARRAY_CAUSAL_DIAGNOSTIC_ONLY",phase="complete")
+        out["phase"]="independent_rgba_endpoint_basis"
+        out.update(basis_observation(cfg,r,lambda file:read_pixels(a.private/file,SIZE)))
+        need(out.get("basis_classification",{}).get("status")=="OBSERVED_RGBA_ENDPOINT_BASIS","rgba_endpoint_basis_inconclusive")
+        out.update(status="OBSERVED_RGBA_ENDPOINT_BASIS",phase="complete")
     except Exception as exc:
         out["failure_type"]=type(exc).__name__
         if type(exc) is StageError:out["failure_reason"]=str(exc)
     write_json(a.safe,out)
     print("GT_SELECTED_ORIGINAL_DRAW "+json.dumps(out,sort_keys=True))
-    return 0 if out["status"] in ("OBSERVED_ISOLATED_SOURCE_CANDIDATE_DRAW","OBSERVED_ARRAY_CAUSAL_DIAGNOSTIC_ONLY") else 2
+    return 0 if out["status"]=="OBSERVED_RGBA_ENDPOINT_BASIS" else 2
 
 if __name__=="__main__":
     p=argparse.ArgumentParser()
