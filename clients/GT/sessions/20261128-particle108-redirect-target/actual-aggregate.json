@@ -1,0 +1,33 @@
+{
+  "XAPK": false,
+  "actual_redirect_collection": true,
+  "android_target_pixels_verified": false,
+  "black_fire_restored": false,
+  "failure_category": "ProbeReject",
+  "original_pc_engine_target_only": true,
+  "phase": "engine_target_texture",
+  "player": false,
+  "private_source_ids_pointers_bytes_or_pixels_published": false,
+  "production": false,
+  "reject_reason": "target_pathid_not_unique",
+  "same_export_pointer_verified": true,
+  "selected_processed_same_texture_sprite_group": true,
+  "selected_processed_sprite_count": 0,
+  "source_metadata": {
+    "ColorSpace": 1,
+    "CompleteImageSize": 21844,
+    "Height": 64,
+    "ImageCount": 1,
+    "LightmapFormat": 0,
+    "MipCount": 7,
+    "MipsStripped": 0,
+    "TextureDimension": 2,
+    "TextureFormat": 4,
+    "Width": 64
+  },
+  "source_owner_SHA_verified": true,
+  "source_payload_bytes": 21844,
+  "source_payload_storage": "stream",
+  "source_raw_object_digest_computed": true,
+  "status": "INCONCLUSIVE"
+}
