@@ -1,0 +1,167 @@
+{
+  "status": "CORRECTED_ACTUAL_EXPERIMENT_IN_PROGRESS",
+  "starting_head": "8348109f95003eb54d913956ba81efb6c0e9f1df",
+  "preparation_commits": [
+    "9d03d1dae8884f77c859ef9c1765ea4372685679",
+    "f3e5fe68537e8cdf371393b57627a979b7405612"
+  ],
+  "failed_execution": {
+    "commit": "b7ffa149084dca7b4a2b2599e1b5ac96a4f31557",
+    "run": 46092107762,
+    "job": 140815158867,
+    "conclusion": "failure",
+    "lint": 46092107741,
+    "lint_conclusion": "success",
+    "tests": {
+      "old_B21_pass": 11,
+      "new_tests": 15,
+      "passed": 8,
+      "errors": 7
+    },
+    "reason": "Light field comparison erroneously passed whole actual dictionary, TypeError; before original checkout/export/editor",
+    "permanent_log": "clients/GT/sessions/20261128-light-same-export/failed-46092107762-selected.log"
+  },
+  "correction_commit": "e87417179438182cee4ad852f1ac0369d79c74b7",
+  "execution_head": "da16043348b6107a70e191e148a26e6daa997bdb",
+  "run": 46092186730,
+  "job": 140815403472,
+  "run_status": "in_progress",
+  "run_conclusion": null,
+  "lint_run": 46092186824,
+  "lint_job": 140815403453,
+  "lint_conclusion": "success",
+  "source_free_controls": "SUCCESS (11 previous B21 + 16 new tests; actual step succeeded; log recheck pending)",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Checkout only bounded trace, reader and tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Authenticate code and run source-free controls before any source checkout",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-dotnet@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Obtain exact public AssetRipperCLI source",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Compile temporary optional hierarchy capture and smoke test",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "name": "Read only six exact small original serialized providers",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Authenticate source and observe selected direct provider references privately",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Execute one actual bounded source export with same-instance private captures",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Verify original chain to actual same-export GUID/fileID and YAML fields",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Stage exact scene and meta only in isolated editor project",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Check existing editor activation inputs without exposing values",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Observe same actual exported scene in Unity Editor (no Play or player build)",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Verify actual editor report and unchanged exact scene bytes",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Publish ONLY safe aggregate reports",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Remove only disposable source and private export/editor staging",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Obtain exact public AssetRipperCLI source",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Run actions/setup-dotnet@v4",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Checkout only bounded trace, reader and tests",
+      "status": "pending",
+      "conclusion": null
+    }
+  ],
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+  "selection": {
+    "scene": "level38",
+    "scene_bytes": 178892,
+    "scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932",
+    "expected_light_count": 1,
+    "expected_chain_nodes": 3,
+    "support_providers": [
+      "globalgamemanagers",
+      "globalgamemanagers.assets",
+      "sharedassets6.assets",
+      "sharedassets38.assets",
+      "sharedassets39.assets"
+    ],
+    "full_scene_provider_closure_proven": false
+  },
+  "tool_pins": {
+    "audit": "d119a5bd0763afb80259c5da9a98df9c3a63194d",
+    "tests": "8889f05654f39094bfdad23ddb95acd8dc8f3445",
+    "stage_trace": "3d5f70e092879090f7e9ac9a3491783d1849518c",
+    "stage_import": "f0bab003b46b543542005344f3e273c1de164e68",
+    "editor_probe": "68107ab8b4b3c344f6be95c2af18fcfc3c3a6968",
+    "public_tool": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+  },
+  "intended_scope": "Light/GameObject/Transform/RectTransform same-instance W1/B02/B21 trace to actual .unity/.meta GUID/fileID, source owner, activeSelf, ordered direct children, reciprocal parent, local TRS, enabled/type/RGBA/intensity/range. Conditional isolated import exact exported scene+meta, no other original assets staged; Editor checks GlobalObjectId/activeInHierarchy/Light.isActiveAndEnabled and same fields, no Player/Play/render/device.",
+  "actual_same_export_mapping_proven": false,
+  "actual_Unity_import_proven": false,
+  "actual_device_pixels": false,
+  "original_game_assets_published": false,
+  "original_source_mutated": false,
+  "production": false,
+  "XAPK": false,
+  "local_checkout_available": false,
+  "all_gates_open": true,
+  "next_action": "G6-original-light-hierarchy-same-export: reconcile actual corrected run 46092186730 job 140815403472 and lint 46092186824 before new work. First attempt 46092107762 failed in source-free comparator (actual[k] bug); original checkout/export/editor skipped; log saved. Corrected execution da16043348b6107a70e191e148a26e6daa997bdb. Read actual safe source/export/same-export/import-stage/import receipts and exact step conclusions. If provider or mapping missing, distinguish compile/source/trace/YAML/export drift, no assumed equivalence; preserve safe counts and do not replay source census or historical two-Light parity. If actual same-export succeeds but editor import unavailable, preserve export proof only and precise activation/disk/dependency/identity cause, no runtime proof; prioritize independent productive shader/material/ambient or water restoration if blocked. Level38 only selected source hierarchy, no full provider closure claimed; exact source and metadata pins; do not publish private traces/YAML/original bytes, bypass protections or modify original data. All G0-G6 open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged; no production/player/XAPK; CL/lab read-only, BLACK/animation deferred. Preserve pinned Ali restore."
+}
