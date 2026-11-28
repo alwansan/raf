@@ -13,6 +13,7 @@ import argparse
 from collections import Counter
 import json
 import math
+import re
 from pathlib import Path
 
 from scripts import b05_verify_material_texenv_bindings as b05
@@ -127,6 +128,7 @@ def assess(source_materials:dict,source_texture_targets:dict,
     counts["selected_texture2d28_missing_export_trace"]=EXPECTED_TEXTURES-len(selected_textures)
     missing=set(source_texture_targets)-set(selected_textures)
     private_nonexportable_pointers={}  # keys and values NEVER serialized.
+    selected_collection_implementations=Counter()
     if "nonexportable_texture_sources" in b02:
         candidates=b02["nonexportable_texture_sources"]
         if type(candidates) is not list:
@@ -139,6 +141,13 @@ def assess(source_materials:dict,source_texture_targets:dict,
                 if src in skipped:
                     raise ValueError("duplicate_selected_private_nonexportable_Texture2D_source")
                 skipped.add(src)
+                if "collection_implementation" in candidate:
+                    implementation=candidate["collection_implementation"]
+                    # Runtime type of the public pinned exporter, not an asset name.
+                    if (type(implementation) is not str or len(implementation)>180
+                        or not re.fullmatch(r"AssetRipper(?:\.[A-Za-z_][A-Za-z0-9_]*)+",implementation)):
+                        raise ValueError("invalid_private_collection_implementation")
+                    selected_collection_implementations[implementation]+=1
                 if "container_export_pointer_captured" in candidate:
                     recorded=candidate["container_export_pointer_captured"]
                     val=candidate.get("container_export")
@@ -268,6 +277,11 @@ def assess(source_materials:dict,source_texture_targets:dict,
     out["status"]=(STATUS_MATCH if exact else
                    STATUS_NONEXPORTABLE_MATCH if nonexportable_exact else
                    STATUS_MISMATCH)
+    if selected_collection_implementations:
+        out["selected_nonexportable_collection_implementations"]=dict(sorted(selected_collection_implementations.items()))
+        out["selected_nonexportable_collection_implementation_observed"]=sum(selected_collection_implementations.values())
+        out["collection_implementation_alone_proves_redirect_cause"]=False
+        out["selected_nonexportable_target_pixels_verified"]=False
     return out
 
 

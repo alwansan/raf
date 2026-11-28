@@ -149,6 +149,29 @@ class OriginalParticleSameInstanceExport(unittest.TestCase):
         self.assertNotIn(missed["source"]["owner"],public)
         self.assertNotIn(missed["export"]["guid"],public)
 
+    def test_opt_in_collection_implementation_selected_scope_only(self):
+        s,t,w,b,exp=build()
+        missed=b["objects"].pop()
+        implementation="AssetRipper.Export.TestCollection"
+        b["nonexportable_texture_sources"]=[{
+            "source":missed["source"],
+            "container_export":missed["export"],
+            "container_export_pointer_captured":True,
+            "collection_implementation":implementation
+        },{
+            "source":{"owner":"Raft_Data/resources.assets","path_id":987654},
+            "collection_implementation":"private-unselected-text"
+        }]
+        result=m.assess(s,t,w,b,exp)
+        self.assertEqual(result["status"],m.STATUS_NONEXPORTABLE_MATCH)
+        self.assertEqual(result["selected_nonexportable_collection_implementations"],{implementation:1})
+        self.assertFalse(result["collection_implementation_alone_proves_redirect_cause"])
+        self.assertFalse(result["selected_nonexportable_target_pixels_verified"])
+        self.assertNotIn("private-unselected-text",json.dumps(result))
+        b["nonexportable_texture_sources"][0]["collection_implementation"]="private/path"
+        with self.assertRaisesRegex(ValueError,"invalid_private_collection_implementation"):
+            m.assess(s,t,w,b,exp)
+
     def test_nonexportable_container_pointer_differs_from_actual_YAML(self):
         source,targets,w1,b02,exported=build()
         missed=b02["objects"].pop()

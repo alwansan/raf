@@ -28,6 +28,17 @@ class DisposableTexture2DTrace(unittest.TestCase):
         self.assertNotEqual(changed,private_base)
         self.assertIn(b'nonexportable_light_objects_skipped',changed)
 
+    def test_opt_in_capture_is_private_and_keeps_pointer(self):
+        baseline=t3.annotate(b21.render(PINNED_W1.read_bytes()))
+        changed=t3.annotate_collection_implementation(baseline)
+        self.assertNotIn(b'collection_implementation',baseline)
+        self.assertEqual(changed.count(b'collection.GetType().FullName'),1)
+        self.assertEqual(changed.count(b'json.WriteString("collection_implementation"'),1)
+        self.assertEqual(changed.count(b'container.CreateExportPointer(asset)'),1)
+        self.assertEqual(changed.count(b'if (!collection.Exportable)'),baseline.count(b'if (!collection.Exportable)'))
+        with self.assertRaisesRegex(ValueError,"anchor_drift"):
+            t3.annotate_collection_implementation(changed)
+
     def test_helper_byte_drift_and_mismatched_anchor_fail_closed(self):
         original=b21.render(PINNED_W1.read_bytes())
         with self.assertRaisesRegex(ValueError,"anchor_drift"):

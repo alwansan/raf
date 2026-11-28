@@ -81,7 +81,27 @@ def annotate(source:bytes)->bytes:
     return result
 
 
-def stage(base:Path,staged:Path):
+def annotate_collection_implementation(source:bytes)->bytes:
+    """Capture a public code type privately in an already annotated disposable helper."""
+    replacements=(
+        ("var nonExportableSourceObjects = new List<IUnityObjectBase>();",
+         "var nonExportableSourceObjects = new List<(IUnityObjectBase Asset, string CollectionImplementation)>();"),
+        ("nonExportableSourceObjects.Add(asset);",
+         "nonExportableSourceObjects.Add((asset, collection.GetType().FullName ?? collection.GetType().Name));"),
+        ("foreach (IUnityObjectBase asset in nonExportableSourceObjects)",
+         "foreach (var (asset, collectionImplementation) in nonExportableSourceObjects)"),
+        ('            Identity(json, "source", asset);\n            // A private, read-only diagnostic',
+         '            Identity(json, "source", asset);\n            json.WriteString("collection_implementation", collectionImplementation);\n            // A private, read-only diagnostic'),
+    )
+    text=source.decode("utf8")
+    for old,new in replacements:
+        if text.count(old)!=1:
+            raise ValueError("private_nonexportable_collection_implementation_anchor_drift")
+        text=text.replace(old,new)
+    return text.encode("utf8")
+
+
+def stage(base:Path,staged:Path,*,capture_collection_implementation:bool=False):
     if (base.is_symlink() or not base.is_file()
         or staged.is_symlink() or not staged.is_file()
         or staged.resolve()==base.resolve()
@@ -92,6 +112,8 @@ def stage(base:Path,staged:Path):
     if actual!=expected:
         raise ValueError("disposable_helper_drifted_from_pinned_B21_composition")
     changed=annotate(actual)
+    if capture_collection_implementation:
+        changed=annotate_collection_implementation(changed)
     staged.write_bytes(changed)
     return {"schema_version":1,"status":"T3_PRIVATE_B02_NONEXPORTABLE_SOURCE_CATEGORIES_STAGED",
         "original_W1_B02_B21_source_authentic":True,
@@ -105,8 +127,9 @@ def main(argv=None):
     ap=argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--base-helper",type=Path,required=True)
     ap.add_argument("--staged-helper",type=Path,required=True)
+    ap.add_argument("--capture-collection-implementation",action="store_true")
     args=ap.parse_args(argv)
-    report=stage(args.base_helper,args.staged_helper)
+    report=stage(args.base_helper,args.staged_helper,capture_collection_implementation=args.capture_collection_implementation)
     # Source-only synthetic helper digest is not proprietary; no paths/IDs.
     print("RAFT_T3_DISPOSABLE_B02_NONEXPORTABLE_SOURCE_AUDIT "+
           "staged=true exact_w1_b02_b21=true game_assets_modified=false")
