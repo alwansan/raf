@@ -82,6 +82,42 @@ def verify(receipt,stage,run_id,editor_outcome):
                 dispatches=sum(c["dispatches"] for c in cases),bindings=sum(c["bindings"] for c in cases),
                 original_runtime_kernel_mapping_proven=False,original_game_inputs_verified=False,
                 original_fft_numeric_parity_verified=False,water_rendering_verified=False,android_device=False,production=False,XAPK=False)
+
+PROGRESS={
+    "environment":{"managed_entry"},
+    "private_import":{"copy","refresh","load_indexed","register","load_references"},
+    "paired_dispatch":{"allocate","sentinel","bind_source","bind_butterfly","bind_target","dispatch","dispatch_returned","compare"},
+    "identity":{"validate"},"complete":{"receipt"},
+}
+def bounded_progress(private,run_id):
+    """Only accept authored phases/counts. Never report raw logs or identifiers."""
+    private=Path(private)
+    names=("editor-output-private","editor.log","editor-stdout.log","editor-exit-code","progress.json","receipt.json")
+    present={name:(private/name).is_file() and not (private/name).is_symlink() for name in names}
+    out={"private_files_present":present,"last_managed_checkpoint":None,"editor_native_exit":None}
+    if not present["editor-output-private"]:return out
+    marker=private/"editor-output-private"
+    if marker.stat().st_size>128 or marker.read_text().strip()!=run_id:return out
+    out["private_launch_marker_matches"]=True
+    if present["editor-exit-code"]:
+        path=private/"editor-exit-code"
+        if path.stat().st_size<=16:
+            value=path.read_text().strip()
+            if re.fullmatch(r"[0-9]{1,3}",value) and int(value)<=255:out["editor_native_exit"]=int(value)
+    if present["progress.json"]:
+        path=private/"progress.json"
+        if path.stat().st_size<=4096:
+            r=json.loads(path.read_text())
+            fields={"run_id","phase","operation","first_slot","seed","pass","variant","bindings","dispatches"}
+            if (type(r) is dict and set(r)==fields and r["run_id"]==run_id and
+                r["phase"] in PROGRESS and r["operation"] in PROGRESS[r["phase"]] and
+                all(type(r[k]) is int for k in fields-{"run_id","phase","operation"}) and
+                r["first_slot"] in (-1,6,16) and r["seed"] in (-1,0,19) and
+                r["pass"] in (-1,0,1) and r["variant"] in (-1,0,1) and
+                0<=r["bindings"]<=12 and 0<=r["dispatches"]<=4):
+                out["last_managed_checkpoint"]={k:v for k,v in r.items() if k!="run_id"}
+    return out
+
 def main():
     p=argparse.ArgumentParser();sub=p.add_subparsers(dest="action",required=True)
     st=sub.add_parser("stage")
@@ -95,13 +131,17 @@ def main():
         if a.action=="stage":result=stage(a.source,a.project,a.private,a.run_id)
         else:
             s=json.loads(a.stage.read_text());cfg=a.private/"config.json"
-            need(sha(cfg)==s["private_config_sha256"] and (a.private/"editor-output-private").read_text().strip()==a.run_id and
-                 (a.private/"editor.log").is_file(),"private_editor_commitment")
+            progress=bounded_progress(a.private,a.run_id);result["editor_progress"]=progress
+            need(sha(cfg)==s["private_config_sha256"] and progress.get("private_launch_marker_matches") is True and
+                 progress["private_files_present"]["editor.log"],"private_editor_commitment")
+            need(progress["private_files_present"]["receipt.json"],"editor_receipt_missing")
             r=json.loads((a.private/"receipt.json").read_text());result["editor_receipt"]=r
+            need(progress["editor_native_exit"]==0 and progress["last_managed_checkpoint"] is not None and
+                 progress["last_managed_checkpoint"]["phase"]=="complete","editor_native_completion")
             manifest=json.loads(cfg.read_text())
             for name,digest in [("indexed.compute",manifest["indexed_sha"])]+[(x["file"],x["sha256"]) for x in manifest["rows"]]:
                 need(sha(a.private/name)==digest and sha(a.project/"Assets/Private"/name)==digest,"editor_program_bytes_changed")
-            result=verify(r,s,a.run_id,a.outcome)
+            result=verify(r,s,a.run_id,a.outcome);result["editor_progress"]=progress
     except Exception as exc:
         result["failure_type"]=type(exc).__name__
         if isinstance(exc,ValueError) and re.fullmatch(r"[a-z_]+",str(exc)):result["failure_reason"]=str(exc)

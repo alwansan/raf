@@ -76,9 +76,10 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
-          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
-          python3 -m scripts.stage_zip2_fft_owner --zip2-checkout zip2-fft-pair --destination "$RUNNER_TEMP/gt-fft-pair-source/Raft_Data/sharedassets0.assets"
-          python3 -B -m tools.gt_fft_indexed_pair.audit stage --source "$RUNNER_TEMP/gt-fft-pair-source/Raft_Data" --project gt-fft-pair-project --private gt-fft-pair-private --run-id "$GT_FFT_RUN_ID" --out "$RUNNER_TEMP/gt-fft-pair-safe/stage.json"
+          python3 -m venv "$RUNNER_TEMP/gt-fft-pair-py"
+          "$RUNNER_TEMP/gt-fft-pair-py/bin/python" -m pip install --disable-pip-version-check UnityPy==1.25.4
+          "$RUNNER_TEMP/gt-fft-pair-py/bin/python" -m scripts.stage_zip2_fft_owner --zip2-checkout zip2-fft-pair --destination "$RUNNER_TEMP/gt-fft-pair-source/Raft_Data/sharedassets0.assets"
+          "$RUNNER_TEMP/gt-fft-pair-py/bin/python" -B -m tools.gt_fft_indexed_pair.audit stage --source "$RUNNER_TEMP/gt-fft-pair-source/Raft_Data" --project gt-fft-pair-project --private gt-fft-pair-private --run-id "$GT_FFT_RUN_ID" --out "$RUNNER_TEMP/gt-fft-pair-safe/stage.json"
           rm -rf zip2-fft-pair "$RUNNER_TEMP/gt-fft-pair-source"
       - name: Execute real Unity Vulkan indexed and standalone pairs
         id: unity
@@ -96,11 +97,12 @@ jobs:
           targetPlatform: StandaloneLinux64
           buildMethod: GTIndexedPair.Run
           manualExit: true
+          enableGpu: true
           versioning: None
           allowDirtyBuild: true
           dockerMemoryLimit: 8g
           dockerCpuLimit: 2
-          customParameters: -force-vulkan -job-worker-count 2 -gtFftRunId ${{ env.GT_FFT_RUN_ID }}
+          customParameters: -force-vulkan -force-device-index 0 -job-worker-count 2 -gtFftRunId ${{ env.GT_FFT_RUN_ID }}
       - name: Verify same-run guarded output and two-pass numerical parity
         if: always() && steps.stage.outcome == 'success'
         env:
@@ -111,7 +113,7 @@ jobs:
           test -d gt-fft-pair-project && test ! -L gt-fft-pair-project
           sudo chown -hR "$(id -u):$(id -g)" -- gt-fft-pair-private gt-fft-pair-project
           test "$(stat -c %a gt-fft-pair-private)" = 700
-          python3 -B -m tools.gt_fft_indexed_pair.audit verify --project gt-fft-pair-project --private gt-fft-pair-private --stage "$RUNNER_TEMP/gt-fft-pair-safe/stage.json" --run-id "$GT_FFT_RUN_ID" --outcome "$EDITOR_OUTCOME" --out "$RUNNER_TEMP/gt-fft-pair-safe/actual.json"
+          "$RUNNER_TEMP/gt-fft-pair-py/bin/python" -B -m tools.gt_fft_indexed_pair.audit verify --project gt-fft-pair-project --private gt-fft-pair-private --stage "$RUNNER_TEMP/gt-fft-pair-safe/stage.json" --run-id "$GT_FFT_RUN_ID" --outcome "$EDITOR_OUTCOME" --out "$RUNNER_TEMP/gt-fft-pair-safe/actual.json"
       - name: Publish bounded aggregate only
         if: always()
         uses: actions/upload-artifact@v4

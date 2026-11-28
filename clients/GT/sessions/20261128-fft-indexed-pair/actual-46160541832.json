@@ -1,0 +1,42 @@
+{
+  "run_id": 46160541832,
+  "job_id": 141026660125,
+  "execution_head": "f98e2c1b1069db178dda0870b900ccb50e9d8bb4",
+  "conclusion": "failure_editor_native_exit_139_no_receipt",
+  "stage": {
+    "android_device": false,
+    "indexed_reference_spirv_exact": 4,
+    "original_runtime_kernel_mapping_proven": false,
+    "original_translated_slots": 20,
+    "private_config_sha256": "b075cad0a6f9448e7f2a5595f27dced319da27921da8b2db9adebe5134b50762",
+    "selected_slots": [
+      6,
+      7,
+      16,
+      17
+    ],
+    "source_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "status": "STAGED_AUTHENTIC_INDEXED_PAIR",
+    "workgroup_x": 512
+  },
+  "actual": {
+    "XAPK": false,
+    "android_device": false,
+    "failure_type": "FileNotFoundError",
+    "original_runtime_kernel_mapping_proven": false,
+    "status": "INCONCLUSIVE",
+    "water_rendering_verified": false
+  },
+  "editor_outcome": "failure",
+  "editor_native_exit_reported_by_gameci": 139,
+  "plan_guard_run": 46160541641,
+  "plan_guard_conclusion": "success",
+  "lint_run": 46160541697,
+  "lint_conclusion": "success",
+  "artifact": {
+    "id": 15269715422,
+    "size_bytes": 700,
+    "github_reported_digest": "sha256:b41f004db718b184b4c9a854640f119c9aff7b8f851c009cc78e49db2f192388",
+    "independent_zip_download": false
+  }
+}

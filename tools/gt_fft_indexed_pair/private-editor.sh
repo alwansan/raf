@@ -25,4 +25,10 @@ test "${args[log_index]}" = /dev/stdout
 umask 077
 args[log_index]="$private/editor.log"
 printf '%s\n' "$run_id" > "$private/editor-output-private"
-exec "$real" "${args[@]}" > "$private/editor-stdout.log" 2>&1
+# Preserve the native process exit and a private launch marker even when
+# the editor cannot enter its managed method. Raw output stays private.
+set +e
+{ "$real" "${args[@]}"; rc=$?; } > "$private/editor-stdout.log" 2>&1
+set -e
+printf '%s\n' "$rc" > "$private/editor-exit-code"
+exit "$rc"

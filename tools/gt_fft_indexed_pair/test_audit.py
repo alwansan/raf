@@ -20,4 +20,24 @@ class PairTests(unittest.TestCase):
         for key,value in (("vulkan",False),("private_guard",False),("registration_count",19),("config_sha256","b"*64)):
             r=self.receipt();r[key]=value
             with self.assertRaises(ValueError):a.verify(r,{"private_config_sha256":"a"*64},"1-2","success")
+    def test_missing_receipt_retains_native_exit_and_checkpoint(self):
+        import json
+        from tempfile import TemporaryDirectory
+        from pathlib import Path
+        with TemporaryDirectory() as tmp:
+            p=Path(tmp)
+            (p/"editor-output-private").write_text("1-2\n")
+            (p/"editor-exit-code").write_text("139\n")
+            (p/"editor.log").write_text("private")
+            row={"run_id":"1-2","phase":"paired_dispatch","operation":"dispatch","first_slot":6,
+                 "seed":0,"pass":0,"variant":0,"bindings":3,"dispatches":0}
+            (p/"progress.json").write_text(json.dumps(row))
+            r=a.bounded_progress(p,"1-2")
+            self.assertEqual(r["editor_native_exit"],139)
+            self.assertEqual(r["last_managed_checkpoint"]["operation"],"dispatch")
+            self.assertFalse(r["private_files_present"]["receipt.json"])
+            row["operation"]="untrusted asset value"
+            (p/"progress.json").write_text(json.dumps(row))
+            self.assertIsNone(a.bounded_progress(p,"1-2")["last_managed_checkpoint"])
+            self.assertIsNone(a.bounded_progress(p,"9-2")["editor_native_exit"])
 if __name__=="__main__":unittest.main()
