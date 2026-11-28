@@ -1,0 +1,30 @@
+// Authored finite binary32 -> binary16 RNE; never changes the FFT program.
+#pragma kernel PackHalf
+#pragma use_dxc
+Texture2D<float4> InputTex;
+RWTexture2D<__UINT_TYPE__> PackedTex;
+uint HalfBits(float x) {
+    uint v=asuint(x);
+    uint sign=(v>>16)&0x8000u;
+    uint exponent=(v>>23)&255u,mant=v&0x7fffffu;
+    if(exponent==255u)return sign|0x7c00u|(mant!=0?0x200u:0u);
+    int e=int(exponent)-112;
+    if(e>=31)return sign|0x7c00u;
+    if(e<=0){
+        if(e < -10)return sign;
+        uint shift=uint(14-e);
+        mant|=0x800000u;
+        uint top=mant>>shift,rest=mant&((1u<<shift)-1u),mid=1u<<(shift-1u);
+        return sign|(top+((rest>mid||(rest==mid&&(top&1u)!=0u))?1u:0u));
+    }
+    uint rounded=mant+0xfffu+((mant>>13)&1u);
+    if((rounded&0x800000u)!=0u){e++;rounded=0u;}
+    if(e>=31)return sign|0x7c00u;
+    return sign|(uint(e)<<10)|(rounded>>13);
+}
+[numthreads(8,8,1)]
+void PackHalf(uint3 id:SV_DispatchThreadID){
+    float4 v=InputTex.Load(int3(id.xy,0));
+    uint low=HalfBits(v.x)|(HalfBits(v.y)<<16);
+    __PACK_STORE__
+}

@@ -1,0 +1,7 @@
+// Authored expansion of the actual half target through a sampled Load.
+#pragma kernel ExpandHalf
+#pragma use_dxc
+Texture2D<float4> InputTex;
+RWTexture2D<float4> OutputTex;
+[numthreads(8,8,1)]
+void ExpandHalf(uint3 id:SV_DispatchThreadID){OutputTex[id.xy]=InputTex.Load(int3(id.xy,0));}
