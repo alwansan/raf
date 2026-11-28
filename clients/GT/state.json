@@ -4653,7 +4653,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261128-skybox-binding-calibration/README.md",
-  "next_action": "G5-original-Particle108-native-import-isolate: Actual 46116411253/job 140891145313 FAILURE in coarse import gate (native asset/meta unchanged, no CPU/GPU samples), prior source export 7/7/21844 and 10/10 PPtr+UV reconfirmed; actual log has Main Object Name vs neutralized filename mismatch (not proven causal) and automatic Unity log exposed original name/export GUID. Do not rerun that old job. Corrective execution 0fd64ec1fda9ac4a0e1b28cf9eb47c35cc43a124: Actual 46117064994/job 140893146463 IN_PROGRESS (source-free controls SUCCESS, disposable exporter compilation); lint 46117064991 COMPLETED SUCCESS. Preserve exact export basename, hold private asset outside Assets until executing editor validates run-bound private-log wrapper marker; guard wrapper rewrites exact GameCI -logfile /dev/stdout and redirects stdout/stderr to private files, raw output never uploaded. Independently record texture load, GUID/fileID, importer kind, descriptor, sampler and precise phase; if importer kind alone differs, keep GPU/CPU measurements but full acceptance stays blocked. Reconcile new actual before any further attempt. If blocked again without specific productive correction, move to independent white-mesh Shader48/source→postvendor exact GUID fanout or water. Do not repeat PC target/sky or change Level38. G0–G6 remain open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged; CL/lab read-only; BLACK/animation deferred; no production/player/XAPK.",
+  "next_action": "G5-original-Particle108-native-alpha-route-diagnostic: Actual 46117064994/job 140893146463 FAILURE full acceptance but Unity completed, private guard true, exact basename/asset/meta, GUID/fileID, descriptor 64x64 RGBA32 7 mips and all six sampler settings matched. Generic AssetImporter API, sRGB graphics format, isReadable=false so CPU mip hashes UNOBSERVED not proven mismatch. Original sampler Vulkan measured 5461 alpha texels, 1/7 levels matched, 3718 mismatches, controls pass. Do not rerun old jobs. New b1f3506f1a90a000844f56df0a83e53e9f6b89fc: Actual 46117813183 IN_PROGRESS; lint 46117813215 COMPLETED SUCCESS. Compare actual Texture2D.Load (integer texel/mip), independent inline point clamp and unchanged source sampler for all 5461 texels each; calibrate asymmetric authored 8x8 four-level chain with wrong-mip negative control, retain strict old full acceptance separately. Diagnostic workflow success only means valid route comparison, NOT full import or fire repair. Preserve exact original asset and sampler, no forced readability or production change. Reconcile new run before further work. If Load and point match 7/7 while original sampler differs, preserve storage evidence and investigate actual shader/sampler route only if materially productive; if blocked without productive correction, pivot independent original white-mesh Shader48 source→postvendor exact GUID fanout or water. Do not replay PC target/sky, Level38 pins unchanged, all G0–G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged, CL/lab read-only, BLACK/animation deferred, no production/player/XAPK.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -17941,30 +17941,30 @@
     }
   },
   "latest_particle108_native_import": {
-    "status": "NATIVE_MIP_UNITY_IMPORT_CORRECTION_STARTED",
-    "starting_head": "13f290de946dd117601840ac9f0f13e7501502e0",
-    "execution_head": "0fd64ec1fda9ac4a0e1b28cf9eb47c35cc43a124",
+    "status": "NATIVE_ALPHA_ROUTE_DIAGNOSTIC_RUNNING",
+    "starting_head": "6bfd315bc4775941dc45d316f8619559f819874e",
+    "execution_head": "b1f3506f1a90a000844f56df0a83e53e9f6b89fc",
     "previous_native_export_run": 46115503520,
     "previous_native_export_job": 140888302528,
     "previous_lint_run": 46115503472,
     "workflow": ".github/workflows/raft-gt-particle108-native-import.yml",
     "observed_runs": [
       {
-        "id": 46117064994,
+        "id": 46117813183,
         "name": "GT original Particle108 native seven-mip Unity Vulkan import (NO PLAYER)",
         "status": "in_progress",
         "conclusion": null,
-        "head_sha": "0fd64ec1fda9ac4a0e1b28cf9eb47c35cc43a124"
+        "head_sha": "b1f3506f1a90a000844f56df0a83e53e9f6b89fc"
       },
       {
-        "id": 46117064991,
+        "id": 46117813215,
         "name": "Raft CI runner compatibility guard (Ubuntu 26.04 transition)",
         "status": "completed",
         "conclusion": "success",
-        "head_sha": "0fd64ec1fda9ac4a0e1b28cf9eb47c35cc43a124"
+        "head_sha": "b1f3506f1a90a000844f56df0a83e53e9f6b89fc"
       }
     ],
-    "source_free_controls_prepared": 11,
+    "source_free_controls_prepared": 18,
     "source_mips_expected": 7,
     "source_bytes_expected": 21844,
     "expected_original_alpha_texels": 5461,
@@ -17975,14 +17975,14 @@
     "production": false,
     "player": false,
     "XAPK": false,
-    "next_action": "G5-original-Particle108-native-import-isolate: Actual 46116411253/job 140891145313 FAILURE in coarse import gate (native asset/meta unchanged, no CPU/GPU samples), prior source export 7/7/21844 and 10/10 PPtr+UV reconfirmed; actual log has Main Object Name vs neutralized filename mismatch (not proven causal) and automatic Unity log exposed original name/export GUID. Do not rerun that old job. Corrective execution 0fd64ec1fda9ac4a0e1b28cf9eb47c35cc43a124: Actual 46117064994/job 140893146463 IN_PROGRESS (source-free controls SUCCESS, disposable exporter compilation); lint 46117064991 COMPLETED SUCCESS. Preserve exact export basename, hold private asset outside Assets until executing editor validates run-bound private-log wrapper marker; guard wrapper rewrites exact GameCI -logfile /dev/stdout and redirects stdout/stderr to private files, raw output never uploaded. Independently record texture load, GUID/fileID, importer kind, descriptor, sampler and precise phase; if importer kind alone differs, keep GPU/CPU measurements but full acceptance stays blocked. Reconcile new actual before any further attempt. If blocked again without specific productive correction, move to independent white-mesh Shader48/source→postvendor exact GUID fanout or water. Do not repeat PC target/sky or change Level38. G0–G6 remain open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged; CL/lab read-only; BLACK/animation deferred; no production/player/XAPK.",
-    "run": 46117064994,
-    "job": 140893146463,
+    "next_action": "G5-original-Particle108-native-alpha-route-diagnostic: Actual 46117064994/job 140893146463 FAILURE full acceptance but Unity completed, private guard true, exact basename/asset/meta, GUID/fileID, descriptor 64x64 RGBA32 7 mips and all six sampler settings matched. Generic AssetImporter API, sRGB graphics format, isReadable=false so CPU mip hashes UNOBSERVED not proven mismatch. Original sampler Vulkan measured 5461 alpha texels, 1/7 levels matched, 3718 mismatches, controls pass. Do not rerun old jobs. New b1f3506f1a90a000844f56df0a83e53e9f6b89fc: Actual 46117813183 IN_PROGRESS; lint 46117813215 COMPLETED SUCCESS. Compare actual Texture2D.Load (integer texel/mip), independent inline point clamp and unchanged source sampler for all 5461 texels each; calibrate asymmetric authored 8x8 four-level chain with wrong-mip negative control, retain strict old full acceptance separately. Diagnostic workflow success only means valid route comparison, NOT full import or fire repair. Preserve exact original asset and sampler, no forced readability or production change. Reconcile new run before further work. If Load and point match 7/7 while original sampler differs, preserve storage evidence and investigate actual shader/sampler route only if materially productive; if blocked without productive correction, pivot independent original white-mesh Shader48 source→postvendor exact GUID fanout or water. Do not replay PC target/sky, Level38 pins unchanged, all G0–G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged, CL/lab read-only, BLACK/animation deferred, no production/player/XAPK.",
+    "run": 46117813183,
+    "job": null,
     "run_status": "in_progress",
-    "lint_run": 46117064991,
+    "lint_run": 46117813215,
     "lint_conclusion": "success",
-    "source_free_controls_passed": true,
-    "latest_observed_step": "Build exact W1 Material21 plus B02 Texture2D28 same-instance optional lineage exporter",
+    "source_free_controls_passed": false,
+    "latest_observed_step": null,
     "prior_failed_run": {
       "execution_head": "e5f00a1417e420050158f8f3a62749c3b4540c01",
       "run": 46116411253,
@@ -18023,6 +18023,124 @@
       "causal_import_failure_not_proven": true,
       "unity_automatic_log_contained_original_name_and_export_guid": true
     },
-    "conclusion": null
+    "conclusion": null,
+    "prior_corrective_actual": {
+      "execution_head": "0fd64ec1fda9ac4a0e1b28cf9eb47c35cc43a124",
+      "run": 46117064994,
+      "job": 140893146463,
+      "conclusion": "failure",
+      "lint_run": 46117064991,
+      "lint_conclusion": "success",
+      "actual_report": {
+        "XAPK": false,
+        "actual_height": 64,
+        "actual_importer_kind": "generic_asset",
+        "actual_mip_count": 7,
+        "actual_srgb": true,
+        "actual_texture_format": "RGBA32",
+        "actual_texture_graphics_format": "R8G8B8A8_SRGB",
+        "actual_vulkan_mips_equal": 1,
+        "actual_width": 64,
+        "android_pixels_verified": false,
+        "backend": "Vulkan",
+        "black_fire_restored": false,
+        "controls": {
+          "force_one_error": 0,
+          "force_zero_error": 0,
+          "max_wrong_baseline_separation": 0.6294117647058823
+        },
+        "device": "llvmpipe (LLVM 15.0.7, 256 bits)",
+        "editor_phase": "complete",
+        "export_basename_preserved": true,
+        "export_stem_matches_serialized_name": true,
+        "imported_cpu_mips_equal": 0,
+        "imported_descriptor_matches": true,
+        "imported_file_id_matches": true,
+        "imported_guid_matches": true,
+        "imported_sampler_fields_match": true,
+        "mips": [
+          {
+            "alpha_max_error": 0.01717597246170044,
+            "alpha_mismatches": 2625,
+            "cpu_byte_match": false,
+            "level": 0,
+            "size": 64,
+            "texels": 4096
+          },
+          {
+            "alpha_max_error": 0.02446642412858846,
+            "alpha_mismatches": 782,
+            "cpu_byte_match": false,
+            "level": 1,
+            "size": 32,
+            "texels": 1024
+          },
+          {
+            "alpha_max_error": 0.04998956287608425,
+            "alpha_mismatches": 229,
+            "cpu_byte_match": false,
+            "level": 2,
+            "size": 16,
+            "texels": 256
+          },
+          {
+            "alpha_max_error": 0.10341856479644773,
+            "alpha_mismatches": 64,
+            "cpu_byte_match": false,
+            "level": 3,
+            "size": 8,
+            "texels": 64
+          },
+          {
+            "alpha_max_error": 0.1354889357791227,
+            "alpha_mismatches": 16,
+            "cpu_byte_match": false,
+            "level": 4,
+            "size": 4,
+            "texels": 16
+          },
+          {
+            "alpha_max_error": 0.007480942501741306,
+            "alpha_mismatches": 2,
+            "cpu_byte_match": false,
+            "level": 5,
+            "size": 2,
+            "texels": 4
+          },
+          {
+            "alpha_max_error": 7.713542249376815e-9,
+            "alpha_mismatches": 0,
+            "cpu_byte_match": false,
+            "level": 6,
+            "size": 1,
+            "texels": 1
+          }
+        ],
+        "native_asset_and_meta_unchanged": true,
+        "native_importer_type_matches": false,
+        "original_alpha_texels_checked": 5461,
+        "original_shader_verified": false,
+        "player": false,
+        "private_editor_log_guard_verified": true,
+        "private_payload_published": false,
+        "production": false,
+        "readable": false,
+        "reason": "vulkan_original_alpha_mismatch",
+        "source_native_bytes": 21844,
+        "source_native_mips": 7,
+        "source_serialized_color_space": 1,
+        "status": "INCONCLUSIVE",
+        "unity_import_verified": false,
+        "unity_step_exit": 0,
+        "unity_texture_loaded": true
+      },
+      "artifact": {
+        "id": 15251638388,
+        "bytes": 3074,
+        "digest": "sha256:95f83d9bb73a40e205037e5363106750434f8ed085898fed162354726473b444",
+        "digest_independently_downloaded": false
+      },
+      "cpu_readback_unavailable_not_proven_mismatch": true
+    }
   }
 }
