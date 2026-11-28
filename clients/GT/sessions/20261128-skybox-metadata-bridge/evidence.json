@@ -478,8 +478,8 @@
     "artifact_independently_downloaded": false
   },
   "run": 46111121179,
-  "run_status": "in_progress",
-  "conclusion": null,
+  "run_status": "completed",
+  "conclusion": "success",
   "lint_run": 46111121049,
   "lint_status": "completed",
   "lint_conclusion": "success",
@@ -491,5 +491,1472 @@
   "player": false,
   "XAPK": false,
   "device": false,
-  "next_action": "G3-G6-Skybox-serialized-metadata-descriptor-bridge: reconcile actual 46111121179 on execution 1336788f4f58fc6e7135edfa107261e7f3758249, lint 46111121049 completed success. Prior 46110226563 SUCCESS comparison only: source 45 offsets/10 named resources/7 registers, actual 2 validated modules and 3/3 rows, 7/7 location-type varying link, direct SPIR-V name/owner offset 0/45 and resource name 0/10; original register identity unresolved; actual combined Unity metadata retains source stage names 45/45 and 5/5 textures in each bucket, direct owner offsets 4/15 VS, 0/30 FS. Native 2 uniform conflicts/2 internal variant creation failures remain. New bridge checks actual OpName/OpMemberName counts, original source member identity to serialized buffer owner/index/offset to actual unique descriptor and member shape, original vs relocated offsets, both texture and sampler family/type/array, 3 buckets each stage. Direct candidate and four alternative packed-index views diagnostic only; no assumed undocumented packing or runtime proof. If no conclusive bridge, use authored calibration or independent meshes/fire/water, not repeated ABI baseline. Level38 exact pins remain unchanged, no editor 154 proof. No production/player/XAPK, all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred."
+  "next_action": "G3-G6-Skybox-binding-calibration: reconcile actual 46111849176 on execution fe9ed9008b56132da536e262672f9f77357d7310, lint 46111849133 completed success. Prior 46111121179 SUCCESS observation: 125 controls, 6/6 metadata stage rows; low8 and low16 identical in every bucket, 36/45 unique numeric descriptor/offset/shape candidates (6/15 VS,30/30 FS), 23 preserved source offset and 13 relocated, 9 VS unresolved; FS 10/10 candidate resources, direct/high16 zero, high8 ambiguous/no complete resources. Both actual SPIR-V modules OpName=7, OpMemberName=0 and SHA identical to prior 46110226563; original register join unresolved, native 2 pre-bundle uniform conflicts remain. New independent authored calibration uses distinct source texture dimensions (2D/cube/3D), two contrasting register/offset/declaration arrangements, named constants and actual sampled-image operands. Compare every direct/packed index view in both actual bundles/stages/buckets; distinguish equal counts from actual image/sampler pair links. If low8 and low16 indistinguishable, record ambiguity, do not adopt global index rule. If informative, resolve 9 original VS mismatches by shape/type/actual byte accesses and exact original varying register proof; otherwise move independent white meshes/fire/water instead of repeating original export. Native editor error, original runtime ABI and pixels remain separate. Level38 exact prior pins unchanged; no 154 editor proof. No production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only; BLACK/animation deferred.",
+  "actual": {
+    "status": "ACTUAL_METADATA_BRIDGE_OBSERVED_PACKED_INDEX_RULE_NOT_CALIBRATED",
+    "run": 46111121179,
+    "job": 140874658373,
+    "execution_head": "1336788f4f58fc6e7135edfa107261e7f3758249",
+    "conclusion": "success",
+    "lint_run": 46111121049,
+    "lint_conclusion": "success",
+    "controls_passed": 125,
+    "source_capture": {
+      "candidate_replayed": true,
+      "candidate_sha256": "0c3571b1db0de5b2fbffbfc352a55a632424d8a31a29c83ed2ff5e0df66d836f",
+      "original_object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9",
+      "original_shader_verified": false,
+      "original_static_named_resources": 10,
+      "original_static_offsets": 45,
+      "original_varying_registers": 7,
+      "phase": "complete",
+      "reference_packet_sha256": "bb1f87c198e2ac55e78ad4bab598d1802ea29a9f6cd53b023abf2e2186e90482",
+      "reference_stage_files_read": 2,
+      "source_static_offsets": 45,
+      "source_static_registers_joined": 7,
+      "source_static_resources": 10,
+      "status": "PASS_PRIVATE_SOURCE_ABI_CAPTURE"
+    },
+    "compiler_control_stage": {
+      "XAPK": false,
+      "candidate_sha256": "0c3571b1db0de5b2fbffbfc352a55a632424d8a31a29c83ed2ff5e0df66d836f",
+      "exact_reversible_body_unchanged": true,
+      "expected_manifest_sha256": "2e7697c539626d6740fbc68c86d20c1d4e051003f3bc25cb2beec9cfeb09c0db",
+      "files": {
+        "Assets/Original.mat": "0a8e7733b547b642b211d19365975f5ec171f317aafab74733ada12a5069a3e1",
+        "Assets/Original.mat.meta": "eb2d88f1230520c5e72e3bc6b4da820ad2b368682eb14f127ca557e85250a488",
+        "Assets/Original.shader": "0c3571b1db0de5b2fbffbfc352a55a632424d8a31a29c83ed2ff5e0df66d836f",
+        "Assets/Original.shader.meta": "b0f9e8c949719437dcc9499a915208afaf7b89529080ffb603531ecaab90bb59"
+      },
+      "one_dxc_pragma_removed": true,
+      "original_shader_verified": false,
+      "original_static_named_resources": 10,
+      "original_static_offsets": 45,
+      "original_static_varying_registers": 7,
+      "player_built": false,
+      "prior_exact_sha256": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+      "protected_original_export_files": 5,
+      "status": "PASS_EXACT_SOURCE_BODY_COMPILER_CONTROL_STAGED",
+      "unchanged_material_and_metas": 3
+    },
+    "compiler_control_verify": {
+      "XAPK": false,
+      "bundle_present": true,
+      "bundle_sha256": "790801bc6ec067200d403c0ad111d842ca2e9219f7bb19580c3da18fe1ef20a7",
+      "compiled_program_proof": {
+        "actual_empty_route_stage_rows": {
+          "progFragment": 3,
+          "progVertex": 3
+        },
+        "all_referenced_spirv_validated": true,
+        "decoded_blobs": 1,
+        "decoded_unique_modules": 2,
+        "execution_models": [
+          0,
+          4
+        ],
+        "fragment_table_fallback": true,
+        "inactive_stereo_keyword_count": 4,
+        "vulkan_platform_only": true
+      },
+      "device_pixels_proven": false,
+      "editor": {
+        "androidVulkanOnly": true,
+        "bundleBuilt": true,
+        "candidateSha256": "0c3571b1db0de5b2fbffbfc352a55a632424d8a31a29c83ed2ff5e0df66d836f",
+        "colorMatches": 6,
+        "colorSlots": 6,
+        "errorCategory": "none",
+        "floatMatches": 20,
+        "floatSlots": 20,
+        "intSlots": 0,
+        "materialIdentity": true,
+        "materialShaderReference": true,
+        "passCount": 1,
+        "playerBuilt": false,
+        "privateBundleBytes": 13080,
+        "shaderErrorsAfter": 0,
+        "shaderErrorsBefore": 0,
+        "shaderIdentity": true,
+        "shaderNameExact": true,
+        "sourcePropertyCount": 0,
+        "status": "PASS",
+        "texEnvSlots": 0,
+        "version": "2021.3.45f2"
+      },
+      "editor_identity_and_values_pass": true,
+      "editor_outcome": "success",
+      "original_runtime_abi_verified": false,
+      "original_shader_verified": false,
+      "player_built": false,
+      "protected_staged_files_unchanged": 4,
+      "status": "PASS_PRIVATE_ORIGINAL_COMPILER_CONTROL_DECODED_PENDING_ABI_AND_NATIVE_LOG",
+      "unity_native_log_reconciled": false
+    },
+    "actual_abi": {
+      "XAPK": false,
+      "bundle_sha256": "790801bc6ec067200d403c0ad111d842ca2e9219f7bb19580c3da18fe1ef20a7",
+      "comparison": {
+        "actual_original_named_resources_exact": 0,
+        "actual_original_offsets_exact": 0,
+        "all_expected_owner_offsets_match": false,
+        "all_named_resource_maps_match": false,
+        "all_static_member_layouts_match": false,
+        "fragment_table_fallback": true,
+        "interfaces": {
+          "actual_location_type_link": {
+            "actual": 7,
+            "exact": 7,
+            "exact_map": true,
+            "expected": 7,
+            "extra": 0,
+            "missing": 0,
+            "same_name_different_value": 0
+          },
+          "cross_stage_descriptor_profile": {
+            "fragment_duplicate_slots": 0,
+            "fragment_slots": 11,
+            "shared_ambiguous_slots": 0,
+            "shared_different_name_or_kind_shape": 0,
+            "shared_exact_name_kind_shape": 0,
+            "shared_slots": 0,
+            "vertex_duplicate_slots": 0,
+            "vertex_slots": 4
+          },
+          "fragment_output_location_type": {
+            "actual": 1,
+            "exact": 1,
+            "exact_map": true,
+            "expected": 1,
+            "extra": 0,
+            "missing": 0,
+            "same_name_different_value": 0
+          },
+          "mesh_input_location_type": {
+            "actual": 1,
+            "exact": 1,
+            "exact_map": true,
+            "expected": 1,
+            "extra": 0,
+            "missing": 0,
+            "same_name_different_value": 0
+          },
+          "original_register_join": {
+            "all_original_registers_linked": false,
+            "reason": "skybox_interface_reflected_register_identity_unresolved"
+          }
+        },
+        "stages": {
+          "fs": {
+            "absent_from_all_blocks": 30,
+            "actual_spirv_debug_name_counts": {
+              "op_member_name": 0,
+              "op_name": 7
+            },
+            "ambiguous_other_block": 0,
+            "descriptor_metadata_bridge_rows": [
+              {
+                "direct_binding_index_is_not_runtime_proof": true,
+                "packed_views_are_diagnostic_only": true,
+                "variant_blob_decoded": true,
+                "views": {
+                  "direct": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 30,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 10,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 30,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 10,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 1,
+                      "full_group_offset_subset_candidates": 4,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 1,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 0,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 16,
+                      "original_offset_relocated": 13,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 29
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 5,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 5,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "low16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 1,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 1
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 0,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 17,
+                      "original_offset_relocated": 13,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 30
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 10
+                    }
+                  },
+                  "low8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 1,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 1
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 0,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 17,
+                      "original_offset_relocated": 13,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 30
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 10
+                    }
+                  }
+                }
+              },
+              {
+                "direct_binding_index_is_not_runtime_proof": true,
+                "packed_views_are_diagnostic_only": true,
+                "variant_blob_decoded": true,
+                "views": {
+                  "direct": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 30,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 10,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 30,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 10,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 1,
+                      "full_group_offset_subset_candidates": 4,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 1,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 0,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 16,
+                      "original_offset_relocated": 13,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 29
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 5,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 5,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "low16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 1,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 1
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 0,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 17,
+                      "original_offset_relocated": 13,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 30
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 10
+                    }
+                  },
+                  "low8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 1,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 1
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 0,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 17,
+                      "original_offset_relocated": 13,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 30
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 10
+                    }
+                  }
+                }
+              },
+              {
+                "direct_binding_index_is_not_runtime_proof": true,
+                "packed_views_are_diagnostic_only": true,
+                "variant_blob_decoded": true,
+                "views": {
+                  "direct": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 30,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 10,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 30,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 10,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 1,
+                      "full_group_offset_subset_candidates": 4,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 1,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 0,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 16,
+                      "original_offset_relocated": 13,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 29
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 5,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 5,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "low16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 1,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 1
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 0,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 17,
+                      "original_offset_relocated": 13,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 30
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 10
+                    }
+                  },
+                  "low8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 1,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 1,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 1
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 30,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 0,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 17,
+                      "original_offset_relocated": 13,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 30,
+                      "unique_descriptor_offset_shape_join": 30
+                    },
+                    "resources": {
+                      "expected": 10,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 10
+                    }
+                  }
+                }
+              }
+            ],
+            "descriptor_pairs_unique": true,
+            "exact_owner_offset": 0,
+            "expected_blocks": 1,
+            "expected_members": 30,
+            "found_in_other_block": 0,
+            "found_in_other_block_same_offset": 0,
+            "full_static_member_type_stride_layout": {
+              "actual": 39,
+              "exact": 0,
+              "exact_map": false,
+              "expected": 39,
+              "extra": 39,
+              "missing": 39,
+              "same_name_different_value": 0
+            },
+            "matched_blocks": 0,
+            "missing_from_owner": 30,
+            "module_sha256": "52a0a509a9a02eab69c99735c185e1bcac000522d8a657718ce379318acc1e20",
+            "named_resources": {
+              "actual": 10,
+              "exact": 0,
+              "exact_map": false,
+              "expected": 10,
+              "extra": 10,
+              "missing": 10,
+              "same_name_different_value": 0
+            },
+            "reflected_ubo_count": 1,
+            "runtime_metadata_rows": [
+              {
+                "expected_source_texture_names": 5,
+                "generated_owner_offsets": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 30,
+                  "extra": 45,
+                  "missing": 30,
+                  "same_name_different_value": 0
+                },
+                "original_members_named_any_owner": 30,
+                "original_owner_offsets": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 30,
+                  "extra": 45,
+                  "missing": 30,
+                  "same_name_different_value": 0
+                },
+                "reflected_to_serialized_members": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 39,
+                  "extra": 45,
+                  "missing": 39,
+                  "same_name_different_value": 0
+                },
+                "reflected_ubo_count": 1,
+                "serialized_index_equal_reflected_binding": 0,
+                "serialized_ubo_name_matches": 0,
+                "source_texture_names_present": 5,
+                "variant_blob_decoded": true
+              },
+              {
+                "expected_source_texture_names": 5,
+                "generated_owner_offsets": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 30,
+                  "extra": 45,
+                  "missing": 30,
+                  "same_name_different_value": 0
+                },
+                "original_members_named_any_owner": 30,
+                "original_owner_offsets": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 30,
+                  "extra": 45,
+                  "missing": 30,
+                  "same_name_different_value": 0
+                },
+                "reflected_to_serialized_members": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 39,
+                  "extra": 45,
+                  "missing": 39,
+                  "same_name_different_value": 0
+                },
+                "reflected_ubo_count": 1,
+                "serialized_index_equal_reflected_binding": 0,
+                "serialized_ubo_name_matches": 0,
+                "source_texture_names_present": 5,
+                "variant_blob_decoded": true
+              },
+              {
+                "expected_source_texture_names": 5,
+                "generated_owner_offsets": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 30,
+                  "extra": 45,
+                  "missing": 30,
+                  "same_name_different_value": 0
+                },
+                "original_members_named_any_owner": 30,
+                "original_owner_offsets": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 30,
+                  "extra": 45,
+                  "missing": 30,
+                  "same_name_different_value": 0
+                },
+                "reflected_to_serialized_members": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 39,
+                  "extra": 45,
+                  "missing": 39,
+                  "same_name_different_value": 0
+                },
+                "reflected_ubo_count": 1,
+                "serialized_index_equal_reflected_binding": 0,
+                "serialized_ubo_name_matches": 0,
+                "source_texture_names_present": 5,
+                "variant_blob_decoded": true
+              }
+            ],
+            "serialized_stage_rows": 3,
+            "wrong_owner_offset": 0
+          },
+          "vs": {
+            "absent_from_all_blocks": 15,
+            "actual_spirv_debug_name_counts": {
+              "op_member_name": 0,
+              "op_name": 7
+            },
+            "ambiguous_other_block": 0,
+            "descriptor_metadata_bridge_rows": [
+              {
+                "direct_binding_index_is_not_runtime_proof": true,
+                "packed_views_are_diagnostic_only": true,
+                "variant_blob_decoded": true,
+                "views": {
+                  "direct": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 15,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 15,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 15,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "low16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 4,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 4
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 9,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 6,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 1,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 6
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "low8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 4,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 4
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 9,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 6,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 1,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 6
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  }
+                }
+              },
+              {
+                "direct_binding_index_is_not_runtime_proof": true,
+                "packed_views_are_diagnostic_only": true,
+                "variant_blob_decoded": true,
+                "views": {
+                  "direct": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 15,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 15,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 15,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "low16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 4,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 4
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 9,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 6,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 1,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 6
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "low8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 4,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 4
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 9,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 6,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 1,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 6
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  }
+                }
+              },
+              {
+                "direct_binding_index_is_not_runtime_proof": true,
+                "packed_views_are_diagnostic_only": true,
+                "variant_blob_decoded": true,
+                "views": {
+                  "direct": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 15,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 15,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "high8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 0,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 0
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 15,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 0,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 0,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 0
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "low16": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 4,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 4
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 9,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 6,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 1,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 6
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  },
+                  "low8": {
+                    "buffers": {
+                      "ambiguous_descriptor_candidates": 0,
+                      "full_group_offset_subset_candidates": 4,
+                      "groups_with_binding": 5,
+                      "groups_with_members": 5,
+                      "reflected_ubos": 4,
+                      "serialized_buffers": 5,
+                      "unique_descriptor_candidates": 4
+                    },
+                    "numeric": {
+                      "ambiguous_join": 0,
+                      "expected": 15,
+                      "missing_serialized_name": 0,
+                      "no_descriptor_offset_shape_join": 9,
+                      "non_injective_join": 0,
+                      "original_offset_preserved": 6,
+                      "original_offset_relocated": 0,
+                      "original_or_generated_owner_preserved": 1,
+                      "serialized_name_present": 15,
+                      "unique_descriptor_offset_shape_join": 6
+                    },
+                    "resources": {
+                      "expected": 0,
+                      "missing_or_ambiguous_descriptor_type": 0,
+                      "missing_serialized_texture_name": 0,
+                      "non_injective_join": 0,
+                      "source_resource_schema_unresolved": 0,
+                      "unique_descriptor_type_join": 0
+                    }
+                  }
+                }
+              }
+            ],
+            "descriptor_pairs_unique": true,
+            "exact_owner_offset": 0,
+            "expected_blocks": 4,
+            "expected_members": 15,
+            "found_in_other_block": 0,
+            "found_in_other_block_same_offset": 0,
+            "full_static_member_type_stride_layout": {
+              "actual": 150,
+              "exact": 0,
+              "exact_map": false,
+              "expected": 150,
+              "extra": 150,
+              "missing": 150,
+              "same_name_different_value": 0
+            },
+            "matched_blocks": 0,
+            "missing_from_owner": 15,
+            "module_sha256": "1be077f50aa6da76fe9faec2480f572c218ba33230b4f765bddd3f8fdf56e286",
+            "named_resources": {
+              "actual": 0,
+              "exact": 0,
+              "exact_map": true,
+              "expected": 0,
+              "extra": 0,
+              "missing": 0,
+              "same_name_different_value": 0
+            },
+            "reflected_ubo_count": 4,
+            "runtime_metadata_rows": [
+              {
+                "expected_source_texture_names": 0,
+                "generated_owner_offsets": {
+                  "actual": 45,
+                  "exact": 4,
+                  "exact_map": false,
+                  "expected": 15,
+                  "extra": 41,
+                  "missing": 11,
+                  "same_name_different_value": 0
+                },
+                "original_members_named_any_owner": 15,
+                "original_owner_offsets": {
+                  "actual": 45,
+                  "exact": 4,
+                  "exact_map": false,
+                  "expected": 15,
+                  "extra": 41,
+                  "missing": 11,
+                  "same_name_different_value": 0
+                },
+                "reflected_to_serialized_members": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 150,
+                  "extra": 45,
+                  "missing": 150,
+                  "same_name_different_value": 0
+                },
+                "reflected_ubo_count": 4,
+                "serialized_index_equal_reflected_binding": 0,
+                "serialized_ubo_name_matches": 0,
+                "source_texture_names_present": 0,
+                "variant_blob_decoded": true
+              },
+              {
+                "expected_source_texture_names": 0,
+                "generated_owner_offsets": {
+                  "actual": 45,
+                  "exact": 4,
+                  "exact_map": false,
+                  "expected": 15,
+                  "extra": 41,
+                  "missing": 11,
+                  "same_name_different_value": 0
+                },
+                "original_members_named_any_owner": 15,
+                "original_owner_offsets": {
+                  "actual": 45,
+                  "exact": 4,
+                  "exact_map": false,
+                  "expected": 15,
+                  "extra": 41,
+                  "missing": 11,
+                  "same_name_different_value": 0
+                },
+                "reflected_to_serialized_members": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 150,
+                  "extra": 45,
+                  "missing": 150,
+                  "same_name_different_value": 0
+                },
+                "reflected_ubo_count": 4,
+                "serialized_index_equal_reflected_binding": 0,
+                "serialized_ubo_name_matches": 0,
+                "source_texture_names_present": 0,
+                "variant_blob_decoded": true
+              },
+              {
+                "expected_source_texture_names": 0,
+                "generated_owner_offsets": {
+                  "actual": 45,
+                  "exact": 4,
+                  "exact_map": false,
+                  "expected": 15,
+                  "extra": 41,
+                  "missing": 11,
+                  "same_name_different_value": 0
+                },
+                "original_members_named_any_owner": 15,
+                "original_owner_offsets": {
+                  "actual": 45,
+                  "exact": 4,
+                  "exact_map": false,
+                  "expected": 15,
+                  "extra": 41,
+                  "missing": 11,
+                  "same_name_different_value": 0
+                },
+                "reflected_to_serialized_members": {
+                  "actual": 45,
+                  "exact": 0,
+                  "exact_map": false,
+                  "expected": 150,
+                  "extra": 45,
+                  "missing": 150,
+                  "same_name_different_value": 0
+                },
+                "reflected_ubo_count": 4,
+                "serialized_index_equal_reflected_binding": 0,
+                "serialized_ubo_name_matches": 0,
+                "source_texture_names_present": 0,
+                "variant_blob_decoded": true
+              }
+            ],
+            "serialized_stage_rows": 3,
+            "wrong_owner_offset": 0
+          }
+        }
+      },
+      "device_pixels": false,
+      "exact_reflected_source_contract": false,
+      "metadata_bridge_observed_rows": 6,
+      "native_log_reconciled": false,
+      "original_runtime_abi_verified": false,
+      "original_shader_verified": false,
+      "player_built": false,
+      "status": "OBSERVED_ACTUAL_ABI_COMPARISON_PENDING_RUNTIME_AND_NATIVE_LOG"
+    },
+    "native_binding_conflicts": 2,
+    "native_internal_variant_failures": 2,
+    "native_vulkan_counts": [
+      3,
+      1
+    ],
+    "native_log_reconciled": true,
+    "native_log_clean": false,
+    "low8_low16_same_counts_all_buckets": true,
+    "diagnostic_numeric_join": {
+      "vs": 6,
+      "fs": 30,
+      "total": 36,
+      "preserved_original_offset": 23,
+      "relocated": 13,
+      "unresolved": 9
+    },
+    "diagnostic_resource_join": {
+      "fs": 10,
+      "vs": 0
+    },
+    "spirv_op_member_name_zero_both_stages": true,
+    "original_register_identity_proven": false,
+    "original_runtime_abi_verified": false,
+    "original_shader_verified": false,
+    "artifact_id": 15249304921,
+    "artifact_github_reported_sha256": "c7e9327a4affe2bdb51391d0f9889158013c19dba43205c51f7499d5eb35bccd",
+    "artifact_independently_downloaded": false
+  }
 }
