@@ -1,0 +1,192 @@
+"""Selected original stage ABI to exact same-export mesh and material.
+Private original data remains runner-local. No Unity or draw acceptance.
+"""
+import argparse
+import json
+from pathlib import Path
+import tempfile
+
+from tools.gt_top_resource_closure import recheck, probe, selected_material_reference
+from tools.gt_top_original_renderer import probe as original
+from scripts import gt_material_route_values as values
+from scripts import gt_particle108_local_texture_document as native
+from scripts.b05_verify_material_texenv_bindings import normalize_texenvs
+from scripts.gt_original_921_all_variants import authenticated_shader_reader, enumerate_all, stage_parameter_records
+from scripts.gt_original_921_keyword_routes import keyword_routes
+from scripts.w1_recover_graphics_programs import decoded_platforms, records, translate
+from scripts.w1_recover_depth_passes import linked_program, stage_variants, variant_key
+from scripts.gt_resource_register_contract import registered_resources
+from scripts.t3_original_921_dxbc_semantic_join import read_original_dxbc_signatures
+
+STATUS = "OBSERVED_EXACT_SELECTED_SOURCE_ABI_MATERIAL_MESH_JOIN"
+
+def require(ok, code):
+    if not ok:
+        raise ValueError(code)
+
+def vertex_channel_observation(signature, channels):
+    """Report channel availability, not runtime binding or default fill."""
+    scalar = {"POSITION":0, "NORMAL":1, "TANGENT":2, "COLOR":3, "BLENDWEIGHT":12, "BLENDINDICES":13}
+    out = dict(user_inputs=0, present_channels=0, absent_channels=0,
+               unsupported_semantics=0, sufficient_declared_lanes=0, fewer_declared_lanes=0)
+    for row in signature:
+        if row["system_value"]:
+            continue
+        out["user_inputs"] += 1
+        name, index = row["semantic"], row["index"]
+        channel = (4+index if name=="TEXCOORD" and 0<=index<8 else scalar.get(name) if index==0 else None)
+        if channel is None:
+            out["unsupported_semantics"] += 1
+            continue
+        dim = channels[channel]["dimension"] if channel<len(channels) else 0
+        require(type(dim) is int and 0<=dim<=4, "unsupported_mesh_channel_dimension")
+        if not dim:
+            out["absent_channels"] += 1
+            continue
+        out["present_channels"] += 1
+        out["fewer_declared_lanes" if row["mask"] & ~((1<<dim)-1) else "sufficient_declared_lanes"] += 1
+    return out
+
+def resource_observation(stage_rows, hlsl_sources, texenvs, typed, selected):
+    result = dict(texture_declarations=0, sampler_declarations=0,
+                  texture_names_in_material=0, texture_names_outside_material=0,
+                  texture_names_in_null_slots=0, texture_names_in_exact_typed_slots=0,
+                  selected_array_texture_declarations=0, selected_array_sampler_declarations=0,
+                  selected_array_type_matches=0, selected_array_type_mismatches=0)
+    require(len(stage_rows)==len(hlsl_sources), "stage_source_count")
+    for row, text in zip(stage_rows,hlsl_sources,strict=True):
+        regs = {}
+        for m in registered_resources(text):
+            key=(m[3],m[2])
+            require(key not in regs,"duplicate_stage_resource")
+            regs[key]=m[1]
+        used=set()
+        for b in row["source_texture_sampler_bindings"]:
+            kind,slot,name=b["kind"],b["slot"],b["source_texture_name"]
+            require(kind in ("t","s") and type(slot) is int and slot>=0,"bad_resource_binding")
+            key=(kind,kind+str(slot))
+            require(key in regs and key not in used,"missing_or_duplicate_stage_resource")
+            used.add(key)
+            if kind=="s":
+                result["sampler_declarations"]+=1
+                if name==selected:
+                    result["selected_array_sampler_declarations"]+=1
+                continue
+            result["texture_declarations"]+=1
+            if name not in texenvs:
+                result["texture_names_outside_material"]+=1
+            else:
+                result["texture_names_in_material"]+=1
+                result["texture_names_in_null_slots" if typed.get(name) is None else "texture_names_in_exact_typed_slots"]+=1
+            if name==selected:
+                result["selected_array_texture_declarations"]+=1
+                good=regs[key].split("<",1)[0].strip()=="Texture2DArray" and typed.get(name)==187
+                result["selected_array_type_matches" if good else "selected_array_type_mismatches"]+=1
+        require(used==set(regs),"unjoined_translated_resources")
+    result["selected_array_used_by_this_explicit_route"]=result["selected_array_texture_declarations"]>0
+    return result
+
+def run(a,out):
+    plan=json.loads(a.plan.read_text())
+    source=recheck.Source(a)
+    mat,mk,xk,trace=recheck.join(a,plan,source)
+    out["same_export_exact_graph"]=True
+    out["phase"]="mesh_and_material"
+    index=probe.file_index(a.project,{mk[0],xk[0]})
+    mesh=probe.mesh_check(source,tuple(plan["mesh"]),index[xk[0]][0],xk[1])
+    out["mesh_fields_matched"]=mesh["matched_geometry_fields"]
+    out["mesh_fields_total"]=mesh["geometry_fields"]
+    require(mesh["status"]=="MATCH","selected_mesh_payload_drift")
+    body=probe.document(index[mk[0]][0],mk[1],21)
+    actual=native.strict_mapping(body)["Material"]
+    out["material_values"]=values.compare(mat,actual)
+    before=normalize_texenvs(mat["m_SavedProperties"]["m_TexEnvs"])
+    after=normalize_texenvs(actual["m_SavedProperties"]["m_TexEnvs"],exported=True)
+    require(set(before)==set(after)==set(plan["texture_targets"]),"selected_texenv_names_drift")
+    typed={}
+    selected=[]
+    for prop in before:
+        edge=recheck.exact_slot(before[prop],after[prop],plan["material"][0],mk[0],source,trace,plan["texture_targets"][prop])
+        typed[prop]=None if edge is None else edge[3]
+        if edge is not None and edge[3]==187:
+            selected.append((prop,edge))
+    require(len(selected)==1,"selected_array_slot_not_unique")
+    prop,(_,exp,kind,cls)=selected[0]
+    out["exact_texenv_slots"]=len(typed)
+    require(cls==187 and kind==3 and exp[1]==18700000,"selected_reference_anchor")
+    repaired=selected_material_reference.repair_native_reference(body,prop,exp[0],exp[1],kind)
+    rejected=0
+    for args in ((prop,"0"*32,exp[1],kind),(prop,exp[0],exp[1]+1,kind),(prop,exp[0],exp[1],2)):
+        try:
+            selected_material_reference.repair_native_reference(body,*args)
+        except ValueError:
+            rejected+=1
+    require(rejected==3,"wrong_reference_control_not_rejected")
+    out["reference_repair_byte_difference"]=sum(x!=y for x,y in zip(body.encode(),repaired.encode(),strict=True))
+    out["reference_negative_controls_rejected"]=rejected
+    out["original_shader_pointer_unchanged"]=True
+    out["phase"]="explicit_original_stage_pair"
+    tree=authenticated_shader_reader(a.original)(tuple(plan["shader"]))
+    tables=[records(parts) for platform,parts in decoded_platforms(tree) if platform==4]
+    require(len(tables)==1,"original_d3d11_table")
+    table=tables[0]
+    pairs,orphans,passes,distinct=enumerate_all(tree["m_ParsedForm"],table,
+        variants=stage_variants,permutation=variant_key,linker=linked_program)
+    routes,_=keyword_routes(tree["m_ParsedForm"],pairs,orphans,passes)
+    route=original.select_route(routes,original.keywords(mat))
+    names=tree["m_ParsedForm"]["m_KeywordNames"]
+    enabled=set(route["enabled"])
+    matched=[p for p in pairs if p["subshader"]==0 and p["pass"]==0
+             and p["vs"]["program_ref"]==route["vs"] and p["fs"]["program_ref"]==route["fs"]
+             and {names[i] for i in p["vs"]["original_variant_metadata"].get("m_KeywordIndices",[])}==enabled
+             and {names[i] for i in p["fs"]["original_variant_metadata"].get("m_KeywordIndices",[])}==enabled]
+    require(len(matched)==1,"exact_route_variant_identity")
+    pair=matched[0]
+    out["explicit_source_route_keyword_count"]=len(enabled)
+    out["phase"]="private_stage_ABI"
+    with tempfile.TemporaryDirectory(prefix="gt-selected-abi-private-",dir=a.out.parent) as td:
+        private=Path(td)
+        dirs={}
+        sources=[]
+        for stage,role in ((1,"vs"),(0,"fs")):
+            ident=pair[role]["program_ref"]
+            folder=private/role
+            folder.mkdir(mode=0o700)
+            require(ident[0]==stage,"source_stage_role")
+            result=translate(distinct[ident]["source_code"],stage,folder)
+            require(result["dxbc_sha256"]==ident[1] and all(result[k] is True for k in
+                    ("vulkan11_valid","hlsl_recovered","roundtrip_vulkan11_valid")),"original_stage_translation")
+            dirs[ident]=role
+            sources.append((folder/"private.hlsl").read_text())
+        out["original_stage_byte_identities_verified"]=len(dirs)
+        out["abi"]=stage_parameter_records([pair],[],passes,table,private,dirs)
+        rows=json.loads((private/"original-private-parameter-records.json").read_text())["stage_records"]
+        require([r["stage"] for r in rows]==[1,0],"source_ABI_stage_order")
+        out["phase"]="material_resource_and_mesh_channel_join"
+        out["resource_join"]=resource_observation(rows,sources,before,typed,prop)
+        signature=read_original_dxbc_signatures((private/"vs/source.dxbc").read_bytes())["input"]
+        channels=source.obj(tuple(plan["mesh"]),"Mesh").read_typetree(check_read=False)["m_VertexData"]["m_Channels"]
+        out["mesh_channel_availability"]=vertex_channel_observation(signature,channels)
+    out["status"]=STATUS
+    out["phase"]="complete_source_ABI_observation"
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__)
+    for name in ("original","manifest","project","w1","b02","renderer-trace","plan","out"):
+        p.add_argument("--"+name,type=Path,required=True)
+    a=p.parse_args()
+    out=dict(status="INCONCLUSIVE",phase="same_export_graph",original_shader_draw_verified=False,
+             runtime_keyword_selection_verified=False,Unity_execution=False,Android_device=False,
+             production=False,XAPK=False,white_mesh_repair_verified=False,private_payload_published=False)
+    try:
+        run(a,out)
+    except Exception as exc:
+        out["failure_type"]=type(exc).__name__
+    with a.out.open("x") as dest:
+        json.dump(out,dest,sort_keys=True,indent=2)
+        dest.write("\n")
+    print("GT_SELECTED_SOURCE_ABI "+json.dumps(out,sort_keys=True))
+    return 0 if out["status"]==STATUS else 2
+
+if __name__=="__main__":
+    raise SystemExit(main())
