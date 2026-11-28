@@ -1,0 +1,148 @@
+name: GT retained authored Particle108 material texture alpha Vulkan (NO BUILD)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-particle108-preserved-alpha-vulkan.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retained-alpha-vulkan:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 25
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+      queue: max
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      GT_IMAGE: raft-gt-retained-alpha:local
+      GT_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}
+    steps:
+      - name: Checkout only authored probe and exact retained evidence
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/gt_particle108_preserved_alpha_vulkan/
+            /clients/GT/sessions/20261127-particle108-verified-texture-preservation/actual-preserved-texture-evidence.zip
+      - name: Verify exact retained bytes and stage new isolated project
+        id: stage
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test ! -e .gt-zip2
+          test "$(git hash-object tools/gt_particle108_preserved_alpha_vulkan/PreservedTextureAlpha.shader)" = 912af323e21f147fed58e8e6390bd67c5d598fb1
+          test "$(git hash-object tools/gt_particle108_preserved_alpha_vulkan/PreservedTextureAlphaValidation.cs)" = 25b982891a38350009c764d1e6be1c3fd5955923
+          test "$(git hash-object tools/gt_particle108_preserved_alpha_vulkan/probe.py)" = be369edc202d2203a07a7ef47ef28f487a549c49
+          echo 'ae5000e1dd1466dc7531e44a91b1c1274b0939579d4de1524270aa297c92707c  clients/GT/sessions/20261127-particle108-verified-texture-preservation/actual-preserved-texture-evidence.zip' | sha256sum -c -
+          python3 -m venv "$RUNNER_TEMP/gt-retained-alpha-python"
+          py="$RUNNER_TEMP/gt-retained-alpha-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check Pillow==11.3.0 PyYAML==6.0.3
+          "$py" -B tools/gt_particle108_preserved_alpha_vulkan/probe.py stage --archive clients/GT/sessions/20261127-particle108-verified-texture-preservation/actual-preserved-texture-evidence.zip --project gt-preserved-project --results gt-preserved-results --run-id "$GT_RUN_ID"
+          "$py" -m pip freeze > gt-preserved-results/python-tools.txt
+          git rev-parse HEAD > gt-preserved-results/tested-head.txt
+      - name: Prepare licensed editor image with bounded software Vulkan preflight
+        id: environment
+        run: |
+          set -euo pipefail
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+          mkdir "$RUNNER_TEMP/gt-preserved-docker"
+          cat > "$RUNNER_TEMP/gt-preserved-docker/Dockerfile" <<'DOCKERFILE'
+          FROM unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3
+          USER root
+          RUN apt-get update -qq && \
+              DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
+                libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb xauth && \
+              rm -rf /var/lib/apt/lists/*
+          ENV VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+          DOCKERFILE
+          timeout 480s docker build --quiet --tag "$GT_IMAGE" "$RUNNER_TEMP/gt-preserved-docker" > gt-preserved-results/image-id.txt
+          docker run --rm --entrypoint /bin/bash "$GT_IMAGE" -lc 'test -f "$VK_ICD_FILENAMES"'
+          set +e
+          timeout --kill-after=10s 45s docker run --name gt-preserved-vulkan-preflight --rm --entrypoint /bin/bash "$GT_IMAGE" -lc 'timeout 30s xvfb-run -a vulkaninfo --summary' > gt-preserved-results/vulkan-preflight.txt 2>&1
+          code=$?
+          set -e
+          docker rm -f gt-preserved-vulkan-preflight >/dev/null 2>&1 || true
+          echo "$code" > gt-preserved-results/vulkan-preflight-exit.txt
+          # Preflight timeout is inconclusive, not a reason to declare GPU success or failure.
+          # The actual editor checks the Vulkan backend and float blend/readback support.
+      - name: Import exact retained textures and material adapters and render only authored probe
+        id: unity
+        continue-on-error: true
+        uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          customImage: raft-gt-retained-alpha:local
+          projectPath: gt-preserved-project
+          targetPlatform: StandaloneLinux64
+          buildMethod: PreservedTextureAlphaValidation.Run
+          manualExit: true
+          enableGpu: true
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 6g
+          dockerCpuLimit: 2
+          customParameters: >-
+            -force-vulkan -force-device-index 0 -job-worker-count 2
+            -gtPreservedRunId ${{ env.GT_RUN_ID }}
+            -gtPreservedReport /github/workspace/gt-preserved-results/raw.unity.json
+      - name: Independently verify actual imported alpha and Vulkan blending
+        if: always() && steps.stage.outcome == 'success'
+        env:
+          UNITY_OUTCOME: ${{ steps.unity.outcome }}
+        run: |
+          set -euo pipefail
+          sudo chown -R "$(id -u):$(id -g)" gt-preserved-results
+          code=1
+          if [ "$UNITY_OUTCOME" = success ]; then code=0; fi
+          "$RUNNER_TEMP/gt-retained-alpha-python/bin/python" -B tools/gt_particle108_preserved_alpha_vulkan/probe.py verify --archive clients/GT/sessions/20261127-particle108-verified-texture-preservation/actual-preserved-texture-evidence.zip --project gt-preserved-project --results gt-preserved-results --run-id "$GT_RUN_ID" --exit-code "$code"
+      - name: Preserve bounded authored receipts even on failure
+        if: always() && steps.stage.outcome == 'success'
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,base64,zipfile
+          from pathlib import Path
+          root=Path("gt-preserved-results")
+          names=("stage.json","tested-head.txt","python-tools.txt","image-id.txt","vulkan-preflight-exit.txt","raw.unity.json","verified.json")
+          files=[root/n for n in names if (root/n).is_file()]
+          assert len(files)<=7 and sum(p.stat().st_size for p in files)<=512*1024
+          with zipfile.ZipFile(root/"permanent-authored-evidence.zip","w",compression=zipfile.ZIP_DEFLATED) as z:
+              for p in files:
+                  assert not p.is_symlink()
+                  z.write(p,p.name)
+          data=(root/"permanent-authored-evidence.zip").read_bytes()
+          assert len(data)<=128*1024
+          print("GT_PERMANENT_EVIDENCE_SHA",len(data),hashlib.sha256(data).hexdigest())
+          enc=base64.b64encode(data).decode("ascii")
+          for i in range(0,len(enc),2048): print("GT_PERMANENT_EVIDENCE_B64",i//2048,enc[i:i+2048])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.stage.outcome == 'success'
+        with:
+          name: gt-retained-alpha-vulkan-receipts
+          path: |
+            gt-preserved-results/*.json
+            gt-preserved-results/*.txt
+            gt-preserved-results/permanent-authored-evidence.zip
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Clean only disposable project and own image
+        if: always() && steps.stage.outcome == 'success'
+        run: |
+          if test -f gt-preserved-project/GTInput.json; then sudo rm -rf gt-preserved-project; fi
+          docker image rm "$GT_IMAGE" >/dev/null 2>&1 || true
+          rm -rf "$RUNNER_TEMP/gt-preserved-docker"
