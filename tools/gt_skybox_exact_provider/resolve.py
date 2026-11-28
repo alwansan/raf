@@ -62,8 +62,9 @@ def external_owner(env,data,rows):
     return name,p[1]
 
 def selection(root):
-    env,i,d=a.read_source(root)
-    name,private_id=external_owner(env,d,catalog())
+    with open(os.devnull,"w") as q,contextlib.redirect_stdout(q),contextlib.redirect_stderr(q):
+        env,i,d=a.read_source(root)
+        name,private_id=external_owner(env,d,catalog())
     return name,private_id
 
 def make_plan(source,root):
@@ -78,8 +79,9 @@ def make_plan(source,root):
 def check_tree(source,rel,oid,typ):
     raw=subprocess.check_output(["git","-C",str(source),"ls-tree","HEAD","--",rel],text=True).rstrip("\n")
     header,sep,path=raw.partition("\t")
-    require(sep and path==rel and header.split()==["040000" if typ=="tree" else "100644",typ,oid] or
-            sep and path==rel and typ=="blob" and header.split()==["100755",typ,oid],"pinned_tree_entry_mismatch")
+    modes={"040000"} if typ=="tree" else {"100644","100755"}
+    fields=header.split()
+    require(sep and path==rel and len(fields)==3 and fields[0] in modes and fields[1:]==[typ,oid],"pinned_tree_entry_mismatch")
 
 def verify_payload(source,plan):
     p=plan["pin"];name=plan["provider"]
@@ -121,6 +123,54 @@ def verify_typed(root,plan):
         require(private_id in table and kind(table[private_id])==("Material",21),"source_skybox_target_not_typed_material")
         require(tree(table[private_id]) is not None,"source_skybox_material_typetree_unavailable")
 
+def compare_pointers(expected,actual,material_verified):
+    if not material_verified:return {"status":"UNKNOWN","reason":"actual_material_document_unverified"}
+    return {"status":"MATCH_TYPED_ACTUAL_MATERIAL" if expected==actual else "DRIFT_MATERIAL_POINTER",
+            "typed_source_material":True,"same_export_trace_matched":True,
+            "actual_material_document_verified":True}
+
+def compare(x,root,plan):
+    report={"source_commit":ZIP2_SHA,"scene_sha256":a.PINS[a.SCENE][1],"selected_provider":plan["provider"],
+            "same_export_settings_identity_proven":False,"full_scene_provider_closure_proven":False,
+            "Unity_import_verified":False,"device_pixels_proven":False,"original_assets_mutated":False,
+            "original_assets_published":False,"XAPK":False}
+    phase="source"
+    try:
+        verify_typed(root,plan)
+        with open(os.devnull,"w") as q,contextlib.redirect_stdout(q),contextlib.redirect_stderr(q):
+            env,i,d=a.read_source(root)
+            owner,private_id=external_owner(env,d,catalog())
+        phase="trace"
+        st,w1,b02=[a.read_trace(p) for p in (x.trace,x.w1,x.b02)]
+        guid,fid,_=a.settings_mapping(st,w1,b02,i)
+        phase="actual_scene_yaml"
+        scene=a.file_for_guid(x.project,guid,{".unity"})
+        actual=a.doc_body(scene,104,fid,"RenderSettings")
+        report["same_export_settings_identity_proven"]=True
+        report["fields"]=a.field_report(d,actual)
+        report["sun"]=a.null_sun(d,actual)
+        phase="skybox_actual_material"
+        try:
+            expected=a.material_mapping(w1,owner,private_id)
+            mat=a.file_for_guid(x.project,expected[0],{".mat",".asset"})
+            a.doc_body(mat,21,expected[1],"Material")
+            actual_pointer=a.export_pointer(actual.get("m_SkyboxMaterial"))
+            report["skybox"]=compare_pointers(expected,actual_pointer,True)
+        except Rejected as e:
+            report["skybox"]={"status":"UNKNOWN","reason":str(e)}
+        except Exception as e:
+            report["skybox"]={"status":"UNKNOWN","reason":type(e).__name__}
+        fields=report["fields"]
+        statuses=[report["sun"]["status"],report["skybox"]["status"]]
+        drift=bool(fields["field_mismatches"]) or any(s.startswith("DRIFT") for s in statuses)
+        unknown=bool(fields["field_unknown"]) or "UNKNOWN" in statuses
+        report["status"]="FAIL_ACTUAL_DRIFT" if drift else "PARTIAL_UNRESOLVED" if unknown else "PASS_EXACT_SKYBOX_SAME_EXPORT"
+    except Exception as e:
+        report.update(status="INCONCLUSIVE",phase=phase,reason=str(e) if isinstance(e,Rejected) else type(e).__name__)
+    x.report.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n")
+    print("GT_SKYBOX_SAME_EXPORT "+json.dumps(report,sort_keys=True,separators=(",",":")))
+    return 0 if report["status"]=="PASS_EXACT_SKYBOX_SAME_EXPORT" else 2
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("mode",choices=("discover","stage","compare"))
@@ -142,10 +192,7 @@ def main():
                 r=stage_selected(x.source,root,x.destination,plan)
                 r["status"]="AUTHENTICATED_TYPED_MATERIAL"
             else:
-                verify_typed(root,plan)
-                x.source=x.destination
-                x.output=x.report
-                return a.run(x,allowed_providers=set(a.PINS)|{plan["provider"]})
+                return compare(x,root,plan)
     except Exception as e:
         # No raw exception text from UnityPy or source paths.
         r={"status":"INCONCLUSIVE","phase":x.mode,"reason":str(e) if isinstance(e,Rejected) else type(e).__name__}

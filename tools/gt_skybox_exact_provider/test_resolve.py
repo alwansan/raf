@@ -33,3 +33,21 @@ class TestExactProvider(unittest.TestCase):
             if p["kind"]=="split":
                 self.assertEqual(sum(x["bytes"] for x in p["parts"]),p["bytes"])
                 self.assertEqual([x["name"] for x in p["parts"]],[f"part-{i:05d}" for i in range(3)])
+    def test_pointer_match_and_drift_only_after_actual_material_document(self):
+        p=("ab"*16,2100000,2)
+        self.assertEqual(r.compare_pointers(p,p,True)["status"],"MATCH_TYPED_ACTUAL_MATERIAL")
+        self.assertEqual(r.compare_pointers(p,None,True)["status"],"DRIFT_MATERIAL_POINTER")
+        self.assertEqual(r.compare_pointers(p,("cd"*16,2100000,2),True)["status"],"DRIFT_MATERIAL_POINTER")
+        self.assertEqual(r.compare_pointers(p,p,False)["status"],"UNKNOWN")
+    def test_tree_entry_controls(self):
+        from unittest.mock import patch
+        from pathlib import Path
+        oid="ab"*20
+        with patch.object(r.subprocess,"check_output",return_value="100644 blob "+oid+"\tRaft_Data/a.assets\n"):
+            r.check_tree(Path("."),"Raft_Data/a.assets",oid,"blob")
+            with self.assertRaisesRegex(r.Rejected,"tree_entry_mismatch"):
+                r.check_tree(Path("."),"Raft_Data/a.assets","cd"*20,"blob")
+            with self.assertRaisesRegex(r.Rejected,"tree_entry_mismatch"):
+                r.check_tree(Path("."),"Raft_Data/b.assets",oid,"blob")
+            with self.assertRaisesRegex(r.Rejected,"tree_entry_mismatch"):
+                r.check_tree(Path("."),"Raft_Data/a.assets",oid,"tree")

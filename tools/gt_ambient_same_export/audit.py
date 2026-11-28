@@ -168,7 +168,7 @@ def doc_body(path,cid,fid,kind_name):
     require(isinstance(d,dict) and set(d)=={kind_name} and isinstance(d[kind_name],dict),"actual_native_document_schema")
     return d[kind_name]
 
-def skybox_binding(root,env,source,actual,w1,allowed_providers=None):
+def skybox_binding(root,env,source,actual,w1):
     import UnityPy
     if "m_SkyboxMaterial" not in source or "m_SkyboxMaterial" not in actual:
         return {"status":"UNKNOWN","reason":"skybox_field_missing"}
@@ -184,7 +184,7 @@ def skybox_binding(root,env,source,actual,w1,allowed_providers=None):
             name=getattr(ex[file_id-1],"path",None)
             require(isinstance(name,str) and bool(name),"source_external_name_unknown")
             owner=name.replace("\\","/").rsplit("/",1)[-1]
-            require(owner in (PINS if allowed_providers is None else allowed_providers),"source_skybox_provider_not_staged")
+            require(owner in PINS,"source_skybox_provider_not_staged")
             loaded=UnityPy.load(str(root/owner))
             table=loaded.file.objects
         else:
@@ -205,7 +205,7 @@ def null_sun(source,actual):
         return {"status":"MATCH_NULL" if ap is None else "DRIFT_NULL_TO_NON_NULL"}
     except Rejected as e:return {"status":"UNKNOWN","reason":str(e)}
 
-def run(a,allowed_providers=None):
+def run(a):
     report={"source_commit":ZIP2_SHA,"scene_sha256":PINS[SCENE][1],"same_export_settings_identity_proven":False,
             "Unity_import_verified":False,"original_assets_mutated":False,"original_assets_published":False,
             "device_pixels_proven":False,"XAPK":False}
@@ -225,7 +225,7 @@ def run(a,allowed_providers=None):
         report["sun"]=null_sun(source,actual)
         phase="skybox"
         with open(os.devnull,"w") as q,contextlib.redirect_stdout(q),contextlib.redirect_stderr(q):
-            sky=skybox_binding(root,env,source,actual,w1,allowed_providers)
+            sky=skybox_binding(root,env,source,actual,w1)
         target=sky.pop("target",None)
         if target:
             try:
