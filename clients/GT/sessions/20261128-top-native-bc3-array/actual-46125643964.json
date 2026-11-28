@@ -1,0 +1,15 @@
+{
+  "Android_device": false,
+  "XAPK": false,
+  "actual_GPU_observation": false,
+  "authored_reference_probe": false,
+  "editor_phase": "reload",
+  "native_all_22_ranges_exact": false,
+  "native_class187_identity": false,
+  "original_shader_draw_verified": false,
+  "private_payload_published": false,
+  "production": false,
+  "reason": "native_Unity_observation_inconclusive",
+  "status": "INCONCLUSIVE",
+  "white_mesh_repair_verified": false
+}
