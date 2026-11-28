@@ -16,5 +16,16 @@
   "Android_device": false,
   "production": false,
   "XAPK": false,
-  "next_action": "G1–G3 checkpoint: Actual 46133315975/job 140943060123 editor completed; exact red/green in-memory authored BC3 overrides bound and source override identical to saved on 3/3 views, red vs green exactly zero pixel differences. Source sample tap prepared (3 sites, external compile), Unity tap_shader_compiled false with 0 recorded errors and zero tap views; no verified causal classification, original reference gate remains false. Preserve evidence; do not rerun unchanged draw. All 15 source tests, guard 46133316064, lint 46133315946 passed. Pivot to independent G5 Particle108: prior 46117813183 proves seven mip alpha storage via Load/point; new source-only route join uses exact native 21844 bytes/7 mips and same-instance 5 Materials/10 PPtr+UV; link original four paired stages' sampled texture/sampler operands to variant-specific parameter blobs and each saved Material route; distinguish invalid exported keywords, actual Shader48 GUID pointer and selected native resource sampled vs unused, no guessed route 0. No duplicate GPU alpha readback. Continue actual source-bound shader and material sampling based on result, retain white-mesh open and no production/XAPK/device claims. G0–G6 open."
+  "next_action": "G1–G3 checkpoint: Actual 46133315975/job 140943060123 editor completed; exact red/green in-memory authored BC3 overrides bound and source override identical to saved on 3/3 views, red vs green exactly zero pixel differences. Source sample tap prepared (3 sites, external compile), Unity tap_shader_compiled false with 0 recorded errors and zero tap views; no verified causal classification, original reference gate remains false. Preserve evidence; do not rerun unchanged draw. All 15 source tests, guard 46133316064, lint 46133315946 passed. Pivot to independent G5 Particle108: prior 46117813183 proves seven mip alpha storage via Load/point; new source-only route join uses exact native 21844 bytes/7 mips and same-instance 5 Materials/10 PPtr+UV; link original four paired stages' sampled texture/sampler operands to variant-specific parameter blobs and each saved Material route; distinguish invalid exported keywords, actual Shader48 GUID pointer and selected native resource sampled vs unused, no guessed route 0. No duplicate GPU alpha readback. Continue actual source-bound shader and material sampling based on result, retain white-mesh open and no production/XAPK/device claims. G0–G6 open. Particle108 execution 639d0f1198c4398569660b98ec2e9f724e1bb8ad: Actual 46134067566/job 140945349271 in_progress/pending; Plan Guard 46134067507 in_progress/pending; lint 46134067551 completed/success. Read source-route evidence and preserve native alpha result; no fresh editor alpha replay.",
+  "execution_head": "639d0f1198c4398569660b98ec2e9f724e1bb8ad",
+  "run": 46134067566,
+  "job": 140945349271,
+  "run_status": "in_progress",
+  "conclusion": null,
+  "plan_guard_run": 46134067507,
+  "plan_guard_status": "in_progress",
+  "plan_guard_conclusion": null,
+  "lint_run": 46134067551,
+  "lint_status": "completed",
+  "lint_conclusion": "success"
 }
