@@ -1,5 +1,5 @@
 {
-  "next_action": "G3-G6-original-skybox-one-pass-source-bound-wrapper: actual 46094976432 proven custom Dummy in actual export, typed native Shader48 from globalgamemanagers.assets, object SHA256 ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9, one SubShader/one pass/one VS and FS, two linked original DXBC both recovered and SPIRV roundtrip valid, 6 colors/20 floats exact, no texenvs/keyword entries. Do not repeat unbound diagnosis. Construct precise source-state/property/name wrapper using same object SHA, exact single permutation, original serialized parameter layouts and DXBC mesh/varying semantics; validate both bound entrypoints and real interface, preserve GUID/meta/material/scene, install only into disposable same-instance export if verified, explicit no Unity/device or production claim. If source contract/compile is unsupported, preserve exact stage/category, no guessed defaults. No original raw assets/program publication or source mutation. No production/player/XAPK; CL/lab read-only BLACK/animation deferred; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged.",
+  "next_action": "G3-G6-original-skybox-one-pass-source-bound-wrapper: reconcile actual 46102429968 job 140847638482 and lint 46102429930 job 140847638088 (execution 3d3e3550b0ebf224c491617d07e1dbbc89016510). Inspect GT_SKYBOX_SOURCE_BOUND_WRAPPER safe aggregate; distinguish route/layout, original program translation, parameter/mesh/varying binding, combined entrypoint/reflection, and disposable install gates. Only PASS_SOURCE_BOUND_WRAPPER_PRIVATE_SAME_EXPORT with verified exact object SHA, both compiled entries, reflected interfaces and original offsets and five protected file hashes proves this scoped install; still no Unity/game/device proof, no full census change. If precise unsupported schema or binding failure, record it without weakening source contracts; pursue separate highest-impact water/light/mesh/particle lane if blocked. Do not repeat prior source-only census or claim closure. No original raw assets/program publication, no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. CL/lab read-only, BLACK/animation deferred.",
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
     "status": "OBSERVED_SELECTED_ORIGINAL_LIGHT_HIERARCHIES",
@@ -11979,5 +11979,46 @@
     ],
     "permanent_log": "clients/GT/sessions/20261128-skybox-shader-program/actual-selected-results.log",
     "actual_aggregate_path": "clients/GT/sessions/20261128-skybox-shader-program/actual-aggregate.json"
+  },
+  "latest_original_skybox_source_bound_wrapper": {
+    "status": "ACTUAL_WORKFLOW_IN_PROGRESS_UNRECONCILED",
+    "starting_head": "4c49603272b908d0b9adbe9e05a84417781417e2",
+    "execution_head": "3d3e3550b0ebf224c491617d07e1dbbc89016510",
+    "branch": "feature/android-native-port",
+    "previous_actual_run": 46094976432,
+    "previous_lint_run": 46094976337,
+    "original_source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9",
+    "run": 46102429968,
+    "job": 140847638482,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/46102429968",
+    "run_status": "in_progress",
+    "conclusion": null,
+    "lint_run": 46102429930,
+    "lint_job": 140847638088,
+    "lint_status": "in_progress",
+    "lint_conclusion": null,
+    "last_observed_step": "Checkout only independent ambient verifier and existing pinned tools",
+    "source_free_controls_step": "pending",
+    "tool_blobs": {
+      "tools/gt_skybox_shader_wrapper/wrapper.py": "95bcf6e7282b8e500c17e7b2676b13448fcf4ea2",
+      "tools/gt_skybox_shader_wrapper/test_wrapper.py": "4dcbdede5c66b0c5c1035b29ab491a6c9b570d5a",
+      ".github/workflows/raft-gt-skybox-source-bound-wrapper.yml": "7a28636541b75ab4ce69900909d092a19ebff584"
+    },
+    "source_free_controls_authored": 13,
+    "source_free_controls_actual": null,
+    "actual_report": null,
+    "private_wrapper_install_proven": false,
+    "local_checkout_visible": false,
+    "local_work_overwritten": false,
+    "original_assets_published": false,
+    "original_assets_modified": false,
+    "production": false,
+    "player": false,
+    "device": false,
+    "XAPK": false,
+    "all_gates_open": true,
+    "session": "clients/GT/sessions/20261128-skybox-source-bound-wrapper/README.md",
+    "next_action": "G3-G6-original-skybox-one-pass-source-bound-wrapper: reconcile actual 46102429968 job 140847638482 and lint 46102429930 job 140847638088 (execution 3d3e3550b0ebf224c491617d07e1dbbc89016510). Inspect GT_SKYBOX_SOURCE_BOUND_WRAPPER safe aggregate; distinguish route/layout, original program translation, parameter/mesh/varying binding, combined entrypoint/reflection, and disposable install gates. Only PASS_SOURCE_BOUND_WRAPPER_PRIVATE_SAME_EXPORT with verified exact object SHA, both compiled entries, reflected interfaces and original offsets and five protected file hashes proves this scoped install; still no Unity/game/device proof, no full census change. If precise unsupported schema or binding failure, record it without weakening source contracts; pursue separate highest-impact water/light/mesh/particle lane if blocked. Do not repeat prior source-only census or claim closure. No original raw assets/program publication, no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. CL/lab read-only, BLACK/animation deferred."
   }
 }
