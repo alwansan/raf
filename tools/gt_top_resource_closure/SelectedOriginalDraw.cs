@@ -14,7 +14,7 @@ public static partial class SelectedArrayUnity {
  [Serializable] public class DrawMaterial { public string name,blob,sha256; }
  [Serializable] public class DrawInput {
    public string run_id,shader_path,shader_guid,mesh_path,mesh_guid,vertex_sha,index_sha,array_guid,array_path,array_name,array_sha,selected_property,wrong_guid;
-   public bool tap_available,provider_probe; public string tap_shader_sha; public int tap_expected_properties,tap_source_sample_sites;
+   public bool tap_available,provider_probe,probe_context; public string tap_shader_sha; public int tap_expected_properties,tap_source_sample_sites;
    public ProviderRow[] provider_rows;public int provider_transport_version;
    public long mesh_id; public int vertex_count,vertex_bytes,index_bytes,index_format,mesh_stride,views,size;
    public int[] sampler; public float mip_bias;
@@ -177,11 +177,13 @@ public static partial class SelectedArrayUnity {
        Capture(cam,rend,null,rt,prefix+"clear.f32");Capture(cam,rend,dummy,rt,prefix+"dummy.f32");
        for(int i=0;i<4;i++)Capture(cam,rend,mats[i],rt,prefix+cases[i]+".f32");
        Capture(cam,rend,mats[1],rt,prefix+"type2_repeat.f32");
-       if(cfg.provider_probe)providerReceipt.views[v]=CaptureProviderView(cfg,r,cam,rend,rt,provider,v,priv);
+       if(cfg.probe_context){} // separate reversible probe context below
+       else if(cfg.provider_probe)providerReceipt.views[v]=CaptureProviderView(cfg,r,cam,rend,rt,provider,v,priv);
        else { CausalCapture(cam,rend,rt,causal,r,prefix); CaptureBasis(cam,rend,rt,causal,r,cfg,prefix); }
        r.rendered_views++;
      }
-     if(cfg.provider_probe)File.WriteAllText(Path.Combine(priv,"provider-receipt.json"),JsonUtility.ToJson(providerReceipt));
+     if(cfg.probe_context)CaptureProbeContext(cfg,r,cam,rend,rt,mats[1],provider,radius,views,priv);
+     else if(cfg.provider_probe)File.WriteAllText(Path.Combine(priv,"provider-receipt.json"),JsonUtility.ToJson(providerReceipt));
    }finally {
      if(provider!=null)UnityEngine.Object.DestroyImmediate(provider);
      if(causal!=null)causal.Dispose();

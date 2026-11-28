@@ -546,6 +546,24 @@
   "source_stage_provider_probe_source_rows": 40,
   "source_stage_provider_probe_editor_complete": true,
   "source_stage_provider_nonfinite_classifier_prepared": true,
-  "source_stage_provider_nonfinite_classifier_actual_verified": false,
-  "source_stage_provider_nonfinite_classifier_workflow": ".github/workflows/raft-gt-selected-original-draw.yml"
+  "source_stage_provider_nonfinite_classifier_actual_verified": true,
+  "source_stage_provider_nonfinite_classifier_workflow": ".github/workflows/raft-gt-selected-original-draw.yml",
+  "source_stage_provider_nonfinite_classifier_actual_run": 46156037577,
+  "source_stage_provider_nonfinite_classifier_actual_job": 141012786656,
+  "source_stage_provider_nonfinite_classifier_actual_receipt": "clients/GT/sessions/20261128-top-native-bc3-array/actual-46156037577.json",
+  "source_stage_provider_nonfinite_classifier_conclusion": "success_diagnostic_only",
+  "source_stage_provider_finite_observations": 105,
+  "source_stage_provider_shader_nonfinite_observations": 15,
+  "source_stage_provider_cpu_matches": 51,
+  "source_stage_provider_nonfinite_rows": [
+    22,
+    23,
+    26,
+    27,
+    32
+  ],
+  "source_stage_provider_transport_mismatch": 0,
+  "probe_context_prepared": true,
+  "probe_context_actual_verified": false,
+  "probe_context_workflow": ".github/workflows/raft-gt-selected-original-draw.yml"
 }

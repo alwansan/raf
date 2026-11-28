@@ -55,9 +55,9 @@ public static partial class SelectedArrayUnity {
    Need(count==cfg.tap_expected_properties);
    return mat;
  }
- static ProviderView CaptureProviderView(DrawInput cfg,DrawReceipt r,Camera camera,MeshRenderer renderer,RenderTexture rt,Material mat,int view,string priv){
+ static ProviderView CaptureProviderView(DrawInput cfg,DrawReceipt r,Camera camera,MeshRenderer renderer,RenderTexture rt,Material mat,int view,string priv,string scenarioPrefix=""){
    var v=new ProviderView{view=view,expected=new ProviderExpectation[cfg.provider_rows.Length]};
-   string prefix=Path.Combine(priv,"provider-"+view+"-");
+   string prefix=Path.Combine(priv,scenarioPrefix+"provider-"+view+"-");
    for(int mode=0;mode<2;mode++){
      TapMode(mat,mode);Capture(camera,renderer,mat,rt,prefix+mode+".f32");
      TapMode(mat,256+mode);Capture(camera,renderer,mat,rt,prefix+(256+mode)+".f32");r.provider_class_captures++;

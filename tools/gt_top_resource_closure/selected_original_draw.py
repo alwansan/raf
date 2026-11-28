@@ -155,9 +155,18 @@ def prepare(a,out,source,plan,mat,mk,xk,trace,body,mesh_info,prop,edge,parsed,pa
         out["tap_stage"]={k:v for k,v in tap.items() if k!="tap_shader_sha"}
     else:
         from tools.gt_top_resource_closure import selected_stage_provider as provider
-        tap=provider.stage(root,parsed,passes,wrapper,provider_rows,mat,before,source_shader)
-        out["provider_stage"]={"prepared":True,"source_probe_rows":len(tap["provider_rows"]),
-                               "original_game_context":False,"private_names_published":False}
+        if getattr(a,"probe_context",False):
+            from tools.gt_top_resource_closure import selected_probe_context as context
+            tap=context.stage(root,parsed,passes,wrapper,provider_rows,mat,before,source_shader)
+            out["source_probe_context"]=context.source_context(source,plan)
+            out["provider_stage"]={"prepared":True,"source_probe_rows":len(tap["provider_rows"]),
+                                   "target_semantics":[{"source_ordinal":r["source_ordinal"],"semantic":r["semantic"]}
+                                                       for r in tap["provider_rows"] if r["previous_nonfinite"]],
+                                   "original_game_context":False,"private_names_published":False}
+        else:
+            tap=provider.stage(root,parsed,passes,wrapper,provider_rows,mat,before,source_shader)
+            out["provider_stage"]={"prepared":True,"source_probe_rows":len(tap["provider_rows"]),
+                                   "original_game_context":False,"private_names_published":False}
     cfg.update(tap)
     cfg["tap_expected_properties"]=prop_count
     here=Path(__file__).parent
@@ -169,6 +178,7 @@ def prepare(a,out,source,plan,mat,mk,xk,trace,body,mesh_info,prop,edge,parsed,pa
            "Assets/Editor/SelectedOriginalDraw.cs":(here/"SelectedOriginalDraw.cs").read_bytes(),
            "Assets/Editor/SelectedArrayCausal.cs":(here/"SelectedArrayCausal.cs").read_bytes(),
            "Assets/Editor/SelectedStageProvider.cs":(here/"SelectedStageProvider.cs").read_bytes(),
+           "Assets/Editor/SelectedProbeContext.cs":(here/"SelectedProbeContext.cs").read_bytes(),
            "Assets/GTSelectedArray.compute":(here/"GTSelectedArray.compute").read_bytes(),
            "Assets/GTDrawControl.shader":b'Shader "Hidden/GTDrawControl" {\nSubShader {\nPass {\nCull Off\nZWrite On\nCGPROGRAM\n#pragma vertex vert\n#pragma fragment frag\n#include "UnityCG.cginc"\nfloat4 vert(float4 v:POSITION):SV_POSITION{return UnityObjectToClipPos(v);}\nfloat4 frag():SV_Target{return float4(0.91,0.07,0.61,1);}\nENDCG\n} } Fallback Off }\n',
            "Packages/manifest.json":b'{"dependencies":{}}\n',
@@ -313,6 +323,19 @@ def verify(a):
         need(imports_ok,"draw_exact_import_or_reference_identity_not_established")
         out["original_reference_pixel_gate_passed"]=out["same_view_all_draw_controls_pass"]>0
         out["isolated_source_candidate_draw_observed"]=out["original_reference_pixel_gate_passed"]
+        if cfg.get("probe_context") is True:
+            from tools.gt_top_resource_closure import selected_probe_context as context
+            out["phase"]="independent_probe_context_readback"
+            need(r.get("tap_shader_compiled") is True and r.get("tap_shader_errors")==0 and
+                 r.get("provider_typed_properties")==cfg["tap_expected_properties"] and
+                 r.get("provider_views")==VIEWS*3 and r.get("provider_observations")==VIEWS*3*len(cfg["provider_rows"]) and
+                 r.get("provider_class_captures")==VIEWS*3*(len(cfg["provider_rows"])+2),
+                 "probe_context_editor_capture_incomplete")
+            receipt=json.loads((a.private/"probe-context-receipt.json").read_text())
+            out["probe_context_observation"]=context.summarize(cfg,receipt,lambda name:read_provider_pixels(a.private/name,SIZE))
+            out["status"]=out["probe_context_observation"]["status"];out["phase"]="complete"
+            write_json(a.safe,out);print("GT_SELECTED_ORIGINAL_DRAW "+json.dumps(out,sort_keys=True))
+            return 0 if out["status"]=="OBSERVED_AUTHORED_PROBE_CONTEXT" else 2
         if cfg.get("provider_probe") is True:
             from tools.gt_top_resource_closure import selected_stage_provider as provider
             out["phase"]="independent_source_stage_provider_readback"
