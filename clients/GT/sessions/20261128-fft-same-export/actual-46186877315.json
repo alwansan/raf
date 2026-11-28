@@ -1,0 +1,87 @@
+{
+  "run": 46186877315,
+  "job": 141108650168,
+  "head": "b4774e5c6fd1a213257b26c8b08cb121dfd62f56",
+  "conclusion": "success",
+  "guard": {
+    "run": 46186877336,
+    "conclusion": "success"
+  },
+  "lint": {
+    "run": 46186877335,
+    "conclusion": "success"
+  },
+  "source_free_tests_passed": 26,
+  "phase": {
+    "XAPK": false,
+    "actual_export_completed": true,
+    "android_device": false,
+    "decompiled_script_export": true,
+    "discovery_mode": "directory",
+    "export_assets_present": true,
+    "exporter_completion_marker": true,
+    "exporter_exit": 0,
+    "exporter_returned_zero": true,
+    "mono_initialization_marker": true,
+    "mono_provider_count": 151,
+    "mono_structure_layout_mismatch_lines": 0,
+    "private_log_bytes": 1198631,
+    "production": false,
+    "source_component_trace_rows": 1,
+    "source_compute_trace_rows": 1,
+    "target_mono_structure_unresolved_count": 0,
+    "tool_exception_categories": [],
+    "trace_exists": {
+      "component": true,
+      "texture": true,
+      "w1": true
+    },
+    "trace_instances_equal": true,
+    "trace_rows": {
+      "component": 2,
+      "texture": 2034,
+      "w1": 1118
+    },
+    "unknown_backend_fallback": false,
+    "unresolved_mono_structure_count": 4
+  },
+  "receipt": {
+    "XAPK": false,
+    "actual_unity_import_verified": false,
+    "all_four_format_runtime_selection_verified": false,
+    "android_device": false,
+    "candidate_reference_type": 3,
+    "candidate_routes": 20,
+    "candidate_sha256": "ffb6df91135f222397ecc660e3dea64e2f6e453c669d4b446d9cbb11bd097994",
+    "changed_reference_documents": 1,
+    "component_custom_field_count": 21,
+    "component_document_sha256": "499a3d62fc9c7f0a53bc651538eed17fa23359bb43220e5152f94fa598a76a32",
+    "component_editor_class_identifier_present": false,
+    "component_exact_fft_pointer_array_count": 1,
+    "component_exact_fft_pointer_array_field_sha256": [
+      "44d311661c7a78efd13c90f0a556b21b538c0b223554eb1332cc29958c765f8b"
+    ],
+    "component_expected_managed_field_count": 1,
+    "component_native_only": false,
+    "component_script_external_guid_present": true,
+    "component_script_nonnull": true,
+    "component_top_level_field_count": 31,
+    "diagnostic_candidate_format": "ARGBFloat",
+    "exact_reference_type_changes": 1,
+    "one_element_array_typed_name_matched": true,
+    "original_component_yaml_class_verified": true,
+    "original_compute_meta_and_yaml_class_verified": true,
+    "original_file_id": 7200000,
+    "original_managed_field_sha256": "44d311661c7a78efd13c90f0a556b21b538c0b223554eb1332cc29958c765f8b",
+    "original_reference_type": 2,
+    "original_runtime_kernel_mapping_proven": false,
+    "original_source_provenance": true,
+    "production": false,
+    "same_export_component_and_compute_guid_join": true,
+    "same_export_component_and_compute_trace_matched": true,
+    "source_asset_bytes_unchanged": true,
+    "status": "OBSERVED_FFT_ORIGINAL_ARRAY_SAME_EXPORT",
+    "unrelated_files_unchanged": true,
+    "water_rendering_verified": false
+  }
+}
