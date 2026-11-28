@@ -1,5 +1,5 @@
 {
-  "status": "CORRECTED_ACTUAL_EXPERIMENT_IN_PROGRESS",
+  "status": "PASS_ACTUAL_LEVEL38_SAME_EXPORT_IMPORT_NOT_EXECUTED",
   "starting_head": "8348109f95003eb54d913956ba81efb6c0e9f1df",
   "preparation_commits": [
     "9d03d1dae8884f77c859ef9c1765ea4372685679",
@@ -25,12 +25,12 @@
   "execution_head": "da16043348b6107a70e191e148a26e6daa997bdb",
   "run": 46092186730,
   "job": 140815403472,
-  "run_status": "in_progress",
-  "run_conclusion": null,
+  "run_status": "completed",
+  "run_conclusion": "failure",
   "lint_run": 46092186824,
   "lint_job": 140815403453,
   "lint_conclusion": "success",
-  "source_free_controls": "SUCCESS (11 previous B21 + 16 new tests; actual step succeeded; log recheck pending)",
+  "source_free_controls": "27/27 actual tests passed (11 old B21, 16 new)",
   "steps": [
     {
       "name": "Set up job",
@@ -59,73 +59,83 @@
     },
     {
       "name": "Compile temporary optional hierarchy capture and smoke test",
-      "status": "in_progress",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "Read only six exact small original serialized providers",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "Authenticate source and observe selected direct provider references privately",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "Execute one actual bounded source export with same-instance private captures",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "Verify original chain to actual same-export GUID/fileID and YAML fields",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "Stage exact scene and meta only in isolated editor project",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "Check existing editor activation inputs without exposing values",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "Observe same actual exported scene in Unity Editor (no Play or player build)",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "skipped"
     },
     {
       "name": "Verify actual editor report and unchanged exact scene bytes",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "failure"
     },
     {
       "name": "Publish ONLY safe aggregate reports",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "Remove only disposable source and private export/editor staging",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Read only six exact small original serialized providers",
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "Post Obtain exact public AssetRipperCLI source",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "Post Run actions/setup-dotnet@v4",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "skipped"
     },
     {
       "name": "Post Checkout only bounded trace, reader and tests",
-      "status": "pending",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success"
     }
   ],
   "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -154,7 +164,7 @@
     "public_tool": "036098ab525a3f9f693dc101edeb21faad4d32d8"
   },
   "intended_scope": "Light/GameObject/Transform/RectTransform same-instance W1/B02/B21 trace to actual .unity/.meta GUID/fileID, source owner, activeSelf, ordered direct children, reciprocal parent, local TRS, enabled/type/RGBA/intensity/range. Conditional isolated import exact exported scene+meta, no other original assets staged; Editor checks GlobalObjectId/activeInHierarchy/Light.isActiveAndEnabled and same fields, no Player/Play/render/device.",
-  "actual_same_export_mapping_proven": false,
+  "actual_same_export_mapping_proven": true,
   "actual_Unity_import_proven": false,
   "actual_device_pixels": false,
   "original_game_assets_published": false,
@@ -163,5 +173,110 @@
   "XAPK": false,
   "local_checkout_available": false,
   "all_gates_open": true,
-  "next_action": "G6-original-light-hierarchy-same-export: reconcile actual corrected run 46092186730 job 140815403472 and lint 46092186824 before new work. First attempt 46092107762 failed in source-free comparator (actual[k] bug); original checkout/export/editor skipped; log saved. Corrected execution da16043348b6107a70e191e148a26e6daa997bdb. Read actual safe source/export/same-export/import-stage/import receipts and exact step conclusions. If provider or mapping missing, distinguish compile/source/trace/YAML/export drift, no assumed equivalence; preserve safe counts and do not replay source census or historical two-Light parity. If actual same-export succeeds but editor import unavailable, preserve export proof only and precise activation/disk/dependency/identity cause, no runtime proof; prioritize independent productive shader/material/ambient or water restoration if blocked. Level38 only selected source hierarchy, no full provider closure claimed; exact source and metadata pins; do not publish private traces/YAML/original bytes, bypass protections or modify original data. All G0-G6 open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged; no production/player/XAPK; CL/lab read-only, BLACK/animation deferred. Preserve pinned Ali restore."
+  "next_action": "G6-original-ambient-same-export: level38 Light hierarchy 42/42 identities, 108/108 comparisons actual PASS at 46092186730; isolated Unity import skipped (combined activation-or-disk condition, exact reason not separately captured), original raw export/trace removed, no runtime proof. Do not repeat its export just to redo proof. Next distinct productive lane: level24 original RenderSettings class104 ambient/fog/skybox source→same-export scene YAML, typed material pointer when source providers resolve; source pins/instance/actual GUID-fileID required; compare exact fields and record actual drift; only targeted repair on demonstrated mismatches. Select independently licensed/available editor preflight with separate disk and activation reason before future import, no bypass or new secrets. No original raw assets published or changed; CL/lab read-only, BLACK/animation deferred, all G0-G6 open; no production/player/XAPK. Historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged.",
+  "reconciliation_head": "3cf027674470640fc71fc8f4972c5ef222e492b0",
+  "actual_source": {
+    "external_name_unknown": 0,
+    "external_names_in_staged_set": 3,
+    "full_scene_provider_closure_proven": false,
+    "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+    "material_headers": 42,
+    "scene_external_reference_headers": 14,
+    "scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932",
+    "selected_native_objects": 42,
+    "shader_headers": 18,
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "verified_bytes": 18213244,
+    "verified_files": 6
+  },
+  "actual_export": {
+    "actual_export_completed": true,
+    "exit_code": 0,
+    "private_log_bytes": 48626,
+    "private_trace_files_present": 3,
+    "tool_exception_categories": []
+  },
+  "actual_same_export": {
+    "Android_device": false,
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "adjacent_child_transforms": 35,
+    "checks": {
+      "component_owner": 4,
+      "gameobject_activeSelf": 3,
+      "gameobject_component_membership": 4,
+      "light_m_Color": 1,
+      "light_m_Enabled": 1,
+      "light_m_Intensity": 1,
+      "light_m_Range": 1,
+      "light_m_Type": 1,
+      "m_LocalPosition": 3,
+      "m_LocalRotation": 3,
+      "m_LocalScale": 3,
+      "native_class": 42,
+      "ordered_transform_children": 3,
+      "transform_parent": 38
+    },
+    "mapped_objects": 42,
+    "mismatches": {},
+    "private_trace_mapping_matched": true,
+    "raw_assets_published": false,
+    "same_export_hierarchy_parity": true,
+    "scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932",
+    "selected_chain_transforms": 3,
+    "selected_source_gameobjects": 3,
+    "selected_source_lights": 1,
+    "selected_source_objects": 42,
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_export_mapping_proven": true,
+    "status": "PASS_SAME_EXPORT"
+  },
+  "actual_import_stage": {
+    "import_executed": false,
+    "other_original_assets_staged": 0,
+    "same_export_scene_copy_exact": true,
+    "scene_dependency_closure_claimed": false,
+    "scene_meta_sha256": "da046194178ee77a2153222d5e2decfdcd52eafa56887dc47f6949173bc9fe15",
+    "scene_sha256": "2a62ecdd103b3bbbca5c9c68bd6c50d47087f09402205344e1e204504254b915",
+    "selected_objects": 42,
+    "source_scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932"
+  },
+  "actual_import": {
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "editor_step_outcome": "skipped",
+    "player_built": false,
+    "reason": "no_bounded_editor_report",
+    "stage": {
+      "import_executed": false,
+      "other_original_assets_staged": 0,
+      "same_export_scene_copy_exact": true,
+      "scene_dependency_closure_claimed": false,
+      "scene_meta_sha256": "da046194178ee77a2153222d5e2decfdcd52eafa56887dc47f6949173bc9fe15",
+      "scene_sha256": "2a62ecdd103b3bbbca5c9c68bd6c50d47087f09402205344e1e204504254b915",
+      "selected_objects": 42,
+      "source_scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932"
+    },
+    "status": "INCONCLUSIVE"
+  },
+  "import_blocker": "activation_or_disk_unavailable (combined condition; not separately observable from prior run)",
+  "independent_check": {
+    "verified_provider_count": 6,
+    "verified_provider_bytes": 18213244,
+    "selected_objects_recomputed": 42,
+    "field_checks_recomputed": 108,
+    "no_mismatches": true,
+    "staging_copy_identity_log_crosscheck": true,
+    "actual_test_log_counts_verified": true,
+    "outer_artifact_independently_downloaded": false
+  },
+  "outer_artifact": [
+    {
+      "id": 15241113025,
+      "bytes": 2203,
+      "github_reported_digest": "sha256:ac34ded84d417211f3b3bdc37e2ac2a142b31be0ee8af16e3ca38165c2238901"
+    }
+  ],
+  "permanent_log": "clients/GT/sessions/20261128-light-same-export/actual-selected-results.log",
+  "actual_aggregate_path": "clients/GT/sessions/20261128-light-same-export/actual-aggregate.json"
 }

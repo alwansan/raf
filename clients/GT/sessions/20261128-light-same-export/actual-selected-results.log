@@ -1,0 +1,40 @@
+2026-11-28T01:15:50.7841806Z test_all_private_traces_share_export_instance (test_b21_stage_light_lineage.TestB21LightLineage.test_all_private_traces_share_export_instance) ... ok
+2026-11-28T01:15:50.7842696Z test_all_three_capture_routes_preserved (test_b21_stage_light_lineage.TestB21LightLineage.test_all_three_capture_routes_preserved) ... ok
+2026-11-28T01:15:50.7844237Z test_changed_b02_stage_requires_review (test_b21_stage_light_lineage.TestB21LightLineage.test_changed_b02_stage_requires_review) ... ok
+2026-11-28T01:15:50.7845430Z test_light_only_independent_optional_mode (test_b21_stage_light_lineage.TestB21LightLineage.test_light_only_independent_optional_mode) ... ok
+2026-11-28T01:15:50.7847004Z test_light_trace_is_not_permanent_asset_or_shader_output (test_b21_stage_light_lineage.TestB21LightLineage.test_light_trace_is_not_permanent_asset_or_shader_output) ... ok
+2026-11-28T01:15:50.7849425Z test_missing_anchor_requires_review (test_b21_stage_light_lineage.TestB21LightLineage.test_missing_anchor_requires_review) ... ok
+2026-11-28T01:15:50.7850626Z test_non_exportable_not_equated_to_absent (test_b21_stage_light_lineage.TestB21LightLineage.test_non_exportable_not_equated_to_absent) ... ok
+2026-11-28T01:15:50.7857049Z test_stages_only_to_fresh_private_path (test_b21_stage_light_lineage.TestB21LightLineage.test_stages_only_to_fresh_private_path) ... ok
+2026-11-28T01:15:50.7858241Z test_tampered_w1_source_fails_closed (test_b21_stage_light_lineage.TestB21LightLineage.test_tampered_w1_source_fails_closed) ... ok
+2026-11-28T01:15:50.7860449Z test_unsafe_destination_parent_link_refused (test_b21_stage_light_lineage.TestB21LightLineage.test_unsafe_destination_parent_link_refused) ... ok
+2026-11-28T01:15:50.7861898Z test_unsafe_source_link_refused (test_b21_stage_light_lineage.TestB21LightLineage.test_unsafe_source_link_refused) ... ok
+2026-11-28T01:15:50.7863418Z Ran 11 tests in 0.003s
+2026-11-28T01:15:50.7863831Z OK
+2026-11-28T01:15:50.8466865Z test_active_and_enabled_drift (test_audit.TestSameExport.test_active_and_enabled_drift) ... ok
+2026-11-28T01:15:50.8562800Z test_actual_yaml_guid_and_duplicate_field (test_audit.TestSameExport.test_actual_yaml_guid_and_duplicate_field) ... ok
+2026-11-28T01:15:50.8563587Z test_collapsed_pointer (test_audit.TestSameExport.test_collapsed_pointer) ... ok
+2026-11-28T01:15:50.8564223Z test_different_instance (test_audit.TestSameExport.test_different_instance) ... ok
+2026-11-28T01:15:50.8564997Z test_external_pointer (test_audit.TestSameExport.test_external_pointer) ... ok
+2026-11-28T01:15:50.8566612Z test_light_color_type_intensity_and_range_drift (test_audit.TestSameExport.test_light_color_type_intensity_and_range_drift) ... ok
+2026-11-28T01:15:50.8567440Z test_local_trs_drift (test_audit.TestSameExport.test_local_trs_drift) ... ok
+2026-11-28T01:15:50.8568878Z test_missing_child_and_parent (test_audit.TestSameExport.test_missing_child_and_parent) ... ok
+2026-11-28T01:15:50.8569880Z test_missing_transform (test_audit.TestSameExport.test_missing_transform) ... ok
+2026-11-28T01:15:50.8571000Z test_positive_and_signed_source (test_audit.TestSameExport.test_positive_and_signed_source) ... ok
+2026-11-28T01:15:50.8573755Z test_stage_pinned_and_optional (test_audit.TestSameExport.test_stage_pinned_and_optional) ... ok
+2026-11-28T01:15:50.8574661Z test_wrong_actual_class (test_audit.TestSameExport.test_wrong_actual_class) ... ok
+2026-11-28T01:15:50.8575630Z test_wrong_owner (test_audit.TestSameExport.test_wrong_owner) ... ok
+2026-11-28T01:15:50.8577202Z test_wrong_source_collection (test_audit.TestSameExport.test_wrong_source_collection) ... ok
+2026-11-28T01:15:50.8578727Z test_wrong_trace_class (test_audit.TestSameExport.test_wrong_trace_class) ... ok
+2026-11-28T01:15:50.8580334Z test_zero_guid (test_audit.TestSameExport.test_zero_guid) ... ok
+2026-11-28T01:15:50.8581679Z Ran 16 tests in 0.012s
+2026-11-28T01:15:50.8582045Z OK
+2026-11-28T01:15:53.3048395Z GT_LIGHT_HIERARCHY_STAGED_SHA256=7f50f3f256dc86c0e0d376afadebe38a441de7de42a2b771c2b6e113d2b9bbe0
+2026-11-28T01:16:36.8108793Z GT_LIGHT_SOURCE_AUTHENTICATED {"external_name_unknown": 0, "external_names_in_staged_set": 3, "full_scene_provider_closure_proven": false, "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e", "material_headers": 42, "scene_external_reference_headers": 14, "scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932", "selected_native_objects": 42, "shader_headers": 18, "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385", "verified_bytes": 18213244, "verified_files": 6}
+2026-11-28T01:16:40.8606799Z GT_LIGHT_ACTUAL_EXPORT {"actual_export_completed": true, "exit_code": 0, "private_log_bytes": 48626, "private_trace_files_present": 3, "tool_exception_categories": []}
+2026-11-28T01:16:41.6363261Z GT_LIGHT_SAME_EXPORT {"Android_device":false,"Unity_import_verified":false,"XAPK":false,"adjacent_child_transforms":35,"checks":{"component_owner":4,"gameobject_activeSelf":3,"gameobject_component_membership":4,"light_m_Color":1,"light_m_Enabled":1,"light_m_Intensity":1,"light_m_Range":1,"light_m_Type":1,"m_LocalPosition":3,"m_LocalRotation":3,"m_LocalScale":3,"native_class":42,"ordered_transform_children":3,"transform_parent":38},"mapped_objects":42,"mismatches":{},"private_trace_mapping_matched":true,"raw_assets_published":false,"same_export_hierarchy_parity":true,"scene_sha256":"205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932","selected_chain_transforms":3,"selected_source_gameobjects":3,"selected_source_lights":1,"selected_source_objects":42,"source_commit":"15964ea8f246b6e076ce26b60931ee2e1a9a2385","source_export_mapping_proven":true,"status":"PASS_SAME_EXPORT"}
+2026-11-28T01:16:42.5737080Z GT_LIGHT_PRIVATE_IMPORT_STAGED {"import_executed": false, "other_original_assets_staged": 0, "same_export_scene_copy_exact": true, "scene_dependency_closure_claimed": false, "scene_meta_sha256": "da046194178ee77a2153222d5e2decfdcd52eafa56887dc47f6949173bc9fe15", "scene_sha256": "2a62ecdd103b3bbbca5c9c68bd6c50d47087f09402205344e1e204504254b915", "selected_objects": 42, "source_scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932"}
+2026-11-28T01:16:42.7515841Z GT_LIGHT_ISOLATED_IMPORT activation_or_disk_unavailable=true
+2026-11-28T01:16:42.8135976Z GT_LIGHT_ISOLATED_IMPORT {"Unity_import_verified":false,"XAPK":false,"editor_step_outcome":"skipped","player_built":false,"reason":"no_bounded_editor_report","stage":{"import_executed":false,"other_original_assets_staged":0,"same_export_scene_copy_exact":true,"scene_dependency_closure_claimed":false,"scene_meta_sha256":"da046194178ee77a2153222d5e2decfdcd52eafa56887dc47f6949173bc9fe15","scene_sha256":"2a62ecdd103b3bbbca5c9c68bd6c50d47087f09402205344e1e204504254b915","selected_objects":42,"source_scene_sha256":"205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932"},"status":"INCONCLUSIVE"}
+2026-11-28T01:16:44.4449751Z Artifact gt-light-level38-safe-aggregate.zip successfully finalized. Artifact ID 15241113025
+2026-11-28T01:16:44.4450612Z Artifact gt-light-level38-safe-aggregate has been successfully uploaded! Final size is 2203 bytes. Artifact ID is 15241113025
