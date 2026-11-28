@@ -1,5 +1,5 @@
 name: GT selected original stage ABI and exact mesh material join (NO PLAYER)
-# Correct non-null prestage schema while retaining explicit null PPtr/UV checks; no Unity or player.
+# Exact packed Mesh channel stride + merged explicit original pair; no Unity or player.
 on:
   workflow_dispatch:
   push:

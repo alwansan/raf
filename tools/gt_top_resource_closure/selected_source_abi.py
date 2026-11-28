@@ -42,6 +42,108 @@ def verify_texture_plan(before, after, planned):
     return {"source_slots":len(before),"export_slots":len(after),
             "nonnull_planned":len(nonnull),"null_source_slots":len(before)-len(nonnull)}
 
+def channel_dimension(raw):
+    # Modern Unity ChannelInfo stores dimension in the low nibble.
+    # UnityPy MeshHandler.get_streams/read_vertex_data use this same mask.
+    # Do not rewrite the serialized channel byte or infer its upper flags.
+    require(type(raw) is int and 0<=raw<=255, "invalid_mesh_channel_dimension_byte")
+    dim=raw & 15
+    require(dim<=4, "unsupported_mesh_channel_dimension")
+    return dim
+
+def vertex_layout_observation(channels, vertex_count, payload_bytes):
+    from scripts.gt_mesh_vertex_payload import WIDTHS
+    require(type(vertex_count) is int and vertex_count>0 and
+            type(payload_bytes) is int and payload_bytes>0 and payload_bytes%vertex_count==0,
+            "invalid_selected_mesh_vertex_stride")
+    stride=payload_bytes//vertex_count
+    ranges=[]
+    flagged=inactive_flagged=0
+    for row in channels:
+        raw=row["dimension"]
+        dim=channel_dimension(raw)
+        flagged+=int(raw!=dim)
+        if not dim:
+            inactive_flagged+=int(raw!=0)
+            continue
+        stream,offset,fmt=(row[k] for k in ("stream","offset","format"))
+        require(type(stream) is int and stream==0 and type(offset) is int and
+                offset>=0 and type(fmt) is int and fmt in WIDTHS,
+                "selected_mesh_single_stream_layout_required")
+        ranges.append((offset,offset+dim*WIDTHS[fmt]))
+    end=0
+    for lo,hi in sorted(ranges):
+        require(lo>=end and hi<=stride,"selected_mesh_channel_overlap_or_extent")
+        end=hi
+    require(bool(ranges) and end==stride and sum(hi-lo for lo,hi in ranges)==stride,
+            "selected_mesh_channel_stride_not_exact")
+    return dict(vertex_count=vertex_count,vertex_payload_bytes=payload_bytes,
+                packed_dimension_flagged_channels=flagged,
+                flagged_inactive_channels=inactive_flagged,
+                active_channels=len(ranges),single_stream_stride_bytes=stride,
+                nonoverlap_full_stride=True,serialized_channel_bytes_changed=False)
+
+def material_member_census(rows, mat, texenvs, parsed):
+    """Exact names only; name presence is not a Unity value upload."""
+    saved=values.normalize(mat)
+    props=parsed["m_PropInfo"]["m_Props"]
+    declared={p["m_Name"] for p in props}
+    require(len(declared)==len(props),"duplicate_source_shader_properties")
+    numeric=set().union(*(set(v) for v in saved.values()))
+    counters=dict(named_numeric_members=0,saved_numeric_name_matches=0,
+                  saved_texenv_ST_name_matches=0,declared_property_not_saved=0,
+                  other_runtime_or_global_name_candidates=0,
+                  outside_material_texture_declared_properties=0,
+                  outside_material_texture_undeclared_names=0)
+    for row in rows:
+        for b in row["source_constant_buffer_layouts"]:
+            for m in b["members"]:
+                name=m["name"]
+                counters["named_numeric_members"]+=1
+                if name in numeric:
+                    counters["saved_numeric_name_matches"]+=1
+                elif name.endswith("_ST") and name[:-3] in texenvs:
+                    counters["saved_texenv_ST_name_matches"]+=1
+                elif name in declared:
+                    counters["declared_property_not_saved"]+=1
+                else:
+                    counters["other_runtime_or_global_name_candidates"]+=1
+        for resource in row["source_texture_sampler_bindings"]:
+            name=resource["source_texture_name"]
+            if resource["kind"]=="t" and name not in texenvs:
+                counters["outside_material_texture_declared_properties" if name in declared else
+                         "outside_material_texture_undeclared_names"]+=1
+    return counters
+
+def combined_candidate(private, rows, pair, dirs):
+    """Prepare one explicit pass body; compile both entries privately.
+    No full shader install, runtime keyword selection, or Unity upload claim.
+    """
+    import re
+    from scripts.gt_original_921_shaderlab import (paired_uniform_layouts, combine_stages,
+        unity_resource_bindings, unity_varying_semantics, verify_entrypoints)
+    from scripts.gt_original_921_cb_hlsl import rebind_constant_buffers
+    from scripts.gt_original_921_semantics import restore_vertex_inputs, pin_varying_locations
+    layouts=paired_uniform_layouts(rows)
+    bodies=[]
+    for i,role in enumerate(("vs","fs")):
+        code=rebind_constant_buffers((private/f"bound-stage-{i:03d}"/"resource-bound.hlsl").read_text(),layouts[i])
+        if i==0:
+            code,_=restore_vertex_inputs(code,(private/dirs[pair["vs"]["program_ref"]]/"source.dxbc").read_bytes())
+        code=unity_varying_semantics(pin_varying_locations(code,1-i))
+        code,n=re.subn(r"\bmain(?=\s*\()",f"gt_{role}_main",code)
+        require(n==1,"combined_candidate_entry_identity")
+        bodies.append(unity_resource_bindings(code,role))
+    body=combine_stages(*bodies)
+    wrapper="HLSLPROGRAM\n#pragma target 5.0\n#pragma vertex gt_vs_main\n#pragma fragment gt_fs_main\n"+body+"\nENDHLSL"
+    # Historical exact two-entry verifier compiles this merged, name-bound
+    # candidate with glslang then validates both Vulkan 1.1 modules.
+    verify_entrypoints(wrapper,private,routes=[[[]]])
+    return {"combined_entrypoints_compiled_and_validated":2,
+            "explicit_single_route_only":True,"Unity_compiler_verified":False,
+            "merged_binding_offset_parity_verified":False,
+            "runtime_uniform_upload_verified":False}
+
 def vertex_channel_observation(signature, channels):
     """Report channel availability, not runtime binding or default fill."""
     scalar = {"POSITION":0, "NORMAL":1, "TANGENT":2, "COLOR":3, "BLENDWEIGHT":12, "BLENDINDICES":13}
@@ -56,8 +158,7 @@ def vertex_channel_observation(signature, channels):
         if channel is None:
             out["unsupported_semantics"] += 1
             continue
-        dim = channels[channel]["dimension"] if channel<len(channels) else 0
-        require(type(dim) is int and 0<=dim<=4, "unsupported_mesh_channel_dimension")
+        dim = channel_dimension(channels[channel]["dimension"]) if channel<len(channels) else 0
         if not dim:
             out["absent_channels"] += 1
             continue
@@ -188,7 +289,13 @@ def run(a,out):
         out["resource_join"]=resource_observation(rows,sources,before,typed,prop)
         signature=read_original_dxbc_signatures((private/"vs/source.dxbc").read_bytes())["input"]
         channels=source.obj(tuple(plan["mesh"]),"Mesh").read_typetree(check_read=False)["m_VertexData"]["m_Channels"]
+        out["phase"]="packed_mesh_channel_layout"
+        out["mesh_channel_layout"]=vertex_layout_observation(channels,mesh["source_vertex_count"],mesh["source_vertex_bytes"])
         out["mesh_channel_availability"]=vertex_channel_observation(signature,channels)
+        out["phase"]="material_member_source_name_census"
+        out["material_member_census"]=material_member_census(rows,mat,before,tree["m_ParsedForm"])
+        out["phase"]="combined_explicit_route_candidate"
+        out["combined_candidate"]=combined_candidate(private,rows,pair,dirs)
     out["status"]=STATUS
     out["phase"]="complete_source_ABI_observation"
 
@@ -222,6 +329,14 @@ def main():
             "named_constant_buffer_reflection_failed",
             "invalid_original_parameter_blob_index",
             "selected_material_reference_diagnostic_anchor",
+            "original_921_shaderlab_entrypoint_compile_failed",
+            "original_921_shaderlab_entrypoint_spirv_invalid",
+            "original_921_shaderlab_entrypoint_missing",
+            "original_921_incompatible_shared_uniform_block",
+            "original_921_conflicting_shared_uniform_member",
+            "original_921_shared_HLSL_declaration_drift",
+            "original_921_uniform_in_multiple_buffers",
+            "original_921_uniform_incompatible_type",
         }
         if type(exc) is ABIFailure or (type(exc) is ValueError and str(exc) in fixed):
             out["failure_reason"]=str(exc)

@@ -47,5 +47,24 @@ class SelectedSourceABITests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"selected_texture_plan_not_prepared"):
             a.verify_texture_plan(before,after,{**planned,"_T0":{"stream_ready":False}})
 
+    def test_packed_dimension_and_stride_preserve_upper_bits(self):
+        def ch(d,o,f=0,s=0):
+            return dict(dimension=d,offset=o,format=f,stream=s)
+        channels=[ch(0x13,0),ch(0x12,12),ch(0x10,0)]
+        result=a.vertex_layout_observation(channels,5,100)
+        self.assertEqual(result["packed_dimension_flagged_channels"],3)
+        self.assertEqual(result["flagged_inactive_channels"],1)
+        self.assertEqual(result["single_stream_stride_bytes"],20)
+        self.assertEqual(channels[0]["dimension"],0x13)
+        self.assertEqual(a.channel_dimension(0xF4),4)
+        for bad in (0x15,256,-1,True):
+            with self.assertRaises(ValueError):
+                a.channel_dimension(bad)
+        for bad in ([ch(0x13,0),ch(0x12,8)],
+                    [ch(0x13,0),ch(0x12,16)],
+                    [ch(0x13,0),ch(0x12,12,s=1)]):
+            with self.assertRaises(ValueError):
+                a.vertex_layout_observation(bad,5,100)
+
 if __name__=="__main__":
     unittest.main()
