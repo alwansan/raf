@@ -1,4 +1,5 @@
 name: GT original Particle108 concrete nonexportable collection identity (NO PLAYER)
+# Revision 2: exact current reviewed W1/B02 filter guard; retain failed run 46112799844.
 on:
   push:
     branches: [feature/android-native-port]

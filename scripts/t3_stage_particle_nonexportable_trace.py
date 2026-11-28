@@ -76,7 +76,10 @@ def annotate(source:bytes)->bytes:
         or result.count(b'container.CreateExportPointer(asset)')!=1
         or result.count(b'container_export_pointer_captured')!=2
         or result.count(b'json.WriteString("export_instance", exportInstance);')!=3
-        or result.count(b'if (asset.ClassID is not (21 or 48))')!=1):
+        # Preserve the exact reviewed current W1/B02 filter, which also has
+        # an optional texture branch. The old exact single-line filter is stale.
+        or source.count(b21.texture_stage.REVIEWED_SHADER_FILTER.encode("utf8"))!=1
+        or result.count(b21.texture_stage.REVIEWED_SHADER_FILTER.encode("utf8"))!=1):
         raise ValueError("unsafe_original_B02_nonexportable_trace_instrumentation")
     return result
 

@@ -39,6 +39,14 @@ class DisposableTexture2DTrace(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"anchor_drift"):
             t3.annotate_collection_implementation(changed)
 
+    def test_current_reviewed_filter_is_required_and_preserved(self):
+        source=b21.render(PINNED_W1.read_bytes())
+        reviewed=b21.texture_stage.REVIEWED_SHADER_FILTER.encode("utf8")
+        self.assertEqual(source.count(reviewed),1)
+        self.assertEqual(t3.annotate(source).count(reviewed),1)
+        with self.assertRaisesRegex(ValueError,"unsafe_original"):
+            t3.annotate(source.replace(reviewed,reviewed.replace(b"21 or 48",b"21 or 49")))
+
     def test_helper_byte_drift_and_mismatched_anchor_fail_closed(self):
         original=b21.render(PINNED_W1.read_bytes())
         with self.assertRaisesRegex(ValueError,"anchor_drift"):
