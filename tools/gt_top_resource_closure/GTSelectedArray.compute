@@ -1,10 +1,10 @@
 #pragma kernel ReadArray
 Texture2DArray<float4> _Source;
 RWStructuredBuffer<float4> _Result;
-int _Width,_Height,_Depth;
+int _Width,_Height,_Depth,_Mip;
 [numthreads(8,8,1)]
 void ReadArray(uint3 id : SV_DispatchThreadID) {
     if(id.x >= (uint)_Width || id.y >= (uint)_Height || id.z >= (uint)_Depth) return;
     uint i = (id.z * _Height + id.y) * _Width + id.x;
-    _Result[i] = _Source.Load(int4(id.x,id.y,id.z,0));
+    _Result[i] = _Source.Load(int4(id.x,id.y,id.z,_Mip));
 }
