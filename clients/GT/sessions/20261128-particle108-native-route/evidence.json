@@ -16,7 +16,7 @@
   "Android_device": false,
   "production": false,
   "XAPK": false,
-  "next_action": "G5 Particle108: Actual 46135691627/job 140950375504 completed Unity, independent strict gate failed only because Dummy absent. GPU clone probe verified: marker 64/64, mip0/3 Load+SampleLevel 4/4 exactly identical RGBA native/clone at 256 coordinates, forced alpha zero/one exact and RGB unchanged. 36 draws: native/repeat/source block/clone/Renderer vs command identical within 1/255 in all 4 cases; zero alpha equals clear; one vs zero differs 1859 (64) and 7459 (128) pixels on both backgrounds; native visible 1180/4710, native vs one 1850/7418, alpha RGB mask preserved; 4 assets/meta, 11 saved values, source Material/refs/sampler unchanged. This establishes controlled isolated alpha differential, NOT strict full gate or game restoration. Source controls 5/5, guard 46135691582 and lint 46135691572 PASS. Targeted remaining harness blocker: old transient Dummy Material was constructed before EditorSceneManager.NewScene; test whether destroyed Unity object still has managed reference but compares null (hypothesis, not proven yet). Make actual Dummy and clone controls after scene transition; fail closed if intended explicit command has no live Material; verify 28 commands, 4 camera Dummy submissions, 4 direct target Dummy submissions; separate direct clip-space marker from camera marker, retain strict original Dummy requirement and all alpha/clone/identity gates. New materially distinct lifecycle/command diagnostic; no original emitter/runtime/device/production/XAPK claim. If still unresolved after this targeted fix, move independent water/sky/light without repeating same lane. White mesh open; G0–G6 open.",
+  "next_action": "G5 Particle108: Actual 46135691627/job 140950375504 completed Unity, independent strict gate failed only because Dummy absent. GPU clone probe verified: marker 64/64, mip0/3 Load+SampleLevel 4/4 exactly identical RGBA native/clone at 256 coordinates, forced alpha zero/one exact and RGB unchanged. 36 draws: native/repeat/source block/clone/Renderer vs command identical within 1/255 in all 4 cases; zero alpha equals clear; one vs zero differs 1859 (64) and 7459 (128) pixels on both backgrounds; native visible 1180/4710, native vs one 1850/7418, alpha RGB mask preserved; 4 assets/meta, 11 saved values, source Material/refs/sampler unchanged. This establishes controlled isolated alpha differential, NOT strict full gate or game restoration. Source controls 5/5, guard 46135691582 and lint 46135691572 PASS. Targeted remaining harness blocker: old transient Dummy Material was constructed before EditorSceneManager.NewScene; test whether destroyed Unity object still has managed reference but compares null (hypothesis, not proven yet). Make actual Dummy and clone controls after scene transition; fail closed if intended explicit command has no live Material; verify 28 commands, 4 camera Dummy submissions, 4 direct target Dummy submissions; separate direct clip-space marker from camera marker, retain strict original Dummy requirement and all alpha/clone/identity gates. New materially distinct lifecycle/command diagnostic; no original emitter/runtime/device/production/XAPK claim. If still unresolved after this targeted fix, move independent water/sky/light without repeating same lane. White mesh open; G0–G6 open. Lifetime/control execution b00905b2ee8d5b43b8fd6c42ebe2195564fe0f3e: Actual 46136487398/job 140952830477 in_progress/pending; Plan Guard 46136487390 in_progress/pending; lint 46136487394 in_progress/pending. Read scene lifetime and direct/camera Dummy marker receipts; preserve independent alpha evidence and strict gate separation.",
   "execution_head": "639d0f1198c4398569660b98ec2e9f724e1bb8ad",
   "run": 46134067566,
   "job": 140945349271,
@@ -896,7 +896,17 @@
   "clone_control_alpha_differential_cases": 4,
   "clone_control_strict_dummy_gate_passed": false,
   "clone_control_source_tests_passed": 5,
-  "dummy_lifetime_diagnostic_status": "PREPARED",
+  "dummy_lifetime_diagnostic_status": "in_progress",
   "dummy_lifetime_diagnostic_verified": false,
-  "dummy_lifetime_diagnostic_workflow": ".github/workflows/raft-gt-particle108-original-draw.yml"
+  "dummy_lifetime_diagnostic_workflow": ".github/workflows/raft-gt-particle108-original-draw.yml",
+  "dummy_lifetime_diagnostic_execution_head": "b00905b2ee8d5b43b8fd6c42ebe2195564fe0f3e",
+  "dummy_lifetime_diagnostic_run": 46136487398,
+  "dummy_lifetime_diagnostic_job": 140952830477,
+  "dummy_lifetime_diagnostic_conclusion": null,
+  "dummy_lifetime_diagnostic_guard_run": 46136487390,
+  "dummy_lifetime_diagnostic_guard_status": "in_progress",
+  "dummy_lifetime_diagnostic_guard_conclusion": null,
+  "dummy_lifetime_diagnostic_lint_run": 46136487394,
+  "dummy_lifetime_diagnostic_lint_status": "in_progress",
+  "dummy_lifetime_diagnostic_lint_conclusion": null
 }
