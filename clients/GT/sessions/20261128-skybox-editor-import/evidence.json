@@ -1,5 +1,5 @@
 {
-  "status": "ACTUAL_SKYBOX_EDITOR_IMPORT_IN_PROGRESS_UNRECONCILED",
+  "status": "ACTUAL_EDITOR_IDENTITY_AND_VALUES_PASS_ANDROID_VULKAN_COMPILER_BLOCKED",
   "starting_head": "806c99ab1d91aafa0ff0b7afd0ad26026c534c4d",
   "execution_head": "2891544fe2a9e4daa7f85d7d4e6ac8f2112e8a13",
   "branch": "feature/android-native-port",
@@ -12,16 +12,51 @@
   "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "run": 46104962432,
   "job": 140855532972,
-  "run_status": "in_progress",
-  "conclusion": null,
+  "run_status": "completed",
+  "conclusion": "failure",
   "lint_run": 46104962399,
   "lint_job": 140855531669,
   "lint_status": "completed",
   "lint_conclusion": "success",
   "source_free_controls_authored_new": 11,
-  "source_free_controls_actual": null,
+  "source_free_controls_actual": 90,
   "last_observed_step": "Compile temporary class104 capture and smoke test",
-  "actual_report": null,
+  "actual_report": {
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "android_vulkan_bundle_verified": false,
+    "device_pixels_proven": false,
+    "editor": {
+      "androidVulkanOnly": true,
+      "bundleBuilt": true,
+      "candidateSha256": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+      "colorMatches": 6,
+      "colorSlots": 6,
+      "errorCategory": "compiler_or_bundle_failed",
+      "floatMatches": 20,
+      "floatSlots": 20,
+      "intSlots": 0,
+      "materialIdentity": true,
+      "materialShaderReference": true,
+      "passCount": 1,
+      "playerBuilt": false,
+      "privateBundleBytes": 6588,
+      "shaderErrorsAfter": 1,
+      "shaderErrorsBefore": 0,
+      "shaderIdentity": true,
+      "shaderNameExact": true,
+      "sourcePropertyCount": 0,
+      "status": "FAIL",
+      "texEnvSlots": 0,
+      "version": "2021.3.45f2"
+    },
+    "editor_outcome": "failure",
+    "player_built": false,
+    "reason": "skybox_editor_compile_or_import_not_proven",
+    "same_export_files_unchanged_after_editor": 4,
+    "scene_import_verified": false,
+    "status": "INCONCLUSIVE"
+  },
   "tool_blobs": {
     "tools/gt_skybox_editor_import/stage.py": "cdc8511483f774fcdd202905855a00feedea67c8",
     "tools/gt_skybox_editor_import/PrivateSkyboxImport.cs": "614243c5a5e106ff8ad979e0168516689460c985",
@@ -41,7 +76,7 @@
   "XAPK": false,
   "all_gates_open": true,
   "session": "clients/GT/sessions/20261128-skybox-editor-import/README.md",
-  "next_action": "G3-G6-skybox-editor-import: reconcile actual 46104962432 job 140855532972 and lint 46104962399 job 140855531669 (execution 2891544fe2a9e4daa7f85d7d4e6ac8f2112e8a13). Actual 46104139224 SUCCESS, 79 controls, all 7 original register identities linked at actual consistent renumbered locations, 45 offsets, 10 resources, 6 invalid stage macros rejected, private installation 5 protected files unchanged, candidate SHA256 06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c. Inspect GT_SKYBOX_EDITOR_STAGE and GT_SKYBOX_EDITOR_IMPORT, prior digest replay, actual material GUID/localID/shader reference, 6 colors and 20 floats binary32, 0 int/TexEnv and 0 authored properties, one pass, Vulkan-only Android editor asset bundle, zero shader errors, four unchanged staged file hashes. Only PASS_EXACT_SKYBOX_ANDROID_VULKAN_BUNDLE proves scoped editor import and compilation. No scene import, original engine/runtime texture uniform bindings, raster/pixels/device or player proof; no production/XAPK. If blocked preserve exact cause and advance independent mesh/material/fire/water/light lane without repeating successful source-only skybox work. All G0-G6 remain open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged, CL/lab read-only BLACK/animation deferred.",
+  "next_action": "Preserve candidate digest and exact failure. Future distinct skybox fix must prove Unity 2021 Android Vulkan stage selection without unsupported macro assumptions and solve same-name uniform binding conflict without weakening original owner/member/resource identities; prove nonzero actual Vulkan programs, not bundle bytes alone. Meanwhile level38 exact prior isolated Light hierarchy editor import, previously skipped; now existing environment available in 46104962432.",
   "source_free_controls_step": "success",
   "actual_step_snapshot": [
     {
@@ -164,5 +199,56 @@
       "status": "pending",
       "conclusion": null
     }
-  ]
+  ],
+  "source_free_controls_breakdown": [
+    14,
+    12,
+    17,
+    13,
+    11,
+    12,
+    11
+  ],
+  "actual_stage": {
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "candidate_sha256": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+    "exact_same_export_files": {
+      "Assets/Original.mat": "571d031b60257f21adc2c7c40b7037ef62c3db6972fce1fc281eb79fae411a2d",
+      "Assets/Original.mat.meta": "e9c319064d5a3510f2561e06cab4b3a44ac9becc9b3bd49012e3dd301d4c5234",
+      "Assets/Original.shader": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+      "Assets/Original.shader.meta": "1ea29e7efbb05bf3169d9adce53eb77d8c5c56a5acd4079ebabf9a11cd66ed89"
+    },
+    "original_assets_published": false,
+    "original_scene_reference_proven_statically": true,
+    "phase": "complete",
+    "player_built": false,
+    "prior_static_wrapper_digest_reproduced": true,
+    "protected_export_files_unchanged": 5,
+    "scene_import_staged": false,
+    "source_color_slots": 6,
+    "source_float_slots": 20,
+    "source_int_slots": 0,
+    "source_texenv_slots": 0,
+    "status": "PASS_EXACT_SKYBOX_EDITOR_STAGING"
+  },
+  "compiler_log_census": {
+    "vulkan_internal_program_counts": [
+      {
+        "total": 0,
+        "unique": 0
+      }
+    ],
+    "stage_selection_compile_errors": 1,
+    "glsl_shared_uniform_explicit_binding_conflicts": 2,
+    "raw_shader_names_or_log_lines_retained": false
+  },
+  "scoped_editor_observed_material_identity_and_values": true,
+  "actual_aggregate_path": "clients/GT/sessions/20261128-skybox-editor-import/actual-aggregate.json",
+  "actual_selected_log_path": "clients/GT/sessions/20261128-skybox-editor-import/actual-selected-results.log",
+  "artifact": {
+    "id": 15247605805,
+    "digest": "sha256:4a1a13b2d9762af6f660d07316c3b5a5d960d3ca40569c07f49c5003cc3c0200",
+    "independently_downloaded": false
+  }
 }

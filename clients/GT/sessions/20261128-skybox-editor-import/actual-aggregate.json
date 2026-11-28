@@ -1,0 +1,119 @@
+{
+  "GT_SKYBOX_DISCOVER": {
+    "bytes": 115978112,
+    "full_scene_provider_closure_proven": false,
+    "git_object": "c162118818a1e7377eeee6032d39fac4f977d80f",
+    "kind": "split",
+    "provider": "sharedassets0.assets",
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "status": "SELECTED_ONE_PROVIDER"
+  },
+  "GT_SKYBOX_STAGE": {
+    "full_scene_provider_closure_proven": false,
+    "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+    "provider_bytes": 115978112,
+    "provider_git_object": "c162118818a1e7377eeee6032d39fac4f977d80f",
+    "provider_kind": "split",
+    "provider_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "selected_additional_providers": 1,
+    "selected_provider": "sharedassets0.assets",
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "status": "AUTHENTICATED_TYPED_MATERIAL",
+    "typed_material21_target": true,
+    "verified_chunk_count": 3
+  },
+  "GT_SKYBOX_SHADER_DISCOVER": {
+    "already_staged": true,
+    "provider": "globalgamemanagers.assets",
+    "provider_bytes": 758412,
+    "provider_git_object": "4eabb7cb093ead2f2b0c8f3451dd953a9f5ff0c9",
+    "provider_sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28",
+    "status": "SELECTED_SHADER_PROVIDER"
+  },
+  "GT_SKYBOX_SHADER_STAGE": {
+    "additional_provider_count": 0,
+    "object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9",
+    "provider": "globalgamemanagers.assets",
+    "provider_bytes": 758412,
+    "provider_sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28",
+    "status": "AUTHENTICATED_TYPED_SHADER48",
+    "typed_source_shader48": true
+  },
+  "GT_SKYBOX_SHADER_ACTUAL_EXPORT": {
+    "actual_export_completed": true,
+    "exit_code": 0,
+    "private_log_bytes": 954520,
+    "private_trace_files_present": 3,
+    "tool_exception_categories": []
+  },
+  "GT_SKYBOX_EDITOR_STAGE": {
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "candidate_sha256": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+    "exact_same_export_files": {
+      "Assets/Original.mat": "571d031b60257f21adc2c7c40b7037ef62c3db6972fce1fc281eb79fae411a2d",
+      "Assets/Original.mat.meta": "e9c319064d5a3510f2561e06cab4b3a44ac9becc9b3bd49012e3dd301d4c5234",
+      "Assets/Original.shader": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+      "Assets/Original.shader.meta": "1ea29e7efbb05bf3169d9adce53eb77d8c5c56a5acd4079ebabf9a11cd66ed89"
+    },
+    "original_assets_published": false,
+    "original_scene_reference_proven_statically": true,
+    "phase": "complete",
+    "player_built": false,
+    "prior_static_wrapper_digest_reproduced": true,
+    "protected_export_files_unchanged": 5,
+    "scene_import_staged": false,
+    "source_color_slots": 6,
+    "source_float_slots": 20,
+    "source_int_slots": 0,
+    "source_texenv_slots": 0,
+    "status": "PASS_EXACT_SKYBOX_EDITOR_STAGING"
+  },
+  "GT_SKYBOX_EDITOR_IMPORT": {
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "android_vulkan_bundle_verified": false,
+    "device_pixels_proven": false,
+    "editor": {
+      "androidVulkanOnly": true,
+      "bundleBuilt": true,
+      "candidateSha256": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+      "colorMatches": 6,
+      "colorSlots": 6,
+      "errorCategory": "compiler_or_bundle_failed",
+      "floatMatches": 20,
+      "floatSlots": 20,
+      "intSlots": 0,
+      "materialIdentity": true,
+      "materialShaderReference": true,
+      "passCount": 1,
+      "playerBuilt": false,
+      "privateBundleBytes": 6588,
+      "shaderErrorsAfter": 1,
+      "shaderErrorsBefore": 0,
+      "shaderIdentity": true,
+      "shaderNameExact": true,
+      "sourcePropertyCount": 0,
+      "status": "FAIL",
+      "texEnvSlots": 0,
+      "version": "2021.3.45f2"
+    },
+    "editor_outcome": "failure",
+    "player_built": false,
+    "reason": "skybox_editor_compile_or_import_not_proven",
+    "same_export_files_unchanged_after_editor": 4,
+    "scene_import_verified": false,
+    "status": "INCONCLUSIVE"
+  },
+  "compiler_log_census": {
+    "vulkan_internal_program_counts": [
+      {
+        "total": 0,
+        "unique": 0
+      }
+    ],
+    "stage_selection_compile_errors": 1,
+    "glsl_shared_uniform_explicit_binding_conflicts": 2,
+    "raw_shader_names_or_log_lines_retained": false
+  }
+}
