@@ -4653,7 +4653,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261128-particle108-preserved-alpha-vulkan/README_AR.md",
-  "next_action": "G6-original-skybox-exact-provider: actual level24 46092860419 proved RenderSettings identity and 19/19 fields, null Sun, but Skybox UNKNOWN because exact source external provider not staged. No replay of ambient-only census. Resolve only actual m_SkyboxMaterial file slot in authenticated level24; validate manifest and exact Git blob/tree+chunk metadata, add only that selected provider to bounded private same-export; verify typed source Material21 and actual scene->same-instance W1 GUID/fileID->actual .mat document. Preserve prior 19-field proof as regression guard, no full provider closure claim. Activation inputs absent on current run with disk threshold met; no retrospective proof of level38 skip. If target material mapping incomplete or actual mismatch, record precise cause, no guessed repairs. Original assets unmodified/unpublished; CL/lab read-only, BLACK/animation deferred, all G0-G6 open, no production/player/XAPK. Historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged.",
+  "next_action": "G6-original-skybox-exact-provider: reconcile actual 46093780414 job 140820429850 and lint 46093780398; read actual GT_SKYBOX_DISCOVER, GT_SKYBOX_STAGE, GT_SKYBOX_ACTUAL_EXPORT and GT_SKYBOX_SAME_EXPORT plus control counts; cross-check selected one provider against pinned catalog Git object/SHA/size and ordered chunks, actual Material21, exact same-export scene/material document and pointer, 19 fields and null Sun regression. If selected provider outside supported bounded catalog or class/trace/actual-document incomplete, preserve exact unknown (do not infer lost asset). If actual proven material pointer drift with typed target and real document, repair precisely in temporary export with same GUID/meta and independent negative controls; otherwise move to next productive shader/material/water issue, not ambient-only census. Original bytes/traces not published; no source mutation, no license/protection bypass, CL/lab read-only, BLACK/animation deferred, no production/player/XAPK, all G0-G6 open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. Retain pinned Ali restore.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -9571,6 +9571,12 @@
       "run": 46092860419,
       "evidence": "clients/GT/sessions/20261128-ambient-same-export/evidence.json",
       "next_action": "G6-original-skybox-exact-provider: actual level24 46092860419 proved RenderSettings identity and 19/19 fields, null Sun, but Skybox UNKNOWN because exact source external provider not staged. No replay of ambient-only census. Resolve only actual m_SkyboxMaterial file slot in authenticated level24; validate manifest and exact Git blob/tree+chunk metadata, add only that selected provider to bounded private same-export; verify typed source Material21 and actual scene->same-instance W1 GUID/fileID->actual .mat document. Preserve prior 19-field proof as regression guard, no full provider closure claim. Activation inputs absent on current run with disk threshold met; no retrospective proof of level38 skip. If target material mapping incomplete or actual mismatch, record precise cause, no guessed repairs. Original assets unmodified/unpublished; CL/lab read-only, BLACK/animation deferred, all G0-G6 open, no production/player/XAPK. Historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged."
+    },
+    "latest_original_skybox_exact_provider": {
+      "execution_head": "56ac4b47086e07d94bfc45f1f3e8998af463a515",
+      "run": 46093780414,
+      "evidence": "clients/GT/sessions/20261128-skybox-exact-provider/evidence.json",
+      "next_action": "G6-original-skybox-exact-provider: reconcile actual 46093780414 job 140820429850 and lint 46093780398; read actual GT_SKYBOX_DISCOVER, GT_SKYBOX_STAGE, GT_SKYBOX_ACTUAL_EXPORT and GT_SKYBOX_SAME_EXPORT plus control counts; cross-check selected one provider against pinned catalog Git object/SHA/size and ordered chunks, actual Material21, exact same-export scene/material document and pointer, 19 fields and null Sun regression. If selected provider outside supported bounded catalog or class/trace/actual-document incomplete, preserve exact unknown (do not infer lost asset). If actual proven material pointer drift with typed target and real document, repair precisely in temporary export with same GUID/meta and independent negative controls; otherwise move to next productive shader/material/water issue, not ambient-only census. Original bytes/traces not published; no source mutation, no license/protection bypass, CL/lab read-only, BLACK/animation deferred, no production/player/XAPK, all G0-G6 open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. Retain pinned Ali restore."
     }
   },
   "v9_importer_state_checkpoint": {
@@ -12008,5 +12014,147 @@
     ],
     "permanent_log": "clients/GT/sessions/20261128-ambient-same-export/actual-selected-results.log",
     "actual_aggregate_path": "clients/GT/sessions/20261128-ambient-same-export/actual-aggregate.json"
+  },
+  "latest_original_skybox_exact_provider": {
+    "status": "EXACT_SKYBOX_PROVIDER_SAME_EXPORT_LAUNCHED",
+    "starting_head": "dc3d5b786c97a08758c7a524b92e74e6ab848a40",
+    "prior_ambient_reconciliation": "ab0a2fcf7dc6c664e68da1c9cb9000ea9fc8a81e",
+    "prior_ambient_result": {
+      "run": 46092860419,
+      "fields_equal": 19,
+      "sun": "MATCH_NULL",
+      "skybox": "UNKNOWN source_skybox_provider_not_staged",
+      "current_run_editor_activation_inputs": false,
+      "current_run_editor_disk_threshold_met": true,
+      "evidence": "clients/GT/sessions/20261128-ambient-same-export/evidence.json"
+    },
+    "preparation_commits": [
+      "451c274bd43afca8d3427ff4adbc13d58f1eb5e5",
+      "91231473671c7abf0b540bea88bb7abfd8528cbf"
+    ],
+    "execution_head": "56ac4b47086e07d94bfc45f1f3e8998af463a515",
+    "run": 46093780414,
+    "job": 140820429850,
+    "run_status": "in_progress",
+    "run_conclusion": null,
+    "lint_run": 46093780398,
+    "lint_job": 140820429455,
+    "lint_conclusion": "success",
+    "source_free_controls_step": "success; actual log counts pending",
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Checkout only independent ambient verifier and existing pinned tools",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Verify reviewed code and run unchanged ambient plus exact provider controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-dotnet@v4",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Obtain exact public AssetRipperCLI source",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Compile temporary class104 capture and smoke test",
+        "status": "in_progress",
+        "conclusion": null
+      },
+      {
+        "name": "Read only level24 and five pinned support providers",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Resolve only exact missing Skybox provider from authenticated native file slot",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Read only one selected additional provider (exact file or ordered chunks)",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Authenticate selected provider Git object and SHA and exact native Material21",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Execute one changed seven-provider actual export with same-instance private traces",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Compare exact authenticated skybox Material to actual same-export scene and Material YAML",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Publish ONLY safe aggregate receipts",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Remove only temporary source and private export",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Obtain exact public AssetRipperCLI source",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Run actions/setup-dotnet@v4",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Checkout only independent ambient verifier and existing pinned tools",
+        "status": "pending",
+        "conclusion": null
+      }
+    ],
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+    "tool_pins": {
+      "resolve": "8986080f354e2e7a096ba3fcbe574d68f2d9691a",
+      "tests": "e561b3e972534bed4993e7f95deef3ae8022ab8a",
+      "provider_metadata_catalog": "41bc2f997dc5c90ddfa43053c82915c5ad7cde7e",
+      "unchanged_ambient_audit": "1485a9ad7bd60d2d8d8fcb21e75ff64f2ca23737",
+      "public_tool": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+    },
+    "metadata_catalog_only": {
+      "eligible_names": 42,
+      "split": 3,
+      "max_selected_extra_bytes": 134217728,
+      "selected_extra_providers": 1,
+      "actual_provider": null,
+      "full_scene_provider_closure_proven": false
+    },
+    "actual_same_export_result": null,
+    "actual_discovery": null,
+    "actual_stage": null,
+    "original_assets_published": false,
+    "original_assets_modified": false,
+    "production": false,
+    "player": false,
+    "device": false,
+    "XAPK": false,
+    "all_gates_open": true,
+    "next_action": "G6-original-skybox-exact-provider: reconcile actual 46093780414 job 140820429850 and lint 46093780398; read actual GT_SKYBOX_DISCOVER, GT_SKYBOX_STAGE, GT_SKYBOX_ACTUAL_EXPORT and GT_SKYBOX_SAME_EXPORT plus control counts; cross-check selected one provider against pinned catalog Git object/SHA/size and ordered chunks, actual Material21, exact same-export scene/material document and pointer, 19 fields and null Sun regression. If selected provider outside supported bounded catalog or class/trace/actual-document incomplete, preserve exact unknown (do not infer lost asset). If actual proven material pointer drift with typed target and real document, repair precisely in temporary export with same GUID/meta and independent negative controls; otherwise move to next productive shader/material/water issue, not ambient-only census. Original bytes/traces not published; no source mutation, no license/protection bypass, CL/lab read-only, BLACK/animation deferred, no production/player/XAPK, all G0-G6 open; historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged. Retain pinned Ali restore."
   }
 }
