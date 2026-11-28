@@ -86,7 +86,7 @@ def classify(clear,actual,rows,selected):
     ok=clear_ok and selected_delta==0 and different(actual,clear)>0 and all(x["marker_verified"] and x["routed_explicit_difference_pixels"]==0 and x["routed_alpha_preserved"] for x in data)
     return dict(clear_verified=clear_ok,selected_saved_material_delta_pixels=selected_delta,selected_visible_pixels=different(actual,clear),
                 selected_distinct_alternatives=alternatives,cases=data,route_probe_verified=bool(ok))
-PHASES=("start","configuration","saved_keywords","camera","clear","actual","marker_shader",routed_material","routed_keywords","routed_draw","reference_shader","reference_properties","reference_draw","marker_keywords","marker_draw","post_draw","complete","permutation_incomplete")
+PHASES=("start","configuration","saved_keywords","camera","clear","actual","marker_shader","routed_material","routed_keywords","routed_draw","reference_shader","reference_properties","reference_draw","marker_keywords","marker_draw","post_draw","complete","permutation_incomplete")
 EXCEPTIONS=("","InvalidOperationException","ArgumentException","IOException","NullReferenceException","UnityException","IndexOutOfRangeException")
 KEYWORD_CATEGORIES=("instancing","fog","soft_particles","stereo","lighting","unity_reserved","other")
 def safe_attempt(x):

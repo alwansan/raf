@@ -1,0 +1,29 @@
+{
+  "source": "GitHub Actions verified job steps and source-free test log",
+  "run": 46148436354,
+  "job": 140989481852,
+  "execution_head": "795e7f4265620266a663d82c09e918b5b821fe9c",
+  "conclusion": "failure",
+  "failure_phase": "source_free_test_import",
+  "failure_type": "SyntaxError",
+  "file": "tools/gt_particle108_native_route/emitter_keyword_candidate.py",
+  "line": 89,
+  "reason": "unterminated string literal in phase tuple",
+  "tests_reported": 46,
+  "import_errors": 1,
+  "unity_executed": false,
+  "artifact_count": 0,
+  "plan_guard_run": 46148436325,
+  "plan_guard_conclusion": "success",
+  "lint_run": 46148436336,
+  "lint_conclusion": "success",
+  "previous_substantive_actual_run": 46147585436,
+  "correction_local_focused_test_observation": {
+    "candidate_blob_sha": "194e0da8e6c00243941e9276fd236ea58804f9f1",
+    "tests_blob_sha": "92443c3ec9638f7522c45be7bb1549078c4c77b1",
+    "syntax_compiled": true,
+    "tests_passed": 5,
+    "integration_dependencies_stubbed": true,
+    "full_repo_tests_run": false
+  }
+}
