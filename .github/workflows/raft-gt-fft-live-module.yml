@@ -59,11 +59,11 @@ jobs:
           cat > "$RUNNER_TEMP/gt-fft-bank-docker/Dockerfile" <<'DOCKERFILE'
           FROM unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3
           USER root
-          RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb xauth g++ libvulkan-dev glslang-tools && rm -rf /var/lib/apt/lists/*
+          RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb xauth g++ libvulkan-dev glslang-tools gdb && rm -rf /var/lib/apt/lists/*
           RUN command -v unity-editor > /opt/gt-real-unity-editor && test -x "$(cat /opt/gt-real-unity-editor)"
           COPY layer.cpp VkLayer_GT_fft_capture.json smoke.cpp smoke.comp /opt/gt-fft-layer/
-          RUN g++ -std=c++17 -Wall -Wextra -O2 -fPIC -fvisibility=hidden -shared -pthread /opt/gt-fft-layer/layer.cpp -o /opt/gt-fft-layer/libGTfftCapture.so
-          RUN g++ -std=c++17 -O2 /opt/gt-fft-layer/smoke.cpp -lvulkan -o /opt/gt-fft-layer/smoke && glslangValidator -V -S comp /opt/gt-fft-layer/smoke.comp -o /opt/gt-fft-layer/smoke.spv
+          RUN g++ -std=c++17 -Wall -Wextra -O2 -g -fno-omit-frame-pointer -fPIC -fvisibility=hidden -shared -pthread /opt/gt-fft-layer/layer.cpp -o /opt/gt-fft-layer/libGTfftCapture.so
+          RUN g++ -std=c++17 -O2 -g -fno-omit-frame-pointer /opt/gt-fft-layer/smoke.cpp -lvulkan -o /opt/gt-fft-layer/smoke && glslangValidator -V -S comp /opt/gt-fft-layer/smoke.comp -o /opt/gt-fft-layer/smoke.spv
           COPY private-editor.sh /opt/gt-private-bin/unity-editor
           RUN chmod 0755 /opt/gt-private-bin/unity-editor
           ENV PATH=/opt/gt-private-bin:$PATH
@@ -79,10 +79,23 @@ jobs:
           mkdir -m 700 "$root"
           printf 'control 64 64 1\n' > "$root/capture.marker"
           docker_args=(--rm --network none --user "$(id -u):$(id -g)" --mount "type=bind,src=$root,dst=/github/workspace/gt-fft-bank-private/vktrace" -e VK_LAYER_PATH=/opt/gt-fft-layer -e VK_INSTANCE_LAYERS=VK_LAYER_GT_fft_capture -e GT_FFT_CAPTURE_DIR=/github/workspace/gt-fft-bank-private/vktrace)
-          timeout 90s docker run "${docker_args[@]}" --entrypoint /bin/bash "$GT_FFT_IMAGE" -c 'set -eu; /opt/gt-fft-layer/smoke; cmp /opt/gt-fft-layer/smoke.spv "$GT_FFT_CAPTURE_DIR/control.spv"'
+          # The unlayered control must first establish that the authored Vulkan
+          # executable itself works in this image. No original sources are present.
+          timeout 90s docker run --rm --network none --user "$(id -u):$(id -g)" --entrypoint /bin/bash "$GT_FFT_IMAGE" -c 'ulimit -c 0; unset VK_INSTANCE_LAYERS VK_LAYER_PATH GT_FFT_CAPTURE_DIR; /opt/gt-fft-layer/smoke'
+          set +e
+          timeout 90s docker run "${docker_args[@]}" -e VK_LOADER_DEBUG=error,warn,layer --entrypoint /bin/bash "$GT_FFT_IMAGE" -c 'set -eu; ulimit -c 0; /opt/gt-fft-layer/smoke; cmp /opt/gt-fft-layer/smoke.spv "$GT_FFT_CAPTURE_DIR/control.spv"'
+          rc=$?
+          set -e
+          if [ "$rc" != 0 ]; then
+            echo "GT_FFT_AUTHORED_SMOKE first_exit=$rc"
+            # Only the source-free authored binary is debugged; never run gdb on Unity.
+            rm -f "$root/control.spv" "$root/control.meta" "$root/control.duplicate"
+            timeout 90s docker run "${docker_args[@]}" --entrypoint /bin/bash "$GT_FFT_IMAGE" -c 'ulimit -c 0; gdb -q -nx -batch -ex "set pagination off" -ex "set disable-randomization off" -ex run -ex "bt 16" --args /opt/gt-fft-layer/smoke' || true
+            exit "$rc"
+          fi
           test "$(cat "$root/control.meta")" = '64 64 1 0 0 main'
           test ! -e "$root/control.duplicate"
-          timeout 90s docker run "${docker_args[@]}" --entrypoint /opt/gt-fft-layer/smoke "$GT_FFT_IMAGE"
+          timeout 90s docker run "${docker_args[@]}" --entrypoint /bin/bash "$GT_FFT_IMAGE" -c 'ulimit -c 0; /opt/gt-fft-layer/smoke'
           test "$(cat "$root/control.duplicate")" = '1'
           rm -rf "$root"
           echo 'Authored exact module bytes and duplicate rejection verified.'
@@ -166,6 +179,6 @@ jobs:
         run: |
           sudo rm -rf gt-fft-bank-project gt-fft-bank-private
           rm -rf zip2-fft-pair "$RUNNER_TEMP/gt-fft-bank-source" "$RUNNER_TEMP/gt-fft-bank-docker"
-          rm -rf "$RUNNER_TEMP/gt-fft-bank-managed" "$RUNNER_TEMP/gt-fft-bank-ilspy"
+          rm -rf "$RUNNER_TEMP/gt-fft-bank-managed" "$RUNNER_TEMP/gt-fft-bank-ilspy" "$RUNNER_TEMP/gt-fft-layer-smoke"
           rm -f "$RUNNER_TEMP/gt-fft-bank-ilspy.log" "$RUNNER_TEMP/gt-fft-bank-pull.log" "$RUNNER_TEMP/gt-fft-bank-build.log"
           docker image rm "$GT_FFT_IMAGE" >/dev/null 2>&1 || true

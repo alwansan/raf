@@ -1,0 +1,21 @@
+{
+  "run": 46166741318,
+  "job": 141045845624,
+  "head": "ab3c7eceb90b7d3d21b65d3cbc0226d0e02a6d8c",
+  "conclusion": "failure",
+  "lint": 46166741263,
+  "guard": 46166741229,
+  "source_free_receipt_controls": "success",
+  "image_prepare": "success",
+  "source_free_layer_smoke": "failure",
+  "exit_code": 139,
+  "first_smoke_signal": "SIGSEGV",
+  "original_checkout": "skipped",
+  "original_stage": "skipped",
+  "unity_capture": "skipped",
+  "actual_module_capture_verified": false,
+  "artifact_published": false,
+  "production": false,
+  "android_device": false,
+  "XAPK": false
+}

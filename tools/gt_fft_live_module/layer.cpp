@@ -20,6 +20,7 @@ struct Instance {
     VkInstance instance{};
     PFN_vkGetInstanceProcAddr gipa{};
     PFN_GetPhysicalDeviceProcAddr pgpa{};
+    PFN_vkDestroyInstance destroy{};
 };
 using Words=std::vector<uint32_t>;
 struct Pipeline {
@@ -31,6 +32,7 @@ struct Pipeline {
 struct Device {
     VkDevice device{};
     PFN_vkGetDeviceProcAddr gdpa{};
+    std::unordered_map<std::string,PFN_vkVoidFunction> next;
     std::unordered_map<VkShaderModule,std::shared_ptr<const Words>> modules;
     std::unordered_map<VkPipeline,Pipeline> pipelines;
     std::unordered_map<VkCommandBuffer,VkPipeline> bound;
@@ -48,7 +50,8 @@ template<class T> std::shared_ptr<Device> dev(T handle){
     auto it=devices.find(key(handle));return it==devices.end()?nullptr:it->second;
 }
 template<class F> F downstream(const std::shared_ptr<Device>& d,const char* name){
-    return reinterpret_cast<F>(d->gdpa(d->device,name));
+    auto i=d->next.find(name);
+    return i==d->next.end()?nullptr:reinterpret_cast<F>(i->second);
 }
 template<class T,class C> T* link_info(const C* c,VkStructureType st){
     auto p=reinterpret_cast<const VkBaseInStructure*>(c->pNext);
@@ -89,6 +92,7 @@ void capture(const Pipeline& p,uint32_t x,uint32_t y,uint32_t z){
         std::to_string(p.spec_count)+" "+std::to_string(p.spec_bytes)+" "+p.entry+"\n";
     exclusive_write(stem+".meta",meta.data(),meta.size());
 }
+PFN_vkVoidFunction device_intercept(const char*);
 VKAPI_ATTR VkResult VKAPI_CALL create_instance(const VkInstanceCreateInfo* c,const VkAllocationCallbacks* a,VkInstance* out){
     auto chain=link_info<VkLayerInstanceCreateInfo>(c,VK_STRUCTURE_TYPE_LOADER_INSTANCE_CREATE_INFO);
     if(!chain||!chain->u.pLayerInfo)return VK_ERROR_INITIALIZATION_FAILED;
@@ -98,12 +102,16 @@ VKAPI_ATTR VkResult VKAPI_CALL create_instance(const VkInstanceCreateInfo* c,con
     chain->u.pLayerInfo=chain->u.pLayerInfo->pNext;
     if(!next)return VK_ERROR_INITIALIZATION_FAILED;
     VkResult result=next(c,a,out);
-    if(result==VK_SUCCESS){std::lock_guard<std::mutex> lock(mu);instances[key(*out)]={*out,g,pg};}
+    if(result==VK_SUCCESS){
+        auto destroy=reinterpret_cast<PFN_vkDestroyInstance>(g(*out,"vkDestroyInstance"));
+        if(!destroy)return VK_ERROR_INITIALIZATION_FAILED;
+        std::lock_guard<std::mutex> lock(mu);instances[key(*out)]={*out,g,pg,destroy};
+    }
     return result;
 }
 VKAPI_ATTR void VKAPI_CALL destroy_instance(VkInstance h,const VkAllocationCallbacks* a){
     auto i=inst(h);if(!i.gipa)return;
-    auto next=reinterpret_cast<PFN_vkDestroyInstance>(i.gipa(h,"vkDestroyInstance"));
+    auto next=i.destroy;
     {std::lock_guard<std::mutex> lock(mu);instances.erase(key(h));}
     if(next)next(h,a);
 }
@@ -119,6 +127,21 @@ VKAPI_ATTR VkResult VKAPI_CALL create_device(VkPhysicalDevice gpu,const VkDevice
     VkResult result=next(gpu,c,a,out);
     if(result==VK_SUCCESS){
         auto d=std::make_shared<Device>();d->device=*out;d->gdpa=dg;
+        // Resolve each downstream core entry once, while the loader is still
+        // initializing the chain. Do not resolve intercepted commands again
+        // through the live device dispatch table after vkCreateDevice returns.
+        static const char* names[]={"vkDestroyDevice","vkCreateShaderModule","vkDestroyShaderModule",
+            "vkCreateComputePipelines","vkDestroyPipeline","vkBeginCommandBuffer","vkFreeCommandBuffers",
+            "vkCmdBindPipeline","vkCmdDispatch"};
+        for(const char* name:names){
+            auto p=dg(*out,name);
+            if(!p||p==device_intercept(name)){
+                auto destroy=reinterpret_cast<PFN_vkDestroyDevice>(dg(*out,"vkDestroyDevice"));
+                if(destroy&&reinterpret_cast<PFN_vkVoidFunction>(destroy)!=device_intercept("vkDestroyDevice"))destroy(*out,a);
+                return VK_ERROR_INITIALIZATION_FAILED;
+            }
+            d->next.emplace(name,p);
+        }
         std::lock_guard<std::mutex> lock(mu);devices[key(*out)]=d;
     }
     return result;
@@ -188,7 +211,8 @@ VKAPI_ATTR void VKAPI_CALL dispatch(VkCommandBuffer c,uint32_t x,uint32_t y,uint
 VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL gipa(VkInstance,const char*);
 VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL gdpa(VkDevice,const char*);
 VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL pgpa(VkInstance h,const char* name){
-    auto i=inst(h);return i.pgpa?i.pgpa(h,name):(i.gipa?i.gipa(h,name):nullptr);
+    if(!h||!name)return nullptr;
+    auto i=inst(h);return i.pgpa?i.pgpa(h,name):nullptr;
 }
 PFN_vkVoidFunction device_intercept(const char* n){
 #define HOOK(s,f) if(std::strcmp(n,s)==0)return reinterpret_cast<PFN_vkVoidFunction>(f)
@@ -206,15 +230,19 @@ PFN_vkVoidFunction device_intercept(const char* n){
     return nullptr;
 }
 VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL gdpa(VkDevice h,const char* n){
-    if(!n)return nullptr;
-    if(auto p=device_intercept(n))return p;
-    auto d=dev(h);return d?d->gdpa(h,n):nullptr;
+    if(!n||!h)return nullptr;
+    if(std::strcmp(n,"vkGetDeviceProcAddr")==0)return reinterpret_cast<PFN_vkVoidFunction>(gdpa);
+    auto d=dev(h);
+    if(auto p=device_intercept(n))return d&&d->next.count(n)?p:nullptr;
+    return d?d->gdpa(h,n):nullptr;
 }
 VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL gipa(VkInstance h,const char* n){
     if(!n)return nullptr;
 #define HOOK(s,f) if(std::strcmp(n,s)==0)return reinterpret_cast<PFN_vkVoidFunction>(f)
     HOOK("vkGetInstanceProcAddr",gipa);
     HOOK("vkCreateInstance",create_instance);
+    if(!h)return nullptr;
+    HOOK("vk_layerGetPhysicalDeviceProcAddr",pgpa);
     HOOK("vkDestroyInstance",destroy_instance);
     HOOK("vkCreateDevice",create_device);
 #undef HOOK

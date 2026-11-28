@@ -23,6 +23,7 @@ test -d "$private" && test -n "$run_id"
 test "$log_count" = 1 && test "$log_index" -lt "${#args[@]}"
 test "${args[log_index]}" = /dev/stdout
 umask 077
+ulimit -c 0
 test -d "$private/vktrace" && test ! -L "$private/vktrace"
 export VK_LAYER_PATH=/opt/gt-fft-layer
 export VK_INSTANCE_LAYERS=VK_LAYER_GT_fft_capture
