@@ -14,7 +14,7 @@ public static class NativeMipValidation {
  [Serializable] class Asset {public string path,blob,guid,sha,meta_sha;public long file_id;}
  [Serializable] class Slot {public string name,guid;public long file_id;public float[] uv;}
  [Serializable] class Number {public string name,kind;public float[] value;}
- [Serializable] class Input {public string run_id,shader_path,material_path,texture_path,shader_guid,material_guid,texture_guid,selected_property;public long texture_id;
+ [Serializable] class Input {public string run_id,shader_path,material_path,texture_path,shader_guid,material_guid,texture_guid,selected_property,raw_sha;public long texture_id;
    public Asset[] assets;public Slot[] slots;public Number[] numbers;public int[] sampler;public float bias;}
  [Serializable] class Requirement {public string semantic;public int index,mask,used_mask,component_type;}
  [Serializable] class Case {public int index,material_count;public string path,blob,sha;public int[] streams;public bool custom_streams,original_self_active;}
@@ -22,8 +22,8 @@ public static class NativeMipValidation {
  [Serializable] class Bake {public int particles,particles_read,positive_size_lifetime,vertices=-1,indices=-1,submeshes=-1,required_present,required_width;public bool finite,nondegenerate,bake_completed;public string failure_category="";}
  [Serializable] class ProbeLane {public int index,width,format;public Vector4[] cpu;}
  [Serializable] class ProbeData {public int index,vertices,indices;public ProbeLane[] lanes;public bool completed;public string failure_category="";}
- [Serializable] class RenderPath {public string path,phase="start",failure_category="";public int submissions;public bool completed,material_restored,streams_unchanged,particles_unchanged;}
- [Serializable] class RenderEvidence {public int index,particles,vertices,indices;public string mode;public RenderPath[] paths;}
+ [Serializable] class RenderPath {public string path,phase="start",failure_category="";public int submissions;public bool completed,material_restored,streams_unchanged,particles_unchanged,blocks_restored;public int override_submissions;}
+ [Serializable] class RenderEvidence {public int index,particles,vertices,indices;public string mode;public bool clone_payload_verified,clone_format_sampler_verified;public RenderPath[] paths;}
  [Serializable] class ControlCase {public int material_kind,method;public Bake empty,one,before_roundtrip;public bool roundtrip_state_equal;public string failure_category="";}
  [Serializable] class Row {public int index,empty_vertices=-1,empty_particles=-1,natural_particles,natural_vertices;
    public bool imported,materials_match,billboard,active_streams_read,streams_match,scene_bytes_unchanged;public Bake forced,natural,roundtrip;public bool roundtrip_state_equal;public int direct_method=-1;public string failure_category="";}
@@ -194,15 +194,46 @@ public static class NativeMipValidation {
      b.ClearRenderTarget(true,true,bg);Graphics.ExecuteCommandBuffer(b);WriteProbePixels(rt,path);
    }finally{b.Release();}
  }
- static void RenderEmitterCase(Camera cam,ParticleSystemRenderer ren,Mesh mesh,Material original,Material marker,
-                               Material[] mats,bool rendererPath,string kind,RenderTexture rt,string path){
-   var b=new CommandBuffer{name="GT generated billboard draw"};
-   var clear=new CommandBuffer{name="GT explicit linear camera clear"};
+ static bool SameSampler(Texture2D t,Input c){
+   return c.sampler.Length==5&&(int)t.filterMode==c.sampler[0]&&t.anisoLevel==c.sampler[1]&&
+      (int)t.wrapModeU==c.sampler[2]&&(int)t.wrapModeV==c.sampler[3]&&(int)t.wrapModeW==c.sampler[4]&&Eq(t.mipMapBias,c.bias);
+ }
+ static Texture2D AlphaClone(Input c,byte[] raw,int alpha){
+   var t=new Texture2D(64,64,TextureFormat.RGBA32,true,false);
    try{
-     Need(ren.sharedMaterials.SequenceEqual(mats)&&mats.All(x=>x==original));
+     t.filterMode=(FilterMode)c.sampler[0];t.anisoLevel=c.sampler[1];t.wrapModeU=(TextureWrapMode)c.sampler[2];t.wrapModeV=(TextureWrapMode)c.sampler[3];t.wrapModeW=(TextureWrapMode)c.sampler[4];t.mipMapBias=c.bias;
+     int pos=0;
+     for(int m=0;m<7;m++){
+       int n=64>>m;var bytes=new byte[n*n*4];Buffer.BlockCopy(raw,pos,bytes,0,bytes.Length);pos+=bytes.Length;
+       if(alpha>=0)for(int k=3;k<bytes.Length;k+=4)bytes[k]=(byte)alpha;
+       t.SetPixelData(bytes,m);
+     }
+     Need(pos==raw.Length);t.Apply(false,false);return t;
+   }catch{UnityEngine.Object.DestroyImmediate(t);throw;}
+ }
+ static bool AlphaClonePayload(Texture2D t,byte[] raw,int alpha){
+   int pos=0;
+   for(int m=0;m<7;m++){
+     var b=t.GetPixelData<byte>(m);int n=64>>m;if(b.Length!=n*n*4)return false;
+     for(int i=0;i<b.Length;i++)if(b[i]!=(alpha>=0&&i%4==3?(byte)alpha:raw[pos+i]))return false;
+     pos+=b.Length;
+   }
+   return pos==raw.Length;
+ }
+ static void RenderEmitterCase(Camera cam,ParticleSystemRenderer ren,Mesh mesh,Material original,Material marker,
+                               Material[] mats,bool rendererPath,string kind,RenderTexture rt,string path,MaterialPropertyBlock block,string property,Texture target){
+   var b=new CommandBuffer{name="GT generated billboard draw"};
+   var clear=new CommandBuffer{name="GT explicit linear camera clear"};bool installed=false;
+   try{
+     Need(ren.sharedMaterials.SequenceEqual(mats)&&mats.All(x=>x==original)&&!ren.HasPropertyBlock());
+     Need((block!=null)==(target!=null));
+     if(block!=null)Need(block.GetTexture(property)==target&&original.HasProperty(property));
      ren.enabled=rendererPath&&kind!="clear";
      if(rendererPath&&kind=="marker")ren.sharedMaterials=mats.Select(x=>marker).ToArray();
-     if(!rendererPath&&kind!="clear")b.DrawMesh(mesh,Matrix4x4.identity,kind=="marker"?marker:original,0,0);
+     if(rendererPath&&block!=null){
+       ren.SetPropertyBlock(block);installed=true;var check=new MaterialPropertyBlock();ren.GetPropertyBlock(check);Need(check.GetTexture(property)==target);
+     }
+     if(!rendererPath&&kind!="clear")b.DrawMesh(mesh,Matrix4x4.identity,kind=="marker"?marker:original,0,0,block);
      // Camera background color may be converted by the editor. Use an explicit
      // GPU clear before any opaque/transparent particle rendering, and verify
      // its output against a separately measured direct clear.
@@ -214,11 +245,12 @@ public static class NativeMipValidation {
    }finally{
      cam.RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque,clear);clear.Release();
      cam.RemoveCommandBuffer(CameraEvent.BeforeForwardAlpha,b);b.Release();
+     if(installed)ren.SetPropertyBlock(null);
      ren.sharedMaterials=mats;ren.enabled=true;
    }
  }
  static RenderPath RenderPathCases(ParticleSystem ps,ParticleSystemRenderer ren,Mesh mesh,Camera cam,Material original,
-                                  Material marker,string priv,int index,string mode,bool rendererPath){
+                                  Material marker,string priv,int index,string mode,bool rendererPath,Input input,Texture2D[] textures){
    var r=new RenderPath{path=rendererPath?"renderer":"baked"};
    var mats=ren.sharedMaterials;var streams=new List<ParticleSystemVertexStream>();ren.GetActiveVertexStreams(streams);
    var before=new ParticleSystem.Particle[ps.particleCount];
@@ -229,6 +261,7 @@ public static class NativeMipValidation {
      r.phase="frame";
      Need(before.Length>0&&before.Length<=256&&ps.GetParticles(before)==before.Length&&mats.Length==2&&mats.All(x=>x==original));
      Need(original!=null&&marker!=null&&original.shader!=marker.shader&&original.passCount==1&&marker.passCount==1);
+     Need(!ren.HasPropertyBlock()&&textures.Length==4&&original.GetTexture(input.selected_property)==textures[0]);
      Frame(cam,rendererPath?LiveWorldBounds(ps,before):MeshBounds(mesh));
      cam.cullingMask=rendererPath?1<<ren.gameObject.layer:0;
      rt=new RenderTexture(64,64,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);
@@ -238,17 +271,21 @@ public static class NativeMipValidation {
      for(int bg=0;bg<2;bg++){
        cam.backgroundColor=backgrounds[bg];
        r.phase="reference";DirectReferenceClear(rt,backgrounds[bg],Path.Combine(priv,"emitter-"+index+"-"+mode+"-"+r.path+"-"+bg+"-reference.f32"));r.submissions++;
-       foreach(var kind in new[]{"clear","native","repeat","marker"}){
-         r.phase=kind;
-         RenderEmitterCase(cam,ren,mesh,original,marker,mats,rendererPath,kind,rt,Path.Combine(priv,"emitter-"+index+"-"+mode+"-"+r.path+"-"+bg+"-"+kind+".f32"));
-         r.submissions++;
+       foreach(var kind in new[]{"clear","native","repeat","marker","source","clone","zero","one","restored"}){
+         r.phase=kind;var names=new[]{"source","clone","zero","one"};int ti=Array.IndexOf(names,kind);
+         Texture2D target=ti<0?null:textures[ti];MaterialPropertyBlock block=null;
+         if(target!=null){block=new MaterialPropertyBlock();block.SetTexture(input.selected_property,target);Need(block.GetTexture(input.selected_property)==target);}
+         RenderEmitterCase(cam,ren,mesh,original,marker,mats,rendererPath,kind,rt,Path.Combine(priv,"emitter-"+index+"-"+mode+"-"+r.path+"-"+bg+"-"+kind+".f32"),block,input.selected_property,target);
+         r.submissions++;if(block!=null)r.override_submissions++;
+         Need(!ren.HasPropertyBlock()&&original.GetTexture(input.selected_property)==textures[0]);
        }
      }
      r.phase="post_draw";
      r.material_restored=ren.sharedMaterials.SequenceEqual(mats);
      var afterStreams=new List<ParticleSystemVertexStream>();ren.GetActiveVertexStreams(afterStreams);
      r.streams_unchanged=streams.SequenceEqual(afterStreams);r.particles_unchanged=ParticleStateEqual(ps,before);
-     r.completed=r.submissions==10&&r.material_restored&&r.streams_unchanged&&r.particles_unchanged;
+     r.blocks_restored=!ren.HasPropertyBlock()&&original.GetTexture(input.selected_property)==textures[0];
+     r.completed=r.submissions==20&&r.override_submissions==8&&r.blocks_restored&&r.material_restored&&r.streams_unchanged&&r.particles_unchanged;
      r.phase="complete";
    }catch(Exception e){r.failure_category=e.GetType().Name;}
    finally{
@@ -259,22 +296,31 @@ public static class NativeMipValidation {
    }
    return r;
  }
- static void RenderGenerated(ParticleSystem ps,ParticleSystemRenderer ren,Mesh mesh,Camera cam,Material original,string priv,int index,string mode){
+ static void RenderGenerated(ParticleSystem ps,ParticleSystemRenderer ren,Mesh mesh,Camera cam,Material original,string priv,int index,string mode,Input input){
    var ev=new RenderEvidence{index=index,mode=mode,particles=ps.particleCount,vertices=mesh.vertexCount,indices=(int)mesh.GetIndexCount(0)};
-   Material marker=null;
+   Material marker=null;var textures=new Texture2D[4];
    try{
      var shader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTEmitterDrawMarker.shader");
      Need(shader!=null&&shader.isSupported&&shader.passCount==1&&ShaderUtil.GetShaderMessages(shader).All(x=>x.severity.ToString()!="Error"));
      marker=new Material(shader);
-     ev.paths=new[]{RenderPathCases(ps,ren,mesh,cam,original,marker,priv,index,mode,true),
-                    RenderPathCases(ps,ren,mesh,cam,original,marker,priv,index,mode,false)};
+     textures[0]=original.GetTexture(input.selected_property) as Texture2D;
+     Need(Id(textures[0],input.texture_guid,input.texture_id)&&SameSampler(textures[0],input));
+     var raw=File.ReadAllBytes(Path.Combine(priv,"native-rgba.bytes"));Need(raw.Length==21844&&Sha(raw)==input.raw_sha);
+     int[] alpha={-1,0,255};
+     for(int k=0;k<3;k++)textures[k+1]=AlphaClone(input,raw,alpha[k]);
+     ev.clone_payload_verified=Enumerable.Range(0,3).All(k=>AlphaClonePayload(textures[k+1],raw,alpha[k]));
+     ev.clone_format_sampler_verified=textures.All(t=>t!=null&&t.width==64&&t.height==64&&t.mipmapCount==7&&t.graphicsFormat==textures[0].graphicsFormat&&SameSampler(t,input));
+     Need(ev.clone_payload_verified&&ev.clone_format_sampler_verified);
+     ev.paths=new[]{RenderPathCases(ps,ren,mesh,cam,original,marker,priv,index,mode,true,input,textures),
+                    RenderPathCases(ps,ren,mesh,cam,original,marker,priv,index,mode,false,input,textures)};
    }catch(Exception){/* missing paths remain inconclusive in the independent verifier */}
    finally{
      if(marker!=null)UnityEngine.Object.DestroyImmediate(marker);
+     for(int k=1;k<textures.Length;k++)if(textures[k]!=null)UnityEngine.Object.DestroyImmediate(textures[k]);
      File.WriteAllText(Path.Combine(priv,"emitter-"+index+"-"+mode+".json"),JsonUtility.ToJson(ev));
    }
  }
- static Bake Measure(ParticleSystem ps,ParticleSystemRenderer ren,Camera cam,Requirement[] req,bool renderBefore=false,string priv=null,int probeIndex=-2,Material drawMaterial=null,string drawMode=null){
+ static Bake Measure(ParticleSystem ps,ParticleSystemRenderer ren,Camera cam,Requirement[] req,bool renderBefore=false,string priv=null,int probeIndex=-2,Material drawMaterial=null,string drawMode=null,Input drawInput=null){
    var b=new Bake{particles=ps.particleCount};
    var mesh=new Mesh();RenderTexture rt=null;
    try {
@@ -301,7 +347,7 @@ public static class NativeMipValidation {
        int mask=q.used_mask!=0?q.used_mask:q.mask, width=0;while(mask>0){width++;mask>>=1;}
        if(mesh.GetVertexAttributeDimension(va)>=width)b.required_width++;}
      if(priv!=null&&probeIndex>=0&&b.vertices==4&&b.indices==6&&drawMode!="natural")ProbeMesh(mesh,req,priv,probeIndex);
-     if(priv!=null&&probeIndex>=0&&drawMaterial!=null&&drawMode!=null&&b.finite&&b.nondegenerate&&b.particles>0&&b.vertices==4*b.particles&&b.indices==6*b.particles)RenderGenerated(ps,ren,mesh,cam,drawMaterial,priv,probeIndex,drawMode);
+     if(priv!=null&&probeIndex>=0&&drawMaterial!=null&&drawMode!=null&&b.finite&&b.nondegenerate&&b.particles>0&&b.vertices==4*b.particles&&b.indices==6*b.particles)RenderGenerated(ps,ren,mesh,cam,drawMaterial,priv,probeIndex,drawMode,drawInput);
    }catch(Exception e){b.failure_category=e.GetType().Name;}
    finally{cam.targetTexture=null;if(rt!=null){rt.Release();UnityEngine.Object.DestroyImmediate(rt);}UnityEngine.Object.DestroyImmediate(mesh);}
    return b;
@@ -388,9 +434,9 @@ public static class NativeMipValidation {
      // Diagnostic fixture activation and explicit emission do not represent original gameplay.
      ren.enabled=true;ps.Stop(false,ParticleSystemStopBehavior.StopEmittingAndClear);
      var zero=Measure(ps,ren,cam,cfg.vertex_requirements,method==3);row.empty_particles=zero.bake_completed?zero.particles:-1;row.empty_vertices=zero.bake_completed?zero.vertices:-1;
-     ps.Simulate(1f,false,true,true);row.natural=Measure(ps,ren,cam,cfg.vertex_requirements,false,priv,item.index,mat,"natural");
+     ps.Simulate(1f,false,true,true);row.natural=Measure(ps,ren,cam,cfg.vertex_requirements,false,priv,item.index,mat,"natural",c);
      row.natural_particles=row.natural.particles;row.natural_vertices=row.natural.vertices;
-     EmitOne(ps,method);row.forced=Measure(ps,ren,cam,cfg.vertex_requirements,method==3,priv,item.index,mat,"forced");
+     EmitOne(ps,method);row.forced=Measure(ps,ren,cam,cfg.vertex_requirements,method==3,priv,item.index,mat,"forced",c);
      if(row.forced.particles==1){
        row.roundtrip_state_equal=Roundtrip(ps);
        row.roundtrip=Measure(ps,ren,cam,cfg.vertex_requirements);

@@ -270,12 +270,15 @@ def verify(a):
         from tools.gt_particle108_native_route import emitter_original_draw as ed
         out["actual_emitter_draw"]=ed.verify(a.private,out["row_observations"])
         need(out["actual_emitter_draw"]["isolated_actual_emitter_original_explicit_route_draw_verified"],"actual_emitter_draw_inconclusive")
-        out.update(status="OBSERVED_ISOLATED_ACTUAL_EMITTER_ORIGINAL_EXPLICIT_ROUTE_DRAW",phase="complete")
+        out["isolated_actual_emitter_original_explicit_route_draw_verified"]=True
+        out["phase"]="actual_emitter_alpha_causality"
+        need(out["actual_emitter_draw"]["isolated_actual_emitter_alpha_causality_verified"],"actual_emitter_alpha_causality_inconclusive")
+        out.update(status="OBSERVED_ISOLATED_ACTUAL_EMITTER_ALPHA_CAUSALITY",phase="complete")
     except Reject as e:out["failure_category"]=str(e)
     except Exception as e:out["failure_type"]=type(e).__name__
     write_json(a.safe,out)
     print("GT_PARTICLE108_EMITTER_GEOMETRY "+json.dumps(out,sort_keys=True))
-    return 0 if out["status"]=="OBSERVED_ISOLATED_ACTUAL_EMITTER_ORIGINAL_EXPLICIT_ROUTE_DRAW" else 2
+    return 0 if out["status"]=="OBSERVED_ISOLATED_ACTUAL_EMITTER_ALPHA_CAUSALITY" else 2
 if __name__=="__main__":
     p=argparse.ArgumentParser()
     for k in ("project","private","safe"):p.add_argument("--"+k,type=Path,required=True)

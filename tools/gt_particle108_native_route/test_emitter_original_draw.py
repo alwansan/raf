@@ -4,9 +4,10 @@ from tools.gt_particle108_native_route.emitter_original_draw import classify,SIZ
 class ActualDraw(unittest.TestCase):
     def rows(self):
         base=np.tile(BACKGROUNDS[0],(SIZE,SIZE,1))
-        rows={k:base.copy() for k in ("reference","clear","native","repeat","marker")}
+        rows={k:base.copy() for k in ("reference","clear","native","repeat","marker","source","clone","zero","one","restored")}
         rows["marker"][10:14,10:14]=MARKER
-        for k in ("native","repeat"):rows[k][10:14,10:14,:3]=(.4,.2,.1)
+        for k in ("native","repeat","source","clone","restored"):rows[k][10:14,10:14,:3]=(.4,.2,.1)
+        rows["one"][10:14,10:14,:3]=(.8,.6,.4)
         return rows
     def test_calibrated_original_visible(self):
         r=classify(self.rows(),0)
@@ -35,6 +36,20 @@ class ActualDraw(unittest.TestCase):
         r=self.rows();r["clear"][1,1,0]=.9
         self.assertFalse(classify(r,0)["clear_uniform"])
         self.assertFalse(classify(r,0)["calibrated_original_rgb_observed"])
+    def test_alpha_only_causal_controls(self):
+        r=self.rows();self.assertTrue(classify(r,0)["calibrated_actual_alpha_effect"])
+        r["clone"][10,10,0]=.95
+        x=classify(r,0);self.assertTrue(x["calibrated_original_rgb_observed"]);self.assertFalse(x["calibrated_actual_alpha_effect"])
+    def test_alpha_zero_or_no_effect_rejected(self):
+        r=self.rows();r["zero"][10,10,0]=.95
+        self.assertFalse(classify(r,0)["calibrated_actual_alpha_effect"])
+        r=self.rows();r["one"]=r["zero"].copy()
+        self.assertFalse(classify(r,0)["calibrated_actual_alpha_effect"])
+    def test_restored_and_alpha_mask_required(self):
+        r=self.rows();r["restored"][10,10,0]=.95
+        self.assertFalse(classify(r,0)["calibrated_actual_alpha_effect"])
+        r=self.rows();r["one"][10,10,3]=1
+        self.assertFalse(classify(r,0)["calibrated_actual_alpha_effect"])
     def test_marker_overlap_required(self):
         r=self.rows();r["marker"]=r["clear"].copy();r["marker"][20:24,20:24]=MARKER
         self.assertFalse(classify(r,0)["calibrated_original_rgb_observed"])
