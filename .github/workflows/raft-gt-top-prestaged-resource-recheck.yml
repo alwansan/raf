@@ -14,9 +14,12 @@ concurrency:
 jobs:
   bounded-original-export-postvendor:
     runs-on: ubuntu-24.04
-    timeout-minutes: 70
+    timeout-minutes: 95
+    environment: UNITY_LICENSE
     env:
       GIT_LFS_SKIP_SMUDGE: '1'
+      GT_ARRAY_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+      GT_ARRAY_IMAGE: raft-gt-selected-array:local
     steps:
       - name: Checkout only B21 scripts/W1/B02 SHA-locked staging source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -35,7 +38,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -c "import shutil; assert shutil.disk_usage('.').free > 8 * 1024**3"
-          python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3 Pillow==12.3.0
+          python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3 Pillow==12.3.0 numpy==2.2.6
           python3 -B -m unittest discover -s tools/gt_top_resource_closure -p 'test_*.py' -v
           python3 -B -m unittest discover -s tools/gt_top_original_renderer -p 'test_*.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_external_texture_lineage.py' -v
@@ -218,6 +221,82 @@ jobs:
             --plan "$RUNNER_TEMP/gt-top-prestage-private.json" \
             --repair-selected-array \
             --out "$RUNNER_TEMP/gt-top-prestaged-resource-safe.json"
+      - name: Stage only the selected source-proven repaired array outside Unity Assets
+        id: array_stage
+        run: |
+          set -euo pipefail
+          python3 -B -m tools.gt_top_resource_closure.selected_array_unity stage \
+            --original "$RUNNER_TEMP/b21-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
+            --w1 "$RUNNER_TEMP/b21-w1-private.json" \
+            --b02 "$RUNNER_TEMP/b21-b02-private.json" \
+            --renderer-trace "$RUNNER_TEMP/gt-renderer-private.json" \
+            --plan "$RUNNER_TEMP/gt-top-prestage-private.json" \
+            --receipt "$RUNNER_TEMP/gt-top-prestaged-resource-safe.json" \
+            --out "$RUNNER_TEMP/gt-selected-array-unity-safe.json" \
+            --unity-project gt-selected-array-project --private gt-selected-array-private \
+            --run-id "$GT_ARRAY_RUN_ID"
+          rm -rf "$RUNNER_TEMP/b21-original" "$RUNNER_TEMP/b21-private-export" "$RUNNER_TEMP/b21-compiled" zip2-original
+      - name: Prepare licensed editor software Vulkan image with private log guard
+        run: |
+          set -euo pipefail
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+          mkdir "$RUNNER_TEMP/gt-selected-array-docker"
+          cp tools/gt_top_resource_closure/private-selected-array-editor.sh "$RUNNER_TEMP/gt-selected-array-docker/"
+          bash -n "$RUNNER_TEMP/gt-selected-array-docker/private-selected-array-editor.sh"
+          cat > "$RUNNER_TEMP/gt-selected-array-docker/Dockerfile" <<'DOCKERFILE'
+          FROM unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3
+          USER root
+          RUN apt-get update -qq && \
+              DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
+                libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb xauth && \
+              rm -rf /var/lib/apt/lists/*
+          RUN command -v unity-editor > /opt/gt-real-unity-editor && test -x "$(cat /opt/gt-real-unity-editor)"
+          COPY private-selected-array-editor.sh /opt/gt-private-bin/unity-editor
+          RUN chmod 0755 /opt/gt-private-bin/unity-editor
+          ENV PATH=/opt/gt-private-bin:$PATH
+          ENV VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+          DOCKERFILE
+          timeout 480s docker build --quiet --tag "$GT_ARRAY_IMAGE" "$RUNNER_TEMP/gt-selected-array-docker" > gt-selected-array-private/image-id.txt
+          docker run --rm --entrypoint /bin/bash "$GT_ARRAY_IMAGE" -c 'test -f "$VK_ICD_FILENAMES" && test "$(command -v unity-editor)" = /opt/gt-private-bin/unity-editor'
+      - name: Import exact selected array and read both original top mip layers on Vulkan
+        id: array_unity
+        continue-on-error: true
+        uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          customImage: raft-gt-selected-array:local
+          projectPath: gt-selected-array-project
+          targetPlatform: StandaloneLinux64
+          buildMethod: SelectedArrayUnity.Run
+          manualExit: true
+          enableGpu: true
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 6g
+          dockerCpuLimit: 2
+          customParameters: >-
+            -force-vulkan -force-device-index 0 -job-worker-count 2
+            -gtArrayRunId ${{ env.GT_ARRAY_RUN_ID }}
+            -gtArrayPrivate /github/workspace/gt-selected-array-private
+      - name: Independently compare actual imported array GPU coordinates to original source pixels
+        if: always() && steps.array_stage.outcome == 'success'
+        env:
+          UNITY_OUTCOME: ${{ steps.array_unity.outcome }}
+        run: |
+          set -euo pipefail
+          sudo chown -R "$(id -u):$(id -g)" gt-selected-array-private gt-selected-array-project
+          code=1
+          if [ "$UNITY_OUTCOME" = success ]; then code=0; fi
+          python3 -B -m tools.gt_top_resource_closure.selected_array_unity verify \
+            --unity-project gt-selected-array-project --private gt-selected-array-private \
+            --safe "$RUNNER_TEMP/gt-selected-array-unity-safe.json" --run-id "$GT_ARRAY_RUN_ID" --exit-code "$code"
       - name: Publish only aggregate observations
         if: always()
         uses: actions/upload-artifact@v4
@@ -227,10 +306,14 @@ jobs:
             ${{ runner.temp }}/gt-top-prestage-safe.json
             ${{ runner.temp }}/gt-top-prestaged-resource-safe.json
             ${{ runner.temp }}/t3-shader-parity-safe.json
+            ${{ runner.temp }}/gt-selected-array-unity-safe.json
           retention-days: 14
           if-no-files-found: warn
       - name: Remove private source export and traces
         if: always()
         run: |
+          sudo rm -rf gt-selected-array-project gt-selected-array-private
+          docker image rm "$GT_ARRAY_IMAGE" >/dev/null 2>&1 || true
+          rm -rf "$RUNNER_TEMP/gt-selected-array-docker"
           rm -rf "$RUNNER_TEMP/gt-top-private-streams" "$RUNNER_TEMP/b21-original" "$RUNNER_TEMP/b21-private-export" "$RUNNER_TEMP/b21-compiled" zip2-original
           rm -f "$RUNNER_TEMP/b21-w1-private.json" "$RUNNER_TEMP/b21-b02-private.json" "$RUNNER_TEMP/gt-renderer-private.json" "$RUNNER_TEMP/gt-top-prestage-private.json" "$RUNNER_TEMP/b21-original-export-private.log"

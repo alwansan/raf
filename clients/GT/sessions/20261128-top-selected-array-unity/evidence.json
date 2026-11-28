@@ -1,0 +1,16 @@
+{
+  "status": "SELECTED_ARRAY_UNITY_LOAD_PREPARED_PENDING_ACTUAL",
+  "starting_head": "139838cf9c90ac054d9ad695cd146bb67b0f41cb",
+  "prior_actual": 46123976674,
+  "prior_actual_receipt": "clients/GT/sessions/20261128-top-inline-array-grid/actual-46123976674.json",
+  "new_authored_test_methods": 3,
+  "tests_executed_in_current_session": false,
+  "actual_Unity_import_verified": false,
+  "actual_GPU_observation": false,
+  "full_lower_mip_pixel_equivalence": false,
+  "original_shader_draw_verified": false,
+  "white_mesh_repair_verified": false,
+  "production": false,
+  "XAPK": false,
+  "next_action": "Reconcile the NEW push-triggered same-export selected class187 Unity import and Vulkan Load observation at execution head. Actual 46123976674 SUCCESS: exact original selected Mesh 10/10, Material 8 colors/43 floats, 6/6 TexEnv+UV, four physical textures, semantic Texture2D 3/3 (raw 2/3); selected inline BC3 original array 2796256 bytes/22 mip extents, both top mip layers exact via UnityPy and independent Pillow, 2097152 coordinates/zero RGB and alpha mismatch; reversed-layer and vertical-orientation controls 0/2; two-digit private grid repair 0/0 to rows2/cols1, unchanged original PNG, GUID, Material bytes. No Unity import in that run. New distinct step uses same-export exact graph and independently redecoded selected PNG+repaired meta, preserved name/GUID/fileID, source withheld from Assets until private log guard, licensed Unity 2021.3.45f2 Linux/Vulkan compute Load over both full top mip layers, asymmetric authored calibration 32 coordinates and wrong-layer comparison, expected source sRGB transfer (not fitted to importer), exact and bounded error counts. Actual dimension/depth/class/mip/format/color-space and meta bytes observed; no re-compression tolerance called source equivalence. Three authored tests pending CI. Raw private receipts never uploaded. If importer/coordinate mapping or compression/metadata differs, isolate specific cause or consider exact native full-mip path (preserve class187/GUID), not repeat. Continue independently to source-bound original shader ABI and selected renderer/material Vulkan draw after suitable resource admission; if blocked independent fire/water. Plan guard pre-existing oversized ledger remains. No production/player/XAPK, G0–G6 open, CL/lab read-only, BLACK/animation deferred."
+}
