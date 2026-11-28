@@ -1,0 +1,42 @@
+name: RAFT isolated Android emulator smoke
+on:
+  push:
+    branches: ['qa/android-emulator']
+  workflow_dispatch:
+    inputs:
+      capture_video:
+        type: boolean
+        default: false
+        description: Capture a short synthetic fixture video
+permissions:
+  contents: read
+jobs:
+  smoke:
+    if: github.ref == 'refs/heads/qa/android-emulator'
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            abi: x86_64
+          - runner: ubuntu-24.04-arm
+            abi: arm64-v8a
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Boot emulator and test synthetic shader APK
+        env:
+          EXPECTED_ABI: ${{ matrix.abi }}
+          CAPTURE_VIDEO: ${{ inputs.capture_video }}
+        run: bash qa/smoke.sh
+      - name: Upload diagnostic results only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: raft-emulator-${{ matrix.abi }}
+          path: evidence/
+          retention-days: 7
+          if-no-files-found: error
