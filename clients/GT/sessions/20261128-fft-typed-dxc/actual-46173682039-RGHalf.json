@@ -1,0 +1,426 @@
+{
+  "run": 46173682039,
+  "job": 141067503037,
+  "head": "30d693367df77d39e7b157f4bc6dca3154ef0557",
+  "conclusion": "failure",
+  "guard": 46173681903,
+  "lint": 46173681936,
+  "artifact_id": 15274876967,
+  "stage": {
+    "android_device": false,
+    "coordinate_sha": "bd28b9f73ae2d15d092cc86cb88214a78c0a245e6398d397e6b6ead1a8c40e39",
+    "editor_sha": "fb68372249796df012472723ea229f6ddb978ceb71cf5e34c794b73e5e223a30",
+    "exact_derived_table_body_executed": true,
+    "format": "RGHalf",
+    "game_runtime_bank_mapping_verified": false,
+    "indexed_reference_spirv_exact": 4,
+    "oracle_canary": {
+      "pixels": 262144,
+      "status": "PASS",
+      "wrong_program_lanes": 524288
+    },
+    "oracle_commitments": {
+      "cpu-16-signed-p0.raw": "0557a6b2730e6ad593c6f48d37426ef2bf19f53789fa1dc6b1e14f428803341a",
+      "cpu-16-signed-p1.raw": "2f7992d4d17ae8c08f7b1cbc17b3c9a998d6d8c4ce83dcd8f653e553b7845f00",
+      "cpu-16-zero-p0.raw": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+      "cpu-16-zero-p1.raw": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+      "cpu-6-signed-p0.raw": "0557a6b2730e6ad593c6f48d37426ef2bf19f53789fa1dc6b1e14f428803341a",
+      "cpu-6-signed-p1.raw": "a917f42f0832964b81cb4f64f7507b4da9d7c5a8e786f5845b53062392e00366",
+      "cpu-6-zero-p0.raw": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+      "cpu-6-zero-p1.raw": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+      "source-signed.rgba32f": "3e7a969840748f22ad28c7eee958f9ab21cb418172e00f2067e60fd26587ccca",
+      "source-zero.rgba32f": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8"
+    },
+    "oracle_exact_outputs": 8,
+    "oracle_module_pins": {
+      "6": {
+        "native": "523880e471e2cef84fa2f425213f0ef8fa5f9002fe9e3e2ba525521dc9f36463",
+        "restored": "ef7b701ce2306d4848572e69f0e57330f125a787d5cdcd12309bc8ce471ed958"
+      },
+      "7": {
+        "native": "168ddd60a1c9e74f90406d385a2b89c466d616b745e99dd160af93720fbeb7b4",
+        "restored": "ec802ed2538de10ab0a592a7c8a043fead9d8483bf1442d5360cbdc9cb151557"
+      },
+      "16": {
+        "native": "2b04a6347227395acc9744cf9077bba6ca2d973202e6aa457c94926809e4687b",
+        "restored": "779203d0e94d4cde15d9d5f06af329003b5309a4ca03f0b370d878c79385a8bb"
+      },
+      "17": {
+        "native": "cdd7e194080764bcac62f8fbdc846be7d5ce33e68859781680a0208a536116bb",
+        "restored": "5d381d34bfa550c6c78faf1cf2df3975aadafc3fdd5d97aeab42a56ff5c804f6"
+      }
+    },
+    "original_runtime_kernel_mapping_proven": false,
+    "original_translated_slots": 20,
+    "private_config_sha256": "7f16c7618c02d319bb25f57e012a65b7b33907dab57aad1e682f1078abdf6626",
+    "selected_slots": [
+      6,
+      7,
+      16,
+      17
+    ],
+    "source_cache_extent": [
+      512,
+      512
+    ],
+    "source_format_modes": [
+      "RGHalf",
+      "RGFloat",
+      "ARGBHalf",
+      "ARGBFloat"
+    ],
+    "source_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "source_records": [
+      {
+        "candidate_sha": "5b327c8fb752b0df5f9f7a83d2406cd814aeebd07b32fa4dde8ea6c93541e93b",
+        "count": 20,
+        "name": "indexed.compute",
+        "original_sha": "94dc4000274106ae4bb2830beab88fbbbe7621fca3c750d805e5e5f185bdc8c4"
+      },
+      {
+        "candidate_sha": "6f4fe721ce12745c297087af8ed9de126942e9b9afc0a5ca7a4e0a0c921e6e91",
+        "count": 1,
+        "name": "reference-6.compute",
+        "original_sha": "6a1f8592de08c71ff242c11dda8b040723f718e95cc802b2f2c51ebf20be3bd4"
+      },
+      {
+        "candidate_sha": "243564b719cecdd43e600a2332dc7f28ef4c21347961dc393b7a32bf1dfb2801",
+        "count": 1,
+        "name": "reference-7.compute",
+        "original_sha": "786e5fd71d3e2989e7e8c338e64f7472bff6d7382a1d270f8234881eade6bbea"
+      },
+      {
+        "candidate_sha": "f0aa8ebecded7e21911df1f7247c4eb447b80c69a2f4cad0a847f4febdbc7b01",
+        "count": 1,
+        "name": "reference-16.compute",
+        "original_sha": "3b798dcfcac8216f8896ed4a8a6b1b0767de63eb3a154db8bf737b5858caa332"
+      },
+      {
+        "candidate_sha": "538d3963ef53ecac9194bcc3e169318b2c7d23f702d9502ed009be0eea3f3641",
+        "count": 1,
+        "name": "reference-17.compute",
+        "original_sha": "2a44db8b7907146a37c85a2eda12c1d4c4aa0f2d54cb179d448fc9cf09dac87f"
+      }
+    ],
+    "source_resolution": 256,
+    "source_selector_formula_authenticated": true,
+    "source_stages": 8,
+    "source_table": {
+      "half_exact_address_lanes": 8192,
+      "half_quantized_components": 16384,
+      "integer_address_lanes": 8192,
+      "table_float_sha256": "eff308e614be3187d49c57f27d2bcd9b55945f8cfea69ec28aa3a78c693faed1",
+      "table_half_sha256": "d93fd79177719e034c4e29e4a8f4f398aefec161745ee084ec485bd36d40fdcd",
+      "table_texels": 4096
+    },
+    "status": "STAGED_TYPED_DXC_TARGET",
+    "table_native_sha": "4014d74468986685069bd2c47b675c7b6c6ad40a5d9e106df61e18ada78ea4ed",
+    "workgroup_x": 512
+  },
+  "receipt": {
+    "XAPK": false,
+    "android_device": false,
+    "capture_presence": {
+      "control": {
+        "duplicate": false,
+        "meta": true,
+        "spv": true
+      },
+      "indexed-16": {
+        "duplicate": false,
+        "meta": false,
+        "spv": false
+      },
+      "indexed-17": {
+        "duplicate": false,
+        "meta": false,
+        "spv": false
+      },
+      "indexed-6": {
+        "duplicate": false,
+        "meta": true,
+        "spv": true
+      },
+      "indexed-7": {
+        "duplicate": false,
+        "meta": false,
+        "spv": false
+      },
+      "standalone-16": {
+        "duplicate": false,
+        "meta": false,
+        "spv": false
+      },
+      "standalone-17": {
+        "duplicate": false,
+        "meta": false,
+        "spv": false
+      },
+      "standalone-6": {
+        "duplicate": false,
+        "meta": false,
+        "spv": false
+      },
+      "standalone-7": {
+        "duplicate": false,
+        "meta": false,
+        "spv": false
+      }
+    },
+    "case_dispatch_counts": [
+      1,
+      0
+    ],
+    "coordinate_control_verified": true,
+    "editor_progress": {
+      "editor_native_exit": 2,
+      "last_managed_checkpoint": {
+        "bindings": 3,
+        "dispatches": 1,
+        "first_slot": 6,
+        "operation": "dispatch_returned",
+        "pass": 0,
+        "phase": "paired_dispatch",
+        "seed": 19,
+        "variant": 0
+      },
+      "private_files_present": {
+        "editor-exit-code": true,
+        "editor-output-private": true,
+        "editor-stdout.log": true,
+        "editor.log": true,
+        "progress.json": true,
+        "receipt.json": true
+      },
+      "private_launch_marker_matches": true
+    },
+    "editor_registered_slots": 20,
+    "editor_status_pass": false,
+    "extended_feature_enabled": true,
+    "failure_reason": "editor_progress",
+    "failure_type": "ValueError",
+    "format": "RGHalf",
+    "format_blocked": true,
+    "observed_modules": [
+      {
+        "capture": {
+          "dispatch_groups": [
+            64,
+            64,
+            1
+          ],
+          "module": {
+            "bytes": 2444,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 0,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 0,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 0,
+                "dimension_enum": 1,
+                "format_enum": 1,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 135,
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 0,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 8,
+                "OpBitwiseAnd": 1,
+                "OpBitwiseOr": 0,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 0,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 0,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 0,
+                "OpFSub": 0,
+                "OpImageFetch": 2,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 0,
+                "OpShiftRightLogical": 0
+              }
+            },
+            "sha256": "a61e5069adc3bd25928e559fab4ec0b6c211b651bd9bfc5cae89d6d13f1f928d",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          },
+          "specialization_bytes": 0,
+          "specialization_entries": 0
+        },
+        "label": "control"
+      },
+      {
+        "capture": {
+          "dispatch_groups": [
+            1,
+            512,
+            1
+          ],
+          "module": {
+            "bytes": 6112,
+            "image_status": "observed",
+            "images": [
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 0,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 6,
+                "multisampled": 0,
+                "sampled_enum": 2,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 1,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              },
+              {
+                "access_enum": null,
+                "arrayed": 0,
+                "binding": 2,
+                "depth_enum": 2,
+                "dimension_enum": 1,
+                "format_enum": 0,
+                "multisampled": 0,
+                "sampled_enum": 1,
+                "scalar_bits": 32,
+                "scalar_kind": "float",
+                "set": 0
+              }
+            ],
+            "instructions": 320,
+            "local_size": [
+              512,
+              1,
+              1
+            ],
+            "opcode_profile": {
+              "ext": {
+                "Ceil": 0,
+                "Cos": 0,
+                "Exp": 0,
+                "FAbs": 0,
+                "FClamp": 0,
+                "FMax": 0,
+                "FMin": 0,
+                "Floor": 0,
+                "Fma": 7,
+                "Fract": 0,
+                "InverseSqrt": 0,
+                "Log": 0,
+                "Pow": 0,
+                "Sin": 0,
+                "Sqrt": 0
+              },
+              "ops": {
+                "OpBitcast": 53,
+                "OpBitwiseAnd": 4,
+                "OpBitwiseOr": 2,
+                "OpBitwiseXor": 0,
+                "OpConvertFToS": 0,
+                "OpConvertFToU": 2,
+                "OpConvertSToF": 0,
+                "OpConvertUToF": 0,
+                "OpExtInst": 7,
+                "OpFAdd": 0,
+                "OpFDiv": 0,
+                "OpFMul": 0,
+                "OpFSub": 0,
+                "OpImageFetch": 3,
+                "OpImageRead": 0,
+                "OpImageWrite": 1,
+                "OpShiftLeftLogical": 5,
+                "OpShiftRightLogical": 8
+              }
+            },
+            "sha256": "6f41c93f685cfee1320b267c49c0555ec0bfea6fb791e39979adffefbeaa2406",
+            "validator_exit": 0,
+            "version": [
+              1,
+              0
+            ]
+          },
+          "specialization_bytes": 0,
+          "specialization_entries": 0
+        },
+        "label": "indexed-6"
+      }
+    ],
+    "status": "INCONCLUSIVE",
+    "typed_feature_marker": false,
+    "water_rendering_verified": false
+  }
+}
