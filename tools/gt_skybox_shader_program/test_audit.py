@@ -45,3 +45,21 @@ class TestSkyboxShader(unittest.TestCase):
         w={"objects":[{"class_id":48,"source":{"owner":key[0],"path_id":key[1]}}]}
         self.assertEqual(a.exact_row(w,key,48),w["objects"][0])
         with self.assertRaisesRegex(a.Rejected,"identity_missing"):a.exact_row(w,(key[0],18),48)
+    def test_null_pointer_not_missing_schema(self):
+        self.assertIsNone(a.shader_pointer({"fileID":0}))
+        with self.assertRaisesRegex(a.Rejected,"schema"):a.shader_pointer(None)
+    def test_recovery_budget_no_sampling(self):
+        p=a.recover_programs({(1,str(i)):b"authored" for i in range(33)})
+        self.assertEqual(p["status"],"ALL_PROGRAMS_EXCEED_BOUNDED_RECOVERY_BUDGET")
+        self.assertEqual(p["attempted"],0)
+    def test_recovery_no_source(self):
+        self.assertEqual(a.recover_programs({})["status"],"NO_LINKED_DXBC")
+    def test_recovery_distinct_stage_programs_mock(self):
+        from unittest.mock import patch
+        from hashlib import sha256
+        code=b"authored";key=(1,sha256(code).hexdigest())
+        with patch.object(a.shutil,"which",return_value="/tool"),patch.object(a,"translate",return_value={"vulkan11_valid":True,"hlsl_recovered":True,"roundtrip_vulkan11_valid":True}) as tr:
+            p=a.recover_programs({key:code})
+            self.assertEqual(p["roundtrip_vulkan11_valid"],1)
+            self.assertFalse(p["numeric_or_visual_equivalence"])
+            tr.assert_called_once()

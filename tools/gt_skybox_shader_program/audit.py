@@ -10,6 +10,8 @@ import json
 import os
 from pathlib import Path
 import re
+import tempfile
+import shutil
 from tools.gt_ambient_same_export import audit as a
 from tools.gt_skybox_exact_provider import resolve as r
 from tools.gt_remaining_scene_lighting.audit import kind,tree,hash_file
@@ -18,7 +20,7 @@ from scripts.w1_stage_zip2_owners import ZIP2_SHA,stage,fingerprint,safe
 from scripts.verify_export_lineage import identity,pointer,actual_graph
 from scripts.w1_audit_export_material_shaders import ENGINE
 from scripts.b49_shaderlab_pass_contract import pass_coverage
-from scripts.w1_recover_graphics_programs import decoded_platforms,records
+from scripts.w1_recover_graphics_programs import decoded_platforms,records,translate
 from scripts.w1_recover_depth_passes import linked_program,stage_variants
 from scripts.b44_verify_material_colors import normalize_colors
 from scripts.b22_verify_material_scalars import normalize as normalize_scalars
@@ -95,7 +97,7 @@ def source_shader(root,sky,plan):
         digest=hashlib.sha256(obj.get_raw_data()).hexdigest()
     return mat,body,target,sh,digest
 
-def source_programs(sh):
+def source_programs(sh,private_codes=None):
     result={"source_subshaders":0,"source_passes":0,"vertex_slots":0,"fragment_slots":0,"other_stage_slots":0,
             "source_d3d11_table_count":0,"linked_d3d11_stage_slots":0,"distinct_linked_dxbc":0,
             "unlinked_d3d11_stage_slots":0,"source_program_schema_complete":False}
@@ -140,7 +142,9 @@ def source_programs(sh):
         for meta,st in allvars:
             try:
                 code,_=linked_program(meta,tables[0],st)
-                hashes.add(hashlib.sha256(code).hexdigest())
+                digest=hashlib.sha256(code).hexdigest()
+                hashes.add(digest)
+                if private_codes is not None:private_codes[(st,digest)]=code
                 result["linked_d3d11_stage_slots"]+=1
             except Exception:
                 result["unlinked_d3d11_stage_slots"]+=1
@@ -149,13 +153,34 @@ def source_programs(sh):
         result["reason"]="source_d3d11_decode_unresolved"
     return result
 
+def recover_programs(codes):
+    tools=("vkd3d-compiler","spirv-val","spirv-cross","glslangValidator")
+    report={"selected_distinct_stage_programs":len(codes),"attempted":0,"vulkan11_valid":0,
+            "hlsl_recovered":0,"roundtrip_vulkan11_valid":0,"private_output_published":False,
+            "numeric_or_visual_equivalence":False,"shaderlab_installed":False}
+    if not codes:
+        report["status"]="NO_LINKED_DXBC";return report
+    if len(codes)>32:
+        report["status"]="ALL_PROGRAMS_EXCEED_BOUNDED_RECOVERY_BUDGET";return report
+    if not all(shutil.which(t) for t in tools):
+        report["status"]="TRANSLATION_TOOLS_UNAVAILABLE";return report
+    with tempfile.TemporaryDirectory(prefix="gt-skybox-private-program-") as d:
+        for (st,digest),code in sorted(codes.items()):
+            require(hashlib.sha256(code).hexdigest()==digest,"private_program_digest_changed")
+            report["attempted"]+=1
+            result=translate(code,st,Path(d))
+            for k in ("vulkan11_valid","hlsl_recovered","roundtrip_vulkan11_valid"):
+                report[k]+=int(result[k] is True)
+    report["status"]="ALL_LINKED_PROGRAMS_RECOVERED_AND_ROUNDTRIP_VALID" if report["roundtrip_vulkan11_valid"]==len(codes) else "PARTIAL_RECOVERY"
+    return report
+
 def exact_row(w1,key,cid):
     rows=[x for x in w1["objects"] if x.get("class_id")==cid and identity(x["source"])==key]
     require(len(rows)==1,"selected_trace_identity_missing_or_duplicate")
     return rows[0]
 
 def shader_pointer(x):
-    if x is None:return None
+    if isinstance(x,dict) and set(x)=={"fileID"} and type(x["fileID"]) is int and x["fileID"]==0:return None
     require(isinstance(x,dict) and set(x)=={"fileID","guid","type"},"shader_pointer_schema")
     f,g,t=pointer({"file_id":x["fileID"],"guid":x["guid"],"type":x["type"]})
     require((g in ENGINE and t=="0") or (g not in ENGINE and g!="0"*32 and t=="3" and f==4800000),"shader_pointer_transport")
@@ -237,8 +262,9 @@ def compare(x,root,sky,plan):
         mat,body,target,sh,digest=source_shader(root,sky,plan)
         report["source_shader_object_sha256"]=digest
         report["typed_source_shader48"]=True
+        private_codes={}
         with open(os.devnull,"w") as q,contextlib.redirect_stdout(q),contextlib.redirect_stderr(q):
-            src=source_programs(sh)
+            src=source_programs(sh,private_codes)
         report["source_programs"]=src
         phase="trace"
         st,w1,b02=[a.read_trace(p) for p in (x.trace,x.w1,x.b02)]
@@ -276,6 +302,10 @@ def compare(x,root,sky,plan):
         report["same_export_shader_pointer_proven"]=actual==expected
         report["material_properties"]=properties(body,material)
         report["fanout"]=scoped_fanout(w1,normalized,expected,x.project)
+        if actual==expected and program["status"]=="ORIGINAL_PROGRAMS_PRESENT_EXPORTED_DUMMY":
+            with open(os.devnull,"w") as q,contextlib.redirect_stdout(q),contextlib.redirect_stderr(q):
+                report["private_source_program_recovery"]=recover_programs(private_codes)
+        else:report["private_source_program_recovery"]={"status":"NOT_APPLICABLE_TO_OBSERVED_PROGRAM_CLASS","shaderlab_installed":False}
         report["status"]="OBSERVED_SHADER_PROGRAM_GAP" if actual==expected and program["status"].startswith(("ORIGINAL_PROGRAMS_PRESENT_EXPORTED_DUMMY","EXPORTED_DUMMY","EXPORTED_STRUCTURE_INCOMPLETE")) else "PASS_SHADER_TRANSPORT_ONLY" if actual==expected else "FAIL_ACTUAL_SHADER_POINTER_DRIFT"
     except Exception as e:
         report.update(status="INCONCLUSIVE",phase=phase,reason=str(e) if isinstance(e,Rejected) else type(e).__name__)
