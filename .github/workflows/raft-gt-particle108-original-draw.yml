@@ -1,5 +1,6 @@
 name: GT Particle108 exact explicit source route and native alpha effect Vulkan draw (NO PLAYER)
-# Exact native Material and companion texture, authored particle surface only.
+# Actual 46134943151: original visible, blank Dummy and changed exact clone.
+# Separate GPU clone calibration from same imported Material explicit draw overrides.
 on:
   push:
     branches: [feature/android-native-port]
@@ -292,7 +293,7 @@ jobs:
           echo "$code" > gt-native-import-private/vulkan-preflight-exit.txt
           # Preflight timeout is inconclusive, not a reason to declare GPU success or failure.
           # The actual editor checks the Vulkan backend and float blend/readback support.
-      - name: Import exact Material and run original explicit ShaderLab alpha differential
+      - name: Calibrate clone GPU samples and draw with same Material property-block overrides
         id: unity
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
@@ -318,7 +319,7 @@ jobs:
             -gtNativeRunId ${{ env.GT_RUN_ID }}
             -gtNativeReport /github/workspace/gt-native-import-private/raw.json
             -gtNativePrivate /github/workspace/gt-native-import-private
-      - name: Independently classify original candidate RGB alpha effect and exact source clone
+      - name: Independently classify GPU clone parity, explicit draw and alpha effect
         if: always() && steps.native_stage.outcome == 'success'
         env:
           UNITY_OUTCOME: ${{ steps.unity.outcome }}

@@ -16,11 +16,11 @@ public static class NativeMipValidation {
  [Serializable] class Slot {public string name,guid;public long file_id;public float[] uv;}
  [Serializable] class Number {public string name,kind;public float[] value;}
  [Serializable] class Input {public string run_id,shader_path,material_path,texture_path,shader_guid,material_guid,texture_guid,selected_property,raw_sha;public long texture_id;
-   public Asset[] assets;public Slot[] slots;public Number[] numbers;public int[] sampler,sizes;public int backgrounds;public float bias;}
+   public Asset[] assets;public Slot[] slots;public Number[] numbers;public int[] sampler,sizes,probe_levels;public int backgrounds,probe_size;public float bias;}
  [Serializable] class Receipt {public string run_id,phase="environment",status="INCONCLUSIVE",unity_version,backend,color_space,failure_category="";
    public bool private_log_guard,shader_identity,material_identity,material_shader_identity,native_identity,native_descriptor,native_sampler,
-     texture_refs,uv_matches,numbers_match,clone_sampler_match,clone_payload_verified;
-   public int asset_identities,asset_bytes_unchanged,meta_bytes_unchanged,shader_errors,numbers_declared,numbers_matched,draw_cases;}
+     texture_refs,uv_matches,numbers_match,clone_sampler_match,clone_payload_verified,clone_graphics_format_match,source_material_unchanged_after_draw,override_blocks_verified;
+   public int asset_identities,asset_bytes_unchanged,meta_bytes_unchanged,shader_errors,numbers_declared,numbers_matched,draw_cases,probe_draw_cases,dummy_shader_errors,probe_shader_errors;}
  static void Need(bool x){if(!x)throw new InvalidOperationException("GT particle draw gate");}
  static string Arg(string n){var a=Environment.GetCommandLineArgs();int i=Array.IndexOf(a,n);return i>=0&&i+1<a.Length?a[i+1]:"";}
  static string Sha(byte[] x){using(var h=SHA256.Create())return BitConverter.ToString(h.ComputeHash(x)).Replace("-","").ToLowerInvariant();}
@@ -42,14 +42,63 @@ public static class NativeMipValidation {
    byte[] b=t.GetPixelData<byte>(m).ToArray();int n=64>>m;if(b.Length!=n*n*4)return false;
    for(int i=0;i<b.Length;i++)if(b[i]!=(force>=0&&i%4==3?(byte)force:raw[pos+i]))return false;
    pos+=b.Length;}return pos==raw.Length;}
- static Material Override(Material mat,string prop,Texture2D t){var m=new Material(mat);m.SetTexture(prop,t);Need(m.GetTexture(prop)==t&&m.shader==mat.shader);return m;}
- static void Capture(Camera cam,MeshRenderer rend,Material mat,RenderTexture rt,string file){
-   rend.enabled=mat!=null;if(mat!=null)rend.sharedMaterial=mat;cam.Render();
+ static MaterialPropertyBlock Block(string prop,Texture2D t){
+   var b=new MaterialPropertyBlock();b.SetTexture(prop,t);Need(b.GetTexture(prop)==t);return b;
+ }
+ static void Readback(RenderTexture rt,string file){
    var old=RenderTexture.active;RenderTexture.active=rt;var read=new Texture2D(rt.width,rt.height,TextureFormat.RGBAFloat,false,true);
    try{read.ReadPixels(new Rect(0,0,rt.width,rt.height),0,0,false);
      using(var w=new BinaryWriter(new FileStream(file,FileMode.CreateNew,FileAccess.Write)))
        foreach(var p in read.GetPixels()){w.Write(p.r);w.Write(p.g);w.Write(p.b);w.Write(p.a);}
    }finally{RenderTexture.active=old;UnityEngine.Object.DestroyImmediate(read);}
+ }
+ static void RenderCase(Camera cam,MeshRenderer rend,Mesh mesh,Material original,Material command,MaterialPropertyBlock block,bool rendererPath,RenderTexture rt,string file){
+   // Same imported Material in all original-shader cases. Never assign a
+   // cloned Material to the renderer or mutate the imported source asset.
+   Need(rend.sharedMaterial==original);
+   rend.enabled=rendererPath;
+   var buffer=new CommandBuffer{name="GT explicit draw"};
+   try{
+     if(command!=null)buffer.DrawMesh(mesh,Matrix4x4.identity,command,0,0,block);
+     cam.AddCommandBuffer(CameraEvent.BeforeForwardAlpha,buffer);
+     cam.Render();
+     Readback(rt,file);
+   }finally{
+     cam.RemoveCommandBuffer(CameraEvent.BeforeForwardAlpha,buffer);buffer.Release();rend.enabled=false;
+   }
+ }
+ static void ProbeClones(Input c,Receipt r,string priv,Texture2D native,Texture2D exact,Texture2D zero,Texture2D one,List<UnityEngine.Object> owned){
+   Need(c.probe_size==8&&c.probe_levels.SequenceEqual(new[]{0,3}));
+   var shader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTParticleCloneProbe.shader");Need(shader!=null&&shader.isSupported&&shader.passCount==1&&Errors(shader)==0);
+   var m=new Material(shader);owned.Add(m);
+   var rt=new RenderTexture(c.probe_size,c.probe_size,0,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);owned.Add(rt);
+   Need(rt.Create()&&!rt.sRGB&&rt.graphicsFormat==GraphicsFormat.R32G32B32A32_SFloat);
+   GL.sRGBWrite=false;
+   m.SetTexture("_GTProbeTex",native);m.SetFloat("_GTProbeMode",2);
+   Graphics.Blit(null,rt,m,0);Readback(rt,Path.Combine(priv,"probe-marker.f32"));r.probe_draw_cases++;
+   Texture2D[] textures={native,exact,zero,one};string[] names={"native","clone","zero","one"},modes={"load","sample"};
+   foreach(int level in c.probe_levels)for(int mode=0;mode<2;mode++)for(int i=0;i<textures.Length;i++){
+     m.SetTexture("_GTProbeTex",textures[i]);Need(m.GetTexture("_GTProbeTex")==textures[i]);
+     m.SetFloat("_GTProbeLevel",level);m.SetFloat("_GTProbeMode",mode);
+     Graphics.Blit(null,rt,m,0);Readback(rt,Path.Combine(priv,"probe-"+level+"-"+modes[mode]+"-"+names[i]+".f32"));r.probe_draw_cases++;
+   }
+   r.probe_shader_errors=Errors(shader);rt.Release();
+ }
+ static bool SourceMaterialUnchanged(Input c,Material mat,Shader shader,Texture2D tex,string root){
+   if(mat.shader!=shader||mat.GetTexture(c.selected_property)!=tex)return false;
+   foreach(var slot in c.slots){
+     if(!Id(mat.GetTexture(slot.name),slot.guid,slot.file_id))return false;
+     var st=mat.GetTextureScale(slot.name);var off=mat.GetTextureOffset(slot.name);
+     if(!Eq(st.x,slot.uv[0])||!Eq(st.y,slot.uv[1])||!Eq(off.x,slot.uv[2])||!Eq(off.y,slot.uv[3]))return false;
+   }
+   foreach(var num in c.numbers){
+     if(!mat.HasProperty(num.name))continue;
+     if(num.kind=="float"&&!Eq(mat.GetFloat(num.name),num.value[0]))return false;
+     if(num.kind=="color"){var v=mat.GetColor(num.name);if(!Eq(v.r,num.value[0])||!Eq(v.g,num.value[1])||!Eq(v.b,num.value[2])||!Eq(v.a,num.value[3]))return false;}
+   }
+   foreach(var a in c.assets){string path=Path.Combine(root,a.path);
+     if(Sha(File.ReadAllBytes(path))!=a.sha||Sha(File.ReadAllBytes(path+".meta"))!=a.meta_sha)return false;}
+   return true;
  }
  public static void Run(){
    var r=new Receipt{run_id=Arg("-gtNativeRunId"),unity_version=Application.unityVersion,backend=SystemInfo.graphicsDeviceType.ToString(),color_space=QualitySettings.activeColorSpace.ToString()};
@@ -98,29 +147,39 @@ public static class NativeMipValidation {
      var exact=Clone(c,raw,-1);owned.Add(exact);var zero=Clone(c,raw,0);owned.Add(zero);var one=Clone(c,raw,255);owned.Add(one);
      r.clone_sampler_match=Sampler(exact,c)&&Sampler(zero,c)&&Sampler(one,c);
      r.clone_payload_verified=VerifyClone(exact,raw,-1)&&VerifyClone(zero,raw,0)&&VerifyClone(one,raw,255);
-     Need(r.clone_sampler_match&&r.clone_payload_verified);
-     var exactMat=Override(mat,c.selected_property,exact);owned.Add(exactMat);var zeroMat=Override(mat,c.selected_property,zero);owned.Add(zeroMat);var oneMat=Override(mat,c.selected_property,one);owned.Add(oneMat);
-     var dummyShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTParticleControl.shader");Need(dummyShader!=null&&dummyShader.isSupported);
+     r.clone_graphics_format_match=exact.graphicsFormat==tex.graphicsFormat&&zero.graphicsFormat==tex.graphicsFormat&&one.graphicsFormat==tex.graphicsFormat&&exact.mipmapCount==7&&zero.mipmapCount==7&&one.mipmapCount==7;
+     Need(r.clone_sampler_match&&r.clone_payload_verified&&r.clone_graphics_format_match);
+     var srcBlock=Block(c.selected_property,tex);var exactBlock=Block(c.selected_property,exact);var zeroBlock=Block(c.selected_property,zero);var oneBlock=Block(c.selected_property,one);
+     r.override_blocks_verified=true;
+     r.phase="clone_gpu_probe";ProbeClones(c,r,priv,tex,exact,zero,one,owned);
+     var dummyShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTParticleControl.shader");Need(dummyShader!=null&&dummyShader.isSupported&&dummyShader.passCount==1&&Errors(dummyShader)==0);
      var dummy=new Material(dummyShader);owned.Add(dummy);
      EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
      var camera=new GameObject("GT diagnostic camera");owned.Add(camera);var cam=camera.AddComponent<Camera>();cam.enabled=false;
-     cam.transform.position=new Vector3(0,0,-2);cam.orthographic=true;cam.orthographicSize=1.1f;cam.aspect=1;cam.nearClipPlane=.1f;cam.farClipPlane=10;cam.clearFlags=CameraClearFlags.SolidColor;cam.allowHDR=true;cam.allowMSAA=false;cam.renderingPath=RenderingPath.Forward;
+     cam.transform.position=new Vector3(0,0,-2);cam.orthographic=true;cam.orthographicSize=1.1f;cam.aspect=1;cam.nearClipPlane=.1f;cam.farClipPlane=10;cam.clearFlags=CameraClearFlags.SolidColor;cam.allowHDR=true;cam.allowMSAA=false;cam.renderingPath=RenderingPath.Forward;cam.useOcclusionCulling=false;
      var go=new GameObject("GT authored particle surface");owned.Add(go);var mesh=new Mesh();owned.Add(mesh);
      mesh.vertices=new[]{new Vector3(-1,-1,0),new Vector3(1,-1,0),new Vector3(1,1,0),new Vector3(-1,1,0)};
      mesh.normals=Enumerable.Repeat(Vector3.back,4).ToArray();mesh.tangents=Enumerable.Repeat(new Vector4(1,0,0,1),4).ToArray();mesh.colors=Enumerable.Repeat(Color.white,4).ToArray();
      var uv=new List<Vector4>{new Vector4(0,0,0,1),new Vector4(1,0,0,1),new Vector4(1,1,0,1),new Vector4(0,1,0,1)};
      for(int i=0;i<8;i++)mesh.SetUVs(i,uv);
      mesh.triangles=new[]{0,1,2,0,2,3};mesh.RecalculateBounds();go.AddComponent<MeshFilter>().sharedMesh=mesh;
-     var rend=go.AddComponent<MeshRenderer>();rend.shadowCastingMode=ShadowCastingMode.Off;rend.receiveShadows=false;
+     var rend=go.AddComponent<MeshRenderer>();rend.shadowCastingMode=ShadowCastingMode.Off;rend.receiveShadows=false;rend.sharedMaterial=mat;rend.enabled=false;
      go.layer=30;cam.cullingMask=1<<30;
      r.phase="draw";Need(c.sizes.SequenceEqual(new[]{64,128})&&c.backgrounds==2);
      var colors=new[]{new Color(.125f,.25f,.5f,.25f),new Color(.625f,.375f,.125f,.75f)};
-     string[] cases={"clear","dummy","native","repeat","clone","zero","one"};
-     Material[] mats={null,dummy,mat,mat,exactMat,zeroMat,oneMat};
-     foreach(int size in c.sizes){var rt=new RenderTexture(size,size,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);owned.Add(rt);Need(rt.Create());cam.targetTexture=rt;
-       for(int bg=0;bg<c.backgrounds;bg++){cam.backgroundColor=colors[bg];for(int i=0;i<cases.Length;i++){Capture(cam,rend,mats[i],rt,Path.Combine(priv,"draw-"+size+"-"+bg+"-"+cases[i]+".f32"));r.draw_cases++;}}
+     string[] cases={"clear","dummy","renderer_native","native","repeat","source_block","clone","zero","one"};
+     Material[] commands={null,dummy,null,mat,mat,mat,mat,mat,mat};
+     MaterialPropertyBlock[] blocks={null,null,null,null,null,srcBlock,exactBlock,zeroBlock,oneBlock};
+     foreach(int size in c.sizes){var rt=new RenderTexture(size,size,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);owned.Add(rt);Need(rt.Create()&&!rt.sRGB&&rt.graphicsFormat==GraphicsFormat.R32G32B32A32_SFloat);cam.targetTexture=rt;
+       for(int bg=0;bg<c.backgrounds;bg++){
+         cam.backgroundColor=colors[bg];for(int i=0;i<cases.Length;i++){
+           RenderCase(cam,rend,mesh,mat,commands[i],blocks[i],i==2,rt,Path.Combine(priv,"draw-"+size+"-"+bg+"-"+cases[i]+".f32"));r.draw_cases++;
+         }
+       }
        cam.targetTexture=null;rt.Release();}
-     r.shader_errors=Errors(shader);Need(r.shader_errors==0&&Sampler(tex,c)&&mat.GetTexture(c.selected_property)==tex);
+     r.shader_errors=Errors(shader);r.dummy_shader_errors=Errors(dummyShader);
+     r.source_material_unchanged_after_draw=SourceMaterialUnchanged(c,mat,shader,tex,root)&&Sampler(tex,c);
+     Need(r.shader_errors==0&&r.dummy_shader_errors==0&&r.probe_shader_errors==0&&r.source_material_unchanged_after_draw);
      r.phase="complete";r.status="OBSERVED";code=0;
    }catch(Exception e){r.failure_category=e.GetType().Name;}
    finally{ShaderUtil.allowAsyncCompilation=async;GL.sRGBWrite=srgb;for(int i=owned.Count-1;i>=0;i--)if(owned[i]!=null)UnityEngine.Object.DestroyImmediate(owned[i]);

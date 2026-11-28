@@ -27,7 +27,12 @@ from scripts.gt_particle108_local_texture_document import strict_mapping
 
 SIZES=(64,128)
 BACKGROUNDS=2
-CASES=("clear","dummy","native","repeat","clone","zero","one")
+CASES=("clear","dummy","renderer_native","native","repeat","source_block","clone","zero","one")
+PROBE_CASES=("native","clone","zero","one")
+PROBE_LEVELS=(0,3)
+PROBE_MODES=("load","sample")
+PROBE_SIZE=8
+TOL=1/255
 class DrawError(ValueError):pass
 def need(ok,code):
     if not ok:raise DrawError(code)
@@ -156,10 +161,11 @@ def stage(a,out,slots,targets,selected,parsed,table,pairs,switches,routes,uses,s
              selected_property=prop,slots=slot_rows,numbers=numbers,raw_sha=sha(raw),
              sampler=[sampler[k] for k in ("m_FilterMode","m_Aniso","m_WrapU","m_WrapV","m_WrapW")],
              bias=sampler["m_MipBias"],companion_source_export_rgba_match=companion_parity,
-             sizes=list(SIZES),backgrounds=BACKGROUNDS)
+             sizes=list(SIZES),backgrounds=BACKGROUNDS,probe_size=PROBE_SIZE,probe_levels=list(PROBE_LEVELS))
     here=Path(__file__).parent
     files={"Assets/Editor/ParticleDraw.cs":(here/"ParticleDraw.cs").read_bytes(),
-           "Assets/GTParticleControl.shader":b'Shader "Hidden/GTParticleControl" {\nSubShader { Pass {\nCull Off\nCGPROGRAM\n#pragma vertex vert\n#pragma fragment frag\n#include "UnityCG.cginc"\nfloat4 vert(float4 v:POSITION):SV_POSITION{return UnityObjectToClipPos(v);}\nfloat4 frag():SV_Target{return float4(0.91,0.07,0.61,1);}\nENDCG\n} } Fallback Off }\n',
+           "Assets/GTParticleControl.shader":(here/"ParticleControl.shader").read_bytes(),
+           "Assets/GTParticleCloneProbe.shader":(here/"ParticleCloneProbe.shader").read_bytes(),
            "Packages/manifest.json":b'{"dependencies":{}}\n',
            "ProjectSettings/ProjectVersion.txt":b"m_EditorVersion: 2021.3.45f2\n",
            "ProjectSettings/ProjectSettings.asset":b"%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!129 &1\nPlayerSettings:\n  m_ObjectHideFlags: 0\n  serializedVersion: 26\n  companyName: GTValidation\n  productName: GTParticleDraw\n  m_ActiveColorSpace: 1\n"}
@@ -176,38 +182,86 @@ def read_pixels(path,size):
     v=np.fromfile(path,dtype="<f4").reshape(size,size,4)
     need(np.isfinite(v).all(),"draw_nonfinite_pixels")
     return v
+def diff(a,b,*,rgb=False):
+    need(a.shape==b.shape and np.isfinite(a).all() and np.isfinite(b).all(),"draw_pixel_schema")
+    if rgb:a,b=a[...,:3],b[...,:3]
+    d=np.max(np.abs(a-b),axis=-1)
+    return dict(over_tolerance=int(np.count_nonzero(d>TOL)),exactly_different=int(np.count_nonzero(d>0)),max_error=float(d.max()))
 def summarize(rows):
     need(set(rows)==set(CASES),"draw_readback_cases")
     need(len({v.shape for v in rows.values()})==1 and all(np.isfinite(v).all() for v in rows.values()),"draw_readback_schema")
-    def diff(a,b):return int(np.count_nonzero(np.max(np.abs(rows[a][...,:3]-rows[b][...,:3]),axis=-1)>1/255))
-    return dict(dummy_visible=diff("dummy","clear"),native_visible=diff("native","clear"),
-                native_vs_dummy=diff("native","dummy"),native_vs_repeat=diff("native","repeat"),
-                native_vs_exact_clone=diff("native","clone"),zero_vs_one=diff("zero","one"),
-                native_vs_zero=diff("native","zero"),native_vs_one=diff("native","one"),
-                zero_vs_clear=diff("zero","clear"),one_vs_clear=diff("one","clear"),
-                source_alpha_channel_mask_preserved=all(np.max(np.abs(rows[x][...,3]-rows["clear"][...,3]))<=1/255 for x in ("native","repeat","clone","zero","one")))
+    def d(a,b):return diff(rows[a],rows[b],rgb=True)["over_tolerance"]
+    marker=np.array([.91,.07,.61,1],dtype=np.float32)
+    mask=np.max(np.abs(rows["dummy"]-marker),axis=-1)<=TOL
+    return dict(dummy_visible=d("dummy","clear"),dummy_marker_pixels=int(mask.sum()),
+                renderer_native_visible=d("renderer_native","clear"),native_visible=d("native","clear"),
+                renderer_vs_command=d("renderer_native","native"),native_vs_dummy=d("native","dummy"),
+                native_vs_repeat=d("native","repeat"),native_vs_source_block=d("native","source_block"),
+                native_vs_exact_clone=d("native","clone"),zero_vs_one=d("zero","one"),
+                native_vs_zero=d("native","zero"),native_vs_one=d("native","one"),
+                zero_vs_clear=d("zero","clear"),one_vs_clear=d("one","clear"),
+                source_alpha_channel_mask_preserved=all(np.max(np.abs(rows[x][...,3]-rows["clear"][...,3]))<=TOL for x in ("renderer_native","native","repeat","source_block","clone","zero","one")))
+def summarize_probe(rows):
+    need(set(rows)==set(PROBE_CASES),"clone_probe_cases")
+    need(len({v.shape for v in rows.values()})==1 and all(np.isfinite(v).all() for v in rows.values()),"clone_probe_schema")
+    exact=rows["clone"];zero=rows["zero"];one=rows["one"]
+    return dict(native_vs_clone=diff(rows["native"],exact),
+                zero_rgb_vs_clone=diff(zero,exact,rgb=True),
+                one_rgb_vs_clone=diff(one,exact,rgb=True),
+                zero_alpha_max_error=float(np.max(np.abs(zero[...,3]))),
+                one_alpha_max_error=float(np.max(np.abs(one[...,3]-1))),
+                clone_alpha_distinguished_from_controls=int(np.count_nonzero((exact[...,3]>TOL)&(exact[...,3]<1-TOL))))
+def probe_pass(row):
+    return (all(row[k]["over_tolerance"]==0 for k in ("native_vs_clone","zero_rgb_vs_clone","one_rgb_vs_clone"))
+            and row["zero_alpha_max_error"]<=TOL and row["one_alpha_max_error"]<=TOL)
+def classify_draw(row):
+    if not (row["dummy_marker_pixels"]>0 and row["dummy_visible"]>0 and row["native_visible"]>0 and
+            row["native_vs_dummy"]>0 and row["native_vs_repeat"]==0 and row["source_alpha_channel_mask_preserved"]):
+        return "COMMAND_DRAW_CONTROL_UNCALIBRATED"
+    if row["native_vs_source_block"]!=0:
+        return "SAME_NATIVE_TEXTURE_PROPERTY_BLOCK_CHANGED_DRAW"
+    if row["native_vs_exact_clone"]!=0:
+        return "EXACT_GPU_CLONE_OVERRIDE_CHANGED_DRAW"
+    if row["zero_vs_one"]==0:
+        return "ALPHA_OVERRIDE_NOT_OBSERVED_IN_FINAL_DRAW"
+    if row["renderer_vs_command"]!=0:
+        return "ISOLATED_COMMAND_ALPHA_EFFECT_RENDERER_BASELINE_DIFFERS"
+    return "CALIBRATED_SOURCE_ROUTE_ALPHA_EFFECT"
 def verify(a):
     out=dict(status="INCONCLUSIVE",phase="editor_receipt",original_shader_draw_verified=False,
              isolated_explicit_route_alpha_effect_observed=False,black_fire_restored=False,
              Android_device=False,production=False,XAPK=False,original_emitter_geometry_verified=False,
-             runtime_keyword_selection_verified=False,private_payload_published=False)
+             runtime_keyword_selection_verified=False,private_payload_published=False,
+             clone_gpu_probe_verified=False,command_material_property_block_verified=False)
     try:
         cfg=json.loads((a.private/"expected.json").read_text())
         need(cfg["run_id"]==a.run_id and cfg==json.loads((a.project/"GTInput.json").read_text()),"draw_run_identity")
         need((a.private/"editor-output-private").read_text().strip()==a.run_id and (a.private/"editor.log").is_file(),"draw_private_log_guard")
         r=json.loads((a.private/"draw-receipt.json").read_text())
         need(r["run_id"]==a.run_id and r["private_log_guard"] is True,"draw_editor_identity")
-        out["editor_phase"]=r.get("phase") if r.get("phase") in ("environment","guard","import","materials","controls","draw","complete") else "unknown"
+        out["editor_phase"]=r.get("phase") if r.get("phase") in ("environment","guard","import","materials","controls","clone_gpu_probe","draw","complete") else "unknown"
         out["editor_failure_category"]=r.get("failure_category") if r.get("failure_category") in ("InvalidOperationException","ArgumentException","IOException","NullReferenceException","UnityException") else "other"
         flags=("shader_identity","material_identity","material_shader_identity","native_identity","native_descriptor","native_sampler",
-               "texture_refs","uv_matches","numbers_match","clone_sampler_match","clone_payload_verified")
+               "texture_refs","uv_matches","numbers_match","clone_sampler_match","clone_payload_verified",
+               "clone_graphics_format_match","source_material_unchanged_after_draw","override_blocks_verified")
         out.update({k:r.get(k) is True for k in flags})
-        for k in ("asset_identities","asset_bytes_unchanged","meta_bytes_unchanged","shader_errors","numbers_declared","numbers_matched","draw_cases"):
+        for k in ("asset_identities","asset_bytes_unchanged","meta_bytes_unchanged","shader_errors","numbers_declared","numbers_matched","draw_cases","probe_draw_cases","dummy_shader_errors","probe_shader_errors"):
             if type(r.get(k)) is int:out[k]=r[k]
         out["companion_source_export_rgba_match"]=cfg["companion_source_export_rgba_match"]
         need(r["unity_version"]=="2021.3.45f2" and r["backend"]=="Vulkan" and r["color_space"]=="Linear","draw_environment")
         need(a.exit_code==0 and r["status"]=="OBSERVED","draw_editor_incomplete")
-        need(all(out[k] for k in flags) and out["asset_identities"]==out["asset_bytes_unchanged"]==out["meta_bytes_unchanged"]==4 and out["shader_errors"]==0,"draw_identity_gate")
+        need(all(out[k] for k in flags) and out["asset_identities"]==out["asset_bytes_unchanged"]==out["meta_bytes_unchanged"]==4 and out["shader_errors"]==out["dummy_shader_errors"]==out["probe_shader_errors"]==0,"draw_identity_gate")
+        out["phase"]="independent_clone_gpu_probe"
+        marker=read_pixels(a.private/"probe-marker.f32",PROBE_SIZE)
+        out["probe_marker_pixels"]=int(np.count_nonzero(np.max(np.abs(marker-np.array([.125,.375,.625,1.])),axis=-1)<=TOL))
+        probes=[]
+        for level in PROBE_LEVELS:
+            for mode in PROBE_MODES:
+                rows={case:read_pixels(a.private/f"probe-{level}-{mode}-{case}.f32",PROBE_SIZE) for case in PROBE_CASES}
+                probes.append(dict(level=level,mode=mode,**summarize_probe(rows)))
+        out["clone_gpu_probes"]=probes
+        out["clone_gpu_probe_verified"]=(out["probe_marker_pixels"]==PROBE_SIZE**2 and all(probe_pass(x) for x in probes)
+            and any(x["clone_alpha_distinguished_from_controls"]>0 for x in probes))
         out["phase"]="independent_pixels"
         observations=[]
         for size in SIZES:
@@ -215,10 +269,12 @@ def verify(a):
                 rows={case:read_pixels(a.private/f"draw-{size}-{bg}-{case}.f32",size) for case in CASES}
                 observations.append(dict(size=size,background=bg,**summarize(rows)))
         out["observations"]=observations
-        passed=[x for x in observations if x["dummy_visible"]>0 and x["native_visible"]>0 and x["native_vs_dummy"]>0
-                and x["native_vs_repeat"]==0 and x["native_vs_exact_clone"]==0 and x["zero_vs_one"]>0
-                and x["source_alpha_channel_mask_preserved"]]
+        for row in observations:row["classification"]=classify_draw(row)
+        out["draw_classification_counts"]={k:sum(x["classification"]==k for x in observations) for k in sorted({x["classification"] for x in observations})}
+        out["command_material_property_block_verified"]=all(x["native_vs_source_block"]==0 and x["native_visible"]>0 for x in observations)
+        passed=[x for x in observations if x["classification"]=="CALIBRATED_SOURCE_ROUTE_ALPHA_EFFECT"]
         out["calibrated_alpha_effect_cases"]=len(passed)
+        need(out["clone_gpu_probe_verified"],"clone_gpu_texture_control_not_calibrated")
         need(len(passed)==len(SIZES)*BACKGROUNDS,"draw_alpha_causality_not_established")
         out.update(status="OBSERVED_ISOLATED_PARTICLE108_EXPLICIT_ROUTE_ALPHA_EFFECT",phase="complete",
                    isolated_explicit_route_alpha_effect_observed=True)
