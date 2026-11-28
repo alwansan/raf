@@ -1,5 +1,5 @@
 name: GT top exact prestaged original resource recheck (NO PLAYER)
-# Distinct native BC3 pre-save vs GUID transfer diagnostic; capture original pre-save observations even if reload fails.
+# Selected actual Material PPtr type differential and original BC3 UNorm Vulkan comparison.
 on:
   workflow_dispatch:
   push:
@@ -260,7 +260,7 @@ jobs:
           DOCKERFILE
           timeout 480s docker build --quiet --tag "$GT_ARRAY_IMAGE" "$RUNNER_TEMP/gt-selected-array-docker" > gt-selected-array-private/image-id.txt
           docker run --rm --entrypoint /bin/bash "$GT_ARRAY_IMAGE" -c 'test -f "$VK_ICD_FILENAMES" && test "$(command -v unity-editor)" = /opt/gt-private-bin/unity-editor'
-      - name: Observe original BC3 before save and diagnose native GUID transfer with authored control
+      - name: Observe selected Material pointer variants and BC3 UNorm differential in isolated editor
         id: array_unity
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
