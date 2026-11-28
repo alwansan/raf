@@ -19,12 +19,13 @@ public static class NativeMipValidation {
  [Serializable] class Requirement {public string semantic;public int index,mask,used_mask,component_type;}
  [Serializable] class Case {public int index,material_count;public string path,blob,sha;public int[] streams;public bool custom_streams,original_self_active;}
  [Serializable] class Config {public string run_id;public Case[] scenes;public Requirement[] vertex_requirements;}
- [Serializable] class Bake {public int particles,vertices,indices,required_present,required_width;public bool finite,nondegenerate;}
+ [Serializable] class Bake {public int particles,particles_read,positive_size_lifetime,vertices=-1,indices=-1,submeshes=-1,required_present,required_width;public bool finite,nondegenerate,bake_completed;public string failure_category="";}
+ [Serializable] class ControlCase {public int material_kind,method;public Bake empty,one;public string failure_category="";}
  [Serializable] class Row {public int index,empty_vertices=-1,empty_particles=-1,natural_particles,natural_vertices;
    public bool imported,materials_match,billboard,active_streams_read,streams_match,scene_bytes_unchanged;public Bake forced;public string failure_category="";}
  [Serializable] class Receipt {public string run_id,phase="guard",status="INCONCLUSIVE",unity_version,backend,failure_category="";
    public bool private_log_guard,control_verified,source_assets_unchanged,shader_supported,material_shader_match,native_identity,native_descriptor,native_sampler,resources_bytes_match;
-   public int asset_identities,assets_written,scenes_written,scenes_imported,shader_errors=-1,slots_declared,slots_matched,uv_matched,numeric_saved,numeric_declared,numeric_matched,numeric_undeclared;public Row[] rows;}
+   public int asset_identities,assets_written,scenes_written,scenes_imported,shader_errors=-1,slots_declared,slots_matched,uv_matched,numeric_saved,numeric_declared,numeric_matched,numeric_undeclared;public Row[] rows;public ControlCase[] calibration_cases;public int selected_calibration_method=-1;}
  static void Need(bool x){if(!x)throw new InvalidOperationException("GT emitter geometry gate");}
  static string Arg(string n){var a=Environment.GetCommandLineArgs();int i=Array.IndexOf(a,n);return i>=0&&i+1<a.Length?a[i+1]:"";}
  static string Sha(byte[] x){using(var h=SHA256.Create())return BitConverter.ToString(h.ComputeHash(x)).Replace("-","").ToLowerInvariant();}
@@ -69,12 +70,22 @@ public static class NativeMipValidation {
    if(q.semantic=="TEXCOORD"&&q.index>=0&&q.index<=7){a=(VertexAttribute)((int)VertexAttribute.TexCoord0+q.index);return true;}
    return false;
  }
- static Bake Measure(ParticleSystem ps,ParticleSystemRenderer ren,Camera cam,Requirement[] req){
+ static Bake Measure(ParticleSystem ps,ParticleSystemRenderer ren,Camera cam,Requirement[] req,bool renderBefore=false){
    var b=new Bake{particles=ps.particleCount};
-   var mesh=new Mesh();
+   var mesh=new Mesh();RenderTexture rt=null;
    try {
+     var live=new ParticleSystem.Particle[Math.Min(ps.particleCount,256)];
+     b.particles_read=ps.GetParticles(live);
+     for(int i=0;i<b.particles_read;i++){
+       float size=live[i].GetCurrentSize(ps);
+       if(Fin(size)&&size>0&&Fin(live[i].remainingLifetime)&&live[i].remainingLifetime>0)b.positive_size_lifetime++;
+     }
+     if(renderBefore){
+       rt=new RenderTexture(64,64,24,RenderTextureFormat.ARGB32,RenderTextureReadWrite.Linear);
+       Need(rt.Create());cam.targetTexture=rt;cam.Render();cam.targetTexture=null;
+     }
      ren.BakeMesh(mesh,cam,false);
-     b.vertices=mesh.vertexCount;
+     b.bake_completed=true;b.vertices=mesh.vertexCount;b.submeshes=mesh.subMeshCount;
      var ii=mesh.subMeshCount>0?mesh.GetIndices(0):new int[0];
      b.indices=ii.Length;var vv=mesh.vertices;
      b.finite=vv.Length==b.vertices&&vv.All(x=>Fin(x))&&ii.All(i=>i>=0&&i<vv.Length);
@@ -82,32 +93,57 @@ public static class NativeMipValidation {
      if(b.nondegenerate)for(int i=0;i<ii.Length;i+=3){
        var cross=Vector3.Cross(vv[ii[i+1]]-vv[ii[i]],vv[ii[i+2]]-vv[ii[i]]);
        if(!Fin(cross)||cross.sqrMagnitude<=1e-20f){b.nondegenerate=false;break;}}
-     foreach(var q in req){if(!Attribute(q,out VertexAttribute a)||!mesh.HasVertexAttribute(a))continue;b.required_present++;
+     foreach(var q in req){if(!Attribute(q,out VertexAttribute va)||!mesh.HasVertexAttribute(va))continue;b.required_present++;
        int mask=q.used_mask!=0?q.used_mask:q.mask, width=0;while(mask>0){width++;mask>>=1;}
-       if(mesh.GetVertexAttributeDimension(a)>=width)b.required_width++;}
-     return b;
-   }finally{UnityEngine.Object.DestroyImmediate(mesh);}
+       if(mesh.GetVertexAttributeDimension(va)>=width)b.required_width++;}
+   }catch(Exception e){b.failure_category=e.GetType().Name;}
+   finally{cam.targetTexture=null;if(rt!=null){rt.Release();UnityEngine.Object.DestroyImmediate(rt);}UnityEngine.Object.DestroyImmediate(mesh);}
+   return b;
  }
- static bool One(Bake b){return b!=null&&b.particles==1&&b.vertices==4&&b.indices==6&&b.finite&&b.nondegenerate;}
+ static bool Empty(Bake b){return b!=null&&b.bake_completed&&b.particles==0&&b.particles_read==0&&b.vertices==0&&b.indices==0;}
+ static bool One(Bake b){return b!=null&&b.bake_completed&&b.particles==1&&b.particles_read==1&&b.positive_size_lifetime==1&&b.vertices==4&&b.indices==6&&b.finite&&b.nondegenerate;}
  static Camera CameraFor(Vector3 p){
    Need(Fin(p));var go=new GameObject("GT isolated bake camera");var cam=go.AddComponent<Camera>();
-   go.transform.position=p+new Vector3(0,0,-8);go.transform.rotation=Quaternion.identity;cam.orthographic=true;cam.orthographicSize=4;
+   go.transform.position=p+new Vector3(0,0,-8);go.transform.rotation=Quaternion.identity;
+   cam.enabled=false;cam.orthographic=true;cam.orthographicSize=4;cam.aspect=1;cam.nearClipPlane=.1f;cam.farClipPlane=100f;
+   cam.clearFlags=CameraClearFlags.SolidColor;cam.useOcclusionCulling=false;cam.allowMSAA=false;cam.renderingPath=RenderingPath.Forward;
    return cam;
  }
- static bool Control(Material mat,Requirement[] req){
-   var go=new GameObject("GT authored particle calibration");var ps=go.AddComponent<ParticleSystem>();var ren=go.GetComponent<ParticleSystemRenderer>();
-   var cam=CameraFor(Vector3.zero);
+ static void EmitOne(ParticleSystem ps,int method){
+   ps.Stop(false,ParticleSystemStopBehavior.StopEmittingAndClear);
+   if(method==0){ps.Emit(1);return;}
+   if(method==1||method==3){
+     ps.Play(false);ps.Clear(false);ps.Emit(1);ps.Pause(false);return;
+   }
+   if(method==2){
+     ps.Simulate(0f,false,true,true);ps.Clear(false);ps.Emit(1);return;
+   }
+   // Seeded particle is a diagnostic of BakeMesh independent of Emit; never
+   // admit it as proof of original emitter generation.
+   Need(method==4);
+   ps.Play(false);ps.Clear(false);ps.Pause(false);
+   var p=new ParticleSystem.Particle{position=Vector3.zero,startLifetime=10f,remainingLifetime=10f,startSize=1f,startColor=new Color32(255,255,255,255),randomSeed=1};
+   ps.SetParticles(new[]{p},1);
+ }
+ static ControlCase Control(Material mat,Requirement[] req,int materialKind,int method){
+   var row=new ControlCase{material_kind=materialKind,method=method};
+   GameObject go=null;Camera cam=null;
    try{
-     ren.sharedMaterial=mat;ren.renderMode=ParticleSystemRenderMode.Billboard;
+     go=new GameObject("GT authored particle calibration");var ps=go.AddComponent<ParticleSystem>();var ren=go.GetComponent<ParticleSystemRenderer>();
+     cam=CameraFor(Vector3.zero);Need(ren!=null&&mat!=null);
+     go.layer=30;cam.cullingMask=1<<30;
+     ren.sharedMaterial=mat;ren.renderMode=ParticleSystemRenderMode.Billboard;ren.enabled=true;
      ren.SetActiveVertexStreams(new List<ParticleSystemVertexStream>{ParticleSystemVertexStream.Position,ParticleSystemVertexStream.Color,ParticleSystemVertexStream.UV});
-     var main=ps.main;main.startLifetime=10f;main.startSize=1f;main.startSpeed=0f;
+     var main=ps.main;main.playOnAwake=false;main.startLifetime=10f;main.startSize=1f;main.startSpeed=0f;main.maxParticles=64;
      var em=ps.emission;em.enabled=false;var sh=ps.shape;sh.enabled=false;
      ps.Stop(false,ParticleSystemStopBehavior.StopEmittingAndClear);
-     var zero=Measure(ps,ren,cam,req);ps.Emit(1);var one=Measure(ps,ren,cam,req);
-     return zero.particles==0&&zero.vertices==0&&One(one);
-   }finally{UnityEngine.Object.DestroyImmediate(cam.gameObject);UnityEngine.Object.DestroyImmediate(go);}
+     row.empty=Measure(ps,ren,cam,req,method==3);
+     EmitOne(ps,method);row.one=Measure(ps,ren,cam,req,method==3);
+   }catch(Exception e){row.failure_category=e.GetType().Name;}
+   finally{if(cam!=null)UnityEngine.Object.DestroyImmediate(cam.gameObject);if(go!=null)UnityEngine.Object.DestroyImmediate(go);}
+   return row;
  }
- static Row Observe(Case item,Input c,Config cfg,Material mat,string root){
+ static Row Observe(Case item,Input c,Config cfg,Material mat,string root,int method){
    var row=new Row{index=item.index};Camera cam=null;
    try{
      var scene=EditorSceneManager.OpenScene(item.path,OpenSceneMode.Single);
@@ -120,10 +156,10 @@ public static class NativeMipValidation {
      Need(row.billboard&&row.materials_match&&row.active_streams_read);cam=CameraFor(go.transform.position);
      // Diagnostic fixture activation and explicit emission do not represent original gameplay.
      ren.enabled=true;ps.Stop(false,ParticleSystemStopBehavior.StopEmittingAndClear);
-     var zero=Measure(ps,ren,cam,cfg.vertex_requirements);row.empty_particles=zero.particles;row.empty_vertices=zero.vertices;
+     var zero=Measure(ps,ren,cam,cfg.vertex_requirements,method==3);row.empty_particles=zero.bake_completed?zero.particles:-1;row.empty_vertices=zero.bake_completed?zero.vertices:-1;
      ps.Simulate(1f,false,true,true);var natural=Measure(ps,ren,cam,cfg.vertex_requirements);
      row.natural_particles=natural.particles;row.natural_vertices=natural.vertices;
-     ps.Stop(false,ParticleSystemStopBehavior.StopEmittingAndClear);ps.Emit(1);row.forced=Measure(ps,ren,cam,cfg.vertex_requirements);
+     EmitOne(ps,method);row.forced=Measure(ps,ren,cam,cfg.vertex_requirements,method==3);
      row.scene_bytes_unchanged=Sha(File.ReadAllBytes(Path.Combine(root,item.path)))==item.sha;
    }catch(Exception e){row.failure_category=e.GetType().Name;}
    finally{if(cam!=null)UnityEngine.Object.DestroyImmediate(cam.gameObject);}
@@ -177,8 +213,21 @@ public static class NativeMipValidation {
      foreach(var x in cfg.scenes)if(AssetDatabase.LoadAssetAtPath<SceneAsset>(x.path)!=null)r.scenes_imported++;
      Need(r.scenes_imported==12&&r.scenes_written==12);
      r.phase="calibration";EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
-     r.control_verified=Control(mat,cfg.vertex_requirements);Need(r.control_verified);
-     r.phase="geometry";r.rows=cfg.scenes.Select(x=>Observe(x,c,cfg,mat,root)).ToArray();
+     Need(mat!=null);
+     var markerShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTParticleControl.shader");
+     Need(markerShader!=null&&markerShader.isSupported&&ShaderUtil.GetShaderMessages(markerShader).All(x=>x.severity.ToString()!="Error"));
+     var marker=new Material(markerShader);
+     try{
+       var cases=new List<ControlCase>();
+       for(int k=0;k<2;k++)for(int m=0;m<5;m++){cases.Add(Control(k==0?mat:marker,cfg.vertex_requirements,k,m));r.calibration_cases=cases.ToArray();}
+       for(int m=0;m<4;m++){
+         var both=cases.Where(x=>x.method==m).ToArray();
+         if(both.Length==2&&both.All(x=>Empty(x.empty)&&One(x.one))){r.selected_calibration_method=m;break;}
+       }
+       r.control_verified=r.selected_calibration_method>=0;
+     }finally{if(marker!=null)UnityEngine.Object.DestroyImmediate(marker);}
+     Need(r.control_verified);
+     r.phase="geometry";r.rows=cfg.scenes.Select(x=>Observe(x,c,cfg,mat,root,r.selected_calibration_method)).ToArray();
      r.phase="post_geometry_asset_contract";r.source_assets_unchanged=AssetsSame(c,root)&&MaterialSame(c,mat,shader,tex,r);
      r.phase="complete";r.status="OBSERVED";code=0;
    }catch(Exception e){r.failure_category=e.GetType().Name;}

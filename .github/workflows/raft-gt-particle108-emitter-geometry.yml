@@ -305,7 +305,7 @@ jobs:
           echo "$code" > gt-native-import-private/vulkan-preflight-exit.txt
           # Preflight timeout is inconclusive, not a reason to declare GPU success or failure.
           # The actual editor checks the Vulkan backend and float blend/readback support.
-      - name: Verify resources before importing exact serialized emitter fixtures and measure generated billboard meshes
+      - name: Calibrate particle lifecycle on both materials before actual emitter BakeMesh
         id: unity
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00

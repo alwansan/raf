@@ -138,8 +138,37 @@ def stage(a,private,ptrs,docs):
                 source_signature_requirements=len(cfg["vertex_requirements"]),authored_quad_used=False)
 
 def valid_bake(b):
-    return (type(b) is dict and b.get("particles")==1 and b.get("vertices")==4 and b.get("indices")==6
-            and b.get("finite") is True and b.get("nondegenerate") is True)
+    return (type(b) is dict and b.get("bake_completed") is True and b.get("particles")==b.get("particles_read")==b.get("positive_size_lifetime")==1
+            and b.get("vertices")==4 and b.get("indices")==6 and b.get("finite") is True and b.get("nondegenerate") is True)
+def valid_empty(b):
+    return type(b) is dict and b.get("bake_completed") is True and b.get("particles")==b.get("particles_read")==b.get("vertices")==b.get("indices")==0
+
+BAKE_COUNTS=("particles","particles_read","positive_size_lifetime","vertices","indices","submeshes","required_present","required_width")
+BAKE_FLAGS=("finite","nondegenerate","bake_completed")
+SAFE_EXCEPTIONS=("InvalidOperationException","ArgumentException","IOException","NullReferenceException","UnityException","IndexOutOfRangeException","")
+def safe_bake(b):
+    if type(b) is not dict:return None
+    return {**{k:b[k] for k in BAKE_COUNTS if type(b.get(k)) is int and -1<=b[k]<=10000000},
+            **{k:b.get(k) is True for k in BAKE_FLAGS},
+            "failure_category":b.get("failure_category") if b.get("failure_category") in SAFE_EXCEPTIONS else "other"}
+
+def calibration_observation(r):
+    rows=r.get("calibration_cases")
+    if type(rows) is not list or len(rows)>10:return dict(calibration_cases=[],calibration_cases_measured=0,independently_selected_method=-1)
+    seen=set();safe=[];passed=set()
+    for x in rows:
+        need(type(x) is dict and type(x.get("material_kind")) is int and x["material_kind"] in (0,1) and type(x.get("method")) is int and 0<=x["method"]<=4,"calibration_case_schema")
+        key=(x["material_kind"],x["method"])
+        need(key not in seen,"duplicate_calibration_case");seen.add(key)
+        zero=safe_bake(x.get("empty"));one=safe_bake(x.get("one"))
+        ok=valid_empty(zero) and valid_bake(one)
+        if ok:passed.add(key)
+        safe.append(dict(material_kind=key[0],method=key[1],empty=zero,one=one,passed=ok,
+            failure_category=x.get("failure_category") if x.get("failure_category") in SAFE_EXCEPTIONS else "other"))
+    selected=next((m for m in range(4) if (0,m) in passed and (1,m) in passed),-1)
+    return dict(calibration_cases=safe,calibration_cases_measured=len(safe),independently_selected_method=selected,
+                manual_seed_control_passes=sum((k,4) in passed for k in (0,1)))
+
 def summarize(cfg,r):
     need(r.get("run_id")==cfg["run_id"] and r.get("private_log_guard") is True,"receipt_run_identity")
     need(r.get("unity_version")=="2021.3.45f2" and r.get("backend")=="Vulkan","editor_environment")
@@ -187,6 +216,7 @@ def verify(a):
         need((a.private/"editor-output-private").read_text().strip()==a.run_id and (a.private/"editor.log").is_file(),"private_log_guard")
         r=json.loads((a.private/"geometry-receipt.json").read_text())
         out.update(import_observation(cfg,r))
+        out.update(calibration_observation(r))
         # Retain the actual failing import predicate and partial counters even
         # when no emitter rows exist. Never replace it with a population error.
         out["editor_exit_code"]=a.exit_code
@@ -199,6 +229,7 @@ def verify(a):
         out["source_assets_unchanged"]=r.get("source_assets_unchanged") is True
         out["source_asset_identity_count"]=r.get("asset_identities")
         need(a.exit_code==0 and r.get("status")=="OBSERVED" and out["authored_empty_one_particle_control_verified"],"editor_or_bake_control")
+        need(out["calibration_cases_measured"]==10 and 0<=out["independently_selected_method"]<4 and out["independently_selected_method"]==r.get("selected_calibration_method"),"independent_calibration_method")
         need(out["source_assets_unchanged"] and out["source_asset_identity_count"]==4,"asset_identity")
         ic=out["import_counters"];fl=out["import_flags"]
         need(all(fl.get(k) is True for k in IMPORT_FLAGS) and ic.get("assets_written")==4 and ic.get("scenes_written")==ic.get("scenes_imported")==12 and ic.get("shader_errors")==0 and ic.get("slots_declared")==ic.get("slots_matched")==ic.get("uv_matched")==2 and ic.get("numeric_declared")==ic.get("numeric_matched")==11 and ic.get("numeric_saved")==ic.get("numeric_declared")+ic.get("numeric_undeclared"),"resource_contract")
