@@ -1,9 +1,11 @@
-name: GT Particle108 source emitter component and renderer material join (NO PLAYER)
+name: GT Particle108 original scene context and exact source route join (NO PLAYER)
 on:
   push:
     branches: [feature/android-native-port]
     paths:
       - '.github/workflows/raft-gt-particle108-source-emitter.yml'
+      - 'tools/gt_particle108_native_route/emitter_scene_context.py'
+      - 'tools/gt_particle108_native_route/test_emitter_scene_context.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -39,7 +41,8 @@ jobs:
           test ! -e Raft
           test ! -e zip2-original
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
-          python3 -B -m unittest discover -s tools/gt_particle108_native_route -p test_emitter.py -v
+          python3 -m py_compile tools/gt_particle108_native_route/emitter_scene_context.py tools/gt_particle108_native_route/test_emitter_scene_context.py
+          python3 -B -m unittest discover -s tools/gt_particle108_native_route -p test_emitter_scene_context.py -v
       - name: Checkout exactly six immutable Raft scenes and six serialized owner sources
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -97,19 +100,19 @@ jobs:
           assert len(outcome["owners"])==12 and outcome["lfs_used"] is False
           print("RAFT_T3_ORIGINAL_PARTICLE108_SIX_SCENE_SIX_OWNER_SHA_VERIFIED=true")
           PY
-      - name: Join exact source selected native material to reciprocal original emitter and render mode
+      - name: Join original emitter hierarchy, camera layer eligibility, serialized depth and material routes
         run: |
           set -euo pipefail
-          python3 -B -m tools.gt_particle108_native_route.emitter \
+          python3 -B -m tools.gt_particle108_native_route.emitter_scene_context \
             --original "$RUNNER_TEMP/t3-particle-original" \
             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
-            --out "$RUNNER_TEMP/gt-particle108-emitter-safe.json"
+            --out "$RUNNER_TEMP/gt-particle108-scene-context-safe.json"
       - name: Publish only aggregate source observation
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gt-particle108-source-emitter-safe
-          path: ${{ runner.temp }}/gt-particle108-emitter-safe.json
+          name: gt-particle108-scene-context-safe
+          path: ${{ runner.temp }}/gt-particle108-scene-context-safe.json
           if-no-files-found: warn
           retention-days: 7
       - name: Clean private original input
