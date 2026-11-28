@@ -1,0 +1,44 @@
+2026-11-28T01:14:57.3463089Z test_all_private_traces_share_export_instance (test_b21_stage_light_lineage.TestB21LightLineage.test_all_private_traces_share_export_instance) ... ok
+2026-11-28T01:14:57.3464283Z test_all_three_capture_routes_preserved (test_b21_stage_light_lineage.TestB21LightLineage.test_all_three_capture_routes_preserved) ... ok
+2026-11-28T01:14:57.3465375Z test_changed_b02_stage_requires_review (test_b21_stage_light_lineage.TestB21LightLineage.test_changed_b02_stage_requires_review) ... ok
+2026-11-28T01:14:57.3466452Z test_light_only_independent_optional_mode (test_b21_stage_light_lineage.TestB21LightLineage.test_light_only_independent_optional_mode) ... ok
+2026-11-28T01:14:57.3467769Z test_light_trace_is_not_permanent_asset_or_shader_output (test_b21_stage_light_lineage.TestB21LightLineage.test_light_trace_is_not_permanent_asset_or_shader_output) ... ok
+2026-11-28T01:14:57.3470114Z test_missing_anchor_requires_review (test_b21_stage_light_lineage.TestB21LightLineage.test_missing_anchor_requires_review) ... ok
+2026-11-28T01:14:57.3471234Z test_non_exportable_not_equated_to_absent (test_b21_stage_light_lineage.TestB21LightLineage.test_non_exportable_not_equated_to_absent) ... ok
+2026-11-28T01:14:57.3478107Z test_stages_only_to_fresh_private_path (test_b21_stage_light_lineage.TestB21LightLineage.test_stages_only_to_fresh_private_path) ... ok
+2026-11-28T01:14:57.3479070Z test_tampered_w1_source_fails_closed (test_b21_stage_light_lineage.TestB21LightLineage.test_tampered_w1_source_fails_closed) ... ok
+2026-11-28T01:14:57.3481486Z test_unsafe_destination_parent_link_refused (test_b21_stage_light_lineage.TestB21LightLineage.test_unsafe_destination_parent_link_refused) ... ok
+2026-11-28T01:14:57.3482914Z test_unsafe_source_link_refused (test_b21_stage_light_lineage.TestB21LightLineage.test_unsafe_source_link_refused) ... ok
+2026-11-28T01:14:57.3484444Z Ran 11 tests in 0.003s
+2026-11-28T01:14:57.3484916Z OK
+2026-11-28T01:14:57.4117821Z test_active_and_enabled_drift (test_audit.TestSameExport.test_active_and_enabled_drift) ... ERROR
+2026-11-28T01:14:57.4217730Z test_actual_yaml_guid_and_duplicate_field (test_audit.TestSameExport.test_actual_yaml_guid_and_duplicate_field) ... ok
+2026-11-28T01:14:57.4218432Z test_collapsed_pointer (test_audit.TestSameExport.test_collapsed_pointer) ... ok
+2026-11-28T01:14:57.4218828Z test_different_instance (test_audit.TestSameExport.test_different_instance) ... ok
+2026-11-28T01:14:57.4221110Z test_external_pointer (test_audit.TestSameExport.test_external_pointer) ... ERROR
+2026-11-28T01:14:57.4223344Z test_local_trs_drift (test_audit.TestSameExport.test_local_trs_drift) ... ERROR
+2026-11-28T01:14:57.4226245Z test_missing_child_and_parent (test_audit.TestSameExport.test_missing_child_and_parent) ... ERROR
+2026-11-28T01:14:57.4227055Z test_missing_transform (test_audit.TestSameExport.test_missing_transform) ... ok
+2026-11-28T01:14:57.4229411Z test_positive_and_signed_source (test_audit.TestSameExport.test_positive_and_signed_source) ... ERROR
+2026-11-28T01:14:57.4232787Z test_stage_pinned_and_optional (test_audit.TestSameExport.test_stage_pinned_and_optional) ... ok
+2026-11-28T01:14:57.4235171Z test_wrong_actual_class (test_audit.TestSameExport.test_wrong_actual_class) ... ERROR
+2026-11-28T01:14:57.4238397Z test_wrong_owner (test_audit.TestSameExport.test_wrong_owner) ... ERROR
+2026-11-28T01:14:57.4240026Z test_wrong_source_collection (test_audit.TestSameExport.test_wrong_source_collection) ... ok
+2026-11-28T01:14:57.4241400Z test_wrong_trace_class (test_audit.TestSameExport.test_wrong_trace_class) ... ok
+2026-11-28T01:14:57.4242648Z test_zero_guid (test_audit.TestSameExport.test_zero_guid) ... ok
+2026-11-28T01:14:57.4249933Z     for k,v in s["fields"].items():eq("light_"+k,close(v,actual))
+2026-11-28T01:14:57.4251701Z TypeError: must be real number, not dict
+2026-11-28T01:14:57.4255581Z     for k,v in s["fields"].items():eq("light_"+k,close(v,actual))
+2026-11-28T01:14:57.4257749Z TypeError: must be real number, not dict
+2026-11-28T01:14:57.4262710Z     for k,v in s["fields"].items():eq("light_"+k,close(v,actual))
+2026-11-28T01:14:57.4264834Z TypeError: must be real number, not dict
+2026-11-28T01:14:57.4271004Z     for k,v in s["fields"].items():eq("light_"+k,close(v,actual))
+2026-11-28T01:14:57.4274095Z TypeError: must be real number, not dict
+2026-11-28T01:14:57.4279275Z     for k,v in s["fields"].items():eq("light_"+k,close(v,actual))
+2026-11-28T01:14:57.4281490Z TypeError: must be real number, not dict
+2026-11-28T01:14:57.4286263Z     for k,v in s["fields"].items():eq("light_"+k,close(v,actual))
+2026-11-28T01:14:57.4288900Z TypeError: must be real number, not dict
+2026-11-28T01:14:57.4294084Z     for k,v in s["fields"].items():eq("light_"+k,close(v,actual))
+2026-11-28T01:14:57.4296234Z TypeError: must be real number, not dict
+2026-11-28T01:14:57.4296937Z Ran 15 tests in 0.013s
+2026-11-28T01:14:57.4297409Z FAILED (errors=7)

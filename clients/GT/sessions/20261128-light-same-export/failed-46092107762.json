@@ -1,0 +1,19 @@
+{
+  "run": 46092107762,
+  "job": 140815158867,
+  "execution_head": "b7ffa149084dca7b4a2b2599e1b5ac96a4f31557",
+  "conclusion": "failure",
+  "lint_run": 46092107741,
+  "lint_conclusion": "success",
+  "old_B21_passed": 11,
+  "new_tests_run": 15,
+  "new_errors": 7,
+  "new_passed": 8,
+  "failure": "per-property comparison passed entire actual dict rather than actual[k]; TypeError",
+  "source_checkout": "skipped",
+  "actual_export": "skipped",
+  "Unity_import": "skipped",
+  "no_original_assets_read": true,
+  "original_restoration_proven": false,
+  "correction": "index per-field actual dictionary; add explicit four-field negative control; preserve previous tests and tolerances"
+}

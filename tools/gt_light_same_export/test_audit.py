@@ -87,3 +87,9 @@ class TestSameExport(unittest.TestCase):
             with self.assertRaisesRegex(a.Rejected,"duplicate_yaml_field"):a.yaml_docs(root,GUID,{-123})
             (assets/"other.unity.meta").write_text("guid: "+GUID+"\n")
             with self.assertRaisesRegex(a.Rejected,"duplicate_export_guid"):a.yaml_docs(root,GUID,{-123})
+
+    def test_light_color_type_intensity_and_range_drift(self):
+        d=self.docs[101][1]
+        d["m_Type"]=2;d["m_Color"]["g"]=0.125;d["m_Intensity"]=4.0;d["m_Range"]=8.0
+        self.assertEqual(a.compare(self.model,self.m,self.docs)["mismatches"],
+                         {"light_m_Type":1,"light_m_Color":1,"light_m_Intensity":1,"light_m_Range":1})

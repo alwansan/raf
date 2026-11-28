@@ -215,7 +215,7 @@ def compare(model,mapping,docs):
             eq(k,close(v,actual))
         if "fields" in s:
             actual=light(d)
-            for k,v in s["fields"].items():eq("light_"+k,close(v,actual))
+            for k,v in s["fields"].items():eq("light_"+k,close(v,actual[k]))
     return {"checks":dict(checked),"mismatches":dict(misses),"same_export_hierarchy_parity":not misses,
             "selected_source_objects":len(model),"mapped_objects":len(mapping),"selected_chain_transforms":sum("trs" in x for x in model.values()),
             "adjacent_child_transforms":sum(x["class"] in T and "trs" not in x for x in model.values()),
