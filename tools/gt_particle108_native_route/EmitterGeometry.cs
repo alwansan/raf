@@ -18,7 +18,17 @@ public static class NativeMipValidation {
    public Asset[] assets;public Slot[] slots;public Number[] numbers;public int[] sampler;public float bias;public RouteConfig route_candidate;}
  [Serializable] class RouteVariant {public int index;public int[] bits;}
  [Serializable] class RouteConfig {public string[] switches;public int selected;public RouteVariant[] rows;}
- [Serializable] class RouteReceipt {public int index,submissions;public bool completed,saved_keywords_match,material_properties_match,source_keywords_unchanged;public string phase="start",failure_category="";}
+ [Serializable] class RoutePermutation {
+   public int index,submissions,reference_shader_errors=-1,marker_shader_errors=-1;
+   public bool completed,routed_bits_match,marker_bits_match,copy_properties_match,reference_properties_match,routed_properties_match,typed_copy_needed;
+   public string phase="start",failure_category="";
+ }
+ [Serializable] class RouteReceipt {
+   public int index,submissions,source_declared_switches,source_enabled_switches,source_expected_enabled_switches,source_local_bit_matches,source_string_bit_matches,source_overridable_switches,source_global_enabled_switches,source_global_override_conflicts,marker_shader_errors=-1;
+   public bool completed,saved_keywords_match,material_properties_match,source_keywords_unchanged,source_global_keywords_unchanged;
+   public RoutePermutation[] variants;
+   public string phase="start",failure_category="";
+ }
  [Serializable] class Requirement {public string semantic;public int index,mask,used_mask,component_type;}
  [Serializable] class Case {public int index,material_count;public string path,blob,sha;public int[] streams;public bool custom_streams,original_self_active;}
  [Serializable] class Config {public string run_id;public Case[] scenes;public Requirement[] vertex_requirements;}
@@ -390,6 +400,37 @@ public static class NativeMipValidation {
    }
    return true;
  }
+ static bool[] GlobalBits(RouteConfig c){return c.switches.Select(x=>Shader.IsKeywordEnabled(x)).ToArray();}
+ static void MeasureKeywordState(Material m,RouteConfig cfg,RouteVariant expected,RouteReceipt r){
+   r.source_expected_enabled_switches=expected.bits.Count(x=>x==1);
+   for(int i=0;i<2;i++){
+     var kw=m.shader.keywordSpace.FindKeyword(cfg.switches[i]);
+     bool want=expected.bits[i]==1;
+     if(m.IsKeywordEnabled(cfg.switches[i])==want)r.source_string_bit_matches++;
+     if(!kw.isValid)continue;
+     r.source_declared_switches++;if(kw.isOverridable)r.source_overridable_switches++;
+     bool local=m.IsKeywordEnabled(kw);
+     if(local)r.source_enabled_switches++;
+     if(local==want)r.source_local_bit_matches++;
+     bool global=Shader.IsKeywordEnabled(cfg.switches[i]);
+     if(global)r.source_global_enabled_switches++;
+     if(global&&kw.isOverridable&&!want)r.source_global_override_conflicts++;
+   }
+   r.saved_keywords_match=r.source_declared_switches==2&&r.source_string_bit_matches==2&&r.source_local_bit_matches==2&&r.source_global_override_conflicts==0;
+ }
+ static int ShaderErrors(Shader s){return s==null?-1:ShaderUtil.GetShaderMessages(s).Count(x=>x.severity.ToString()=="Error");}
+ static void CopyTypedRouteValues(Material source,Material reference,Input c){
+   foreach(var x in c.slots){
+     Need(reference.HasProperty(x.name));
+     reference.SetTexture(x.name,source.GetTexture(x.name));reference.SetTextureScale(x.name,source.GetTextureScale(x.name));reference.SetTextureOffset(x.name,source.GetTextureOffset(x.name));
+   }
+   foreach(var x in c.numbers)if(source.HasProperty(x.name)){
+     Need(reference.HasProperty(x.name));
+     if(x.kind=="float")reference.SetFloat(x.name,source.GetFloat(x.name));
+     else if(x.kind=="color")reference.SetColor(x.name,source.GetColor(x.name));
+     else Need(false);
+   }
+ }
  static void RouteDraw(Camera cam,Mesh mesh,Material mat,RenderTexture rt,string file){
    var clear=new CommandBuffer{name="GT route clear"};var b=new CommandBuffer{name="GT route draw"};
    try{
@@ -401,35 +442,52 @@ public static class NativeMipValidation {
  }
  static void ProbeRoutes(Mesh mesh,ParticleSystemRenderer ren,Material source,Input input,string priv,int index){
    var r=new RouteReceipt{index=index};Camera cam=null;RenderTexture rt=null;var owned=new List<Material>();bool enabled=ren.enabled,srgb=GL.sRGBWrite;
-   var originalWords=source.shaderKeywords.OrderBy(x=>x).ToArray();
+   var originalWords=source.shaderKeywords.OrderBy(x=>x).ToArray();bool[] originalGlobals=null;
    try{
-     var cfg=input.route_candidate;Need(cfg!=null&&cfg.rows.Length==4&&cfg.switches.Length==2);
+     r.phase="configuration";var cfg=input.route_candidate;
+     Need(cfg!=null&&cfg.rows.Length==4&&cfg.switches.Length==2&&cfg.rows.Select(x=>x.index).OrderBy(x=>x).SequenceEqual(new[]{0,1,2,3}));
      var chosen=cfg.rows.Single(x=>x.index==cfg.selected);
-     r.phase="saved_keywords";r.saved_keywords_match=BitsMatch(source,cfg,chosen);Need(r.saved_keywords_match);
+     originalGlobals=GlobalBits(cfg);
+     r.phase="saved_keywords";MeasureKeywordState(source,cfg,chosen,r);
+     // Still collect independent draws if the saved bits do not match.
+     // The independent gate must reject that mismatch; never toggle source.
      r.phase="camera";cam=CameraFor(Vector3.zero);Frame(cam,MeshBounds(mesh));cam.cullingMask=0;ren.enabled=false;
      rt=new RenderTexture(64,64,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);
      Need(rt.Create()&&!rt.sRGB&&rt.graphicsFormat==GraphicsFormat.R32G32B32A32_SFloat);
      cam.targetTexture=rt;cam.backgroundColor=new Color(.125f,.25f,.5f,.25f);GL.sRGBWrite=false;
      string prefix=Path.Combine(priv,"route-"+index+"-");
-     RouteDraw(cam,mesh,null,rt,prefix+"clear.f32");r.submissions++;
-     // Exact imported original Material, never manually toggle this object.
-     RouteDraw(cam,mesh,source,rt,prefix+"actual.f32");r.submissions++;
-     var marker=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTKeywordDiagnostic/marker.shader");
-     Need(marker!=null&&marker.isSupported&&marker.passCount==1);
-     r.material_properties_match=true;
+     r.phase="clear";RouteDraw(cam,mesh,null,rt,prefix+"clear.f32");r.submissions++;
+     r.phase="actual";RouteDraw(cam,mesh,source,rt,prefix+"actual.f32");r.submissions++;
+     r.phase="marker_shader";var marker=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTKeywordDiagnostic/marker.shader");
+     r.marker_shader_errors=ShaderErrors(marker);
+     var variants=new List<RoutePermutation>();
      foreach(var row in cfg.rows){
-       r.phase="variant";var explicitShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTKeywordDiagnostic/explicit-"+row.index+".shader");
-       Need(explicitShader!=null&&explicitShader.isSupported&&explicitShader.passCount==1);
-       var routed=new Material(source);owned.Add(routed);SetBits(routed,cfg,row);
-       var reference=new Material(explicitShader);owned.Add(reference);reference.CopyPropertiesFromMaterial(source);
-       var mark=new Material(marker);owned.Add(mark);SetBits(mark,cfg,row);
-       r.material_properties_match&=SameRouteProperties(source,routed,input)&&SameRouteProperties(source,reference,input);Need(r.material_properties_match);
-       RouteDraw(cam,mesh,routed,rt,prefix+"routed-"+row.index+".f32");r.submissions++;
-       RouteDraw(cam,mesh,reference,rt,prefix+"explicit-"+row.index+".f32");r.submissions++;
-       RouteDraw(cam,mesh,mark,rt,prefix+"marker-"+row.index+".f32");r.submissions++;
+       var v=new RoutePermutation{index=row.index,marker_shader_errors=r.marker_shader_errors};variants.Add(v);
+       try{
+         v.phase="routed_material";var routed=new Material(source);owned.Add(routed);SetBits(routed,cfg,row);
+         v.routed_bits_match=BitsMatch(routed,cfg,row);v.routed_properties_match=SameRouteProperties(source,routed,input);
+         Need(v.routed_bits_match&&v.routed_properties_match);
+         v.phase="routed_draw";RouteDraw(cam,mesh,routed,rt,prefix+"routed-"+row.index+".f32");v.submissions++;r.submissions++;
+         v.phase="reference_shader";var explicitShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTKeywordDiagnostic/explicit-"+row.index+".shader");
+         v.reference_shader_errors=ShaderErrors(explicitShader);
+         Need(explicitShader!=null&&explicitShader.isSupported&&explicitShader.passCount==1&&v.reference_shader_errors==0);
+         v.phase="reference_properties";var reference=new Material(explicitShader);owned.Add(reference);reference.CopyPropertiesFromMaterial(source);
+         v.copy_properties_match=SameRouteProperties(source,reference,input);
+         if(!v.copy_properties_match){v.typed_copy_needed=true;CopyTypedRouteValues(source,reference,input);}
+         v.reference_properties_match=reference.shader==explicitShader&&SameRouteProperties(source,reference,input);Need(v.reference_properties_match);
+         v.phase="reference_draw";RouteDraw(cam,mesh,reference,rt,prefix+"explicit-"+row.index+".f32");v.submissions++;r.submissions++;
+         v.phase="marker_shader";Need(marker!=null&&marker.isSupported&&marker.passCount==1&&v.marker_shader_errors==0);
+         v.phase="marker_keywords";var mark=new Material(marker);owned.Add(mark);SetBits(mark,cfg,row);v.marker_bits_match=BitsMatch(mark,cfg,row);Need(v.marker_bits_match);
+         v.phase="marker_draw";RouteDraw(cam,mesh,mark,rt,prefix+"marker-"+row.index+".f32");v.submissions++;r.submissions++;
+         v.completed=v.submissions==3;v.phase="complete";
+       }catch(Exception e){v.failure_category=e.GetType().Name;}
      }
-     r.source_keywords_unchanged=BitsMatch(source,cfg,chosen)&&originalWords.SequenceEqual(source.shaderKeywords.OrderBy(x=>x));
-     r.completed=r.submissions==14&&r.source_keywords_unchanged;r.phase="complete";
+     r.variants=variants.ToArray();
+     r.phase="post_draw";r.material_properties_match=r.variants.All(x=>x.reference_properties_match&&x.routed_properties_match);
+     r.source_keywords_unchanged=originalWords.SequenceEqual(source.shaderKeywords.OrderBy(x=>x));
+     r.source_global_keywords_unchanged=originalGlobals.SequenceEqual(GlobalBits(cfg));
+     r.completed=r.submissions==14&&r.variants.All(x=>x.completed)&&r.material_properties_match&&r.source_keywords_unchanged&&r.source_global_keywords_unchanged;
+     r.phase=r.completed?"complete":"permutation_incomplete";
    }catch(Exception e){r.failure_category=e.GetType().Name;}
    finally{
      ren.enabled=enabled;GL.sRGBWrite=srgb;if(cam!=null){cam.targetTexture=null;UnityEngine.Object.DestroyImmediate(cam.gameObject);}

@@ -86,20 +86,65 @@ def classify(clear,actual,rows,selected):
     ok=clear_ok and selected_delta==0 and different(actual,clear)>0 and all(x["marker_verified"] and x["routed_explicit_difference_pixels"]==0 and x["routed_alpha_preserved"] for x in data)
     return dict(clear_verified=clear_ok,selected_saved_material_delta_pixels=selected_delta,selected_visible_pixels=different(actual,clear),
                 selected_distinct_alternatives=alternatives,cases=data,route_probe_verified=bool(ok))
+PHASES=("start","configuration","saved_keywords","camera","clear","actual","marker_shader","routed_material","routed_draw","reference_shader","reference_properties","reference_draw","marker_keywords","marker_draw","post_draw","complete","permutation_incomplete")
+EXCEPTIONS=("","InvalidOperationException","ArgumentException","IOException","NullReferenceException","UnityException","IndexOutOfRangeException")
+def safe_receipt(j,index):
+    need(type(j) is dict and j.get("index")==index,"receipt_identity")
+    def bounded(x,k,lo,hi):
+        v=x.get(k)
+        return v if type(v) is int and lo<=v<=hi else -1
+    def state(x):
+        return dict(phase=x.get("phase") if x.get("phase") in PHASES else "other",
+                    failure_category=x.get("failure_category") if x.get("failure_category") in EXCEPTIONS else "other")
+    flags=("completed","saved_keywords_match","material_properties_match","source_keywords_unchanged","source_global_keywords_unchanged")
+    counts=("source_declared_switches","source_enabled_switches","source_expected_enabled_switches","source_local_bit_matches","source_string_bit_matches","source_overridable_switches","source_global_enabled_switches","source_global_override_conflicts")
+    out=dict(index=index,**state(j),submissions=bounded(j,"submissions",0,14),marker_shader_errors=bounded(j,"marker_shader_errors",-1,1000),
+             **{k:j.get(k) is True for k in flags},**{k:bounded(j,k,0,2) for k in counts})
+    variants=j.get("variants")
+    if type(variants) is not list:variants=[]
+    need(len(variants)<=4 and all(type(x) is dict and type(x.get("index")) is int and 0<=x["index"]<4 for x in variants)
+         and len({x["index"] for x in variants})==len(variants),"variant_receipt_population")
+    vf=("completed","routed_bits_match","marker_bits_match","copy_properties_match","reference_properties_match","routed_properties_match","typed_copy_needed")
+    out["variants"]=[dict(index=x["index"],**state(x),submissions=bounded(x,"submissions",0,3),
+                           reference_shader_errors=bounded(x,"reference_shader_errors",-1,1000),
+                           marker_shader_errors=bounded(x,"marker_shader_errors",-1,1000),**{k:x.get(k) is True for k in vf}) for x in variants]
+    out["strict_editor_receipt"]=bool(all(out[k] for k in flags) and out["submissions"]==14 and out["source_declared_switches"]==out["source_local_bit_matches"]==out["source_string_bit_matches"]==2
+         and out["source_global_override_conflicts"]==0 and len(variants)==4 and all(x["completed"] and x["submissions"]==3 and x["routed_bits_match"] and x["marker_bits_match"] and x["reference_properties_match"] and x["routed_properties_match"] and x["reference_shader_errors"]==x["marker_shader_errors"]==0 for x in out["variants"]))
+    return out
+
 def verify(root,cfg):
     selected=cfg["selected"];need(type(selected) is int and 0<=selected<4,"selected_route")
-    results=[];failures=[]
+    results=[];failures=[];receipts=[]
     for i in range(12):
         try:
             j=json.loads((root/f"route-{i}.json").read_text())
-            need(j.get("index")==i and j.get("completed") is True and j.get("saved_keywords_match") is True and j.get("material_properties_match") is True and j.get("source_keywords_unchanged") is True and j.get("submissions")==14,"editor_route_receipt")
+            rec=safe_receipt(j,i);receipts.append(rec)
             def r(name):return read_pixels(root/f"route-{i}-{name}.f32",SIZE)
-            result=classify(r("clear"),r("actual"),{k:(r(f"routed-{k}"),r(f"explicit-{k}"),r(f"marker-{k}")) for k in range(4)},selected)
+            # Collect partial comparisons even if a permutation stopped.
+            partial=[]
+            clear=None;actual=None
+            try:clear=r("clear");actual=r("actual")
+            except Exception:pass
+            for v in rec["variants"]:
+                n=v["index"];p=dict(index=n)
+                try:
+                    x=r(f"routed-{n}");p["routed_pixels_read"]=True
+                    if clear is not None:p["visible_pixels"]=different(x,clear)
+                    if actual is not None:p["actual_difference_pixels"]=different(x,actual)
+                    y=r(f"explicit-{n}");p["routed_explicit_difference_pixels"]=different(x,y)
+                    m=r(f"marker-{n}");col=np.array([(n+1)/8,.375,.625,1]);p["marker_pixels"]=int((np.max(np.abs(m-col),axis=-1)<=TOL).sum())
+                except Exception as e:p["readback_failure_type"]=type(e).__name__
+                partial.append(p)
+            rec["partial_readbacks"]=partial
+            if not rec["strict_editor_receipt"]:
+                failures.append(dict(index=i,reason="editor_route_receipt",phase=rec["phase"]));continue
+            result=classify(r("clear"),r("actual"),{n:(r(f"routed-{n}"),r(f"explicit-{n}"),r(f"marker-{n}")) for n in range(4)},selected)
             results.append(dict(index=i,**result))
         except Reject as e:failures.append(dict(index=i,reason=str(e)))
         except Exception as e:failures.append(dict(index=i,failure_type=type(e).__name__))
     return dict(observed_meshes=len(results),verified_meshes=sum(x["route_probe_verified"] for x in results),
                 distinct_selected_meshes=sum(x["selected_distinct_alternatives"]>0 for x in results),
+                uniquely_distinct_selected_meshes=sum(x["selected_distinct_alternatives"]==3 for x in results),
                 isolated_saved_keyword_candidate_verified=len(results)==12 and all(x["route_probe_verified"] for x in results),
                 original_keyword_scope_verified=False,original_game_runtime_keyword_selection_verified=False,
-                diagnostic_marker_shader_only=True,cases=results,failures=failures)
+                diagnostic_marker_shader_only=True,cases=results,editor_receipts=receipts,failures=failures)
