@@ -1,5 +1,121 @@
 {
-  "latest_particle108_retained_alpha_vulkan": {
+  "latest_particle108_filtered_alpha_cause": {
+    "status": "RUN_IN_PROGRESS_NOT_YET_PROVEN",
+    "starting_head": "6310c2e090c00aeaa5a3b0987f203fd6acf4c646",
+    "preparation_commit": "c61eabc7793cb80cd0987da7ee057bc50edfa844",
+    "execution_head": "895c81b4bfb51f83b8470de3a266b49d5d188bf6",
+    "run": 46087611511,
+    "job": 140800781653,
+    "lint_run": 46087611457,
+    "lint_job": 140800780630,
+    "lint_conclusion": "success",
+    "last_observed_step": "Prepare licensed editor image with bounded software Vulkan preflight",
+    "stage_conclusion": "success",
+    "source_blobs": {
+      "PreservedTextureAlpha.shader": "912af323e21f147fed58e8e6390bd67c5d598fb1",
+      "PreservedTextureAlphaValidation.cs": "3a9740b94651adaeb81e8f0c90d26a0b37f46c70",
+      "probe.py": "9ec05c1098d65c36068709b2cb008723af14e494"
+    },
+    "retained_inputs": [
+      {
+        "run": 46044376618,
+        "sha256": "ae5000e1dd1466dc7531e44a91b1c1274b0939579d4de1524270aa297c92707c",
+        "entries": 31,
+        "bytes": 16667
+      },
+      {
+        "run": 46086079821,
+        "sha256": "06f9def4b062f5076733b6d02f7234021890affe43b34fd1b502f63aca4ce784",
+        "entries": 7,
+        "bytes": 4711
+      }
+    ],
+    "independent_prior_archive_check": {
+      "both_zip_all_entry_crc_and_size_verified": true,
+      "alpha_is_transparency_exact_field_count_each": 1,
+      "stage_sha256_verified_in_ci": true,
+      "source_vs_prior_imported_predicted_deltas": {
+        "821": {
+          "samples": [
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "max": 0.12549019607843137
+        },
+        "822": {
+          "samples": [],
+          "max": 0
+        },
+        "823": {
+          "samples": [
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "max": 0.12549019607843137
+        },
+        "824": {
+          "samples": [],
+          "max": 0
+        }
+      },
+      "sample_delta_values": [
+        0.10955882352941176,
+        0.12549019607843137,
+        0.06274509803921569
+      ],
+      "prediction_not_new_GPU_readback": true
+    },
+    "experiment": {
+      "single_field": "alphaIsTransparency: 1 -> 0",
+      "retained_shader_adapter_only": true,
+      "draw_filter": "Bilinear LOD0",
+      "baseline_unchanged_importer": true,
+      "expected_observations": 8,
+      "expected_draws": 12,
+      "expected_readback_pixels": 96,
+      "controls": [
+        "same imported reference/UV",
+        "unaffected 822/824",
+        "swapped reference and forced opacity in both phases",
+        "nearest independent prediction rejection"
+      ],
+      "actual_new_causal_result": null,
+      "actual_new_gpu_readback": null
+    },
+    "original_assets_read": false,
+    "production": false,
+    "Android_device": false,
+    "XAPK": false,
+    "original_census_unchanged": {
+      "non_dummy": 688,
+      "total": 786,
+      "dummy": 98,
+      "dummy_shader_guid": 37
+    },
+    "next_action": "Fetch actual job 140800781653 on run 46087611511, verify exit and GT_FILTERED_ALPHA_RESULT, reconstruct bounded evidence archive from actual log chunks (or artifact), verify all CRC/length/digests and CPU-vs-Vulkan receipts; if fail retain actual failure and correct only supported cause. If PASS, no universal importer policy or original repair; move to independent water/lighting evidence, after reviewing G4 FFT/G6 B21. Never redo prior point/export. Original G0-G6 remain open.",
+    "session": "clients/GT/sessions/20261128-particle108-filtered-alpha-cause/README_AR.md"
+  },
+"latest_particle108_retained_alpha_vulkan": {
     "status": "PASS_ACTUAL_RETAINED_AUTHORED_ALPHA_VULKAN",
     "starting_head": "de9bcc86ed5988d0d08e5b6e02a314ee7c953124",
     "preparation_commit": "ff7d6ae419129255346b5cbc47d5fca8a615a704",
