@@ -26,9 +26,12 @@ META=("m_Width","m_Height","m_TextureFormat","m_TextureDimension","m_ImageCount"
       "m_MipCount","m_MipsStripped","m_LightmapFormat","m_TextureUsageMode",
       "m_ColorSpace","m_CompleteImageSize")
 
+class ProbeReject(ValueError):
+    pass
+
 def require(ok,reason):
     if not ok:
-        raise ValueError(reason)
+        raise ProbeReject(reason)
 
 def selected_redirect(targets,b02):
     require(type(targets) is dict and len(targets)==3,"source_target_scope")
@@ -75,6 +78,11 @@ def load_texture(path,pin,pid):
     require(obj.type.name=="Texture2D","target_not_texture2d")
     return obj, obj.read()
 
+def raw_digest(obj):
+    raw=obj.get_raw_data()
+    require(isinstance(raw,(bytes,bytearray,memoryview)) and len(raw)>0,"missing_raw_texture_object")
+    return hashlib.sha256(raw).hexdigest()
+
 def compare(original_root,manifest,engine_root,project,w1_path,b02_path,out):
     report={"status":"INCONCLUSIVE","phase":"source_scope",
             "original_pc_engine_target_only":True,"android_target_pixels_verified":False,
@@ -109,7 +117,7 @@ def compare(original_root,manifest,engine_root,project,w1_path,b02_path,out):
         src_payload,kind=pixels.exact_payload(source,original_root/"Raft_Data",manifest)
         report.update(source_metadata=metadata(source),source_payload_bytes=len(src_payload),
                       source_payload_storage=kind,source_owner_SHA_verified=True,
-                      source_raw_object_digest_computed=bool(hashlib.sha256(source_obj.get_raw_data()).digest()))
+                      source_raw_object_digest_computed=bool(raw_digest(source_obj)))
         report["phase"]="engine_target_texture"
         rel=ENGINE_FILES[ptr[1]]
         target_obj,target=load_texture(engine_root/rel,staging.PINS[rel],ptr[0])
@@ -118,7 +126,7 @@ def compare(original_root,manifest,engine_root,project,w1_path,b02_path,out):
                       target_metadata=metadata(target),
                       same_cache_key_name_and_dimensions=(source.m_Name==target.m_Name and
                           source.m_Width==target.m_Width and source.m_Height==target.m_Height),
-                      target_raw_object_digest_computed=bool(hashlib.sha256(target_obj.get_raw_data()).digest()))
+                      target_raw_object_digest_computed=bool(raw_digest(target_obj)))
         target_payload,target_kind=pixels.exact_payload(target,(engine_root/rel).parent,manifest)
         report.update(target_payload_bytes=len(target_payload),target_payload_storage=target_kind,
                       payload_bytes_equal=src_payload==target_payload)
@@ -131,6 +139,8 @@ def compare(original_root,manifest,engine_root,project,w1_path,b02_path,out):
     except Exception as e:
         # Do not print arbitrary exception text; it may carry private IDs/paths.
         report["failure_category"]=type(e).__name__
+        if isinstance(e,ProbeReject):
+            report["reject_reason"]=str(e)
     out.parent.mkdir(parents=True,exist_ok=True)
     out.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n")
     print("GT_PARTICLE108_ORIGINAL_PC_REDIRECT_TARGET "+json.dumps(report,sort_keys=True))
