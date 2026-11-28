@@ -3,7 +3,7 @@ on:
   push:
     branches: [feature/android-native-port]
     paths:
-      - '.github/workflows/raft-gt-light-exact-exact-editor.yml'
+      - '.github/workflows/raft-gt-light-exact-editor.yml'
   workflow_dispatch:
 permissions:
   contents: read
