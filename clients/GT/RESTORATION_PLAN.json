@@ -1,5 +1,5 @@
 {
-  "next_action": "G1–G3 top original Shader48 (921 source slots / 1538 actual export slots): independently identify a native MeshRenderer23 -> Material21 -> Shader48 and sibling MeshFilter33 -> Mesh43 via same-instance typed trace and exact YAML GUID/fileID; select highest-frequency eligible source material, verify source/export keywords and exact original pass-zero program pair for explicit directional test context; translate only the selected stages. No assertion of runtime route, Unity GPU pixels or white-mesh repair. Then stage verified real geometry/material/texture dependency closure and original candidate shader for isolated Unity/Vulkan draw, with Dummy and wrong-reference controls. Do not repeat fanout census as a standalone experiment; no production/player/XAPK; Level38 pins unchanged, CL/lab read-only, BLACK/animation deferred. All G0–G6 open.",
+  "next_action": "Reconcile G1–G3 top original native renderer/program actual 46120268225/job 140903033199 (in_progress/pending; last observed step: Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout) and lint 46120268193/job 140903032646 (completed/success) at execution 2d6e14a4220f44d6fd8710ebc862db9a03f48cc6. Inspect actual typed renderer/material/shader and MeshFilter/Mesh identity, selected eligible source-material frequency, saved keyword equality and exact source pass-zero explicit directional pair. Accept only scoped source/export/program translation; no GPU or runtime route acceptance. If successful, stage exact source-linked geometry, complete texture/material dependencies, source-bound program ABI and real isolated Unity Vulkan draw with unchanged metadata, Dummy baseline and wrong-reference controls. If a concrete failure, retain safe result, correct only a verified cause or pivot independent fire shader/filter or water, not a census replay. Level38 pins unchanged; CL/lab read-only; BLACK/animation deferred; all G0–G6 open; no production/player/XAPK.",
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
     "status": "OBSERVED_SELECTED_ORIGINAL_LIGHT_HIERARCHIES",
@@ -18005,5 +18005,34 @@
     "original_shader_program_restored": false,
     "white_mesh_pixels_verified": false,
     "next_action": "G1–G3 top original Shader48 (921 source slots / 1538 actual export slots): independently identify a native MeshRenderer23 -> Material21 -> Shader48 and sibling MeshFilter33 -> Mesh43 via same-instance typed trace and exact YAML GUID/fileID; select highest-frequency eligible source material, verify source/export keywords and exact original pass-zero program pair for explicit directional test context; translate only the selected stages. No assertion of runtime route, Unity GPU pixels or white-mesh repair. Then stage verified real geometry/material/texture dependency closure and original candidate shader for isolated Unity/Vulkan draw, with Dummy and wrong-reference controls. Do not repeat fanout census as a standalone experiment; no production/player/XAPK; Level38 pins unchanged, CL/lab read-only, BLACK/animation deferred. All G0–G6 open."
+  },
+  "latest_top_original_renderer_program": {
+    "status": "TOP_ORIGINAL_RENDERER_PROGRAM_DIAGNOSTIC_STARTED",
+    "starting_head": "a7ac52d079d965f60281f74c423499a8c9825e68",
+    "execution_head": "2d6e14a4220f44d6fd8710ebc862db9a03f48cc6",
+    "run": 46120268225,
+    "job": 140903033199,
+    "run_status": "in_progress",
+    "conclusion": null,
+    "lint_run": 46120268193,
+    "lint_job": 140903032646,
+    "lint_status": "completed",
+    "lint_conclusion": "success",
+    "last_observed_step": "Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout",
+    "source_free_controls_step": "success",
+    "prior_actual_fanout_run": 46118609795,
+    "source_rank_one_slots": 921,
+    "export_rank_one_slots": 1538,
+    "source_export_selected_identity_verified": false,
+    "selected_program_pair_translated": false,
+    "original_shader_program_installed": false,
+    "original_mesh_payload_parity_verified": false,
+    "unity_gpu_pixels_verified": false,
+    "white_mesh_repair_verified": false,
+    "runtime_keyword_selection_verified": false,
+    "android_device": false,
+    "production": false,
+    "XAPK": false,
+    "next_action": "Reconcile G1–G3 top original native renderer/program actual 46120268225/job 140903033199 (in_progress/pending; last observed step: Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout) and lint 46120268193/job 140903032646 (completed/success) at execution 2d6e14a4220f44d6fd8710ebc862db9a03f48cc6. Inspect actual typed renderer/material/shader and MeshFilter/Mesh identity, selected eligible source-material frequency, saved keyword equality and exact source pass-zero explicit directional pair. Accept only scoped source/export/program translation; no GPU or runtime route acceptance. If successful, stage exact source-linked geometry, complete texture/material dependencies, source-bound program ABI and real isolated Unity Vulkan draw with unchanged metadata, Dummy baseline and wrong-reference controls. If a concrete failure, retain safe result, correct only a verified cause or pivot independent fire shader/filter or water, not a census replay. Level38 pins unchanged; CL/lab read-only; BLACK/animation deferred; all G0–G6 open; no production/player/XAPK."
   }
 }
