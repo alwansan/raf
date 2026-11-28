@@ -22,6 +22,8 @@ public static class NativeMipValidation {
  [Serializable] class Bake {public int particles,particles_read,positive_size_lifetime,vertices=-1,indices=-1,submeshes=-1,required_present,required_width;public bool finite,nondegenerate,bake_completed;public string failure_category="";}
  [Serializable] class ProbeLane {public int index,width,format;public Vector4[] cpu;}
  [Serializable] class ProbeData {public int index,vertices,indices;public ProbeLane[] lanes;public bool completed;public string failure_category="";}
+ [Serializable] class RenderPath {public string path,phase="start",failure_category="";public int submissions;public bool completed,material_restored,streams_unchanged,particles_unchanged;}
+ [Serializable] class RenderEvidence {public int index,particles,vertices,indices;public string mode;public RenderPath[] paths;}
  [Serializable] class ControlCase {public int material_kind,method;public Bake empty,one,before_roundtrip;public bool roundtrip_state_equal;public string failure_category="";}
  [Serializable] class Row {public int index,empty_vertices=-1,empty_particles=-1,natural_particles,natural_vertices;
    public bool imported,materials_match,billboard,active_streams_read,streams_match,scene_bytes_unchanged;public Bake forced,natural,roundtrip;public bool roundtrip_state_equal;public int direct_method=-1;public string failure_category="";}
@@ -142,7 +144,98 @@ public static class NativeMipValidation {
      return ProbeMesh(m,req,priv,-1).completed;
    }finally{UnityEngine.Object.DestroyImmediate(m);}
  }
- static Bake Measure(ParticleSystem ps,ParticleSystemRenderer ren,Camera cam,Requirement[] req,bool renderBefore=false,string priv=null,int probeIndex=-2){
+ static bool ParticleStateEqual(ParticleSystem ps,ParticleSystem.Particle[] before){
+   if(ps.particleCount!=before.Length)return false;
+   var after=new ParticleSystem.Particle[before.Length];
+   if(ps.GetParticles(after)!=before.Length)return false;
+   for(int i=0;i<after.Length;i++)if(!SameParticleState(before[i],after[i]))return false;
+   return true;
+ }
+ static void Frame(Camera cam,Bounds bounds){
+   Need(Fin(bounds.center)&&Fin(bounds.extents)&&bounds.extents.x>=0&&bounds.extents.y>=0&&bounds.extents.z>=0);
+   float extent=Mathf.Max(bounds.extents.x,bounds.extents.y);Need(extent>1e-7f&&extent<1e8f);
+   float distance=Mathf.Max(2f,bounds.extents.z+2f);
+   cam.transform.position=bounds.center-new Vector3(0,0,distance);
+   cam.orthographic=true;cam.orthographicSize=extent*1.4f;cam.aspect=1;
+   cam.nearClipPlane=.01f;cam.farClipPlane=distance+bounds.extents.z+4f;
+   cam.allowHDR=true;cam.allowMSAA=false;cam.clearFlags=CameraClearFlags.SolidColor;
+ }
+ static Bounds MeshBounds(Mesh mesh){
+   var v=mesh.vertices;Need(v.Length>0&&v.All(x=>Fin(x)));
+   var b=new Bounds(v[0],Vector3.zero);foreach(var x in v)b.Encapsulate(x);return b;
+ }
+ static void RenderEmitterCase(Camera cam,ParticleSystemRenderer ren,Mesh mesh,Material original,Material marker,
+                               Material[] mats,bool rendererPath,string kind,RenderTexture rt,string path){
+   var b=new CommandBuffer{name="GT generated billboard draw"};
+   try{
+     Need(ren.sharedMaterials.SequenceEqual(mats)&&mats.All(x=>x==original));
+     ren.enabled=rendererPath&&kind!="clear";
+     if(rendererPath&&kind=="marker")ren.sharedMaterials=mats.Select(x=>marker).ToArray();
+     if(!rendererPath&&kind!="clear")b.DrawMesh(mesh,Matrix4x4.identity,kind=="marker"?marker:original,0,0);
+     cam.AddCommandBuffer(CameraEvent.BeforeForwardAlpha,b);cam.Render();
+     WriteProbePixels(rt,path);
+   }finally{
+     cam.RemoveCommandBuffer(CameraEvent.BeforeForwardAlpha,b);b.Release();
+     ren.sharedMaterials=mats;ren.enabled=true;
+   }
+ }
+ static RenderPath RenderPathCases(ParticleSystem ps,ParticleSystemRenderer ren,Mesh mesh,Camera cam,Material original,
+                                  Material marker,string priv,int index,string mode,bool rendererPath){
+   var r=new RenderPath{path=rendererPath?"renderer":"baked"};
+   var mats=ren.sharedMaterials;var streams=new List<ParticleSystemVertexStream>();ren.GetActiveVertexStreams(streams);
+   var before=new ParticleSystem.Particle[ps.particleCount];
+   var oldPos=cam.transform.position;float oldSize=cam.orthographicSize,oldNear=cam.nearClipPlane,oldFar=cam.farClipPlane,oldAspect=cam.aspect;
+   int oldMask=cam.cullingMask;Color oldColor=cam.backgroundColor;bool oldEnabled=ren.enabled,oldHdr=cam.allowHDR,oldMsaa=cam.allowMSAA;
+   RenderTexture rt=null;bool srgb=GL.sRGBWrite;
+   try{
+     r.phase="frame";
+     Need(before.Length>0&&before.Length<=256&&ps.GetParticles(before)==before.Length&&mats.Length==2&&mats.All(x=>x==original));
+     Need(original!=null&&marker!=null&&original.shader!=marker.shader&&original.passCount==1&&marker.passCount==1);
+     Frame(cam,rendererPath?ren.bounds:MeshBounds(mesh));
+     cam.cullingMask=rendererPath?1<<ren.gameObject.layer:0;
+     rt=new RenderTexture(64,64,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);
+     Need(rt.Create()&&!rt.sRGB&&rt.graphicsFormat==GraphicsFormat.R32G32B32A32_SFloat);
+     cam.targetTexture=rt;GL.sRGBWrite=false;
+     var backgrounds=new[]{new Color(.125f,.25f,.5f,.25f),new Color(.625f,.375f,.125f,.75f)};
+     for(int bg=0;bg<2;bg++){
+       cam.backgroundColor=backgrounds[bg];
+       foreach(var kind in new[]{"clear","native","repeat","marker"}){
+         r.phase=kind;
+         RenderEmitterCase(cam,ren,mesh,original,marker,mats,rendererPath,kind,rt,Path.Combine(priv,"emitter-"+index+"-"+mode+"-"+r.path+"-"+bg+"-"+kind+".f32"));
+         r.submissions++;
+       }
+     }
+     r.phase="post_draw";
+     r.material_restored=ren.sharedMaterials.SequenceEqual(mats);
+     var afterStreams=new List<ParticleSystemVertexStream>();ren.GetActiveVertexStreams(afterStreams);
+     r.streams_unchanged=streams.SequenceEqual(afterStreams);r.particles_unchanged=ParticleStateEqual(ps,before);
+     r.completed=r.submissions==8&&r.material_restored&&r.streams_unchanged&&r.particles_unchanged;
+     r.phase="complete";
+   }catch(Exception e){r.failure_category=e.GetType().Name;}
+   finally{
+     cam.targetTexture=null;GL.sRGBWrite=srgb;ren.sharedMaterials=mats;ren.enabled=oldEnabled;
+     cam.transform.position=oldPos;cam.orthographicSize=oldSize;cam.nearClipPlane=oldNear;cam.farClipPlane=oldFar;cam.aspect=oldAspect;
+     cam.cullingMask=oldMask;cam.backgroundColor=oldColor;cam.allowHDR=oldHdr;cam.allowMSAA=oldMsaa;
+     if(rt!=null){rt.Release();UnityEngine.Object.DestroyImmediate(rt);}
+   }
+   return r;
+ }
+ static void RenderGenerated(ParticleSystem ps,ParticleSystemRenderer ren,Mesh mesh,Camera cam,Material original,string priv,int index,string mode){
+   var ev=new RenderEvidence{index=index,mode=mode,particles=ps.particleCount,vertices=mesh.vertexCount,indices=(int)mesh.GetIndexCount(0)};
+   Material marker=null;
+   try{
+     var shader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTEmitterDrawMarker.shader");
+     Need(shader!=null&&shader.isSupported&&shader.passCount==1&&ShaderUtil.GetShaderMessages(shader).All(x=>x.severity.ToString()!="Error"));
+     marker=new Material(shader);
+     ev.paths=new[]{RenderPathCases(ps,ren,mesh,cam,original,marker,priv,index,mode,true),
+                    RenderPathCases(ps,ren,mesh,cam,original,marker,priv,index,mode,false)};
+   }catch(Exception){/* missing paths remain inconclusive in the independent verifier */}
+   finally{
+     if(marker!=null)UnityEngine.Object.DestroyImmediate(marker);
+     File.WriteAllText(Path.Combine(priv,"emitter-"+index+"-"+mode+".json"),JsonUtility.ToJson(ev));
+   }
+ }
+ static Bake Measure(ParticleSystem ps,ParticleSystemRenderer ren,Camera cam,Requirement[] req,bool renderBefore=false,string priv=null,int probeIndex=-2,Material drawMaterial=null,string drawMode=null){
    var b=new Bake{particles=ps.particleCount};
    var mesh=new Mesh();RenderTexture rt=null;
    try {
@@ -168,7 +261,8 @@ public static class NativeMipValidation {
      foreach(var q in req){if(!Attribute(q,out VertexAttribute va)||!mesh.HasVertexAttribute(va))continue;b.required_present++;
        int mask=q.used_mask!=0?q.used_mask:q.mask, width=0;while(mask>0){width++;mask>>=1;}
        if(mesh.GetVertexAttributeDimension(va)>=width)b.required_width++;}
-     if(priv!=null&&probeIndex>=0&&b.vertices==4&&b.indices==6)ProbeMesh(mesh,req,priv,probeIndex);
+     if(priv!=null&&probeIndex>=0&&b.vertices==4&&b.indices==6&&drawMode!="natural")ProbeMesh(mesh,req,priv,probeIndex);
+     if(priv!=null&&probeIndex>=0&&drawMaterial!=null&&drawMode!=null&&b.finite&&b.nondegenerate&&b.particles>0&&b.vertices==4*b.particles&&b.indices==6*b.particles)RenderGenerated(ps,ren,mesh,cam,drawMaterial,priv,probeIndex,drawMode);
    }catch(Exception e){b.failure_category=e.GetType().Name;}
    finally{cam.targetTexture=null;if(rt!=null){rt.Release();UnityEngine.Object.DestroyImmediate(rt);}UnityEngine.Object.DestroyImmediate(mesh);}
    return b;
@@ -255,9 +349,9 @@ public static class NativeMipValidation {
      // Diagnostic fixture activation and explicit emission do not represent original gameplay.
      ren.enabled=true;ps.Stop(false,ParticleSystemStopBehavior.StopEmittingAndClear);
      var zero=Measure(ps,ren,cam,cfg.vertex_requirements,method==3);row.empty_particles=zero.bake_completed?zero.particles:-1;row.empty_vertices=zero.bake_completed?zero.vertices:-1;
-     ps.Simulate(1f,false,true,true);row.natural=Measure(ps,ren,cam,cfg.vertex_requirements);
+     ps.Simulate(1f,false,true,true);row.natural=Measure(ps,ren,cam,cfg.vertex_requirements,false,priv,item.index,mat,"natural");
      row.natural_particles=row.natural.particles;row.natural_vertices=row.natural.vertices;
-     EmitOne(ps,method);row.forced=Measure(ps,ren,cam,cfg.vertex_requirements,method==3,priv,item.index);
+     EmitOne(ps,method);row.forced=Measure(ps,ren,cam,cfg.vertex_requirements,method==3,priv,item.index,mat,"forced");
      if(row.forced.particles==1){
        row.roundtrip_state_equal=Roundtrip(ps);
        row.roundtrip=Measure(ps,ren,cam,cfg.vertex_requirements);

@@ -135,6 +135,7 @@ def stage(a,private,ptrs,docs):
     target.write_bytes((Path(__file__).parent/"EmitterGeometry.cs").read_bytes())
     from tools.gt_particle108_native_route import emitter_vertex_lanes as vl
     (project/"Assets/GTEmitterLaneProbe.shader").write_text(vl.shader(cfg["vertex_requirements"]),encoding="utf-8")
+    (project/"Assets/GTEmitterDrawMarker.shader").write_bytes((Path(__file__).parent/"EmitterDrawMarker.shader").read_bytes())
     return dict(fixtures=12,exact_component_documents=24,original_local_transform_retained=12,
                 original_parent_hierarchy_retained=False,fixture_self_activated=True,dependency_pointers_admitted=True,
                 source_signature_requirements=len(cfg["vertex_requirements"]),authored_quad_used=False)
@@ -265,12 +266,16 @@ def verify(a):
         from tools.gt_particle108_native_route import emitter_vertex_lanes as vl
         out["vertex_lane_probe"]=vl.verify(a.private,cfg["vertex_requirements"],r.get("lane_control_completed") is True)
         need(out["vertex_lane_probe"]["gpu_vertex_lane_probe_verified"],"gpu_vertex_lane_probe_inconclusive")
-        out.update(status="OBSERVED_ISOLATED_EMITTER_GPU_VERTEX_INPUT_LANES",phase="complete")
+        out["phase"]="actual_emitter_original_route_draw"
+        from tools.gt_particle108_native_route import emitter_original_draw as ed
+        out["actual_emitter_draw"]=ed.verify(a.private,out["row_observations"])
+        need(out["actual_emitter_draw"]["isolated_actual_emitter_original_explicit_route_draw_verified"],"actual_emitter_draw_inconclusive")
+        out.update(status="OBSERVED_ISOLATED_ACTUAL_EMITTER_ORIGINAL_EXPLICIT_ROUTE_DRAW",phase="complete")
     except Reject as e:out["failure_category"]=str(e)
     except Exception as e:out["failure_type"]=type(e).__name__
     write_json(a.safe,out)
     print("GT_PARTICLE108_EMITTER_GEOMETRY "+json.dumps(out,sort_keys=True))
-    return 0 if out["status"]=="OBSERVED_ISOLATED_EMITTER_GPU_VERTEX_INPUT_LANES" else 2
+    return 0 if out["status"]=="OBSERVED_ISOLATED_ACTUAL_EMITTER_ORIGINAL_EXPLICIT_ROUTE_DRAW" else 2
 if __name__=="__main__":
     p=argparse.ArgumentParser()
     for k in ("project","private","safe"):p.add_argument("--"+k,type=Path,required=True)

@@ -305,7 +305,7 @@ jobs:
           echo "$code" > gt-native-import-private/vulkan-preflight-exit.txt
           # Preflight timeout is inconclusive, not a reason to declare GPU success or failure.
           # The actual editor checks the Vulkan backend and float blend/readback support.
-      - name: Measure actual generated emitter mesh shader-input lanes with independent GPU readback
+      - name: Draw actual particle renderer and unchanged generated geometry with original explicit route
         id: unity
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
