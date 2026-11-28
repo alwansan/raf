@@ -2,7 +2,7 @@
   "next_action": "G6-original-light-owner-activation-transform: all 40 original scene files now have source-only lightmap census coverage (six historical plus 34 new), zero baked entries and 176197 unassigned renderer indices. Do not repeat the census or infer white mesh repair. All 197 new native Light owners typed local GameObject but self-active classification UNKNOWN; likely Boolean schema but not yet verified. Inspect actual UnityPy generated type-tree schema and independently resolve native GameObject m_IsActive and Transform parent lineage on a narrowly selected source-backed light scene (prefer a small positive scene with at least one Light and distinct known disabled controls, using exact current pins); no raw identifiers/values published. Distinguish self vs ancestor activity, cycles, external parent and transform/owner mismatch; then pursue same-instance export identity and actual import/render only when source-backed mapping exists. RenderSettings sun null in all 34, ambient mode known in 34, not actual ambient equivalence. Prefer material/shader/ambient causes of white surfaces; no invented baked lightmaps, no repeat of prior G5/G6 or two-Light owner/value export. G0-G6 open, original A3/Particle108/FFT/white mesh/NEXT23b/ten runtime groups open. Only feature/android-native-port, no CL/lab/BLACK, no production/player/XAPK, no source mutations or protection bypass or raw game assets publication.",
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
-    "status": "RUN_IN_PROGRESS_NOT_YET_PROVEN",
+    "status": "OBSERVED_SELECTED_ORIGINAL_LIGHT_HIERARCHIES",
     "starting_head": "26541714e856b9725ca66e1c2c71fbfc104ad725",
     "prior_checkpoint": "3841ec844cdfed0e71d8de411d851710ac62552e",
     "preparation_commit": "339bf40cff29a1c3fe912aa41d17807f0ac40a88",
@@ -12,7 +12,7 @@
     "lint_run": 46091060202,
     "lint_job": 140811795373,
     "lint_conclusion": "success",
-    "last_observed_step": "Authenticate each source scene and observe actual Light hierarchy",
+    "last_observed_step": "Complete job",
     "tool_checkout": "success",
     "source_free_controls_step": "success",
     "source_checkout": "success",
@@ -42,8 +42,156 @@
     "device_pixels_proven": false,
     "production": false,
     "XAPK": false,
-    "next_action": "Verify actual 46091060299 job 140811795755 and GT_ORIGINAL_LIGHT_HIERARCHY aggregate, check exact three source pins/population vs prior 46090251018; validate counter sums and depth histograms, preserve unresolved causes and actual test log. If GameObject bool explains prior UNKNOWN, distinguish self vs hierarchy vs component enabled, finite local TRS and composed quaternion direction vs runtime. If actual schema differs, repair the precise evidence-backed parser issue without masking unknowns. Then use highest-impact actual source Light/Transform/ambient or material/shader discrepancy in same-export identity rather than repeating source census or previously proven two-Light value/owner scope. Current owner direction governs; only feature/android-native-port; no source mutation, raw game assets publication, protection bypass, production/player/XAPK, CL/lab/BLACK changes. All G0-G6 remain open.",
-    "session": "clients/GT/sessions/20261128-original-light-hierarchy/README_AR.md"
+    "next_action": "G6-original-light-hierarchy-same-export: do not repeat the 40-scene census or selected 117 hierarchy analysis. Actual level24 has 9/9 inactive by combined serialized component and hierarchy (6 disabled components and 3 enabled components with inactive self), despite all nine nontrivial composed directions; level30 106 active/1 inactive, 10 nonuniform-scale chains; level38 one active. Prior 197 UNKNOWN was caused by strict int-only owner flag on the 117 selected, actual m_IsActive bool, not missing source fields. For next distinct source-to-export experiment use small level38 (one Light, 3-node hierarchy) or level24 (disabled/self-inactive controls) with exact source manifest/provider pins and B21 same-instance class1/108 tracing extended to class4/224; authenticate the actual Transform source owner/pathID -> same export GUID/fileID and GameObject activeSelf/parent/child/local TRS and Light enabled/type/values, preserve any precise discrepancy. Prefer smallest complete original source subset and actual Unity isolated import where supported; do not fabricate runtime proof. If needed inspect exact source provider dependencies first; alternative prioritize actual shader/material/ambient or water restoration. No original modifications or raw game assets publication; only feature/android-native-port, CL/lab/BLACK untouched; no production/player/XAPK. All G0-G6 remain open.",
+    "session": "clients/GT/sessions/20261128-original-light-hierarchy/README_AR.md",
+    "conclusion": "success",
+    "actual_tests_passed": 14,
+    "actual_report": {
+      "aggregate_counts": {
+        "complete_hierarchy": 117,
+        "composed_forward_differs_from_positive_z": 91,
+        "composed_forward_is_local_positive_z": 26,
+        "finite_local_trs_and_composed_forward": 117,
+        "hierarchy_active_no": 3,
+        "hierarchy_active_yes": 114,
+        "hierarchy_node_active_schema_bool": 1138,
+        "light_decoded": 117,
+        "light_enabled_no": 7,
+        "light_enabled_schema_int01": 117,
+        "light_enabled_yes": 110,
+        "light_headers": 117,
+        "nonuniform_scale_on_chain": 10,
+        "owner_active_schema_bool": 117,
+        "owner_self_active_no": 3,
+        "owner_self_active_yes": 114,
+        "owner_unique_transform": 117,
+        "prior_int_only_would_be_unknown": 117,
+        "reciprocal_light_owner_membership": 117,
+        "serialized_light_and_hierarchy_active": 107,
+        "serialized_light_and_hierarchy_inactive": 10,
+        "typed_local_light_owner": 117
+      },
+      "device_pixels_proven": false,
+      "levels": {
+        "24": {
+          "bytes": 2803016,
+          "counts": {
+            "complete_hierarchy": 9,
+            "composed_forward_differs_from_positive_z": 9,
+            "finite_local_trs_and_composed_forward": 9,
+            "hierarchy_active_no": 3,
+            "hierarchy_active_yes": 6,
+            "hierarchy_node_active_schema_bool": 43,
+            "light_decoded": 9,
+            "light_enabled_no": 6,
+            "light_enabled_schema_int01": 9,
+            "light_enabled_yes": 3,
+            "light_headers": 9,
+            "owner_active_schema_bool": 9,
+            "owner_self_active_no": 3,
+            "owner_self_active_yes": 6,
+            "owner_unique_transform": 9,
+            "prior_int_only_would_be_unknown": 9,
+            "reciprocal_light_owner_membership": 9,
+            "serialized_light_and_hierarchy_inactive": 9,
+            "typed_local_light_owner": 9
+          },
+          "root_depth_histogram": {
+            "3": 6,
+            "5": 2,
+            "6": 1
+          },
+          "sha256": "6a06f3e95da765e89ded81c13837cd3de5844969c131ea02e59c38dbda22fc5d",
+          "source_verified": true,
+          "status": "OBSERVED"
+        },
+        "30": {
+          "bytes": 70435196,
+          "counts": {
+            "complete_hierarchy": 107,
+            "composed_forward_differs_from_positive_z": 81,
+            "composed_forward_is_local_positive_z": 26,
+            "finite_local_trs_and_composed_forward": 107,
+            "hierarchy_active_yes": 107,
+            "hierarchy_node_active_schema_bool": 1092,
+            "light_decoded": 107,
+            "light_enabled_no": 1,
+            "light_enabled_schema_int01": 107,
+            "light_enabled_yes": 106,
+            "light_headers": 107,
+            "nonuniform_scale_on_chain": 10,
+            "owner_active_schema_bool": 107,
+            "owner_self_active_yes": 107,
+            "owner_unique_transform": 107,
+            "prior_int_only_would_be_unknown": 107,
+            "reciprocal_light_owner_membership": 107,
+            "serialized_light_and_hierarchy_active": 106,
+            "serialized_light_and_hierarchy_inactive": 1,
+            "typed_local_light_owner": 107
+          },
+          "root_depth_histogram": {
+            "6": 3,
+            "7": 2,
+            "9": 68,
+            "10": 33,
+            "11": 1
+          },
+          "sha256": "53eb88c75c3a7d63333536e26b199dbfdcfd5ba8fb656ce843f24e45c3d9c94f",
+          "source_verified": true,
+          "status": "OBSERVED"
+        },
+        "38": {
+          "bytes": 178892,
+          "counts": {
+            "complete_hierarchy": 1,
+            "composed_forward_differs_from_positive_z": 1,
+            "finite_local_trs_and_composed_forward": 1,
+            "hierarchy_active_yes": 1,
+            "hierarchy_node_active_schema_bool": 3,
+            "light_decoded": 1,
+            "light_enabled_schema_int01": 1,
+            "light_enabled_yes": 1,
+            "light_headers": 1,
+            "owner_active_schema_bool": 1,
+            "owner_self_active_yes": 1,
+            "owner_unique_transform": 1,
+            "prior_int_only_would_be_unknown": 1,
+            "reciprocal_light_owner_membership": 1,
+            "serialized_light_and_hierarchy_active": 1,
+            "typed_local_light_owner": 1
+          },
+          "root_depth_histogram": {
+            "2": 1
+          },
+          "sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932",
+          "source_verified": true,
+          "status": "OBSERVED"
+        }
+      },
+      "observed_scenes": 3,
+      "original_assets_modified": false,
+      "runtime_active_hierarchy_observed": false,
+      "runtime_world_transform_observed": false,
+      "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "source_export_mapping_proven": false,
+      "source_verified_scenes": 3,
+      "status": "OBSERVED_ALL_SELECTED",
+      "unitypy_version": "1.23.0"
+    },
+    "independent": {
+      "per_scene_source_pins_and_prior_population_match": true,
+      "all_counter_sums_and_depth_histograms_verified": true,
+      "chain_node_counts_recomputed_from_depth": true,
+      "actual_test_log_count_verified": true,
+      "outer_artifact_independently_downloaded": false
+    },
+    "outer_artifact": {
+      "id": 15241351627,
+      "bytes": 1161,
+      "github_reported_digest": "sha256:aab1fd60707733ca2fe3215e69a902e3718154db8c2b9f694b67ed6ccde1bcfe"
+    },
+    "actual_aggregate_path": "clients/GT/sessions/20261128-original-light-hierarchy/actual-aggregate.json",
+    "actual_log_path": "clients/GT/sessions/20261128-original-light-hierarchy/actual-selected-results.log"
   },
   "latest_remaining_scene_lighting": {
     "status": "OBSERVED_ALL_SELECTED_ORIGINAL_SCENES",
