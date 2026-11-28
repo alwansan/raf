@@ -1,0 +1,39 @@
+{
+  "status": "PASS_SOURCE_FREE_TYPED_LOCAL_LIGHTMAP_ADMISSION",
+  "starting_head": "7b4d93bf08cb4861d9c460f4a3fefa76ce6cfd31",
+  "execution_head": "a911dc0070c8924375b0f01b5955d92677c41045",
+  "run": 46089341539,
+  "job": 140806320471,
+  "conclusion": "success",
+  "lint_run": 46089341494,
+  "lint_job": 140806320526,
+  "lint_conclusion": "success",
+  "source_blobs": {
+    "tools/gt_lightmap_local_binding/audit.py": "82b23a454cf39781045b3f39a939cdb9b76b30cd",
+    "tools/gt_lightmap_local_binding/test_audit.py": "caaa2c3c32f9d7b2cc6519f0a4cd8e795b333ff5",
+    "scripts/b21_scene_lightmap_links.py": "5d8ae71825a16e41962e23dfc3e98b122a2cf001",
+    "tests/test_b21_scene_lightmap_links.py": "4930df4d7bc781e7902fa7a3275a8fbc59182ea8"
+  },
+  "actual_tests": {
+    "existing_b21_passed": 16,
+    "new_typed_admission_passed": 13,
+    "total_passed": 29,
+    "source_only": true
+  },
+  "artifact": {
+    "id": 15240771384,
+    "bytes": 1302,
+    "github_reported_digest": "sha256:d07110e54985caa8f587afd3eb31140ffeef86f3b9db8929caad2b96fbec5f69",
+    "independently_downloaded": false
+  },
+  "permanent_selected_log": "clients/GT/sessions/20261128-lightmap-typed-local-binding/actual-selected-results.log",
+  "old_b21_unchanged": true,
+  "original_assets_read_or_acquired": false,
+  "production": false,
+  "original_lightmap_fix": false,
+  "export_mapping_verified": false,
+  "lighting_pixels_verified": false,
+  "Android_device": false,
+  "XAPK": false,
+  "next_action": "G6-lightmap-typed-source-export-identity: do not repeat G5 sampler/alpha or G6 local synthetic suite. Review B21 same-export traces and actual AssetRipper typed loader/export capture for a distinct source-to-export binding gap, especially LightmapSettings slot -> Texture2D and Renderer index/owner. Prefer legitimate, independently verified source-backed private evidence if available under current owner directive; require actual source SHA and class/owner/pathID, same invocation export pointer and GUID/fileID, actual imported texture/renderer mapping, and avoid claiming original repair or installing defaults before that evidence. If original source or necessary trace unavailable, record precise blocker and choose a materially new water/lighting or white-mesh integration gap, not more repeat fixtures. All G0-G6 open. No game build/player/XAPK; CL/lab/BLACK untouched. Historical 688/786 non-Dummy, 98 Dummy/37 GUID unchanged."
+}

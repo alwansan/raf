@@ -1,0 +1,35 @@
+Actual Actions selected lines (not complete log)
+2026-11-28T00:42:43.4626032Z test_double_lightmap_settings_refused (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_double_lightmap_settings_refused) ... ok
+2026-11-28T00:42:43.4630929Z test_duplicate_path_ids_refused (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_duplicate_path_ids_refused) ... ok
+2026-11-28T00:42:43.4635957Z test_empty_settings_is_not_a_loss_claim (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_empty_settings_is_not_a_loss_claim) ... ok
+2026-11-28T00:42:43.4641110Z test_external_file_id_never_called_missing (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_external_file_id_never_called_missing) ... ok
+2026-11-28T00:42:43.4646075Z test_invalid_path_ids_refused (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_invalid_path_ids_refused) ... ok
+2026-11-28T00:42:43.4650747Z test_malformed_lightmap_pointer_is_unknown (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_malformed_lightmap_pointer_is_unknown) ... ok
+2026-11-28T00:42:43.4656890Z test_missing_local_texture_tracked_not_claimed_fixed (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_missing_local_texture_tracked_not_claimed_fixed) ... ok
+2026-11-28T00:42:43.4662491Z test_missing_typetree_is_unknown_not_absence (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_missing_typetree_is_unknown_not_absence) ... ok
+2026-11-28T00:42:43.4668005Z test_null_pointer_is_not_missing_local_target (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_null_pointer_is_not_missing_local_target) ... ok
+2026-11-28T00:42:43.4672972Z test_original_size_sha_and_tamper (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_original_size_sha_and_tamper) ... ok
+2026-11-28T00:42:43.4678164Z test_renderer_out_of_range_is_observed_not_repaired (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_renderer_out_of_range_is_observed_not_repaired) ... ok
+2026-11-28T00:42:43.4683331Z test_source_symlink_refused (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_source_symlink_refused) ... ok
+2026-11-28T00:42:43.4688248Z test_unassigned_indices_do_not_report_broken_link (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_unassigned_indices_do_not_report_broken_link) ... ok
+2026-11-28T00:42:43.4693416Z test_unbounded_objects_refused (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_unbounded_objects_refused) ... ok
+2026-11-28T00:42:43.4698276Z test_unknown_lightmap_array_shape_preserved (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_unknown_lightmap_array_shape_preserved) ... ok
+2026-11-28T00:42:43.4703216Z test_valid_color_and_renderer_links (test_b21_scene_lightmap_links.B21OriginalLightmapTests.test_valid_color_and_renderer_links) ... ok
+2026-11-28T00:42:43.4708073Z Ran 16 tests in 0.002s
+2026-11-28T00:42:43.4709225Z OK
+2026-11-28T00:42:43.5111305Z test_absent_or_out_of_range (test_audit.TypedLightmapTests.test_absent_or_out_of_range) ... ok
+2026-11-28T00:42:43.5114594Z test_ambiguous_physical_settings_old_accepts (test_audit.TypedLightmapTests.test_ambiguous_physical_settings_old_accepts) ... ok
+2026-11-28T00:42:43.5118343Z test_disagreeing_name_class (test_audit.TypedLightmapTests.test_disagreeing_name_class) ... ok
+2026-11-28T00:42:43.5120812Z test_duplicate_and_bad_ids_fail_closed (test_audit.TypedLightmapTests.test_duplicate_and_bad_ids_fail_closed) ... ok
+2026-11-28T00:42:43.5123714Z test_no_assigned_renderer_not_vacuous_success (test_audit.TypedLightmapTests.test_no_assigned_renderer_not_vacuous_success) ... ok
+2026-11-28T00:42:43.5126580Z test_old_in_range_does_not_establish_color (test_audit.TypedLightmapTests.test_old_in_range_does_not_establish_color) ... ok
+2026-11-28T00:42:43.5129245Z test_old_presence_is_not_typed_identity (test_audit.TypedLightmapTests.test_old_presence_is_not_typed_identity) ... ok
+2026-11-28T00:42:43.5132437Z test_optional_external_or_wrong_class_not_admitted (test_audit.TypedLightmapTests.test_optional_external_or_wrong_class_not_admitted) ... ok
+2026-11-28T00:42:43.5135353Z test_optional_missing_schema_is_not_null (test_audit.TypedLightmapTests.test_optional_missing_schema_is_not_null) ... ok
+2026-11-28T00:42:43.5137978Z test_positive_typed_and_optional_null (test_audit.TypedLightmapTests.test_positive_typed_and_optional_null) ... ok
+2026-11-28T00:42:43.5140598Z test_reserved_index_never_regular_offset (test_audit.TypedLightmapTests.test_reserved_index_never_regular_offset) ... ok
+2026-11-28T00:42:43.5143476Z test_scene_scoped_same_pathid_different_class (test_audit.TypedLightmapTests.test_scene_scoped_same_pathid_different_class) ... ok
+2026-11-28T00:42:43.5146376Z test_unknown_renderer_index_prevents_positive (test_audit.TypedLightmapTests.test_unknown_renderer_index_prevents_positive) ... ok
+2026-11-28T00:42:43.5218867Z Ran 13 tests in 0.001s
+2026-11-28T00:42:43.5220092Z OK
+2026-11-28T00:42:43.5222143Z GT_LIGHTMAP_TYPED_LOCAL_ADMISSION_PASS source_free=true export=false device=false
