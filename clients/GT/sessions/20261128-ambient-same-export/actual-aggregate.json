@@ -1,0 +1,79 @@
+{
+  "editor_preflight": {
+    "activation_inputs_configured": false,
+    "current_run_only": true,
+    "disk_free_bytes": 90784763904,
+    "editor_executed": false,
+    "previous_run_specific_cause_proven": false,
+    "prior_editor_disk_threshold_met": true,
+    "prior_editor_threshold_bytes": 17179869184
+  },
+  "source": {
+    "external_name_unknown": 0,
+    "external_names_in_staged_set": 3,
+    "full_scene_provider_closure_proven": false,
+    "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+    "material_headers": 200,
+    "scene_external_reference_headers": 9,
+    "scene_sha256": "6a06f3e95da765e89ded81c13837cd3de5844969c131ea02e59c38dbda22fc5d",
+    "selected_fields_present": 19,
+    "selected_fields_total": 19,
+    "shader_headers": 21,
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_render_settings_documents": 1,
+    "verified_bytes": 37682084,
+    "verified_files": 6
+  },
+  "export": {
+    "actual_export_completed": true,
+    "exit_code": 0,
+    "private_log_bytes": 261878,
+    "private_trace_files_present": 3,
+    "tool_exception_categories": []
+  },
+  "same_export": {
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "device_pixels_proven": false,
+    "fields": {
+      "field_mismatches": [],
+      "field_unknown": {},
+      "fields_checked": [
+        "m_AmbientSkyColor",
+        "m_AmbientEquatorColor",
+        "m_AmbientGroundColor",
+        "m_SubtractiveShadowColor",
+        "m_FogColor",
+        "m_AmbientIntensity",
+        "m_FogDensity",
+        "m_LinearFogStart",
+        "m_LinearFogEnd",
+        "m_ReflectionIntensity",
+        "m_HaloStrength",
+        "m_FlareStrength",
+        "m_FlareFadeSpeed",
+        "m_AmbientMode",
+        "m_FogMode",
+        "m_DefaultReflectionMode",
+        "m_DefaultReflectionResolution",
+        "m_ReflectionBounces",
+        "m_Fog"
+      ],
+      "fields_equal": 19,
+      "fields_in_scope": 19
+    },
+    "original_assets_mutated": false,
+    "original_assets_published": false,
+    "same_export_settings_identity_proven": true,
+    "scene_sha256": "6a06f3e95da765e89ded81c13837cd3de5844969c131ea02e59c38dbda22fc5d",
+    "skybox": {
+      "reason": "source_skybox_provider_not_staged",
+      "status": "UNKNOWN"
+    },
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "status": "PARTIAL_UNRESOLVED",
+    "sun": {
+      "status": "MATCH_NULL"
+    }
+  }
+}
