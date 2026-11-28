@@ -73,7 +73,7 @@ jobs:
           mkdir "$RUNNER_TEMP/gt-fft-bank-docker"
           cp tools/gt_fft_live_module/{private-editor.sh,layer.cpp,VkLayer_GT_fft_capture.json,smoke.cpp,smoke.comp} "$RUNNER_TEMP/gt-fft-bank-docker/"
           cp tools/gt_fft_typed_dxc/layer.cpp "$RUNNER_TEMP/gt-fft-bank-docker/layer.cpp"
-          # Typed capture guard only; no pipeline replacement or half-map.
+          # Typed capture guard only; no pipeline replacement or half-map. CRC is checked before opening each bundle.
           bash -n "$RUNNER_TEMP/gt-fft-bank-docker/private-editor.sh"
           cat > "$RUNNER_TEMP/gt-fft-bank-docker/Dockerfile" <<'DOCKERFILE'
           FROM unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3

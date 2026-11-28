@@ -274,7 +274,7 @@ public static class GTIndexedPair {
    for(int i=0;i<5;i++){
      r.bundle_load_index=i;r.bundle_load_step=1;r.bundle_asset_count=-1;
      string file=Path.Combine(dir,"fft-"+i);
-     Need(Sha(file)==r.bundle_sha256[i]&&BuildPipeline.GetCRCForAssetBundle(file,out uint crc));
+     Need(Sha(file)==r.bundle_sha256[i]);Need(BuildPipeline.GetCRCForAssetBundle(file,out uint crc));
      r.bundle_crc_verified++;r.bundle_load_step=2;
      bundles[i]=AssetBundle.LoadFromFile(file,crc);Need(bundles[i]!=null);r.bundle_opened++;
      r.bundle_load_step=3;var entries=bundles[i].GetAllAssetNames();r.bundle_asset_count=entries.Length;
