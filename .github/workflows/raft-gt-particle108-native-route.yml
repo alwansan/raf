@@ -1,11 +1,6 @@
 name: GT Particle108 native mip to saved Material route and original sample operands (NO PLAYER)
 # Distinct source-only route join; no repeated Unity alpha readback.
 on:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - '.github/workflows/raft-gt-particle108-native-route.yml'
-      - 'tools/gt_particle108_native_route/**'
   workflow_dispatch:
 permissions:
   contents: read

@@ -196,12 +196,19 @@ def run(a,out):
     out["per_material_anonymous_counts"]=sorted(rows,key=lambda x:json.dumps(x,sort_keys=True))
     need(shader_matches==5,"material_shader_pointer_drift")
     need(out["selected_native_slots"]==targets[selected],"selected_native_slot_multiplicity_drift")
+    if a.draw_project is not None:
+        from tools.gt_particle108_native_route import draw
+        out["phase"]="private_original_draw_stage"
+        draw.stage(a,out,slots,targets,selected,parsed,table,pairs,switches,routes,uses,source_docs,exported,shader_ptr,mat_ptrs)
     out["phase"]="complete_source_route_observation";out["status"]=STATUS
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ("original","manifest","project","w1","b02","out"):p.add_argument("--"+name,type=Path,required=True)
+    p.add_argument("--draw-project",type=Path);p.add_argument("--draw-private",type=Path);p.add_argument("--run-id")
     a=p.parse_args()
+    if any(x is not None for x in (a.draw_project,a.draw_private,a.run_id)) and not all(x is not None for x in (a.draw_project,a.draw_private,a.run_id)):
+        p.error("all draw arguments are required together")
     out=dict(status="INCONCLUSIVE",phase="start",runtime_keyword_selection_verified=False,
              original_shader_draw_verified=False,alpha_sample_value_verified=False,
              phone_black_square_emitter_verified=False,black_fire_restored=False,
@@ -210,6 +217,9 @@ def main():
     except Exception as exc:
         out["failure_type"]=type(exc).__name__
         if type(exc) is Reject:out["failure_reason"]=str(exc)
+        elif a.draw_project is not None:
+            from tools.gt_particle108_native_route.draw import DrawError
+            if type(exc) is DrawError:out["failure_reason"]=str(exc)
     with a.out.open("x") as f:json.dump(out,f,sort_keys=True,indent=2);f.write("\n")
     print("GT_PARTICLE108_NATIVE_ROUTE_JOIN "+json.dumps(out,sort_keys=True))
     return 0 if out["status"]==STATUS else 2
