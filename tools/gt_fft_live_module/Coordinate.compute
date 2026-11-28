@@ -1,0 +1,11 @@
+// Authored coordinate/texture Load/output control only; no original game data.
+#pragma kernel Coordinate
+Texture2D<float4> InputTex;
+Texture2D<float4> TableTex;
+RWTexture2D<float4> OutputTex;
+[numthreads(8,8,1)]
+void Coordinate(uint3 id:SV_DispatchThreadID) {
+    float4 a=InputTex.Load(int3(id.xy,0));
+    float4 b=TableTex.Load(int3(id.x,id.y%8,0));
+    OutputTex[id.xy]=float4(a.r,a.g,b.b,b.a);
+}

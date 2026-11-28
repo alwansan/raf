@@ -1,0 +1,1945 @@
+{
+  "run": 46165728944,
+  "job": 141042713160,
+  "head": "b4714a3df843b7d7cfaa289089655f6534c399c1",
+  "conclusion": "success",
+  "guard": 46165728934,
+  "lint": 46165728885,
+  "artifact_id": 15271272732,
+  "receipt": {
+    "XAPK": false,
+    "android_device": false,
+    "coordinate_control_pixels": 262144,
+    "host_device": {
+      "apiVersion": "1.4.318",
+      "deviceName": "llvmpipe (LLVM 20.1.2, 256 bits)",
+      "driverInfo": "Mesa 25.2.8-0ubuntu0.24.04.5 (LLVM 20.1.2)",
+      "driverName": "llvmpipe"
+    },
+    "image_canary": {
+      "exact_first_pass_pixels": 262144,
+      "exact_native_second_pixels": 262144,
+      "status": "PASS",
+      "wrong_second_detected_lanes": 1048576
+    },
+    "image_comparisons": [
+      {
+        "first_slot": 6,
+        "image_native_roundtrip": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ],
+        "image_profiles": [
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          }
+        ],
+        "image_vs_host": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ],
+        "input_mode": "signed"
+      },
+      {
+        "first_slot": 6,
+        "image_native_roundtrip": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ],
+        "image_profiles": [
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          }
+        ],
+        "image_vs_host": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ],
+        "input_mode": "zero"
+      },
+      {
+        "first_slot": 16,
+        "image_native_roundtrip": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ],
+        "image_profiles": [
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          }
+        ],
+        "image_vs_host": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ],
+        "input_mode": "signed"
+      },
+      {
+        "first_slot": 16,
+        "image_native_roundtrip": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ],
+        "image_profiles": [
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          },
+          {
+            "class_counts": [
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0,
+              262144,
+              0,
+              0,
+              0
+            ],
+            "written_pixels": 262144
+          }
+        ],
+        "image_vs_host": [
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          },
+          {
+            "class_mismatch": 0,
+            "finite_different": 0,
+            "finite_over_tolerance": 0,
+            "raw_bit_different": 0
+          }
+        ],
+        "input_mode": "zero"
+      }
+    ],
+    "image_device": {
+      "apiVersion": "4206847 (1.3.255)",
+      "deviceName": "llvmpipe (LLVM 15.0.7, 256 bits)",
+      "driverInfo": "Mesa 23.2.1-1ubuntu3.1~22.04.4 (LLVM 15.0.7)",
+      "driverName": "llvmpipe"
+    },
+    "image_device_name_exact": true,
+    "module_commitments": {
+      "6": {
+        "native": "523880e471e2cef84fa2f425213f0ef8fa5f9002fe9e3e2ba525521dc9f36463",
+        "roundtrip": "48e77448dc7b1680375da32b548f2d1084d4548705ccadf01a609cdf44ac9853"
+      },
+      "7": {
+        "native": "168ddd60a1c9e74f90406d385a2b89c466d616b745e99dd160af93720fbeb7b4",
+        "roundtrip": "347edc99040311926102fbb0298a48801d490ebe22edda798574955e3a3ea348"
+      },
+      "16": {
+        "native": "2b04a6347227395acc9744cf9077bba6ca2d973202e6aa457c94926809e4687b",
+        "roundtrip": "ef032bd7551141cdb5e0dc04398195c3e8ddcd5156a38ba3385efc992f512c16"
+      },
+      "17": {
+        "native": "cdd7e194080764bcac62f8fbdc846be7d5ce33e68859781680a0208a536116bb",
+        "roundtrip": "4fffa57637741a49ff2b40900454e59c344c4aba5cf27f80bdf3dd239c635957"
+      }
+    },
+    "observed_cases": 4,
+    "observed_outputs": 32,
+    "oracle_canary": {
+      "exact_first_pass_pixels": 262144,
+      "exact_native_second_pixels": 262144,
+      "status": "PASS",
+      "wrong_second_detected_lanes": 1048576
+    },
+    "original_fft_numeric_parity_verified": false,
+    "original_runtime_kernel_mapping_proven": false,
+    "outputs_per_case": 8,
+    "production": false,
+    "rows": [
+      {
+        "counts": {
+          "bindings": 24,
+          "dispatches": 8,
+          "sentinel_checks": 8,
+          "snapshots": 8
+        },
+        "failure_phase": "",
+        "failure_type": "",
+        "first_slot": 6,
+        "flags": {
+          "injected_gpu_exact": true,
+          "input_gpu_exact": true,
+          "replay_gpu_exact": true,
+          "table_gpu_exact": true,
+          "target_format_exact": true
+        },
+        "indexed_chain_vs_own_replay": {
+          "class_mismatch": 0,
+          "finite_different": 0,
+          "finite_over_tolerance": 0,
+          "raw_bit_different": 0
+        },
+        "indexed_vs_standalone_same_cpu_input": {
+          "class_mismatch": 0,
+          "finite_different": 2048,
+          "finite_over_tolerance": 0,
+          "raw_bit_different": 2048
+        },
+        "input_mode": "signed",
+        "outcome": "OBSERVED",
+        "outputs": {
+          "indexed-chain": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 1048572,
+              "finite_over_tolerance": 1048568,
+              "raw_bit_different": 1048572
+            }
+          },
+          "indexed-cpu": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 1048572,
+              "finite_over_tolerance": 1048568,
+              "raw_bit_different": 1048572
+            }
+          },
+          "indexed-replay": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 1048572,
+              "finite_over_tolerance": 1048568,
+              "raw_bit_different": 1048572
+            }
+          },
+          "indexed0": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 1048554,
+              "finite_over_tolerance": 1048546,
+              "raw_bit_different": 1048554
+            }
+          },
+          "standalone-chain": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 1048572,
+              "finite_over_tolerance": 1048568,
+              "raw_bit_different": 1048572
+            }
+          },
+          "standalone-cpu": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 1048572,
+              "finite_over_tolerance": 1048568,
+              "raw_bit_different": 1048572
+            }
+          },
+          "standalone-replay": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 1048572,
+              "finite_over_tolerance": 1048568,
+              "raw_bit_different": 1048572
+            }
+          },
+          "standalone0": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 1048554,
+              "finite_over_tolerance": 1048546,
+              "raw_bit_different": 1048554
+            }
+          }
+        },
+        "stage1_indexed_vs_standalone": {
+          "class_mismatch": 0,
+          "finite_different": 1536,
+          "finite_over_tolerance": 0,
+          "raw_bit_different": 1536
+        },
+        "standalone_chain_vs_own_replay": {
+          "class_mismatch": 0,
+          "finite_different": 2048,
+          "finite_over_tolerance": 0,
+          "raw_bit_different": 2048
+        },
+        "unity_vs_image_chained_stage2": {
+          "indexed-chain": {
+            "native": {
+              "class_mismatch": 0,
+              "finite_different": 1048572,
+              "finite_over_tolerance": 1048568,
+              "raw_bit_different": 1048572
+            },
+            "roundtrip": {
+              "class_mismatch": 0,
+              "finite_different": 1048572,
+              "finite_over_tolerance": 1048568,
+              "raw_bit_different": 1048572
+            }
+          },
+          "standalone-chain": {
+            "native": {
+              "class_mismatch": 0,
+              "finite_different": 1048572,
+              "finite_over_tolerance": 1048568,
+              "raw_bit_different": 1048572
+            },
+            "roundtrip": {
+              "class_mismatch": 0,
+              "finite_different": 1048572,
+              "finite_over_tolerance": 1048568,
+              "raw_bit_different": 1048572
+            }
+          }
+        },
+        "unity_vs_image_same_source_stage1": {
+          "indexed0": {
+            "native": {
+              "class_mismatch": 0,
+              "finite_different": 1048554,
+              "finite_over_tolerance": 1048546,
+              "raw_bit_different": 1048554
+            },
+            "roundtrip": {
+              "class_mismatch": 0,
+              "finite_different": 1048554,
+              "finite_over_tolerance": 1048546,
+              "raw_bit_different": 1048554
+            }
+          },
+          "standalone0": {
+            "native": {
+              "class_mismatch": 0,
+              "finite_different": 1048554,
+              "finite_over_tolerance": 1048546,
+              "raw_bit_different": 1048554
+            },
+            "roundtrip": {
+              "class_mismatch": 0,
+              "finite_different": 1048554,
+              "finite_over_tolerance": 1048546,
+              "raw_bit_different": 1048554
+            }
+          }
+        }
+      },
+      {
+        "counts": {
+          "bindings": 24,
+          "dispatches": 8,
+          "sentinel_checks": 8,
+          "snapshots": 8
+        },
+        "failure_phase": "",
+        "failure_type": "",
+        "first_slot": 6,
+        "flags": {
+          "injected_gpu_exact": true,
+          "input_gpu_exact": true,
+          "replay_gpu_exact": true,
+          "table_gpu_exact": true,
+          "target_format_exact": true
+        },
+        "indexed_chain_vs_own_replay": {
+          "class_mismatch": 0,
+          "finite_different": 2048,
+          "finite_over_tolerance": 0,
+          "raw_bit_different": 2048
+        },
+        "indexed_vs_standalone_same_cpu_input": {
+          "class_mismatch": 0,
+          "finite_different": 0,
+          "finite_over_tolerance": 0,
+          "raw_bit_different": 0
+        },
+        "input_mode": "zero",
+        "outcome": "OBSERVED",
+        "outputs": {
+          "indexed-chain": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 3072,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 3072
+            }
+          },
+          "indexed-cpu": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 3072,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 3072
+            }
+          },
+          "indexed-replay": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 3072,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 3072
+            }
+          },
+          "indexed0": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 2304,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 2304
+            }
+          },
+          "standalone-chain": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 3072,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 3072
+            }
+          },
+          "standalone-cpu": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 3072,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 3072
+            }
+          },
+          "standalone-replay": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 3072,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 3072
+            }
+          },
+          "standalone0": {
+            "profile": {
+              "class_counts": [
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0,
+                262144,
+                0,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 0,
+              "finite_different": 2304,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 2304
+            }
+          }
+        },
+        "stage1_indexed_vs_standalone": {
+          "class_mismatch": 0,
+          "finite_different": 0,
+          "finite_over_tolerance": 0,
+          "raw_bit_different": 0
+        },
+        "standalone_chain_vs_own_replay": {
+          "class_mismatch": 0,
+          "finite_different": 0,
+          "finite_over_tolerance": 0,
+          "raw_bit_different": 0
+        },
+        "unity_vs_image_chained_stage2": {
+          "indexed-chain": {
+            "native": {
+              "class_mismatch": 0,
+              "finite_different": 3072,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 3072
+            },
+            "roundtrip": {
+              "class_mismatch": 0,
+              "finite_different": 3072,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 3072
+            }
+          },
+          "standalone-chain": {
+            "native": {
+              "class_mismatch": 0,
+              "finite_different": 3072,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 3072
+            },
+            "roundtrip": {
+              "class_mismatch": 0,
+              "finite_different": 3072,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 3072
+            }
+          }
+        },
+        "unity_vs_image_same_source_stage1": {
+          "indexed0": {
+            "native": {
+              "class_mismatch": 0,
+              "finite_different": 2304,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 2304
+            },
+            "roundtrip": {
+              "class_mismatch": 0,
+              "finite_different": 2304,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 2304
+            }
+          },
+          "standalone0": {
+            "native": {
+              "class_mismatch": 0,
+              "finite_different": 2304,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 2304
+            },
+            "roundtrip": {
+              "class_mismatch": 0,
+              "finite_different": 2304,
+              "finite_over_tolerance": 0,
+              "raw_bit_different": 2304
+            }
+          }
+        }
+      },
+      {
+        "counts": {
+          "bindings": 24,
+          "dispatches": 8,
+          "sentinel_checks": 8,
+          "snapshots": 8
+        },
+        "failure_phase": "",
+        "failure_type": "",
+        "first_slot": 16,
+        "flags": {
+          "injected_gpu_exact": true,
+          "input_gpu_exact": true,
+          "replay_gpu_exact": true,
+          "table_gpu_exact": true,
+          "target_format_exact": true
+        },
+        "indexed_chain_vs_own_replay": {
+          "class_mismatch": 0,
+          "finite_different": 13824,
+          "finite_over_tolerance": 0,
+          "raw_bit_different": 13824
+        },
+        "indexed_vs_standalone_same_cpu_input": {
+          "class_mismatch": 0,
+          "finite_different": 20736,
+          "finite_over_tolerance": 0,
+          "raw_bit_different": 20736
+        },
+        "input_mode": "signed",
+        "outcome": "OBSERVED",
+        "outputs": {
+          "indexed-chain": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 833536,
+              "finite_over_tolerance": 833530,
+              "raw_bit_different": 1048576
+            }
+          },
+          "indexed-cpu": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 833536,
+              "finite_over_tolerance": 833530,
+              "raw_bit_different": 1048576
+            }
+          },
+          "indexed-replay": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 833536,
+              "finite_over_tolerance": 833530,
+              "raw_bit_different": 1048576
+            }
+          },
+          "indexed0": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 833144,
+              "finite_over_tolerance": 832614,
+              "raw_bit_different": 1048184
+            }
+          },
+          "standalone-chain": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 833536,
+              "finite_over_tolerance": 833530,
+              "raw_bit_different": 1048576
+            }
+          },
+          "standalone-cpu": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 833536,
+              "finite_over_tolerance": 833530,
+              "raw_bit_different": 1048576
+            }
+          },
+          "standalone-replay": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 833536,
+              "finite_over_tolerance": 833530,
+              "raw_bit_different": 1048576
+            }
+          },
+          "standalone0": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 833148,
+              "finite_over_tolerance": 832615,
+              "raw_bit_different": 1048188
+            }
+          }
+        },
+        "stage1_indexed_vs_standalone": {
+          "class_mismatch": 184320,
+          "finite_different": 228352,
+          "finite_over_tolerance": 11264,
+          "raw_bit_different": 412672
+        },
+        "standalone_chain_vs_own_replay": {
+          "class_mismatch": 184320,
+          "finite_different": 230656,
+          "finite_over_tolerance": 26624,
+          "raw_bit_different": 414976
+        },
+        "unity_vs_image_chained_stage2": {
+          "indexed-chain": {
+            "native": {
+              "class_mismatch": 215040,
+              "finite_different": 833536,
+              "finite_over_tolerance": 833530,
+              "raw_bit_different": 1048576
+            },
+            "roundtrip": {
+              "class_mismatch": 215040,
+              "finite_different": 833536,
+              "finite_over_tolerance": 833530,
+              "raw_bit_different": 1048576
+            }
+          },
+          "standalone-chain": {
+            "native": {
+              "class_mismatch": 215040,
+              "finite_different": 833536,
+              "finite_over_tolerance": 833530,
+              "raw_bit_different": 1048576
+            },
+            "roundtrip": {
+              "class_mismatch": 215040,
+              "finite_different": 833536,
+              "finite_over_tolerance": 833530,
+              "raw_bit_different": 1048576
+            }
+          }
+        },
+        "unity_vs_image_same_source_stage1": {
+          "indexed0": {
+            "native": {
+              "class_mismatch": 215040,
+              "finite_different": 833144,
+              "finite_over_tolerance": 832614,
+              "raw_bit_different": 1048184
+            },
+            "roundtrip": {
+              "class_mismatch": 215040,
+              "finite_different": 833144,
+              "finite_over_tolerance": 832614,
+              "raw_bit_different": 1048184
+            }
+          },
+          "standalone0": {
+            "native": {
+              "class_mismatch": 215040,
+              "finite_different": 833148,
+              "finite_over_tolerance": 832615,
+              "raw_bit_different": 1048188
+            },
+            "roundtrip": {
+              "class_mismatch": 215040,
+              "finite_different": 833148,
+              "finite_over_tolerance": 832615,
+              "raw_bit_different": 1048188
+            }
+          }
+        }
+      },
+      {
+        "counts": {
+          "bindings": 24,
+          "dispatches": 8,
+          "sentinel_checks": 8,
+          "snapshots": 8
+        },
+        "failure_phase": "",
+        "failure_type": "",
+        "first_slot": 16,
+        "flags": {
+          "injected_gpu_exact": true,
+          "input_gpu_exact": true,
+          "replay_gpu_exact": true,
+          "table_gpu_exact": true,
+          "target_format_exact": true
+        },
+        "indexed_chain_vs_own_replay": {
+          "class_mismatch": 0,
+          "finite_different": 20736,
+          "finite_over_tolerance": 0,
+          "raw_bit_different": 20736
+        },
+        "indexed_vs_standalone_same_cpu_input": {
+          "class_mismatch": 184320,
+          "finite_different": 237568,
+          "finite_over_tolerance": 26624,
+          "raw_bit_different": 421888
+        },
+        "input_mode": "zero",
+        "outcome": "OBSERVED",
+        "outputs": {
+          "indexed-chain": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 366336,
+              "finite_over_tolerance": 50688,
+              "raw_bit_different": 581376
+            }
+          },
+          "indexed-cpu": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 366336,
+              "finite_over_tolerance": 50688,
+              "raw_bit_different": 581376
+            }
+          },
+          "indexed-replay": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 366336,
+              "finite_over_tolerance": 50688,
+              "raw_bit_different": 581376
+            }
+          },
+          "indexed0": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 371456,
+              "finite_over_tolerance": 22016,
+              "raw_bit_different": 586496
+            }
+          },
+          "standalone-chain": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 366336,
+              "finite_over_tolerance": 50688,
+              "raw_bit_different": 581376
+            }
+          },
+          "standalone-cpu": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 366336,
+              "finite_over_tolerance": 50688,
+              "raw_bit_different": 581376
+            }
+          },
+          "standalone-replay": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 366336,
+              "finite_over_tolerance": 50688,
+              "raw_bit_different": 581376
+            }
+          },
+          "standalone0": {
+            "profile": {
+              "class_counts": [
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0,
+                208384,
+                53760,
+                0,
+                0
+              ],
+              "written_pixels": 262144
+            },
+            "vs_cpu": {
+              "class_mismatch": 215040,
+              "finite_different": 371456,
+              "finite_over_tolerance": 22016,
+              "raw_bit_different": 586496
+            }
+          }
+        },
+        "stage1_indexed_vs_standalone": {
+          "class_mismatch": 184320,
+          "finite_different": 228352,
+          "finite_over_tolerance": 11264,
+          "raw_bit_different": 412672
+        },
+        "standalone_chain_vs_own_replay": {
+          "class_mismatch": 184320,
+          "finite_different": 230656,
+          "finite_over_tolerance": 26624,
+          "raw_bit_different": 414976
+        },
+        "unity_vs_image_chained_stage2": {
+          "indexed-chain": {
+            "native": {
+              "class_mismatch": 215040,
+              "finite_different": 366336,
+              "finite_over_tolerance": 50688,
+              "raw_bit_different": 581376
+            },
+            "roundtrip": {
+              "class_mismatch": 215040,
+              "finite_different": 366336,
+              "finite_over_tolerance": 50688,
+              "raw_bit_different": 581376
+            }
+          },
+          "standalone-chain": {
+            "native": {
+              "class_mismatch": 215040,
+              "finite_different": 366336,
+              "finite_over_tolerance": 50688,
+              "raw_bit_different": 581376
+            },
+            "roundtrip": {
+              "class_mismatch": 215040,
+              "finite_different": 366336,
+              "finite_over_tolerance": 50688,
+              "raw_bit_different": 581376
+            }
+          }
+        },
+        "unity_vs_image_same_source_stage1": {
+          "indexed0": {
+            "native": {
+              "class_mismatch": 215040,
+              "finite_different": 371456,
+              "finite_over_tolerance": 22016,
+              "raw_bit_different": 586496
+            },
+            "roundtrip": {
+              "class_mismatch": 215040,
+              "finite_different": 371456,
+              "finite_over_tolerance": 22016,
+              "raw_bit_different": 586496
+            }
+          },
+          "standalone0": {
+            "native": {
+              "class_mismatch": 215040,
+              "finite_different": 371456,
+              "finite_over_tolerance": 22016,
+              "raw_bit_different": 586496
+            },
+            "roundtrip": {
+              "class_mismatch": 215040,
+              "finite_different": 371456,
+              "finite_over_tolerance": 22016,
+              "raw_bit_different": 586496
+            }
+          }
+        }
+      }
+    ],
+    "same_image_id": "sha256:5d34725a68801bbc6919d370061827ea11803fe7329c9be6bbbb68fc826c0831",
+    "status": "OBSERVED_FFT_SAME_IMAGE_DIFFERENTIAL",
+    "unity_graphics_device_name": "llvmpipe (LLVM 15.0.7, 256 bits)",
+    "unity_graphics_device_vendor": "Unknown (ID=10005)",
+    "unity_graphics_device_version": "Vulkan 1.1.0 [0x00000001]",
+    "water_rendering_verified": false
+  }
+}
