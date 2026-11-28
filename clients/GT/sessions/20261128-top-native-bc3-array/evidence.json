@@ -514,5 +514,19 @@
   "selected_original_draw_causal_stage_tap_sites": 3,
   "selected_original_draw_causal_source_override_exact_views": 3,
   "selected_original_draw_causal_red_green_exact_difference_views": 0,
-  "selected_original_draw_causal_tap_Unity_verified": false
+  "selected_original_draw_causal_tap_Unity_verified": false,
+  "rgba_endpoint_basis_actual_verified": true,
+  "rgba_endpoint_basis_actual_run": 46152627189,
+  "rgba_endpoint_basis_actual_job": 141002337138,
+  "rgba_endpoint_basis_actual_receipt": "clients/GT/sessions/20261128-top-native-bc3-array/actual-46152627189.json",
+  "rgba_endpoint_basis_conclusion": "success_diagnostic_only",
+  "rgba_endpoint_basis_actual_arrays": 10,
+  "rgba_endpoint_basis_actual_site_pairs": 90,
+  "rgba_endpoint_basis_calibrated_views": 3,
+  "rgba_endpoint_basis_observed_sites": 3,
+  "rgba_endpoint_basis_no_endpoint_response": true,
+  "rgba_endpoint_basis_original_reference_gate": false,
+  "merged_source_abi_context_prepared": true,
+  "merged_source_abi_context_actual_verified": false,
+  "merged_source_abi_context_workflow": ".github/workflows/raft-gt-selected-source-abi.yml"
 }

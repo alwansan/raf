@@ -297,6 +297,13 @@ def run(a,out):
         out["material_member_census"]=material_member_census(rows,mat,before,tree["m_ParsedForm"])
         out["phase"]="combined_explicit_route_candidate"
         out["combined_candidate"]=combined_candidate(private,rows,pair,dirs)
+        if a.audit_merged:
+            from tools.gt_top_resource_closure import selected_merged_abi as merged
+            out["phase"]="merged_source_ABI_context"
+            out["merged_source_ABI_context"]=merged.audit(private,(private/"combined-explicit-wrapper.txt").read_text(),
+                rows,sources,mat,before,tree["m_ParsedForm"])
+            require(out["merged_source_ABI_context"]["status"]=="OBSERVED_MERGED_SOURCE_ABI_CONTEXT",
+                    "merged_reflection_inconclusive")
         if a.draw_private is not None:
             from tools.gt_top_resource_closure import selected_original_draw as draw
             out["phase"]="guarded_original_draw_stage"
@@ -309,6 +316,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ("original","manifest","project","w1","b02","renderer-trace","plan","out"):
         p.add_argument("--"+name,type=Path,required=True)
+    p.add_argument("--audit-merged",action="store_true")
     p.add_argument("--draw-private",type=Path)
     p.add_argument("--unity-project",type=Path)
     p.add_argument("--run-id")
