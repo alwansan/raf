@@ -95,6 +95,38 @@ def summarize(actual,expected,mode):
                     "reversed_rows_control":vertical})
     return per
 
+TRANSFER_PHASES={"not_started","scratch_create","scratch_identity","target_write","target_import","target_identity","target_descriptor","target_rejected","complete"}
+TRANSFER_FLAGS=("scratch_id_matches","scratch_name_matches","meta_guid_anchor","meta_written",
+                "path_guid_matches","guid_path_matches","loaded_array","object_guid_matches","object_id_matches",
+                "native_meta","importer_reports_native","name_matches","dimensions_match","mips_match","format_matches","srgb","readable",
+                "serialized_bytes_unchanged","accepted")
+FAILURE_TYPES={"","InvalidOperationException","ArgumentException","IOException","UnityException","NullReferenceException",
+               "FileNotFoundException","UnauthorizedAccessException","NotSupportedException","OverflowException"}
+
+def safe_transfer(record):
+    need(isinstance(record,dict),"native_transfer_record_missing")
+    phase=record.get("phase")
+    failure=record.get("failure_category")
+    return {"phase":phase if phase in TRANSFER_PHASES else "unknown",
+            "failure_category":failure if failure in FAILURE_TYPES else "other",
+            **{key:record.get(key) is True for key in TRANSFER_FLAGS}}
+
+def raw_matches(source,back,w,h,d,n):
+    need(len(source)==len(back),"native_raw_extent")
+    rr=list(ranges(w,h,d,n))
+    need(rr[-1][2]+rr[-1][3]==len(source),"native_raw_range_extent")
+    return sum(source[off:off+size]==back[off:off+size] for _,_,off,size in rr)
+
+def gpu_summary(actual,expected,mode):
+    rows=summarize(actual,expected,mode)
+    correct=[x for m in rows for x in m["per_layer"]]
+    wrong=[x for m in rows for x in m["reversed_layer_control"]]
+    return {"per_mip":rows,"coordinates":sum(x["coordinates"] for x in correct),
+            "RGBA_mismatches_over_1_div_255":sum(x["RGBA_mismatches_over_1_div_255"] for x in correct),
+            "correct_layer_order_lower_error":sum(x["RGBA_mismatches_over_2_div_255"] for x in correct)<
+              sum(x["RGBA_mismatches_over_2_div_255"] for x in wrong),
+            "all_mip_GPU_RGBA_within_1e_5":all(x["rgb_mismatches_over_1e_5"]==0 and x["alpha_mismatches_over_1e_5"]==0 for x in correct)}
+
 def verify(a):
     result={"status":"INCONCLUSIVE","native_class187_identity":False,
             "native_all_22_ranges_exact":False,"actual_GPU_observation":False,
@@ -111,40 +143,60 @@ def verify(a):
         r=json.loads((root/"receipt.json").read_text())
         need(r["run_id"]==a.run_id and r["private_log_guard"],"native_receipt_run_mismatch")
         phase=r.get("phase")
-        result["editor_phase"]=phase if phase in ("environment","private_guard","source","save","reload","raw","gpu","calibration","reference","complete") else "unknown"
-        need(a.exit_code==0 and r["status"]=="OBSERVED" and r["unity_version"]=="2021.3.45f2"
-             and r["backend"]=="Vulkan" and r["color_space"]=="Linear","native_Unity_observation_inconclusive")
-        need(r["guid"]==cfg["guid"] and r["file_id"]==cfg["file_id"]==18700000 and r["native_importer"]
-             and r["name_matches"] and (r["width"],r["height"],r["depth"],r["mip_count"])==(1024,1024,2,11)
+        result["editor_phase"]=phase if phase in ("environment","private_guard","source","calibration","presave","authored_transfer","original_transfer","raw","gpu","reference","complete") else "unknown"
+        result["editor_failure_category"]=r.get("failure_category") if r.get("failure_category") in FAILURE_TYPES else "other"
+        result["original_transfer"]=safe_transfer(r.get("original_transfer"))
+        result["authored_transfer"]=safe_transfer(r.get("authored_transfer"))
+        need(r["unity_version"]=="2021.3.45f2" and r["backend"]=="Vulkan" and r["color_space"]=="Linear",
+             "native_environment_not_admitted")
+        src=(root/"array.bc3.bytes").read_bytes()
+        need(len(src)==cfg["native_payload_bytes"]==2796256 and sha(src)==cfg["native_payload_sha256"],
+             "native_raw_extent_or_stage_hash")
+        cal=(root/"authored.bc3.bytes").read_bytes()
+        need(cal==cal_payload() and sha(cal)==cfg["calibration_sha256"],"native_calibration_bytes_drift")
+        if r.get("presave_raw_written") is True:
+            matches=raw_matches(src,(root/"presave.bc3.bytes").read_bytes(),1024,1024,2,11)
+            result.update(presave_native_ranges_exact=matches,presave_all_22_ranges_exact=matches==22)
+        if r.get("authored_reload_raw_written") is True:
+            matches=raw_matches(cal,(root/"authored-reload.bc3.bytes").read_bytes(),8,8,2,4)
+            result.update(authored_reload_ranges_exact=matches,authored_reload_all_8_ranges_exact=matches==8)
+        if r.get("calibration_written") is True:
+            try:
+                expected_cal=decoded(cal,8,8,2,4)
+                cal_actual=[old.readback(root/("cal-%d.f32"%m),2,max(1,8>>m),max(1,8>>m)) for m in range(4)]
+                mode=calibrate(cal_actual,expected_cal)
+                result.update(BC3_calibration_orientation=mode,authored_wrong_mip_layer_orientation_distinguished=True)
+                if r.get("authored_reload_gpu_written") is True:
+                    loaded_cal=[old.readback(root/("authored-reload-%d.f32"%m),2,max(1,8>>m),max(1,8>>m)) for m in range(4)]
+                    result["authored_reload_GPU_exact"]=all(np.max(np.abs(x-orient(y,mode)))<=1e-5 for x,y in zip(loaded_cal,expected_cal,strict=True))
+                if r.get("presave_gpu_written") is True:
+                    pre=[old.readback(root/("pre-mip-%d.f32"%m),2,max(1,1024>>m),max(1,1024>>m)) for m in range(11)]
+                    result["presave_GPU"]=gpu_summary(pre,decoded(src,1024,1024,2,11),mode)
+                    result["presave_GPU_observed"]=True
+            except Exception as exc:
+                result["presave_GPU_reason"]=str(exc) if isinstance(exc,old.Failure) else type(exc).__name__
+        # Retain independent pre-save evidence even when post-save transfer fails.
+        need(a.exit_code==0 and r["status"]=="OBSERVED","native_Unity_observation_inconclusive")
+        need(result["original_transfer"]["accepted"] and r["guid"]==cfg["guid"] and r["file_id"]==cfg["file_id"]==18700000
+             and r["native_importer"] and r["name_matches"] and (r["width"],r["height"],r["depth"],r["mip_count"])==(1024,1024,2,11)
              and r["graphics_format"]==100 and r["srgb"],"native_identity_descriptor_mismatch")
         result.update(native_class187_identity=True,source_format="BC3_SRGB",actual_graphics_format=r["graphics_format"],
                       actual_dimensions=[1024,1024,2],actual_mip_count=11,
                       source_ref_type=cfg["source_ref_type"],authored_reference_probe=r["reference_probe"],
                       authored_wrong_reference_rejected=r["wrong_reference_rejected"])
-        src=(root/"array.bc3.bytes").read_bytes()
         back=(root/"native-readback.bc3.bytes").read_bytes()
-        need(len(src)==len(back)==cfg["native_payload_bytes"]==2796256 and sha(src)==cfg["native_payload_sha256"],
-             "native_raw_extent_or_stage_hash")
-        rr=list(ranges(1024,1024,2,11))
-        matches=sum(src[off:off+size]==back[off:off+size] for _,_,off,size in rr)
-        result.update(native_ranges_compared=len(rr),native_ranges_exact=matches,
+        matches=raw_matches(src,back,1024,1024,2,11)
+        result.update(native_ranges_compared=22,native_ranges_exact=matches,
                       native_all_22_ranges_exact=matches==22,native_original_bytes_compared=len(src))
         need(matches==22,"native_source_bytes_not_preserved")
-        cal=(root/"authored.bc3.bytes").read_bytes()
-        need(cal==cal_payload() and sha(cal)==cfg["calibration_sha256"],"native_calibration_bytes_drift")
-        cal_actual=[old.readback(root/("cal-%d.f32"%m),2,max(1,8>>m),max(1,8>>m)) for m in range(4)]
-        mode=calibrate(cal_actual,decoded(cal,8,8,2,4))
+        need(result["authored_transfer"]["accepted"] and result.get("authored_reload_all_8_ranges_exact") is True
+             and result.get("authored_reload_GPU_exact") is True and result.get("presave_all_22_ranges_exact") is True
+             and result.get("presave_GPU_observed") is True,"native_authored_transfer_or_presave_control_failed")
+        mode=result["BC3_calibration_orientation"]
         actual=[old.readback(root/("mip-%d.f32"%m),2,max(1,1024>>m),max(1,1024>>m)) for m in range(11)]
-        rows=summarize(actual,decoded(src,1024,1024,2,11),mode)
-        all_rows=[x for m in rows for x in m["per_layer"]]
-        wrong_rows=[x for m in rows for x in m["reversed_layer_control"]]
+        summary=gpu_summary(actual,decoded(src,1024,1024,2,11),mode)
         result.update(status="OBSERVED_NATIVE_BC3_ARRAY_ALL_MIPS",actual_GPU_observation=True,
-                      BC3_calibration_orientation=mode,authored_wrong_mip_layer_orientation_distinguished=True,
-                      actual_GPU_coordinates=sum(x["coordinates"] for x in all_rows),per_mip=rows,
-                      RGBA_mismatches_over_1_div_255=sum(x["RGBA_mismatches_over_1_div_255"] for x in all_rows),
-                      correct_layer_order_lower_error=sum(x["RGBA_mismatches_over_2_div_255"] for x in all_rows)<
-                      sum(x["RGBA_mismatches_over_2_div_255"] for x in wrong_rows),
-                      all_mip_GPU_RGBA_within_1e_5=all(x["rgb_mismatches_over_1e_5"]==0 and x["alpha_mismatches_over_1e_5"]==0 for x in all_rows))
+                      actual_GPU_coordinates=summary["coordinates"],**{k:v for k,v in summary.items() if k!="coordinates"})
     except Exception as exc:
         result["reason"]=str(exc) if isinstance(exc,old.Failure) else type(exc).__name__
     old.write(a.safe,result)

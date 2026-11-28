@@ -27,4 +27,18 @@ class NativeArrayTests(unittest.TestCase):
         rows=n.summarize(a,e,"raw_first")
         self.assertEqual(rows[0]["per_layer"][0]["alpha_mismatches_over_1e_5"],1)
         self.assertGreater(rows[0]["reversed_layer_control"][0]["RGBA_mismatches_over_1_div_255"],0)
+    def test_partial_raw_matches_and_fail_closed_extent(self):
+        raw=n.cal_payload()
+        self.assertEqual(n.raw_matches(raw,raw,8,8,2,4),8)
+        changed=bytearray(raw);changed[0]^=1
+        self.assertEqual(n.raw_matches(raw,bytes(changed),8,8,2,4),7)
+        with self.assertRaises(n.old.Failure):
+            n.raw_matches(raw,raw[:-1],8,8,2,4)
+    def test_safe_transfer_does_not_disclose_names_or_accept_truthy_values(self):
+        record=n.safe_transfer({"phase":"private-name","failure_category":"private-path","accepted":1,"loaded_array":True,"guid":"secret"})
+        self.assertEqual(record["phase"],"unknown")
+        self.assertEqual(record["failure_category"],"other")
+        self.assertIs(record["accepted"],False)
+        self.assertIs(record["loaded_array"],True)
+        self.assertNotIn("guid",record)
 if __name__=="__main__": unittest.main()
