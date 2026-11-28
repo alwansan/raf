@@ -42,6 +42,10 @@ jobs:
             abi: x86_64
             probe: arm64-vulkan
             artifact: x86_64-arm64-vulkan
+          - runner: ubuntu-24.04
+            abi: x86_64
+            probe: arm64-shader
+            artifact: x86_64-arm64-shader
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -53,7 +57,8 @@ jobs:
           CAPTURE_VIDEO: ${{ matrix.probe == 'video' || inputs.capture_video == true }}
           VULKAN_PROBE: ${{ matrix.probe == 'vulkan' }}
           ARM_TRANSLATION_PROBE: ${{ matrix.probe == 'arm64-translation' }}
-          ARM_VULKAN_PROBE: ${{ matrix.probe == 'arm64-vulkan' }}
+          ARM_VULKAN_PROBE: ${{ matrix.probe == 'arm64-vulkan' || matrix.probe == 'arm64-shader' }}
+          ARM_SHADER_PROBE: ${{ matrix.probe == 'arm64-shader' }}
         run: bash qa/smoke.sh
       - name: Upload diagnostic results only
         if: always()

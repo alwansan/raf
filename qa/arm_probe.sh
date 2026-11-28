@@ -18,7 +18,22 @@ cc="$root/ndk/$ndk_version/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-lin
 if [[ ! -x "$cc" ]]; then sdkmanager "ndk;$ndk_version"; fi
 test -x "$cc"
 if [[ "${ARM_VULKAN_PROBE:-false}" == true ]]; then
-  "$cc" -std=c11 -Wall -Wextra -Werror -O2 -fPIC -shared -DRAFT_ANDROID_JNI_LOG \
+  draw_flags=()
+  if [[ "${ARM_SHADER_PROBE:-false}" == true ]]; then
+    if ! command -v glslangValidator >/dev/null || ! command -v spirv-val >/dev/null; then
+      sudo apt-get update -qq
+      sudo apt-get install -y --no-install-recommends glslang-tools spirv-tools
+    fi
+    glslangValidator --version > evidence/shader-compiler.txt
+    glslangValidator -V --target-env vulkan1.0 -S vert -o evidence/probe.vert.spv qa/probe.vert
+    glslangValidator -V --target-env vulkan1.0 -S frag -o evidence/probe.frag.spv qa/probe.frag
+    spirv-val --target-env vulkan1.0 evidence/probe.vert.spv
+    spirv-val --target-env vulkan1.0 evidence/probe.frag.spv
+    python3 qa/embed_spirv.py "$tmp/probe_spirv.h" evidence/probe.vert.spv evidence/probe.frag.spv
+    sha256sum qa/probe.vert qa/probe.frag evidence/probe.vert.spv evidence/probe.frag.spv "$tmp/probe_spirv.h" > evidence/shader-sha256.txt
+    draw_flags=(-DRAFT_SHADER_DRAW -I "$tmp")
+  fi
+  "$cc" -std=c11 -Wall -Wextra -Werror -O2 -fPIC -shared -DRAFT_ANDROID_JNI_LOG "${draw_flags[@]}" \
     qa/arm_probe.c qa/vulkan_probe.c -lvulkan -llog -o "$tmp/apk/lib/arm64-v8a/libraftarmprobe.so"
   readelf -d "$tmp/apk/lib/arm64-v8a/libraftarmprobe.so" | tee evidence/arm-vulkan-elf-dependencies.txt
   grep -Fq '[libvulkan.so]' evidence/arm-vulkan-elf-dependencies.txt
@@ -74,6 +89,11 @@ for i in {1..75}; do
       grep -F 'VK_FRAME_1_FIRST_RGBA=0,255,0,255' evidence/arm-runtime.log
       grep -F 'VULKAN_TRANSFER_READBACK_PASS pixels=32' evidence/arm-runtime.log
       printf 'result=passed\npixels=32\nscope=translated_arm64_vulkan_not_native_arm64_guest\n' | tee evidence/arm-vulkan-result.txt
+      if [[ "${ARM_SHADER_PROBE:-false}" == true ]]; then
+        grep -F 'VK_FRAME_2_FIRST_RGBA=0,0,255,255' evidence/arm-runtime.log
+        grep -F 'VK_SHADER_DRAW_PASS pixels=32 negative_control=16' evidence/arm-runtime.log
+        printf 'result=passed\nshader_pixels=32\nno_draw_control_pixels=16\nscope=translated_arm64_offscreen_graphics_pipeline\n' | tee evidence/arm-shader-result.txt
+      fi
     fi
     cat evidence/arm-runtime.log
     sleep 1

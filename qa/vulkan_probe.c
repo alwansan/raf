@@ -42,6 +42,10 @@ static void image_barrier(VkCommandBuffer cb, VkImage image,
     vkCmdPipelineBarrier(cb, from, to, 0, 0, NULL, 0, NULL, 1, &b);
 }
 
+#ifdef RAFT_SHADER_DRAW
+#include "vulkan_draw.h"
+#endif
+
 #ifdef RAFT_ANDROID_JNI_LOG
 int raft_vulkan_probe_main(void) {
 #else
@@ -97,12 +101,21 @@ int main(void) {
     VkPhysicalDeviceMemoryProperties mp;
     vkGetPhysicalDeviceMemoryProperties(physical, &mp);
 
-    enum { W = 4, H = 4, FRAME = W * H * 4, SIZE = 2 * FRAME };
+#ifdef RAFT_SHADER_DRAW
+    enum { FRAMES = 3 };
+#else
+    enum { FRAMES = 2 };
+#endif
+    enum { W = 4, H = 4, FRAME = W * H * 4, SIZE = FRAMES * FRAME };
     VkImageCreateInfo ii = { .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
         .imageType = VK_IMAGE_TYPE_2D, .format = VK_FORMAT_R8G8B8A8_UNORM,
         .extent = {W, H, 1}, .mipLevels = 1, .arrayLayers = 1,
         .samples = VK_SAMPLE_COUNT_1_BIT, .tiling = VK_IMAGE_TILING_OPTIMAL,
-        .usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+        .usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT
+#ifdef RAFT_SHADER_DRAW
+            | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+#endif
+        ,
         .sharingMode = VK_SHARING_MODE_EXCLUSIVE, .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED };
     VkImage image;
     VK(vkCreateImage(device, &ii, NULL, &image));
@@ -116,6 +129,10 @@ int main(void) {
     VkDeviceMemory im;
     VK(vkAllocateMemory(device, &ia, NULL, &im));
     VK(vkBindImageMemory(device, image, im, 0));
+#ifdef RAFT_SHADER_DRAW
+    ProbeDraw draw = {0};
+    REQUIRE(create_draw(device, image, W, H, &draw) == 0);
+#endif
 
     VkBufferCreateInfo bi = { .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
         .size = SIZE, .usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT,
@@ -147,9 +164,24 @@ int main(void) {
     VK(vkBeginCommandBuffer(cb, &begin));
 
     const VkClearColorValue colors[2] = { { .float32 = {1,0,0,1} }, { .float32 = {0,1,0,1} } };
+#ifndef RAFT_SHADER_DRAW
     VkImageSubresourceRange range = { .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
         .levelCount = 1, .layerCount = 1 };
-    for (uint32_t i = 0; i < 2; ++i) {
+#endif
+    for (uint32_t i = 0; i < FRAMES; ++i) {
+#ifdef RAFT_SHADER_DRAW
+        image_barrier(cb, image,
+            i ? VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED,
+            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+            i ? VK_ACCESS_TRANSFER_READ_BIT : 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            i ? VK_PIPELINE_STAGE_TRANSFER_BIT : VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+        record_draw(cb, &draw, W, H, i < 2 ? colors[i].float32 : NULL);
+        image_barrier(cb, image, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_TRANSFER_READ_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_TRANSFER_BIT);
+#else
         image_barrier(cb, image,
             i ? VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED,
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
@@ -160,6 +192,7 @@ int main(void) {
         image_barrier(cb, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_ACCESS_TRANSFER_WRITE_BIT,
             VK_ACCESS_TRANSFER_READ_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT);
+#endif
         VkBufferImageCopy copy = { .bufferOffset = i * FRAME,
             .imageSubresource = { .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT, .layerCount = 1 },
             .imageExtent = { W, H, 1 } };
@@ -187,9 +220,9 @@ int main(void) {
             .memory = bm, .offset = 0, .size = VK_WHOLE_SIZE };
         VK(vkInvalidateMappedMemoryRanges(device, 1, &mr));
     }
-    const uint8_t expect[2][4] = {{255,0,0,255}, {0,255,0,255}};
+    const uint8_t expect[3][4] = {{255,0,0,255}, {0,255,0,255}, {0,0,255,255}};
     const uint8_t *bytes = mapped;
-    for (uint32_t i = 0; i < 2; ++i) {
+    for (uint32_t i = 0; i < FRAMES; ++i) {
         const uint8_t *p = bytes + i * FRAME;
         printf("VK_FRAME_%u_FIRST_RGBA=%u,%u,%u,%u\n", i, p[0], p[1], p[2], p[3]);
         for (uint32_t j = 0; j < W*H; ++j) {
@@ -205,10 +238,16 @@ int main(void) {
     vkDestroyCommandPool(device, pool, NULL);
     vkDestroyBuffer(device, buffer, NULL);
     vkFreeMemory(device, bm, NULL);
+#ifdef RAFT_SHADER_DRAW
+    destroy_draw(device, &draw);
+#endif
     vkDestroyImage(device, image, NULL);
     vkFreeMemory(device, im, NULL);
     vkDestroyDevice(device, NULL);
     vkDestroyInstance(instance, NULL);
+#ifdef RAFT_SHADER_DRAW
+    puts("VK_SHADER_DRAW_PASS pixels=32 negative_control=16");
+#endif
     puts("VULKAN_TRANSFER_READBACK_PASS pixels=32");
     return 0;
 }
