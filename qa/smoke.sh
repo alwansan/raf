@@ -3,7 +3,18 @@ set -euo pipefail
 mkdir -p evidence
 exec > >(tee evidence/runner.log) 2>&1
 phase=setup
-trap 'rc=$?; printf "phase=%s\nexit=%s\n" "$phase" "$rc" > evidence/result.txt; if [[ -n "${emu_pid:-}" ]]; then adb logcat -d -s RaftQaFixture AndroidRuntime > evidence/fixture.log 2>&1 || true; kill "$emu_pid" 2>/dev/null || true; fi' EXIT
+cleanup() {
+  local rc=$?
+  printf "phase=%s\nexit=%s\n" "$phase" "$rc" > evidence/result.txt
+  if [[ -n "${emu_pid:-}" ]]; then
+    if [[ $(timeout -k 2s 5s adb get-state 2>/dev/null || true) == device ]]; then
+      timeout -k 2s 15s adb logcat -d -s RaftQaFixture AndroidRuntime > evidence/fixture.log 2>&1 || true
+    fi
+    kill "$emu_pid" 2>/dev/null || true
+    if (( rc != 0 )); then tail -n 100 evidence/emulator.log || true; fi
+  fi
+}
+trap cleanup EXIT
 abi=${EXPECTED_ABI:?}
 case "${abi}:$(uname -m)" in x86_64:x86_64|arm64-v8a:aarch64) ;; *) echo "Host ABI mismatch"; exit 2;; esac
 phase=sdk-discovery
@@ -42,8 +53,20 @@ if [[ ! -r /dev/kvm || ! -w /dev/kvm ]]; then
   sudo setfacl -m "u:$(id -un):rw" /dev/kvm
 fi
 test -r /dev/kvm && test -w /dev/kvm
-emulator -accel-check
-printf 'no\n' | avdmanager create avd -n raft-qa -k "$image" --force
+emulator -accel-check 2>&1 | tee evidence/kvm-check.txt
+phase=avd-creation
+avd_root=$(mktemp -d)
+export ANDROID_USER_HOME="$avd_root/.android"
+export ANDROID_EMULATOR_HOME="$ANDROID_USER_HOME"
+export ANDROID_SDK_HOME="$avd_root"
+export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
+mkdir -p "$ANDROID_AVD_HOME"
+printf 'no\n' | avdmanager create avd -n raft-qa -k "$image" -p "$ANDROID_AVD_HOME/raft-qa.avd" --force 2>&1 | tee evidence/avd-create.txt
+ls -la "$ANDROID_AVD_HOME" | tee evidence/avd-directory.txt
+test -s "$ANDROID_AVD_HOME/raft-qa.ini"
+test -s "$ANDROID_AVD_HOME/raft-qa.avd/config.ini"
+emulator -list-avds | tee evidence/avd-list.txt
+grep -Fx raft-qa evidence/avd-list.txt
 phase=build-fixture
 bt="$root/build-tools/35.0.0"
 jar="$root/platforms/android-35/android.jar"
@@ -61,13 +84,26 @@ phase=boot
 emulator -avd raft-qa -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader -accel on > evidence/emulator.log 2>&1 &
 emu_pid=$!
 export ANDROID_SERIAL=emulator-5554
-timeout 300 adb wait-for-device
-for i in {1..180}; do
-  [[ $(adb shell getprop sys.boot_completed | tr -d '\r') == 1 ]] && break
-  kill -0 "$emu_pid"
+deadline=$((SECONDS + 420))
+booted=0
+while (( SECONDS < deadline )); do
+  if ! kill -0 "$emu_pid" 2>/dev/null; then
+    echo 'Emulator process exited before Android booted'
+    exit 2
+  fi
+  if [[ $(timeout -k 2s 8s adb get-state 2>/dev/null || true) == device ]]; then
+    if [[ $(timeout -k 2s 8s adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r' || true) == 1 ]]; then
+      booted=1
+      break
+    fi
+  fi
   sleep 2
 done
-[[ $(adb shell getprop sys.boot_completed | tr -d '\r') == 1 ]]
+if (( booted != 1 )); then
+  echo 'Android boot deadline exceeded'
+  exit 2
+fi
+echo 'Android reported sys.boot_completed=1'
 guest=$(adb shell getprop ro.product.cpu.abi | tr -d '\r')
 [[ "$guest" == "$abi" ]]
 { uname -m; adb shell getprop ro.build.fingerprint; adb shell getprop ro.build.version.sdk; adb shell getprop ro.product.cpu.abilist; adb shell wm size; adb shell pm list features | grep -i vulkan || true; } > evidence/device.txt
