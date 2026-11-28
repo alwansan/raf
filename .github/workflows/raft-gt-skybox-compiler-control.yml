@@ -1,0 +1,326 @@
+name: GT G3 G6 exact Skybox compiler lowering control (NO PLAYER)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-gt-skybox-compiler-control.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-gt-g3-g6-skybox-compiler-control-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  skybox-editor:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    environment: UNITY_LICENSE
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+      queue: max
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only independent ambient verifier and existing pinned tools
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/
+            /tools/gt_original_light_hierarchy/audit.py
+            /tools/gt_remaining_scene_lighting/audit.py
+            /tools/gt_light_same_export/audit.py
+            /tools/gt_light_same_export/stage_trace.py
+            /tools/gt_ambient_same_export/
+            /tools/gt_skybox_exact_provider/
+            /tools/gt_skybox_shader_program/
+            /tools/gt_skybox_shader_wrapper/
+            /tools/gt_skybox_offset_differential/
+            /tools/gt_skybox_source_register_join/
+            /tools/gt_skybox_editor_import/
+            /tools/gt_skybox_compiler_control/
+            /android-port/Experiments/ExportLineage/
+      - name: Verify pinned source readers and shader program recovery controls
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test "$(git hash-object tools/gt_skybox_editor_import/stage.py)" = cdc8511483f774fcdd202905855a00feedea67c8
+          test "$(git hash-object tools/gt_skybox_editor_import/PrivateSkyboxImport.cs)" = 614243c5a5e106ff8ad979e0168516689460c985
+          test "$(git hash-object tools/gt_skybox_editor_import/test_stage.py)" = b92c0c6a232f94dab66d02866bc35a678a447b4c
+          test "$(git hash-object tools/gt_skybox_source_register_join/audit.py)" = ba3844b8668c1f4a98b600aee00795e8f4114238
+          test "$(git hash-object tools/gt_skybox_source_register_join/test_audit.py)" = dd79e61c8b87eb9e13e5588a83a3da39999684bf
+          test "$(git hash-object scripts/t3_original_921_dxbc_semantic_join.py)" = 8a7b0178f4502d7c163a7c8a313e7f754cd68162
+          test "$(git hash-object scripts/t3_spirv_interface_name_drift.py)" = b52cae6d2c5a620a7069cac46f9bc8f0281a0291
+          test "$(git hash-object tools/gt_skybox_offset_differential/audit.py)" = de84a2fc07532f8063c336e81f733e52a2c51b55
+          test "$(git hash-object tools/gt_skybox_offset_differential/test_audit.py)" = 11bc87b26260dd6b695abb9f511e4e4eb68ece24
+          test "$(git hash-object tools/gt_skybox_shader_wrapper/wrapper.py)" = 95bcf6e7282b8e500c17e7b2676b13448fcf4ea2
+          test "$(git hash-object tools/gt_skybox_shader_wrapper/test_wrapper.py)" = 4dcbdede5c66b0c5c1035b29ab491a6c9b570d5a
+          test "$(git hash-object scripts/gt_original_921_all_variants.py)" = 3ab23da40c1cfd8e77af5721e4bdd3d72fe749a9
+          test "$(git hash-object scripts/gt_original_921_keyword_routes.py)" = 1672c7e9ad6698c2703d57dc30c760f4bd4a41af
+          test "$(git hash-object scripts/gt_original_921_shaderlab.py)" = 33d08da56c3e11fb18f4ce511e8bfc17279edf67
+          test "$(git hash-object scripts/gt_original_921_cb_hlsl.py)" = 975bb92f79598b2c3179ee4fa301da1e29160e1f
+          test "$(git hash-object scripts/gt_original_921_semantics.py)" = cfcfb698e0d5aca84dc622cd2d29b66ac2b767a4
+          test "$(git hash-object tools/gt_skybox_shader_program/audit.py)" = ac3928d0f437e4a4b00ee82eb8cdc0848f55298b
+          test "$(git hash-object tools/gt_skybox_shader_program/test_audit.py)" = 4828398f46313efa7a93bbf6b58ab61bd5358ac6
+          test "$(git hash-object scripts/verify_export_lineage.py)" = e1304ef81abfa2c8c9e33c5509d68c75e743dd12
+          test "$(git hash-object scripts/w1_recover_graphics_programs.py)" = fce7fe2ac6635f9e67e03ea4aa8ec7b462603352
+          test "$(git hash-object scripts/w1_recover_depth_passes.py)" = 087d655e618abb9a8a8e773968af877dd413a0fb
+          test "$(git hash-object scripts/b44_verify_material_colors.py)" = a90596c5845de7e8078b6716441f48c282bf9ac2
+          test "$(git hash-object scripts/b22_verify_material_scalars.py)" = f90bebc6c93f37b487f9e100c36aeee0d7a3d673
+          test "$(git hash-object scripts/b05_verify_material_texenv_bindings.py)" = 730550c9851e3ce974ee97037c489eba1e7347d5
+          test "$(git hash-object scripts/w1_audit_export_material_shaders.py)" = 03f408f3e01c76310dd858e77c5b7584dec76cf8
+          test "$(git hash-object scripts/b49_shaderlab_pass_contract.py)" = b54d0174622de7da0d454a451e63023778696bb5
+          test "$(git hash-object tools/gt_skybox_exact_provider/resolve.py)" = 8986080f354e2e7a096ba3fcbe574d68f2d9691a
+          test "$(git hash-object tools/gt_skybox_exact_provider/test_resolve.py)" = e561b3e972534bed4993e7f95deef3ae8022ab8a
+          test "$(git hash-object tools/gt_skybox_exact_provider/provider-catalog.json)" = 41bc2f997dc5c90ddfa43053c82915c5ad7cde7e
+          test "$(git hash-object tools/gt_ambient_same_export/audit.py)" = 1485a9ad7bd60d2d8d8fcb21e75ff64f2ca23737
+          test "$(git hash-object tools/gt_ambient_same_export/stage_trace.py)" = 7c204d8ad6cbbeb10167f22bd352bd9d4d4beb8c
+          test "$(git hash-object tools/gt_ambient_same_export/test_audit.py)" = a057d81547d8786f231efced5a2477e1c9c1fe21
+          test "$(git hash-object tools/gt_light_same_export/audit.py)" = d119a5bd0763afb80259c5da9a98df9c3a63194d
+          test "$(git hash-object tools/gt_light_same_export/stage_trace.py)" = 3d5f70e092879090f7e9ac9a3491783d1849518c
+          test "$(git hash-object scripts/w1_stage_zip2_owners.py)" = 9ae972de1b478ceda51f56cce33d6111a8c72229
+          test "$(git hash-object scripts/b21_compare_export_lights.py)" = 1246ca47b7cd4dd8a3a933c843de973a2d95fc34
+          test "$(git hash-object scripts/b21_stage_light_lineage.py)" = ce27df170592e5dac292c9de74c28f2eccd96d3a
+          test "$(git hash-object scripts/b02_stage_texture_lineage.py)" = a9d678ba03f44b86b6f18149b787e06c8dd1535f
+          test "$(git hash-object scripts/patch_export_lineage.py)" = 25de1a42b918d0a3c1d0b5ebe17ec17b7744cd38
+          test "$(git hash-object android-port/Experiments/ExportLineage/RaftExportLineage.cs)" = 4b84a325bb1766583adb4ba6cfd9a23225f23bb9
+          test "$(git hash-object android-port/Experiments/ExportLineage/Program.cs)" = aed1e144574b12dd4ddf0fdc71a3cf28ee9d878d
+          test "$(git hash-object tools/gt_original_light_hierarchy/audit.py)" = b7a78d4edd86a9c38186e7bb6536c76fa9cb11fa
+          test "$(git hash-object tools/gt_remaining_scene_lighting/audit.py)" = 84133c4b34c1d3b1cda8a2b534676d38c062f1ee
+          mkdir "$RUNNER_TEMP/gt-skybox-editor-safe" "$RUNNER_TEMP/gt-skybox-editor-private"
+          python3 -m venv "$RUNNER_TEMP/gt-skybox-editor-py"
+          py="$RUNNER_TEMP/gt-skybox-editor-py/bin/python"
+          "$py" -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          "$py" -B -m unittest discover -s tools/gt_ambient_same_export -p test_audit.py -v
+          "$py" -B -m unittest discover -s tools/gt_skybox_exact_provider -p test_resolve.py -v
+          "$py" -B -m unittest discover -s tools/gt_skybox_shader_program -p test_audit.py -v
+          "$py" -B -m unittest discover -s tools/gt_skybox_shader_wrapper -p test_wrapper.py -v
+          "$py" -B -m unittest discover -s tools/gt_skybox_offset_differential -p test_audit.py -v
+          "$py" -B -m unittest discover -s tools/gt_skybox_source_register_join -p test_audit.py -v
+          "$py" -B -m unittest discover -s tools/gt_skybox_editor_import -p test_stage.py -v
+          "$py" -B -m unittest discover -s tools/gt_skybox_compiler_control -p test_control.py -v
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 8388608
+      - name: Install public translation tools for exact private wrapper
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          smolv="$RUNNER_TEMP/gt-skybox-editor-smolv"
+          mkdir "$smolv"
+          upstream=https://raw.githubusercontent.com/aras-p/smol-v/6303e979b59153ee7007fd14e06d3fed8687b64c/source
+          curl -fsSL "$upstream/smolv.cpp" -o "$smolv/smolv.cpp"
+          curl -fsSL "$upstream/smolv.h" -o "$smolv/smolv.h"
+          c++ -std=c++11 -O2 -I"$smolv" scripts/gt_decode_smolv.cpp "$smolv/smolv.cpp" -o "$smolv/decode"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Obtain exact public AssetRipperCLI source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: Source
+      - name: Compile temporary class104 capture and smoke test
+        run: |
+          set -euo pipefail
+          test "$(git -C ar-host rev-parse HEAD)" = 036098ab525a3f9f693dc101edeb21faad4d32d8
+          p="$RUNNER_TEMP/gt-skybox-editor-private"
+          python3 -m tools.gt_ambient_same_export.stage_trace --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --destination "$p/RaftExportLineage.cs"
+          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper "$p/RaftExportLineage.cs"
+          timeout 780s dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$p/compiled" > "$p/compile.log" 2>&1 || { tail -60 "$p/compile.log"; exit 1; }
+          dotnet "$p/compiled/ExportLineage.dll" --probe-tool > /dev/null
+      - name: Read only level24 and five pinned support providers
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-skybox-editor-selected-source
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/level24
+            /Raft/Raft_Data/globalgamemanagers
+            /Raft/Raft_Data/globalgamemanagers.assets
+            /Raft/Raft_Data/sharedassets6.assets
+            /Raft/Raft_Data/sharedassets24.assets
+            /Raft/Raft_Data/sharedassets25.assets
+      - name: Resolve only exact missing Skybox provider from authenticated native file slot
+        id: select
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-skybox-editor-private"
+          "$RUNNER_TEMP/gt-skybox-editor-py/bin/python" -B -m tools.gt_skybox_exact_provider.resolve discover \
+            --source .gt-skybox-editor-selected-source --destination "$p/source" --plan "$p/provider-plan.json" \
+            --report "$RUNNER_TEMP/gt-skybox-editor-safe/discover.json"
+      - name: Read only one selected additional provider (exact file or ordered chunks)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-skybox-editor-extra-source
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: ${{ steps.select.outputs.paths }}
+      - name: Authenticate selected provider Git object and SHA and exact native Material21
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-skybox-editor-private"
+          "$RUNNER_TEMP/gt-skybox-editor-py/bin/python" -B -m tools.gt_skybox_exact_provider.resolve stage \
+            --source .gt-skybox-editor-extra-source --destination "$p/source" --plan "$p/provider-plan.json" \
+            --report "$RUNNER_TEMP/gt-skybox-editor-safe/stage.json"
+      - name: Resolve actual Skybox Material m_Shader exact native provider
+        id: shader-select
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-skybox-editor-private"
+          "$RUNNER_TEMP/gt-skybox-editor-py/bin/python" -B -m tools.gt_skybox_shader_program.audit discover \
+            --destination "$p/source" --skybox-plan "$p/provider-plan.json" --plan "$p/shader-plan.json" \
+            --report "$RUNNER_TEMP/gt-skybox-editor-safe/shader-discover.json"
+      - name: Read only additional exact Shader provider when not already staged
+        if: steps.shader-select.outputs.needs_extra == 'true'
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-skybox-editor-extra-shader
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: ${{ steps.shader-select.outputs.paths }}
+      - name: Authenticate exact selected native Shader48 and provider bytes
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-skybox-editor-private"
+          "$RUNNER_TEMP/gt-skybox-editor-py/bin/python" -B -m tools.gt_skybox_shader_program.audit stage \
+            --source .gt-skybox-editor-extra-shader --destination "$p/source" --skybox-plan "$p/provider-plan.json" \
+            --plan "$p/shader-plan.json" --report "$RUNNER_TEMP/gt-skybox-editor-safe/shader-stage.json"
+      - name: Execute actual bounded shader-linked export with same-instance traces
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/gt-skybox-editor-private/w1.json
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: ${{ runner.temp }}/gt-skybox-editor-private/b02.json
+          RAFT_PRIVATE_EXPORT_AMBIENT_LINEAGE: ${{ runner.temp }}/gt-skybox-editor-private/ambient.json
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-skybox-editor-private"
+          rc=0
+          timeout 540s dotnet "$p/compiled/ExportLineage.dll" "$p/source" "$p/export" > "$p/export.log" 2>&1 || rc=$?
+          RC="$rc" python3 - <<'PY'
+          import json,os,re
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"]);p=root/"gt-skybox-editor-private"
+          raw=(p/"export.log").read_text(errors="replace")
+          r={"exit_code":int(os.environ["RC"]),"actual_export_completed":os.environ["RC"]=="0",
+             "private_trace_files_present":sum((p/x).is_file() for x in ("w1.json","b02.json","ambient.json")),
+             "tool_exception_categories":sorted(set(re.findall(r"\b(?:System|AssetRipper)\.[A-Za-z.]+Exception\b",raw))),
+             "private_log_bytes":(p/"export.log").stat().st_size}
+          (root/"gt-skybox-editor-safe/export.json").write_text(json.dumps(r,sort_keys=True,indent=2)+"\n")
+          print("GT_SKYBOX_SHADER_ACTUAL_EXPORT "+json.dumps(r,sort_keys=True))
+          PY
+          test "$rc" = 0
+          test -s "$RAFT_PRIVATE_EXPORT_LINEAGE" && test -s "$RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE" && test -s "$RAFT_PRIVATE_EXPORT_AMBIENT_LINEAGE"
+      - name: Replay exact verified candidate and stage actual same-export shader/material
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/gt-skybox-editor-private"
+          timeout 900s "$RUNNER_TEMP/gt-skybox-editor-py/bin/python" -B -m tools.gt_skybox_editor_import.stage stage \
+            --destination "$p/source" --skybox-plan "$p/provider-plan.json" --plan "$p/shader-plan.json" \
+            --project "$p/export/ExportedProject" --trace "$p/ambient.json" --w1 "$p/w1.json" --b02 "$p/b02.json" \
+            --replay-report "$RUNNER_TEMP/gt-skybox-editor-safe/same-export.json" --dest gt-skybox-editor-project \
+            --report "$RUNNER_TEMP/gt-skybox-editor-safe/editor-stage.json"
+          "$RUNNER_TEMP/gt-skybox-editor-py/bin/python" -B -m tools.gt_skybox_compiler_control.control stage \
+            --dest gt-skybox-editor-project --prior-report "$RUNNER_TEMP/gt-skybox-editor-safe/editor-stage.json" \
+            --report "$RUNNER_TEMP/gt-skybox-editor-safe/compiler-control-stage.json"
+          rm -rf "$p/source" "$p/export" .gt-skybox-editor-selected-source .gt-skybox-editor-extra-source .gt-skybox-editor-extra-shader
+      - name: Check existing Unity activation and remaining disk
+        id: activation
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          set +x
+          if { [ -n "$UNITY_LICENSE" ] || { [ -n "$UNITY_SERIAL" ] && [ -n "$UNITY_EMAIL" ] && [ -n "$UNITY_PASSWORD" ]; }; } &&
+             test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 16777216; then
+            echo available=true >> "$GITHUB_OUTPUT"
+          else
+            echo available=false >> "$GITHUB_OUTPUT"
+            echo 'GT_SKYBOX_EDITOR activation_or_disk_unavailable=true'
+          fi
+      - name: Compile exact original body with only DXC pragma removed in isolated Android Vulkan bundle
+        id: unity
+        if: steps.activation.outputs.available == 'true'
+        continue-on-error: true
+        uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-skybox-editor-project
+          targetPlatform: Android
+          buildMethod: GTPrivateSkyboxImport.Run
+          manualExit: true
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 8g
+          dockerCpuLimit: 2
+          customParameters: -job-worker-count 2
+      - name: Independently decode original compiler-control Vulkan stage programs and check exact identity
+        if: always() && steps.activation.outcome == 'success'
+        env:
+          EDITOR_OUTCOME: ${{ steps.unity.outcome }}
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/gt-skybox-editor-py/bin/python" -B -m tools.gt_skybox_compiler_control.control verify \
+            --dest gt-skybox-editor-project --stage-report "$RUNNER_TEMP/gt-skybox-editor-safe/compiler-control-stage.json" \
+            --decoder "$RUNNER_TEMP/gt-skybox-editor-smolv/decode" \
+            --outcome "$EDITOR_OUTCOME" --report "$RUNNER_TEMP/gt-skybox-editor-safe/compiler-control-verify.json"
+      - name: Publish ONLY safe aggregate receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-skybox-compiler-control-safe-aggregate
+          path: |
+            ${{ runner.temp }}/gt-skybox-editor-safe/discover.json
+            ${{ runner.temp }}/gt-skybox-editor-safe/stage.json
+            ${{ runner.temp }}/gt-skybox-editor-safe/shader-discover.json
+            ${{ runner.temp }}/gt-skybox-editor-safe/shader-stage.json
+            ${{ runner.temp }}/gt-skybox-editor-safe/export.json
+            ${{ runner.temp }}/gt-skybox-editor-safe/same-export.json
+            ${{ runner.temp }}/gt-skybox-editor-safe/editor-stage.json
+            ${{ runner.temp }}/gt-skybox-editor-safe/compiler-control-stage.json
+            ${{ runner.temp }}/gt-skybox-editor-safe/compiler-control-verify.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove only temporary source and private export
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -d .gt-skybox-editor-selected-source/.git; then rm -rf .gt-skybox-editor-selected-source; fi
+          if test -d .gt-skybox-editor-extra-source/.git; then rm -rf .gt-skybox-editor-extra-source; fi
+          if test -d .gt-skybox-editor-extra-shader/.git; then rm -rf .gt-skybox-editor-extra-shader; fi
+          if test -d "$RUNNER_TEMP/gt-skybox-editor-private"; then rm -rf "$RUNNER_TEMP/gt-skybox-editor-private"; fi
+          if test -f gt-skybox-editor-project/expected-private.json; then sudo rm -rf gt-skybox-editor-project; fi
