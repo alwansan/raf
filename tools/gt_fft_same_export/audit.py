@@ -92,6 +92,45 @@ def verify_field(body,field_sha,target):
     need(type(p["fileID"]) is int and type(p["type"]) is int and (p["fileID"],p["guid"],str(p["type"]))==target,"compute_array_pointer")
     return True
 
+def field_diagnostics(body,field_sha,target):
+    d=strict_yaml(body)
+    need(type(d) is dict and set(d)=={"MonoBehaviour"} and type(d["MonoBehaviour"]) is dict,"component_document")
+    values=d["MonoBehaviour"]
+    need(len(values)<=10000,"component_field_budget")
+    native={"m_ObjectHideFlags","m_CorrespondingSourceObject","m_PrefabInstance","m_PrefabAsset","m_GameObject","m_Enabled","m_EditorHideFlags","m_Script","m_Name","m_EditorClassIdentifier","m_PrefabParentObject","m_PrefabInternal"}
+    candidates=[k for k,v in values.items() if type(k) is str and digest(k.encode())==field_sha]
+    matches=[]
+    for k,v in values.items():
+        if not isinstance(k,str) or type(v) is not list or len(v)!=1 or type(v[0]) is not dict:continue
+        p=v[0]
+        if set(p)=={"fileID","guid","type"} and type(p["fileID"]) is int and type(p["type"]) is int and (p["fileID"],p["guid"],str(p["type"]))==target:
+            matches.append(digest(k.encode()))
+    script=values.get("m_Script")
+    script_pointer=type(script) is dict and type(script.get("fileID")) is int and script["fileID"]!=0
+    guid=script.get("guid") if script_pointer else None
+    return dict(component_document_sha256=digest(body),component_top_level_field_count=len(values),
+                component_custom_field_count=sum(k not in native for k in values),
+                component_expected_managed_field_count=len(candidates),
+                component_exact_fft_pointer_array_count=len(matches),
+                component_exact_fft_pointer_array_field_sha256=matches,
+                component_script_nonnull=script_pointer,
+                component_script_external_guid_present=isinstance(guid,str) and re.fullmatch(r"[a-fA-F0-9]{32}",guid) is not None and guid!="0"*32,
+                component_editor_class_identifier_present=bool(values.get("m_EditorClassIdentifier")),
+                component_native_only=set(values)<=native)
+
+def managed_log_diagnostics(raw):
+    providers=re.findall(r"During Mono initialization, found (\d+) assemblies",raw)
+    unresolved=re.findall(r"Could not read MonoBehaviour structure for \x60([^\x60\r\n]+)\x60",raw)
+    target_hash=original.MONOSCRIPT_NAME_SHA
+    return dict(mono_provider_count=int(providers[-1]) if providers else 0,
+                mono_initialization_marker=bool(providers),
+                unknown_backend_fallback="Could not initialize assembly manager" in raw or "'Unknown' scripting backend" in raw,
+                decompiled_script_export="ScriptExportMode: Decompiled" in raw,
+                exporter_completion_marker="General : === COMPLETED ===" in raw,
+                mono_structure_layout_mismatch_lines=raw.count("layout mismatched binary content"),
+                unresolved_mono_structure_count=len(unresolved),
+                target_mono_structure_unresolved_count=sum(digest(x.encode())==target_hash for x in unresolved))
+
 def snapshot(project):
     files={}
     for p in project.rglob("*"):
@@ -101,7 +140,8 @@ def snapshot(project):
             with p.open("rb") as stream:files[str(p.relative_to(project))]=(p.stat().st_size,hashlib.file_digest(stream,"sha256").hexdigest())
     return files
 
-def run(source,managed,project,w1,component_trace,work):
+def run(source,managed,project,w1,component_trace,work,progress=None):
+    if progress is None:progress={}
     p=original.verify(source,managed)
     need(p["original_compute_shader_array_source_verified"] and p["original_one_element_fft_array_tail_correlated"],"original_provenance")
     m=mono.inspect(managed)
@@ -119,7 +159,12 @@ def run(source,managed,project,w1,component_trace,work):
     need(guid==fp[1] and meta_path(assets,guid)==old.with_suffix(".asset.meta"),"compute_meta_identity")
     component=meta_path(assets,cp[1]).with_suffix("")
     original_body=selected_body(component,cp[0],114)
+    progress.update(original_source_provenance=True,same_export_component_and_compute_trace_matched=True,
+                    original_compute_meta_and_yaml_class_verified=True,original_component_yaml_class_verified=True,
+                    original_file_id=fp[0],original_reference_type=int(fp[2]),original_managed_field_sha256=field)
+    progress.update(field_diagnostics(original_body,field,fp))
     verify_field(original_body,field,fp)
+    progress.update(one_element_array_typed_name_matched=True,same_export_component_and_compute_guid_join=True)
     stage=work/"candidate";backup=work/"backup";backup.mkdir()
     src_report=candidate.stage(source,stage)
     need(src_report["executable_spirv_matches_independent_candidates"]==20,"source_routes")
@@ -156,11 +201,11 @@ def run(source,managed,project,w1,component_trace,work):
         actual_unity_import_verified=False,original_runtime_kernel_mapping_proven=False,all_four_format_runtime_selection_verified=False,
         android_device=False,water_rendering_verified=False,production=False,XAPK=False)
 
-def export_status(rc,project,w1,component,texture,log):
+def export_status(rc,project,w1,component,texture,log,mode="explicit_files"):
     # Publish only bounded observations. Private source paths, trace IDs,
     # exported GUIDs and raw exporter messages must not leave the runner.
     paths={"w1":w1,"component":component,"texture":texture}
-    report=dict(exporter_exit=rc,exporter_returned_zero=rc==0,trace_exists={},trace_rows={},trace_instances_equal=False,
+    report=dict(exporter_exit=rc,exporter_returned_zero=rc==0,discovery_mode=mode,trace_exists={},trace_rows={},trace_instances_equal=False,
                 source_compute_trace_rows=0,source_component_trace_rows=0,export_assets_present=(project/"Assets").is_dir(),
                 actual_export_completed=False,android_device=False,production=False,XAPK=False)
     if log.is_file() and not log.is_symlink():
@@ -168,6 +213,7 @@ def export_status(rc,project,w1,component,texture,log):
         with log.open("rb") as stream:
             raw=stream.read(16*1024*1024).decode("utf-8",errors="replace")
         report["tool_exception_categories"]=sorted(set(re.findall(r"\b(?:System|AssetRipper)\.[A-Za-z.]+Exception\b",raw)))[:32]
+        report.update(managed_log_diagnostics(raw))
     loaded={}
     for key,p in paths.items():
         report["trace_exists"][key]=p.is_file() and not p.is_symlink() and 0<p.stat().st_size<=40*1024*1024
@@ -190,18 +236,19 @@ def export_status(rc,project,w1,component,texture,log):
 def main():
     p=argparse.ArgumentParser();p.add_argument("--patch-helper",type=Path)
     p.add_argument("--export-status",type=int);p.add_argument("--texture-trace",type=Path);p.add_argument("--export-log",type=Path)
+    p.add_argument("--discovery-mode",choices=("explicit_files","directory"),default="explicit_files")
     for k in ("source","managed","project","w1","component-trace","out"):p.add_argument("--"+k,type=Path)
     a=p.parse_args()
     if a.patch_helper:patch_helper(a.patch_helper);return 0
     if a.export_status is not None:
-        report=export_status(a.export_status,a.project,a.w1,a.component_trace,a.texture_trace,a.export_log)
+        report=export_status(a.export_status,a.project,a.w1,a.component_trace,a.texture_trace,a.export_log,a.discovery_mode)
         a.out.write_text(json.dumps(report,sort_keys=True)+"\n")
         print("GT_FFT_SAME_EXPORT_PHASE "+json.dumps(report,sort_keys=True))
         return 0 if report["actual_export_completed"] else 2
     result=dict(status="INCONCLUSIVE",actual_unity_import_verified=False,water_rendering_verified=False,android_device=False,production=False,XAPK=False)
     try:
         with tempfile.TemporaryDirectory(prefix="gt-fft-same-export-",dir=a.project.parent) as work:
-            result.update(run(a.source,a.managed,a.project,json.loads(a.w1.read_text()),json.loads(a.component_trace.read_text()),Path(work)))
+            result.update(run(a.source,a.managed,a.project,json.loads(a.w1.read_text()),json.loads(a.component_trace.read_text()),Path(work),result))
     except Exception as e:
         result["failure_type"]=type(e).__name__
         if isinstance(e,ValueError) and re.fullmatch(r"[a-z_]+",str(e)):result["failure_reason"]=str(e)

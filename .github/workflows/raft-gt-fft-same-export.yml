@@ -148,7 +148,7 @@ jobs:
           timeout 300s "$RUNNER_TEMP/gt-fft-ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/gt-fft-managed" Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/gt-fft-private-ilspy.log" 2>&1
           sudo apt-get update -qq
           sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
-      - name: Run one bounded genuine source export with THREE same-instance private traces
+      - name: Run one bounded genuine source export with THREE same-instance private traces via directory discovery
         env:
           DOTNET_PROCESSOR_COUNT: '2'
           RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/b21-w1-private.json
@@ -159,12 +159,12 @@ jobs:
           set -euo pipefail
           set +e
           timeout 540s dotnet "$RUNNER_TEMP/b21-compiled/ExportLineage.dll" \
-               "$RUNNER_TEMP/b21-original" "$RUNNER_TEMP/b21-private-export" \
+               "$RUNNER_TEMP/b21-original" "$RUNNER_TEMP/b21-private-export" --full-install \
                > "$RUNNER_TEMP/b21-original-export-private.log" 2>&1
           rc=$?
           set -e
           python3 -B -m tools.gt_fft_same_export.audit \
-            --export-status "$rc" \
+            --export-status "$rc" --discovery-mode directory \
             --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
             --w1 "$RAFT_PRIVATE_EXPORT_LINEAGE" \
             --component-trace "$RAFT_PRIVATE_EXPORT_FFT_COMPONENT_LINEAGE" \

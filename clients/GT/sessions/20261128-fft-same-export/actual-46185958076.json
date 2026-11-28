@@ -1,0 +1,52 @@
+{
+  "run": 46185958076,
+  "job": 141105786516,
+  "head": "acbcde9b052a2f58eabec3915954c380d8ed2b4b",
+  "conclusion": "failure",
+  "guard": {
+    "run": 46185958083,
+    "conclusion": "success"
+  },
+  "lint": {
+    "run": 46185958062,
+    "conclusion": "success"
+  },
+  "source_free_tests_passed": 24,
+  "authenticated_serialized_providers": 12,
+  "managed_providers_staged": 151,
+  "phase": {
+    "XAPK": false,
+    "actual_export_completed": true,
+    "android_device": false,
+    "export_assets_present": true,
+    "exporter_exit": 0,
+    "exporter_returned_zero": true,
+    "private_log_bytes": 1205115,
+    "production": false,
+    "source_component_trace_rows": 1,
+    "source_compute_trace_rows": 1,
+    "tool_exception_categories": [],
+    "trace_exists": {
+      "component": true,
+      "texture": true,
+      "w1": true
+    },
+    "trace_instances_equal": true,
+    "trace_rows": {
+      "component": 2,
+      "texture": 2034,
+      "w1": 1118
+    }
+  },
+  "receipt": {
+    "XAPK": false,
+    "actual_unity_import_verified": false,
+    "android_device": false,
+    "failure_reason": "managed_array_field_missing",
+    "failure_type": "ValueError",
+    "production": false,
+    "status": "INCONCLUSIVE",
+    "water_rendering_verified": false
+  },
+  "original_array_guid_verified": false
+}
