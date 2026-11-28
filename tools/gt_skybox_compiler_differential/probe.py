@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-CASES=("common","guard_common","split_registers","guard_different_registers","negative_error")
+CASES=("common","guard_common","split_registers","guard_different_registers","guard_entries","guard_entries_offset","negative_error")
 GUARD="#if defined(SHADER_STAGE_VERTEX) && !defined(SHADER_STAGE_FRAGMENT)"
 FRAG="#elif defined(SHADER_STAGE_FRAGMENT) && !defined(SHADER_STAGE_VERTEX)"
 MARKER="GT_PROBE_STAGE_SELECTION"
@@ -17,6 +17,15 @@ def shared(reg):
 
 def shader(case):
     if case not in CASES: raise ValueError("unknown_case")
+    if case in ("guard_entries","guard_entries_offset"):
+        # Unlike a guarded declaration, the other entrypoint is absent in each stage.
+        header='Shader "Hidden/GTStageProbe/'+case+'" {\nSubShader { Pass {\nHLSLPROGRAM\n#pragma target 4.5\n#pragma only_renderers vulkan\n#pragma vertex gt_vert\n#pragma fragment gt_frag\n'
+        varying="struct Vary { float4 pos : SV_POSITION; float4 val : TEXCOORD0; };\n"
+        v="cbuffer GTShared : register(b2) { float4 _GTShared : packoffset(c0); };\nVary gt_vert(float4 p : POSITION) { Vary o; o.pos=p; o.pos.xy+=_GTShared.xy*0.01; o.val=_GTShared; return o; }\n"
+        reg=3 if case=="guard_entries_offset" else 2
+        offset=1 if case=="guard_entries_offset" else 0
+        f=f"cbuffer GTShared : register(b{reg}) {{ float4 _GTShared : packoffset(c{offset}); }};\nfloat4 gt_frag(Vary i) : SV_Target {{ return i.val*0.25+_GTShared*0.75; }}\n"
+        return header+varying+GUARD+"\n"+v+FRAG+"\n"+f+"#else\n#error "+MARKER+"\n#endif\nENDHLSL\n} } }\n"
     vert=frag="_GTShared"
     if case=="split_registers":
         decl=("cbuffer GTVertex : register(b2) { float4 _GTVertex; };\n"
@@ -98,6 +107,16 @@ def decode(path,case,decoder):
     return dict(decoded_vertex_fragment=True,referenced_blob_count=len(seen),
                 execution_models=sorted(set().union(*seen.values())),all_spirv_validated=True)
 
+def editor_clean_decoded(r):
+    # Scoped proof independent of the native console stream. The original
+    # compiler acceptance and native-log corroboration are not implied.
+    return (r.get("imported") is True and r.get("bundleBuilt") is True
+            and r.get("sourceCopyExact") is True and r.get("bundle_sha256_matches") is True
+            and r.get("errorsBefore")==0 and r.get("errorsAfter")==0
+            and r.get("stageSelectorMessages")==0 and r.get("bindingConflictMessages")==0
+            and r.get("decoded_vertex_fragment") is True and r.get("all_spirv_validated") is True
+            and r.get("referenced_blob_count",0)>0 and r.get("execution_models")==[0,4])
+
 def compiled(r):
     return (r.get("imported") is True and r.get("bundleBuilt") is True and r.get("errorsBefore")==0
             and r.get("errorsAfter")==0 and r.get("decoded_vertex_fragment") is True
@@ -108,37 +127,54 @@ def compiled(r):
 def verify(dest,outcome,decoder,report):
     result=dict(status="INCONCLUSIVE",original_shader_verified=False,device_pixels=False,player_built=False,XAPK=False,editor_outcome=outcome,cases={})
     try:
-        manifest=json.loads((dest/"authored-sha.json").read_text())
+        manifest_path=dest/"authored-sha.json"
+        editor_path=dest/"editor-safe.json"
+        log_path=dest/"editor-private.log"
+        result["input_presence"]={"authored_manifest":manifest_path.is_file(),
+                                  "editor_receipt":editor_path.is_file(),"native_log_file":log_path.is_file(),
+                                  "decoder":decoder.is_file()}
+        if not manifest_path.is_file(): raise ValueError("missing_authored_manifest")
+        manifest=json.loads(manifest_path.read_text())
         expected={"Assets/Editor/StageProbe.cs",*["cases/"+c+".shader" for c in CASES]}
         if set(manifest)!=expected or any(digest(dest/p)!=v for p,v in manifest.items()): raise ValueError("source_drift")
         result["authored_source_unchanged"]=True
-        editor=json.loads((dest/"editor-safe.json").read_text())
+        if not editor_path.is_file(): raise ValueError("missing_editor_receipt")
+        editor=json.loads(editor_path.read_text())
         if editor["version"]!="2021.3.45f2" or editor["androidVulkanOnly"] is not True or editor["playerBuilt"] is not False: raise ValueError("editor_environment")
         if [r["id"] for r in editor["cases"]]!=list(CASES): raise ValueError("case_set")
-        log=(dest/"editor-private.log").read_text(errors="replace")
+        log=log_path.read_text(errors="replace") if log_path.is_file() else None
         for item in editor["cases"]:
             c=item["id"]
-            r={k:item[k] for k in ("imported","bundleBuilt","errorsBefore","errorsAfter","exceptionCategory")}
-            r.update(log_case(log,c))
+            r={k:item[k] for k in ("imported","bundleBuilt","errorsBefore","errorsAfter","exceptionCategory",
+                                   "sourceCopyExact","stageSelectorMessages","bindingConflictMessages","negativeSentinelMessages")}
+            r.update(log_case(log,c) if log is not None else {"log_boundary":False})
+            bundle=dest/"private-bundles"/c/"probe"
+            r["bundle_file_present"]=bundle.is_file()
+            r["bundle_sha256_matches"]=False
             if r["bundleBuilt"]:
-                try: r.update(decode(dest/"private-bundles"/c/"probe",c,decoder))
-                except Exception as e: r["decode_failure"]=type(e).__name__+":"+str(e)[:120] if isinstance(e,ValueError) else type(e).__name__
-            r["compiled"]=compiled(r)
+                try:
+                    if not bundle.is_file(): raise ValueError("missing_bundle")
+                    r["bundle_sha256_matches"]=digest(bundle)==item["bundleSha256"]
+                    if not r["bundle_sha256_matches"]: raise ValueError("bundle_digest_drift")
+                    r.update(decode(bundle,c,decoder))
+                except Exception as e:
+                    r["decode_failure"]=type(e).__name__+":"+str(e)[:120] if isinstance(e,ValueError) else type(e).__name__
+            r["decoded_and_editor_clean"]=editor_clean_decoded(r)
+            r["compiled"]=compiled(r) and r["decoded_and_editor_clean"]
             result["cases"][c]=r
         rows=result["cases"];neg=rows["negative_error"]
-        negative=(not neg["compiled"] and neg.get("negative_sentinel_errors",0)>0 and (neg["errorsBefore"]>0 or neg["errorsAfter"]>0))
-        result.update(negative_control_rejected=negative,shared_unconditional_compiled=rows["common"]["compiled"],
-                      split_unconditional_compiled=rows["split_registers"]["compiled"],
-                      guard_same_binding_compiled=rows["guard_common"]["compiled"],
-                      guard_different_binding_compiled=rows["guard_different_registers"]["compiled"],
-                      guard_error_observed=rows["guard_common"].get("stage_selection_errors",0)>0,
-                      binding_conflict_observed=rows["guard_different_registers"].get("shared_uniform_explicit_binding_conflicts",0)>0)
-        if outcome=="success" and negative and all(r.get("log_boundary") for r in rows.values()) and rows["common"]["compiled"] and rows["split_registers"]["compiled"]:
-            result["status"]="PASS_AUTHORED_DIAGNOSTIC_MATRIX"
+        negative=(neg["sourceCopyExact"] is True and not neg["decoded_and_editor_clean"] and
+                  neg["negativeSentinelMessages"]>0 and (neg["errorsBefore"]>0 or neg["errorsAfter"]>0))
+        result["negative_control_rejected_by_shaderutil"]=negative
+        result["native_log_reconciliation_required"]=True
+        result["native_log_file_present"]=log is not None
+        result["decoded_editor_clean_cases"]=[c for c,r in rows.items() if r["decoded_and_editor_clean"]]
+        if outcome=="success" and negative and rows["common"]["decoded_and_editor_clean"] and rows["split_registers"]["decoded_and_editor_clean"]:
+            result["status"]="PASS_AUTHORED_DECODED_BASELINES_PENDING_NATIVE_LOG_RECONCILIATION"
     except Exception as e: result["reason"]=type(e).__name__+":"+str(e)[:120] if isinstance(e,ValueError) else type(e).__name__
     report.write_text(json.dumps(result,sort_keys=True,indent=2)+"\n")
     print("GT_SKYBOX_COMPILER_DIFFERENTIAL "+json.dumps(result,sort_keys=True))
-    return 0 if result["status"]=="PASS_AUTHORED_DIAGNOSTIC_MATRIX" else 2
+    return 0 if result["status"]=="PASS_AUTHORED_DECODED_BASELINES_PENDING_NATIVE_LOG_RECONCILIATION" else 2
 
 if __name__=="__main__":
     p=argparse.ArgumentParser();sub=p.add_subparsers(dest="action",required=True)

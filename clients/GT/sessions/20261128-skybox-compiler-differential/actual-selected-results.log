@@ -1,0 +1,20 @@
+2026-11-28T04:24:02.5739406Z Ran 7 tests in 0.001s
+2026-11-28T04:27:52.3335025Z GT_STAGE_PROBE_BEGIN common
+2026-11-28T04:27:53.1182541Z     vulkan (total internal programs: 3, unique: 1)
+2026-11-28T04:27:53.1824170Z GT_STAGE_PROBE_END common
+2026-11-28T04:27:53.1830240Z GT_STAGE_PROBE_BEGIN guard_common
+2026-11-28T04:27:53.5159490Z     vulkan (total internal programs: 3, unique: 1)
+2026-11-28T04:27:53.5650159Z GT_STAGE_PROBE_END guard_common
+2026-11-28T04:27:53.5658861Z GT_STAGE_PROBE_BEGIN split_registers
+2026-11-28T04:27:53.8910131Z     vulkan (total internal programs: 3, unique: 1)
+2026-11-28T04:27:53.9463328Z GT_STAGE_PROBE_END split_registers
+2026-11-28T04:27:53.9473305Z GT_STAGE_PROBE_BEGIN guard_different_registers
+2026-11-28T04:27:54.2787158Z     vulkan (total internal programs: 3, unique: 1)
+2026-11-28T04:27:54.3322293Z GT_STAGE_PROBE_END guard_different_registers
+2026-11-28T04:27:54.3328473Z GT_STAGE_PROBE_BEGIN negative_error
+2026-11-28T04:27:54.6730993Z     vulkan (total internal programs: 0, unique: 0)
+2026-11-28T04:27:54.6732099Z Shader error in 'Hidden/GTStageProbe/negative_error': GT_PROBE_NEGATIVE_SENTINEL at line 8
+2026-11-28T04:27:54.7219606Z GT_STAGE_PROBE_END negative_error
+2026-11-28T04:27:59.9652077Z GT_SKYBOX_COMPILER_DIFFERENTIAL {"XAPK": false, "authored_source_unchanged": true, "cases": {}, "device_pixels": false, "editor_outcome": "success", "original_shader_verified": false, "player_built": false, "reason": "FileNotFoundError", "status": "INCONCLUSIVE"}
+2026-11-28T04:28:00.5588979Z SHA256 digest of uploaded artifact zip is 945be519fc565d421b991f194bcd2e27db91781fa549e25335460b4752cf8359
+2026-11-28T04:28:00.8903182Z Artifact gt-skybox-compiler-differential-safe.zip successfully finalized. Artifact ID 15247879836

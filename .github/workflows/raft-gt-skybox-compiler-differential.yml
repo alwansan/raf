@@ -69,7 +69,7 @@ jobs:
           if test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 16777216; then d=true; fi
           printf '{"activation_inputs_available":%s,"disk_budget_available":%s}\n' "$a" "$d" > "$RUNNER_TEMP/gt-stage-probe-safe/preflight.json"
           test "$a" = true && test "$d" = true
-      - name: Execute five independent authored shader bundle compiler cases
+      - name: Execute seven independent authored shader bundle compiler cases
         id: unity
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
@@ -88,13 +88,14 @@ jobs:
           allowDirtyBuild: true
           dockerMemoryLimit: 8g
           dockerCpuLimit: 2
-          customParameters: -job-worker-count 2 -logFile /github/workspace/gt-stage-probe/editor-private.log
+          customParameters: -job-worker-count 2
       - name: Decode actual Vulkan entrypoints and distinguish compiler failures
         if: always() && steps.stage.outcome == 'success'
         env:
           EDITOR_OUTCOME: ${{ steps.unity.outcome }}
         run: |
           set -euo pipefail
+          printf 'GT_STAGE_PROBE_INPUTS receipt=%s native_log=%s bundles=%s\n' "$(test -f gt-stage-probe/editor-safe.json && echo true || echo false)" "$(test -f gt-stage-probe/editor-private.log && echo true || echo false)" "$(test -d gt-stage-probe/private-bundles && echo true || echo false)"
           "$RUNNER_TEMP/gt-stage-probe-py/bin/python" -B -m tools.gt_skybox_compiler_differential.probe verify \
             --dest gt-stage-probe --decoder "$RUNNER_TEMP/gt-stage-probe-smolv/decode" \
             --outcome "$EDITOR_OUTCOME" --report "$RUNNER_TEMP/gt-stage-probe-safe/aggregate.json"
