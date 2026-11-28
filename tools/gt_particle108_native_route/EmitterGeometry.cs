@@ -17,9 +17,9 @@ public static class NativeMipValidation {
  [Serializable] class Input {public string run_id,shader_path,material_path,texture_path,shader_guid,material_guid,texture_guid,selected_property,raw_sha;public long texture_id;
    public Asset[] assets;public Slot[] slots;public Number[] numbers;public int[] sampler;public float bias;public RouteConfig route_candidate;}
  [Serializable] class RouteVariant {public int index;public int[] bits;}
- [Serializable] class RouteConfig {public string[] switches;public int selected;public RouteVariant[] rows;}
+ [Serializable] class RouteConfig {public string[] switches;public int selected,instancing_index;public RouteVariant[] rows;}
  [Serializable] class KeywordAttempt {
-   public int expected_mask,declared,before_string_mask,before_local_mask,after_string_mask,after_local_mask,after_enabled_list_mask,global_mask;
+   public int requested_mask,engine_mask,expected_mask,declared,before_string_mask,before_local_mask,after_string_mask,after_local_mask,after_enabled_list_mask,global_mask;
    public bool attempted,matched;
    public string failure_category="";
  }
@@ -27,14 +27,14 @@ public static class NativeMipValidation {
    public int index,submissions,reference_shader_errors=-1,marker_shader_errors=-1;
    public KeywordAttempt routed_keyword_attempt,marker_keyword_attempt;
    public string routed_phase="start",reference_phase="start",marker_phase="start",routed_failure="",reference_failure="",marker_failure="";
-   public bool routed_drawn,reference_drawn,marker_drawn;
+   public bool routed_drawn,reference_drawn,marker_drawn,instanced_draw;public int draw_instance_count;
    public bool completed,routed_bits_match,marker_bits_match,copy_properties_match,reference_properties_match,routed_properties_match,typed_copy_needed;
    public string phase="start",failure_category="";
  }
  [Serializable] class RouteReceipt {
    public int index,submissions,source_declared_switches,source_enabled_switches,source_expected_enabled_switches,source_local_bit_matches,source_string_bit_matches,source_overridable_switches,source_global_enabled_switches,source_global_override_conflicts,marker_shader_errors=-1;
    public bool completed,saved_keywords_match,material_properties_match,source_keywords_unchanged,source_global_keywords_unchanged;
-   public RoutePermutation[] variants;public string[] switch_categories;public bool source_instancing_enabled;
+   public RoutePermutation[] variants;public string[] switch_categories;public bool source_instancing_enabled,source_instancing_unchanged,device_instancing_supported;
    public string phase="start",failure_category="";
  }
  [Serializable] class Requirement {public string semantic;public int index,mask,used_mask,component_type;}
@@ -416,7 +416,8 @@ public static class NativeMipValidation {
    var r=new KeywordAttempt();
    try{
      Need(c.switches.Length==2&&v.bits.Length==2&&v.bits.All(x=>x==0||x==1));
-     r.expected_mask=v.bits[0]+2*v.bits[1];
+     Need(c.instancing_index>=0&&c.instancing_index<2&&c.switches[c.instancing_index]=="INSTANCING_ON");
+     r.requested_mask=v.bits[0]+2*v.bits[1];r.engine_mask=1<<c.instancing_index;r.expected_mask=r.requested_mask&~r.engine_mask;
      r.before_string_mask=Mask(m,c,false);r.before_local_mask=Mask(m,c,true);
      var handles=c.switches.Select(x=>m.shader.keywordSpace.FindKeyword(x)).ToArray();
      r.declared=handles.Count(x=>x.isValid);Need(r.declared==2);
@@ -425,12 +426,14 @@ public static class NativeMipValidation {
      // Only transient material state changes. Use the actual shader's handles,
      // not global string keyword registration or a synthetic route selector.
      for(int i=0;i<2;i++){
+       // Unity chooses INSTANCING_ON when it submits an instanced draw.
+       if(i==c.instancing_index)continue;
        if(v.bits[i]==1)m.EnableKeyword(handles[i]);else m.DisableKeyword(handles[i]);
      }
    }catch(Exception e){r.failure_category=e.GetType().Name;}
    try{
      r.after_string_mask=Mask(m,c,false);r.after_local_mask=Mask(m,c,true);r.after_enabled_list_mask=EnabledListMask(m,c);
-     r.matched=r.attempted&&r.failure_category==""&&r.declared==2&&r.after_local_mask==r.expected_mask&&r.after_string_mask==r.expected_mask&&r.after_enabled_list_mask==r.expected_mask;
+     r.matched=r.attempted&&r.failure_category==""&&r.declared==2&&r.global_mask==0&&r.after_local_mask==r.expected_mask&&r.after_string_mask==r.expected_mask&&r.after_enabled_list_mask==r.expected_mask;
    }catch(Exception e){r.failure_category=e.GetType().Name;}
    return r;
  }
@@ -476,11 +479,21 @@ public static class NativeMipValidation {
      else Need(false);
    }
  }
- static void RouteDraw(Camera cam,Mesh mesh,Material mat,RenderTexture rt,string file){
+ static Matrix4x4[] RouteMatrices(Camera cam,Mesh mesh,bool instanced){
+   Bounds bounds=MeshBounds(mesh);if(!instanced){Frame(cam,bounds);return null;}
+   float offset=Mathf.Max(bounds.extents.x,bounds.extents.y)*1.5f;Need(Fin(offset)&&offset>0);
+   Vector3 delta=Vector3.right*offset;
+   var union=new Bounds(bounds.center-delta,bounds.size);union.Encapsulate(new Bounds(bounds.center+delta,bounds.size));Frame(cam,union);
+   return new[]{Matrix4x4.Translate(-delta),Matrix4x4.Translate(delta)};
+ }
+ static void RouteDraw(Camera cam,Mesh mesh,Material mat,RenderTexture rt,string file,Matrix4x4[] matrices=null){
    var clear=new CommandBuffer{name="GT route clear"};var b=new CommandBuffer{name="GT route draw"};
    try{
      clear.SetRenderTarget(BuiltinRenderTextureType.CameraTarget);clear.ClearRenderTarget(true,true,cam.backgroundColor);
-     if(mat!=null)b.DrawMesh(mesh,Matrix4x4.identity,mat,0,0);
+     if(mat!=null){
+       if(matrices==null)b.DrawMesh(mesh,Matrix4x4.identity,mat,0,0);
+       else{Need(SystemInfo.supportsInstancing&&mat.enableInstancing&&matrices.Length==2);b.DrawMeshInstanced(mesh,0,mat,0,matrices,matrices.Length);}
+     }
      cam.AddCommandBuffer(CameraEvent.BeforeForwardOpaque,clear);cam.AddCommandBuffer(CameraEvent.BeforeForwardAlpha,b);
      cam.Render();WriteProbePixels(rt,file);
    }finally{cam.RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque,clear);cam.RemoveCommandBuffer(CameraEvent.BeforeForwardAlpha,b);clear.Release();b.Release();}
@@ -492,6 +505,8 @@ public static class NativeMipValidation {
      r.phase="configuration";var cfg=input.route_candidate;
      Need(cfg!=null&&cfg.rows.Length==4&&cfg.switches.Length==2&&cfg.rows.Select(x=>x.index).OrderBy(x=>x).SequenceEqual(new[]{0,1,2,3}));
      var chosen=cfg.rows.Single(x=>x.index==cfg.selected);
+     Need(cfg.instancing_index>=0&&cfg.instancing_index<2&&cfg.switches[cfg.instancing_index]=="INSTANCING_ON"&&chosen.bits[cfg.instancing_index]==0);
+     r.device_instancing_supported=SystemInfo.supportsInstancing;
      originalGlobals=GlobalBits(cfg);r.switch_categories=cfg.switches.Select(KeywordCategory).ToArray();r.source_instancing_enabled=source.enableInstancing;
      r.phase="saved_keywords";MeasureKeywordState(source,cfg,chosen,r);
      // Still collect independent draws if the saved bits do not match.
@@ -508,29 +523,30 @@ public static class NativeMipValidation {
      var variants=new List<RoutePermutation>();
      foreach(var row in cfg.rows){
        var v=new RoutePermutation{index=row.index,marker_shader_errors=r.marker_shader_errors};variants.Add(v);
+       v.instanced_draw=row.bits[cfg.instancing_index]==1;var matrices=RouteMatrices(cam,mesh,v.instanced_draw);v.draw_instance_count=matrices==null?1:matrices.Length;
        try{
-         v.routed_phase="routed_material";var routed=new Material(source);owned.Add(routed);
+         v.routed_phase="routed_material";var routed=new Material(source);owned.Add(routed);if(v.instanced_draw)routed.enableInstancing=true;
          v.routed_properties_match=SameRouteProperties(source,routed,input);Need(v.routed_properties_match);
          v.routed_phase="routed_keywords";v.routed_keyword_attempt=SetLocalBits(routed,cfg,row);
          v.routed_bits_match=v.routed_keyword_attempt.matched;Need(v.routed_bits_match);
-         v.routed_phase="routed_draw";RouteDraw(cam,mesh,routed,rt,prefix+"routed-"+row.index+".f32");v.submissions++;r.submissions++;v.routed_drawn=true;v.routed_phase="complete";
+         v.routed_phase="routed_draw";RouteDraw(cam,mesh,routed,rt,prefix+"routed-"+row.index+".f32",matrices);v.submissions++;r.submissions++;v.routed_drawn=true;v.routed_phase="complete";
        }catch(Exception e){v.routed_failure=e.GetType().Name;}
        // Explicit reference and marker are independent from routed activation.
        try{
          v.reference_phase="reference_shader";var explicitShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTKeywordDiagnostic/explicit-"+row.index+".shader");
          v.reference_shader_errors=ShaderErrors(explicitShader);
          Need(explicitShader!=null&&explicitShader.isSupported&&explicitShader.passCount==1&&v.reference_shader_errors==0);
-         v.reference_phase="reference_properties";var reference=new Material(explicitShader);owned.Add(reference);reference.CopyPropertiesFromMaterial(source);
+         v.reference_phase="reference_properties";var reference=new Material(explicitShader);owned.Add(reference);reference.CopyPropertiesFromMaterial(source);if(v.instanced_draw)reference.enableInstancing=true;
          v.copy_properties_match=SameRouteProperties(source,reference,input);
          if(!v.copy_properties_match){v.typed_copy_needed=true;CopyTypedRouteValues(source,reference,input);}
          v.reference_properties_match=reference.shader==explicitShader&&SameRouteProperties(source,reference,input);Need(v.reference_properties_match);
-         v.reference_phase="reference_draw";RouteDraw(cam,mesh,reference,rt,prefix+"explicit-"+row.index+".f32");v.submissions++;r.submissions++;v.reference_drawn=true;v.reference_phase="complete";
+         v.reference_phase="reference_draw";RouteDraw(cam,mesh,reference,rt,prefix+"explicit-"+row.index+".f32",matrices);v.submissions++;r.submissions++;v.reference_drawn=true;v.reference_phase="complete";
        }catch(Exception e){v.reference_failure=e.GetType().Name;}
        try{
          v.marker_phase="marker_shader";Need(marker!=null&&marker.isSupported&&marker.passCount==1&&v.marker_shader_errors==0);
-         v.marker_phase="marker_keywords";var mark=new Material(marker);owned.Add(mark);v.marker_keyword_attempt=SetLocalBits(mark,cfg,row);
+         v.marker_phase="marker_keywords";var mark=new Material(marker);owned.Add(mark);if(v.instanced_draw)mark.enableInstancing=true;v.marker_keyword_attempt=SetLocalBits(mark,cfg,row);
          v.marker_bits_match=v.marker_keyword_attempt.matched;Need(v.marker_bits_match);
-         v.marker_phase="marker_draw";RouteDraw(cam,mesh,mark,rt,prefix+"marker-"+row.index+".f32");v.submissions++;r.submissions++;v.marker_drawn=true;v.marker_phase="complete";
+         v.marker_phase="marker_draw";RouteDraw(cam,mesh,mark,rt,prefix+"marker-"+row.index+".f32",matrices);v.submissions++;r.submissions++;v.marker_drawn=true;v.marker_phase="complete";
        }catch(Exception e){v.marker_failure=e.GetType().Name;}
        v.completed=v.submissions==3&&v.routed_drawn&&v.reference_drawn&&v.marker_drawn;
        v.phase=v.completed?"complete":"permutation_incomplete";
@@ -538,8 +554,8 @@ public static class NativeMipValidation {
      r.variants=variants.ToArray();
      r.phase="post_draw";r.material_properties_match=r.variants.All(x=>x.reference_properties_match&&x.routed_properties_match);
      r.source_keywords_unchanged=originalWords.SequenceEqual(source.shaderKeywords.OrderBy(x=>x));
-     r.source_global_keywords_unchanged=originalGlobals.SequenceEqual(GlobalBits(cfg));
-     r.completed=r.submissions==14&&r.variants.All(x=>x.completed)&&r.material_properties_match&&r.source_keywords_unchanged&&r.source_global_keywords_unchanged;
+     r.source_global_keywords_unchanged=originalGlobals.SequenceEqual(GlobalBits(cfg));r.source_instancing_unchanged=source.enableInstancing==r.source_instancing_enabled;
+     r.completed=r.submissions==14&&r.variants.All(x=>x.completed)&&r.material_properties_match&&r.source_keywords_unchanged&&r.source_global_keywords_unchanged&&r.source_instancing_unchanged&&r.device_instancing_supported;
      r.phase=r.completed?"complete":"permutation_incomplete";
    }catch(Exception e){r.failure_category=e.GetType().Name;}
    finally{
