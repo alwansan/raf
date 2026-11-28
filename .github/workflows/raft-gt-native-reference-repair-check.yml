@@ -11,6 +11,7 @@ on:
       - tools/gt_top_resource_closure/test_selected_source_abi.py
       - tools/gt_top_resource_closure/selected_original_draw.py
       - tools/gt_top_resource_closure/test_selected_original_draw.py
+      - tools/gt_top_resource_closure/selected_array_causal.py
 permissions:
   contents: read
 jobs:

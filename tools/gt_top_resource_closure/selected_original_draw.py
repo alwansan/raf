@@ -45,16 +45,21 @@ def variants(body,prop,guid,fid,kind,wrong):
         need(restored==body,"draw_control_other_bytes_changed")
     return dict(zip(CASES,(body,corrected,wrong_guid,wrong_id),strict=True))
 
-def source_shader(parsed,passes,wrapper):
+def source_shader(parsed,passes,wrapper,*,diagnostic=False):
     properties,counts=serialize_properties(parsed,allow_hidden_and_toggle=True)
     rows=[p for p in passes if p["subshader"]==0 and p["pass"]==0]
     need(len(rows)==1,"draw_pass_identity")
     sub=parsed["m_SubShaders"][0]
     # Exact original properties, selected pass render state and SubShader tags.
     # Other passes and runtime route dispatch are deliberately absent.
-    shader="\n".join(["Shader "+quoted(parsed["m_Name"])+" {",properties,
+    if diagnostic:
+        from tools.gt_top_resource_closure import selected_array_causal as causal
+        need(properties.rstrip().endswith("}") and causal.MODE not in properties,"tap_diagnostic_property_collision")
+        properties=properties.rstrip()[:-1]+causal.MODE+' ("GT diagnostic mode", Float) = 0\n}'
+    pass_state=(tags(rows[0]["original_state"]["m_Tags"])+"\nCull Off\nZWrite On\nZTest LEqual\nBlend Off\nColorMask RGBA\nAlphaToMask Off" if diagnostic else render_state(rows[0]["original_state"],allow_selective_color_mask=True))
+    shader="\n".join(["Shader "+quoted("Hidden/GTSelectedArrayTap" if diagnostic else parsed["m_Name"])+" {",properties,
         "SubShader {","LOD "+str(sub["m_LOD"]),tags(sub["m_Tags"]),
-        "Pass {",render_state(rows[0]["original_state"],allow_selective_color_mask=True),
+        "Pass {",pass_state,
         wrapper,"}","}","Fallback Off","}",""])
     return shader.encode(),counts["original_authored_property_count"]
 
@@ -144,6 +149,10 @@ def prepare(a,out,source,plan,mat,mk,xk,trace,body,mesh_info,prop,edge,parsed,pa
              array_guid=array_guid,array_path=array_path,array_name=array_source["m_Name"],array_sha=sha(raw),
              sampler=sampler,mip_bias=bias,selected_property=prop,wrong_guid=wrong,slots=slots,numbers=numbers,
              materials=materials,views=VIEWS,size=SIZE)
+    from tools.gt_top_resource_closure import selected_array_causal as causal
+    tap=causal.stage_tap(root,parsed,passes,wrapper,prop,source_shader)
+    cfg.update(tap)
+    out["tap_stage"]={k:v for k,v in tap.items() if k!="tap_shader_sha"}
     here=Path(__file__).parent
     prior=(here/"SelectedArrayNative.cs").read_text()
     need(prior.count("public static class SelectedArrayUnity")==1 and prior.count("public static void Run()")==1,"draw_prior_editor_helper_anchor")
@@ -151,6 +160,7 @@ def prepare(a,out,source,plan,mat,mk,xk,trace,body,mesh_info,prop,edge,parsed,pa
     # Only authored scripts/controls are in Assets before the guarded method.
     files={"Assets/Editor/SelectedArrayNativeHelpers.cs":prior.encode(),
            "Assets/Editor/SelectedOriginalDraw.cs":(here/"SelectedOriginalDraw.cs").read_bytes(),
+           "Assets/Editor/SelectedArrayCausal.cs":(here/"SelectedArrayCausal.cs").read_bytes(),
            "Assets/GTSelectedArray.compute":(here/"GTSelectedArray.compute").read_bytes(),
            "Assets/GTDrawControl.shader":b'Shader "Hidden/GTDrawControl" {\nSubShader {\nPass {\nCull Off\nZWrite On\nCGPROGRAM\n#pragma vertex vert\n#pragma fragment frag\n#include "UnityCG.cginc"\nfloat4 vert(float4 v:POSITION):SV_POSITION{return UnityObjectToClipPos(v);}\nfloat4 frag():SV_Target{return float4(0.91,0.07,0.61,1);}\nENDCG\n} } Fallback Off }\n',
            "Packages/manifest.json":b'{"dependencies":{}}\n',
@@ -176,7 +186,13 @@ def pixel_summary(pixels):
     shapes={x.shape for x in pixels.values()}
     need(len(shapes)==1 and all(np.isfinite(x).all() for x in pixels.values()),"draw_readback_schema")
     def difference(x,y): return int(np.count_nonzero(np.max(np.abs(x-y),axis=-1)>1/255))
-    return dict(dummy_vs_clear=difference(pixels["dummy"],pixels["clear"]),
+    covered=np.max(np.abs(pixels["type2"]-pixels["clear"]),axis=-1)>1/255
+    rgb=pixels["type2"][...,:3]
+    return dict(candidate_near_black_pixels=int(np.count_nonzero(covered&(np.max(np.abs(rgb),axis=-1)<=1/255))),
+                candidate_near_white_pixels=int(np.count_nonzero(covered&(np.max(np.abs(rgb-1),axis=-1)<=1/255))),
+                candidate_near_magenta_pixels=int(np.count_nonzero(covered&(np.max(np.abs(rgb-np.array([1,0,1])),axis=-1)<=1/255))),
+                type2_vs_type3_exact_different_pixels=int(np.count_nonzero(np.any(pixels["type2"]!=pixels["type3"],axis=-1))),
+                dummy_vs_clear=difference(pixels["dummy"],pixels["clear"]),
                 type2_vs_clear=difference(pixels["type2"],pixels["clear"]),
                 type3_vs_clear=difference(pixels["type3"],pixels["clear"]),
                 type2_vs_dummy=difference(pixels["type2"],pixels["dummy"]),
@@ -190,6 +206,7 @@ def verify(a):
              original_shader_draw_verified=False,isolated_source_candidate_draw_observed=False,
              runtime_keyword_selection_verified=False,merged_binding_offset_parity_verified=False,
              original_game_global_resources_verified=False,android_device=False,white_mesh_repair_verified=False,
+             original_reference_pixel_gate_passed=False,array_causal_diagnostic_verified=False,
              production=False,XAPK=False,private_payload_published=False)
     try:
         cfg=json.loads((a.private/"expected.json").read_text())
@@ -224,19 +241,43 @@ def verify(a):
         out["same_view_all_draw_controls_pass"]=sum(x["dummy_vs_clear"]>0 and x["type2_vs_clear"]>0 and
             x["type2_vs_dummy"]>0 and x["type2_repeat_difference"]==0 and all(x[k]>0 for k in
             ("type2_vs_type3","type2_vs_wrong_guid","type2_vs_wrong_fileid")) for x in summaries)
-        need(out["same_view_all_draw_controls_pass"]>0,
-             "draw_reference_pixel_differential_not_established")
-        need(all(out[k] for k in flags) and out.get("shader_errors")==0 and out.get("shader_passes")==1
-             and out.get("source_asset_identities")==5 and out.get("source_asset_bytes_unchanged")==5,
-             "draw_exact_import_or_reference_identity_not_established")
-        out.update(status="OBSERVED_ISOLATED_SOURCE_CANDIDATE_DRAW",phase="complete",
-                   isolated_source_candidate_draw_observed=True)
+        imports_ok=(all(out[k] for k in flags) and out.get("shader_errors")==0 and out.get("shader_passes")==1
+             and out.get("source_asset_identities")==5 and out.get("source_asset_bytes_unchanged")==5 and
+             out.get("source_asset_meta_bytes_unchanged")==5)
+        need(imports_ok,"draw_exact_import_or_reference_identity_not_established")
+        out["original_reference_pixel_gate_passed"]=out["same_view_all_draw_controls_pass"]>0
+        out["isolated_source_candidate_draw_observed"]=out["original_reference_pixel_gate_passed"]
+        from tools.gt_top_resource_closure import selected_array_causal as causal
+        out["phase"]="independent_causal_readback"
+        out["tap_stage_available"]=cfg.get("tap_available") is True
+        out["tap_shader_compiled"]=r.get("tap_shader_compiled") is True
+        out["authored_array_overrides_bound"]=r.get("authored_array_overrides_bound") is True
+        out["causal_override_views"]=r.get("causal_override_views",0)
+        out["causal_tap_views"]=r.get("causal_tap_views",0)
+        out["tap_shader_errors"]=r.get("tap_shader_errors",0)
+        need(out["authored_array_overrides_bound"] and out["causal_override_views"]==VIEWS,
+             "causal_override_draw_incomplete")
+        tap=(out["tap_shader_compiled"] and out["causal_tap_views"]==VIEWS and out["tap_shader_errors"]==0)
+        diagnostics=[]
+        for v in range(VIEWS):
+            pixels={case:read_pixels(a.private/f"view-{v}-{case}.f32",SIZE)
+                    for case in causal.BASE_CASES+(causal.TAP_CASES if tap else ())}
+            diagnostics.append(causal.summarize(pixels,read_pixels(a.private/f"view-{v}-type2.f32",SIZE),tap))
+        out["causal_views"]=diagnostics
+        out["causal_classification"]=causal.classify(diagnostics)
+        out["array_causal_diagnostic_verified"]=out["causal_classification"]["status"]!="INCONCLUSIVE_SAMPLE_CAUSALITY"
+        if out["original_reference_pixel_gate_passed"]:
+            out.update(status="OBSERVED_ISOLATED_SOURCE_CANDIDATE_DRAW",phase="complete")
+        else:
+            out["original_reference_gate_failure"]="draw_reference_pixel_differential_not_established"
+            need(out["array_causal_diagnostic_verified"],"draw_reference_and_causal_diagnostic_inconclusive")
+            out.update(status="OBSERVED_ARRAY_CAUSAL_DIAGNOSTIC_ONLY",phase="complete")
     except Exception as exc:
         out["failure_type"]=type(exc).__name__
         if type(exc) is StageError:out["failure_reason"]=str(exc)
     write_json(a.safe,out)
     print("GT_SELECTED_ORIGINAL_DRAW "+json.dumps(out,sort_keys=True))
-    return 0 if out["status"]=="OBSERVED_ISOLATED_SOURCE_CANDIDATE_DRAW" else 2
+    return 0 if out["status"] in ("OBSERVED_ISOLATED_SOURCE_CANDIDATE_DRAW","OBSERVED_ARRAY_CAUSAL_DIAGNOSTIC_ONLY") else 2
 
 if __name__=="__main__":
     p=argparse.ArgumentParser()

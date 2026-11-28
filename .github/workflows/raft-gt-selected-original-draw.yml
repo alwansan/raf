@@ -1,5 +1,5 @@
 name: GT selected original explicit shader material mesh Vulkan draw (NO PLAYER)
-# Private isolated original explicit route draw; no full runtime or player.
+# New causal array substitution + instrumented source sample tap; no player.
 on:
   workflow_dispatch:
   push:
@@ -269,7 +269,7 @@ jobs:
             --unity-project gt-selected-array-project --draw-private gt-selected-array-private \
             --run-id "$GT_ARRAY_RUN_ID"
           rm -rf "$RUNNER_TEMP/b21-original" "$RUNNER_TEMP/b21-private-export" "$RUNNER_TEMP/b21-compiled" zip2-original
-      - name: Import original explicit shader candidate and render exact selected mesh with reference controls
+      - name: Observe exact selected draw with authored array substitution and instrumented sample tap
         id: array_unity
         continue-on-error: true
         uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00
@@ -294,7 +294,7 @@ jobs:
             -force-vulkan -force-device-index 0 -job-worker-count 2
             -gtArrayRunId ${{ env.GT_ARRAY_RUN_ID }}
             -gtArrayPrivate /github/workspace/gt-selected-array-private
-      - name: Independently compare diagnostic Vulkan render and reference controls
+      - name: Independently classify reference and causal sample differences
         if: always() && steps.array_stage.outcome == 'success'
         env:
           UNITY_OUTCOME: ${{ steps.array_unity.outcome }}

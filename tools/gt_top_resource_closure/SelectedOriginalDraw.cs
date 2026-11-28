@@ -14,6 +14,7 @@ public static partial class SelectedArrayUnity {
  [Serializable] public class DrawMaterial { public string name,blob,sha256; }
  [Serializable] public class DrawInput {
    public string run_id,shader_path,shader_guid,mesh_path,mesh_guid,vertex_sha,index_sha,array_guid,array_path,array_name,array_sha,selected_property,wrong_guid;
+   public bool tap_available; public string tap_shader_sha;
    public long mesh_id; public int vertex_count,vertex_bytes,index_bytes,index_format,mesh_stride,views,size;
    public int[] sampler; public float mip_bias;
    public DrawAsset[] assets; public DrawSlot[] slots; public DrawNumber[] numbers; public DrawMaterial[] materials;
@@ -23,6 +24,9 @@ public static partial class SelectedArrayUnity {
    public bool private_log_guard,shader_identity,shader_supported,mesh_identity,mesh_vertex_bytes_match,mesh_index_bytes_match,mesh_descriptor_match,
       array_identity,array_raw_bytes_match,array_sampler_match,material_shader_identity,reference_controls_expected,all_four_nonnull_type2,
       all_six_serialized_UV_type2,all_material_YAML_unchanged;
+   public bool authored_array_overrides_bound,tap_shader_compiled;
+   public string tap_failure_category="";
+   public int causal_override_views,causal_tap_views,tap_shader_errors;
    public int shader_errors,shader_passes,source_asset_identities,source_asset_bytes_unchanged,source_asset_meta_bytes_unchanged,
       saved_float_runtime_matches,saved_color_runtime_matches,saved_float_runtime_declared,saved_color_runtime_declared,rendered_views;
  }
@@ -146,6 +150,7 @@ public static partial class SelectedArrayUnity {
    var rt=new RenderTexture(cfg.size,cfg.size,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);
    var dummyShader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTDrawControl.shader");
    Need(dummyShader!=null&&dummyShader.isSupported);var dummy=new Material(dummyShader);
+   CausalControls causal=null;
    try {
      Need(cfg.views==3&&cfg.size==128&&rt.Create());
      go.layer=30;go.transform.position=-mesh.bounds.center;go.AddComponent<MeshFilter>().sharedMesh=mesh;
@@ -157,6 +162,7 @@ public static partial class SelectedArrayUnity {
      cam.orthographicSize=radius*1.25f;cam.nearClipPlane=Mathf.Max(.001f,radius*.01f);cam.farClipPlane=radius*10+1;
      var light=lightGO.AddComponent<Light>();light.type=LightType.Directional;light.intensity=1;light.color=Color.white;
      light.cullingMask=1<<30;light.shadows=LightShadows.None;lightGO.transform.rotation=Quaternion.Euler(40,25,0);
+     causal=PrepareCausal(cfg,r,mats[1],Directory.GetParent(Application.dataPath).FullName,priv);
      Vector3[] views={new Vector3(1,1,-2),new Vector3(-2,.7f,-1),new Vector3(0,2,1)};
      string[] cases={"type3","type2","wrong_guid","wrong_fileid"};
      for(int v=0;v<views.Length;v++){
@@ -165,9 +171,11 @@ public static partial class SelectedArrayUnity {
        Capture(cam,rend,null,rt,prefix+"clear.f32");Capture(cam,rend,dummy,rt,prefix+"dummy.f32");
        for(int i=0;i<4;i++)Capture(cam,rend,mats[i],rt,prefix+cases[i]+".f32");
        Capture(cam,rend,mats[1],rt,prefix+"type2_repeat.f32");
+       CausalCapture(cam,rend,rt,causal,r,prefix);
        r.rendered_views++;
      }
    }finally {
+     if(causal!=null)causal.Dispose();
      rt.Release();UnityEngine.Object.DestroyImmediate(rt);UnityEngine.Object.DestroyImmediate(dummy);
      UnityEngine.Object.DestroyImmediate(go);UnityEngine.Object.DestroyImmediate(cameraGO);UnityEngine.Object.DestroyImmediate(lightGO);
    }
@@ -206,7 +214,9 @@ public static partial class SelectedArrayUnity {
      r.phase="materials";var mats=DrawMaterials(cfg,root,priv,shader,r);
      r.phase="mesh";var mesh=AssetDatabase.LoadAssetAtPath<Mesh>(cfg.mesh_path);Need(mesh!=null);ObserveMesh(mesh,cfg,r);
      r.phase="render";DrawViews(cfg,r,mesh,mats,priv);
-     r.shader_errors=ShaderErrors(shader);r.phase="complete";r.status="OBSERVED";code=0;
+     r.shader_errors=ShaderErrors(shader);
+     if(r.tap_shader_compiled){var t=Shader.Find("Hidden/GTSelectedArrayTap");r.tap_shader_errors=t==null?-1:ShaderErrors(t);}
+     r.phase="complete";r.status="OBSERVED";code=0;
    }catch(Exception e){r.failure_category=e.GetType().Name;}
    finally{
      if(r.private_log_guard)File.WriteAllText(Path.Combine(priv,"draw-receipt.json"),JsonUtility.ToJson(r));
