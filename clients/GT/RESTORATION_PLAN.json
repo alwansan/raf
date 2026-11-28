@@ -1,5 +1,5 @@
 {
-  "next_action": "G3-G6-skybox-compiler-differential-v2: reconcile actual 46107935993 on execution 750b4144d4cd2f9af2fb9ef92e695ec5733562e6, lint 46107935976 in_progress . Inspect seven authored cases, explicit input presence and per-case Unity receipt, actual bundle SHA256 matches, decoded vertex/fragment entrypoints and spirv-val, independent native per-case logs. Prior actual 46107345497 had 3/1 Vulkan programs in four positive authored cases and 0/0 with deliberate sentinel, but independent decode did not run due FileNotFoundError; missing path unproven. V2 isolates full exclusive entrypoints and register/packoffset mismatch; scoped decoded-baseline result is not native-log corroboration or original shader proof. Keep original 45 offsets, 10 resources, 7 varying register joins and runtime names; no repinning Level38, no editor 154 proof. If compiler path blocked, continue independent meshes/fire/water. No production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. CL/lab read-only, BLACK/animation deferred.",
+  "next_action": "G3-G6-Skybox-exact-source-body-compiler-control: reconcile actual 46108809138 on execution fe95b758a94b8b0c48f673300fef5e64ba59e180, lint 46108809086 in_progress . Prior 46107935993 independently decoded six authored positive cases, all SPIR-V validated, seven bundle SHA matches; native log negative sentinel and zero programs, decoder vertex_missing despite ShaderUtil zero errors. Native log absent as file but verified in Actions log; keep workflow result FAILURE, no original acceptance. New original replay requires 06b9c2f7... exact prior shader, protected 5 export files, removes only one complete DXC pragma line in isolated project; verify reversible bytes, original material/3 staged protected files, actual Vulkan one-pass empty-route VS/FS row proofs and native per-case compiler errors/programs in job log. If compiler control works, do independent actual original ABI/register/offset/resource/name/varying join before integration. If fails, preserve precise blocker and proceed independently on white meshes/fire/water instead of repeating authored probes. Level38 prior exact scene/meta pins remain, no 154 editor proof. No production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred.",
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
     "status": "OBSERVED_SELECTED_ORIGINAL_LIGHT_HIERARCHIES",
@@ -13204,84 +13204,442 @@
     "artifact_independently_downloaded": false
   },
   "latest_skybox_compiler_differential": {
-    "status": "REVISION_PUSHED_ACTUAL_PENDING_RECONCILIATION",
-    "starting_head": "5f89d51f8cffe1fca73e0da8a3f3036f1ada50bb",
+    "status": "INCONCLUSIVE_WORKFLOW_BUT_SIX_AUTHORED_DECODED_CASES_AND_NATIVE_NEGATIVE_PROVEN",
+    "run": 46107935993,
+    "job": 140864768713,
     "execution_head": "750b4144d4cd2f9af2fb9ef92e695ec5733562e6",
+    "conclusion": "failure",
+    "lint_run": 46107935976,
+    "lint_conclusion": "success",
+    "actual_report": {
+      "XAPK": false,
+      "authored_source_unchanged": true,
+      "cases": {
+        "common": {
+          "all_spirv_validated": true,
+          "bindingConflictMessages": 0,
+          "bundleBuilt": true,
+          "bundle_file_present": true,
+          "bundle_sha256_matches": true,
+          "compiled": false,
+          "decoded_and_editor_clean": true,
+          "decoded_vertex_fragment": true,
+          "errorsAfter": 0,
+          "errorsBefore": 0,
+          "exceptionCategory": "none",
+          "execution_models": [
+            0,
+            4
+          ],
+          "imported": true,
+          "log_boundary": false,
+          "negativeSentinelMessages": 0,
+          "referenced_blob_count": 1,
+          "sourceCopyExact": true,
+          "stageSelectorMessages": 0
+        },
+        "guard_common": {
+          "all_spirv_validated": true,
+          "bindingConflictMessages": 0,
+          "bundleBuilt": true,
+          "bundle_file_present": true,
+          "bundle_sha256_matches": true,
+          "compiled": false,
+          "decoded_and_editor_clean": true,
+          "decoded_vertex_fragment": true,
+          "errorsAfter": 0,
+          "errorsBefore": 0,
+          "exceptionCategory": "none",
+          "execution_models": [
+            0,
+            4
+          ],
+          "imported": true,
+          "log_boundary": false,
+          "negativeSentinelMessages": 0,
+          "referenced_blob_count": 1,
+          "sourceCopyExact": true,
+          "stageSelectorMessages": 0
+        },
+        "guard_different_registers": {
+          "all_spirv_validated": true,
+          "bindingConflictMessages": 0,
+          "bundleBuilt": true,
+          "bundle_file_present": true,
+          "bundle_sha256_matches": true,
+          "compiled": false,
+          "decoded_and_editor_clean": true,
+          "decoded_vertex_fragment": true,
+          "errorsAfter": 0,
+          "errorsBefore": 0,
+          "exceptionCategory": "none",
+          "execution_models": [
+            0,
+            4
+          ],
+          "imported": true,
+          "log_boundary": false,
+          "negativeSentinelMessages": 0,
+          "referenced_blob_count": 1,
+          "sourceCopyExact": true,
+          "stageSelectorMessages": 0
+        },
+        "guard_entries": {
+          "all_spirv_validated": true,
+          "bindingConflictMessages": 0,
+          "bundleBuilt": true,
+          "bundle_file_present": true,
+          "bundle_sha256_matches": true,
+          "compiled": false,
+          "decoded_and_editor_clean": true,
+          "decoded_vertex_fragment": true,
+          "errorsAfter": 0,
+          "errorsBefore": 0,
+          "exceptionCategory": "none",
+          "execution_models": [
+            0,
+            4
+          ],
+          "imported": true,
+          "log_boundary": false,
+          "negativeSentinelMessages": 0,
+          "referenced_blob_count": 1,
+          "sourceCopyExact": true,
+          "stageSelectorMessages": 0
+        },
+        "guard_entries_offset": {
+          "all_spirv_validated": true,
+          "bindingConflictMessages": 0,
+          "bundleBuilt": true,
+          "bundle_file_present": true,
+          "bundle_sha256_matches": true,
+          "compiled": false,
+          "decoded_and_editor_clean": true,
+          "decoded_vertex_fragment": true,
+          "errorsAfter": 0,
+          "errorsBefore": 0,
+          "exceptionCategory": "none",
+          "execution_models": [
+            0,
+            4
+          ],
+          "imported": true,
+          "log_boundary": false,
+          "negativeSentinelMessages": 0,
+          "referenced_blob_count": 1,
+          "sourceCopyExact": true,
+          "stageSelectorMessages": 0
+        },
+        "negative_error": {
+          "bindingConflictMessages": 0,
+          "bundleBuilt": true,
+          "bundle_file_present": true,
+          "bundle_sha256_matches": true,
+          "compiled": false,
+          "decode_failure": "ValueError:vertex_missing",
+          "decoded_and_editor_clean": false,
+          "errorsAfter": 0,
+          "errorsBefore": 0,
+          "exceptionCategory": "none",
+          "imported": true,
+          "log_boundary": false,
+          "negativeSentinelMessages": 0,
+          "sourceCopyExact": true,
+          "stageSelectorMessages": 0
+        },
+        "split_registers": {
+          "all_spirv_validated": true,
+          "bindingConflictMessages": 0,
+          "bundleBuilt": true,
+          "bundle_file_present": true,
+          "bundle_sha256_matches": true,
+          "compiled": false,
+          "decoded_and_editor_clean": true,
+          "decoded_vertex_fragment": true,
+          "errorsAfter": 0,
+          "errorsBefore": 0,
+          "exceptionCategory": "none",
+          "execution_models": [
+            0,
+            4
+          ],
+          "imported": true,
+          "log_boundary": false,
+          "negativeSentinelMessages": 0,
+          "referenced_blob_count": 1,
+          "sourceCopyExact": true,
+          "stageSelectorMessages": 0
+        }
+      },
+      "decoded_editor_clean_cases": [
+        "common",
+        "guard_common",
+        "split_registers",
+        "guard_different_registers",
+        "guard_entries",
+        "guard_entries_offset"
+      ],
+      "device_pixels": false,
+      "editor_outcome": "success",
+      "input_presence": {
+        "authored_manifest": true,
+        "decoder": true,
+        "editor_receipt": true,
+        "native_log_file": false
+      },
+      "native_log_file_present": false,
+      "native_log_reconciliation_required": true,
+      "negative_control_rejected_by_shaderutil": false,
+      "original_shader_verified": false,
+      "player_built": false,
+      "status": "INCONCLUSIVE"
+    },
+    "authored_controls_passed": 9,
+    "independently_decoded_positive_cases": 6,
+    "bundle_sha_matches": 7,
+    "native_positive_cases": 6,
+    "native_negative_sentinel": true,
+    "native_negative_program_count": [
+      0,
+      0
+    ],
+    "negative_shaderutil_error_count": 0,
+    "negative_decode_rejection": "vertex_missing",
+    "native_log_file_absent": true,
+    "original_shader_verified": false,
+    "artifact_id": 15247699655,
+    "artifact_github_reported_sha256": "37464afb696da15661e8b26b89996b52f589d266babdd3b0d060c10b13508bf2",
+    "artifact_independently_downloaded": false
+  },
+  "latest_skybox_compiler_control": {
+    "status": "ORIGINAL_COMPILER_CONTROL_PUSHED_ACTUAL_PENDING",
+    "starting_head": "07bae7504807e858b675f63fa7e1ad5f80efd9e0",
+    "execution_head": "fe95b758a94b8b0c48f673300fef5e64ba59e180",
     "branch": "feature/android-native-port",
-    "previous_actual": {
-      "status": "INCONCLUSIVE_NATIVE_COMPILER_OBSERVED_DECODE_NOT_EXECUTED",
-      "run": 46107345497,
-      "job": 140862945529,
-      "lint_run": 46107345414,
-      "lint_conclusion": "success",
-      "execution_head": "83c61d6c0db959090d06b3282e151253eaf8a81d",
+    "prior_original_run": 46104962432,
+    "prior_original_sha256": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+    "prior_authored_actual": {
+      "status": "INCONCLUSIVE_WORKFLOW_BUT_SIX_AUTHORED_DECODED_CASES_AND_NATIVE_NEGATIVE_PROVEN",
+      "run": 46107935993,
+      "job": 140864768713,
+      "execution_head": "750b4144d4cd2f9af2fb9ef92e695ec5733562e6",
       "conclusion": "failure",
-      "source_free_tests_passed": 7,
-      "editor_step": "success",
-      "decoder_step": "failure",
+      "lint_run": 46107935976,
+      "lint_conclusion": "success",
       "actual_report": {
         "XAPK": false,
         "authored_source_unchanged": true,
-        "cases": {},
+        "cases": {
+          "common": {
+            "all_spirv_validated": true,
+            "bindingConflictMessages": 0,
+            "bundleBuilt": true,
+            "bundle_file_present": true,
+            "bundle_sha256_matches": true,
+            "compiled": false,
+            "decoded_and_editor_clean": true,
+            "decoded_vertex_fragment": true,
+            "errorsAfter": 0,
+            "errorsBefore": 0,
+            "exceptionCategory": "none",
+            "execution_models": [
+              0,
+              4
+            ],
+            "imported": true,
+            "log_boundary": false,
+            "negativeSentinelMessages": 0,
+            "referenced_blob_count": 1,
+            "sourceCopyExact": true,
+            "stageSelectorMessages": 0
+          },
+          "guard_common": {
+            "all_spirv_validated": true,
+            "bindingConflictMessages": 0,
+            "bundleBuilt": true,
+            "bundle_file_present": true,
+            "bundle_sha256_matches": true,
+            "compiled": false,
+            "decoded_and_editor_clean": true,
+            "decoded_vertex_fragment": true,
+            "errorsAfter": 0,
+            "errorsBefore": 0,
+            "exceptionCategory": "none",
+            "execution_models": [
+              0,
+              4
+            ],
+            "imported": true,
+            "log_boundary": false,
+            "negativeSentinelMessages": 0,
+            "referenced_blob_count": 1,
+            "sourceCopyExact": true,
+            "stageSelectorMessages": 0
+          },
+          "guard_different_registers": {
+            "all_spirv_validated": true,
+            "bindingConflictMessages": 0,
+            "bundleBuilt": true,
+            "bundle_file_present": true,
+            "bundle_sha256_matches": true,
+            "compiled": false,
+            "decoded_and_editor_clean": true,
+            "decoded_vertex_fragment": true,
+            "errorsAfter": 0,
+            "errorsBefore": 0,
+            "exceptionCategory": "none",
+            "execution_models": [
+              0,
+              4
+            ],
+            "imported": true,
+            "log_boundary": false,
+            "negativeSentinelMessages": 0,
+            "referenced_blob_count": 1,
+            "sourceCopyExact": true,
+            "stageSelectorMessages": 0
+          },
+          "guard_entries": {
+            "all_spirv_validated": true,
+            "bindingConflictMessages": 0,
+            "bundleBuilt": true,
+            "bundle_file_present": true,
+            "bundle_sha256_matches": true,
+            "compiled": false,
+            "decoded_and_editor_clean": true,
+            "decoded_vertex_fragment": true,
+            "errorsAfter": 0,
+            "errorsBefore": 0,
+            "exceptionCategory": "none",
+            "execution_models": [
+              0,
+              4
+            ],
+            "imported": true,
+            "log_boundary": false,
+            "negativeSentinelMessages": 0,
+            "referenced_blob_count": 1,
+            "sourceCopyExact": true,
+            "stageSelectorMessages": 0
+          },
+          "guard_entries_offset": {
+            "all_spirv_validated": true,
+            "bindingConflictMessages": 0,
+            "bundleBuilt": true,
+            "bundle_file_present": true,
+            "bundle_sha256_matches": true,
+            "compiled": false,
+            "decoded_and_editor_clean": true,
+            "decoded_vertex_fragment": true,
+            "errorsAfter": 0,
+            "errorsBefore": 0,
+            "exceptionCategory": "none",
+            "execution_models": [
+              0,
+              4
+            ],
+            "imported": true,
+            "log_boundary": false,
+            "negativeSentinelMessages": 0,
+            "referenced_blob_count": 1,
+            "sourceCopyExact": true,
+            "stageSelectorMessages": 0
+          },
+          "negative_error": {
+            "bindingConflictMessages": 0,
+            "bundleBuilt": true,
+            "bundle_file_present": true,
+            "bundle_sha256_matches": true,
+            "compiled": false,
+            "decode_failure": "ValueError:vertex_missing",
+            "decoded_and_editor_clean": false,
+            "errorsAfter": 0,
+            "errorsBefore": 0,
+            "exceptionCategory": "none",
+            "imported": true,
+            "log_boundary": false,
+            "negativeSentinelMessages": 0,
+            "sourceCopyExact": true,
+            "stageSelectorMessages": 0
+          },
+          "split_registers": {
+            "all_spirv_validated": true,
+            "bindingConflictMessages": 0,
+            "bundleBuilt": true,
+            "bundle_file_present": true,
+            "bundle_sha256_matches": true,
+            "compiled": false,
+            "decoded_and_editor_clean": true,
+            "decoded_vertex_fragment": true,
+            "errorsAfter": 0,
+            "errorsBefore": 0,
+            "exceptionCategory": "none",
+            "execution_models": [
+              0,
+              4
+            ],
+            "imported": true,
+            "log_boundary": false,
+            "negativeSentinelMessages": 0,
+            "referenced_blob_count": 1,
+            "sourceCopyExact": true,
+            "stageSelectorMessages": 0
+          }
+        },
+        "decoded_editor_clean_cases": [
+          "common",
+          "guard_common",
+          "split_registers",
+          "guard_different_registers",
+          "guard_entries",
+          "guard_entries_offset"
+        ],
         "device_pixels": false,
         "editor_outcome": "success",
+        "input_presence": {
+          "authored_manifest": true,
+          "decoder": true,
+          "editor_receipt": true,
+          "native_log_file": false
+        },
+        "native_log_file_present": false,
+        "native_log_reconciliation_required": true,
+        "negative_control_rejected_by_shaderutil": false,
         "original_shader_verified": false,
         "player_built": false,
-        "reason": "FileNotFoundError",
         "status": "INCONCLUSIVE"
       },
-      "program_counts": {
-        "common": [
-          3,
-          1
-        ],
-        "guard_common": [
-          3,
-          1
-        ],
-        "split_registers": [
-          3,
-          1
-        ],
-        "guard_different_registers": [
-          3,
-          1
-        ],
-        "negative_error": [
-          0,
-          0
-        ]
-      },
-      "negative_error_seen_in_native_log": true,
-      "source_guard_errors_in_native_log": 0,
-      "shared_uniform_explicit_binding_conflicts_in_native_log": 0,
-      "decoded_programs_verified": false,
-      "missing_path_proven": false,
-      "artifact": 15247879836
+      "authored_controls_passed": 9,
+      "independently_decoded_positive_cases": 6,
+      "bundle_sha_matches": 7,
+      "native_positive_cases": 6,
+      "native_negative_sentinel": true,
+      "native_negative_program_count": [
+        0,
+        0
+      ],
+      "negative_shaderutil_error_count": 0,
+      "negative_decode_rejection": "vertex_missing",
+      "native_log_file_absent": true,
+      "original_shader_verified": false,
+      "artifact_id": 15247699655,
+      "artifact_github_reported_sha256": "37464afb696da15661e8b26b89996b52f589d266babdd3b0d060c10b13508bf2",
+      "artifact_independently_downloaded": false
     },
-    "run": 46107935993,
+    "run": 46108809138,
     "run_status": "in_progress",
     "conclusion": null,
-    "lint_run": 46107935976,
+    "lint_run": 46108809086,
     "lint_status": "in_progress",
     "lint_conclusion": null,
-    "cases": [
-      "common",
-      "guard_common",
-      "split_registers",
-      "guard_different_registers",
-      "guard_entries",
-      "guard_entries_offset",
-      "negative_error"
-    ],
-    "authored_tests": 9,
-    "actual_results": null,
-    "source_free": true,
+    "authored_new_tests": 10,
+    "exact_reversible_single_pragma_control": true,
     "original_shader_verified": false,
+    "actual_runtime_abi_verified": false,
+    "device": false,
     "production": false,
     "player": false,
     "XAPK": false,
-    "device": false,
-    "next_action": "G3-G6-skybox-compiler-differential-v2: reconcile actual 46107935993 on execution 750b4144d4cd2f9af2fb9ef92e695ec5733562e6, lint 46107935976 in_progress . Inspect seven authored cases, explicit input presence and per-case Unity receipt, actual bundle SHA256 matches, decoded vertex/fragment entrypoints and spirv-val, independent native per-case logs. Prior actual 46107345497 had 3/1 Vulkan programs in four positive authored cases and 0/0 with deliberate sentinel, but independent decode did not run due FileNotFoundError; missing path unproven. V2 isolates full exclusive entrypoints and register/packoffset mismatch; scoped decoded-baseline result is not native-log corroboration or original shader proof. Keep original 45 offsets, 10 resources, 7 varying register joins and runtime names; no repinning Level38, no editor 154 proof. If compiler path blocked, continue independent meshes/fire/water. No production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. CL/lab read-only, BLACK/animation deferred."
+    "next_action": "G3-G6-Skybox-exact-source-body-compiler-control: reconcile actual 46108809138 on execution fe95b758a94b8b0c48f673300fef5e64ba59e180, lint 46108809086 in_progress . Prior 46107935993 independently decoded six authored positive cases, all SPIR-V validated, seven bundle SHA matches; native log negative sentinel and zero programs, decoder vertex_missing despite ShaderUtil zero errors. Native log absent as file but verified in Actions log; keep workflow result FAILURE, no original acceptance. New original replay requires 06b9c2f7... exact prior shader, protected 5 export files, removes only one complete DXC pragma line in isolated project; verify reversible bytes, original material/3 staged protected files, actual Vulkan one-pass empty-route VS/FS row proofs and native per-case compiler errors/programs in job log. If compiler control works, do independent actual original ABI/register/offset/resource/name/varying join before integration. If fails, preserve precise blocker and proceed independently on white meshes/fire/water instead of repeating authored probes. Level38 prior exact scene/meta pins remain, no 154 editor proof. No production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred."
   }
 }
