@@ -164,6 +164,19 @@ def summarize(cfg,r):
         out["scene_bytes_unchanged_cases"]+=int(x.get("scene_bytes_unchanged") is True)
     return dict(out)
 
+IMPORT_PHASES=("guard","asset_staging","asset_refresh","asset_identity","shader_load","material_texture_load","material_contract","material_identity","texture_descriptor_sampler","texture_refs_uv","numeric_properties","scene_staging","scene_refresh","calibration","geometry","post_geometry_asset_contract","complete")
+IMPORT_COUNTERS=("asset_identities","assets_written","scenes_written","scenes_imported","shader_errors","slots_declared","slots_matched","uv_matched","numeric_saved","numeric_declared","numeric_matched","numeric_undeclared")
+IMPORT_FLAGS=("shader_supported","material_shader_match","native_identity","native_descriptor","native_sampler","resources_bytes_match","control_verified","source_assets_unchanged")
+
+def import_observation(cfg,r):
+    need(r.get("run_id")==cfg["run_id"] and r.get("private_log_guard") is True,"receipt_run_identity")
+    need(r.get("unity_version")=="2021.3.45f2" and r.get("backend")=="Vulkan","editor_environment")
+    return dict(editor_phase=r.get("phase") if r.get("phase") in IMPORT_PHASES else "other",
+        editor_failure_category=r.get("failure_category") if r.get("failure_category") in ("InvalidOperationException","ArgumentException","IOException","NullReferenceException","UnityException") else "other",
+        editor_row_count=len(r["rows"]) if type(r.get("rows")) is list and len(r["rows"])<=12 else 0,
+        import_counters={k:r[k] for k in IMPORT_COUNTERS if type(r.get(k)) is int and -1<=r[k]<=10000},
+        import_flags={k:r.get(k) is True for k in IMPORT_FLAGS})
+
 def verify(a):
     out=dict(status="INCONCLUSIVE",phase="receipt",isolated_exported_emitter_generated_geometry_verified=False,
              original_emitter_geometry_verified=False,runtime_keyword_selection_verified=False,black_fire_restored=False,
@@ -173,8 +186,13 @@ def verify(a):
         need(cfg["run_id"]==a.run_id and cfg==json.loads((a.project/"GTEmitterInput.json").read_text()),"fixture_config_identity")
         need((a.private/"editor-output-private").read_text().strip()==a.run_id and (a.private/"editor.log").is_file(),"private_log_guard")
         r=json.loads((a.private/"geometry-receipt.json").read_text())
-        out["editor_phase"]=r.get("phase") if r.get("phase") in ("guard","import","calibration","geometry","complete") else "other"
-        out["editor_failure_category"]=r.get("failure_category") if r.get("failure_category") in ("InvalidOperationException","ArgumentException","IOException","NullReferenceException","UnityException") else "other"
+        out.update(import_observation(cfg,r))
+        # Retain the actual failing import predicate and partial counters even
+        # when no emitter rows exist. Never replace it with a population error.
+        out["editor_exit_code"]=a.exit_code
+        if r.get("status")!="OBSERVED" or a.exit_code!=0:
+            out["phase"]="editor_incomplete"
+            raise Reject("editor_"+out["editor_phase"]+"_incomplete")
         out["counts"]=summarize(cfg,r)
         count=out["counts"]
         out["authored_empty_one_particle_control_verified"]=r.get("control_verified") is True
@@ -182,6 +200,8 @@ def verify(a):
         out["source_asset_identity_count"]=r.get("asset_identities")
         need(a.exit_code==0 and r.get("status")=="OBSERVED" and out["authored_empty_one_particle_control_verified"],"editor_or_bake_control")
         need(out["source_assets_unchanged"] and out["source_asset_identity_count"]==4,"asset_identity")
+        ic=out["import_counters"];fl=out["import_flags"]
+        need(all(fl.get(k) is True for k in IMPORT_FLAGS) and ic.get("assets_written")==4 and ic.get("scenes_written")==ic.get("scenes_imported")==12 and ic.get("shader_errors")==0 and ic.get("slots_declared")==ic.get("slots_matched")==ic.get("uv_matched")==2 and ic.get("numeric_declared")==ic.get("numeric_matched")==11 and ic.get("numeric_saved")==ic.get("numeric_declared")+ic.get("numeric_undeclared"),"resource_contract")
         need(all(count.get(k)==12 for k in ("imported_emitter_cases","material_identity_cases","billboard_cases","active_stream_cases","empty_cases","explicit_one_particle_billboard_cases","scene_bytes_unchanged_cases")),"original_fixture_geometry_population")
         need(count.get("custom_stream_cases")==count.get("custom_stream_match_cases"),"custom_stream_runtime_mismatch")
         # Attribute width and spontaneous emission are intentionally separately measured, not inferred from a successful bake.

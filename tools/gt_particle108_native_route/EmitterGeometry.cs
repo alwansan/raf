@@ -15,7 +15,7 @@ public static class NativeMipValidation {
  [Serializable] class Slot {public string name,guid;public long file_id;public float[] uv;}
  [Serializable] class Number {public string name,kind;public float[] value;}
  [Serializable] class Input {public string run_id,shader_path,material_path,texture_path,shader_guid,material_guid,texture_guid,selected_property;public long texture_id;
-   public Asset[] assets;public Slot[] slots;public Number[] numbers;}
+   public Asset[] assets;public Slot[] slots;public Number[] numbers;public int[] sampler;public float bias;}
  [Serializable] class Requirement {public string semantic;public int index,mask,used_mask,component_type;}
  [Serializable] class Case {public int index,material_count;public string path,blob,sha;public int[] streams;public bool custom_streams,original_self_active;}
  [Serializable] class Config {public string run_id;public Case[] scenes;public Requirement[] vertex_requirements;}
@@ -23,7 +23,8 @@ public static class NativeMipValidation {
  [Serializable] class Row {public int index,empty_vertices=-1,empty_particles=-1,natural_particles,natural_vertices;
    public bool imported,materials_match,billboard,active_streams_read,streams_match,scene_bytes_unchanged;public Bake forced;public string failure_category="";}
  [Serializable] class Receipt {public string run_id,phase="guard",status="INCONCLUSIVE",unity_version,backend,failure_category="";
-   public bool private_log_guard,control_verified,source_assets_unchanged;public int asset_identities;public Row[] rows;}
+   public bool private_log_guard,control_verified,source_assets_unchanged,shader_supported,material_shader_match,native_identity,native_descriptor,native_sampler,resources_bytes_match;
+   public int asset_identities,assets_written,scenes_written,scenes_imported,shader_errors=-1,slots_declared,slots_matched,uv_matched,numeric_saved,numeric_declared,numeric_matched,numeric_undeclared;public Row[] rows;}
  static void Need(bool x){if(!x)throw new InvalidOperationException("GT emitter geometry gate");}
  static string Arg(string n){var a=Environment.GetCommandLineArgs();int i=Array.IndexOf(a,n);return i>=0&&i+1<a.Length?a[i+1]:"";}
  static string Sha(byte[] x){using(var h=SHA256.Create())return BitConverter.ToString(h.ComputeHash(x)).Replace("-","").ToLowerInvariant();}
@@ -34,15 +35,30 @@ public static class NativeMipValidation {
  static bool AssetsSame(Input c,string root){
    return c.assets.All(a=>Sha(File.ReadAllBytes(Path.Combine(root,a.path)))==a.sha&&Sha(File.ReadAllBytes(Path.Combine(root,a.path)+".meta"))==a.meta_sha);
  }
- static bool MaterialSame(Input c,Material mat,Shader shader,Texture2D tex){
-   if(!Id(mat,c.material_guid,2100000)||!Id(shader,c.shader_guid,4800000)||!Id(tex,c.texture_guid,c.texture_id)||mat.shader!=shader||mat.GetTexture(c.selected_property)!=tex)return false;
-   foreach(var slot in c.slots){if(!mat.HasProperty(slot.name)||!Id(mat.GetTexture(slot.name),slot.guid,slot.file_id))return false;
+ static bool MaterialSame(Input c,Material mat,Shader shader,Texture2D tex,Receipt r){
+   r.material_shader_match=Id(mat,c.material_guid,2100000)&&Id(shader,c.shader_guid,4800000)&&mat.shader==shader;
+   r.native_identity=Id(tex,c.texture_guid,c.texture_id)&&mat.GetTexture(c.selected_property)==tex;
+   r.native_descriptor=tex.width==64&&tex.height==64&&tex.mipmapCount==7&&tex.format==TextureFormat.RGBA32&&GraphicsFormatUtility.IsSRGBFormat(tex.graphicsFormat);
+   r.native_sampler=c.sampler!=null&&c.sampler.Length==5&&(int)tex.filterMode==c.sampler[0]&&tex.anisoLevel==c.sampler[1]&&(int)tex.wrapModeU==c.sampler[2]&&(int)tex.wrapModeV==c.sampler[3]&&(int)tex.wrapModeW==c.sampler[4]&&Eq(tex.mipMapBias,c.bias);
+   r.slots_declared=c.slots.Length;r.slots_matched=0;r.uv_matched=0;
+   foreach(var slot in c.slots){if(!mat.HasProperty(slot.name))continue;
+     if(Id(mat.GetTexture(slot.name),slot.guid,slot.file_id))r.slots_matched++;
      var st=mat.GetTextureScale(slot.name);var off=mat.GetTextureOffset(slot.name);
-     if(slot.uv.Length!=4||!Eq(st.x,slot.uv[0])||!Eq(st.y,slot.uv[1])||!Eq(off.x,slot.uv[2])||!Eq(off.y,slot.uv[3]))return false;}
-   foreach(var num in c.numbers){if(!mat.HasProperty(num.name))return false;
-     if(num.kind=="float"&&!Eq(mat.GetFloat(num.name),num.value[0]))return false;
-     if(num.kind=="color"){var v=mat.GetColor(num.name);if(!Eq(v.r,num.value[0])||!Eq(v.g,num.value[1])||!Eq(v.b,num.value[2])||!Eq(v.a,num.value[3]))return false;}}
-   return true;
+     if(slot.uv.Length==4&&Eq(st.x,slot.uv[0])&&Eq(st.y,slot.uv[1])&&Eq(off.x,slot.uv[2])&&Eq(off.y,slot.uv[3]))r.uv_matched++;
+   }
+   r.numeric_saved=c.numbers.Length;r.numeric_declared=0;r.numeric_matched=0;r.numeric_undeclared=0;
+   foreach(var num in c.numbers){
+     // Same measured contract as the calibrated draw: distinguish saved-but-undeclared
+     // values rather than treating them as a numeric match or an automatic import failure.
+     if(!mat.HasProperty(num.name)){r.numeric_undeclared++;continue;}
+     r.numeric_declared++;
+     bool match=false;
+     if(num.kind=="float"&&num.value.Length==1)match=Eq(mat.GetFloat(num.name),num.value[0]);
+     if(num.kind=="color"&&num.value.Length==4){var v=mat.GetColor(num.name);match=Eq(v.r,num.value[0])&&Eq(v.g,num.value[1])&&Eq(v.b,num.value[2])&&Eq(v.a,num.value[3]);}
+     if(match)r.numeric_matched++;
+   }
+   return r.material_shader_match&&r.native_identity&&r.native_descriptor&&r.native_sampler&&r.slots_declared==2&&r.slots_matched==2&&r.uv_matched==2
+       &&r.numeric_declared==11&&r.numeric_matched==11&&r.numeric_saved==r.numeric_declared+r.numeric_undeclared;
  }
  static bool Attribute(Requirement q,out VertexAttribute a){
    a=VertexAttribute.Position;
@@ -115,7 +131,7 @@ public static class NativeMipValidation {
  }
  public static void Run(){
    var r=new Receipt{run_id=Arg("-gtNativeRunId"),unity_version=Application.unityVersion,backend=SystemInfo.graphicsDeviceType.ToString()};
-   string priv=Arg("-gtNativePrivate");int code=2;
+   string priv=Arg("-gtNativePrivate");int code=2;bool async=ShaderUtil.allowAsyncCompilation;
    try{
      Need(Application.isBatchMode&&r.unity_version=="2021.3.45f2"&&SystemInfo.graphicsDeviceType==GraphicsDeviceType.Vulkan&&QualitySettings.activeColorSpace==ColorSpace.Linear&&GraphicsSettings.currentRenderPipeline==null);
      Need(!String.IsNullOrEmpty(priv)&&File.Exists(Path.Combine(priv,"editor-output-private"))&&File.ReadAllText(Path.Combine(priv,"editor-output-private")).Trim()==r.run_id);r.private_log_guard=true;
@@ -124,30 +140,50 @@ public static class NativeMipValidation {
      string conf=File.ReadAllText(Path.Combine(root,"GTEmitterInput.json"));Need(conf==File.ReadAllText(Path.Combine(priv,"emitter-input.json")));
      var c=JsonUtility.FromJson<Input>(input);var cfg=JsonUtility.FromJson<Config>(conf);
      Need(c.run_id==cfg.run_id&&cfg.run_id==r.run_id&&c.assets.Length==4&&cfg.scenes.Length==12&&cfg.vertex_requirements.Length>0);
-     r.phase="import";
+     ShaderUtil.allowAsyncCompilation=false;
+     r.phase="asset_staging";
      foreach(var a in c.assets){
        string path=Path.GetFullPath(Path.Combine(root,a.path));Need(path.StartsWith(Path.Combine(root,"Assets","GTParticle")+Path.DirectorySeparatorChar,StringComparison.Ordinal)&&!File.Exists(path)&&!File.Exists(path+".meta"));
        Need(String.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(a.guid)));
        var data=File.ReadAllBytes(Path.Combine(priv,a.blob+".bytes"));var meta=File.ReadAllBytes(Path.Combine(priv,a.blob+".meta.bytes"));
-       Need(Sha(data)==a.sha&&Sha(meta)==a.meta_sha);Directory.CreateDirectory(Path.GetDirectoryName(path));File.WriteAllBytes(path,data);File.WriteAllBytes(path+".meta",meta);
+       Need(Sha(data)==a.sha&&Sha(meta)==a.meta_sha);Directory.CreateDirectory(Path.GetDirectoryName(path));File.WriteAllBytes(path,data);File.WriteAllBytes(path+".meta",meta);r.assets_written++;
      }
+     r.phase="asset_refresh";AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+     r.phase="asset_identity";
+     foreach(var a in c.assets)if(Id(AssetDatabase.LoadMainAssetAtPath(a.path),a.guid,a.file_id))r.asset_identities++;
+     r.resources_bytes_match=AssetsSame(c,root);
+     Need(r.asset_identities==4&&r.resources_bytes_match);
+     r.phase="shader_load";
+     var shader=AssetDatabase.LoadAssetAtPath<Shader>(c.shader_path);
+     r.shader_supported=shader!=null&&shader.isSupported&&shader.passCount==1;
+     if(shader!=null)r.shader_errors=ShaderUtil.GetShaderMessages(shader).Count(x=>x.severity.ToString()=="Error");
+     Need(r.shader_supported&&r.shader_errors==0);
+     r.phase="material_texture_load";
+     var mat=AssetDatabase.LoadAssetAtPath<Material>(c.material_path);var tex=AssetDatabase.LoadAssetAtPath<Texture2D>(c.texture_path);
+     Need(mat!=null&&tex!=null);
+     r.phase="material_contract";
+     bool materialOk=MaterialSame(c,mat,shader,tex,r);
+     r.phase="material_identity";Need(r.material_shader_match&&r.native_identity);
+     r.phase="texture_descriptor_sampler";Need(r.native_descriptor&&r.native_sampler);
+     r.phase="texture_refs_uv";Need(r.slots_declared==2&&r.slots_matched==2&&r.uv_matched==2);
+     r.phase="numeric_properties";Need(materialOk);
+     r.phase="scene_staging";
      foreach(var x in cfg.scenes){
        string path=Path.GetFullPath(Path.Combine(root,x.path));
        Need(path.StartsWith(Path.Combine(root,"Assets","GTEmitter")+Path.DirectorySeparatorChar,StringComparison.Ordinal)&&!File.Exists(path));
-       var data=File.ReadAllBytes(Path.Combine(priv,x.blob));Need(Sha(data)==x.sha);Directory.CreateDirectory(Path.GetDirectoryName(path));File.WriteAllBytes(path,data);
+       var data=File.ReadAllBytes(Path.Combine(priv,x.blob));Need(Sha(data)==x.sha);Directory.CreateDirectory(Path.GetDirectoryName(path));File.WriteAllBytes(path,data);r.scenes_written++;
      }
-     AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-     foreach(var a in c.assets)if(Id(AssetDatabase.LoadMainAssetAtPath(a.path),a.guid,a.file_id))r.asset_identities++;
-     var shader=AssetDatabase.LoadAssetAtPath<Shader>(c.shader_path);var mat=AssetDatabase.LoadAssetAtPath<Material>(c.material_path);var tex=AssetDatabase.LoadAssetAtPath<Texture2D>(c.texture_path);
-     Need(shader!=null&&mat!=null&&tex!=null&&shader.isSupported&&shader.passCount==1&&ShaderUtil.GetShaderMessages(shader).All(x=>x.severity.ToString()!="Error"));
-     Need(r.asset_identities==4&&MaterialSame(c,mat,shader,tex));
+     r.phase="scene_refresh";AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+     foreach(var x in cfg.scenes)if(AssetDatabase.LoadAssetAtPath<SceneAsset>(x.path)!=null)r.scenes_imported++;
+     Need(r.scenes_imported==12&&r.scenes_written==12);
      r.phase="calibration";EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
      r.control_verified=Control(mat,cfg.vertex_requirements);Need(r.control_verified);
      r.phase="geometry";r.rows=cfg.scenes.Select(x=>Observe(x,c,cfg,mat,root)).ToArray();
-     r.source_assets_unchanged=AssetsSame(c,root)&&MaterialSame(c,mat,shader,tex);
+     r.phase="post_geometry_asset_contract";r.source_assets_unchanged=AssetsSame(c,root)&&MaterialSame(c,mat,shader,tex,r);
      r.phase="complete";r.status="OBSERVED";code=0;
    }catch(Exception e){r.failure_category=e.GetType().Name;}
    finally{
+     ShaderUtil.allowAsyncCompilation=async;
      if(r.private_log_guard)File.WriteAllText(Path.Combine(priv,"geometry-receipt.json"),JsonUtility.ToJson(r));
      EditorApplication.Exit(code);
    }

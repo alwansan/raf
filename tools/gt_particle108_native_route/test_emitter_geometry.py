@@ -1,5 +1,5 @@
 import unittest
-from tools.gt_particle108_native_route.emitter_geometry import audit_refs,valid_bake,fixture,Reject
+from tools.gt_particle108_native_route.emitter_geometry import audit_refs,valid_bake,fixture,Reject,import_observation
 class GeometryTests(unittest.TestCase):
     def test_bound_pointers(self):
         audit_refs({"a":{"fileID":1},"b":{"fileID":2,"guid":"a"*32,"type":2}}, {1},{(2,"a"*32)})
@@ -20,4 +20,14 @@ class GeometryTests(unittest.TestCase):
         ren="--- !u!199 &4\nParticleSystemRenderer:\n  custom: 002\n"
         data=fixture(1,2,3,4,None,0,tr,ps,ren)
         self.assertIn(ps.encode(),data);self.assertIn(ren.encode(),data)
+    def test_failed_import_without_rows_retains_safe_counters(self):
+        r=dict(run_id="r",private_log_guard=True,unity_version="2021.3.45f2",backend="Vulkan",phase="numeric_properties",
+               failure_category="InvalidOperationException",asset_identities=4,numeric_declared=11,numeric_matched=10,numeric_undeclared=2,rows=None,private_asset_name="omit")
+        obs=import_observation({"run_id":"r"},r)
+        self.assertEqual(obs["editor_phase"],"numeric_properties")
+        self.assertEqual(obs["editor_row_count"],0)
+        self.assertEqual(obs["import_counters"]["numeric_matched"],10)
+        self.assertNotIn("private_asset_name",obs)
+    def test_wrong_run_rejected(self):
+        with self.assertRaises(Reject):import_observation({"run_id":"r"},{"run_id":"other"})
 if __name__=="__main__":unittest.main()
