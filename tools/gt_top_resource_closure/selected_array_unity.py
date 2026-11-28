@@ -82,13 +82,20 @@ def stage(a):
     a.private.mkdir(mode=0o700)
     (a.private/"array.png.bytes").write_bytes(asset)
     (a.private/"array.meta.bytes").write_bytes(metadata)
+    if getattr(a,"native_bc3",False):
+        from tools.gt_top_resource_closure import selected_array_native
+        cfg["asset_path"]="Assets/GTSource/"+path.with_suffix(".asset").name
+        selected_array_native.stage_native(raw,a.private,cfg,tree,kind)
     write(a.private/"expected.json",cfg)
     here=Path(__file__).parent
-    files={"Assets/Editor/SelectedArrayUnity.cs":(here/"SelectedArrayUnity.cs").read_bytes(),
+    editor="SelectedArrayNative.cs" if getattr(a,"native_bc3",False) else "SelectedArrayUnity.cs"
+    files={"Assets/Editor/SelectedArrayUnity.cs":(here/editor).read_bytes(),
            "Assets/GTSelectedArray.compute":(here/"GTSelectedArray.compute").read_bytes(),
            "Packages/manifest.json":b'{"dependencies":{}}\n',
            "ProjectSettings/ProjectVersion.txt":b"m_EditorVersion: 2021.3.45f2\n",
            "ProjectSettings/ProjectSettings.asset":b"%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!129 &1\nPlayerSettings:\n  m_ObjectHideFlags: 0\n  serializedVersion: 26\n  companyName: GTValidation\n  productName: GTSelectedArray\n  m_ActiveColorSpace: 1\n"}
+    if getattr(a,"native_bc3",False):
+        files["Assets/GTArrayReference.shader"]=b'Shader "Hidden/GTArrayReference" { Properties { _GTArray ("GT", 2DArray) = "" {} } SubShader { Pass {} } }\n'
     for rel,data in files.items():
         target=a.unity_project/rel;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
     write(a.unity_project/"GTInput.json",cfg)
@@ -196,6 +203,7 @@ def main():
     for key in ("original","manifest","project","w1","b02","renderer-trace","plan","receipt","out","unity-project","private","safe"):
         p.add_argument("--"+key,type=Path)
     p.add_argument("--run-id",required=True);p.add_argument("--exit-code",type=int,default=1)
+    p.add_argument("--native-bc3",action="store_true",help="Stage original compressed bytes for native editor instead of PNG import")
     a=p.parse_args()
     if a.mode=="verify":
         return verify(a)
