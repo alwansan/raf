@@ -13,4 +13,12 @@ class SizeControls(unittest.TestCase):
             self.assertIn(f"dispatchGroupY=={size}",host)
             self.assertIn(f"size_t(w)*(i?{stages}:h)",host)
             self.assertIn(f"texH=t==1?{stages}:h",host)
+    def test_rg_widths(self):
+        self.assertEqual(a.FORMATS["RGFloat"],("rg32f",2,4))
+        self.assertEqual(a.FORMATS["RGHalf"],("rg16f",2,2))
+    def test_rgfloat_missing_bundle_rejected(self):
+        from tempfile import TemporaryDirectory
+        with TemporaryDirectory() as root:
+            p=Path(root)
+            with self.assertRaises(ValueError):a.read_rgfloat(p,p/"out",{"bundle_sha256":["0"*64]*5},(0,1,10,11))
 if __name__=="__main__":unittest.main()
