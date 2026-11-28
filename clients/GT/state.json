@@ -4653,7 +4653,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261128-particle108-preserved-alpha-vulkan/README_AR.md",
-  "next_action": "G3-G6-skybox-editor-import: reconcile actual 46104962432 job 140855532972 and lint 46104962399 job 140855531669 (execution 2891544fe2a9e4daa7f85d7d4e6ac8f2112e8a13). Actual 46104139224 SUCCESS, 79 controls, all 7 original register identities linked at actual consistent renumbered locations, 45 offsets, 10 resources, 6 invalid stage macros rejected, private installation 5 protected files unchanged, candidate SHA256 06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c. Inspect GT_SKYBOX_EDITOR_STAGE and GT_SKYBOX_EDITOR_IMPORT, prior digest replay, actual material GUID/localID/shader reference, 6 colors and 20 floats binary32, 0 int/TexEnv and 0 authored properties, one pass, Vulkan-only Android editor asset bundle, zero shader errors, four unchanged staged file hashes. Only PASS_EXACT_SKYBOX_ANDROID_VULKAN_BUNDLE proves scoped editor import and compilation. No scene import, original engine/runtime texture uniform bindings, raster/pixels/device or player proof; no production/XAPK. If blocked preserve exact cause and advance independent mesh/material/fire/water/light lane without repeating successful source-only skybox work. All G0-G6 remain open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged, CL/lab read-only BLACK/animation deferred.",
+  "next_action": "G6-level38-exact-editor: reconcile actual 46105747109 job 140857970292 and lint 46105747057 job 140857968861, execution a29afeda77edfc7c01e8fdad91f7ed43e541b582. Previous light same-export 46092186730 passed 42 identities/108 field checks; editor skipped due combined activation/disk condition. New workflow uses existing UNITY_LICENSE environment, separate preflight flags, exact previous scene SHA 2a62ecdd103b3bbbca5c9c68bd6c50d47087f09402205344e1e204504254b915 and meta SHA da046194178ee77a2153222d5e2decfdcd52eafa56887dc47f6949173bc9fe15. Require 42 editor objects and all 154 checks (108 prior + 42 presence + 3 activeInHierarchy + 1 isActiveAndEnabled), no mismatches, exact unchanged scene/meta; no rendering/device or full provider closure. Skybox actual 46104962432 identity/values pass but compilation failed: one stage-selector error, two GLSL same-name explicit uniform binding conflicts, Vulkan 0 internal programs despite 6588-byte bundle. Do not repeat successful skybox static or import identity checks alone. Future independent source-free Unity stage selection / uniform binding probe must resolve both compiler issues with authentic register/offset/resource semantics, nonzero actual Vulkan programs and no errors. No player, production or XAPK; all G0-G6 open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -13461,7 +13461,7 @@
     }
   },
   "latest_original_skybox_editor_import": {
-    "status": "ACTUAL_SKYBOX_EDITOR_IMPORT_IN_PROGRESS_UNRECONCILED",
+    "status": "ACTUAL_EDITOR_IDENTITY_AND_VALUES_PASS_ANDROID_VULKAN_COMPILER_BLOCKED",
     "starting_head": "806c99ab1d91aafa0ff0b7afd0ad26026c534c4d",
     "execution_head": "2891544fe2a9e4daa7f85d7d4e6ac8f2112e8a13",
     "branch": "feature/android-native-port",
@@ -13474,16 +13474,51 @@
     "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "run": 46104962432,
     "job": 140855532972,
-    "run_status": "in_progress",
-    "conclusion": null,
+    "run_status": "completed",
+    "conclusion": "failure",
     "lint_run": 46104962399,
     "lint_job": 140855531669,
     "lint_status": "completed",
     "lint_conclusion": "success",
     "source_free_controls_authored_new": 11,
-    "source_free_controls_actual": null,
-    "last_observed_step": "Checkout only independent ambient verifier and existing pinned tools",
-    "actual_report": null,
+    "source_free_controls_actual": 90,
+    "last_observed_step": "Compile temporary class104 capture and smoke test",
+    "actual_report": {
+      "Unity_import_verified": false,
+      "XAPK": false,
+      "android_vulkan_bundle_verified": false,
+      "device_pixels_proven": false,
+      "editor": {
+        "androidVulkanOnly": true,
+        "bundleBuilt": true,
+        "candidateSha256": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+        "colorMatches": 6,
+        "colorSlots": 6,
+        "errorCategory": "compiler_or_bundle_failed",
+        "floatMatches": 20,
+        "floatSlots": 20,
+        "intSlots": 0,
+        "materialIdentity": true,
+        "materialShaderReference": true,
+        "passCount": 1,
+        "playerBuilt": false,
+        "privateBundleBytes": 6588,
+        "shaderErrorsAfter": 1,
+        "shaderErrorsBefore": 0,
+        "shaderIdentity": true,
+        "shaderNameExact": true,
+        "sourcePropertyCount": 0,
+        "status": "FAIL",
+        "texEnvSlots": 0,
+        "version": "2021.3.45f2"
+      },
+      "editor_outcome": "failure",
+      "player_built": false,
+      "reason": "skybox_editor_compile_or_import_not_proven",
+      "same_export_files_unchanged_after_editor": 4,
+      "scene_import_verified": false,
+      "status": "INCONCLUSIVE"
+    },
     "tool_blobs": {
       "tools/gt_skybox_editor_import/stage.py": "cdc8511483f774fcdd202905855a00feedea67c8",
       "tools/gt_skybox_editor_import/PrivateSkyboxImport.cs": "614243c5a5e106ff8ad979e0168516689460c985",
@@ -13503,6 +13538,227 @@
     "XAPK": false,
     "all_gates_open": true,
     "session": "clients/GT/sessions/20261128-skybox-editor-import/README.md",
-    "next_action": "G3-G6-skybox-editor-import: reconcile actual 46104962432 job 140855532972 and lint 46104962399 job 140855531669 (execution 2891544fe2a9e4daa7f85d7d4e6ac8f2112e8a13). Actual 46104139224 SUCCESS, 79 controls, all 7 original register identities linked at actual consistent renumbered locations, 45 offsets, 10 resources, 6 invalid stage macros rejected, private installation 5 protected files unchanged, candidate SHA256 06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c. Inspect GT_SKYBOX_EDITOR_STAGE and GT_SKYBOX_EDITOR_IMPORT, prior digest replay, actual material GUID/localID/shader reference, 6 colors and 20 floats binary32, 0 int/TexEnv and 0 authored properties, one pass, Vulkan-only Android editor asset bundle, zero shader errors, four unchanged staged file hashes. Only PASS_EXACT_SKYBOX_ANDROID_VULKAN_BUNDLE proves scoped editor import and compilation. No scene import, original engine/runtime texture uniform bindings, raster/pixels/device or player proof; no production/XAPK. If blocked preserve exact cause and advance independent mesh/material/fire/water/light lane without repeating successful source-only skybox work. All G0-G6 remain open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged, CL/lab read-only BLACK/animation deferred."
+    "next_action": "Preserve candidate digest and exact failure. Future distinct skybox fix must prove Unity 2021 Android Vulkan stage selection without unsupported macro assumptions and solve same-name uniform binding conflict without weakening original owner/member/resource identities; prove nonzero actual Vulkan programs, not bundle bytes alone. Meanwhile level38 exact prior isolated Light hierarchy editor import, previously skipped; now existing environment available in 46104962432.",
+    "source_free_controls_step": "success",
+    "actual_step_snapshot": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Checkout only independent ambient verifier and existing pinned tools",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Verify pinned source readers and shader program recovery controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Install public translation tools for exact private wrapper",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-dotnet@v4",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Obtain exact public AssetRipperCLI source",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Compile temporary class104 capture and smoke test",
+        "status": "in_progress",
+        "conclusion": null
+      },
+      {
+        "name": "Read only level24 and five pinned support providers",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Resolve only exact missing Skybox provider from authenticated native file slot",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Read only one selected additional provider (exact file or ordered chunks)",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Authenticate selected provider Git object and SHA and exact native Material21",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Resolve actual Skybox Material m_Shader exact native provider",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Read only additional exact Shader provider when not already staged",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Authenticate exact selected native Shader48 and provider bytes",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Execute actual bounded shader-linked export with same-instance traces",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Replay exact verified candidate and stage actual same-export shader/material",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Check existing Unity activation and remaining disk",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Compile isolated exact original shader/material as Android Vulkan asset bundle only",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Verify bounded editor receipt, prior digest and exact staged file hashes",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Publish ONLY safe aggregate receipts",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Remove only temporary source and private export",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Obtain exact public AssetRipperCLI source",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Run actions/setup-dotnet@v4",
+        "status": "pending",
+        "conclusion": null
+      },
+      {
+        "name": "Post Checkout only independent ambient verifier and existing pinned tools",
+        "status": "pending",
+        "conclusion": null
+      }
+    ],
+    "source_free_controls_breakdown": [
+      14,
+      12,
+      17,
+      13,
+      11,
+      12,
+      11
+    ],
+    "actual_stage": {
+      "Unity_import_verified": false,
+      "XAPK": false,
+      "candidate_sha256": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+      "exact_same_export_files": {
+        "Assets/Original.mat": "571d031b60257f21adc2c7c40b7037ef62c3db6972fce1fc281eb79fae411a2d",
+        "Assets/Original.mat.meta": "e9c319064d5a3510f2561e06cab4b3a44ac9becc9b3bd49012e3dd301d4c5234",
+        "Assets/Original.shader": "06b9c2f7dd5f213c653d3a5304eadab557a39273a542a1c4bf2af708628aae6c",
+        "Assets/Original.shader.meta": "1ea29e7efbb05bf3169d9adce53eb77d8c5c56a5acd4079ebabf9a11cd66ed89"
+      },
+      "original_assets_published": false,
+      "original_scene_reference_proven_statically": true,
+      "phase": "complete",
+      "player_built": false,
+      "prior_static_wrapper_digest_reproduced": true,
+      "protected_export_files_unchanged": 5,
+      "scene_import_staged": false,
+      "source_color_slots": 6,
+      "source_float_slots": 20,
+      "source_int_slots": 0,
+      "source_texenv_slots": 0,
+      "status": "PASS_EXACT_SKYBOX_EDITOR_STAGING"
+    },
+    "compiler_log_census": {
+      "vulkan_internal_program_counts": [
+        {
+          "total": 0,
+          "unique": 0
+        }
+      ],
+      "stage_selection_compile_errors": 1,
+      "glsl_shared_uniform_explicit_binding_conflicts": 2,
+      "raw_shader_names_or_log_lines_retained": false
+    },
+    "scoped_editor_observed_material_identity_and_values": true,
+    "actual_aggregate_path": "clients/GT/sessions/20261128-skybox-editor-import/actual-aggregate.json",
+    "actual_selected_log_path": "clients/GT/sessions/20261128-skybox-editor-import/actual-selected-results.log",
+    "artifact": {
+      "id": 15247605805,
+      "digest": "sha256:4a1a13b2d9762af6f660d07316c3b5a5d960d3ca40569c07f49c5003cc3c0200",
+      "independently_downloaded": false
+    }
+  },
+  "latest_original_light_exact_editor": {
+    "status": "ACTUAL_LEVEL38_EXACT_EDITOR_IN_PROGRESS_UNRECONCILED",
+    "starting_head": "ad1a83d119e80717519cb8ddd386727cd6314ece",
+    "preparation_commit": "2ec8167e5a0670cc3fee9e09576609c2cf1c72cf",
+    "preparation_trigger_flaw": "duplicated exact in workflow path; no dedicated run at preparation commit, compatibility 46105694378 success",
+    "execution_head": "a29afeda77edfc7c01e8fdad91f7ed43e541b582",
+    "branch": "feature/android-native-port",
+    "prior_light_run": 46092186730,
+    "prior_light_editor_skipped": true,
+    "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "prior_source_scene_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932",
+    "prior_export_scene_sha256": "2a62ecdd103b3bbbca5c9c68bd6c50d47087f09402205344e1e204504254b915",
+    "prior_export_scene_meta_sha256": "da046194178ee77a2153222d5e2decfdcd52eafa56887dc47f6949173bc9fe15",
+    "expected_objects": 42,
+    "expected_same_export_checks": 108,
+    "expected_editor_checks": 154,
+    "run": 46105747109,
+    "job": 140857970292,
+    "run_status": "in_progress",
+    "conclusion": null,
+    "lint_run": 46105747057,
+    "lint_job": 140857968861,
+    "lint_status": "in_progress",
+    "lint_conclusion": null,
+    "source_free_controls_authored_new": 12,
+    "source_free_controls_actual": null,
+    "last_observed_step": "Checkout only bounded trace, reader and tests",
+    "actual_report": null,
+    "tool_blobs": {
+      "tools/gt_light_exact_editor/audit.py": "b7e15a745d323dcff7164fb8f7fa05b9b8402bf9",
+      "tools/gt_light_exact_editor/test_audit.py": "3f6ecfc69672080a83909803a113ee099459283e",
+      ".github/workflows/raft-gt-light-exact-editor.yml": "891bdcd2451e05e006f5e0c9fb0855ba12a9d02e"
+    },
+    "local_checkout_visible": false,
+    "local_work_overwritten": false,
+    "original_assets_mutated": false,
+    "original_assets_published": false,
+    "Unity_import_verified": false,
+    "full_scene_provider_closure_proven": false,
+    "device": false,
+    "production": false,
+    "player": false,
+    "XAPK": false,
+    "all_gates_open": true,
+    "session": "clients/GT/sessions/20261128-light-exact-editor/README.md",
+    "next_action": "G6-level38-exact-editor: reconcile actual 46105747109 job 140857970292 and lint 46105747057 job 140857968861, execution a29afeda77edfc7c01e8fdad91f7ed43e541b582. Previous light same-export 46092186730 passed 42 identities/108 field checks; editor skipped due combined activation/disk condition. New workflow uses existing UNITY_LICENSE environment, separate preflight flags, exact previous scene SHA 2a62ecdd103b3bbbca5c9c68bd6c50d47087f09402205344e1e204504254b915 and meta SHA da046194178ee77a2153222d5e2decfdcd52eafa56887dc47f6949173bc9fe15. Require 42 editor objects and all 154 checks (108 prior + 42 presence + 3 activeInHierarchy + 1 isActiveAndEnabled), no mismatches, exact unchanged scene/meta; no rendering/device or full provider closure. Skybox actual 46104962432 identity/values pass but compilation failed: one stage-selector error, two GLSL same-name explicit uniform binding conflicts, Vulkan 0 internal programs despite 6588-byte bundle. Do not repeat successful skybox static or import identity checks alone. Future independent source-free Unity stage selection / uniform binding probe must resolve both compiler issues with authentic register/offset/resource semantics, nonzero actual Vulkan programs and no errors. No player, production or XAPK; all G0-G6 open; historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; CL/lab read-only, BLACK/animation deferred."
   }
 }
