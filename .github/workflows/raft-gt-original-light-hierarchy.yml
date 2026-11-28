@@ -1,0 +1,77 @@
+name: GT G6 original Light activation and Transform hierarchy (READ ONLY)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-original-light-hierarchy.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-light-hierarchy:
+    if: github.repository == 'alwansan/raf' && github.ref == 'refs/heads/feature/android-native-port'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout only bounded hierarchy audit tools
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/gt_original_light_hierarchy/
+            /tools/gt_remaining_scene_lighting/audit.py
+            /tools/gt_remaining_scene_lighting/pins.json
+      - name: Verify exact tool pins and regression controls
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          test "$(git hash-object tools/gt_original_light_hierarchy/audit.py)" = b7a78d4edd86a9c38186e7bb6536c76fa9cb11fa
+          test "$(git hash-object tools/gt_original_light_hierarchy/test_audit.py)" = 0f293d259af54c55d725b68d6babe3170a719dd6
+          test "$(git hash-object tools/gt_remaining_scene_lighting/audit.py)" = 84133c4b34c1d3b1cda8a2b534676d38c062f1ee
+          test "$(git hash-object tools/gt_remaining_scene_lighting/pins.json)" = 5113b42905333c70e7ba2c1aa2cdfc4b0f7f39c1
+          python3 -B -m unittest discover -s tools/gt_original_light_hierarchy -p test_audit.py -v
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 2097152
+      - name: Read only three selected original scenes at fixed ZIP2 pin
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-light-hierarchy-source
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/level24
+            /Raft/Raft_Data/level30/part-00000
+            /Raft/Raft_Data/level30/part-00001
+            /Raft/Raft_Data/level38
+      - name: Authenticate each source scene and observe actual Light hierarchy
+        run: |
+          set -euo pipefail
+          test "$(git -C .gt-light-hierarchy-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(git -C .gt-light-hierarchy-source hash-object RAFT_FILE_MANIFEST.tsv)" = 4201fda426d80caba36c275ceaddb440b05c5b4e
+          python3 -m venv "$RUNNER_TEMP/gt-light-hierarchy-python"
+          py="$RUNNER_TEMP/gt-light-hierarchy-python/bin/python"
+          "$py" -m pip install --disable-pip-version-check UnityPy==1.23.0
+          mkdir -p "$RUNNER_TEMP/gt-light-hierarchy-results"
+          "$py" -B -m tools.gt_original_light_hierarchy.audit --source .gt-light-hierarchy-source --pins tools/gt_remaining_scene_lighting/pins.json --output "$RUNNER_TEMP/gt-light-hierarchy-results/aggregate.json"
+      - name: Upload only aggregate source counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-original-light-hierarchy-aggregate
+          path: ${{ runner.temp }}/gt-light-hierarchy-results/aggregate.json
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Clean only disposable source checkout
+        if: always()
+        run: |
+          if test -d .gt-light-hierarchy-source/.git; then rm -rf .gt-light-hierarchy-source; fi
