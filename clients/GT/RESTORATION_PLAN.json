@@ -1,5 +1,5 @@
 {
-  "next_action": "Stage the exact previously selected source graph's dependency owners and full pinned stream providers before AssetRipper export, not after. Source-only preflight must reproduce 855 eligible original graphs, top Material 118; private exact source identity retained across new export. Budget from immutable manifest, bounded free disk and exact source extents. Trace all supported typed texture classes; inspect actual target metadata and native documents after export. Compare selected source geometry/values and Texture2D pixel parity, report non-Texture2D separately. No separate census/route translation replay; no GPU/device acceptance; G0–G6 open. Level38 unchanged; CL/lab read-only; BLACK/animation deferred; no production/player/XAPK.",
+  "next_action": "Reconcile actual 46121881941/job 140907974513 (in_progress/pending; last observed step Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout) and lint 46121881919/job 140907974013 (completed/success) at execution 0867a7dd56ca8720ebdada5230c06bd6b0f363b1. Prior actual 46120955031: 8 color/43 float exact; 5/6 TexEnv pointer and UV (2 null); three missing physical texture assets; Mesh stream exceeds old 512 MiB. New distinct causal test stages exact private selected source graph's providers before actual export with 4 GiB cap, free-disk guard, authenticated SHA/size, typed 28/84/89/117/187 trace. Inspect GT_TOP_EXACT_DEPENDENCY_PRESTAGE and GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK safe receipts; report concrete source provider or physical/typed/pixel differences. Do not infer closure from workflow success. If verified mesh/resources, stage source-bound shader ABI and actual isolated Unity Vulkan draw, Dummy/wrong-reference controls. If specific non-Texture2D or importer/mismatch remains, address actual cause or pivot independent fire or water, no census or program-only replay. All G0–G6 open; CL/lab read-only; Level38 pins unchanged; BLACK/animation deferred; no production/player/XAPK.",
   "owner_direction_20261128_current": "توجيه العمل الحالي — 28 نوفمبر 2026: استعد وادمج رسوم RAFT بالكامل على `feature/android-native-port`. استخدم ZIP2 (`alwansan/raf:zip2`) مصدراً للبيانات والمرجع الفني بالقدر الذي تحتاجه الاستعادة، واستعمل أدوات الاسترجاع والجرد والتحويل والاستيراد والاختبارات المناسبة. اتخذ القرارات الهندسية مباشرة، وابدأ بأكبر مشكلة فعلية ذات أثر. ثبّت SHA المصدر والملفات والـGUID وMaterial/Shader/Renderer، وحافظ على الأدلة ونتائج الاختبارات. أبق CL وlab للقراءة فقط وBLACK والأنيميشن مؤجلين. لا تشغّل مسار بناء اللعبة أو XAPK قبل دمج الاستعادة وإغلاق G0–G6 بالأدلة العملية؛ واصل المسارات المنتجة بالتوازي دون تكرار. تحقق من HEAD الفعلي وActions قبل كل دفعة.",
   "latest_original_light_hierarchy": {
     "status": "OBSERVED_SELECTED_ORIGINAL_LIGHT_HIERARCHIES",
@@ -18195,5 +18195,47 @@
       "archive_independently_downloaded": false
     },
     "actual_result_path": "clients/GT/sessions/20261128-top-resource-closure/actual-46120955031.json"
+  },
+  "latest_top_exact_prestaged_resource_recheck": {
+    "status": "TOP_EXACT_PRESTAGED_RESOURCE_RECHECK_STARTED",
+    "starting_head": "2c3eec71d1a81c687d9f9fcac59ae976c46adf8b",
+    "execution_head": "0867a7dd56ca8720ebdada5230c06bd6b0f363b1",
+    "run": 46121881941,
+    "job": 140907974513,
+    "run_status": "in_progress",
+    "conclusion": null,
+    "lint_run": 46121881919,
+    "lint_job": 140907974013,
+    "lint_status": "completed",
+    "lint_conclusion": "success",
+    "last_observed_step": "Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout",
+    "source_free_controls_step": "success",
+    "prior_actual": 46120955031,
+    "prior_material_color_matches": 8,
+    "prior_material_float_matches": 43,
+    "prior_texture_pointer_uv_slots": 5,
+    "prior_missing_physical_texture_targets": 3,
+    "prior_mesh_stream_budget_exceeded": true,
+    "new_source_free_control_methods": 6,
+    "private_dependency_acquisition_cap_bytes": 4294967296,
+    "per_provider_disk_reserve_bytes": 3221225472,
+    "typed_texture_trace_classes": [
+      28,
+      84,
+      89,
+      117,
+      187
+    ],
+    "new_source_prepared_verified": false,
+    "new_export_completed": false,
+    "serialized_mesh_fields_match": false,
+    "all_saved_TexEnv_edges_and_UV_match": false,
+    "all_nonnull_texture_payloads_verified": false,
+    "unity_gpu_pixels_verified": false,
+    "white_mesh_repair_verified": false,
+    "android_device": false,
+    "production": false,
+    "XAPK": false,
+    "next_action": "Reconcile actual 46121881941/job 140907974513 (in_progress/pending; last observed step Compile SHA-pinned optional W1+B02 native renderer trace in disposable public checkout) and lint 46121881919/job 140907974013 (completed/success) at execution 0867a7dd56ca8720ebdada5230c06bd6b0f363b1. Prior actual 46120955031: 8 color/43 float exact; 5/6 TexEnv pointer and UV (2 null); three missing physical texture assets; Mesh stream exceeds old 512 MiB. New distinct causal test stages exact private selected source graph's providers before actual export with 4 GiB cap, free-disk guard, authenticated SHA/size, typed 28/84/89/117/187 trace. Inspect GT_TOP_EXACT_DEPENDENCY_PRESTAGE and GT_TOP_PRESTAGED_EXACT_RESOURCE_RECHECK safe receipts; report concrete source provider or physical/typed/pixel differences. Do not infer closure from workflow success. If verified mesh/resources, stage source-bound shader ABI and actual isolated Unity Vulkan draw, Dummy/wrong-reference controls. If specific non-Texture2D or importer/mismatch remains, address actual cause or pivot independent fire or water, no census or program-only replay. All G0–G6 open; CL/lab read-only; Level38 pins unchanged; BLACK/animation deferred; no production/player/XAPK."
   }
 }
