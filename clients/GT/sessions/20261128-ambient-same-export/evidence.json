@@ -1,0 +1,139 @@
+{
+  "status": "ORIGINAL_AMBIENT_SAME_EXPORT_LAUNCHED",
+  "starting_head": "3cf027674470640fc71fc8f4972c5ef222e492b0",
+  "prior_level38_reconciliation": "46037177caa60145203d395d6603bfdb14179b6c",
+  "prior_level38_result": {
+    "run": 46092186730,
+    "mapped_objects": 42,
+    "field_checks": 108,
+    "mismatches": 0,
+    "isolated_import": "skipped activation_or_disk combined condition; exact cause unproven",
+    "evidence": "clients/GT/sessions/20261128-light-same-export/evidence.json"
+  },
+  "preparation_commit": "23b0f81bc51e1f2a3382b011f2ad723c8366f743",
+  "execution_head": "c5be5e2cb84e6610b99c1f0824be2265f90bea24",
+  "run": 46092860419,
+  "job": 140817533184,
+  "run_status": "in_progress",
+  "run_conclusion": null,
+  "lint_run": 46092860401,
+  "lint_job": 140817532882,
+  "lint_conclusion": "success",
+  "source_free_controls_step": "success",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Checkout only independent ambient verifier and existing pinned tools",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Verify reviewed code and run source-free ambient controls",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Separate current editor disk and activation eligibility without starting Unity",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-dotnet@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Obtain exact public AssetRipperCLI source",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Compile temporary class104 capture and smoke test",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "name": "Read only level24 and five pinned support providers",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Authenticate six providers and exact RenderSettings104 source document",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Execute one actual bounded ambient export with private traces",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Compare actual original ambient, fog, reflection and typed skybox binding",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Publish ONLY safe aggregate receipts",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Remove only temporary source and private export",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Obtain exact public AssetRipperCLI source",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Run actions/setup-dotnet@v4",
+      "status": "pending",
+      "conclusion": null
+    },
+    {
+      "name": "Post Checkout only independent ambient verifier and existing pinned tools",
+      "status": "pending",
+      "conclusion": null
+    }
+  ],
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+  "selection": {
+    "scene": "level24",
+    "scene_bytes": 2803016,
+    "scene_sha256": "6a06f3e95da765e89ded81c13837cd3de5844969c131ea02e59c38dbda22fc5d",
+    "six_provider_bytes": 37682084,
+    "providers": [
+      "level24",
+      "globalgamemanagers",
+      "globalgamemanagers.assets",
+      "sharedassets6.assets",
+      "sharedassets24.assets",
+      "sharedassets25.assets"
+    ],
+    "full_scene_provider_closure_proven": false
+  },
+  "tool_pins": {
+    "audit": "1485a9ad7bd60d2d8d8fcb21e75ff64f2ca23737",
+    "stage_trace": "7c204d8ad6cbbeb10167f22bd352bd9d4d4beb8c",
+    "tests": "a057d81547d8786f231efced5a2477e1c9c1fe21",
+    "public_tool": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+  },
+  "scope": "RenderSettings104 original owner/pathID to actual same-export scene GUID/local fileID and 19 selected ambient/fog/reflection fields, null sun and typed local or external Skybox Material21 to same W1 instance and actual Material YAML; preserve unknowns, no guessed defaults. New current-run-only independent activation/disk preflight without running Unity.",
+  "actual_same_export_result": null,
+  "actual_current_preflight_result": null,
+  "original_assets_published": false,
+  "original_assets_modified": false,
+  "production": false,
+  "player": false,
+  "device": false,
+  "XAPK": false,
+  "all_gates_open": true,
+  "next_action": "G6-original-ambient-same-export: reconcile actual new level24 run 46092860419 job 140817533184 and lint 46092860401; read actual GT_AMBIENT_EDITOR_PREFLIGHT (current-run-only separate activation and disk; not retrospective cause), GT_AMBIENT_SOURCE_AUTHENTICATED, GT_AMBIENT_ACTUAL_EXPORT, and GT_AMBIENT_SAME_EXPORT, verify selected 19 fields and sun/skybox/trace/actual YAML. Preserve unknowns and exact mismatch fields; repair only demonstrated drift without modifying original assets. If class104 tracing misses due exporter transformed collection, examine exact public exporter handling rather than match by names/count. Do not replay actual level38 42/42 Light hierarchy or source census. If ambient blocked or matches, pursue distinct shader/material/water issue. No Unity import from current ambient experiment, no original raw assets published, no protection bypass, only feature/android-native-port, CL/lab read-only, BLACK/animation deferred; no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. Preserve Ali pinned restore."
+}
