@@ -1533,5 +1533,10 @@
   "report_blob": "9d9642b7f59a21780e8d74a9b8bd12b615da9bc9",
   "correction_commit": "b86e62effa96eafe153e2fee34f998928cd7ea67",
   "new_regression_controls": 4,
-  "correction_test_status": "pending isolated workflow"
+  "correction_test_status": "12/12 PASS in 46112799844 and 46112888090; original Actual remains FAILURE",
+  "correction_test_runs": [
+    46112799844,
+    46112888090
+  ],
+  "correction_tests_passed": 12
 }

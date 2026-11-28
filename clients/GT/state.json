@@ -17662,10 +17662,10 @@
     "report_blob": "9d9642b7f59a21780e8d74a9b8bd12b615da9bc9",
     "correction_commit": "b86e62effa96eafe153e2fee34f998928cd7ea67",
     "new_regression_controls": 4,
-    "correction_test_status": "pending isolated workflow"
+    "correction_test_status": "12/12 PASS in 46112799844 and 46112888090; original Actual remains FAILURE"
   },
   "latest_particle108_collection_implementation": {
-    "status": "ORIGINAL_COLLECTION_IMPLEMENTATION_DIAGNOSTIC_RUNNING",
+    "status": "ORIGINAL_COLLECTION_DIAGNOSTIC_REVISION3_PENDING",
     "starting_head": "42beabf17baf322392767df91c22100fd0664216",
     "preparation_commit": "0fa61c15a6841ded6fc891f688b3ab94b355af97",
     "workflow": ".github/workflows/raft-gt-particle108-collection-implementation.yml",
@@ -17684,16 +17684,39 @@
     "XAPK": false,
     "device": false,
     "next_action": "G5-original-Particle108-collection-implementation: low8/low16 remain indistinguishable after independent 12-row authored calibration replay; do not repeat sky export or infer packing. Reconcile the new isolated original Particle108 collection-implementation workflow: existing exact six-scene/six-owner ZIP2 staging, W1/B02/B21, public pinned exporter and opt-in private concrete nonexportable collection implementation capture joined to selected Texture2D28 and tenth actual Material PPtr. Determine the concrete class, then inspect public selection path and independently authenticated source format/usage/mips/payload and resolved target bytes before any override. No original pixel or black-fire restoration claim; highest-impact white-mesh same-export GUID fanout remains next independent lane. Native sky editor conflicts, nine VS and original register joins open. Level38 pins unchanged, 154 editor proof absent; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged; no production/player/XAPK; CL/lab read-only; BLACK/animation deferred.",
-    "execution_head": "50abd6e26ca0d6ae24d36b2deb98571d17b3d31b",
-    "run": 46112799844,
-    "job": 140879862434,
+    "execution_head": "27cb0bd86e2d6321fa963bf8f83cd2a2aab1d5e0",
+    "run": 46112931401,
+    "job": null,
     "run_status": "in_progress",
     "conclusion": null,
-    "lint_run": 46112799740,
-    "lint_job": 140879862152,
-    "lint_status": "in_progress",
-    "lint_conclusion": null,
-    "last_observed_step": "Checkout only verification and exporter helper source",
-    "offline_sky_calibration_replay_controls_pending": true
+    "lint_run": 46112931410,
+    "lint_job": null,
+    "lint_status": "completed",
+    "lint_conclusion": "success",
+    "last_observed_step": "Revision 3 run status checked; inspect live jobs",
+    "offline_sky_calibration_replay_controls_pending": false,
+    "first_attempt": {
+      "run": 46112799844,
+      "job": 140879862434,
+      "conclusion": "failure",
+      "lint_run": 46112799740,
+      "lint_conclusion": "success",
+      "sky_controls_passed": 12,
+      "particle_binding_tests_passed": 17,
+      "cause": "stale exact W1 single-line shader filter guard",
+      "source_acquired": false
+    },
+    "second_attempt": {
+      "run": 46112888090,
+      "job": 140880137655,
+      "conclusion": "failure",
+      "lint_run": 46112888084,
+      "lint_conclusion": "success",
+      "cause": "new assertion counted pre-existing GetType().FullName sites globally",
+      "source_acquired": false
+    },
+    "first_correction": "20edac6d05ea732e71b9ff017fc51cee5d02a12e",
+    "offline_sky_calibration_replay_controls_passed": 12,
+    "original_source_acquired_in_first_two_attempts": false
   }
 }
