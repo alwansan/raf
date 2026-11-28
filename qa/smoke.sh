@@ -150,5 +150,9 @@ if [[ "${CAPTURE_VIDEO:-false}" == true ]]; then
   phase=video
   bash qa/capture_video.sh "$x" "$y" "$tmp/venv/bin/python"
 fi
+if [[ "${ARM_TRANSLATION_PROBE:-false}" == true ]]; then
+  phase=arm64-translation
+  bash qa/arm_probe.sh "$root" "$tmp"
+fi
 phase=passed
 echo "Synthetic emulator checks passed for $guest"

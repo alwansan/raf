@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.raft.qa.armfixture" android:versionCode="1" android:versionName="1">
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="34"/>
+    <application android:label="RAFT QA ARM64 translation fixture" android:theme="@android:style/Theme.Material.NoActionBar" android:allowBackup="false" android:extractNativeLibs="true">
+        <activity android:name=".ArmProbe" android:exported="true"/>
+    </application>
+</manifest>
