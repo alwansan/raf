@@ -1,5 +1,5 @@
 {
-  "status": "ACTUAL_WORKFLOW_IN_PROGRESS_UNRECONCILED",
+  "status": "ACTUAL_COMBINED_WRAPPER_OFFSET_MISMATCH",
   "starting_head": "4c49603272b908d0b9adbe9e05a84417781417e2",
   "execution_head": "3d3e3550b0ebf224c491617d07e1dbbc89016510",
   "branch": "feature/android-native-port",
@@ -10,8 +10,8 @@
   "run": 46102429968,
   "job": 140847638482,
   "run_url": "https://github.com/alwansan/raf/actions/runs/46102429968",
-  "run_status": "in_progress",
-  "conclusion": null,
+  "run_status": "completed",
+  "conclusion": "failure",
   "lint_run": 46102429930,
   "lint_job": 140847638088,
   "lint_status": "completed",
@@ -24,8 +24,51 @@
     ".github/workflows/raft-gt-skybox-source-bound-wrapper.yml": "7a28636541b75ab4ce69900909d092a19ebff584"
   },
   "source_free_controls_authored": 13,
-  "source_free_controls_actual": null,
-  "actual_report": null,
+  "source_free_controls_actual": 56,
+  "actual_report": {
+    "Unity_import_verified": false,
+    "XAPK": false,
+    "all_gates_open": true,
+    "bound_stage_counts": {
+      "constant_buffer_bindings_from_variant": 0,
+      "constant_buffer_layouts_with_shared_members_table": 5,
+      "constant_buffer_named_32bit_lanes": 216,
+      "constant_buffer_named_member_occurrences": 45,
+      "constant_buffer_named_struct_occurrences": 0,
+      "distinct_original_parameter_blobs": 2,
+      "named_constant_buffer_candidate_stages_vulkan11_valid": 2,
+      "named_constant_buffer_reflected_offsets_verified": 45,
+      "named_original_numeric_members_in_distinct_parameter_blobs": 0,
+      "named_original_resource_entries_in_distinct_parameter_blobs": 0,
+      "original_variant_stages_with_cb_bindings": 0,
+      "original_variant_stages_with_parameter_records": 2,
+      "original_variant_stages_with_textures": 0,
+      "original_vertex_fragment_varying_records_matched": 7,
+      "original_vertex_input_semantics_restored": 1,
+      "resource_rebound_stages_verified_spirv_identical_excluding_debug": 2,
+      "translated_constant_buffer_declarations_mapped": 5,
+      "translated_sampler_declarations_mapped_to_source_texture": 5,
+      "translated_texture_declarations_mapped_to_source_name": 5,
+      "vertex_variants_with_verified_mesh_inputs": 1,
+      "vulkan_vertex_fragment_locations_matched": 7
+    },
+    "device_pixels_proven": false,
+    "original_assets_mutated": false,
+    "original_assets_published": false,
+    "original_object_sha256": "ef5c31aa0751308a026445ad4503ace5b1114ead41edb5408f84b11751e667d9",
+    "phase": "combined_wrapper_compile_and_interface",
+    "private_wrapper_installed": false,
+    "production": false,
+    "reason": "named_constant_buffer_offset_mismatch",
+    "same_export_binding_verified": true,
+    "source_layout": {
+      "empty_keyword_routes": 1,
+      "original_properties": 0,
+      "render_states": 1
+    },
+    "status": "INCONCLUSIVE",
+    "translated_original_programs": 2
+  },
   "private_wrapper_install_proven": false,
   "local_checkout_visible": false,
   "local_work_overwritten": false,
@@ -37,7 +80,7 @@
   "XAPK": false,
   "all_gates_open": true,
   "session": "clients/GT/sessions/20261128-skybox-source-bound-wrapper/README.md",
-  "next_action": "G3-G6-original-skybox-one-pass-source-bound-wrapper: reconcile actual 46102429968 job 140847638482 and lint 46102429930 job 140847638088 (execution 3d3e3550b0ebf224c491617d07e1dbbc89016510). Inspect GT_SKYBOX_SOURCE_BOUND_WRAPPER safe aggregate; distinguish route/layout, original program translation, parameter/mesh/varying binding, combined entrypoint/reflection, and disposable install gates. Only PASS_SOURCE_BOUND_WRAPPER_PRIVATE_SAME_EXPORT with verified exact object SHA, both compiled entries, reflected interfaces and original offsets and five protected file hashes proves this scoped install; still no Unity/game/device proof, no full census change. If precise unsupported schema or binding failure, record it without weakening source contracts; pursue separate highest-impact water/light/mesh/particle lane if blocked. Do not repeat prior source-only census or claim closure. No original raw assets/program publication, no production/player/XAPK; all G0-G6 open, historical 688/786 non-Dummy and 98 Dummy/37 GUID unchanged. CL/lab read-only, BLACK/animation deferred.",
+  "next_action": "G3-G6-skybox-offset-differential: reproduce the observed combined wrapper failure, compare original owner/member offsets for both final stages, test exclusive source stage-local declarations with exact original offsets, resources and interfaces; conditional temporary install only on strict success. No Unity/device or production proof.",
   "actual_step_snapshot": [
     {
       "name": "Set up job",
@@ -144,5 +187,18 @@
       "status": "pending",
       "conclusion": null
     }
-  ]
+  ],
+  "source_free_controls_breakdown": [
+    14,
+    12,
+    17,
+    13
+  ],
+  "actual_aggregate_path": "clients/GT/sessions/20261128-skybox-source-bound-wrapper/actual-aggregate.json",
+  "actual_selected_log_path": "clients/GT/sessions/20261128-skybox-source-bound-wrapper/actual-selected-results.log",
+  "artifact": {
+    "id": 15246451612,
+    "digest": "sha256:6fab1bd8583154fdf9bb1cf488d4a3db187e659f1ba59439ab7e6b733b67cd9b",
+    "independently_downloaded": false
+  }
 }
