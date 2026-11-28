@@ -11,6 +11,7 @@ import tempfile
 from pathlib import Path
 
 from tools.gt_skybox_compiler_control import control as c
+from tools.gt_skybox_actual_abi import metadata_bridge as bridge
 from tools.gt_skybox_shader_wrapper import wrapper as w
 from tools.gt_skybox_source_register_join import audit as join
 from tools.gt_skybox_offset_differential import audit as d
@@ -240,7 +241,7 @@ def inspect_bundle(path,decoder,name,packet):
     names=None
     try:names=original_name_registry(p["m_NameIndices"])
     except Exception:pass
-    reflection={}; blobs={}; results={}; stage_hashes={}
+    reflection={}; blobs={}; results={}; stage_hashes={}; debug_counts={}
     with tempfile.TemporaryDirectory(prefix="gt-actual-skybox-abi-") as td:
         def decode(i):
             c.require(type(i) is int and 0<=i<len(entries),"blob_index")
@@ -255,6 +256,7 @@ def inspect_bundle(path,decoder,name,packet):
                         spv=Path(td)/(h+".spv");spv.write_bytes(data)
                         subprocess.run(["spirv-val","--target-env","vulkan1.1",str(spv)],capture_output=True,timeout=30,check=True)
                         reflection[h]=(next(iter(models)),read_reflection(spv))
+                        debug_counts[h]=bridge.debug_op_counts(data)
                     hashes.append(h)
                 c.require(bool(hashes),"empty_blob")
                 blobs[i]=hashes
@@ -270,6 +272,8 @@ def inspect_bundle(path,decoder,name,packet):
             result=compare_stage(packet["static_refs"][i],actual,packet["layouts"][i],stage,packet["refs"][i])
             result["module_sha256"]=h;result["serialized_stage_rows"]=len(rr)
             result["runtime_metadata_rows"]=[]
+            result["actual_spirv_debug_name_counts"]=debug_counts[h]
+            result["descriptor_metadata_bridge_rows"]=[]
             for row in tables[table]:
                 try:
                     c.require(names is not None,"name_registry_unavailable")
@@ -279,6 +283,14 @@ def inspect_bundle(path,decoder,name,packet):
                                     packet["named_resources"][i],m,res,b,actual,variant))
                 except Exception as e:
                     result["runtime_metadata_rows"].append({"observed":False,"reason":w.error_category(e)})
+                try:
+                    c.require(names is not None,"name_registry_unavailable")
+                    owner_table="progVertex" if fallback and stage=="fs" else table
+                    full=bridge.full_metadata(p[owner_table],row,entries,names)
+                    result["descriptor_metadata_bridge_rows"].append(bridge.view_profiles(packet["layouts"][i],stage,
+                                    packet["named_resources"][i],packet["static_refs"][i],packet["refs"][i],full,actual))
+                except Exception as e:
+                    result["descriptor_metadata_bridge_rows"].append({"observed":False,"reason":w.error_category(e)})
             results[stage]=result
         pair=compare_pair(reflection[stage_hashes["vs"]][1],reflection[stage_hashes["fs"]][1],packet)
     return dict(stages=results,interfaces=pair,fragment_table_fallback=fallback,
@@ -312,6 +324,8 @@ def verify(x):
             a["interfaces"]["fragment_output_location_type"]["exact_map"] and
             a["interfaces"]["original_register_join"]["all_original_registers_linked"])
         r["status"]=OBSERVED
+        r["metadata_bridge_observed_rows"]=sum(sum("views" in x for x in stage["descriptor_metadata_bridge_rows"]) for stage in a["stages"].values())
+        r["original_runtime_abi_verified"]=False
     except Exception as e:r["reason"]=w.error_category(e)
     output(x.report,r,"GT_SKYBOX_ACTUAL_ABI_VERIFY")
     # Completing comparison is not ABI acceptance. A measured mismatch is retained,
