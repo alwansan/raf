@@ -164,17 +164,55 @@ public static class NativeMipValidation {
    var v=mesh.vertices;Need(v.Length>0&&v.All(x=>Fin(x)));
    var b=new Bounds(v[0],Vector3.zero);foreach(var x in v)b.Encapsulate(x);return b;
  }
+ static Bounds LiveWorldBounds(ParticleSystem ps,ParticleSystem.Particle[] particles){
+   var main=ps.main;var tr=ps.transform;Transform space=null;
+   if(main.simulationSpace==ParticleSystemSimulationSpace.Local)space=tr;
+   else if(main.simulationSpace==ParticleSystemSimulationSpace.Custom){space=main.customSimulationSpace;Need(space!=null);}
+   else Need(main.simulationSpace==ParticleSystemSimulationSpace.World);
+   Vector3 scale=Vector3.one;
+   if(main.scalingMode==ParticleSystemScalingMode.Hierarchy)scale=tr.lossyScale;
+   else if(main.scalingMode==ParticleSystemScalingMode.Local)scale=tr.localScale;
+   else Need(main.scalingMode==ParticleSystemScalingMode.Shape);
+   float factor=Mathf.Max(Mathf.Abs(scale.x),Mathf.Abs(scale.y),Mathf.Abs(scale.z));
+   Need(Fin(factor)&&factor>0&&particles.Length>0);
+   Bounds bounds=new Bounds();bool first=true;
+   foreach(var p in particles){
+     Vector3 world=space==null?p.position:space.TransformPoint(p.position);
+     var size=p.GetCurrentSize3D(ps);
+     float extent=Mathf.Max(Mathf.Abs(size.x),Mathf.Abs(size.y),Mathf.Abs(size.z))*factor;
+     Need(Fin(world)&&Fin(size)&&Fin(extent)&&extent>1e-7f&&extent<1e8f);
+     // Conservative square billboard envelope, centered on the actual live particle.
+     var part=new Bounds(world,Vector3.one*extent*2f);
+     if(first){bounds=part;first=false;}else bounds.Encapsulate(part);
+   }
+   return bounds;
+ }
+ static void DirectReferenceClear(RenderTexture rt,Color bg,string path){
+   var b=new CommandBuffer{name="GT independent linear reference clear"};
+   try{
+     b.SetRenderTarget(rt);b.SetViewport(new Rect(0,0,rt.width,rt.height));
+     b.ClearRenderTarget(true,true,bg);Graphics.ExecuteCommandBuffer(b);WriteProbePixels(rt,path);
+   }finally{b.Release();}
+ }
  static void RenderEmitterCase(Camera cam,ParticleSystemRenderer ren,Mesh mesh,Material original,Material marker,
                                Material[] mats,bool rendererPath,string kind,RenderTexture rt,string path){
    var b=new CommandBuffer{name="GT generated billboard draw"};
+   var clear=new CommandBuffer{name="GT explicit linear camera clear"};
    try{
      Need(ren.sharedMaterials.SequenceEqual(mats)&&mats.All(x=>x==original));
      ren.enabled=rendererPath&&kind!="clear";
      if(rendererPath&&kind=="marker")ren.sharedMaterials=mats.Select(x=>marker).ToArray();
      if(!rendererPath&&kind!="clear")b.DrawMesh(mesh,Matrix4x4.identity,kind=="marker"?marker:original,0,0);
+     // Camera background color may be converted by the editor. Use an explicit
+     // GPU clear before any opaque/transparent particle rendering, and verify
+     // its output against a separately measured direct clear.
+     clear.SetRenderTarget(BuiltinRenderTextureType.CameraTarget);
+     clear.ClearRenderTarget(true,true,cam.backgroundColor);
+     cam.AddCommandBuffer(CameraEvent.BeforeForwardOpaque,clear);
      cam.AddCommandBuffer(CameraEvent.BeforeForwardAlpha,b);cam.Render();
      WriteProbePixels(rt,path);
    }finally{
+     cam.RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque,clear);clear.Release();
      cam.RemoveCommandBuffer(CameraEvent.BeforeForwardAlpha,b);b.Release();
      ren.sharedMaterials=mats;ren.enabled=true;
    }
@@ -191,7 +229,7 @@ public static class NativeMipValidation {
      r.phase="frame";
      Need(before.Length>0&&before.Length<=256&&ps.GetParticles(before)==before.Length&&mats.Length==2&&mats.All(x=>x==original));
      Need(original!=null&&marker!=null&&original.shader!=marker.shader&&original.passCount==1&&marker.passCount==1);
-     Frame(cam,rendererPath?ren.bounds:MeshBounds(mesh));
+     Frame(cam,rendererPath?LiveWorldBounds(ps,before):MeshBounds(mesh));
      cam.cullingMask=rendererPath?1<<ren.gameObject.layer:0;
      rt=new RenderTexture(64,64,24,RenderTextureFormat.ARGBFloat,RenderTextureReadWrite.Linear);
      Need(rt.Create()&&!rt.sRGB&&rt.graphicsFormat==GraphicsFormat.R32G32B32A32_SFloat);
@@ -199,6 +237,7 @@ public static class NativeMipValidation {
      var backgrounds=new[]{new Color(.125f,.25f,.5f,.25f),new Color(.625f,.375f,.125f,.75f)};
      for(int bg=0;bg<2;bg++){
        cam.backgroundColor=backgrounds[bg];
+       r.phase="reference";DirectReferenceClear(rt,backgrounds[bg],Path.Combine(priv,"emitter-"+index+"-"+mode+"-"+r.path+"-"+bg+"-reference.f32"));r.submissions++;
        foreach(var kind in new[]{"clear","native","repeat","marker"}){
          r.phase=kind;
          RenderEmitterCase(cam,ren,mesh,original,marker,mats,rendererPath,kind,rt,Path.Combine(priv,"emitter-"+index+"-"+mode+"-"+r.path+"-"+bg+"-"+kind+".f32"));
@@ -209,7 +248,7 @@ public static class NativeMipValidation {
      r.material_restored=ren.sharedMaterials.SequenceEqual(mats);
      var afterStreams=new List<ParticleSystemVertexStream>();ren.GetActiveVertexStreams(afterStreams);
      r.streams_unchanged=streams.SequenceEqual(afterStreams);r.particles_unchanged=ParticleStateEqual(ps,before);
-     r.completed=r.submissions==8&&r.material_restored&&r.streams_unchanged&&r.particles_unchanged;
+     r.completed=r.submissions==10&&r.material_restored&&r.streams_unchanged&&r.particles_unchanged;
      r.phase="complete";
    }catch(Exception e){r.failure_category=e.GetType().Name;}
    finally{

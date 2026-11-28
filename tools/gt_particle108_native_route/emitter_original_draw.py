@@ -12,8 +12,8 @@ BACKGROUNDS=(np.array([.125,.25,.5,.25]),np.array([.625,.375,.125,.75]))
 MARKER=np.array([.91,.07,.61,1.])
 PATHS=("renderer","baked")
 MODES=("natural","forced")
-CASES=("clear","native","repeat","marker")
-PHASES=("start","frame","clear","native","repeat","marker","post_draw","complete")
+CASES=("reference","clear","native","repeat","marker")
+PHASES=("start","frame","reference","clear","native","repeat","marker","post_draw","complete")
 EXCEPTIONS=("","InvalidOperationException","ArgumentException","IOException","NullReferenceException","UnityException")
 class Reject(ValueError):pass
 def need(ok,code):
@@ -24,18 +24,26 @@ def classify(rows,bg):
     def neq(a,b,rgb=False):
         if rgb:a,b=a[...,:3],b[...,:3]
         return np.max(np.abs(a-b),axis=-1)>TOL
+    reference_ok=not neq(rows["reference"],BACKGROUNDS[bg]).any()
     clear_ok=not neq(rows["clear"],BACKGROUNDS[bg]).any()
+    clear_reference_ok=not neq(rows["clear"],rows["reference"]).any()
+    clear_uniform=not neq(rows["clear"],rows["clear"][0,0]).any()
     marker=np.max(np.abs(rows["marker"]-MARKER),axis=-1)<=TOL
     native=neq(rows["native"],rows["clear"],True)
     repeat=neq(rows["native"],rows["repeat"],True)
     alpha=max(float(np.max(np.abs(rows[k][...,3]-rows["clear"][...,3]))) for k in ("native","repeat"))
     distinct=neq(rows["native"],rows["marker"],True)&native
     overlap=marker&native
-    result=dict(clear_matches_background=bool(clear_ok),marker_pixels=int(marker.sum()),native_visible_pixels=int(native.sum()),
+    result=dict(reference_matches_background=bool(reference_ok),clear_matches_background=bool(clear_ok),
+                clear_matches_independent_reference=bool(clear_reference_ok),clear_uniform=bool(clear_uniform),
+                reference_rgb_matches=not bool(neq(rows["reference"],BACKGROUNDS[bg],True).any()),
+                reference_alpha_matches=bool(np.max(np.abs(rows["reference"][...,3]-BACKGROUNDS[bg][3]))<=TOL),
+                clear_rgb_matches=not bool(neq(rows["clear"],BACKGROUNDS[bg],True).any()),
+                clear_alpha_matches=bool(np.max(np.abs(rows["clear"][...,3]-BACKGROUNDS[bg][3]))<=TOL),marker_pixels=int(marker.sum()),native_visible_pixels=int(native.sum()),
                 native_distinct_from_marker_pixels=int(distinct.sum()),native_marker_overlap_pixels=int(overlap.sum()),
                 native_outside_marker_pixels=int((native&~marker).sum()),repeat_rgb_difference_pixels=int(repeat.sum()),
                 source_rgb_mask_alpha_preserved=alpha<=TOL)
-    result["calibrated_original_rgb_observed"]=bool(clear_ok and marker.sum()>=4 and overlap.any() and distinct.any() and not repeat.any() and alpha<=TOL)
+    result["calibrated_original_rgb_observed"]=bool(reference_ok and clear_ok and clear_reference_ok and clear_uniform and marker.sum()>=4 and overlap.any() and distinct.any() and not repeat.any() and alpha<=TOL)
     return result
 
 def inspect(root,index,mode,expected):
@@ -51,7 +59,7 @@ def inspect(root,index,mode,expected):
         path=r["path"]
         safe=dict(path=path,phase=r.get("phase") if r.get("phase") in PHASES else "other",
                   failure_category=r.get("failure_category") if r.get("failure_category") in EXCEPTIONS else "other",
-                  submissions=r.get("submissions") if type(r.get("submissions")) is int and 0<=r["submissions"]<=8 else 0,
+                  submissions=r.get("submissions") if type(r.get("submissions")) is int and 0<=r["submissions"]<=10 else 0,
                   completed=r.get("completed") is True,material_restored=r.get("material_restored") is True,
                   streams_unchanged=r.get("streams_unchanged") is True,particles_unchanged=r.get("particles_unchanged") is True,
                   backgrounds=[])
@@ -61,7 +69,7 @@ def inspect(root,index,mode,expected):
                 safe["backgrounds"].append(dict(background=bg,**classify(rows,bg)))
             except Exception as e:
                 safe["backgrounds"].append(dict(background=bg,failure_type=type(e).__name__))
-        safe["path_verified"]=(safe["submissions"]==8 and all(safe[k] for k in ("completed","material_restored","streams_unchanged","particles_unchanged")) and all(x.get("calibrated_original_rgb_observed") is True for x in safe["backgrounds"]))
+        safe["path_verified"]=(safe["submissions"]==10 and all(safe[k] for k in ("completed","material_restored","streams_unchanged","particles_unchanged")) and all(x.get("calibrated_original_rgb_observed") is True for x in safe["backgrounds"]))
         result.append(safe)
     return dict(index=index,mode=mode,particles=n,vertices=4*n,indices=6*n,paths=result)
 
@@ -77,6 +85,7 @@ def verify(root,rows):
             for mode in MODES for path in PATHS}
     return dict(isolated_actual_emitter_original_explicit_route_draw_verified=len(results)==24 and all(v==12 for v in counts.values()),
                 observed_emitter_modes=len(results),counts=counts,cases=results,failures=failures,
-                separate_diagnostic_camera_framing=True,original_full_scene_draw_verified=False,
+                separate_diagnostic_camera_framing=True,renderer_framed_from_live_world_particles=True,
+                explicit_camera_clear_and_direct_reference=True,original_full_scene_draw_verified=False,
                 original_mesh_payload_modified=False,alpha_force_replayed=False,runtime_keyword_selection_verified=False,
                 black_fire_restored=False,Android_device=False,production=False,XAPK=False)
