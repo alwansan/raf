@@ -22,6 +22,11 @@ def digest(data):
 def dump(path,obj):
     path.write_text(json.dumps(obj,sort_keys=True,indent=2)+"\n")
 
+def native_asset_path(asset):
+    need(asset.suffix in (".asset",".texture2D") and asset.name not in (".","..")
+         and "\\" not in asset.name and "\x00" not in asset.name,"unsafe_native_asset_filename")
+    return "Assets/GTSource/"+asset.name
+
 def stage(original,manifest,export,w1,b02,project,private,run_id):
     from tools.gt_particle108_native_mips import probe as p
     from scripts import b05_verify_material_texenv_bindings as b05
@@ -46,10 +51,12 @@ def stage(original,manifest,export,w1,b02,project,private,run_id):
     meta=hits[0]
     asset=meta.with_suffix("")
     need(asset.is_file() and not asset.is_symlink(),"stage_asset_missing")
-    # Keep the original native asset and meta byte-for-byte, including the
-    # source-linked GUID and local object anchor. Only neutralize filename.
-    path="Assets/GTOriginal"+asset.suffix
-    out={path:asset.read_bytes(),path+".meta":meta.read_bytes()}
+    # Keep exact exported basename, bytes, GUID and local anchor. Do not
+    # expose it to Unity's startup importer until the private log guard is
+    # proved by the executing editor. No original payload inside Assets yet.
+    path=native_asset_path(asset)
+    asset_bytes,meta_bytes=asset.read_bytes(),meta.read_bytes()
+    out={}
     raw=bytes.fromhex(body["_typelessdata"])
     need(digest(raw)==source.sha256 and tuple(source.mip_lengths)==LENGTHS,"stage_original_hash")
     mips=[];pos=0
@@ -59,7 +66,9 @@ def stage(original,manifest,export,w1,b02,project,private,run_id):
         mips.append(dict(level=i,size=64>>i,sha256=digest(data),alpha=list(data[3::4])))
     cfg=dict(run_id=run_id,asset_path=path,guid=guid,file_id=anchor,mips=mips,
              source_sampler=sampler,source_color_space=1,
-             asset_sha256=digest(out[path]),meta_sha256=digest(out[path+".meta"]))
+             asset_sha256=digest(asset_bytes),meta_sha256=digest(meta_bytes),
+             export_basename_preserved=True,
+             export_stem_matches_serialized_name=asset.stem==body.get("m_Name"))
     here=Path(__file__).parent
     out["Assets/Editor/NativeMipValidation.cs"]=(here/"NativeMipValidation.cs").read_bytes()
     out["Assets/GTNativeMipAlpha.shader"]=(here/"NativeMipAlpha.shader").read_bytes()
@@ -69,9 +78,11 @@ def stage(original,manifest,export,w1,b02,project,private,run_id):
     for name,data in out.items():
         f=project/name;f.parent.mkdir(parents=True,exist_ok=True);f.write_bytes(data)
     private.mkdir(mode=0o700)
+    (private/"native.asset.bytes").write_bytes(asset_bytes)
+    (private/"native.meta.bytes").write_bytes(meta_bytes)
     dump(project/"GTInput.json",cfg)
     dump(private/"expected.json",cfg)
-    print("GT_NATIVE_MIP_UNITY_STAGE "+json.dumps({"source_native_mips":7,"source_native_bytes":21844,"same_export_PPtr":10,"private_payload_published":False,"status":"PREPARED_ONLY"},sort_keys=True))
+    print("GT_NATIVE_MIP_UNITY_STAGE "+json.dumps({"source_native_mips":7,"source_native_bytes":21844,"same_export_PPtr":10,"export_basename_preserved":True,"export_stem_matches_serialized_name":cfg["export_stem_matches_serialized_name"],"asset_withheld_until_private_editor_log_guard":True,"private_payload_published":False,"status":"PREPARED_ONLY"},sort_keys=True))
 
 def alpha_error(values,expected):
     need(type(values) is list and len(values)==len(expected) and len(values)>0,"readback_population")
@@ -89,17 +100,38 @@ def evaluate(cfg,r,unchanged,exit_code):
         private_payload_published=False,production=False,player=False,XAPK=False)
     try:
         report["unity_step_exit"]=exit_code
-        if r.get("phase") in ("start","environment","import","adapter","all_mips","controls","complete"):
-            report["editor_phase"]=r["phase"]
-        need(exit_code==0 and r["status"]=="OBSERVED" and r["run_id"]==cfg["run_id"],"editor_receipt_not_successful")
+        phases=("start","environment","input","private_log_guard","private_stage","refresh","texture_load",
+                "identity_query","importer_kind","descriptor","guid_match","file_id_match","width_height",
+                "mip_count","texture_format","adapter","all_mips","controls","complete")
+        if r.get("phase") in phases: report["editor_phase"]=r["phase"]
+        category=r.get("failure_category")
+        if category in ("InvalidOperationException","ArgumentException","IOException","FileNotFoundException",
+                        "UnauthorizedAccessException","UnityException","NullReferenceException"):
+            report["editor_failure_category"]=category
+        need(r["run_id"]==cfg["run_id"],"editor_receipt_run_mismatch")
+        report["private_editor_log_guard_verified"]=r.get("private_log_guard") is True
+        report["export_basename_preserved"]=cfg.get("export_basename_preserved") is True
+        report["export_stem_matches_serialized_name"]=cfg.get("export_stem_matches_serialized_name") is True
+        need(report["private_editor_log_guard_verified"],"private_editor_log_guard_missing")
         need(r["unity_version"]=="2021.3.45f2" and r["backend"]=="Vulkan" and r["color_space"]=="Linear" and r["device"],"actual_vulkan_environment")
-        need(r["guid"]==cfg["guid"] and r["file_id"]==cfg["file_id"] and r["native_importer"] is True,"imported_native_guid_file_id")
-        need((r["width"],r["height"],r["mip_count"],r["texture_format"])==(64,64,7,"RGBA32"),"imported_descriptor_drift")
+        report.update(backend=r["backend"],device=r["device"],unity_texture_loaded=r.get("texture_loaded") is True,
+                      imported_guid_matches=r.get("guid")==cfg["guid"],imported_file_id_matches=r.get("file_id")==cfg["file_id"],
+                      native_importer_type_matches=r.get("native_importer") is True,
+                      actual_width=r.get("width",0),actual_height=r.get("height",0),actual_mip_count=r.get("mip_count",0),
+                      actual_texture_format=r.get("texture_format") if r.get("texture_format") in ("RGBA32","ARGB32","BGRA32","RGB24","DXT1","DXT5","Alpha8") else "other_or_unobserved")
+        if r.get("importer_kind") in ("native_format","generic_asset","other","missing"):
+            report["actual_importer_kind"]=r["importer_kind"]
+        identity=report["unity_texture_loaded"] and report["imported_guid_matches"] and report["imported_file_id_matches"]
+        descriptor=(r.get("width"),r.get("height"),r.get("mip_count"),r.get("texture_format"))==(64,64,7,"RGBA32")
         s=cfg["source_sampler"]
-        need(all(type(r[k]) is int and r[k]==s[v] for k,v in (("filter_mode","m_FilterMode"),("aniso","m_Aniso"),("wrap_u","m_WrapU"),("wrap_v","m_WrapV"),("wrap_w","m_WrapW"))),"imported_sampler_drift")
-        need(math.isfinite(r["mip_bias"]) and abs(r["mip_bias"]-s["m_MipBias"])<=1e-6,"imported_bias_drift")
-        report.update(unity_import_verified=True,backend=r["backend"],device=r["device"],actual_texture_graphics_format=r["graphics_format"],
-                      actual_srgb=r["srgb"],source_serialized_color_space=cfg["source_color_space"],readable=r["readable"])
+        sampler=all(type(r.get(k)) is int and r[k]==s[v] for k,v in (("filter_mode","m_FilterMode"),("aniso","m_Aniso"),("wrap_u","m_WrapU"),("wrap_v","m_WrapV"),("wrap_w","m_WrapW")))
+        bias=type(r.get("mip_bias")) in (int,float) and math.isfinite(r["mip_bias"]) and abs(r["mip_bias"]-s["m_MipBias"])<=1e-6
+        report.update(imported_descriptor_matches=descriptor,imported_sampler_fields_match=sampler and bias,
+                      unity_import_verified=identity and descriptor and sampler and bias and r.get("native_importer") is True,
+                      actual_texture_graphics_format=r.get("graphics_format"),
+                      actual_srgb=r.get("srgb"),source_serialized_color_space=cfg["source_color_space"],readable=r.get("readable"))
+        need(identity and descriptor,"imported_identity_or_descriptor_drift")
+        need(exit_code==0 and r["status"]=="OBSERVED","editor_receipt_not_successful")
         need(len(cfg["mips"])==7 and len(r["mips"])==7,"mip_population")
         rows=[];cpu=0;gpu=0;texels=0
         for i,(expected,observed) in enumerate(zip(cfg["mips"],r["mips"])):
@@ -122,6 +154,7 @@ def evaluate(cfg,r,unchanged,exit_code):
         need(unchanged,"native_asset_or_meta_changed")
         need(gpu==7 and texels==5461,"vulkan_original_alpha_mismatch")
         need(cpu==7,"cpu_original_mip_bytes_unproved_or_drift")
+        need(report["unity_import_verified"],"native_importer_or_sampler_unproved")
         report["status"]=PASS
     except (ValueError,KeyError,TypeError,IndexError) as e:
         # Do not echo arbitrary data from the private receipt.
@@ -138,6 +171,9 @@ def verify(project,private,safe,run_id,exit_code):
         meta=Path(str(asset)+".meta")
         unchanged=all(p.is_file() and not p.is_symlink() for p in (asset,meta)) and digest(asset.read_bytes())==cfg["asset_sha256"] and digest(meta.read_bytes())==cfg["meta_sha256"]
         raw=json.loads((private/"raw.json").read_text())
+        marker=private/"editor-output-private"
+        guard=marker.is_file() and not marker.is_symlink() and marker.read_text().strip()==run_id and (private/"editor.log").is_file()
+        raw["private_log_guard"]=raw.get("private_log_guard") is True and guard
         result=evaluate(cfg,raw,unchanged,exit_code)
     except Exception as e:
         result["failure_category"]=type(e).__name__

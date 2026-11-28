@@ -4,9 +4,11 @@ from tools.gt_particle108_native_import import probe as p
 
 def fixture():
     s=dict(m_FilterMode=1,m_Aniso=1,m_MipBias=0,m_WrapU=0,m_WrapV=0,m_WrapW=0)
-    cfg=dict(run_id="test",guid="authored",file_id=2800000,source_color_space=1,source_sampler=s,mips=[])
+    cfg=dict(run_id="test",guid="authored",file_id=2800000,source_color_space=1,source_sampler=s,mips=[],
+             export_basename_preserved=True,export_stem_matches_serialized_name=True)
     r=dict(status="OBSERVED",run_id="test",unity_version="2021.3.45f2",backend="Vulkan",color_space="Linear",device="fixture",
-           guid="authored",file_id=2800000,native_importer=True,width=64,height=64,mip_count=7,texture_format="RGBA32",
+           guid="authored",file_id=2800000,native_importer=True,texture_loaded=True,private_log_guard=True,
+           importer_kind="native_format",width=64,height=64,mip_count=7,texture_format="RGBA32",
            filter_mode=1,aniso=1,wrap_u=0,wrap_v=0,wrap_w=0,mip_bias=0,graphics_format="fixture",srgb=False,readable=True,
            mips=[],force_zero=[.25],force_one=[1.])
     for i,n in enumerate(p.LENGTHS):
@@ -41,4 +43,22 @@ class Tests(unittest.TestCase):
         c,r=fixture();r["force_zero"]=[1.];self.assertNotEqual(p.evaluate(c,r,True,0)["status"],p.PASS)
         c,r=fixture();r["run_id"]="stale";self.assertNotEqual(p.evaluate(c,r,True,0)["status"],p.PASS)
         c,r=fixture();self.assertNotEqual(p.evaluate(c,r,True,1)["status"],p.PASS)
+    def test_private_log_guard_missing_rejected(self):
+        c,r=fixture();r["private_log_guard"]=False
+        self.assertEqual(p.evaluate(c,r,True,0)["reason"],"private_editor_log_guard_missing")
+    def test_exact_export_basename_and_unsupported_extension(self):
+        from pathlib import Path
+        self.assertEqual(p.native_asset_path(Path("private/Original.texture2D")),"Assets/GTSource/Original.texture2D")
+        with self.assertRaises(ValueError):p.native_asset_path(Path("private/Original.png"))
+    def test_partial_import_phase_and_no_identity_leak(self):
+        c,r=fixture();r["status"]="INCONCLUSIVE";r["phase"]="file_id_match";r["file_id"]=99
+        d=p.evaluate(c,r,True,1)
+        self.assertFalse(d["unity_import_verified"]);self.assertEqual(d["editor_phase"],"file_id_match")
+        self.assertTrue(d["imported_guid_matches"]);self.assertFalse(d["imported_file_id_matches"])
+        self.assertNotIn("authored",str(d))
+    def test_generic_importer_keeps_actual_mip_measurement_but_not_pass(self):
+        c,r=fixture();r["native_importer"]=False;r["importer_kind"]="generic_asset"
+        d=p.evaluate(c,r,True,0)
+        self.assertEqual(d["actual_vulkan_mips_equal"],7);self.assertFalse(d["unity_import_verified"])
+        self.assertNotEqual(d["status"],p.PASS)
 if __name__=="__main__":unittest.main()

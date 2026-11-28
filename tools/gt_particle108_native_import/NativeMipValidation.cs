@@ -21,11 +21,11 @@ public static class NativeMipValidation {
  }
  [Serializable] public class Receipt {
    public string status="INCONCLUSIVE",phase="start",run_id,unity_version,backend,device,color_space,
-     guid,texture_format,graphics_format,failure_category;
+     guid,texture_format,graphics_format,failure_category,importer_kind;
    public long file_id;
    public int width,height,mip_count,filter_mode,aniso,wrap_u,wrap_v,wrap_w;
    public float mip_bias;
-   public bool native_importer,readable,srgb;
+   public bool native_importer,readable,srgb,texture_loaded,private_log_guard;
    public List<Mip> mips=new List<Mip>();
    public float[] force_zero,force_one;
  }
@@ -46,22 +46,52 @@ public static class NativeMipValidation {
      Need(SystemInfo.SupportsTextureFormat(TextureFormat.RGBAFloat) &&
        SystemInfo.IsFormatSupported(GraphicsFormat.R32G32B32A32_SFloat,FormatUsage.Render) &&
        SystemInfo.IsFormatSupported(GraphicsFormat.R32G32B32A32_SFloat,FormatUsage.Blend));
-     r.phase="import";
-     Input input=JsonUtility.FromJson<Input>(File.ReadAllText(Path.Combine(Directory.GetParent(Application.dataPath).FullName,"GTInput.json")));
+     r.phase="input";
+     string root=Directory.GetParent(Application.dataPath).FullName;
+     Input input=JsonUtility.FromJson<Input>(File.ReadAllText(Path.Combine(root,"GTInput.json")));
      Need(input!=null && input.run_id==r.run_id);
+     r.phase="private_log_guard";
+     string privateRoot=Arg("-gtNativePrivate");
+     string marker=Path.Combine(privateRoot,"editor-output-private");
+     Need(!String.IsNullOrEmpty(privateRoot) && File.Exists(marker) &&
+       File.ReadAllText(marker).Trim()==r.run_id);
+     r.private_log_guard=true;
+     r.phase="private_stage";
+     Need(input.asset_path.StartsWith("Assets/GTSource/",StringComparison.Ordinal));
+     string target=Path.GetFullPath(Path.Combine(root,input.asset_path));
+     Need(Path.GetDirectoryName(target)==Path.Combine(root,"Assets","GTSource") &&
+       !File.Exists(target) && !File.Exists(target+".meta"));
+     Directory.CreateDirectory(Path.GetDirectoryName(target));
+     File.Copy(Path.Combine(privateRoot,"native.asset.bytes"),target,false);
+     File.Copy(Path.Combine(privateRoot,"native.meta.bytes"),target+".meta",false);
      ShaderUtil.allowAsyncCompilation=false;
+     r.phase="refresh";
      AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+     r.phase="texture_load";
      var tex=AssetDatabase.LoadAssetAtPath<Texture2D>(input.asset_path); Need(tex!=null);
+     r.texture_loaded=true;
+     r.phase="identity_query";
      Need(AssetDatabase.TryGetGUIDAndLocalFileIdentifier(tex,out string guid,out long local));
      r.guid=guid;r.file_id=local;
+     r.phase="importer_kind";
      var importer=AssetImporter.GetAtPath(input.asset_path);
-     r.native_importer=importer!=null && importer.GetType().FullName=="UnityEditor.NativeFormatImporter";
+     string importerType=importer==null?"":importer.GetType().FullName;
+     r.native_importer=importerType=="UnityEditor.NativeFormatImporter";
+     r.importer_kind=r.native_importer?"native_format":importer==null?"missing":
+       importerType=="UnityEditor.AssetImporter"?"generic_asset":"other";
+     r.phase="descriptor";
      r.width=tex.width;r.height=tex.height;r.mip_count=tex.mipmapCount;r.texture_format=tex.format.ToString();
      r.graphics_format=tex.graphicsFormat.ToString();r.srgb=GraphicsFormatUtility.IsSRGBFormat(tex.graphicsFormat);
      r.readable=tex.isReadable;r.filter_mode=(int)tex.filterMode;r.aniso=tex.anisoLevel;r.mip_bias=tex.mipMapBias;
      r.wrap_u=(int)tex.wrapModeU;r.wrap_v=(int)tex.wrapModeV;r.wrap_w=(int)tex.wrapModeW;
-     Need(guid==input.guid && local==input.file_id && r.native_importer &&
-       tex.width==64 && tex.height==64 && tex.mipmapCount==7 && tex.format==TextureFormat.RGBA32);
+     r.phase="guid_match";Need(guid==input.guid);
+     r.phase="file_id_match";Need(local==input.file_id);
+     r.phase="width_height";Need(tex.width==64 && tex.height==64);
+     r.phase="mip_count";Need(tex.mipmapCount==7);
+     r.phase="texture_format";Need(tex.format==TextureFormat.RGBA32);
+     // Observe pixels even if the editor exposes a generic importer type.
+     // Independent full acceptance still requires the native importer and
+     // exact sampler checks; a partial pixel observation is not a PASS.
      r.phase="adapter";
      Shader shader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/GTNativeMipAlpha.shader");
      Need(shader!=null && shader.isSupported && !ShaderUtil.ShaderHasError(shader));

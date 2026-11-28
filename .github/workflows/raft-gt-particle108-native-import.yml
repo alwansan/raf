@@ -1,6 +1,8 @@
 name: GT original Particle108 native seven-mip Unity Vulkan import (NO PLAYER)
 # Prior 46115503520 PASS: exact seven-mip export; distinct Unity acceptance lane.
 # Re-materialize only because the safe artifact did not retain raw asset bytes.
+# 46116411253 failed at coarse import gate; preserve basename, private log guard,
+# split every import sub-gate before a new observation. No old-run rerun.
 on:
   push:
     branches: [feature/android-native-port]
@@ -265,6 +267,8 @@ jobs:
           set -euo pipefail
           test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
           mkdir "$RUNNER_TEMP/gt-native-mip-docker"
+          cp tools/gt_particle108_native_import/private-unity-editor.sh "$RUNNER_TEMP/gt-native-mip-docker/"
+          bash -n "$RUNNER_TEMP/gt-native-mip-docker/private-unity-editor.sh"
           cat > "$RUNNER_TEMP/gt-native-mip-docker/Dockerfile" <<'DOCKERFILE'
           FROM unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3
           USER root
@@ -272,10 +276,16 @@ jobs:
               DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
                 libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb xauth && \
               rm -rf /var/lib/apt/lists/*
+          RUN command -v unity-editor > /opt/gt-real-unity-editor && test -x "$(cat /opt/gt-real-unity-editor)"
+          COPY private-unity-editor.sh /opt/gt-private-bin/unity-editor
+          RUN chmod 0755 /opt/gt-private-bin/unity-editor
+          ENV PATH=/opt/gt-private-bin:$PATH
           ENV VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
           DOCKERFILE
           timeout 480s docker build --quiet --tag "$GT_IMAGE" "$RUNNER_TEMP/gt-native-mip-docker" > gt-native-import-private/image-id.txt
-          docker run --rm --entrypoint /bin/bash "$GT_IMAGE" -lc 'test -f "$VK_ICD_FILENAMES"'
+          docker run --rm --entrypoint /bin/bash "$GT_IMAGE" -c 'test -f "$VK_ICD_FILENAMES" && test "$(command -v unity-editor)" = /opt/gt-private-bin/unity-editor && test -x "$(cat /opt/gt-real-unity-editor)"'
+          # The original file is not in Assets before the custom editor method
+          # verifies the run-bound marker made by the private log wrapper.
           set +e
           timeout --kill-after=10s 45s docker run --name gt-native-mip-vulkan-preflight --rm --entrypoint /bin/bash "$GT_IMAGE" -lc 'timeout 30s xvfb-run -a vulkaninfo --summary' > gt-native-import-private/vulkan-preflight.txt 2>&1
           code=$?
@@ -309,6 +319,7 @@ jobs:
             -force-vulkan -force-device-index 0 -job-worker-count 2
             -gtNativeRunId ${{ env.GT_RUN_ID }}
             -gtNativeReport /github/workspace/gt-native-import-private/raw.json
+            -gtNativePrivate /github/workspace/gt-native-import-private
       - name: Independently compare actual imported seven mip bytes and explicit Vulkan alpha readbacks
         if: always() && steps.native_stage.outcome == 'success'
         env:
