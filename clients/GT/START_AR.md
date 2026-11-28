@@ -1,4 +1,4 @@
-> **نقطة التسليم الشاملة — 26 نوفمبر 2026:** ابدأ من [رسالة الاستعادة](RESTORE_AR.md) و[حزمة الأدوات والنتائج والخطة](sessions/20261126-complete-handoff/README_AR.md). السجل أدناه تاريخي؛ الاستعادة الكاملة وruntime keywords وUnity/GUID/device ما زالت غير مكتملة. طلب هذه الجلسة هو الحفظ والنشر فقط.
+> **نقطة الاستئناف الحالية — 28 نوفمبر 2026:** ابدأ من [قرار المالك الحالي](OWNER_DIRECTIVE_RESTORE_FIRST_AR.md) و[رسالة الاستعادة الحية](RESTORE_AR.md) ثم [الخطة](RESTORATION_PLAN_AR.md) و[الحالة](state.json). حزمة التسليم 26 نوفمبر مرجع تاريخي للأدلة وليست وقفاً للعمل. استمر باستعادة الرسوم الفعلية، ولا تكرر التجارب المنجزة أو تبدأ XAPK قبل إغلاق G0–G6.
 
 اسمك **GT**. أنت العامل المستقل المسؤول عن استعادة رسوميات Raft Android ودمجها في مشروع [alwansan/raf](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة هو `feature/android-native-port`.
 
